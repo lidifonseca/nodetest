@@ -1,0 +1,118 @@
+{
+    "name": "Pesquisa",
+    "fields": [
+        {
+            "fieldName": "nome",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "classesIncluir",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "incluirMovimentacoes",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "descartarMovimentacoes",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "incluirMovimentacoesAll",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "anoInicial",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "anoFinal",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "csv",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "dataCriacao",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataFinalizacao",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "situacao",
+            "fieldType": "Situacao",
+            "fieldValues": "AGUARDANDO,COLETANDO,SUCESSO,ERRO,CANCELADA",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "observacoes",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "csvTotal",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "csvVerificados",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "comarcaPorComarca",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "pesquisa",
+            "relationshipName": "user",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "processo",
+            "otherEntityRelationshipName": "pesquisa",
+            "relationshipName": "processo",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "comarca",
+            "otherEntityRelationshipName": "pesquisas",
+            "relationshipName": "comarcas",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "estado",
+            "otherEntityRelationshipName": "pesquisas",
+            "relationshipName": "estado",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200427230600",
+    "entityTableName": "pesquisa",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

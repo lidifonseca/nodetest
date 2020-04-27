@@ -1,0 +1,38 @@
+{
+    "name": "Parte",
+    "fields": [
+        {
+            "fieldName": "categoria",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "participante",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "advogados",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "processo",
+            "otherEntityRelationshipName": "partes",
+            "relationshipName": "processo",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200427231000",
+    "entityTableName": "parte",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

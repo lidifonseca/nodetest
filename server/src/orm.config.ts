@@ -12,8 +12,9 @@ const commonConf = {
 
 let ormconfig: TypeOrmModuleOptions = {
   name: 'default',
-  type: 'sqlite',
-  database: '../target/sqlite-dev-db.sql',
+  type: 'mysql',
+  database: 'nodetest',
+  url: 'mysql://root:root@localhost:3306/nodetest',
   logging: true,
   synchronize: true,
   entities: commonConf.ENTITIES,
@@ -26,8 +27,8 @@ if (process.env.NODE_ENV === 'prod') {
   ormconfig = {
     name: 'default',
     type: 'mysql',
-    database: 'generador',
-    url: 'mysql://YOUR_USER:YOUR_PWD@localhost:27017/generador',
+    database: 'nodetest',
+    url: 'mysql://root:root@localhost:3306/nodetest',
     logging: false,
     synchronize: commonConf.SYNCRONIZE,
     entities: commonConf.ENTITIES,
@@ -40,10 +41,11 @@ if (process.env.NODE_ENV === 'prod') {
 if (process.env.NODE_ENV === 'test') {
   ormconfig = {
     name: 'default',
-    type: 'sqlite',
-    database: ':memory:',
-    logging: true,
-    synchronize: true,
+    type: 'mysql',
+    database: 'nodetest',
+    url: 'mysql://root:root@localhost:3306/nodetest',
+    logging: false,
+    synchronize: commonConf.SYNCRONIZE,
     entities: commonConf.ENTITIES,
     migrations: commonConf.MIGRATIONS,
     cli: commonConf.CLI,

@@ -1,0 +1,44 @@
+{
+    "name": "Estado",
+    "fields": [
+        {
+            "fieldName": "nome",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "sigla",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pesquisa",
+            "otherEntityRelationshipName": "estado",
+            "relationshipName": "pesquisas"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "comarca",
+            "otherEntityRelationshipName": "estado",
+            "relationshipName": "comarcas"
+        }
+    ],
+    "changelogDate": "20200427230700",
+    "entityTableName": "estado",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

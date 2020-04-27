@@ -1,0 +1,44 @@
+{
+    "name": "Apenso",
+    "fields": [
+        {
+            "fieldName": "numero",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "clase",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "apensamento",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "motivo",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "processo",
+            "otherEntityRelationshipName": "apensos",
+            "relationshipName": "processo",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200427231400",
+    "entityTableName": "apenso",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}
