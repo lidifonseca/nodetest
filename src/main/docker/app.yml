@@ -1,0 +1,8 @@
+version: '2'
+services:
+  generador-app:
+    build: ../../..
+    container_name: generador-app
+    environment:
+    ports:
+      - 8081:8081:
