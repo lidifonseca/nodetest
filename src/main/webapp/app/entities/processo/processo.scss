@@ -20,3 +20,19 @@
 #movimentacaoTable b {
   color: #ff0000;
 }
+
+#togglerFilter {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0px;
+  color: #495057;
+}
+
+.card-body {
+  padding: 0 !important;
+}

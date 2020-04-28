@@ -129,10 +129,10 @@ export default (state: ProcessoState = initialState, action): ProcessoState => {
       };
     case SUCCESS(ACTION_TYPES.PRENCHER_COMARCAR): {
       const listaComarcas = action.payload.data;
-      const listaComarcasSelect = [{ value: -1, label: 'Todas' }];
+      const listaComarcasSelect = [];
       for (const i in listaComarcas) {
         if (Object.prototype.hasOwnProperty.call(listaComarcas, i)) {
-          listaComarcasSelect.push({ value: listaComarcas[i].tjid, label: listaComarcas[i].nome });
+          listaComarcasSelect.push({ value: listaComarcas[i].id, label: listaComarcas[i].nome });
         }
       }
       return {
@@ -183,7 +183,8 @@ export type ICrudGetAllActionProcesso<T> = (
   distribuicaoFinal?: Date,
   valorInicial?: number,
   valorFinal?: number,
-  moeda?: string
+  moeda?: string,
+  cnpj?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionProcesso<IProcesso> = (
@@ -201,7 +202,8 @@ export const getEntities: ICrudGetAllActionProcesso<IProcesso> = (
   distribuicaoFinal?,
   valorInicial?,
   valorFinal?,
-  moeda?
+  moeda?,
+  cnpj?
 ) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   let activeTabRequest = '';
@@ -214,9 +216,15 @@ export const getEntities: ICrudGetAllActionProcesso<IProcesso> = (
         ? 'advogados.equals=true&'
         : 'advogados.equals=false&'
       : '';
-  const estadoRequest = `estado.equals=${estado}&`;
+
+  let estadoRequest = '';
+  if (estado === 'Todos') {
+    estadoRequest = `estado.specified=true&`;
+  } else {
+    estadoRequest = `estado.equals=${estado}&`;
+  }
   const pesquisaRequest = pesquisa ? `pesquisaId.equals=${pesquisa}&` : '';
-  const comarcasRequest = comarca ? `comarcaTjId.equals=${comarca}&` : '';
+  const comarcasRequest = comarca ? `comarcaId.equals=${comarca}&` : '';
   const assuntoRequest = assunto ? `assunto.contains=${assunto}&` : '';
   const numeroRequest = numeroProcesso ? `numero.contains=${numeroProcesso}&` : '';
   const valorInicialRequest = valorInicial ? `valor.greaterThanOrEqual=${valorInicial}&` : '';
@@ -229,13 +237,14 @@ export const getEntities: ICrudGetAllActionProcesso<IProcesso> = (
     : '';
 
   const moedaRequest = moeda ? `moeda.equals=${moeda}&` : '';
+  const cnpjRequest = cnpj ? `cnpj.contains=${cnpj}&` : '';
 
   return {
     type: ACTION_TYPES.FETCH_PROCESSO_LIST,
     payload: axios.get<IProcesso>(
       `${requestUrl}${
         sort ? '&' : '?'
-      }${activeTabRequest}${estadoRequest}${advogadosRequest}${pesquisaRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}${valorInicialRequest}${valorFinalRequest}${moedaRequest}cacheBuster=${new Date().getTime()}`
+      }${activeTabRequest}${estadoRequest}${advogadosRequest}${pesquisaRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}${valorInicialRequest}${valorFinalRequest}${moedaRequest}${cnpjRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -254,7 +263,8 @@ export const getEntityFilter: ICrudGetAllActionProcesso<IProcesso> = (
   distribuicaoFinal?,
   valorInicial?,
   valorFinal?,
-  moeda?
+  moeda?,
+  cnpj?
 ) => {
   const requestUrl = `${apiUrl}?details=true${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
   let activeTabRequest = '';
@@ -267,9 +277,14 @@ export const getEntityFilter: ICrudGetAllActionProcesso<IProcesso> = (
         ? 'advogados.equals=true&'
         : 'advogados.equals=false&'
       : '';
-  const estadoRequest = `estado.equals=${estado}&`;
+
+  let estadoRequest = '';
+  if (estado !== 'Todos') {
+    estadoRequest = `estado.equals=${estado}&`;
+  }
+
   const pesquisaRequest = pesquisa ? `pesquisaId.equals=${pesquisa}&` : '';
-  const comarcasRequest = comarca ? `comarcaTjId.equals=${comarca}&` : '';
+  const comarcasRequest = comarca ? `comarcaId.equals=${comarca}&` : '';
   const assuntoRequest = assunto ? `assunto.contains=${assunto}&` : '';
   const numeroRequest = numeroProcesso ? `numero.contains=${numeroProcesso}&` : '';
   const valorInicialRequest = valorInicial ? `valor.greaterThanOrEqual=${valorInicial}&` : '';
@@ -282,11 +297,12 @@ export const getEntityFilter: ICrudGetAllActionProcesso<IProcesso> = (
     : '';
 
   const moedaRequest = moeda ? `moeda.equals=${moeda}&` : '';
+  const cnpjRequest = cnpj ? `cnpj.contains=${cnpj}&` : '';
 
   return {
     type: ACTION_TYPES.FETCH_PROCESSO_DETALE_FILTER,
     payload: axios.get<IProcesso>(
-      `${requestUrl}&${activeTabRequest}${estadoRequest}${advogadosRequest}${pesquisaRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}${valorInicialRequest}${valorFinalRequest}${moedaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}&${activeTabRequest}${estadoRequest}${advogadosRequest}${pesquisaRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}${valorInicialRequest}${valorFinalRequest}${moedaRequest}${cnpjRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -306,7 +322,8 @@ export const getEntitiesCSV: ICrudGetAllActionProcesso<IProcesso> = (
   distribuicaoFinal?,
   valorInicial?,
   valorFinal?,
-  moeda?
+  moeda?,
+  cnpj?
 ) => {
   const requestUrl = `${apiUrl}`;
 
@@ -321,21 +338,29 @@ export const getEntitiesCSV: ICrudGetAllActionProcesso<IProcesso> = (
         ? 'advogados.equals=true&'
         : 'advogados.equals=false&'
       : '';
-  const estadoRequest = `estado.equals=${estado}&`;
-  const comarcasRequest = comarca ? `comarca.contains=${comarca}&` : '';
+  let estadoRequest = '';
+  if (estado !== 'Todos') {
+    estadoRequest = `estado.equals=${estado}&`;
+  }
+  const comarcasRequest = comarca ? `comarcaId.equals=${comarca}&` : '';
   const assuntoRequest = assunto ? `assunto.contains=${assunto}&` : '';
   const numeroRequest = numeroProcesso ? `numero.contains=${numeroProcesso}&` : '';
-  // const valorInicialRequest = valorInicial ? `valorInicial.contains=${valorInicial}&` : '';
-  // const valorFinalRequest = valorFinal ? `valorFinal.contains=${valorFinal}&` : '';
-  // const distribuicaoInicialRequest = distribuicaoInicial ? `dataDistribuicao.greaterThanOrEqual=${distribuicaoInicial.toString()}&` : '';
-  // const distribuicaoFinalRequest = distribuicaoInicial ? `dataDistribuicao.lessThanOrEqual=${distribuicaoFinal.toString()}&` : '';
+  const valorInicialRequest = valorInicial ? `valor.greaterThanOrEqual=${valorInicial}&` : '';
+  const valorFinalRequest = valorFinal ? `valor.lessThanOrEqual=${valorFinal}&` : '';
+  const distribuicaoInicialRequest = distribuicaoInicial
+    ? `dataDistribuicao.greaterThanOrEqual=${distribuicaoInicial.toISOString().slice(0, 10)}&`
+    : '';
+  const distribuicaoFinalRequest = distribuicaoFinal
+    ? `dataDistribuicao.lessThanOrEqual=${distribuicaoFinal.toISOString().slice(0, 10)}&`
+    : '';
   const moedaRequest = moeda ? `moeda.equals=${moeda}&` : '';
   const pesquisaRequest = pesquisa ? `pesquisaId.equals=${pesquisa}&` : '';
+  const cnpjRequest = cnpj ? `cnpj.contains=${cnpj}&` : '';
   return {
     type: ACTION_TYPES.FETCH_PROCESSO_LIST_CSV,
     // payload: axios.get<IProcesso>(`${requestUrl}/export-csv${sort ? '&' : '?'}${activeTabRequest}${advogadosRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}cacheBuster=${new Date().getTime()}`)
     payload: axios.get<IProcesso>(
-      `${requestUrl}/export-csv?${pesquisaRequest}${estadoRequest}${activeTabRequest}${advogadosRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${moedaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}/export-csv?${pesquisaRequest}${estadoRequest}${activeTabRequest}${advogadosRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}${valorInicialRequest}${valorFinalRequest}${moedaRequest}${cnpjRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -439,9 +464,13 @@ export const setBlob = (name, data, contentType?) => ({
 });
 
 export const prencherComarcas = estadoId => {
+  let queryUrl = '';
+  if (estadoId !== -1) {
+    queryUrl = '&estadoId.equals=' + estadoId;
+  }
   return {
     type: ACTION_TYPES.PRENCHER_COMARCAR,
-    payload: axios.get('api/comarcas?size=1000&estadoId.equals=' + estadoId)
+    payload: axios.get('api/comarcas?size=10000' + queryUrl)
   };
 };
 

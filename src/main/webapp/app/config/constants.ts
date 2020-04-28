@@ -20,6 +20,13 @@ export const currency = {
   REAIS: 'R$',
   CRUZEIRO: 'Cr$'
 };
+
+export const estados = {
+  Todos: -1,
+  SC: 1,
+  SP: 2
+};
+
 export const APP_DATE_FORMAT = 'DD/MM/YY HH:mm';
 export const APP_TIMESTAMP_FORMAT = 'DD/MM/YY HH:mm:ss';
 export const APP_LOCAL_DATE_FORMAT = 'DD/MM/YYYY';

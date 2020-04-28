@@ -9,8 +9,12 @@ const Menu = [
     path: '/pesquisa', icon: 'fa fa-history', title: 'Histórico de pesquisas', role: []
   },
   {
+    path: '/apenso', icon: 'fa fa-history', title: 'Apenso', role: []
+  },
+  {
     path: '/processo', icon: 'fa fa-balance-scale', title: 'Estados', role: [],
     children: [
+      { path: '/processo/Todos', title: 'Todos' },
       { path: '/processo/SC', title: 'Santa Catarina' },
       { path: '/processo/SP', title: 'São Paulo' },
     ]

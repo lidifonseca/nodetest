@@ -30,7 +30,7 @@ export class ApensoUpdate extends React.Component<IApensoUpdateProps, IApensoUpd
     };
   }
 
-  componentDidUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps, nextState) {
     if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
       this.handleClose();
     }

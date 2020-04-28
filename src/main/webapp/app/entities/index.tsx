@@ -22,8 +22,7 @@ import PageNotFound from 'app/shared/error/page-not-found';
 const Routes = ({ match }) => (
   <div>
     <Switch>
-      {/* prettier-ignore */}
-      <ErrorBoundaryRoute path={`${match.url}apenso`} component={Apenso} />
+      {/* prettier-ignore */}<ErrorBoundaryRoute path={`${match.url}apenso`} component={Apenso} />
       <ErrorBoundaryRoute path={`${match.url}processo`} component={Processo} />
       <ErrorBoundaryRoute path={`${match.url}pesquisa`} component={Pesquisa} />
       <ErrorBoundaryRoute component={PageNotFound} />

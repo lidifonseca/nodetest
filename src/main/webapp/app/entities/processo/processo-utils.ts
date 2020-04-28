@@ -15,6 +15,7 @@ export interface IProcessoBaseState {
   valorInicial?: number;
   valorFinal?: number;
   moeda?: string;
+  cnpj?: string;
 }
 export interface IProcessoBaseStateDetails {
   offset?: number;
@@ -37,6 +38,7 @@ export const getProcessoState = (location): IProcessoBaseState => {
   const valorInicialParam = parseFloat(url.searchParams.get('valorInicial')) || null;
   const valorFinalParam = parseFloat(url.searchParams.get('valorFinal')) || null;
   const moedaParam = url.searchParams.get('moeda') || '';
+  const cnpjParam = url.searchParams.get('cnpj') || '';
 
   let advogados = null;
   const activeTab = activeTabParam ? activeTabParam : 'sem_clasificacao';
@@ -49,6 +51,7 @@ export const getProcessoState = (location): IProcessoBaseState => {
   const valorInicial = valorInicialParam ? valorInicialParam : null;
   const valorFinal = valorFinalParam ? valorFinalParam : null;
   const moeda = moedaParam;
+  const cnpj = cnpjParam;
 
   if (advogadosParam === '0') advogados = '0';
   if (advogadosParam === '1') advogados = '1';
@@ -64,7 +67,8 @@ export const getProcessoState = (location): IProcessoBaseState => {
     distribuicaoFinal,
     valorInicial,
     valorFinal,
-    moeda
+    moeda,
+    cnpj
   };
 };
 export const getProcessoStateDetails = (location): IProcessoBaseStateDetails => {

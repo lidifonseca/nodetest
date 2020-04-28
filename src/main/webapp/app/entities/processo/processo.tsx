@@ -8,7 +8,6 @@ import {
   Label,
   UncontrolledTooltip,
   UncontrolledCollapse,
-  DropdownToggle,
   CardHeader,
   CardBody,
   UncontrolledAlert
@@ -25,7 +24,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {IRootState} from 'app/shared/reducers';
 import {getEntities, updateInteresseEntity, getEntitiesCSV, insertObservacao, prencherComarcas, editValorAcao, editMoeda} from './processo.reducer';
 import {getProcessoState, getSortState, IProcessoBaseState} from './processo-utils';
-import {APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT, APP_LOCAL_DATETIME_FORMAT, currency} from 'app/config/constants';
+import {
+  APP_DATE_FORMAT,
+  APP_LOCAL_DATE_FORMAT,
+  APP_LOCAL_DATETIME_FORMAT,
+  currency,
+  estados
+} from 'app/config/constants';
 import {ITEMS_PER_PAGE} from 'app/shared/util/pagination.constants';
 import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
 import {AvForm, AvInput} from 'availity-reactstrap-validation';
@@ -79,14 +84,14 @@ class Processo extends React.Component<IProcessoProps, IProcessoState> {
   };
   componentDidUpdate = (prevProps) => {
     if (this.props.match.params['estado'] !== prevProps.match.params['estado']) {
-      this.setState({estado: this.props.match.params['estado']},
+      this.setState({estado: this.props.match.params['estado'], distribuicaoInicial: null, distribuicaoFinal: null, comarca: '', numeroProcesso: '', assunto: '', valorInicial: null, valorFinal: null, cnpj: ''},
         () => {
           this.componentDidMount();
         }
       );
     }
     if (this.props.match.params['pesquisa'] !== prevProps.match.params['pesquisa']) {
-      this.setState({pesquisa: this.props.match.params['pesquisa']},
+      this.setState({pesquisa: this.props.match.params['pesquisa'], distribuicaoInicial: null, distribuicaoFinal: null, comarca: '', numeroProcesso: '', assunto: '', valorInicial: null, valorFinal: null, cnpj: ''},
         () => {
           this.componentDidMount();
         }
@@ -95,9 +100,8 @@ class Processo extends React.Component<IProcessoProps, IProcessoState> {
   };
 
   componentDidMount() {
-    console.info(this.state);
     this.getEntities();
-    let idEstado = this.state.estado == "SC" ? 1 : 2;
+    let idEstado = estados[this.state.estado];
     this.props.prencherComarcas(idEstado);
   }
 
@@ -127,36 +131,36 @@ class Processo extends React.Component<IProcessoProps, IProcessoState> {
     this.setState({distribuicaoFinal: value});
   };
   saveInteresse = (id, interesse) => {
-    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda} = this.state;
-    const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda];
+    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj} = this.state;
+    const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj];
     this.props.updateInteresseEntity(id, interesse, filters);
   };
 
 
   cancelCourse = () => {
     this.setState(
-      {distribuicaoInicial: null, distribuicaoFinal: null, comarca: '', numeroProcesso: '', assunto: '', valorInicial: null, valorFinal: null},
+      {distribuicaoInicial: null, distribuicaoFinal: null, comarca: '', numeroProcesso: '', assunto: '', valorInicial: null, valorFinal: null, cnpj: ''},
       () => this.sortEntities()
     );
   };
 
   insertObservacao = (event, errors, values, id) => {
-    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda} = this.state;
-    const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda];
+    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj} = this.state;
+    const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj];
 
     this.props.insertObservacao(id, values.observacao, filters);
   };
 
   editValorAcao = (id, valor) => {
-    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda} = this.state;
-    const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda];
+    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj} = this.state;
+    const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj];
 
     this.props.editValorAcao (id, valor, filters);
   };
 
   editMoeda = (id, moeda) => {
-  const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal} = this.state;
-  const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal];
+  const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, cnpj} = this.state;
+  const filters = [estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, cnpj];
 
   this.props.editMoeda (id, moeda, filters);
 };
@@ -195,13 +199,13 @@ class Processo extends React.Component<IProcessoProps, IProcessoState> {
   handlePagination = activePage => this.setState({activePage}, () => this.sortEntities());
 
   getEntities = () => {
-    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda} = this.state;
-    this.props.getEntities(estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda);
+    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj} = this.state;
+    this.props.getEntities(estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,  pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj);
   };
 
   getEntitiesCSV = () => {
-    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda} = this.state;
-    this.props.getEntitiesCSV(estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda);
+    const {estado, activePage, itemsPerPage, sort, order, activeTab, comarca, advogados, pesquisa, numeroProcesso, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj} = this.state;
+    this.props.getEntitiesCSV(estado, activePage - 1, itemsPerPage, `${sort},${order}`, activeTab, comarca, numeroProcesso, advogados,pesquisa, assunto, distribuicaoInicial, distribuicaoFinal, valorInicial, valorFinal, moeda, cnpj);
   };
 
 
@@ -272,11 +276,12 @@ class Processo extends React.Component<IProcessoProps, IProcessoState> {
               : ''
             }
             <CardHeader className={"p-2"} style={{backgroundColor:"#e9ecef", borderBottom:"0px"}}>
-              <DropdownToggle nav caret right id="toggler" style={{ marginBottom: '0.5rem', paddingBottom: "0px", color: "#495057"}}>
+              <Button id="togglerFilter">
                 Filtros&nbsp;
-              </DropdownToggle>
+                <FontAwesomeIcon icon="caret-down" />
+              </Button>
             </CardHeader>
-            <UncontrolledCollapse toggler="#toggler">
+            <UncontrolledCollapse toggler="#togglerFilter">
               <CardBody>
                 <AvForm ref={(el) => this.myFormRef = el} id="form-filter" onSubmit={this.filterEntity}>
                   <div className="row mt-1 ml-3 mr-3">
@@ -292,14 +297,18 @@ class Processo extends React.Component<IProcessoProps, IProcessoState> {
                         required={true}/>
                     </div>
                     <div className="col-md-3">
-                      <Label for="numero-porocesso" className=" col-form-label">Numero do processo</Label>
-                      <AvInput type="text" name="numeroProcesso" id="numero-porocesso" placeholder="Insere o numero do processo" value={this.state.numeroProcesso}/>
+                      <Label for="cnpj" className=" col-form-label">CNPJ</Label>
+                      <AvInput type="text" name="cnpj" id="cnpj" placeholder="Numero do CNPJ" value={this.state.cnpj}/>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-2">
+                      <Label for="numero-porocesso" className=" col-form-label">Numero do processo</Label>
+                      <AvInput type="text" name="numeroProcesso" id="numero-porocesso" placeholder="Numero do processo" value={this.state.numeroProcesso}/>
+                    </div>
+                    <div className="col-md-2">
                       <Label for="assunto" className="col-form-label">Assunto</Label>
                       <AvInput type="text" name="assunto" id="assunto" placeholder="Insere o assunto"  value={this.state.assunto} />
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-2">
                       <Label for="advogados" className="col-form-label">Advogados</Label>
                       <AvInput type="select" name="advogados" defaultValue={this.state.advogados}
                                placeholder="Advogados">
@@ -402,7 +411,7 @@ class Processo extends React.Component<IProcessoProps, IProcessoState> {
                       <td className={"align-middle text-center"}>
                         <TextFormat type="date" value={processo.dataCriacao} format={APP_LOCAL_DATETIME_FORMAT}/>
                       </td>
-                      <td className={"align-middle"}>{processo.comarcaNome}</td>
+                      <td className={"align-middle"}>{processo.comarcaNome} {match.url ==='/processo/Todos'  ? '- ' + processo.estado : ''}</td>
                       <td className={"align-middle text-center"}>
                         <TextFormat type="date" value={processo.dataDistribuicao} format={APP_LOCAL_DATE_FORMAT}/>
                       </td>
