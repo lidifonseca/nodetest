@@ -35,7 +35,7 @@
         "version": "1.0.2"
       }
     ],
-    "enableTranslation": false,
+    "enableTranslation": true,
     "blueprints": [
       {
         "name": "generator-jhipster-nodejs",

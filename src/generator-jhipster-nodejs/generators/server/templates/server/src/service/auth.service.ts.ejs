@@ -1,0 +1,72 @@
+import { Injectable, <%_ if (authenticationType === 'jwt') { _%> HttpException, HttpStatus,  <%_ } _%>  Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+<%_ if (authenticationType === 'jwt') { _%>
+import { JwtService } from '@nestjs/jwt';
+import { UserLoginDTO } from '../service/dto/user-login.dto';
+import { Payload } from '../security/payload.interface';
+import { Authority } from '../domain/authority.entity';
+<%_ } _%>
+import { User } from '../domain/user.entity';
+import { AuthorityRepository } from '../repository/authority.repository';
+import { UserService } from '../service/user.service';
+
+@Injectable()
+export class AuthService {
+    logger = new Logger('AuthService');
+  constructor(
+    <%_ if (authenticationType === 'jwt') { _%>
+    private readonly jwtService: JwtService,
+    <%_ } _%>
+    @InjectRepository(AuthorityRepository) private authorityRepository: AuthorityRepository,
+    private userService: UserService,
+  ) {}
+
+  <%_ if (authenticationType === 'jwt') { _%>
+  async login(userLogin: UserLoginDTO): Promise<any> {
+    const loginUserName = userLogin.username;
+    const loginPassword = userLogin.password;
+
+    const userFind = await this.userService.findByfields({ where: { username: loginUserName, password: loginPassword } });
+    if (!userFind) {
+      throw new HttpException('Invalid login name or password.', HttpStatus.BAD_REQUEST);
+    }
+
+    const user = await this.findUserWithAuthById(userFind.id);
+
+    const payload: Payload = { id: user.id, username: user.login, authorities: user.authorities };
+
+    /* eslint-disable */
+    return {
+      id_token: this.jwtService.sign(payload)
+    };
+  }
+
+  /* eslint-enable */
+  async validateUser(payload: Payload): Promise<User | undefined> {
+    return await this.findUserWithAuthById(payload.id);
+  }
+
+  async find(): Promise<Authority[]> {
+    return await this.authorityRepository.find();
+  }
+
+  async findUserWithAuthById(userId: string): Promise<User | undefined> {
+    const user: any = await this.userService.findByfields({ where: { id: userId } });
+    return user;
+  }
+  <%_ } else if (authenticationType === 'oauth2') { _%>
+    async findUserOrSave(loginUser: User): Promise<User | undefined> {
+        let userFound = await this.userService.findByfields({ where: { login: loginUser.login } });
+
+        if (!userFound) {
+          const authoritiesName = [];
+          loginUser.authorities.forEach(authority => authoritiesName.push({ name: authority }));
+          userFound = Object.assign({}, loginUser);
+          userFound.authorities = authoritiesName;
+          await this.userService.save(userFound);
+        }
+        return loginUser;
+      }
+
+  <%_ } _%>
+}
