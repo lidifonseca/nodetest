@@ -22,10 +22,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-<%_ } _%>
+import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table, Label, UncontrolledTooltip, UncontrolledCollapse, CardHeader, CardBody, UncontrolledAlert } from 'reactstrap';
+import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
   <%_ if (blobFields.length > 0) { _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
@@ -33,7 +31,7 @@ import {
     <%_ } _%>
   byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine === 'elasticsearch') { %>, translate, ICrudSearchAction<% } %>,
+  Translate, translate<% if (searchEngine === 'elasticsearch') { %>, ICrudSearchAction<% } %>,
   ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
@@ -42,6 +40,8 @@ import {
   <%_ }} _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
 import {
@@ -59,28 +59,115 @@ import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileNam
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 <%_ } _%>
 
+
+
+<%_
+let hasRelationshipQuery = false;
+let otherEntityActions = new Set();
+let manyToManyOwners = new Set();
+let relFieldNames = new Set();
+let uniqueRealtionFields = new Set();
+
+
+Object.keys(differentRelationships).forEach(key => {
+
+  const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
+      (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')
+          || rel.relationshipType !== 'one-to-many'
+  );
+  if (hasAnyRelationshipQuery) {
+    hasRelationshipQuery = true;
+    differentRelationships[key].forEach(rel => {
+      if (rel.relationshipType === 'many-to-many' && rel.ownerSide === true) {
+        manyToManyOwners.add(rel);
+      } else {
+        relFieldNames.add(rel);
+      }
+    });
+  }
+  if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+    const uniqueRel = differentRelationships[key][0];
+    uniqueRealtionFields.add(uniqueRel.otherEntityNamePlural);
+    otherEntityActions.add({
+      action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
+      instance: `${uniqueRel.otherEntityNamePlural}`,
+      entity: uniqueRel.otherEntityAngularName,
+      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
+    });
+    if (uniqueRel.otherEntityAngularName === 'User') {
+_%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getUsers } from 'app/shared/reducers/user-management';
+<%_ } else { _%>
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } _%>
+<%_
+  } else {
+    if (uniqueRel.otherEntityAngularName !== entityReactName) {
+_%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+  <%_ } _%>
+import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
+<%_ }
+  }
+}); _%>
+
+
+
 export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{url: string}> {}
 
+export interface I<%= entityReactName %>BaseState {
+  <%_ for (idx in fields) { _%>
+    <%= fields[idx].fieldName %> : any;
+  <%_ } _%>
+  <%_ relationships.forEach(rel => { _%>
+    <%= rel.relationshipName %> : any;
+  <%_ }) _%>
+}
 <% if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
-export interface I<%= entityReactName %>State extends IPaginationBaseState {
+export interface I<%= entityReactName %>State extends I<%= entityReactName %>BaseState, IPaginationBaseState {
   search: string;
 }
 <%_ } else if (searchEngine === 'elasticsearch') { _%>
-export interface I<%= entityReactName %>State {
+export interface I<%= entityReactName %>State extends I<%= entityReactName %>BaseState {
   search: string;
 }
 <%_ } else if (pagination !== 'no') { _%>
-export type I<%= entityReactName %>State = IPaginationBaseState;
+export interface I<%= entityReactName %>State extends I<%= entityReactName %>BaseState, IPaginationBaseState {};
 <%_ } _%>
 
 export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch' || pagination !== 'no') { %>, I<%= entityReactName %>State<% } %>> {
+  private myFormRef: any;
+
+  get<%= entityReactName %>State = (location): I<%= entityReactName %>BaseState => {
+    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+    <%_ for (idx in fields) { _%>
+      const <%= fields[idx].fieldName %> = url.searchParams.get('<%= fields[idx].fieldName %>') || '';
+    <%_ } _%>
+
+    <%_ relationships.forEach(rel => { _%>
+      const <%= rel.relationshipName %> = url.searchParams.get('<%= rel.relationshipName %>') || '';
+    <%_ }) _%>
+
+    return {
+      <%_ for (idx in fields) { _%>
+        <%= fields[idx].fieldName %>,
+      <%_ } _%>
+      <%_ relationships.forEach(rel => { _%>
+        <%= rel.relationshipName %>,
+      <%_ }) _%>
+    };
+  };
+
   <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
   state: I<%= entityReactName %>State = {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     search: '',
     <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
-    ...getSortState(this.props.location, ITEMS_PER_PAGE)
+    ...getSortState(this.props.location, ITEMS_PER_PAGE),
+    ...this.get<%= entityReactName %>State(this.props.location)
     <%_ } _%>
   };
   <%_ } _%>
@@ -95,7 +182,34 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     <%_ } else { _%>
     this.props.getEntities();
     <%_ } _%>
+
+    <%_ otherEntityActions.forEach(val => { _%>
+      this.props.<%= val.action %>();
+    <%_ }) _%>
   }
+
+
+  cancelCourse = () => {
+    this.setState(
+      {
+        <%_ for (idx in fields) { _%>
+          <%= fields[idx].fieldName %>: '',
+        <%_ } _%>
+        <%_ relationships.forEach(rel => { _%>
+          <%= rel.relationshipName %>: '',
+        <%_ }) _%>
+      },
+      () => this.sortEntities()
+    );
+  };
+  
+  filterEntity = (event, errors, values) => {
+    this.setState({
+      ...this.state,
+      ...values
+    }, () => this.sortEntities());
+  };
+  
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   componentDidUpdate() {
@@ -163,8 +277,22 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   sortEntities() {
     this.getEntities();
-    this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
+    this.props.history.push(this.props.location.pathname +'?' +this.getFiltersURL());
   }
+
+  getFiltersURL = (offset = null) => {
+    return 'page=' + this.state.activePage + '&' +
+    'size=' + this.state.itemsPerPage + '&' +
+    (offset !== null ? ('offset=' + offset) + '&' : '') +
+    'sort=' + this.state.sort + ',' + this.state.order + '&' +
+      <%_ for (idx in fields) { _%>
+        '<%= fields[idx].fieldName %>=' + this.state.<%= fields[idx].fieldName %> + '&' +
+      <%_ } _%>
+      <%_ relationships.forEach(rel => { _%>
+        '<%= rel.relationshipName %>=' + this.state.<%= rel.relationshipName %> + '&' +
+      <%_ }) _%>
+    ''
+  };
   <%_ } _%>
 
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
@@ -180,242 +308,602 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
       this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
     }
     <%_ } else { _%>
-    const { activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    const {<%_ for (idx in fields) { _%><%= fields[idx].fieldName %>, <%_ } _%><%_ relationships.forEach(rel => { _%><%= rel.relationshipName %>, <%_ }) _%>activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(<%_ for (idx in fields) { _%><%= fields[idx].fieldName %>, <%_ } _%><%_ relationships.forEach(rel => { _%><%= rel.relationshipName %>, <%_ }) _%>activePage - 1, itemsPerPage, `${sort},${order}`);
     <%_ } _%>
   };
   <%_ } _%>
 
   render() {
-    const { <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
+    const { <% uniqueRealtionFields.forEach(rel => {%> <%= rel %>,<% }) %> <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
     return (
       <div>
-        <h2 id="<%= entityFileName %>-heading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
-          <%_ if (!readOnly) { _%>
-          <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
-            <FontAwesomeIcon icon="plus" />&nbsp;
-            <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
-              Create a new <%= entityClassHumanized %>
-            </Translate>
-          </Link>
-          <%_ } _%>
-        </h2>
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        <Row>
-          <Col sm="12">
-            <AvForm onSubmit={this.search}>
-              <AvGroup>
-                <InputGroup>
-                  <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch}
-                    placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
-                  <Button className="input-group-addon">
-                    <FontAwesomeIcon icon="search" />
-                  </Button>
-                  <Button type="reset" className="input-group-addon" onClick={this.clear}>
-                    <FontAwesomeIcon icon="trash" />
-                  </Button>
-                </InputGroup>
-              </AvGroup>
-            </AvForm>
-          </Col>
-        </Row>
-        <%_ } _%>
-        <div className="table-responsive">
-          <%_ if (pagination === 'infinite-scroll') { _%>
-          <InfiniteScroll pageStart={this.state.activePage}
-                          loadMore={this.handleLoadMore}
-                          hasMore={this.state.activePage - 1 < this.props.links.next}
-                          loader={<div className="loader">Loading ...</div>}
-                          threshold={0}
-                          initialLoad={false}>
-          <%_ } _%>
-          {
-            <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(
-              <Table responsive aria-describedby="<%= entityFileName %>-heading">
-                <thead>
-                  <tr>
-                    <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
-                    <%_ for (idx in fields) { _%>
-                    <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
-                    <%_ } _%>
-                    <%_ for (idx in relationships) { _%>
-                        <%_ if (relationships[idx].relationshipType === 'many-to-one'
-                        || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
-                        || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
-                        const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                    <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
-                        <%_ } _%>
-                    <%_ } _%>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    <%= entityInstance %>List.map((<%=entityInstance %>, i) => (
-                    <tr key={`entity-${i}`}>
-                      <td>
-                        <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="link" size="sm">
-                          {<%= entityInstance %>.id}
-                        </Button>
-                      </td>
-                      <%_ for (idx in fields) {
-                        const fieldType = fields[idx].fieldType;
-                        const fieldName = fields[idx].fieldName;
-                        const fieldIsEnum = fields[idx].fieldIsEnum;
-                      _%>
-                      <td>
-                      <%_ if (fieldType === 'Boolean') { _%>
-                        {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
-                      <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                        <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_DATE_FORMAT} />
-                      <%_ } else if (fieldType === 'LocalDate') { _%>
-                        <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
-                      <%_ } else if (fieldIsEnum && enableTranslation) { _%>
-                        <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
-                      <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-                        <%_
-                          // blobFields
-                          const fieldBlobType = fields[idx].fieldTypeBlobContent;
-                          if (fieldBlobType !== 'text') {
-                        _%>
-                          {<%= entityInstance %>.<%= fieldName %> ? (
-                            <div>
-                                <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
-                                <%_ if (fieldBlobType === 'image') { _%>
-                                  <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+        <ol className="breadcrumb float-xl-right">
+          <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
+          <li className="breadcrumb-item active"><%= entityClassPluralHumanized %></li>
+        </ol>
+        <h1 className="page-header">&nbsp;&nbsp;</h1>
+        <Panel>
+          <PanelHeader>
+            
+            <h2 id="page-heading">
+              <span className="page-header ml-3"><%= entityClassPluralHumanized %></span>
+              <Button id="togglerFilter<%= entityReactName %>" className="btn btn-primary float-right jh-create-entity">
+                  Filtros&nbsp;
+                <FontAwesomeIcon icon="caret-down" />
+              </Button>
+              <%_ if (!readOnly) { _%>
+              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+                <FontAwesomeIcon icon="plus" />&nbsp;
+                <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
+                  Create a new <%= entityClassHumanized %>
+                </Translate>
+              </Link>
+              <%_ } _%>
+            </h2>
+          </PanelHeader>
+          <PanelBody>
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            <Row>
+              <Col sm="12">
+                <AvForm onSubmit={this.search}>
+                  <div>
+                    <InputGroup>
+                      <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch}
+                        placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
+                      <Button className="input-group-addon">
+                        <FontAwesomeIcon icon="search" />
+                      </Button>
+                      <Button type="reset" className="input-group-addon" onClick={this.clear}>
+                        <FontAwesomeIcon icon="trash" />
+                      </Button>
+                    </InputGroup>
+                  </div>
+                </AvForm>
+              </Col>
+            </Row>
+            <%_ } _%>
+            <div className="table-responsive">
+              <%_ if (pagination === 'infinite-scroll') { _%>
+              <InfiniteScroll pageStart={this.state.activePage}
+                              loadMore={this.handleLoadMore}
+                              hasMore={this.state.activePage - 1 < this.props.links.next}
+                              loader={<div className="loader">Loading ...</div>}
+                              threshold={0}
+                              initialLoad={false}>
+              <%_ } _%>
+               
+                <UncontrolledCollapse toggler="#togglerFilter<%= entityReactName %>">
+                  <CardBody>
+                    <AvForm ref={(el) => this.myFormRef = el} id="form-filter" onSubmit={this.filterEntity} >
+                      <div className="row mt-1 ml-3 mr-3">
+                          <%_ for (idx in fields) {
+                              const fieldType = fields[idx].fieldType;
+                              const fieldName = fields[idx].fieldName;
+                              const fieldNameHumanized = fields[idx].fieldNameHumanized;
+                          _%>
+
+                          <div className="col-md-3">
+                          <%_ if (fieldType === 'Boolean') { _%>
+                            <Label id="<%= fieldName %>Label" check>
+                              <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="checkbox" className="form-control" name="<%= fieldName %>" />
+                              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                                <%= fieldNameHumanized %>
+                              </Translate>
+                            </Label>
+                          <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                                <%= fieldNameHumanized %>
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              id="<%= entityFileName %>-<%= fieldName %>"
+                              type="datetime-local"
+                              className="form-control"
+                              name="<%= fieldName %>"
+                              placeholder={"YYYY-MM-DD HH:mm"}
+                              value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
+                              <%- include react_validators %>
+                            />
+                          <%_ } else if (fieldType === 'LocalDate') { _%>
+                            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                                <%= fieldNameHumanized %>
+                              </Translate>
+                            </Label>
+                            <AvInput type="date" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}  <%- include react_validators %> />
+                          <%_
+                            } else if (fields[idx].fieldIsEnum) {
+                              const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+                          _%>
+                            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                                <%= fieldNameHumanized %>
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              id="<%= entityFileName %>-<%= fieldName %>"
+                              type="select"
+                              className="form-control"
+                              name="<%= fieldName %>"
+                              value={(!isNew && <%= entityInstance %>Entity.<%= fieldName%>) || '<%= values[0] %>'}
+                            >
+                            <%_
+                              const enumPrefix = angularAppName + '.'+ fieldType;
+                              for (key in values) {
+                                  const value = values[key];
+                            _%>
+                              <option value="<%= value %>">
+                              <%_ if (enableTranslation) { _%>
+                                {translate("<%= enumPrefix %>.<%= value %>")}
+                              <%_ } else { _%>
+                                <%= value %>
+                              <%_ } _%>
+                              </option>
+                            <%_ } _%>
+                            </AvInput>
+                          <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
+                            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                                <%= fieldNameHumanized %>
+                              </Translate>
+                            </Label>
+                            <AvInput type="string" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}  <%- include react_validators %> />
+                          <%_
+                          } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
+              
+                            const fieldBlobType = fields[idx].fieldTypeBlobContent;
+                            if (fieldBlobType !== 'text') {
+                              const isAnImage = fieldBlobType === 'image';
+                              const capitalizedFirstLetter =  _.upperFirst(fieldName);
+              
+                          _%>
+              
+                          <div>
+                            <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+                              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                                <%= fieldNameHumanized %>
+                              </Translate>
+                            </Label>
+                            <br />
+                            {<%= fieldName %> ? (
+                              <div>
+                                <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
+                                <%_ if (isAnImage) { _%>
+                                  <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
                                 <%_ } else { _%>
                                   <Translate contentKey="entity.action.open">Open</Translate>
                                 <%_ } _%>
-                                &nbsp;
-                              </a>
-                              <span>{<%= entityInstance %>.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>.<%= fieldName %>)}</span>
-                            </div>
-                          ) : null}
-                        <%_ } else { _%>
-                            {<%= entityInstance %>.<%= fieldName %>}
-                        <%_ } _%>
-                      <%_ } else { _%>
-                        {<%= entityInstance %>.<%= fieldName %>}
-                      <%_ } _%>
-                      </td>
-                      <%_ } _%>
-                      <%_ for (idx in relationships) {
-                        const relationshipType = relationships[idx].relationshipType;
-                        const ownerSide = relationships[idx].ownerSide;
-                        const relationshipFieldName = relationships[idx].relationshipFieldName;
-                        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-                        const otherEntityName = relationships[idx].otherEntityName;
-                        const otherEntityStateName = relationships[idx].otherEntityStateName;
-                        const otherEntityField = relationships[idx].otherEntityField;
-                        const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
-                        <%_ if (relationshipType === 'many-to-one'
-                        || (relationshipType === 'one-to-one' && ownerSide === true)
-                        || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
-                      <td>
-                        <%_ if (otherEntityName === 'user') { _%>
-                          <%_ if (relationshipType === 'many-to-many') { _%>
-                        {
-                          (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
-                              (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
-                                  <span key={j}>{val.<%= otherEntityField %>}{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
-                              )
-                          ) : null
-                        }
+                                </a>
+                                <br />
+                                <Row>
+                                  <Col md="11">
+                                    <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
+                                  </Col>
+                                  <Col md="1">
+                                    <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}><FontAwesomeIcon icon="times-circle" /></Button>
+                                  </Col>
+                                </Row>
+                              </div>
+                            ) : null}
+                            <input id="file_<%= fieldName %>" type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
+                            <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %>/>
+                          </div>
+              
                           <%_ } else { _%>
-                            <%_ if (dto === 'no') { _%>
-                        {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
-                            <%_ } else { _%>
-                        {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
-                              <%_ } _%>
-                          <%_ } _%>
-                          <%_ } else { _%>
-                            <%_ if (relationshipType === 'many-to-many') { _%>
-                          {
-                            (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
-                                (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
-                                    <span key={j}><Link to={`<%= otherEntityStateName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
-                                )
-                            ) : null
-                          }
-                            <%_ } else { _%>
-                                <%_ if (dto === 'no') { _%>
-                          {<%= entityInstance + "." + relationshipFieldName %> ?
-                          <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
-                            {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
-                          </Link> : ''}
-                                <%_ } else { _%>
-                          {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ?
-                          <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
-                            {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}
-                          </Link> : ''}
-                                <%_ } _%>
+                            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                              <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                                <%= fieldNameHumanized %>
+                              </Translate>
+                            </Label>
+                            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
                             <%_ } _%>
+                          <%_ } else { _%>
+                          <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                            <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                              <%= fieldNameHumanized %>
+                            </Translate>
+                          </Label>
+
+                          <AvInput type="text" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}  <%- include react_validators %> />
+                        <%_ } _%>
+                          <%_ if (fields[idx].javadoc) { _%>
+                          <UncontrolledTooltip target="<%= fieldName %>Label">
+                            <%_ if (enableTranslation) { _%>
+                            <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
+                            <%_ } else { _%>
+                            <%= fields[idx].javadoc %>
+                            <%_ } _%>
+                          </UncontrolledTooltip>
                           <%_ } _%>
-                        </td>
+                        </div>
                         <%_ } _%>
-                        <%_ } _%>
-                        <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
-                            </Button>
-                            <%_ if (!readOnly) { _%>
-                            <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
-                            </Button>
+                          <%_ relationships.forEach(rel => {
+                              const relationshipType = rel.relationshipType;
+                              const ownerSide = rel.ownerSide;
+                              const otherEntityName = rel.otherEntityName;
+                              const otherEntityNamePlural = rel.otherEntityNamePlural;
+                              const otherEntityNameCapitalized = rel.otherEntityNameCapitalized;
+                              const relationshipName = rel.relationshipName;
+                              const relationshipNameHumanized = rel.relationshipNameHumanized;
+                              const relationshipFieldName = rel.relationshipFieldName;
+                              const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
+                              const otherEntityField = rel.otherEntityField;
+                              const otherEntityFieldCapitalized = rel.otherEntityFieldCapitalized;
+                              const relationshipRequired = rel.relationshipRequired;
+                              const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
+                          <div className="col-md-3">
+                              <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
+                          <div>
+                            <Label for="<%= entityFileName %>-<%= relationshipName %>">
+                              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+                            </Label>
+                            <%_ if (dto === 'no') { _%>
+                                <%_ if (!relationshipRequired) { _%>
+                            <AvInput
+                              id="<%= entityFileName %>-<%= relationshipName %>"
+                              type="select"
+                              className="form-control"
+                              name="<%= relationshipFieldName %>.id"
+                            >
+                              <option value="" key="0" />
+                              {
+                                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                                  <option
+                                    value={otherEntity.id}
+                                    key={otherEntity.id}>
+                                    {otherEntity.<%=otherEntityField%>}
+                                  </option>
+                                ) : null
+                              }
+                            </AvInput>
+                              <%_ } else { _%>
+                            <AvInput
+                              id="<%= entityFileName %>-<%= relationshipName %>"
+                              type="select"
+                              className="form-control"
+                              name="<%= relationshipFieldName %>.id"
+                              value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
+                              required
+                            >
+                              {
+                                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                                  <option
+                                    value={otherEntity.id}
+                                    key={otherEntity.id}>
+                                    {otherEntity.<%=otherEntityField%>}
+                                  </option>
+                                ) : null
+                              }
+                            </AvInput>
+                            <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
+                            <%_ } _%>
+                            <%_ } else { _%>
+                              <%_ if (!relationshipRequired) { _%>
+                                <AvInput
+                                  id="<%= entityFileName %>-<%= relationshipName %>"
+                                  type="select"
+                                  className="form-control"
+                                  name="<%= relationshipFieldName %>Id"
+                                >
+                                  <option value="" key="0" />
+                                  {
+                                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                                      <option
+                                        value={otherEntity.id}
+                                        key={otherEntity.id}>
+                                        {otherEntity.<%=otherEntityField%>}
+                                      </option>
+                                    ) : null
+                                  }
+                                </AvInput>
+                              <%_ } else { _%>
+                                <AvInput
+                                  id="<%= entityFileName %>-<%= relationshipName %>"
+                                  type="select"
+                                  className="form-control"
+                                  name="<%= relationshipFieldName %>Id"
+                                  required
+                                >
+                                  {
+                                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                                      <option
+                                        value={otherEntity.id}
+                                        key={otherEntity.id}>
+                                        {otherEntity.<%=otherEntityField%>}
+                                      </option>
+                                    ) : null
+                                  }
+                                </AvInput>
+                                <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
+                              <%_ } _%>
                             <%_ } _%>
                           </div>
-                        </td>
+                              <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
+                          <div>
+                            <Label for="<%= entityFileName %>-<%= relationshipName %>">
+                              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+                            </Label>
+                              <%_ if (dto === 'no') { _%>
+                                <AvInput
+                                  id="<%= entityFileName %>-<%= relationshipName %>"
+                                  type="select"
+                                  className="form-control"
+                                  name="<%= relationshipFieldName %>.id"
+                                >
+                                  <option value="" key="0" />
+                                  {
+                                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                                      <option
+                                        value={otherEntity.id}
+                                        key={otherEntity.id}>
+                                        {otherEntity.<%=otherEntityField%>}
+                                      </option>
+                                    ) : null
+                                  }
+                                </AvInput>
+                              <%_ } else { _%>
+                                <AvInput
+                                  id="<%= entityFileName %>-<%= relationshipName %>"
+                                  type="select"
+                                  className="form-control"
+                                  name="<%= relationshipFieldName %>Id"
+                                >
+                                  <option value="" key="0" />
+                                  {
+                                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                                      <option
+                                        value={otherEntity.id}
+                                        key={otherEntity.id}>
+                                        {otherEntity.<%=otherEntityField%>}
+                                      </option>
+                                    ) : null
+                                  }
+                                </AvInput>
+                              <%_ } _%>
+                          </div>
+                              <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
+                          <div>
+                            <Label for="<%= entityFileName %>-<%= relationshipName %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
+                            <AvInput
+                              id="<%= entityFileName %>-<%= relationshipName %>"
+                              type="select"
+                              multiple
+                              className="form-control"
+                              name="<%= relationshipFieldNamePlural %>"
+                              value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.id)}
+                            >
+                              <option value="" key="0" />
+                              {
+                                (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                                <option
+                                    value={otherEntity.id}
+                                    key={otherEntity.id}>
+                                    {otherEntity.<%=otherEntityField%>}
+                                </option>
+                                ) : null
+                              }
+                            </AvInput>
+                          </div>
+                          <%_ } _%>
+                        </div>
+                        <%_ }) _%>
+                      </div>
+
+                      <div className="row mb-2 mr-4 justify-content-end">
+                          <Button className="btn btn-success" type="submit">
+                            <i className="fa fa-filter" aria-hidden={"true"}></i>
+                            &nbsp;
+                            <Translate contentKey="entity.validation.filter">Filter</Translate>
+                            
+                          </Button>
+                          &nbsp;
+                          <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
+                            <FontAwesomeIcon icon="trash-alt" />
+                            &nbsp;
+                            <Translate contentKey="entity.validation.clean">Clean</Translate>
+                          </div>
+                        </div>
+                
+                    </AvForm>
+                  </CardBody>
+                </UncontrolledCollapse>
+
+              {
+                <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(
+                  <Table responsive aria-describedby="<%= entityFileName %>-heading"  className={'table-hover table-striped mt-4'}>
+                    <thead className={"thead-light"}>
+                      <tr>
+                        <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                        <%_ for (idx in fields) { _%>
+                        <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                        <%_ } _%>
+                        <%_ for (idx in relationships) { _%>
+                            <%_ if (relationships[idx].relationshipType === 'many-to-one'
+                            || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
+                            || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
+                            const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
+                        <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                            <%_ } _%>
+                        <%_ } _%>
+                        <th />
                       </tr>
-                    ))
-                  }
-                </tbody>
-              </Table>
-            ) : (
-              <div className="alert alert-warning">
-                <Translate contentKey="<%= i18nKeyPrefix %>.home.notFound">
-                  No <%= entityClassPluralHumanized %> found
-                </Translate>
+                    </thead>
+                    <tbody>
+                      <tr></tr>
+                      {
+                        <%= entityInstance %>List.map((<%=entityInstance %>, i) => (
+                        <tr key={`entity-${i}`}>
+                          <td>
+                            <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="link" size="sm">
+                              {<%= entityInstance %>.id}
+                            </Button>
+                          </td>
+                          <%_ for (idx in fields) {
+                            const fieldType = fields[idx].fieldType;
+                            const fieldName = fields[idx].fieldName;
+                            const fieldIsEnum = fields[idx].fieldIsEnum;
+                          _%>
+                          <td>
+                          <%_ if (fieldType === 'Boolean') { _%>
+                            {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
+                          <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+                            <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_DATE_FORMAT} />
+                          <%_ } else if (fieldType === 'LocalDate') { _%>
+                            <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                          <%_ } else if (fieldIsEnum && enableTranslation) { _%>
+                            <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
+                          <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+                            <%_
+                              // blobFields
+                              const fieldBlobType = fields[idx].fieldTypeBlobContent;
+                              if (fieldBlobType !== 'text') {
+                            _%>
+                              {<%= entityInstance %>.<%= fieldName %> ? (
+                                <div>
+                                    <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
+                                    <%_ if (fieldBlobType === 'image') { _%>
+                                      <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                                    <%_ } else { _%>
+                                      <Translate contentKey="entity.action.open">Open</Translate>
+                                    <%_ } _%>
+                                    &nbsp;
+                                  </a>
+                                  <span>{<%= entityInstance %>.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>.<%= fieldName %>)}</span>
+                                </div>
+                              ) : null}
+                            <%_ } else { _%>
+                                {<%= entityInstance %>.<%= fieldName %>}
+                            <%_ } _%>
+                          <%_ } else { _%>
+                            {<%= entityInstance %>.<%= fieldName %>}
+                          <%_ } _%>
+                          </td>
+                          <%_ } _%>
+                          <%_ for (idx in relationships) {
+                            const relationshipType = relationships[idx].relationshipType;
+                            const ownerSide = relationships[idx].ownerSide;
+                            const relationshipFieldName = relationships[idx].relationshipFieldName;
+                            const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                            const otherEntityName = relationships[idx].otherEntityName;
+                            const otherEntityStateName = relationships[idx].otherEntityStateName;
+                            const otherEntityField = relationships[idx].otherEntityField;
+                            const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
+                            <%_ if (relationshipType === 'many-to-one'
+                            || (relationshipType === 'one-to-one' && ownerSide === true)
+                            || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
+                          <td>
+                            <%_ if (otherEntityName === 'user') { _%>
+                              <%_ if (relationshipType === 'many-to-many') { _%>
+                            {
+                              (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
+                                  (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
+                                      <span key={j}>{val.<%= otherEntityField %>}{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                                  )
+                              ) : null
+                            }
+                              <%_ } else { _%>
+                                <%_ if (dto === 'no') { _%>
+                            {<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
+                                <%_ } else { _%>
+                            {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
+                                  <%_ } _%>
+                              <%_ } _%>
+                              <%_ } else { _%>
+                                <%_ if (relationshipType === 'many-to-many') { _%>
+                              {
+                                (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
+                                    (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
+                                        <span key={j}><Link to={`<%= otherEntityStateName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                                    )
+                                ) : null
+                              }
+                                <%_ } else { _%>
+                                    <%_ if (dto === 'no') { _%>
+                              {<%= entityInstance + "." + relationshipFieldName %> ?
+                              <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
+                                {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
+                              </Link> : ''}
+                                    <%_ } else { _%>
+                              {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ?
+                              <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
+                                {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}
+                              </Link> : ''}
+                                    <%_ } _%>
+                                <%_ } _%>
+                              <%_ } _%>
+                            </td>
+                            <%_ } _%>
+                            <%_ } _%>
+                            <td className="text-right">
+                              <div className="btn-group flex-btn-group-container">
+                                <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
+                                </Button>
+                                <%_ if (!readOnly) { _%>
+                                <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
+                                  <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                                </Button>
+                                <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
+                                  <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
+                                </Button>
+                                <%_ } _%>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      }
+                    </tbody>
+                  </Table>
+                ) : (
+                  <div className="alert alert-warning">
+                    <Translate contentKey="<%= i18nKeyPrefix %>.home.notFound">
+                      No <%= entityClassPluralHumanized %> found
+                    </Translate>
+                  </div>
+                )
+              }
+              <%_ if (pagination === 'infinite-scroll') { _%>
+              </InfiniteScroll>
+              <%_ } _%>
+            </div>
+          </PanelBody>
+          <PanelFooter>
+            <%_ if (databaseType !== 'cassandra') { _%>
+              <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+              <div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
+                <Row className="justify-content-center">
+                  <JhiItemCount
+                    page={this.state.activePage}
+                    total={totalItems}
+                    itemsPerPage={this.state.itemsPerPage}
+                    <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
+                  />
+                </Row>
+                <Row className="justify-content-center">
+                  <JhiPagination
+                    activePage={this.state.activePage}
+                    onSelect={this.handlePagination}
+                    maxButtons={5}
+                    itemsPerPage={this.state.itemsPerPage}
+                    totalItems={this.props.totalItems}
+                  />
+                </Row>
               </div>
-            )
-          }
-          <%_ if (pagination === 'infinite-scroll') { _%>
-          </InfiniteScroll>
-          <%_ } _%>
-        </div>
-        <%_ if (databaseType !== 'cassandra') { _%>
-          <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-          <div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
-            <Row className="justify-content-center">
-              <JhiItemCount
-                page={this.state.activePage}
-                total={totalItems}
-                itemsPerPage={this.state.itemsPerPage}
-                <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
-              />
-            </Row>
-            <Row className="justify-content-center">
-              <JhiPagination
-                activePage={this.state.activePage}
-                onSelect={this.handlePagination}
-                maxButtons={5}
-                itemsPerPage={this.state.itemsPerPage}
-                totalItems={this.props.totalItems}
-              />
-            </Row>
-          </div>
-          <% } _%>
-        <%_ } _%>
+              <% } _%>
+            <%_ } _%>
+          </PanelFooter>
+        </Panel>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
+const mapStateToProps = ({ <%= entityInstance %>, ...storeState  }: IRootState) => ({
+  <%_ otherEntityActions.forEach(val => { _%>
+    <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
+  <%_ }) _%>
   <%= entityInstance %>List: <%= entityInstance %>.entities,
   <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems,
@@ -428,6 +916,9 @@ const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  <%_ otherEntityActions.forEach(val => { _%>
+    <%= val.action %>,
+  <%_ }) _%>
  <%_ if (searchEngine === 'elasticsearch') { _%>
  getSearchEntities,
  <%_ } _%>

@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+
+import { IPayload } from 'react-jhipster/src/type/redux-action.type';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -101,14 +103,33 @@ const apiUrl = 'api/apensos';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IApenso> = (page, size, sort) => {
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+// Actions
+export type ICrudGetAllActionApenso<T> = (
+  numero?: any,
+  clase?: any,
+  apensamento?: any,
+  motivo?: any,
+  processo?: any,
+  page?: Number,
+  size?: Number,
+  sort?: String
+) => IPayload<T> | ((dispatch: any) => IPayload<T>);
+
+export const getEntities: ICrudGetAllActionApenso<IApenso> = (numero, clase, apensamento, motivo, processo, page, size, sort) => {
+  const numeroRequest = numero ? `numero.contains=${numero}&` : '';
+  const claseRequest = clase ? `clase.contains=${clase}&` : '';
+  const apensamentoRequest = apensamento ? `apensamento.contains=${apensamento}&` : '';
+  const motivoRequest = motivo ? `motivo.contains=${motivo}&` : '';
+  const processoRequest = processo ? `processoId.equals=${processo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_APENSO_LIST,
-    payload: axios.get<IApenso>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IApenso>(
+      `${requestUrl}${numeroRequest}${claseRequest}${apensamentoRequest}${motivoRequest}${processoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
-
 export const getEntity: ICrudGetAction<IApenso> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {

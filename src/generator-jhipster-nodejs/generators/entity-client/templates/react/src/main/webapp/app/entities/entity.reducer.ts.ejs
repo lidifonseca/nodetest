@@ -28,8 +28,10 @@ import {
   <%_ if (pagination === 'infinite-scroll') { _%>
   parseHeaderForLinks, loadMoreDataWhenScrolled,
   <%_ } _%>
-  ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction
+  ICrudGetAction, ICrudPutAction, ICrudDeleteAction
 } from 'react-jhipster';
+
+import { IPayload } from 'react-jhipster/src/type/redux-action.type';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -210,22 +212,47 @@ export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (qu
 });
 
 <%_ } _%>
-export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, size, sort) =>
-<%_ if (pagination !== 'no') { _%>
-{
-  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
-  return {
-    type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-    payload: axios.get<I<%= entityReactName %>>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
-  }
-}
-<%_ } else { _%>
-({
-  type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-  payload: axios.get<I<%= entityReactName %>>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
-});
-<%_ } _%>
 
+
+
+// Actions
+export type ICrudGetAllAction<%= entityReactName %><T> = (
+  <%_ for (idx in fields) { _%>
+    <%= fields[idx].fieldName %>?: any,
+  <%_ } _%>
+  <%_ relationships.forEach(rel => { _%>
+    <%= rel.relationshipName %>?: any,
+  <%_ }) _%>
+  page?: Number,
+  size?: Number,
+  sort?: String,
+) => IPayload<T> | ((dispatch: any) => IPayload<T>);
+
+export const getEntities: ICrudGetAllAction<%= entityReactName %><I<%= entityReactName %>> = (
+  <%_ for (idx in fields) { _%><%= fields[idx].fieldName %>, <%_ } _%><%_ relationships.forEach(rel => { _%><%= rel.relationshipName %>, <%_ }) _%>page, size, sort
+  ) =>
+  {
+    <%_ for (idx in fields) { _%>
+      const <%= fields[idx].fieldName %>Request = <%= fields[idx].fieldName %> ? `<%= fields[idx].fieldName %>.contains=${<%= fields[idx].fieldName %>}&` : '';
+    <%_ } _%>
+    <%_ relationships.forEach(rel => { _%>
+      const <%= rel.relationshipName %>Request = <%= rel.relationshipName %> ? `<%= rel.relationshipName %>Id.equals=${<%= rel.relationshipName %>}&` : '';
+    <%_ }) _%>
+
+    
+    <%_ if (pagination !== 'no') { _%>
+      const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+      return {
+        type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
+        payload: axios.get<I<%= entityReactName %>>(`${requestUrl}<%_ for (idx in fields) { _%>${<%= fields[idx].fieldName %>Request}<%_ } _%><%_ relationships.forEach(rel => { _%>${<%= rel.relationshipName %>Request}<%_ }) _%>cacheBuster=${new Date().getTime()}`)
+      }
+    <%_ } else { _%>
+      return {
+        type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
+        payload: axios.get<I<%= entityReactName %>>(`${requestUrl}<%_ for (idx in fields) { _%>${<%= fields[idx].fieldName %>Request}<%_ } _%><%_ relationships.forEach(rel => { _%>${<%= rel.relationshipName %>Request}<%_ }) _%>cacheBuster=${new Date().getTime()}}`)
+      }
+    <%_ } _%>
+}
 export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {

@@ -47,8 +47,7 @@ export interface IProcessoProps extends StateProps, DispatchProps, RouteComponen
 }
 
 
-export interface IProcessoState extends IProcessoBaseState, IPaginationBaseState {
-}
+export interface IProcessoState extends IProcessoBaseState, IPaginationBaseState {}
 
 class Processo extends React.Component<IProcessoProps, IProcessoState> {
   private myFormRef: any;
