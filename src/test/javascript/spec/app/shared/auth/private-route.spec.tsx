@@ -1,13 +1,17 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { shallow } from 'enzyme';
+import { TranslatorContext } from 'react-jhipster';
 
-import { AUTHORITIES } from 'app/config/constants';
 import { PrivateRouteComponent, hasAnyAuthority } from 'app/shared/auth/private-route';
 
 const TestComp = () => <div>Test</div>;
 
 describe('private-route component', () => {
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('pt-br', {});
+  });
+
   // All tests will go here
   it('Should throw error when no component is provided', () => {
     expect(() => shallow(<PrivateRouteComponent component={null} isAuthenticated sessionHasBeenFetched isAuthorized />)).toThrow(Error);
@@ -27,7 +31,9 @@ describe('private-route component', () => {
     expect(comp.length).toEqual(1);
     const error = comp.find('div.insufficient-authority');
     expect(error.length).toEqual(1);
-    expect(error.find('.alert-danger').html()).toEqual('<div class="alert alert-danger">You are not authorized to access this page.</div>');
+    expect(error.find('.alert-danger').html()).toEqual(
+      '<div class="alert alert-danger"><span>You are not authorized to access this page.</span></div>'
+    );
   });
 
   it('Should render a route for the component provided when authenticated', () => {
@@ -66,28 +72,28 @@ describe('private-route component', () => {
 
 describe('hasAnyAuthority', () => {
   // All tests will go here
-  it('Should return false when authorities is invalid', () => {
+  it('Should return false when authorities is invlaid', () => {
     expect(hasAnyAuthority(undefined, undefined)).toEqual(false);
     expect(hasAnyAuthority(null, [])).toEqual(false);
     expect(hasAnyAuthority([], [])).toEqual(false);
-    expect(hasAnyAuthority([], [AUTHORITIES.USER])).toEqual(false);
+    expect(hasAnyAuthority([], ['ROLE_USER'])).toEqual(false);
   });
 
   it('Should return true when authorities is valid and hasAnyAuthorities is empty', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [])).toEqual(true);
+    expect(hasAnyAuthority(['ROLE_USER'], [])).toEqual(true);
   });
 
   it('Should return true when authorities is valid and hasAnyAuthorities contains an authority', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [AUTHORITIES.USER])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER, AUTHORITIES.ADMIN])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.USER, 'ROLEADMIN'])).toEqual(true);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], [AUTHORITIES.ADMIN])).toEqual(true);
+    expect(hasAnyAuthority(['ROLE_USER'], ['ROLE_USER'])).toEqual(true);
+    expect(hasAnyAuthority(['ROLE_USER', 'ROLE_ADMIN'], ['ROLE_USER'])).toEqual(true);
+    expect(hasAnyAuthority(['ROLE_USER', 'ROLE_ADMIN'], ['ROLE_USER', 'ROLE_ADMIN'])).toEqual(true);
+    expect(hasAnyAuthority(['ROLE_USER', 'ROLE_ADMIN'], ['ROLE_USER', 'ROLEADMIN'])).toEqual(true);
+    expect(hasAnyAuthority(['ROLE_USER', 'ROLE_ADMIN'], ['ROLE_ADMIN'])).toEqual(true);
   });
 
-  it('Should return false when authorities is valid and hasAnyAuthorities does not contain an authority', () => {
-    expect(hasAnyAuthority([AUTHORITIES.USER], [AUTHORITIES.ADMIN])).toEqual(false);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], ['ROLE_USERSS'])).toEqual(false);
-    expect(hasAnyAuthority([AUTHORITIES.USER, AUTHORITIES.ADMIN], ['ROLEUSER', 'ROLEADMIN'])).toEqual(false);
+  it('Should return false when authorities is valid and hasAnyAuthorities does not contains an authority', () => {
+    expect(hasAnyAuthority(['ROLE_USER'], ['ROLE_ADMIN'])).toEqual(false);
+    expect(hasAnyAuthority(['ROLE_USER', 'ROLE_ADMIN'], ['ROLE_USERSS'])).toEqual(false);
+    expect(hasAnyAuthority(['ROLE_USER', 'ROLE_ADMIN'], ['ROLEUSER', 'ROLEADMIN'])).toEqual(false);
   });
 });

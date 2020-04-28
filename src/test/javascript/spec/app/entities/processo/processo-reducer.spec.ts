@@ -83,19 +83,6 @@ describe('Entities reducer tests', () => {
         }
       );
     });
-
-    it('should reset the state', () => {
-      expect(
-        reducer(
-          { ...initialState, loading: true },
-          {
-            type: ACTION_TYPES.RESET
-          }
-        )
-      ).toEqual({
-        ...initialState
-      });
-    });
   });
 
   describe('Failures', () => {
@@ -214,7 +201,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getEntity(42666, 1)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.CREATE_PROCESSO actions', async () => {
@@ -245,6 +232,13 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_PROCESSO),
           payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_PROCESSO_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_PROCESSO_LIST),
+          payload: resolvedObject
         }
       ];
       await store.dispatch(updateEntity({ id: 1 })).then(() => expect(store.getActions()).toEqual(expectedActions));
@@ -257,6 +251,13 @@ describe('Entities reducer tests', () => {
         },
         {
           type: SUCCESS(ACTION_TYPES.DELETE_PROCESSO),
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_PROCESSO_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_PROCESSO_LIST),
           payload: resolvedObject
         }
       ];

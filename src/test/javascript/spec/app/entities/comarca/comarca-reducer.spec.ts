@@ -245,6 +245,13 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_COMARCA),
           payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_COMARCA_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_COMARCA_LIST),
+          payload: resolvedObject
         }
       ];
       await store.dispatch(updateEntity({ id: 1 })).then(() => expect(store.getActions()).toEqual(expectedActions));
@@ -257,6 +264,13 @@ describe('Entities reducer tests', () => {
         },
         {
           type: SUCCESS(ACTION_TYPES.DELETE_COMARCA),
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_COMARCA_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_COMARCA_LIST),
           payload: resolvedObject
         }
       ];

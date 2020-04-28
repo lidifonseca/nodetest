@@ -13,9 +13,9 @@ import reducer, {
   getEntity,
   updateEntity,
   reset
-} from 'app/entities/parte/parte.reducer';
+} from 'app/entities/cliente/cliente.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { IParte, defaultValue } from 'app/shared/model/parte.model';
+import { ICliente, defaultValue } from 'app/shared/model/cliente.model';
 
 describe('Entities reducer tests', () => {
   function isEmpty(element): boolean {
@@ -29,7 +29,7 @@ describe('Entities reducer tests', () => {
   const initialState = {
     loading: false,
     errorMessage: null,
-    entities: [] as ReadonlyArray<IParte>,
+    entities: [] as ReadonlyArray<ICliente>,
     entity: defaultValue,
     totalItems: 0,
     updating: false,
@@ -61,7 +61,7 @@ describe('Entities reducer tests', () => {
 
   describe('Requests', () => {
     it('should set state to loading', () => {
-      testMultipleTypes([REQUEST(ACTION_TYPES.FETCH_PARTE_LIST), REQUEST(ACTION_TYPES.FETCH_PARTE)], {}, state => {
+      testMultipleTypes([REQUEST(ACTION_TYPES.FETCH_CLIENTE_LIST), REQUEST(ACTION_TYPES.FETCH_CLIENTE)], {}, state => {
         expect(state).toMatchObject({
           errorMessage: null,
           updateSuccess: false,
@@ -72,7 +72,7 @@ describe('Entities reducer tests', () => {
 
     it('should set state to updating', () => {
       testMultipleTypes(
-        [REQUEST(ACTION_TYPES.CREATE_PARTE), REQUEST(ACTION_TYPES.UPDATE_PARTE), REQUEST(ACTION_TYPES.DELETE_PARTE)],
+        [REQUEST(ACTION_TYPES.CREATE_CLIENTE), REQUEST(ACTION_TYPES.UPDATE_CLIENTE), REQUEST(ACTION_TYPES.DELETE_CLIENTE)],
         {},
         state => {
           expect(state).toMatchObject({
@@ -102,11 +102,11 @@ describe('Entities reducer tests', () => {
     it('should set a message in errorMessage', () => {
       testMultipleTypes(
         [
-          FAILURE(ACTION_TYPES.FETCH_PARTE_LIST),
-          FAILURE(ACTION_TYPES.FETCH_PARTE),
-          FAILURE(ACTION_TYPES.CREATE_PARTE),
-          FAILURE(ACTION_TYPES.UPDATE_PARTE),
-          FAILURE(ACTION_TYPES.DELETE_PARTE)
+          FAILURE(ACTION_TYPES.FETCH_CLIENTE_LIST),
+          FAILURE(ACTION_TYPES.FETCH_CLIENTE),
+          FAILURE(ACTION_TYPES.CREATE_CLIENTE),
+          FAILURE(ACTION_TYPES.UPDATE_CLIENTE),
+          FAILURE(ACTION_TYPES.DELETE_CLIENTE)
         ],
         'error message',
         state => {
@@ -125,7 +125,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }], headers: { 'x-total-count': 123 } };
       expect(
         reducer(undefined, {
-          type: SUCCESS(ACTION_TYPES.FETCH_PARTE_LIST),
+          type: SUCCESS(ACTION_TYPES.FETCH_CLIENTE_LIST),
           payload
         })
       ).toEqual({
@@ -140,7 +140,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: { 1: 'fake1' } };
       expect(
         reducer(undefined, {
-          type: SUCCESS(ACTION_TYPES.FETCH_PARTE),
+          type: SUCCESS(ACTION_TYPES.FETCH_CLIENTE),
           payload
         })
       ).toEqual({
@@ -154,7 +154,7 @@ describe('Entities reducer tests', () => {
       const payload = { data: 'fake payload' };
       expect(
         reducer(undefined, {
-          type: SUCCESS(ACTION_TYPES.CREATE_PARTE),
+          type: SUCCESS(ACTION_TYPES.CREATE_CLIENTE),
           payload
         })
       ).toEqual({
@@ -168,7 +168,7 @@ describe('Entities reducer tests', () => {
     it('should delete entity', () => {
       const payload = 'fake payload';
       const toTest = reducer(undefined, {
-        type: SUCCESS(ACTION_TYPES.DELETE_PARTE),
+        type: SUCCESS(ACTION_TYPES.DELETE_CLIENTE),
         payload
       });
       expect(toTest).toMatchObject({
@@ -191,86 +191,86 @@ describe('Entities reducer tests', () => {
       axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
-    it('dispatches ACTION_TYPES.FETCH_PARTE_LIST actions', async () => {
+    it('dispatches ACTION_TYPES.FETCH_CLIENTE_LIST actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_PARTE_LIST)
+          type: REQUEST(ACTION_TYPES.FETCH_CLIENTE_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_PARTE_LIST),
+          type: SUCCESS(ACTION_TYPES.FETCH_CLIENTE_LIST),
           payload: resolvedObject
         }
       ];
       await store.dispatch(getEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
-    it('dispatches ACTION_TYPES.FETCH_PARTE actions', async () => {
+    it('dispatches ACTION_TYPES.FETCH_CLIENTE actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.FETCH_PARTE)
+          type: REQUEST(ACTION_TYPES.FETCH_CLIENTE)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_PARTE),
+          type: SUCCESS(ACTION_TYPES.FETCH_CLIENTE),
           payload: resolvedObject
         }
       ];
       await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
-    it('dispatches ACTION_TYPES.CREATE_PARTE actions', async () => {
+    it('dispatches ACTION_TYPES.CREATE_CLIENTE actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.CREATE_PARTE)
+          type: REQUEST(ACTION_TYPES.CREATE_CLIENTE)
         },
         {
-          type: SUCCESS(ACTION_TYPES.CREATE_PARTE),
+          type: SUCCESS(ACTION_TYPES.CREATE_CLIENTE),
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_PARTE_LIST)
+          type: REQUEST(ACTION_TYPES.FETCH_CLIENTE_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_PARTE_LIST),
+          type: SUCCESS(ACTION_TYPES.FETCH_CLIENTE_LIST),
           payload: resolvedObject
         }
       ];
       await store.dispatch(createEntity({ id: 1 })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
-    it('dispatches ACTION_TYPES.UPDATE_PARTE actions', async () => {
+    it('dispatches ACTION_TYPES.UPDATE_CLIENTE actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.UPDATE_PARTE)
+          type: REQUEST(ACTION_TYPES.UPDATE_CLIENTE)
         },
         {
-          type: SUCCESS(ACTION_TYPES.UPDATE_PARTE),
+          type: SUCCESS(ACTION_TYPES.UPDATE_CLIENTE),
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_PARTE_LIST)
+          type: REQUEST(ACTION_TYPES.FETCH_CLIENTE_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_PARTE_LIST),
+          type: SUCCESS(ACTION_TYPES.FETCH_CLIENTE_LIST),
           payload: resolvedObject
         }
       ];
       await store.dispatch(updateEntity({ id: 1 })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
-    it('dispatches ACTION_TYPES.DELETE_PARTE actions', async () => {
+    it('dispatches ACTION_TYPES.DELETE_CLIENTE actions', async () => {
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.DELETE_PARTE)
+          type: REQUEST(ACTION_TYPES.DELETE_CLIENTE)
         },
         {
-          type: SUCCESS(ACTION_TYPES.DELETE_PARTE),
+          type: SUCCESS(ACTION_TYPES.DELETE_CLIENTE),
           payload: resolvedObject
         },
         {
-          type: REQUEST(ACTION_TYPES.FETCH_PARTE_LIST)
+          type: REQUEST(ACTION_TYPES.FETCH_CLIENTE_LIST)
         },
         {
-          type: SUCCESS(ACTION_TYPES.FETCH_PARTE_LIST),
+          type: SUCCESS(ACTION_TYPES.FETCH_CLIENTE_LIST),
           payload: resolvedObject
         }
       ];
@@ -285,25 +285,6 @@ describe('Entities reducer tests', () => {
       ];
       await store.dispatch(reset());
       expect(store.getActions()).toEqual(expectedActions);
-    });
-  });
-
-  describe('blobFields', () => {
-    it('should properly set a blob in state.', () => {
-      const payload = { name: 'fancyBlobName', data: 'fake data', contentType: 'fake dataType' };
-      expect(
-        reducer(undefined, {
-          type: ACTION_TYPES.SET_BLOB,
-          payload
-        })
-      ).toEqual({
-        ...initialState,
-        entity: {
-          ...initialState.entity,
-          fancyBlobName: payload.data,
-          fancyBlobNameContentType: payload.contentType
-        }
-      });
     });
   });
 });

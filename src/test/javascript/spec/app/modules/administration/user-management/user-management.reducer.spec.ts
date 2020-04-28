@@ -16,7 +16,6 @@ import userManagement, {
   reset
 } from 'app/modules/administration/user-management/user-management.reducer';
 import { defaultValue } from 'app/shared/model/user.model';
-import { AUTHORITIES } from 'app/config/constants';
 
 describe('User management reducer tests', () => {
   function isEmpty(element): boolean {
@@ -130,7 +129,7 @@ describe('User management reducer tests', () => {
     });
 
     it('should update state according to a successful fetch role request', () => {
-      const payload = { data: [AUTHORITIES.ADMIN] };
+      const payload = { data: ['ROLE_ADMIN'] };
       const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ROLES), payload });
 
       expect(toTest).toMatchObject({

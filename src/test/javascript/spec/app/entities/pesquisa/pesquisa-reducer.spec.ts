@@ -83,19 +83,6 @@ describe('Entities reducer tests', () => {
         }
       );
     });
-
-    it('should reset the state', () => {
-      expect(
-        reducer(
-          { ...initialState, loading: true },
-          {
-            type: ACTION_TYPES.RESET
-          }
-        )
-      ).toEqual({
-        ...initialState
-      });
-    });
   });
 
   describe('Failures', () => {
@@ -245,6 +232,13 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_PESQUISA),
           payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_PESQUISA_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_PESQUISA_LIST),
+          payload: resolvedObject
         }
       ];
       await store.dispatch(updateEntity({ id: 1 })).then(() => expect(store.getActions()).toEqual(expectedActions));
@@ -258,9 +252,16 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.DELETE_PESQUISA),
           payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_PESQUISA_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_PESQUISA_LIST),
+          payload: resolvedObject
         }
       ];
-      await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(deleteEntity(42666, null)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.RESET actions', async () => {
