@@ -1,0 +1,26 @@
+{
+  "tjscrapperApp": {
+    "audiencia": {
+      "home": {
+        "title": "Audiencias",
+        "createLabel": "Criar novo Audiencia",
+        "createOrEditLabel": "Criar ou editar Audiencia",
+        "notFound": "Nenhum Audiencia encontrado"
+      },
+      "created": "Um novo Audiencia foi criado com o identificador {{ param }}",
+      "updated": "Um Audiencia foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Audiencia foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Audiencia {{ id }}?"
+      },
+      "detail": {
+        "title": "Audiencia"
+      },
+      "data": "Data",
+      "audencia": "Audencia",
+      "situacao": "Situacao",
+      "quatidadePessoas": "Quatidade Pessoas",
+      "processo": "Processo"
+    }
+  }
+}

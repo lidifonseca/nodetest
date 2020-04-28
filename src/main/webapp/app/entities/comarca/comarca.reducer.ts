@@ -131,6 +131,7 @@ export const updateEntity: ICrudPutAction<IComarca> = entity => async dispatch =
     type: ACTION_TYPES.UPDATE_COMARCA,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  dispatch(getEntities());
   return result;
 };
 
@@ -140,6 +141,7 @@ export const deleteEntity: ICrudDeleteAction<IComarca> = id => async dispatch =>
     type: ACTION_TYPES.DELETE_COMARCA,
     payload: axios.delete(requestUrl)
   });
+  dispatch(getEntities());
   return result;
 };
 

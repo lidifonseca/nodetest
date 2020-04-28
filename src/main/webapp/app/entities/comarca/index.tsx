@@ -11,12 +11,12 @@ import ComarcaDeleteDialog from './comarca-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={ComarcaDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={ComarcaUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={ComarcaUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={ComarcaDetail} />
       <ErrorBoundaryRoute path={match.url} component={Comarca} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={ComarcaDeleteDialog} />
   </>
 );
 

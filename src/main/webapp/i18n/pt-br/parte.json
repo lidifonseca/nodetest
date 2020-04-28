@@ -1,0 +1,25 @@
+{
+  "tjscrapperApp": {
+    "parte": {
+      "home": {
+        "title": "Partes",
+        "createLabel": "Criar novo Parte",
+        "createOrEditLabel": "Criar ou editar Parte",
+        "notFound": "Nenhum Parte encontrado"
+      },
+      "created": "Um novo Parte foi criado com o identificador {{ param }}",
+      "updated": "Um Parte foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Parte foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Parte {{ id }}?"
+      },
+      "detail": {
+        "title": "Parte"
+      },
+      "categoria": "Categoria",
+      "participante": "Participante",
+      "advogados": "Advogados",
+      "processo": "Processo"
+    }
+  }
+}

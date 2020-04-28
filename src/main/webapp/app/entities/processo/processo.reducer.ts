@@ -1,19 +1,29 @@
+/* eslint no-console: off */
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import fileDownload from 'js-file-download';
+import { ICrudDeleteAction, ICrudGetAction, ICrudPutAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
 
-import { IProcesso, defaultValue } from 'app/shared/model/processo.model';
+import { defaultValue, IProcesso } from 'app/shared/model/processo.model';
+import { IPayload } from 'react-jhipster/src/type/redux-action.type';
 
 export const ACTION_TYPES = {
   FETCH_PROCESSO_LIST: 'processo/FETCH_PROCESSO_LIST',
+  FETCH_PROCESSO_DETALE_FILTER: 'processo/FETCH_PROCESSO_DETALE_FILTER',
+  FETCH_PROCESSO_LIST_CSV: 'processo/FETCH_PROCESSO_LIST_CSV',
+  UPDATE_PROCESSO_INTERESSE: 'processo/UPDATE_PROCESSO_INTERESSE',
   FETCH_PROCESSO: 'processo/FETCH_PROCESSO',
   CREATE_PROCESSO: 'processo/CREATE_PROCESSO',
   UPDATE_PROCESSO: 'processo/UPDATE_PROCESSO',
   DELETE_PROCESSO: 'processo/DELETE_PROCESSO',
   SET_BLOB: 'processo/SET_BLOB',
-  RESET: 'processo/RESET'
+  RESET: 'processo/RESET',
+  INSERT_OBSERVACAO: 'processo/INSERT_OBSERVACAO',
+  PRENCHER_COMARCAR: 'processo/PRENCHER_COMARCAR',
+  EDIT_VALOR: 'processo/EDIT_VALOR',
+  EDIT_MOEDA: 'processo/EDIT_MOEDA'
 };
 
 const initialState = {
@@ -23,7 +33,9 @@ const initialState = {
   entity: defaultValue,
   updating: false,
   totalItems: 0,
-  updateSuccess: false
+  updateSuccess: false,
+  csvError: '',
+  listaComarcas: []
 };
 
 export type ProcessoState = Readonly<typeof initialState>;
@@ -33,6 +45,7 @@ export type ProcessoState = Readonly<typeof initialState>;
 export default (state: ProcessoState = initialState, action): ProcessoState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_PROCESSO_LIST):
+    case REQUEST(ACTION_TYPES.FETCH_PROCESSO_LIST_CSV):
     case REQUEST(ACTION_TYPES.FETCH_PROCESSO):
       return {
         ...state,
@@ -50,6 +63,7 @@ export default (state: ProcessoState = initialState, action): ProcessoState => {
         updating: true
       };
     case FAILURE(ACTION_TYPES.FETCH_PROCESSO_LIST):
+    case FAILURE(ACTION_TYPES.FETCH_PROCESSO_LIST_CSV):
     case FAILURE(ACTION_TYPES.FETCH_PROCESSO):
     case FAILURE(ACTION_TYPES.CREATE_PROCESSO):
     case FAILURE(ACTION_TYPES.UPDATE_PROCESSO):
@@ -68,11 +82,27 @@ export default (state: ProcessoState = initialState, action): ProcessoState => {
         entities: action.payload.data,
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
+    case SUCCESS(ACTION_TYPES.FETCH_PROCESSO_LIST_CSV):
+      {
+        fileDownload(action.payload.data, 'processos.csv');
+      }
+
+      return {
+        ...state,
+        loading: false,
+        csvError: 'Erro ao exportar o arquivo csv do processo'
+      };
     case SUCCESS(ACTION_TYPES.FETCH_PROCESSO):
       return {
         ...state,
         loading: false,
         entity: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_PROCESSO_DETALE_FILTER):
+      return {
+        ...state,
+        loading: false,
+        entity: action.payload.data.length > 0 ? action.payload.data[0] : {}
       };
     case SUCCESS(ACTION_TYPES.CREATE_PROCESSO):
     case SUCCESS(ACTION_TYPES.UPDATE_PROCESSO):
@@ -82,12 +112,38 @@ export default (state: ProcessoState = initialState, action): ProcessoState => {
         updateSuccess: true,
         entity: action.payload.data
       };
+    case SUCCESS(ACTION_TYPES.UPDATE_PROCESSO_INTERESSE):
+      return {
+        ...state
+      };
+    case SUCCESS(ACTION_TYPES.INSERT_OBSERVACAO):
+      return {
+        ...state
+      };
     case SUCCESS(ACTION_TYPES.DELETE_PROCESSO):
       return {
         ...state,
         updating: false,
         updateSuccess: true,
         entity: {}
+      };
+    case SUCCESS(ACTION_TYPES.PRENCHER_COMARCAR): {
+      const listaComarcas = action.payload.data;
+      const listaComarcasSelect = [{ value: -1, label: 'Todas' }];
+      for (const i in listaComarcas) {
+        if (Object.prototype.hasOwnProperty.call(listaComarcas, i)) {
+          listaComarcasSelect.push({ value: listaComarcas[i].tjid, label: listaComarcas[i].nome });
+        }
+      }
+      return {
+        ...state,
+        listaComarcas: listaComarcasSelect
+      };
+    }
+    case FAILURE(ACTION_TYPES.PRENCHER_COMARCAR):
+      return {
+        ...state,
+        listaComarcas: []
       };
     case ACTION_TYPES.SET_BLOB: {
       const { name, data, contentType } = action.payload;
@@ -112,17 +168,185 @@ export default (state: ProcessoState = initialState, action): ProcessoState => {
 const apiUrl = 'api/processos';
 
 // Actions
+export type ICrudGetAllActionProcesso<T> = (
+  estado?: string,
+  page?: number,
+  size?: number,
+  sort?: string,
+  activeTab?: string,
+  comarca?: string,
+  numeroProcesso?: string,
+  advogados?: any,
+  pesquisa?: any,
+  assunto?: string,
+  distribuicaoInicial?: Date,
+  distribuicaoFinal?: Date,
+  valorInicial?: number,
+  valorFinal?: number,
+  moeda?: string
+) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllAction<IProcesso> = (page, size, sort) => {
+export const getEntities: ICrudGetAllActionProcesso<IProcesso> = (
+  estado,
+  page,
+  size,
+  sort,
+  activeTab?,
+  comarca?,
+  numeroProcesso?,
+  advogados?,
+  pesquisa?,
+  assunto?,
+  distribuicaoInicial?,
+  distribuicaoFinal?,
+  valorInicial?,
+  valorFinal?,
+  moeda?
+) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  let activeTabRequest = '';
+  if (activeTab === 'sem_clasificacao') activeTabRequest = 'interesse.specified=false&';
+  else if (activeTab === 'com_interesse') activeTabRequest = 'interesse.equals=true&';
+  else if (activeTab === 'sem_interesse') activeTabRequest = 'interesse.equals=false&';
+  const advogadosRequest =
+    parseInt(advogados, 10) === 1 || parseInt(advogados, 10) === 0
+      ? parseInt(advogados, 10) === 1
+        ? 'advogados.equals=true&'
+        : 'advogados.equals=false&'
+      : '';
+  const estadoRequest = `estado.equals=${estado}&`;
+  const pesquisaRequest = pesquisa ? `pesquisaId.equals=${pesquisa}&` : '';
+  const comarcasRequest = comarca ? `comarcaTjId.equals=${comarca}&` : '';
+  const assuntoRequest = assunto ? `assunto.contains=${assunto}&` : '';
+  const numeroRequest = numeroProcesso ? `numero.contains=${numeroProcesso}&` : '';
+  const valorInicialRequest = valorInicial ? `valor.greaterThanOrEqual=${valorInicial}&` : '';
+  const valorFinalRequest = valorFinal ? `valor.lessThanOrEqual=${valorFinal}&` : '';
+  const distribuicaoInicialRequest = distribuicaoInicial
+    ? `dataDistribuicao.greaterThanOrEqual=${distribuicaoInicial.toISOString().slice(0, 10)}&`
+    : '';
+  const distribuicaoFinalRequest = distribuicaoFinal
+    ? `dataDistribuicao.lessThanOrEqual=${distribuicaoFinal.toISOString().slice(0, 10)}&`
+    : '';
+
+  const moedaRequest = moeda ? `moeda.equals=${moeda}&` : '';
+
   return {
     type: ACTION_TYPES.FETCH_PROCESSO_LIST,
-    payload: axios.get<IProcesso>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IProcesso>(
+      `${requestUrl}${
+        sort ? '&' : '?'
+      }${activeTabRequest}${estadoRequest}${advogadosRequest}${pesquisaRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}${valorInicialRequest}${valorFinalRequest}${moedaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+export const getEntityFilter: ICrudGetAllActionProcesso<IProcesso> = (
+  estado,
+  page,
+  size,
+  sort,
+  activeTab?,
+  comarca?,
+  numeroProcesso?,
+  advogados?,
+  pesquisa?,
+  assunto?,
+  distribuicaoInicial?,
+  distribuicaoFinal?,
+  valorInicial?,
+  valorFinal?,
+  moeda?
+) => {
+  const requestUrl = `${apiUrl}?details=true${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
+  let activeTabRequest = '';
+  if (activeTab === 'sem_clasificacao') activeTabRequest = 'interesse.specified=false&';
+  else if (activeTab === 'com_interesse') activeTabRequest = 'interesse.equals=true&';
+  else if (activeTab === 'sem_interesse') activeTabRequest = 'interesse.equals=false&';
+  const advogadosRequest =
+    parseInt(advogados, 10) === 1 || parseInt(advogados, 10) === 0
+      ? parseInt(advogados, 10) === 1
+        ? 'advogados.equals=true&'
+        : 'advogados.equals=false&'
+      : '';
+  const estadoRequest = `estado.equals=${estado}&`;
+  const pesquisaRequest = pesquisa ? `pesquisaId.equals=${pesquisa}&` : '';
+  const comarcasRequest = comarca ? `comarcaTjId.equals=${comarca}&` : '';
+  const assuntoRequest = assunto ? `assunto.contains=${assunto}&` : '';
+  const numeroRequest = numeroProcesso ? `numero.contains=${numeroProcesso}&` : '';
+  const valorInicialRequest = valorInicial ? `valor.greaterThanOrEqual=${valorInicial}&` : '';
+  const valorFinalRequest = valorFinal ? `valor.lessThanOrEqual=${valorFinal}&` : '';
+  const distribuicaoInicialRequest = distribuicaoInicial
+    ? `dataDistribuicao.greaterThanOrEqual=${distribuicaoInicial.toISOString().slice(0, 10)}&`
+    : '';
+  const distribuicaoFinalRequest = distribuicaoFinal
+    ? `dataDistribuicao.lessThanOrEqual=${distribuicaoFinal.toISOString().slice(0, 10)}&`
+    : '';
+
+  const moedaRequest = moeda ? `moeda.equals=${moeda}&` : '';
+
+  return {
+    type: ACTION_TYPES.FETCH_PROCESSO_DETALE_FILTER,
+    payload: axios.get<IProcesso>(
+      `${requestUrl}&${activeTabRequest}${estadoRequest}${advogadosRequest}${pesquisaRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}${valorInicialRequest}${valorFinalRequest}${moedaRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
-export const getEntity: ICrudGetAction<IProcesso> = id => {
-  const requestUrl = `${apiUrl}/${id}`;
+export const getEntitiesCSV: ICrudGetAllActionProcesso<IProcesso> = (
+  estado,
+  page,
+  size,
+  sort,
+  activeTab?,
+  comarca?,
+  numeroProcesso?,
+  advogados?,
+  pesquisa?,
+  assunto?,
+  distribuicaoInicial?,
+  distribuicaoFinal?,
+  valorInicial?,
+  valorFinal?,
+  moeda?
+) => {
+  const requestUrl = `${apiUrl}`;
+
+  let activeTabRequest = '';
+  if (activeTab === 'sem_clasificacao') activeTabRequest = 'interesse.specified=false&';
+  else if (activeTab === 'com_interesse') activeTabRequest = 'interesse.equals=true&';
+  else if (activeTab === 'sem_interesse') activeTabRequest = 'interesse.equals=false&';
+
+  const advogadosRequest =
+    parseInt(advogados, 10) === 1 || parseInt(advogados, 10) === 0
+      ? parseInt(advogados, 10) === 1
+        ? 'advogados.equals=true&'
+        : 'advogados.equals=false&'
+      : '';
+  const estadoRequest = `estado.equals=${estado}&`;
+  const comarcasRequest = comarca ? `comarca.contains=${comarca}&` : '';
+  const assuntoRequest = assunto ? `assunto.contains=${assunto}&` : '';
+  const numeroRequest = numeroProcesso ? `numero.contains=${numeroProcesso}&` : '';
+  // const valorInicialRequest = valorInicial ? `valorInicial.contains=${valorInicial}&` : '';
+  // const valorFinalRequest = valorFinal ? `valorFinal.contains=${valorFinal}&` : '';
+  // const distribuicaoInicialRequest = distribuicaoInicial ? `dataDistribuicao.greaterThanOrEqual=${distribuicaoInicial.toString()}&` : '';
+  // const distribuicaoFinalRequest = distribuicaoInicial ? `dataDistribuicao.lessThanOrEqual=${distribuicaoFinal.toString()}&` : '';
+  const moedaRequest = moeda ? `moeda.equals=${moeda}&` : '';
+  const pesquisaRequest = pesquisa ? `pesquisaId.equals=${pesquisa}&` : '';
+  return {
+    type: ACTION_TYPES.FETCH_PROCESSO_LIST_CSV,
+    // payload: axios.get<IProcesso>(`${requestUrl}/export-csv${sort ? '&' : '?'}${activeTabRequest}${advogadosRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${distribuicaoInicialRequest}${distribuicaoFinalRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IProcesso>(
+      `${requestUrl}/export-csv?${pesquisaRequest}${estadoRequest}${activeTabRequest}${advogadosRequest}${comarcasRequest}${assuntoRequest}${numeroRequest}${moedaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
+export type IGetProcessWithPesquisaIdAction<T> = (
+  id: string | number,
+  pesquisaId: number | null
+) => IPayload<T> | ((dispatch: any) => IPayload<T>);
+
+export const getEntity: IGetProcessWithPesquisaIdAction<IProcesso> = (id, pesquisaId) => {
+  const requestUrl = `${apiUrl}/${id}/details${pesquisaId ? '?pesquisaId=' + pesquisaId : ''}`;
   return {
     type: ACTION_TYPES.FETCH_PROCESSO,
     payload: axios.get<IProcesso>(requestUrl)
@@ -143,6 +367,55 @@ export const updateEntity: ICrudPutAction<IProcesso> = entity => async dispatch 
     type: ACTION_TYPES.UPDATE_PROCESSO,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  dispatch(getEntities());
+  return result;
+};
+
+export const updateInteresseEntity = (id, interesse, listFiltersPage) => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.UPDATE_PROCESSO,
+    payload: axios.put(apiUrl + '/interesse', { id, interesse })
+  });
+
+  dispatch(getEntities(...listFiltersPage));
+  return result;
+};
+
+export const updateInteresseEntityDetails = (id, interesse, listFiltersPage) => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.UPDATE_PROCESSO,
+    payload: axios.put(apiUrl + '/interesse', { id, interesse })
+  });
+
+  dispatch(getEntityFilter(...listFiltersPage));
+  return result;
+};
+
+export const insertObservacao = (id, observacao, listFiltersPage) => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.INSERT_OBSERVACAO,
+    payload: axios.put(apiUrl + '/observacoes', { id, observacao })
+  });
+
+  dispatch(getEntities(...listFiltersPage));
+  return result;
+};
+
+export const editValorAcao = (id, valor, listFiltersPage) => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.EDIT_VALOR,
+    payload: axios.put(apiUrl + '/valor', { id, valor })
+  });
+  dispatch(getEntities(...listFiltersPage));
+  return result;
+};
+
+export const editMoeda = (id, moeda, listFiltersPage) => async dispatch => {
+  const result = await dispatch({
+    type: ACTION_TYPES.EDIT_MOEDA,
+    payload: axios.put(apiUrl + '/moeda', { id, moeda })
+  });
+  dispatch(getEntities(...listFiltersPage));
   return result;
 };
 
@@ -152,6 +425,7 @@ export const deleteEntity: ICrudDeleteAction<IProcesso> = id => async dispatch =
     type: ACTION_TYPES.DELETE_PROCESSO,
     payload: axios.delete(requestUrl)
   });
+  dispatch(getEntities());
   return result;
 };
 
@@ -163,6 +437,13 @@ export const setBlob = (name, data, contentType?) => ({
     contentType
   }
 });
+
+export const prencherComarcas = estadoId => {
+  return {
+    type: ACTION_TYPES.PRENCHER_COMARCAR,
+    payload: axios.get('api/comarcas?size=1000&estadoId.equals=' + estadoId)
+  };
+};
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

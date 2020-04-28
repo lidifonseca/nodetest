@@ -11,12 +11,12 @@ import HistoricoClaseDeleteDialog from './historico-clase-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={HistoricoClaseDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={HistoricoClaseUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={HistoricoClaseUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={HistoricoClaseDetail} />
       <ErrorBoundaryRoute path={match.url} component={HistoricoClase} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={HistoricoClaseDeleteDialog} />
   </>
 );
 

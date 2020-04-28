@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-
+import { Translate } from 'react-jhipster';
 import { Table, Badge, Col, Row, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -34,7 +34,7 @@ export const HealthPage = (props: IHealthPageProps) => {
   const renderModal = () => <HealthModal healthObject={healthObject} handleClose={handleClose} showModal={showModal} />;
 
   const { health, isFetching } = props;
-  const data = (health || {}).components || {};
+  const data = (health || {}).details || {};
 
   return (
     <div>
@@ -42,7 +42,10 @@ export const HealthPage = (props: IHealthPageProps) => {
       <p>
         <Button onClick={getSystemHealth} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
           <FontAwesomeIcon icon="sync" />
-          &nbsp; Refresh
+          &nbsp;
+          <Translate component="span" contentKey="health.refresh.button">
+            Refresh
+          </Translate>
         </Button>
       </p>
       <Row>
@@ -92,4 +95,7 @@ const mapDispatchToProps = { systemHealth };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(HealthPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HealthPage);

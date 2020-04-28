@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { Storage } from 'react-jhipster';
+import { Storage, translate } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { setLocale } from 'app/shared/reducers/locale';
 
 export const ACTION_TYPES = {
   LOGIN: 'authentication/LOGIN',
@@ -15,7 +16,7 @@ const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
 
 const initialState = {
   loading: false,
-  isAuthenticated: false,
+  isAuthenticated: null,
   loginSuccess: false,
   loginError: false, // Errors returned from server side
   showModalLogin: false,
@@ -42,6 +43,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case FAILURE(ACTION_TYPES.LOGIN):
       return {
         ...initialState,
+        isAuthenticated: false,
         errorMessage: action.payload,
         showModalLogin: true,
         loginError: true
@@ -66,6 +68,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
+        isAuthenticated: false,
         showModalLogin: true
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION): {
@@ -81,6 +84,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
+        isAuthenticated: false,
         showModalLogin: true,
         redirectMessage: action.message
       };
@@ -98,17 +102,27 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession = () => (dispatch, getState) => {
-  dispatch({
+export const getSession = () => async (dispatch, getState) => {
+  await dispatch({
     type: ACTION_TYPES.GET_SESSION,
     payload: axios.get('api/account')
   });
+
+  const { account } = getState().authentication;
+  if (account && account.langKey) {
+    const langKey = Storage.session.get('locale', account.langKey);
+    await dispatch(setLocale(langKey));
+  }
 };
 
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
   const result = await dispatch({
     type: ACTION_TYPES.LOGIN,
-    payload: axios.post('api/authenticate', { username, password, rememberMe })
+    payload: axios.post('api/authenticate', { username, password, rememberMe }),
+    meta: {
+      successMessage: translate('login.messages.success.authentication'),
+      errorMessage: translate('login.messages.error.authentication')
+    }
   });
   const bearerToken = result.value.headers.authorization;
   if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {

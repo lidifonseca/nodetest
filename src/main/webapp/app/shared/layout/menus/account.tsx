@@ -3,36 +3,31 @@ import MenuItem from 'app/shared/layout/menus/menu-item';
 import { DropdownItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink as Link } from 'react-router-dom';
-
+import { Translate, translate } from 'react-jhipster';
 import { NavDropdown } from './menu-components';
 
 const accountMenuItemsAuthenticated = (
   <>
     <MenuItem icon="wrench" to="/account/settings">
-      Settings
+      Conta
     </MenuItem>
     <MenuItem icon="lock" to="/account/password">
-      Password
+      Senha
     </MenuItem>
     <MenuItem icon="sign-out-alt" to="/logout">
-      Sign out
+      Sair
     </MenuItem>
   </>
 );
 
 const accountMenuItems = (
-  <>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login">
-      Sign in
+      Entrar
     </MenuItem>
-    <MenuItem icon="sign-in-alt" to="/account/register">
-      Register
-    </MenuItem>
-  </>
 );
 
 export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="user" name="Account" id="account-menu">
+  <NavDropdown icon="" name="Conta">
     {isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
   </NavDropdown>
 );

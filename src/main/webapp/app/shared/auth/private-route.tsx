@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
-
+import {Route, Redirect, RouteProps, Link} from 'react-router-dom';
+import { Translate } from 'react-jhipster';
 import { IRootState } from 'app/shared/reducers';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 
@@ -26,13 +26,28 @@ export const PrivateRouteComponent = ({
       </ErrorBoundary>
     ) : (
       <div className="insufficient-authority">
-        <div className="alert alert-danger">You are not authorized to access this page.</div>
+        <div className="error">
+          <div className="error-code m-b-10">403</div>
+          <div className="error-content">
+            <div className="error-message">
+              <Translate contentKey="error.http.403">You are not authorized to access this page.</Translate>
+            </div>
+            <div className="error-desc m-b-30">
+              <Translate contentKey="error.http-desc.403">You are not authorized to access this page.</Translate>
+            </div>
+            <div>
+              <Link to="/" className="btn btn-success p-l-20 p-r-20">
+                <Translate contentKey="error.goHome">Exit</Translate>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     );
 
   const renderRedirect = props => {
     if (!sessionHasBeenFetched) {
-      return <div></div>;
+      return <div />;
     } else {
       return isAuthenticated ? (
         checkAuthorities(props)
@@ -79,6 +94,11 @@ type StateProps = ReturnType<typeof mapStateToProps>;
  * Accepts same props as React router Route.
  * The route also checks for authorization if hasAnyAuthorities is specified.
  */
-export const PrivateRoute = connect<StateProps, undefined, IOwnProps>(mapStateToProps, null, null, { pure: false })(PrivateRouteComponent);
+export const PrivateRoute = connect<StateProps, undefined, IOwnProps>(
+  mapStateToProps,
+  null,
+  null,
+  { pure: false }
+)(PrivateRouteComponent);
 
 export default PrivateRoute;

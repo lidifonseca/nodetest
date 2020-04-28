@@ -1,32 +1,32 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { IRootState } from 'app/shared/reducers';
 import { logout } from 'app/shared/reducers/authentication';
+import { Redirect } from 'react-router';
 
 export interface ILogoutProps extends StateProps, DispatchProps {
   idToken: string;
   logoutUrl: string;
 }
 
-export const Logout = (props: ILogoutProps) => {
-  useLayoutEffect(() => {
-    props.logout();
-    const logoutUrl = props.logoutUrl;
+export class Logout extends React.Component<ILogoutProps> {
+  componentDidMount() {
+    this.props.logout();
+  }
+
+  render() {
+    const logoutUrl = this.props.logoutUrl;
     if (logoutUrl) {
       // if Keycloak, logoutUrl has protocol/openid-connect in it
       window.location.href = logoutUrl.includes('/protocol')
         ? logoutUrl + '?redirect_uri=' + window.location.origin
-        : logoutUrl + '?id_token_hint=' + props.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+        : logoutUrl + '?id_token_hint=' + this.props.idToken + '&post_logout_redirect_uri=' + window.location.origin;
     }
-  });
 
-  return (
-    <div className="p-5">
-      <h4>Logged out successfully!</h4>
-    </div>
-  );
-};
+    return <Redirect to={'/'} />;
+  }
+}
 
 const mapStateToProps = (storeState: IRootState) => ({
   logoutUrl: storeState.authentication.logoutUrl,
@@ -38,4 +38,7 @@ const mapDispatchToProps = { logout };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Logout);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Logout);

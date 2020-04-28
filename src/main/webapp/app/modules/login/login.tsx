@@ -19,13 +19,14 @@ export const Login = (props: ILoginProps) => {
 
   const handleClose = () => {
     setShowModal(false);
-    props.history.push('/');
+    props.history.push('/pesquisa');
   };
 
   const { location, isAuthenticated } = props;
-  const { from } = (location.state as any) || { from: { pathname: '/', search: location.search } };
-  if (isAuthenticated) {
-    return <Redirect to={from} />;
+  const { from } = location.state || { from: { pathname: '/pesquisa', search: location.search } };
+
+  if (location.pathname !== '/') {
+    return <Redirect to={'/'} />;
   }
   return <LoginModal showModal={showModal} handleLogin={handleLogin} handleClose={handleClose} loginError={props.loginError} />;
 };
@@ -41,4 +42,7 @@ const mapDispatchToProps = { login };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

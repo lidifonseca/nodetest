@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { Translate, translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Button } from 'reactstrap';
@@ -8,6 +8,9 @@ import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 import { savePassword, reset } from './password.reducer';
+import {Link} from "react-router-dom";
+import {Panel, PanelBody, PanelHeader} from "app/shared/layout/panel/panel";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export interface IUserPasswordProps extends StateProps, DispatchProps {}
 
@@ -28,62 +31,88 @@ export const PasswordPage = (props: IUserPasswordProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="password-title">Password for {props.account.login}</h2>
-          <AvForm id="password-form" onValidSubmit={handleValidSubmit}>
-            <AvField
-              name="currentPassword"
-              label="Current password"
-              placeholder={'Current password'}
-              type="password"
-              validate={{
-                required: { value: true, errorMessage: 'Your password is required.' }
-              }}
-            />
-            <AvField
-              name="newPassword"
-              label="New password"
-              placeholder={'New password'}
-              type="password"
-              validate={{
-                required: { value: true, errorMessage: 'Your password is required.' },
-                minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-                maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
-              }}
-              onChange={updatePassword}
-            />
-            <PasswordStrengthBar password={password} />
-            <AvField
-              name="confirmPassword"
-              label="New password confirmation"
-              placeholder="Confirm the new password"
-              type="password"
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'Your confirmation password is required.'
-                },
-                minLength: {
-                  value: 4,
-                  errorMessage: 'Your confirmation password is required to be at least 4 characters.'
-                },
-                maxLength: {
-                  value: 50,
-                  errorMessage: 'Your confirmation password cannot be longer than 50 characters.'
-                },
-                match: {
-                  value: 'newPassword',
-                  errorMessage: 'The password and its confirmation do not match!'
-                }
-              }}
-            />
-            <Button color="success" type="submit">
-              Save
-            </Button>
-          </AvForm>
-        </Col>
-      </Row>
+      <ol className="breadcrumb float-xl-right">
+        <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
+        <li className="breadcrumb-item">Conta</li>
+        <li className="breadcrumb-item active">Trocar senha</li>
+      </ol>
+      <h2>
+        <Translate contentKey="password.title" interpolate={{ username: props.account.login }}>
+          Password for {props.account.login}
+        </Translate>
+      </h2>
+      <Panel>
+        <PanelHeader>Senha</PanelHeader>
+        <PanelBody>
+          <Row className="justify-content-center">
+            <Col md="6">
+              <AvForm id="password-form" onValidSubmit={handleValidSubmit}>
+                <AvField
+                  name="currentPassword"
+                  label={translate('global.form.currentpassword.label')}
+                  placeholder={translate('global.form.currentpassword.placeholder')}
+                  type="password"
+                  validate={{
+                    required: { value: true, errorMessage: translate('global.messages.validate.newpassword.required') }
+                  }}
+                />
+                <AvField
+                  name="newPassword"
+                  label={translate('global.form.newpassword.label')}
+                  placeholder={translate('global.form.newpassword.placeholder')}
+                  type="password"
+                  validate={{
+                    required: { value: true, errorMessage: translate('global.messages.validate.newpassword.required') },
+                    minLength: { value: 4, errorMessage: translate('global.messages.validate.newpassword.minlength') },
+                    maxLength: { value: 50, errorMessage: translate('global.messages.validate.newpassword.maxlength') }
+                  }}
+                  onChange={updatePassword}
+                />
+                <PasswordStrengthBar password={password} />
+                <AvField
+                  name="confirmPassword"
+                  label={translate('global.form.confirmpassword.label')}
+                  placeholder={translate('global.form.confirmpassword.placeholder')}
+                  type="password"
+                  validate={{
+                    required: {
+                      value: true,
+                      errorMessage: translate('global.messages.validate.confirmpassword.required')
+                    },
+                    minLength: {
+                      value: 4,
+                      errorMessage: translate('global.messages.validate.confirmpassword.minlength')
+                    },
+                    maxLength: {
+                      value: 50,
+                      errorMessage: translate('global.messages.validate.confirmpassword.maxlength')
+                    },
+                    match: {
+                      value: 'newPassword',
+                      errorMessage: translate('global.messages.error.dontmatch')
+                    }
+                  }}
+                />
+                <Row className="justify-content-md-center">
+                  <Button color="success" type="submit">
+                    <FontAwesomeIcon icon="save"/>
+                    &nbsp;
+                    <Translate contentKey="password.form.button">Save</Translate>
+                  </Button>
+                  &nbsp;&nbsp;
+                  <Button tag={Link} to="/account/settings" replace color="dark">
+                    <FontAwesomeIcon icon="arrow-left"/>
+                    &nbsp;
+                    <span className="d-none d-md-inline">
+                    <Translate contentKey="entity.action.cancel">Cancel</Translate>
+                  </span>
+                  </Button>
+                </Row>
+              </AvForm>
+            </Col>
+          </Row>
+        </PanelBody>
+      </Panel>
     </div>
   );
 };
@@ -98,4 +127,7 @@ const mapDispatchToProps = { getSession, savePassword, reset };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(PasswordPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PasswordPage);

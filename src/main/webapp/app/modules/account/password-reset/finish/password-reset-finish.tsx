@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Col, Row, Button } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
-import { getUrlParameter } from 'react-jhipster';
-import { RouteComponentProps } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {connect} from 'react-redux';
+import {Col, Row, Button} from 'reactstrap';
+import {AvForm, AvField} from 'availity-reactstrap-validation';
+import {Translate, translate, getUrlParameter} from 'react-jhipster';
+import {Redirect, RouteComponentProps} from 'react-router-dom';
 
-import { handlePasswordResetFinish, reset } from '../password-reset.reducer';
+import {handlePasswordResetFinish, handlePasswordResetInit, reset} from '../password-reset.reducer';
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
+import {IRootState} from "app/shared/reducers";
 
-export interface IPasswordResetFinishProps extends DispatchProps, RouteComponentProps<{ key: string }> {}
+export interface IPasswordResetFinishProps extends DispatchProps, StateProps, RouteComponentProps<{ key: string }> {
+}
 
 export const PasswordResetFinishPage = (props: IPasswordResetFinishProps) => {
   const [password, setPassword] = useState('');
@@ -22,53 +24,94 @@ export const PasswordResetFinishPage = (props: IPasswordResetFinishProps) => {
 
   const getResetForm = () => {
     return (
-      <AvForm onValidSubmit={handleValidSubmit}>
-        <AvField
-          name="newPassword"
-          label="New password"
-          placeholder={'New password'}
-          type="password"
-          validate={{
-            required: { value: true, errorMessage: 'Your password is required.' },
-            minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-            maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' }
-          }}
-          onChange={updatePassword}
-        />
-        <PasswordStrengthBar password={password} />
-        <AvField
-          name="confirmPassword"
-          label="New password confirmation"
-          placeholder="Confirm the new password"
-          type="password"
-          validate={{
-            required: { value: true, errorMessage: 'Your confirmation password is required.' },
-            minLength: { value: 4, errorMessage: 'Your confirmation password is required to be at least 4 characters.' },
-            maxLength: { value: 50, errorMessage: 'Your confirmation password cannot be longer than 50 characters.' },
-            match: { value: 'newPassword', errorMessage: 'The password and its confirmation do not match!' }
-          }}
-        />
-        <Button color="success" type="submit">
-          Validate new password
-        </Button>
-      </AvForm>
+      <div>
+        {props.resetPasswordSuccess === true ? <Redirect to={'/'}/> : ''}
+        <React.Fragment>
+          <AvForm onValidSubmit={handleValidSubmit}>
+            <div className="login-cover">
+              <div className="login-cover-image"
+                   style={{backgroundImage: 'url(../../content/images/confiancaprime-login-background.webp)'}}></div>
+              <div className="login-cover-bg"></div>
+            </div>
+            <div className="login login-v2">
+              <div className="login-header">
+                <div className="brand">
+                  { /* <span className="logo"></span> */}
+                  <h1>Confiança Prime</h1>
+                  <h4>
+                    <Translate contentKey="reset.finish.title">Reset password</Translate>
+                  </h4>
+                </div>
+                <div className="icon">
+                  <i className="fa fa-key"></i>
+                </div>
+              </div>
+              <div className="login-content">
+                <AvField
+                  name="newPassword"
+                  className="form-control-lg"
+                  label={translate('global.form.newpassword.label')}
+                  placeholder={translate('global.form.newpassword.placeholder')}
+                  type="password"
+                  validate={{
+                    required: {value: true, errorMessage: translate('global.messages.validate.newpassword.required')},
+                    minLength: {value: 4, errorMessage: translate('global.messages.validate.newpassword.minlength')},
+                    maxLength: {value: 50, errorMessage: translate('global.messages.validate.newpassword.maxlength')}
+                  }}
+                  onChange={updatePassword}
+                />
+                <PasswordStrengthBar password={password}/>
+                <AvField
+                  name="confirmPassword"
+                  className="form-control-lg m-b-20"
+                  label={translate('global.form.confirmpassword.label')}
+                  placeholder={translate('global.form.confirmpassword.placeholder')}
+                  type="password"
+                  validate={{
+                    required: {
+                      value: true,
+                      errorMessage: translate('global.messages.validate.confirmpassword.required')
+                    },
+                    minLength: {
+                      value: 4,
+                      errorMessage: translate('global.messages.validate.confirmpassword.minlength')
+                    },
+                    maxLength: {
+                      value: 50,
+                      errorMessage: translate('global.messages.validate.confirmpassword.maxlength')
+                    },
+                    match: {value: 'newPassword', errorMessage: translate('global.messages.error.dontmatch')}
+                  }}
+                />
+                <Button className="btn btn-success btn-block btn-lg" type="submit">
+                  <Translate contentKey="reset.finish.form.button">Validate new password</Translate>
+                </Button>
+              </div>
+            </div>
+          </AvForm>
+        </React.Fragment>
+      </div>
     );
   };
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="4">
-          <h1>Reset password</h1>
-          <div>{key ? getResetForm() : null}</div>
-        </Col>
-      </Row>
+      <div>{key ? getResetForm() : null}</div>
     </div>
   );
 };
 
-const mapDispatchToProps = { handlePasswordResetFinish, reset };
+const mapDispatchToProps = {handlePasswordResetFinish, reset};
+
+const mapStateToProps = ({passwordReset}: IRootState) => ({
+  resetPasswordFailure: passwordReset.resetPasswordFailure,
+  resetPasswordSuccess: passwordReset.resetPasswordSuccess,
+});
 
 type DispatchProps = typeof mapDispatchToProps;
+type StateProps = ReturnType<typeof mapStateToProps>;
 
-export default connect(null, mapDispatchToProps)(PasswordResetFinishPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PasswordResetFinishPage);

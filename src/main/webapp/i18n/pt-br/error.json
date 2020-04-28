@@ -1,0 +1,24 @@
+{
+  "error": {
+    "title": "Página de erro!",
+    "http": {
+      "400": "Requisição inválida.",
+      "403": "Você não tem autorização para acessar esta página.",
+      "404": "A página não existe.",
+      "405": "O verbo HTTP utilizado não é suportado para essa URL.",
+      "500": "<strong>Erro interno do servidor</strong><br>Ocurreu um erro no servidor ao processar a requisição."
+    },
+    "http-desc": {
+      "403": "Você não tem privilégios suficientes para acessar esta página.<br> Se tiver qualquer dúvida, por favor entre em contato conosco."
+    },
+    "concurrencyFailure": "Outro usuário modificou esses dados ao mesmo tempo que você. Suas modificações foram rejeitadas.",
+    "validation": "Erro de validação no servidor.",
+    "goHome": "Sair",
+    "tj": {
+      "usuario-senha-invalido": "<strong>Erro de autenticação!</strong><br>Verifique suas credenciais e tente novamente. Se o problema continúa, por favor entre em contato conosco.",
+      "csv": {
+        "formato-invalido": "<strong>Formato de arquivo não válido</strong><br>O arquivo utilizado na pesquisa não está corretamente formatado."
+      }
+    }
+  }
+}

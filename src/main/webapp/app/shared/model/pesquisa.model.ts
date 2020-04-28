@@ -21,8 +21,13 @@ export interface IPesquisa {
   comarcaPorComarca?: boolean;
   userId?: number;
   processos?: IProcesso[];
+  userLogin?: string;
   comarcasId?: number;
+  quantidadeResultados?: number;
+  estadoSigla?: string;
+  comarcaNome?: string;
   estadoId?: number;
+  comarcaTjId?: number;
 }
 
 export const defaultValue: Readonly<IPesquisa> = {

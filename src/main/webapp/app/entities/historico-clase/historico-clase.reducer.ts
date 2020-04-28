@@ -131,6 +131,7 @@ export const updateEntity: ICrudPutAction<IHistoricoClase> = entity => async dis
     type: ACTION_TYPES.UPDATE_HISTORICOCLASE,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  dispatch(getEntities());
   return result;
 };
 
@@ -140,6 +141,7 @@ export const deleteEntity: ICrudDeleteAction<IHistoricoClase> = id => async disp
     type: ACTION_TYPES.DELETE_HISTORICOCLASE,
     payload: axios.delete(requestUrl)
   });
+  dispatch(getEntities());
   return result;
 };
 

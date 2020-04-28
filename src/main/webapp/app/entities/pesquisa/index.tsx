@@ -11,12 +11,12 @@ import PesquisaDeleteDialog from './pesquisa-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={PesquisaDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={PesquisaUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={PesquisaUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={PesquisaDetail} />
       <ErrorBoundaryRoute path={match.url} component={Pesquisa} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={PesquisaDeleteDialog} />
   </>
 );
 

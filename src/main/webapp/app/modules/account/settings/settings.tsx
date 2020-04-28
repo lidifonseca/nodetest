@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
-import { Button, Col, Alert, Row } from 'reactstrap';
-import { connect } from 'react-redux';
+import React, {useEffect} from 'react';
+import {Button, Col, Alert, Row} from 'reactstrap';
+import {connect} from 'react-redux';
+import {Translate, translate} from 'react-jhipster';
+import {AvForm, AvField} from 'availity-reactstrap-validation';
 
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import {IRootState} from 'app/shared/reducers';
+import {getSession} from 'app/shared/reducers/authentication';
+import {saveAccountSettings, reset} from './settings.reducer';
+import {Link} from "react-router-dom";
+import {Panel, PanelBody, PanelHeader} from "app/shared/layout/panel/panel";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-import { IRootState } from 'app/shared/reducers';
-import { getSession } from 'app/shared/reducers/authentication';
-import { saveAccountSettings, reset } from './settings.reducer';
-
-export interface IUserSettingsProps extends StateProps, DispatchProps {}
+export interface IUserSettingsProps extends StateProps, DispatchProps {
+}
 
 export const SettingsPage = (props: IUserSettingsProps) => {
   useEffect(() => {
@@ -30,69 +34,98 @@ export const SettingsPage = (props: IUserSettingsProps) => {
 
   return (
     <div>
-      <Row className="justify-content-center">
-        <Col md="8">
-          <h2 id="settings-title">User settings for {props.account.login}</h2>
+      <ol className="breadcrumb float-xl-right">
+        <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
+        <li className="breadcrumb-item">Conta</li>
+        <li className="breadcrumb-item active">Detalhes</li>
+      </ol>
+      <h2>
+        <Translate contentKey="settings.title" interpolate={{username: props.account.login}}>
+          User settings for {props.account.login}
+        </Translate>
+      </h2>
+      <Panel>
+        <PanelHeader>
+          <span>Dados da conta</span>
+          <Button tag={Link} to={"/account/password"} color="success" className="pull-right" size="sm">
+            <i className="fa fa-key" aria-hidden={"true"}>&nbsp;</i>
+            Senha
+          </Button>
+        </PanelHeader>
+        <PanelBody>
           <AvForm id="settings-form" onValidSubmit={handleValidSubmit}>
-            {/* First name */}
-            <AvField
-              className="form-control"
-              name="firstName"
-              label="First Name"
-              id="firstName"
-              placeholder="Your first name"
-              validate={{
-                required: { value: true, errorMessage: 'Your first name is required.' },
-                minLength: { value: 1, errorMessage: 'Your first name is required to be at least 1 character' },
-                maxLength: { value: 50, errorMessage: 'Your first name cannot be longer than 50 characters' }
-              }}
-              value={props.account.firstName}
-            />
-            {/* Last name */}
-            <AvField
-              className="form-control"
-              name="lastName"
-              label="Last Name"
-              id="lastName"
-              placeholder="Your last name"
-              validate={{
-                required: { value: true, errorMessage: 'Your last name is required.' },
-                minLength: { value: 1, errorMessage: 'Your last name is required to be at least 1 character' },
-                maxLength: { value: 50, errorMessage: 'Your last name cannot be longer than 50 characters' }
-              }}
-              value={props.account.lastName}
-            />
-            {/* Email */}
-            <AvField
-              name="email"
-              label="Email"
-              placeholder={'Your email'}
-              type="email"
-              validate={{
-                required: { value: true, errorMessage: 'Your email is required.' },
-                minLength: { value: 5, errorMessage: 'Your email is required to be at least 5 characters.' },
-                maxLength: { value: 254, errorMessage: 'Your email cannot be longer than 50 characters.' }
-              }}
-              value={props.account.email}
-            />
-            <Button color="primary" type="submit">
-              Save
-            </Button>
+            <Row size="md">
+              <Col md="4">
+                <AvField
+                  className="form-control mb-md-3"
+                  name="firstName"
+                  label={translate('settings.form.firstname')}
+                  id="firstName"
+                  placeholder={translate('settings.form.firstname.placeholder')}
+                  validate={{
+                    required: {value: true, errorMessage: translate('settings.messages.validate.firstname.required')},
+                    minLength: {value: 1, errorMessage: translate('settings.messages.validate.firstname.minlength')},
+                    maxLength: {value: 50, errorMessage: translate('settings.messages.validate.firstname.maxlength')}
+                  }}
+                  value={props.account.firstName}
+                />
+              </Col>
+              <Col md="4">
+                <AvField
+                  className="form-control mb-md-3"
+                  name="lastName"
+                  label={translate('settings.form.lastname')}
+                  id="lastName"
+                  placeholder={translate('settings.form.lastname.placeholder')}
+                  validate={{
+                    required: {value: true, errorMessage: translate('settings.messages.validate.lastname.required')},
+                    minLength: {value: 1, errorMessage: translate('settings.messages.validate.lastname.minlength')},
+                    maxLength: {value: 50, errorMessage: translate('settings.messages.validate.lastname.maxlength')}
+                  }}
+                  value={props.account.lastName}
+                />
+              </Col>
+              <Col md="4">
+                <AvField
+                  className="form-control mb-md-3"
+                  name="email"
+                  label={translate('global.form.email.label')}
+                  placeholder={translate('global.form.email.placeholder')}
+                  type="email"
+                  validate={{
+                    required: {value: true, errorMessage: translate('global.messages.validate.email.required')},
+                    minLength: {value: 5, errorMessage: translate('global.messages.validate.email.minlength')},
+                    maxLength: {value: 254, errorMessage: translate('global.messages.validate.email.maxlength')}
+                  }}
+                  value={props.account.email}
+                />
+              </Col>
+            </Row>
+            <Row className="justify-content-md-center">
+              <Button color="success" type="submit">
+                <FontAwesomeIcon icon="save"/>&nbsp;
+                <Translate contentKey="settings.form.button">Save</Translate>
+              </Button>
+            </Row>
           </AvForm>
-        </Col>
-      </Row>
+        </PanelBody>
+      </Panel>
+
     </div>
   );
 };
 
-const mapStateToProps = ({ authentication }: IRootState) => ({
+const mapStateToProps = ({authentication}: IRootState) => ({
   account: authentication.account,
   isAuthenticated: authentication.isAuthenticated
 });
 
-const mapDispatchToProps = { getSession, saveAccountSettings, reset };
+const mapDispatchToProps = {getSession, saveAccountSettings, reset};
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SettingsPage);

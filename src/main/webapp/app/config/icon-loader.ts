@@ -1,9 +1,13 @@
+/* eslint no-console: off */
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
+import { faSortDown } from '@fortawesome/free-solid-svg-icons/faSortDown';
+import { faSortUp } from '@fortawesome/free-solid-svg-icons/faSortUp';
 import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faSave } from '@fortawesome/free-solid-svg-icons/faSave';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
@@ -28,17 +32,26 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faRoad } from '@fortawesome/free-solid-svg-icons/faRoad';
 import { faCloud } from '@fortawesome/free-solid-svg-icons/faCloud';
-
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons/faFacebook';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons/faTwitter';
+import { faLinkedinIn } from '@fortawesome/free-brands-svg-icons/faLinkedinIn';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { library } from '@fortawesome/fontawesome-svg-core';
-
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons/faTrashAlt';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
+import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
 export const loadIcons = () => {
   library.add(
     faSort,
+    faSortDown,
+    faSortUp,
     faEye,
     faSync,
     faBan,
     faTrash,
     faArrowLeft,
+    faArrowRight,
     faSave,
     faPlus,
     faPencilAlt,
@@ -62,6 +75,14 @@ export const loadIcons = () => {
     faRoad,
     faCloud,
     faTimesCircle,
-    faSearch
+    faSearch,
+    faCheck,
+    faFacebook,
+    faTimes,
+    faTwitter,
+    faLinkedinIn,
+    faTrashAlt,
+    faSpinner,
+    faDownload
   );
 };

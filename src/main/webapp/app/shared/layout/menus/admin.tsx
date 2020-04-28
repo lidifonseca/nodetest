@@ -4,39 +4,40 @@ import { DropdownItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink as Link } from 'react-router-dom';
 import { NavDropdown } from './menu-components';
+import { Translate, translate } from 'react-jhipster';
 
 const adminMenuItems = (
   <>
     <MenuItem icon="user" to="/admin/user-management">
-      User management
+      Usuários
     </MenuItem>
     <MenuItem icon="tachometer-alt" to="/admin/metrics">
       Metrics
     </MenuItem>
-    <MenuItem icon="heart" to="/admin/health">
-      Health
-    </MenuItem>
-    <MenuItem icon="list" to="/admin/configuration">
-      Configuration
-    </MenuItem>
-    <MenuItem icon="bell" to="/admin/audits">
-      Audits
-    </MenuItem>
-    {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
-    <MenuItem icon="tasks" to="/admin/logs">
-      Logs
-    </MenuItem>
+    {/*  <MenuItem icon="heart" to="/admin/health"> */}
+    {/*    Health*/}
+    {/*  </MenuItem> */}
+    {/*  <MenuItem icon="list" to="/admin/configuration"> */}
+    {/*    Configurações*/}
+    {/*  </MenuItem> */}
+    {/*  <MenuItem icon="bell" to="/admin/audits"> */}
+    {/*    Audits*/}
+    {/*  </MenuItem> */}
+    {/*   jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
+    {/*  <MenuItem icon="tasks" to="/admin/logs"> */}
+    {/*    Logs*/}
+    {/*  </MenuItem> */}
   </>
 );
 
 const swaggerItem = (
   <MenuItem icon="book" to="/admin/docs">
-    API
+    <Translate contentKey="global.menu.admin.apidocs">API</Translate>
   </MenuItem>
 );
 
 export const AdminMenu = ({ showSwagger }) => (
-  <NavDropdown icon="user-plus" name="Administration" style={{ width: '140%' }} id="admin-menu">
+  <NavDropdown icon="" name="Administração" style={{ width: '127px' }}>
     {adminMenuItems}
     {showSwagger && swaggerItem}
   </NavDropdown>

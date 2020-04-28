@@ -1,0 +1,40 @@
+{
+  "tjscrapperApp": {
+    "pesquisa": {
+      "home": {
+        "title": "Pesquisas",
+        "createLabel": "Criar novo Pesquisa",
+        "createOrEditLabel": "Criar ou editar Pesquisa",
+        "notFound": "Nenhum Pesquisa encontrado"
+      },
+      "created": "Um novo Pesquisa foi criado com o identificador {{ param }}",
+      "updated": "<strong>Pesquisa atualizada</strong><br>A pesquisa {{ param }} foi atualizada com sucesso.",
+      "deleted": "<strong>Pesquisa excluída</strong><br>A pesquisa {{ param }} foi excluída com sucesso.",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir a pesquisa?"
+      },
+      "detail": {
+        "title": "Pesquisa"
+      },
+      "nome": "Nome",
+      "classesIncluir": "Classes Incluir",
+      "incluirMovimentacoes": "Incluir Movimentacoes",
+      "descartarMovimentacoes": "Descartar Movimentacoes",
+      "incluirMovimentacoesAll": "Incluir Movimentacoes All",
+      "anoInicial": "Ano Inicial",
+      "anoFinal": "Ano Final",
+      "csv": "Csv",
+      "dataCriacao": "Data Criacao",
+      "dataFinalizacao": "Data Finalizacao",
+      "situacao": "Situacao",
+      "observacoes": "Observacoes",
+      "csvTotal": "Csv Total",
+      "csvVerificados": "Csv Verificados",
+      "comarcaPorComarca": "Comarca Por Comarca",
+      "user": "User",
+      "processo": "Processo",
+      "comarcas": "Comarcas",
+      "estado": "Estado"
+    }
+  }
+}

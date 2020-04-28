@@ -11,12 +11,12 @@ import PeticaoDeleteDialog from './peticao-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={PeticaoDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={PeticaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={PeticaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={PeticaoDetail} />
       <ErrorBoundaryRoute path={match.url} component={Peticao} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={PeticaoDeleteDialog} />
   </>
 );
 

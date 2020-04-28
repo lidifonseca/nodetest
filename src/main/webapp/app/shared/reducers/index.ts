@@ -1,7 +1,10 @@
 import { combineReducers } from 'redux';
 import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
+import locale, { LocaleState } from './locale';
 import authentication, { AuthenticationState } from './authentication';
+import configuracoes, { ConfiguracoesState } from './configuracoes';
+import sidebar, { SidebarState } from './sidebar';
 import applicationProfile, { ApplicationProfileState } from './application-profile';
 
 import administration, { AdministrationState } from 'app/modules/administration/administration.reducer';
@@ -11,18 +14,6 @@ import activate, { ActivateState } from 'app/modules/account/activate/activate.r
 import password, { PasswordState } from 'app/modules/account/password/password.reducer';
 import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
-// prettier-ignore
-import pesquisa, {
-  PesquisaState
-} from 'app/entities/pesquisa/pesquisa.reducer';
-// prettier-ignore
-import estado, {
-  EstadoState
-} from 'app/entities/estado/estado.reducer';
-// prettier-ignore
-import comarca, {
-  ComarcaState
-} from 'app/entities/comarca/comarca.reducer';
 // prettier-ignore
 import processo, {
   ProcessoState
@@ -55,10 +46,29 @@ import audiencia, {
 import historicoClase, {
   HistoricoClaseState
 } from 'app/entities/historico-clase/historico-clase.reducer';
+// prettier-ignore
+import cliente, {
+  ClienteState
+} from 'app/entities/cliente/cliente.reducer';
+// prettier-ignore
+import pesquisa, {
+  PesquisaState
+} from 'app/entities/pesquisa/pesquisa.reducer';
+// prettier-ignore
+import estado, {
+  EstadoState
+} from 'app/entities/estado/estado.reducer';
+// prettier-ignore
+import comarca, {
+  ComarcaState
+} from 'app/entities/comarca/comarca.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
   readonly authentication: AuthenticationState;
+  readonly configuracoes: ConfiguracoesState;
+  readonly sidebar: SidebarState;
+  readonly locale: LocaleState;
   readonly applicationProfile: ApplicationProfileState;
   readonly administration: AdministrationState;
   readonly userManagement: UserManagementState;
@@ -67,9 +77,6 @@ export interface IRootState {
   readonly passwordReset: PasswordResetState;
   readonly password: PasswordState;
   readonly settings: SettingsState;
-  readonly pesquisa: PesquisaState;
-  readonly estado: EstadoState;
-  readonly comarca: ComarcaState;
   readonly processo: ProcessoState;
   readonly parte: ParteState;
   readonly movimentacao: MovimentacaoState;
@@ -78,12 +85,19 @@ export interface IRootState {
   readonly apenso: ApensoState;
   readonly audiencia: AudienciaState;
   readonly historicoClase: HistoricoClaseState;
+  readonly cliente: ClienteState;
+  readonly pesquisa: PesquisaState;
+  readonly estado: EstadoState;
+  readonly comarca: ComarcaState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
 
 const rootReducer = combineReducers<IRootState>({
   authentication,
+  configuracoes,
+  sidebar,
+  locale,
   applicationProfile,
   administration,
   userManagement,
@@ -92,9 +106,6 @@ const rootReducer = combineReducers<IRootState>({
   passwordReset,
   password,
   settings,
-  pesquisa,
-  estado,
-  comarca,
   processo,
   parte,
   movimentacao,
@@ -103,6 +114,10 @@ const rootReducer = combineReducers<IRootState>({
   apenso,
   audiencia,
   historicoClase,
+  cliente,
+  pesquisa,
+  estado,
+  comarca,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

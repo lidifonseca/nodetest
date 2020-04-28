@@ -1,31 +1,42 @@
 import './header.scss';
 
 import React, { useState } from 'react';
-
+import { Translate, Storage } from 'react-jhipster';
 import { Navbar, Nav, NavbarToggler, NavbarBrand, Collapse } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
 
-import { Home, Brand } from './header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu } from '../menus';
+import { Brand, Account, Logout, SwaggerMenu } from './header-components';
+import {connect} from "react-redux";
+import {toggleSidebarMobileOpen} from "app/shared/reducers/sidebar";
 
-export interface IHeaderProps {
+export interface IMyHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
   isSwaggerEnabled: boolean;
+  currentLocale: string;
+  onLocaleChange: Function;
 }
 
+export interface IHeaderProps extends StateProps, DispatchProps, IMyHeaderProps {}
+
 const Header = (props: IHeaderProps) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(true);
+
+  const handleLocaleChange = event => {
+    const langKey = event.target.value;
+    Storage.session.set('locale', langKey);
+    props.onLocaleChange(langKey);
+  };
 
   const renderDevRibbon = () =>
     props.isInProduction === false ? (
       <div className="ribbon dev">
-        <a href="">Development</a>
+        <a href="">
+          <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
+        </a>
       </div>
     ) : null;
 
@@ -37,20 +48,50 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar className="loading-bar" />
-      <Navbar dark expand="sm" fixed="top" className="jh-navbar">
-        <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
-        <Brand />
-        <Collapse isOpen={menuOpen} navbar>
-          <Nav id="header-tabs" className="ml-auto" navbar>
-            <Home />
-            {props.isAuthenticated && <EntitiesMenu />}
-            {props.isAuthenticated && props.isAdmin && <AdminMenu showSwagger={props.isSwaggerEnabled} />}
-            <AccountMenu isAuthenticated={props.isAuthenticated} />
+      <div id="header" className="header navbar-default" style={{ boxShadow: "0 0 16px rgba(0,0,0,.15)" }}>
+        <div className={"navbar-header"}>
+          <Brand />
+          <div className={"navbar-nav navbar-right d-block d-md-none"}>
+            <Collapse isOpen={menuOpen} navbar>
+              <Nav id="header-tabs" className="ml-auto navbar-nav navbar-right pull-right" navbar>
+                {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
+                {props.isAuthenticated && <Account />}
+                {props.isAuthenticated && <Logout />}
+
+                <button type="button" className="navbar-toggle" onClick={props.toggleSidebarMobileOpen}>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                </button>
+              </Nav>
+            </Collapse>
+          </div>
+        </div>
+        <div className={"navbar-nav navbar-right d-none d-md-block"}>
+          <Nav id="header-tabs" className="ml-auto navbar-nav navbar-right pull-right mr-4" navbar>
+            {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
+            {props.isAuthenticated && <Account />}
+            {props.isAuthenticated && <Logout />}
           </Nav>
-        </Collapse>
-      </Navbar>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Header;
+
+const mapStateToProps = (storeState) => ({
+
+});
+
+
+const mapDispatchToProps = { toggleSidebarMobileOpen };
+
+type StateProps = ReturnType <typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);
+

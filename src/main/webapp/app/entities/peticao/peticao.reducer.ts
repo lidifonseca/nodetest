@@ -143,6 +143,7 @@ export const updateEntity: ICrudPutAction<IPeticao> = entity => async dispatch =
     type: ACTION_TYPES.UPDATE_PETICAO,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  dispatch(getEntities());
   return result;
 };
 
@@ -152,6 +153,7 @@ export const deleteEntity: ICrudDeleteAction<IPeticao> = id => async dispatch =>
     type: ACTION_TYPES.DELETE_PETICAO,
     payload: axios.delete(requestUrl)
   });
+  dispatch(getEntities());
   return result;
 };
 

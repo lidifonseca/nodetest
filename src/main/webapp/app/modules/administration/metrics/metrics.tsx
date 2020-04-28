@@ -41,9 +41,12 @@ export const MetricsPage = (props: IMetricsPageProps) => {
     <div>
       <h2 id="metrics-page-heading">Application Metrics</h2>
       <p>
-        <Button onClick={getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
+        <Button onClick={getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-dark'} disabled={isFetching}>
           <FontAwesomeIcon icon="sync" />
-          &nbsp; Refresh
+          &nbsp;
+          <Translate component="span" contentKey="health.refresh.button">
+            Refresh
+          </Translate>
         </Button>
       </p>
       <hr />
@@ -125,4 +128,7 @@ const mapDispatchToProps = { systemMetrics, systemThreadDump };
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(MetricsPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MetricsPage);

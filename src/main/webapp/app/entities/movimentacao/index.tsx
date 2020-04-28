@@ -11,12 +11,12 @@ import MovimentacaoDeleteDialog from './movimentacao-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={MovimentacaoDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={MovimentacaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={MovimentacaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={MovimentacaoDetail} />
       <ErrorBoundaryRoute path={match.url} component={Movimentacao} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={MovimentacaoDeleteDialog} />
   </>
 );
 

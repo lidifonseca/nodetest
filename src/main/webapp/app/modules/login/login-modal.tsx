@@ -1,8 +1,8 @@
 import React from 'react';
-
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Alert, Row, Col } from 'reactstrap';
-import { AvForm, AvField, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { Link } from 'react-router-dom';
+import {translate} from 'react-jhipster';
+import {Button, Label} from 'reactstrap';
+import {AvForm, AvField, AvGroup, AvInput} from 'availity-reactstrap-validation';
+import {Link} from 'react-router-dom';
 
 export interface ILoginModalProps {
   showModal: boolean;
@@ -12,71 +12,80 @@ export interface ILoginModalProps {
 }
 
 class LoginModal extends React.Component<ILoginModalProps> {
-  handleSubmit = (event, errors, { username, password, rememberMe }) => {
-    const { handleLogin } = this.props;
+  handleSubmit = (event, errors, {username, password, rememberMe}) => {
+    const {handleLogin} = this.props;
     handleLogin(username, password, rememberMe);
   };
 
   render() {
-    const { loginError, handleClose } = this.props;
+    const {loginError, handleClose} = this.props;
 
     return (
-      <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
-        <AvForm onSubmit={this.handleSubmit}>
-          <ModalHeader id="login-title" toggle={handleClose}>
-            Sign in
-          </ModalHeader>
-          <ModalBody>
-            <Row>
-              <Col md="12">
-                {loginError ? (
-                  <Alert color="danger">
-                    <strong>Failed to sign in!</strong> Please check your credentials and try again.
-                  </Alert>
-                ) : null}
-              </Col>
-              <Col md="12">
-                <AvField
-                  name="username"
-                  label="Username"
-                  placeholder="Your username"
-                  required
-                  errorMessage="Username cannot be empty!"
-                  autoFocus
-                />
-                <AvField
-                  name="password"
-                  type="password"
-                  label="Password"
-                  placeholder="Your password"
-                  required
-                  errorMessage="Password cannot be empty!"
-                />
-                <AvGroup check inline>
-                  <Label className="form-check-label">
-                    <AvInput type="checkbox" name="rememberMe" /> Remember me
-                  </Label>
-                </AvGroup>
-              </Col>
-            </Row>
-            <div className="mt-1">&nbsp;</div>
-            <Alert color="warning">
-              <Link to="/account/reset/request">Did you forget your password?</Link>
-            </Alert>
-            <Alert color="warning">
-              <span>You don&apos;t have an account yet?</span> <Link to="/account/register">Register a new account</Link>
-            </Alert>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={handleClose} tabIndex="1">
-              Cancel
-            </Button>{' '}
-            <Button color="primary" type="submit">
-              Sign in
-            </Button>
-          </ModalFooter>
-        </AvForm>
-      </Modal>
+      <div>
+        <React.Fragment>
+          <AvForm onSubmit={this.handleSubmit}>
+            <div className="login-cover">
+              <div className="login-cover-image"
+                   style={{backgroundImage: 'url(../../content/images/confiancaprime-login-background.webp)'}}></div>
+              <div className="login-cover-bg"></div>
+            </div>
+
+            <div className="login login-v2">
+              <div className="login-header">
+                <div className="brand">
+                  { /* <span className="logo"></span> */}
+                  <b>Confiança Prime</b>
+                </div>
+                <div className="icon">
+                  <i className="fa fa-lock"></i>
+                </div>
+              </div>
+              <div className="login-content">
+                <div className="margin-bottom-0">
+                  <div className="form-group m-b-20">
+                    <AvField
+                      name="username"
+                      className="form-control form-control-lg"
+                      label={translate('global.form.username.label')}
+                      placeholder={translate('global.form.username.placeholder')}
+                      required
+                      errorMessage="O nome de usuário não pode estar vazio!"
+                      autoFocus
+                    />
+                  </div>
+                  <div className="form-group m-b-20">
+                    <AvField
+                      name="password"
+                      type="password"
+                      className="form-control form-control-lg"
+                      label={translate('login.form.password')}
+                      placeholder={translate('login.form.password.placeholder')}
+                      required
+                      errorMessage="A senha não pode estar vazia!"
+                    />
+                  </div>
+                  <div className="checkbox checkbox-css m-b-20">
+                    <AvGroup check inline>
+                      <AvInput type="checkbox" name="rememberMe" value={true}/>
+                      <Label className="form-check-label" for="rememberMe">
+                        Lembrar senha
+                      </Label>
+                    </AvGroup>
+                  </div>
+                  <div>
+                    <Button className="btn-success btn-block btn-lg" type="submit">
+                      Entrar
+                    </Button>
+                    <div className="m-t-15">
+                      Esqueceu sua senha? Clique <Link to={"/account/reset/request"}>aqui</Link> para recuperá-la.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AvForm>
+        </React.Fragment>
+      </div>
     );
   }
 }

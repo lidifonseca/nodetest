@@ -11,12 +11,12 @@ import AudienciaDeleteDialog from './audiencia-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={AudienciaDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={AudienciaUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={AudienciaUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={AudienciaDetail} />
       <ErrorBoundaryRoute path={match.url} component={Audiencia} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={AudienciaDeleteDialog} />
   </>
 );
 

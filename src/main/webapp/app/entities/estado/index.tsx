@@ -11,12 +11,12 @@ import EstadoDeleteDialog from './estado-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={EstadoDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={EstadoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={EstadoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={EstadoDetail} />
       <ErrorBoundaryRoute path={match.url} component={Estado} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={EstadoDeleteDialog} />
   </>
 );
 

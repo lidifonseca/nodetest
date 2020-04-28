@@ -1,8 +1,10 @@
-import { isPromise } from 'react-jhipster';
+import { isPromise, translate } from 'react-jhipster';
 import { toast } from 'react-toastify';
+import configuracoes from 'app/shared/reducers/configuracoes';
 
-const addErrorAlert = (message, key?, data?) => {
-  toast.error(message);
+const addErrorAlert = (message, toastOptions?: {}, key?, data?) => {
+  key = key ? key : message;
+  toast.error(translate(key, data), toastOptions);
 };
 export default () => next => action => {
   // If not a promise, continue on
@@ -17,25 +19,39 @@ export default () => next => action => {
    */
   return next(action)
     .then(response => {
+      let toastOptions = {};
+      if (action.type == 'configuracoes/ENVIAR_DADOS') {
+        toastOptions = { autoClose: false };
+      }
+
       if (action.meta && action.meta.successMessage) {
-        toast.success(action.meta.successMessage);
+        toast.success(action.meta.successMessage, toastOptions);
       } else if (response && response.action && response.action.payload && response.action.payload.headers) {
         const headers = response.action.payload.headers;
         let alert: string = null;
+        let alertParams: string = null;
         Object.entries(headers).forEach(([k, v]: [string, string]) => {
           if (k.toLowerCase().endsWith('app-alert')) {
             alert = v;
+          } else if (k.toLowerCase().endsWith('app-params')) {
+            alertParams = v;
           }
         });
         if (alert) {
-          toast.success(alert);
+          const alertParam = alertParams;
+          toast.success(translate(alert, { param: alertParam }), toastOptions);
         }
       }
       return Promise.resolve(response);
     })
     .catch(error => {
+      let toastOptions = {};
+      if (action.type == 'configuracoes/ENVIAR_DADOS') {
+        toastOptions = { autoClose: false };
+      }
+
       if (action.meta && action.meta.errorMessage) {
-        toast.error(action.meta.errorMessage);
+        toast.error(action.meta.errorMessage, toastOptions);
       } else if (error && error.response) {
         const response = error.response;
         const data = response.data;
@@ -44,7 +60,7 @@ export default () => next => action => {
           switch (response.status) {
             // connection refused, server not reachable
             case 0:
-              addErrorAlert('Server not reachable', 'error.server.not.reachable');
+              addErrorAlert('Server not reachable', toastOptions, 'error.server.not.reachable');
               break;
 
             case 400: {
@@ -59,8 +75,8 @@ export default () => next => action => {
                 }
               });
               if (errorHeader) {
-                const entityName = entityKey;
-                addErrorAlert(errorHeader, errorHeader, { entityName });
+                const entityName = translate('global.menu.entities.' + entityKey);
+                addErrorAlert(errorHeader, toastOptions, errorHeader, { entityName });
               } else if (data !== '' && data.fieldErrors) {
                 const fieldErrors = data.fieldErrors;
                 for (i = 0; i < fieldErrors.length; i++) {
@@ -70,25 +86,25 @@ export default () => next => action => {
                   }
                   // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                   const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                  const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
-                  addErrorAlert(`Error on field "${fieldName}"`, `error.${fieldError.message}`, { fieldName });
+                  const fieldName = translate(`tjscrapperApp.${fieldError.objectName}.${convertedField}`);
+                  addErrorAlert(`Error on field "${fieldName}"`, toastOptions, `error.${fieldError.message}`, { fieldName });
                 }
               } else if (data !== '' && data.message) {
-                addErrorAlert(data.message, data.message, data.params);
+                addErrorAlert(data.message, toastOptions, data.message, data.params);
               } else {
-                addErrorAlert(data);
+                addErrorAlert(data, toastOptions);
               }
               break;
             }
             case 404:
-              addErrorAlert('Not found', 'error.url.not.found');
+              addErrorAlert('Not found', toastOptions, 'error.url.not.found');
               break;
 
             default:
               if (data !== '' && data.message) {
-                addErrorAlert(data.message);
+                addErrorAlert(data.message, toastOptions);
               } else {
-                addErrorAlert(data);
+                addErrorAlert(data, toastOptions);
               }
           }
         }
@@ -96,9 +112,9 @@ export default () => next => action => {
         /* eslint-disable no-console */
         console.log('Authentication Error: Trying to access url api/account with GET.');
       } else if (error && error.message) {
-        toast.error(error.message);
+        toast.error(error.message, toastOptions);
       } else {
-        toast.error('Unknown error!');
+        toast.error('Unknown error!', toastOptions);
       }
       return Promise.reject(error);
     });

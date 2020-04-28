@@ -1,8 +1,9 @@
 // Override Boostrap variables
 // Import Bootstrap source files from node_modules
-@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'src/main/webapp/app/assets/scss/react';
+@import '~@pathofdev/react-tag-input/build/index.css';
+
 body {
-  background: #fafafa;
   margin: 0;
 }
 
@@ -80,6 +81,18 @@ Custom button styles
     -webkit-box-shadow: none;
     box-shadow: none;
   }
+}
+
+.btn {
+  text-transform: none;
+}
+
+.btn-success:focus,
+.btn-success.focus {
+  color: #fff;
+  background-color: $success !important;
+  border-color: $success !important;
+  box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
 }
 
 /* ==========================================================================
@@ -309,4 +322,97 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
   width: 1% !important;
 }
 
+// Fix checkbox alignment https://github.com/jhipster/generator-jhipster/issues/8463
+.form-check-input {
+  margin-top: -0.5rem;
+}
+
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+.modal-header-dark {
+  color: #fff;
+  padding: 9px 15px;
+  background-color: #1d2226;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.modal-header-dark .close {
+  color: #fff;
+}
+
+/* ==========================================================================
+Csutom Rules to Fix Conflict
+========================================================================== */
+.insufficient-authority .error {
+  background-color: inherit;
+  height: auto;
+  height: -moz-available;
+  height: -webkit-fill-available;
+}
+
+.breadcrumb {
+  text-transform: none;
+  border: none;
+}
+
+.header .navbar-header {
+  display: -webkit-box !important;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.header .navbar-toggle {
+  margin-right: 0px !important;
+}
+
+.panel-title > span {
+  vertical-align: -webkit-baseline-middle;
+}
+
+.Toastify__toast--info {
+  background-color: $info;
+  border-color: $info !important;
+}
+.Toastify__toast--success {
+  background-color: $dark;
+  border-color: $dark !important;
+}
+.Toastify__toast--warning {
+  background-color: $warning;
+  border-color: $warning !important;
+}
+.Toastify__toast--error {
+  background-color: $danger;
+  border-color: $danger !important;
+}
+
+.toastify-container {
+  right: 11em;
+}
+
+.toastify-toast {
+  height: 100px;
+  width: 420px;
+  border: 5px solid;
+  border-radius: 6px;
+  opacity: 0.94;
+}
+.toastify-body {
+  font-size: 13px;
+}
+
+.toastify-body > span > strong {
+  font-size: 16px;
+}
+
+@media (max-width: 767.98px) {
+  .content {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}

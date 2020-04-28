@@ -1,0 +1,27 @@
+{
+  "reset": {
+    "request": {
+      "title": "Nova senha",
+      "form": {
+        "button": "Criar nova senha"
+      },
+      "messages": {
+        "info": "Informe endereço de e-mail utilizado no cadastro",
+        "success": "<strong>Redefinição de senha</strong><br>Verifique seu e-mail para detalhes sobre a criação de uma nova senha.",
+        "notfound": "<strong>Endereço de e-mail não cadastrado!</strong><br> Por favor verifique e tente novamente"
+      }
+    },
+    "finish": {
+      "title": "Criar nova senha",
+      "form": {
+        "button": "Validar nova senha"
+      },
+      "messages": {
+        "info": "Escolha uma nova senha",
+        "success": "<strong>Senha alterada</strong><br>Sua senha foi alterada com sucesso.",
+        "keymissing": "Chave de reestabelecimento não encontrada.",
+        "error": "<strong>Sua senha não pode ser trocada</strong> Lembre-se, a requisição de troca de senha é válida apenas por 24 horas."
+      }
+    }
+  }
+}
