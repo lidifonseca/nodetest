@@ -4,6 +4,7 @@ const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const utils = require('./utils.js');
 
 const getTsLoaderRule = env => {
@@ -122,6 +123,14 @@ module.exports = options => ({
       chunksSortMode: 'dependency',
       inject: 'body'
     }),
-    new BaseHrefWebpackPlugin({ baseHref: '/' }),
+    new BaseHrefWebpackPlugin({ baseHref: '/' }), 
+    new MergeJsonWebpackPlugin({
+      output: {
+        groupBy: [
+                    { pattern: "./src/main/webapp/i18n/pt-br/*.json", fileName: "./i18n/pt-br.json" }
+                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
+                ]
+      }
+    }),
   ]
 });

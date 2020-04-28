@@ -11,12 +11,12 @@ import ApensoDeleteDialog from './apenso-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={ApensoDeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={ApensoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={ApensoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={ApensoDetail} />
       <ErrorBoundaryRoute path={match.url} component={Apenso} />
     </Switch>
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={ApensoDeleteDialog} />
   </>
 );
 

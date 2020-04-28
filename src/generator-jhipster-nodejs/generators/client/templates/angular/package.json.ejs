@@ -56,9 +56,6 @@
     "sockjs-client": "1.4.0",
     "webstomp-client": "1.2.6",
     <%_ } _%>
-    <%_ if (skipServer) { _%>
-    "sonar-scanner": "3.1.0",
-    <%_ } _%>
     "tslib": "1.10.0",
     "zone.js": "0.10.2"
   },
@@ -104,9 +101,6 @@
     "file-loader": "5.0.2",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
-    <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
-    <%_ }); _%>
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
     <%_ if (!skipCommitHook) { _%>
@@ -150,6 +144,9 @@
     <%_ } _%>
     "tslint": "6.0.0",
     "typescript": "3.7.5",
+    <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_ }); _%>
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
@@ -170,25 +167,17 @@
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
-    "ngc": "ngc -p tsconfig-aot.json",
+    "ngc": "ngc -p tsconfig.app.json",
     "cleanup": "rimraf <%= DIST_DIR %> <%= AOT_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
     <%_ } _%>
-    <%_ if (!skipServer) { _%>
-    "postInstall": "cd server && npm run lint:fix",
-    <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
-    <%_ if (skipServer) { _%>
-    "sonar": "sonar-scanner",
-    <%_ } _%>
-	"start:app": "<%= clientPackageManager %> run build && cd server && <%= clientPackageManager %> run start",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-  	"build:app": "<%= clientPackageManager %> run build && cd server && <%= clientPackageManager %> run build",
     "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "<%= clientPackageManager %> run test <%= optionsForwarder %>--watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",

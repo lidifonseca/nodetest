@@ -60,9 +60,6 @@ limitations under the License.
     "rxjs": "6.4.0",
     "sockjs-client": "1.3.0",
     <%_ } _%>
-    <%_ if (skipServer) { _%>
-    "sonar-scanner": "3.1.0",
-    <%_ } _%>
     "tslib": "1.10.0",
     "uuid": "3.3.3"<% if (websocket === 'spring-websocket') { %>,
     "webstomp-client": "1.2.6"
@@ -116,9 +113,6 @@ limitations under the License.
     "fork-ts-checker-webpack-plugin": "3.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
-    <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
-    <%_ }); _%>
     "html-webpack-plugin": "3.2.0",
     <%_ if (!skipCommitHook) { _%>
     "husky": "3.1.0",
@@ -158,6 +152,9 @@ limitations under the License.
     "stripcomment-loader": "0.1.0",
     "style-loader": "1.0.1",
     "swagger-ui-dist": "3.24.3",
+    <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_ }); _%>
     "terser-webpack-plugin": "2.2.3",
     "thread-loader": "2.1.3",
     "to-string-loader": "1.1.6",
@@ -198,16 +195,7 @@ limitations under the License.
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
     <%_ } _%>
-    <%_ if (!skipServer) { _%>
-    "postInstall": "cd server && npm run lint:fix",
-    <%_ } _%>
-    <%_ if (skipServer) { _%>
-    "sonar": "sonar-scanner",
-    <%_ } _%>
-	"build": "<%= clientPackageManager %> run webpack:prod",
-    "build:app": "<%= clientPackageManager %> run build && cd server && <%= clientPackageManager %> run build",
     "start": "<%= clientPackageManager %> run webpack:dev",
-	"start:app": "<%= clientPackageManager %> run build && cd server && <%= clientPackageManager %> run start",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config src/test/javascript/jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--updateSnapshot",
