@@ -103,57 +103,93 @@ export class ApensoUpdate extends React.Component<IApensoUpdateProps, IApensoUpd
                   <AvForm model={isNew ? {} : apensoEntity} onSubmit={this.saveEntity}>
                     {!isNew ? (
                       <AvGroup>
-                        <Label for="apenso-id">
-                          <Translate contentKey="global.field.id">ID</Translate>
-                        </Label>
-                        <AvInput id="apenso-id" type="text" className="form-control" name="id" required readOnly />
+                        <Row>
+                          <Col md="3">
+                            <Label className="mt-2" for="apenso-id">
+                              <Translate contentKey="global.field.id">ID</Translate>
+                            </Label>
+                          </Col>
+                          <Col md="9">
+                            <AvInput id="apenso-id" type="text" className="form-control" name="id" required readOnly />
+                          </Col>
+                        </Row>
                       </AvGroup>
                     ) : null}
                     <AvGroup>
-                      <Label id="numeroLabel" for="apenso-numero">
-                        <Translate contentKey="generadorApp.apenso.numero">Numero</Translate>
-                      </Label>
-                      <AvField
-                        id="apenso-numero"
-                        type="text"
-                        name="numero"
-                        validate={{
-                          required: { value: true, errorMessage: translate('entity.validation.required') }
-                        }}
-                      />
+                      <Row>
+                        <Col md="3">
+                          <Label className="mt-2" id="numeroLabel" for="apenso-numero">
+                            <Translate contentKey="generadorApp.apenso.numero">Numero</Translate>
+                          </Label>
+                        </Col>
+                        <Col md="9">
+                          <AvField
+                            id="apenso-numero"
+                            type="text"
+                            name="numero"
+                            validate={{
+                              required: { value: true, errorMessage: translate('entity.validation.required') }
+                            }}
+                          />
+                        </Col>
+                      </Row>
                     </AvGroup>
                     <AvGroup>
-                      <Label id="claseLabel" for="apenso-clase">
-                        <Translate contentKey="generadorApp.apenso.clase">Clase</Translate>
-                      </Label>
-                      <AvField id="apenso-clase" type="text" name="clase" />
+                      <Row>
+                        <Col md="3">
+                          <Label className="mt-2" id="claseLabel" for="apenso-clase">
+                            <Translate contentKey="generadorApp.apenso.clase">Clase</Translate>
+                          </Label>
+                        </Col>
+                        <Col md="9">
+                          <AvField id="apenso-clase" type="text" name="clase" />
+                        </Col>
+                      </Row>
                     </AvGroup>
                     <AvGroup>
-                      <Label id="apensamentoLabel" for="apenso-apensamento">
-                        <Translate contentKey="generadorApp.apenso.apensamento">Apensamento</Translate>
-                      </Label>
-                      <AvField id="apenso-apensamento" type="date" className="form-control" name="apensamento" />
+                      <Row>
+                        <Col md="3">
+                          <Label className="mt-2" id="apensamentoLabel" for="apenso-apensamento">
+                            <Translate contentKey="generadorApp.apenso.apensamento">Apensamento</Translate>
+                          </Label>
+                        </Col>
+                        <Col md="9">
+                          <AvField id="apenso-apensamento" type="date" className="form-control" name="apensamento" />
+                        </Col>
+                      </Row>
                     </AvGroup>
                     <AvGroup>
-                      <Label id="motivoLabel" for="apenso-motivo">
-                        <Translate contentKey="generadorApp.apenso.motivo">Motivo</Translate>
-                      </Label>
-                      <AvField id="apenso-motivo" type="text" name="motivo" />
+                      <Row>
+                        <Col md="3">
+                          <Label className="mt-2" id="motivoLabel" for="apenso-motivo">
+                            <Translate contentKey="generadorApp.apenso.motivo">Motivo</Translate>
+                          </Label>
+                        </Col>
+                        <Col md="9">
+                          <AvField id="apenso-motivo" type="text" name="motivo" />
+                        </Col>
+                      </Row>
                     </AvGroup>
                     <AvGroup>
-                      <Label for="apenso-processo">
-                        <Translate contentKey="generadorApp.apenso.processo">Processo</Translate>
-                      </Label>
-                      <AvInput id="apenso-processo" type="select" className="form-control" name="processoId">
-                        <option value="" key="0" />
-                        {processos
-                          ? processos.map(otherEntity => (
-                              <option value={otherEntity.id} key={otherEntity.id}>
-                                {otherEntity.id}
-                              </option>
-                            ))
-                          : null}
-                      </AvInput>
+                      <Row>
+                        <Col md="3">
+                          <Label className="mt-2" for="apenso-processo">
+                            <Translate contentKey="generadorApp.apenso.processo">Processo</Translate>
+                          </Label>
+                        </Col>
+                        <Col md="9">
+                          <AvInput id="apenso-processo" type="select" className="form-control" name="processoId">
+                            <option value="" key="0" />
+                            {processos
+                              ? processos.map(otherEntity => (
+                                  <option value={otherEntity.id} key={otherEntity.id}>
+                                    {otherEntity.id}
+                                  </option>
+                                ))
+                              : null}
+                          </AvInput>
+                        </Col>
+                      </Row>
                     </AvGroup>
                     <Button tag={Link} id="cancel-save" to="/apenso" replace color="info">
                       <FontAwesomeIcon icon="arrow-left" />
