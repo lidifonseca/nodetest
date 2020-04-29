@@ -31,7 +31,8 @@ import { HistoricoClaseModule } from './module/historico-clase.module';
     IncidenteModule,
     ApensoModule,
     AudienciaModule,
-    HistoricoClaseModule
+    HistoricoClaseModule,
+    ApensoModule
     // jhipster-needle-add-entity-module-to-main - JHipster will add entity modules here, do not remove
   ],
   controllers: [

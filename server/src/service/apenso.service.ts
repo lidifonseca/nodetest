@@ -22,8 +22,29 @@ export class ApensoService {
     return await this.apensoRepository.findOne(options);
   }
 
-  async findAndCount(options: FindManyOptions<Apenso>): Promise<[Apenso[], number]> {
+  async findAndCount(
+    options: FindManyOptions<Apenso>,
+    filters?: Array<{ column: string; value: string; operation: string }>[]
+  ): Promise<[Apenso[], number]> {
     options.relations = relationshipNames;
+    let where = '';
+    let first = true;
+    for (const i in filters) {
+      if (filters.hasOwnProperty(i)) {
+        const element = filters[i];
+        if (!first) {
+          where += 'and';
+        } else {
+          first = false;
+        }
+        if (element['operation'] === 'contains') {
+          where += ' `Apenso`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+        } else if (element['operation'] === 'equals') {
+          where += ' `Apenso`.`' + element['column'] + '` = "' + element['value'] + '" ';
+        }
+      }
+    }
+    options.where = where;
     return await this.apensoRepository.findAndCount(options);
   }
 

@@ -233,7 +233,11 @@ export const getEntities: ICrudGetAllAction<%= entityReactName %><I<%= entityRea
   ) =>
   {
     <%_ for (idx in fields) { _%>
-      const <%= fields[idx].fieldName %>Request = <%= fields[idx].fieldName %> ? `<%= fields[idx].fieldName %>.contains=${<%= fields[idx].fieldName %>}&` : '';
+      <%_ if (fields[idx].fieldType === 'LocalDate') { _%>
+        const <%= fields[idx].fieldName %>Request = <%= fields[idx].fieldName %> ? `<%= fields[idx].fieldName %>.equals=${<%= fields[idx].fieldName %>}&` : ''; 
+      <%_ } else { _%>
+        const <%= fields[idx].fieldName %>Request = <%= fields[idx].fieldName %> ? `<%= fields[idx].fieldName %>.contains=${<%= fields[idx].fieldName %>}&` : '';
+      <%_ } _%>
     <%_ } _%>
     <%_ relationships.forEach(rel => { _%>
       const <%= rel.relationshipName %>Request = <%= rel.relationshipName %> ? `<%= rel.relationshipName %>Id.equals=${<%= rel.relationshipName %>}&` : '';

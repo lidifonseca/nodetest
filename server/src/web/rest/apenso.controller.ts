@@ -27,11 +27,22 @@ export class ApensoController {
   })
   async getAll(@Req() req: Request): Promise<Apenso[]> {
     const pageRequest: PageRequest = new PageRequest(req.query.page, req.query.size, req.query.sort);
-    const [results, count] = await this.apensoService.findAndCount({
-      skip: +pageRequest.page * pageRequest.size,
-      take: +pageRequest.size,
-      order: pageRequest.sort.asOrder()
-    });
+    let filters = [];
+    for (var param in req.query) {
+      if (param !== 'page' && param !== 'size' && param !== 'sort' && param !== 'cacheBuster') {
+        let column = param.split('.')[0];
+        let operation = param.split('.').length > 1 ? param.split('.')[1] : 'equals';
+        filters.push({ column, value: req.query[param], operation });
+      }
+    }
+    const [results, count] = await this.apensoService.findAndCount(
+      {
+        skip: +pageRequest.page * pageRequest.size,
+        take: +pageRequest.size,
+        order: pageRequest.sort.asOrder()
+      },
+      filters
+    );
     HeaderUtil.addPaginationHeaders(req.res, new Page(results, count, pageRequest));
     return results;
   }

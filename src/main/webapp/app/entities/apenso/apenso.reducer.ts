@@ -118,7 +118,7 @@ export type ICrudGetAllActionApenso<T> = (
 export const getEntities: ICrudGetAllActionApenso<IApenso> = (numero, clase, apensamento, motivo, processo, page, size, sort) => {
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
   const claseRequest = clase ? `clase.contains=${clase}&` : '';
-  const apensamentoRequest = apensamento ? `apensamento.contains=${apensamento}&` : '';
+  const apensamentoRequest = apensamento ? `apensamento.equals=${apensamento}&` : '';
   const motivoRequest = motivo ? `motivo.contains=${motivo}&` : '';
   const processoRequest = processo ? `processoId.equals=${processo}&` : '';
 
