@@ -1,0 +1,1151 @@
+entity CepbrBairro {
+	idBairro Integer required,
+	bairro String maxlength(100)
+}
+
+entity CepbrCidade {
+	idCidade Integer required,
+	cidade String maxlength(100),
+	codIbge String required maxlength(10),
+	area Float required
+}
+
+entity CepbrEndereco {
+	cep String required maxlength(10),
+	logradouro String maxlength(200),
+	tipoLogradouro String maxlength(80),
+	complemento String maxlength(100),
+	local String maxlength(120)
+}
+
+entity CepbrEstado {
+	uf String required maxlength(2),
+	estado String maxlength(100),
+	codIbge String required maxlength(10)
+}
+
+entity Cid {
+	id Integer,
+	codigo String maxlength(5),
+	diagnostico String maxlength(264),
+	gr String maxlength(10),
+	temp String maxlength(10),
+	apelido String maxlength(16)
+}
+
+entity Julho {
+	dataInicio String maxlength(10),
+	dataFim String maxlength(10),
+	id Integer,
+	especialidade Integer,
+	periodicidade Integer,
+	periodo Integer,
+	qtd Integer
+}
+
+entity Junho {
+	idFranquia Integer,
+	idPaciente Integer,
+	nroPad String maxlength(10),
+	dataInicio String maxlength(10),
+	dataFim String maxlength(10),
+	idEspecialidade Integer,
+	idPeriodicidade Integer,
+	idPeriodo Integer,
+	qtdSessoes Integer
+}
+
+entity Maio {
+	idFranquia Integer,
+	idPaciente Integer,
+	nroPad Integer,
+	dataInicio String maxlength(10),
+	dataFim String maxlength(10),
+	idEspecialidade Integer,
+	idPeriodicidade Integer,
+	idPeriodo Integer,
+	qtdSessoes Integer
+}
+
+entity PadCsv {
+	idFranquia Integer,
+	idPaciente Integer,
+	nroPad String maxlength(10),
+	dataInicio String maxlength(10),
+	dataFim String maxlength(10),
+	idEspecialidade Integer,
+	idPeriodicidade Integer,
+	idPeriodo Integer,
+	qtdSessoes Integer
+}
+
+entity Phinxlog {
+	version Long required,
+	migrationName String maxlength(100),
+	startTime Instant,
+	endTime Instant,
+	breakpoint Boolean required
+}
+
+entity TbAcao {
+	id Integer required,
+	acao String maxlength(100),
+	dataPost Instant required
+}
+
+entity TbAcoesRespostas {
+	id Integer required,
+	abrirCampoPersonalizado Boolean,
+	condicaoSexo String maxlength(45),
+	observacoes String maxlength(125),
+	tipoCampo1 String maxlength(45),
+	tipoCampo2 String maxlength(45)
+}
+
+entity TbAlertasIndicadores {
+	id Integer required,
+	pontuacao Double,
+	alteracaoEsperada Boolean,
+	observacoes String maxlength(255),
+	usuarioId Integer
+}
+
+entity TbAlertasResultadosEsperados {
+	id Integer required,
+	pontuacao Double,
+	alteracaoEsperada Boolean,
+	observacoes String maxlength(255),
+	usuarioId Integer,
+	valor Integer
+}
+
+entity TbApiInput {
+	id Integer required,
+	idApiName Integer,
+	apiInput String maxlength(100),
+	apiType String maxlength(50),
+	obs String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbApiName {
+	id Integer required,
+	apiName String maxlength(100),
+	apiReceiver String maxlength(60),
+	apiObs String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbApiReturn {
+	id Integer required,
+	idApiName Integer,
+	apiReturn String maxlength(100),
+	apiType String maxlength(50),
+	obs String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbAtendimento {
+	id Long required,
+	idUnidade Long required,
+	idFranquia Long,
+	idProfissional Long,
+	cep String maxlength(10),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	latitude String maxlength(60),
+	longitude String maxlength(60),
+	dataAgenda Instant,
+	horario String maxlength(10),
+	dataChegada Instant,
+	latitudeChegada String maxlength(60),
+	longitudeChegada String maxlength(60),
+	dataSaida Instant,
+	latitudeSaida String maxlength(60),
+	longitudeSaida String maxlength(60),
+	evolucao String maxlength(255),
+	observacao String maxlength(255),
+	intercorrencia Integer,
+	avaliacao Integer,
+	aceito Integer,
+	motivo String maxlength(255),
+	valor Float,
+	ordemAtendimento Integer,
+	ativo Integer,
+	dataPost Instant required,
+	dataForaHora Instant,
+	idUsuarioCancelamento Integer,
+	dataCancelamento LocalDate,
+	tipoUsuarioCancelamento String maxlength(5),
+	confidencialProfissional String maxlength(255),
+	confidencialPaciente String maxlength(255),
+	imagemAssinatura String maxlength(245)
+}
+
+entity TbAtendimentoAceite {
+	msgPush String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbAtendimentoAcompanhamentoPush {
+	id Integer required,
+	atendimentoId Integer required,
+	pacienteId Integer required,
+	profissionalId Integer required,
+	timestampAtendimento Instant,
+	nomePaciente String maxlength(60),
+	nomeProfissioinal String maxlength(60),
+	timestampConfirmacao Instant,
+	dataPost Instant
+}
+
+entity TbAtendimentoAssinaturas {
+	arquivoAssinatura String maxlength(150),
+	dataPost Instant required
+}
+
+entity TbAtendimentoAtividades {
+	feito Integer,
+	dataPost Instant required
+}
+
+entity TbAtendimentoCepRecusado {
+	cep String required maxlength(10),
+	dataPost Instant required
+}
+
+entity TbAtendimentoGlosado {
+	id Integer required,
+	idAtendimento Integer required,
+	glosado String maxlength(1),
+	idUsuario Integer,
+	dataPost LocalDate
+}
+
+entity TbAtendimentoImagem {
+	id Integer required,
+	atendimentoId Integer required,
+	imagem String required maxlength(200),
+	criadoEm Instant required
+}
+
+entity TbAtendimentoSorteioFeito {
+	sorteioFeito Integer required,
+	dataPost Instant required
+}
+
+entity TbAtendimentoStatusFinanceiro {
+	idAtendimento Integer required,
+	idStatusFinanceiro Integer required,
+	idUsuario Integer,
+	dataPost LocalDate
+}
+
+entity TbAtividades {
+	id Integer required,
+	atividade String maxlength(100),
+	ativo Integer
+}
+
+entity TbBanco {
+	id Integer required,
+	codBanco String maxlength(15),
+	banco String maxlength(100),
+	dataPost Instant required
+}
+
+entity TbCategoria {
+	id Integer required,
+	categoria String maxlength(100),
+	styleCategoria String maxlength(100),
+	icon String maxlength(100),
+	publicar Integer,
+	dataPost Instant required,
+	ordem Integer,
+	publicarSite Integer required
+}
+
+entity TbCategoriaAtividade {
+	id Long required,
+	atividade String maxlength(100),
+	dataPost Instant required,
+	idUnidade Integer
+}
+
+entity TbCategoriaContrato {
+	id Integer required,
+	contrato String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbCategoriaUnidade {
+	dataPost Instant required
+}
+
+entity TbCid {
+	id Long required,
+	codigo String maxlength(10),
+	diagnostico String maxlength(400),
+	gr String maxlength(20),
+	temp String maxlength(20),
+	apelido String maxlength(30),
+	dataPost Instant required
+}
+
+entity TbCidPta {
+	id Integer required,
+	idDescPta Integer required,
+	idCid Integer required,
+	idAtividade Integer required,
+	ativo Integer required,
+	dataPost Instant required
+}
+
+entity TbCidXPtaNovo {
+	id Integer required,
+	complexidade String maxlength(45),
+	versao Integer,
+	score Integer,
+	titulo String maxlength(245)
+}
+
+entity TbCidXPtaNovoTbPadItemIndicadores {
+	id Integer required,
+	meta String maxlength(145),
+	maximo String maxlength(145),
+	minimo String maxlength(145),
+	unidadeMedidaExtra String maxlength(145),
+	tbUnidadeMedidaId Integer,
+	score Double
+}
+
+entity TbCidade {
+	id Long required,
+	descrCidade String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbControleDisparoAviso {
+	id Integer required,
+	idAtendimento Integer required,
+	qtdDisparo Integer,
+	avisopush Integer,
+	dataPost Instant required
+}
+
+entity TbDescPta {
+	id Integer required,
+	nome String maxlength(45),
+	resultadoEsperado String maxlength(255),
+	ativo Integer required
+}
+
+entity TbDiario {
+	id Long required,
+	historico String maxlength(255),
+	gerarPdf Integer,
+	dataPost Instant required
+}
+
+entity TbDiarioTags {
+	id Integer required,
+	nome String required maxlength(45),
+	idPai Integer,
+	nomeId String maxlength(45),
+	ativo Integer
+}
+
+entity TbEmpresa {
+	id Long required,
+	empresa String maxlength(100),
+	nome String maxlength(60),
+	email String maxlength(100),
+	cpf String maxlength(20),
+	rg String maxlength(30),
+	nascimento LocalDate,
+	sexo Integer,
+	telefone1 String maxlength(20),
+	telefone2 String maxlength(20),
+	celular1 String maxlength(20),
+	celular2 String maxlength(20),
+	cep String maxlength(10),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	tipo Integer required,
+	dataPost Instant required
+}
+
+entity TbEspecialidade {
+	id Integer required,
+	icon String maxlength(100),
+	especialidade String maxlength(150),
+	descricao String maxlength(255),
+	duracao Integer,
+	importante String maxlength(255),
+	ativo Integer,
+	dataPost Instant required,
+	idUnidade Integer
+}
+
+entity TbEspecialidadeOperadora {
+	id Long required,
+	codTuss String maxlength(30),
+	codDespesa String maxlength(5),
+	codTabela String maxlength(5),
+	valorCusto Float,
+	valorVenda Float,
+	descontoCusto Float,
+	descontoVenda Float,
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbEspecialidadeUnidade {
+	valorBaixaUrg Float,
+	valorAltaUrg Float,
+	valorPagar Float,
+	publicar Integer,
+	comentarioPreco String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbEspecialidadeValor {
+	id Long required,
+	idFranquia Long,
+	valor Float,
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbFilesPanico {
+	id Integer required,
+	idPanico Integer required,
+	idPaciente Integer required,
+	tipo String maxlength(3),
+	imagem String required maxlength(100),
+	criadoEm Instant required
+}
+
+entity TbFranquia {
+	id Long required,
+	idCidade Long,
+	nomeFantasia String maxlength(100),
+	razaoSocial String maxlength(150),
+	cnpj String maxlength(20),
+	ie String maxlength(30),
+	site String maxlength(100),
+	telefone1 String maxlength(20),
+	telefone2 String maxlength(20),
+	celular String maxlength(20),
+	cep String maxlength(10),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	observacao String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbFranquiaAreaAtuacao {
+	id Long required,
+	cepIni String maxlength(10),
+	cepFim String maxlength(10),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbFranquiaStatusAtual {
+	id Long required,
+	statusAtual Integer,
+	obs String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbFranquiaUsuario {
+	id Long required,
+	senha String maxlength(100),
+	nome String maxlength(60),
+	email String maxlength(100),
+	verProfissional Integer,
+	cadProfissional Integer,
+	ediProfissional Integer,
+	delProfissional Integer,
+	relProfissional Integer,
+	verPaciente Integer,
+	cadPaciente Integer,
+	ediPaciente Integer,
+	delPaciente Integer,
+	relPaciente Integer,
+	verPad Integer,
+	cadPad Integer,
+	ediPad Integer,
+	delPad Integer,
+	relPad Integer,
+	verAtendimento Integer,
+	cadAtendimento Integer,
+	ediAtendimento Integer,
+	delAtendimento Integer,
+	relAtendimento Integer,
+	verPush Integer,
+	cadPush Integer,
+	verEspecialidadeValor Integer,
+	cadEspecialidadeValor Integer,
+	ediEspecialidadeValor Integer,
+	delEspecialidadeValor Integer,
+	verUsuario Integer,
+	cadUsuario Integer,
+	ediUsuario Integer,
+	delUsuario Integer,
+	envioRecusa Integer,
+	envioIntercorrencia Integer,
+	envioCancelamento Integer,
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbGeoPanico {
+	id Integer required,
+	idPanico Integer required,
+	idPaciente Integer required,
+	latitude String maxlength(300),
+	longitude String maxlength(300),
+	dataPost Instant required
+}
+
+entity TbGrauParentesco {
+	id Integer required,
+	grauParentesco String maxlength(60),
+	dataPost Instant required
+}
+
+entity TbGrupoRisco {
+	id Integer required,
+	grupoRisco String maxlength(40),
+	styleLabel String maxlength(40),
+	dataPost Instant required
+}
+
+entity TbImagemProntuario {
+	id Integer required,
+	idProntuario Long required,
+	imagem String required maxlength(100),
+	ativo Integer required,
+	diretorio String maxlength(500)
+}
+
+entity TbIndicadores {
+	id Integer required,
+	titulo String maxlength(145)
+}
+
+entity TbIndicadoresValores {
+	id Integer required,
+	sexo String maxlength(45),
+	vlMinimo String maxlength(45),
+	vlMaximo String maxlength(45),
+	unidadeMedida String maxlength(45),
+	idadeMinima String maxlength(45),
+	idadeMaxima String maxlength(45)
+}
+
+entity TbLicaoCasa {
+	id Integer required,
+	atendimentoId Integer required,
+	pacienteId Integer required,
+	profissionalId Integer required,
+	atividade String required maxlength(100),
+	horaInicio Instant,
+	repeticaoHoras Boolean required,
+	qtdDias Boolean required,
+	intervaloDias Boolean required,
+	criadoEm Instant,
+	concluidaEm Instant,
+	ativo Boolean required,
+	ativ Integer,
+	forma String maxlength(3),
+	enviarPara String maxlength(2),
+	notificarFamiliar String maxlength(1),
+	replicarAtividade String maxlength(1)
+}
+
+entity TbLicaoCasaEvolucao {
+	id Integer required,
+	licaoCasaId Integer required,
+	atualizadoEm Instant required,
+	realizada Boolean required,
+	realizadaEm Instant,
+	observacoes String maxlength(100),
+	instrucoes String maxlength(100),
+	dataAgenda Instant,
+	qtdLembrete Boolean required
+}
+
+entity TbLogPacAcesso {
+	id Integer required,
+	idPaciente Integer required,
+	profissional String maxlength(255),
+	token String maxlength(200),
+	ipLocal String maxlength(25),
+	inforAcesso String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbLogUser {
+	id Long required,
+	idUsuario Long,
+	descricao String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbLogUserFranquia {
+	id Long required,
+	descricao String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbMatMed {
+	id Integer required,
+	nome String maxlength(80),
+	/** Tipo 1 - Medicamento, Tipo 2 - Materiais, Tipo 3 - Equipamento */
+	idTipoMatMed Integer,
+	valor BigDecimal,
+	ativo Integer,
+	dataPost LocalDate
+}
+
+entity TbMigracao {
+	id Integer required,
+	idPad Integer,
+	dataHoraMigracao Instant
+}
+
+entity TbModulosPad {
+	id Integer required,
+	nomeModulo String maxlength(45),
+	ativo String maxlength(1),
+	dataPost LocalDate
+}
+
+entity TbModulosPadConfig {
+	id Integer required,
+	idModulosPad Integer required,
+	idEspecialidade Integer,
+	idPeriodicidade Integer
+}
+
+entity TbMotivoInternacao {
+	id Integer required,
+	nome String maxlength(255),
+	idPai Integer,
+	ativo Integer,
+	class String maxlength(40),
+	name String maxlength(20)
+}
+
+entity TbMotivoPs {
+	id Integer required,
+	nome String maxlength(255),
+	idPai Integer,
+	ativo Integer,
+	class String maxlength(40),
+	name String maxlength(20)
+}
+
+entity TbNotificacaoConfig {
+	id Integer required,
+	criadoEm Instant required,
+	titulo String required maxlength(50),
+	/** Este campo é usado como uma chave para identificar qual a notificação à ser tratada. Pode ser o nome da função que controla o envio de push/email para o paciente e/ou profissionais. */
+	referencia String required maxlength(50),
+	descricao String maxlength(255),
+	/** 0 = Inativo / 1 = Ativo */
+	ativo Boolean required,
+	/** Caso valor=1 o app obriga o usário escolher envios por push e/ou email. */
+	envioObrigatorio Boolean required,
+	serveProfissional Boolean required,
+	servePaciente Boolean required
+}
+
+entity TbNotificacaoConfigUsuario {
+	id Integer required,
+	notificacaoConfigId Integer required,
+	profissionalId Integer,
+	pacienteId Integer,
+	atualizadoEm Instant required,
+	atualizadoPor Integer,
+	enviarPush Boolean required,
+	enviarEmail Boolean required,
+	observacao String maxlength(100)
+}
+
+entity TbOcorrenciaProntuario {
+	id Integer required,
+	nome String maxlength(45),
+	ativo String maxlength(1),
+	dataPost LocalDate
+}
+
+entity TbOperadora {
+	id Integer required,
+	nomeFantasia String maxlength(100),
+	razaoSocial String maxlength(150),
+	cnpj String maxlength(20),
+	ie String maxlength(30),
+	site String maxlength(100),
+	ativo Integer,
+	dataPost Instant required,
+	idUnidade Integer,
+	endereco String maxlength(200),
+	contatoCentralAtendimento String maxlength(20),
+	emailCentralAtendimento String maxlength(50),
+	nomeContatoComercial String maxlength(200),
+	contatoComercial String maxlength(20),
+	emailComercial String maxlength(50),
+	nomeContatoFinanceiro String maxlength(200),
+	contatoFinanceiro String maxlength(20),
+	emailFinanceiro String maxlength(50),
+	idTipoOperadora Integer
+}
+
+entity TbPaciente {
+	id Long required,
+	idUnidade Long required,
+	idFranquia Long,
+	idCidade Long,
+	idCidadeFamiliar Long,
+	idGrauParentesco Integer required,
+	senha String maxlength(100),
+	nome String maxlength(60),
+	email String maxlength(100),
+	cpf String maxlength(20),
+	rg String maxlength(30),
+	registro String maxlength(50),
+	nascimento LocalDate,
+	sexo Integer,
+	telefone String maxlength(20),
+	telefone2 String maxlength(20),
+	celular String maxlength(20),
+	celular1 String maxlength(20),
+	cep String maxlength(10),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	latitude String maxlength(60),
+	longitude String maxlength(60),
+	responsavelFamiliar String maxlength(60),
+	emailFamiliar String maxlength(100),
+	cpfFamiliar String maxlength(20),
+	rgFamiliar String maxlength(30),
+	nascimentoFamiliar LocalDate,
+	sexoFamiliar Integer,
+	telefoneFamiliar String maxlength(20),
+	telefone2Familiar String maxlength(20),
+	celularFamiliar String maxlength(20),
+	celular2Familiar String maxlength(20),
+	cepFamiliar String maxlength(10),
+	enderecoFamiliar String maxlength(100),
+	numeroFamiliar String maxlength(30),
+	complementoFamiliar String maxlength(20),
+	bairroFamiliar String maxlength(40),
+	cidadeFamiliar String maxlength(100),
+	ufFamiliar String maxlength(5),
+	latitudeFamiliar String maxlength(60),
+	longitudeFamiliar String maxlength(60),
+	observacao String maxlength(255),
+	aph Integer required,
+	nivelComplexidade Integer,
+	passagemPs Integer,
+	obsPs String maxlength(255),
+	passagemInternacao Integer,
+	obsInternacao String maxlength(255),
+	custoTotal Float,
+	observacaoFamiliar String maxlength(255),
+	mesmoEndereco Integer,
+	acessoFamiliar Integer,
+	comResponsavel Integer,
+	cadastroCompleto Integer,
+	ativo Integer,
+	dataPost Instant required,
+	detalhes String maxlength(255),
+	tipohospital Integer,
+	liminar String maxlength(50),
+	expoToken String maxlength(255),
+	profissionalPref Integer,
+	senhaChat String maxlength(45)
+}
+
+entity TbPacienteArquivo {
+	id Integer required,
+	idPaciente Long,
+	arquivo String maxlength(100),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPacienteCaracteristicaAtual {
+	id Integer required,
+	idPaciente Integer required,
+	idPacienteCaracteristica Integer required,
+	idUsuario Integer required,
+	dataPost Instant
+}
+
+entity TbPacienteComplexidadeAtual {
+	id Integer required,
+	idPaciente Integer,
+	idPacienteComplexidade Integer,
+	baixa Integer,
+	media Integer,
+	alta Integer,
+	ventilacaoMecanica Integer,
+	telemonitoramente Integer,
+	idUsuario Integer,
+	dataPost Instant
+}
+
+entity TbPacienteDadosCartao {
+	id Long required,
+	bandeira String maxlength(40),
+	numeroCartao String maxlength(30),
+	validade LocalDate,
+	codAtivacao Integer,
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPacienteDiagnostico {
+	id Long required,
+	observacao String maxlength(255),
+	ativo Integer,
+	dataPost Instant required,
+	cidPrimario Boolean,
+	complexidade String maxlength(80),
+	cidComAlta Boolean
+}
+
+entity TbPacienteDiagnosticoTemp {
+	id Integer required,
+	idCid Integer,
+	cidPrimario Boolean,
+	complexidade String maxlength(45),
+	createdAt LocalDate,
+	sessionId String maxlength(255),
+	observacao String maxlength(245)
+}
+
+entity TbPacienteDiario {
+	id Long required,
+	idOperadora Integer,
+	historico String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPacienteDiarioTags {
+	id Integer required,
+	idPacienteDiario Integer required,
+	idDiarioTags Integer required,
+	escalaDePlantao Integer,
+	captacaoEdp Integer,
+	implantacaoEdp Integer,
+	furoDeEscalaEdp Integer,
+	solicitacaoDeFolgaEdp Integer,
+	trocaDeProfissionalEdp Integer,
+	reclamacaoEdp Integer,
+	elogioEdp Integer,
+	recusaDeAtendimentoEdp Integer,
+	duplicidadeEdp Integer,
+	monitorarEdp Integer,
+	pendenteEdp Integer required,
+	escalaMultiProfissional Integer,
+	captacaoEmp Integer,
+	implantacaoEmp Integer,
+	solicitacaoDeFolgaEmp Integer,
+	trocaDeProfissionalEmp Integer,
+	reclamacaoEmp Integer,
+	elogioEmp Integer,
+	padIncompletoEmp Integer,
+	visitaImprodutivaEmp Integer,
+	monitorarEmp Integer,
+	pendenteEmp Integer required,
+	intercorrencia Integer,
+	clinicaInter Integer,
+	aphInter Integer,
+	pendenteInter Integer required,
+	solicitacoes Integer,
+	recargaDeOxigenioSolic Integer,
+	equipamentosSolic Integer,
+	matmedSolic Integer,
+	prontuarioSolic Integer,
+	prescricoesSolic Integer,
+	examesSolic Integer,
+	ambulanciaSolic Integer,
+	atendimentoDeEquipeSolic Integer,
+	monitorarSolic Integer,
+	pendenteSolic Integer required,
+	avaliacao Integer,
+	residenciaAval Integer,
+	hospitalAval Integer,
+	monitorarAval Integer,
+	captacaoAtivaAval Integer,
+	pendenteAval Integer required,
+	implantacao Integer,
+	monitorarImpl Integer,
+	pendenteImpl Integer required,
+	alta Integer,
+	hospitalizacaoAlt Integer,
+	migracaoDeEmpresaAlt Integer,
+	obitoEmCasaAlt Integer,
+	terminoDeAtendimentoAlt Integer,
+	atendimentoSuspensoAlt Integer,
+	monitorarAlt Integer,
+	pendenteAlt Integer required,
+	eCommerceSegViagem Integer,
+	monitorarEcsv Integer,
+	pendenteEcsv Integer required,
+	farmacia Integer required,
+	matMedFarm Integer required,
+	receitaFarm Integer required,
+	prontuarioFarm Integer required,
+	romaneioManualFarm Integer required,
+	outrosFarm Integer required,
+	monitorarFarm Integer required,
+	pendenteFarm Integer required,
+	contatoTelefonico Integer required,
+	ativoContTel Integer required,
+	receptivoContTel Integer required,
+	monitorarContTel Integer required,
+	pendenteContTel Integer required,
+	dtPost Instant required
+}
+
+entity TbPacienteDispositivoAtual {
+	id Integer required,
+	idPaciente Integer required,
+	idPacienteDispositivo Integer required,
+	tqtTraqueostomia Integer required,
+	gttGastrostomia Integer required,
+	sneSondaNasoenteral Integer required,
+	svdSondaVesicalDeDemora Integer required,
+	svaSondaVesicalDeAlivio Integer required,
+	portACath Integer required,
+	piccAcessoVenosoCentral Integer required,
+	ventiladores Integer required,
+	uppUlceraPorPressao Integer required,
+	avpAcessoVenosoPeriferico Integer required,
+	uripen Integer required,
+	fraldaGeriatrica Integer required,
+	sngSondaNasogastrica Integer required,
+	bipap Integer required,
+	cpap Integer required,
+	cistostomia Integer required,
+	cateterNasalDeOxigenio Integer required,
+	mascaraDeVentilacao Integer required,
+	entubacaoOrotraqueal Integer required,
+	ileostomia Integer required,
+	jejunostomia Integer required,
+	colostomia Integer required,
+	idUsuario Integer required,
+	dataPost Instant required
+}
+
+entity TbPacienteDispositivoComplexidade {
+	id Integer required,
+	caracteristica String required maxlength(100),
+	ativo Integer required,
+	tipo String maxlength(45)
+}
+
+entity TbPacienteEnqueteApp {
+	id Long required,
+	votacao Integer,
+	dataPost Instant required
+}
+
+entity TbPacienteGrauParentesco {
+	id Integer required,
+	grauParentesco String maxlength(60),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPacienteHospital {
+	id Integer required,
+	servico String maxlength(40),
+	styleLabel String maxlength(40),
+	dataPost Instant required
+}
+
+entity TbPacienteMotivoInternacao {
+	id Integer required,
+	idPaciente Integer required,
+	idMotivoInternacao Integer required,
+	idUsuario Integer required,
+	dataPost String maxlength(45)
+}
+
+entity TbPacienteOperadora {
+	id Long required,
+	registro String maxlength(100),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPacientePedido {
+	id Long required,
+	dataPedido LocalDate,
+	dataAgenda Instant,
+	qtdSessoes Integer,
+	parcelas Integer,
+	valor Float,
+	desconto Float,
+	tipoValor Integer,
+	dataPost Instant required
+}
+
+entity TbPacienteProntuario {
+	id Integer required,
+	idPaciente Long required,
+	idTipoProntuario Integer required,
+	oQue String maxlength(255),
+	resultado String maxlength(255),
+	ativo Integer required,
+	idUsuario Long,
+	idEspecialidade Integer,
+	dataConsulta Instant,
+	idExame Integer,
+	idTipoExame Integer,
+	dataExame LocalDate,
+	dataInternacao LocalDate,
+	dataAlta LocalDate,
+	dataPs LocalDate,
+	dataOcorrencia LocalDate,
+	idOcorrenciaProntuario Integer,
+	dataPost Instant,
+	dataManifestacao LocalDate
+}
+
+entity TbPacientePush {
+	id Long required,
+	idFranquia Long,
+	mensagem String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPacienteServico {
+	id Integer required,
+	idPaciente Integer required,
+	servico Integer required,
+	dataPost Instant required
+}
+
+entity TbPacienteStatusAtual {
+	id Long required,
+	dataStatus LocalDate,
+	observacao String maxlength(255),
+	ativo Integer,
+	dataPost Instant required,
+	idUsuario Long required
+}
+
+entity TbPad {
+	id Long required,
+	idUnidade Long required,
+	idOperadora Integer,
+	idFranquia Long,
+	nroPad String maxlength(30),
+	dataInicio LocalDate,
+	dataFim LocalDate,
+	dataConferido LocalDate,
+	ativo Integer,
+	dataPost Instant required,
+	idUsuario Integer,
+	statusPad Integer,
+	novoModelo Boolean,
+	imagePath String maxlength(250),
+	score Double
+}
+
+entity TbPadCid {
+	observacao String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPadItem {
+	id Long required,
+	idPedido Long,
+	dataInicio LocalDate,
+	dataFim LocalDate,
+	qtdSessoes Integer,
+	observacao String maxlength(255),
+	sub Integer,
+	ativo Integer,
+	dataPost Instant required,
+	dataPadItemIncompleto Instant,
+	dataPadItemCompleto Instant,
+	numGhc String maxlength(40),
+	tbCidXPtaNovo Integer,
+	tbCategoriaId Integer,
+	score Double
+}
+
+entity TbPadItemAlerta {
+	id Integer required,
+	padItemMetaId Integer required,
+	envioEmailEm Instant,
+	visualizadoEm Instant,
+	criadoEm Instant,
+	ativo Boolean required,
+	mensagem String maxlength(100)
+}
+
+entity TbPadItemAtividade {
+	id Long required,
+	dataInicio LocalDate,
+	dataFim LocalDate,
+	dataPost Instant required
+}
+
+entity TbPadItemCepRecusado {
+	cep String required maxlength(10),
+	dataPost Instant required
+}
+
+entity TbPadItemHistDataIncComp {
+	id Integer required,
+	idPadItem Long,
+	dataPadItemIncompleto Instant,
+	dataPadItemCompleto Instant
+}
+
+entity TbPadItemIndicadores {
+	id Integer required,
+	idUnidadeMedida Integer,
+	titulo String required maxlength(45),
+	descricao String maxlength(100),
+	meta Integer,
+	maximoSt Integer,
+	minimoSt Integer
+}
+

@@ -75,8 +75,18 @@ entity Incidente {
     clase String
 }
 
+    /** 
+    @formTab primeiro<motivo>@@ 
+    @formTab segundo<processo,apensamento>@@ 
+    @viewLayout processo<top;6>, apensamento<top;6>@@ 
+    */
 entity Apenso {
+
+    /** @formTab primeiro@@ */
     numero String required
+
+    /** @formTab segundo@@ 
+     Otro info */
     clase String
     apensamento LocalDate
     motivo String
@@ -112,6 +122,8 @@ relationship OneToMany {
     Processo{partes} to Parte{processo},
     Processo{peticoes} to Peticao{processo},
     Processo{incidentes} to Incidente{processo},
+    /** @formTab segundo@@ 
+     Otro info */
     Processo{apensos} to Apenso{processo},
     Processo{audioencias} to Audiencia{processo},
     Processo{historicos} to HistoricoClase{processo}, 

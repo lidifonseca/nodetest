@@ -79,6 +79,7 @@ module.exports = {
     normalizeBlueprintName,
     packageNameToNamespace,
     stringHashCode,
+    analizeJavadoc,
     RandexpWithFaker,
     gitExec,
     isGitInstalled
@@ -581,6 +582,136 @@ function getJavadoc(text, indentSize) {
     }
     javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
     return javadoc;
+}
+
+
+function analizeJavadoc(generator) {
+
+    generator.formTabs = [];
+    generator.viewTabs = [];
+    generator.viewLayout = [];
+
+    let generatorJavadoc = generator.javadoc; 
+    if(generatorJavadoc) {
+        while(generatorJavadoc.indexOf('@') > -1 ) {
+            let parameter =  generatorJavadoc.substring(generatorJavadoc.indexOf('@')+1, generatorJavadoc.indexOf('@@')).split(" ");
+            if(parameter.length > 1) {
+                // generator.fields[idx][parameter[0]] = parameter[1].trim();
+                if(parameter[0] === "formTab") {
+                    let value = parameter[1].trim().split(">")[0].split("<");
+                    let fields = value[1].split(",");
+                    if(generator.formTabs.indexOf(value[0]) === -1) {
+                        generator.formTabs.push(value[0]);
+                    }
+                    for (idx in generator.fields) { 
+                        if(fields.indexOf(generator.fields[idx].fieldName) !== -1 ){
+                            generator.fields[idx].formTab = value[0];
+                        }
+                    }
+                    for (idx in generator.relationships) { 
+                        if(fields.indexOf(generator.relationships[idx].relationshipName) !== -1 ){
+                            generator.relationships[idx].formTab = value[0];
+                        }
+                    }
+                }
+                if(parameter[0] === "viewTab") {
+                    let value = parameter[1].trim().split(">")[0].split("<");
+                    let fields = value[1].split(",");
+                    if(generator.viewTabs.indexOf(value[0]) === -1) {
+                        generator.viewTabs.push(value[0]);
+                    }
+                    for (idx in generator.fields) { 
+                        if(fields.indexOf(generator.fields[idx].fieldName) !== -1 ){
+                            generator.fields[idx].viewTab = value[0];
+                        }
+                    }
+                    for (idx in generator.relationships) { 
+                        if(fields.indexOf(generator.relationships[idx].relationshipName) !== -1 ){
+                            generator.relationships[idx].viewTab = value[0];
+                        }
+                    }
+                }
+                if(parameter[0] === "viewLayout") {
+                    for (const key in parameter) {
+                        if (key > 0) {
+                            const element = parameter[key];
+                            const value = element.trim().split(">")[0].split("<");
+                            const fields = value[1].split(";");
+                            for (idx in generator.fields) { 
+                                if(generator.fields[idx].fieldName === value[0] ){
+                                    generator.fields[idx].viewLayoutLabel = fields[0];
+                                    generator.fields[idx].viewLayoutSize = fields[1];
+                                }
+                            }
+                            for (idx in generator.relationships) { 
+                                if(generator.relationships[idx].relationshipName === value[0] ){
+                                    generator.relationships[idx].viewLayoutLabel = fields[0];
+                                    generator.relationships[idx].viewLayoutSize = fields[1];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            generatorJavadoc = generatorJavadoc.substring(0,generatorJavadoc.indexOf('@')) + generatorJavadoc.substring(generatorJavadoc.indexOf('@@')+2).trim();
+        }
+    }
+    for (idx in generator.fields) { 
+        let javadoc = generator.fields[idx].javadoc; 
+        generator.fields[idx]['clean_javadoc'] = undefined;
+        if(javadoc) {
+            while(javadoc.indexOf('@') > -1 ) {
+                let parameter =  javadoc.substring(javadoc.indexOf('@')+1, javadoc.indexOf('@@')).split(" ");
+                if(parameter.length > 1) {
+                    generator.fields[idx][parameter[0]] = parameter[1].trim();
+                    if(parameter[0] === "formTab" && generator.formTabs.indexOf(parameter[1].trim()) === -1) {
+                        generator.formTabs.push(parameter[1].trim());
+                    }
+                    if(parameter[0] === "viewTab" && generator.viewTabs.indexOf(parameter[1].trim()) === -1) {
+                        generator.viewTabs.push(parameter[1].trim());
+                    }
+                }
+                javadoc = javadoc.substring(0,javadoc.indexOf('@')) + javadoc.substring(javadoc.indexOf('@@')+2).trim();
+            }
+            generator.fields[idx]['clean_javadoc'] = javadoc;
+        }
+    } 
+
+    if(generator.formTabs.length > 0){
+        generator.defaultFormTab = false;
+        for (idx in generator.fields) { 
+            if(generator.formTabs.indexOf(generator.fields[idx].formTab) === -1 ){
+                generator.defaultFormTab = true;
+            }
+        }
+        for (idx in generator.relationships) { 
+            if(generator.formTabs.indexOf(generator.relationships[idx].formTab) === -1 ){
+                generator.defaultFormTab = true;
+            }
+        }
+    } else {
+        generator.defaultFormTab = true;
+    }
+
+    if(generator.viewTabs.length > 0){
+        generator.defaultViewTab = false;
+        for (idx in generator.fields) { 
+            if(generator.viewTabs.indexOf(generator.fields[idx].viewTab) === -1 ){
+                generator.defaultViewTab = true;
+            }
+        }
+        for (idx in generator.relationships) { 
+            if(generator.viewTabs.indexOf(generator.relationships[idx].viewTab) === -1 ){
+                generator.defaultViewTab = true;
+            }
+        }
+    } else {
+        generator.defaultViewTab = true;
+    }
+
+    console.info(generator.fields)
+
+    return generator;
 }
 
 function getEnumsWithCustomValue(enums) {

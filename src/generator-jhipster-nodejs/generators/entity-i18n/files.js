@@ -48,6 +48,7 @@ function writeFiles() {
         writeClientFiles() {
             if (this.skipClient) return;
 
+            generator = utils.analizeJavadoc(this);
             // Copy for each
             if (this.enableTranslation) {
                 const languages = this.languages || this.getAllInstalledLanguages();

@@ -508,12 +508,12 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
                           <AvInput type="text" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}  <%- include react_validators %> />
                         <%_ } _%>
-                          <%_ if (fields[idx].javadoc) { _%>
+                          <%_ if (fields[idx].clean_javadoc) { _%>
                           <UncontrolledTooltip target="<%= fieldName %>Label">
                             <%_ if (enableTranslation) { _%>
                             <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
                             <%_ } else { _%>
-                            <%= fields[idx].javadoc %>
+                            <%= fields[idx].clean_javadoc %>
                             <%_ } _%>
                           </UncontrolledTooltip>
                           <%_ } _%>

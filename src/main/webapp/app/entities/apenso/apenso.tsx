@@ -212,6 +212,9 @@ export class Apenso extends React.Component<IApensoProps, IApensoState> {
                         </Label>
 
                         <AvInput type="text" name="clase" id="apenso-clase" value={this.state.clase} />
+                        <UncontrolledTooltip target="claseLabel">
+                          <Translate contentKey="generadorApp.apenso.help.clase" />
+                        </UncontrolledTooltip>
                       </div>
 
                       <div className="col-md-3">

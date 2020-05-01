@@ -331,8 +331,9 @@ function writeFiles() {
                 return;
             }
 
+            generator = utils.analizeJavadoc(this);
             const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
-            this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
+            this.writeFilesToDisk(files, generator, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
             addEnumerationFiles(this, templatesDir, destDir);
 
             if (!this.embedded) {

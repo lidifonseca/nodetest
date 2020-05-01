@@ -3,6 +3,7 @@
     "fields": [
         {
             "fieldName": "numero",
+            "javadoc": "@formTab primeiro@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
@@ -10,6 +11,7 @@
         },
         {
             "fieldName": "clase",
+            "javadoc": "@formTab segundo@@\\nOtro info",
             "fieldType": "String"
         },
         {
@@ -40,5 +42,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "javadoc": "@formTab primeiro<motivo>@@\\n@viewTab segundo<processo,apensamento>@@\\n@viewLayout processo<top;6>, apensamento<top;6>@@"
 }

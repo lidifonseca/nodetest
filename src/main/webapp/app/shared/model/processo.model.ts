@@ -39,7 +39,6 @@ export interface IProcesso {
   audioencias?: IAudiencia[];
   historicos?: IHistoricoClase[];
   comarcaId?: number;
-  comarcaNome?: string;
   pesquisas?: IPesquisa[];
 }
 

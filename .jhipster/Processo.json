@@ -135,6 +135,7 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "apenso",
             "otherEntityRelationshipName": "processo",
+            "javadoc": "@formTab segundo@@\\nOtro info",
             "relationshipName": "apensos"
         },
         {

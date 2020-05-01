@@ -20,7 +20,10 @@
       "clase": "Clase",
       "apensamento": "Apensamento",
       "motivo": "Motivo",
-      "processo": "Processo"
+      "processo": "Processo",
+      "help": {
+        "clase": "\nOtro info"
+      }
     }
   }
 }

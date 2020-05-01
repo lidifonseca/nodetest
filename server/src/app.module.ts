@@ -32,6 +32,8 @@ import { HistoricoClaseModule } from './module/historico-clase.module';
     ApensoModule,
     AudienciaModule,
     HistoricoClaseModule,
+    ApensoModule,
+    ApensoModule,
     ApensoModule
     // jhipster-needle-add-entity-module-to-main - JHipster will add entity modules here, do not remove
   ],

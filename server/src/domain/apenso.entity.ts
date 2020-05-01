@@ -7,13 +7,19 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 import Processo from './processo.entity';
 
 /**
- * A Apenso.
+ * @formTab primeiro<motivo>@@\n@formTab segundo<processo,apensamento>@@\n@layout processo<top;6>, apensamento<top;6>@@
  */
 @Entity('apenso')
 export default class Apenso extends BaseEntity {
+  /**
+   * @formTab primeiro@@
+   */
   @Column({ name: 'numero', nullable: false })
   numero: string;
 
+  /**
+   * @formTab segundo@@\nOtro info
+   */
   @Column({ name: 'clase' })
   clase: string;
 
