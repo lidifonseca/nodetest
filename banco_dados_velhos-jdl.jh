@@ -1149,3 +1149,1257 @@ entity TbPadItemIndicadores {
 	minimoSt Integer
 }
 
+entity TbPadItemMeta {
+	id Integer required,
+	unidadeMedidaId Integer,
+	indicadorId Integer required,
+	idPaciente Integer required,
+	idPad Integer,
+	idPadItem Integer,
+	minimo String maxlength(50),
+	maximo String maxlength(50),
+	meta String maxlength(50),
+	valorAtual String maxlength(50),
+	atualizadoEm Instant,
+	dataLimite Instant,
+	frequenciaMedicaoHoras Integer,
+	/** melhoria ou manutencao */
+	tipoAcompanhamento String maxlength(255),
+	atendimentoId Integer,
+	email Integer required,
+	minimoSistolica String maxlength(20),
+	maximoSistolica String maxlength(20),
+	minimoDiastolica String maxlength(20),
+	maximoDiastolica String maxlength(20),
+	idUsuario Integer,
+	score Double,
+	alteracaoEsperada Boolean
+}
+
+entity TbPadItemResultado {
+	id Long required,
+	resultado String maxlength(255),
+	dataPost Instant required,
+	dataFim LocalDate,
+	resultadoAnalisado Boolean,
+	usuarioId Integer
+}
+
+entity TbPadItemSorteioFeito {
+	sorteioFeito Integer required,
+	dataPost Instant required
+}
+
+entity TbPadItemTemp {
+	id Long required,
+	sessionId String maxlength(100),
+	idEspecialidade Integer,
+	idPeriodicidade Integer,
+	idPeriodo Integer,
+	dataInicio LocalDate,
+	dataFim LocalDate,
+	qtdSessoes Integer,
+	observacao String maxlength(255),
+	dataPost Instant,
+	tbCidXPtaNovoId Integer,
+	tbCategoriaId Integer,
+	numGhc String maxlength(40)
+}
+
+entity TbPadMatMed {
+	id Integer required,
+	idPad Integer required,
+	idMatMed Integer required,
+	qtd Integer required,
+	idUsuario Integer required,
+	dataPost LocalDate,
+	ativo Integer required
+}
+
+entity TbPadPta {
+	id Integer required,
+	idPad Long required,
+	idDescPta Long,
+	idCid Long required,
+	idUsuario Long required,
+	dataPost Instant required,
+	idCidXPtaNovo Integer required
+}
+
+entity TbPadPtaTemp {
+	id Integer required,
+	sessionId String maxlength(100),
+	idPta Integer required,
+	idCid Integer required,
+	idUsuario Integer required,
+	dataPost Instant,
+	tbCidXPtaNovoId Integer
+}
+
+entity TbPerguntasQuestionario {
+	id Integer required,
+	pergunta String maxlength(245),
+	tipoResposta String maxlength(60),
+	obrigatorio Boolean,
+	tipoCampo String maxlength(45)
+}
+
+entity TbPeriodicidade {
+	id Integer required,
+	periodicidade String maxlength(40),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbPeriodo {
+	id Integer required,
+	periodo String maxlength(40),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbProfissional {
+	id Long required,
+	idUnidade Long required,
+	idCidade Long,
+	idTempoExperiencia Integer,
+	idBanco Integer,
+	senha String maxlength(100),
+	nome String maxlength(60),
+	email String maxlength(100),
+	cpf String maxlength(20),
+	rg String maxlength(30),
+	nomeEmpresa String maxlength(150),
+	cnpj String maxlength(20),
+	registro String maxlength(50),
+	nascimento LocalDate,
+	sexo Integer,
+	telefone1 String maxlength(20),
+	telefone2 String maxlength(20),
+	celular1 String maxlength(20),
+	celular2 String maxlength(20),
+	cep String maxlength(10),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	atendeCrianca Integer,
+	atendeIdoso Integer,
+	ag String maxlength(10),
+	conta String maxlength(25),
+	tipoConta String maxlength(20),
+	origemCadastro String maxlength(100),
+	obs String maxlength(255),
+	chavePrivada String maxlength(255),
+	ativo Integer,
+	dataPost Instant required,
+	senhaOriginal String maxlength(100),
+	dataSenha Instant,
+	expoToken String maxlength(255),
+	preferenciaAtendimento Integer,
+	senhaChat String maxlength(45)
+}
+
+entity TbProfissionalAreaAtuacao {
+	id Long required,
+	idProfissional Long,
+	cepArea String maxlength(10),
+	cepFim String maxlength(10),
+	ativo Integer,
+	dataPost Instant required,
+	cepIni String maxlength(45)
+}
+
+entity TbProfissionalAreaAtuacaoNew {
+	id Long required,
+	idProfissional Long,
+	cepArea String maxlength(10),
+	cepFim String maxlength(10),
+	ativo Integer,
+	dataPost Instant required,
+	cepIni String maxlength(45)
+}
+
+entity TbProfissionalArquivo {
+	id Long required,
+	idProfissional Long,
+	arquivo String maxlength(100),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbProfissionalCategoriaContrato {
+	idProfissional Long required,
+	idCategoriaContrato Integer required,
+	aceito Integer,
+	dataPost Instant required
+}
+
+entity TbProfissionalComplexidadeAtual {
+	id Integer required,
+	idProfissional Integer required,
+	baixa Integer,
+	media Integer,
+	alta Integer,
+	ventilacaoMecanica Integer,
+	telemonitoramente Integer required,
+	idUsuario Integer,
+	dataPost Instant
+}
+
+entity TbProfissionalDispositivoAtual {
+	id Integer required,
+	idProfissional Integer required,
+	tqtTraqueostomia Integer,
+	gttGastrostomia Integer,
+	sneSondaNasoenteral Integer,
+	svdSondaVesicalDeDemora Integer,
+	svaSondaVesicalDeAlivio Integer,
+	portACath Integer,
+	piccAcessoVenosoCentral Integer,
+	ventiladores Integer,
+	uppUlceraPorPressao Integer,
+	avpAcessoVenosoPeriferico Integer,
+	uripen Integer,
+	fraldaGeriatrica Integer,
+	sngSondaNasogastrica Integer,
+	bipap Integer,
+	cpap Integer,
+	cistostomia Integer,
+	cateterNasalDeOxigenio Integer,
+	mascaraDeVentilacao Integer,
+	entubacaoOrotraqueal Integer,
+	idUsuario Integer required,
+	dataPost Instant required
+}
+
+entity TbProfissionalDispositivoComplexidade {
+	id Integer required,
+	caracteristica String required maxlength(100),
+	ativo Integer required,
+	tipo String required maxlength(1)
+}
+
+entity TbProfissionalDispositivoComplexidadeAtual {
+	id Integer required,
+	idProfissional Integer required,
+	idProfissionalDispositivoComplexidade Integer required,
+	idUsuario Integer required,
+	dataPost Instant required
+}
+
+entity TbProfissionalEspecialidade {
+	idEspecialidade Integer required,
+	idProfissional Long required,
+	dataPost Instant required
+}
+
+entity TbProfissionalEspecialidadeNew {
+	idEspecialidade Integer required,
+	idProfissional Long required,
+	dataPost Instant required
+}
+
+entity TbProfissionalFranquia {
+	idProfissional Long required,
+	idFranquia Long required,
+	dataPost Instant required
+}
+
+entity TbProfissionalHorario {
+	id Integer required,
+	idAtendimento Integer required,
+	idProfissional Integer required,
+	horario Instant required,
+	confirm Integer,
+	dataPost Instant required
+}
+
+entity TbProfissionalNew {
+	id Long required,
+	idUnidade Long required,
+	idCidade Long,
+	idTempoExperiencia Integer,
+	idBanco Integer,
+	senha String maxlength(100),
+	nome String maxlength(60),
+	email String maxlength(100),
+	cpf String maxlength(20),
+	rg String maxlength(30),
+	nomeEmpresa String maxlength(150),
+	cnpj String maxlength(20),
+	registro String maxlength(50),
+	nascimento LocalDate,
+	sexo Integer,
+	telefone1 String maxlength(20),
+	telefone2 String maxlength(20),
+	celular1 String maxlength(20),
+	celular2 String maxlength(20),
+	cep String maxlength(10),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	atendeCrianca Integer,
+	atendeIdoso Integer,
+	ag String maxlength(10),
+	conta String maxlength(25),
+	tipoConta String maxlength(20),
+	origemCadastro String maxlength(100),
+	obs String maxlength(255),
+	chavePrivada String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbProfissionalPush {
+	id Long required,
+	idProfissional Long,
+	idFranquia Long,
+	mensagem String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbProfissionalStatusAtual {
+	id Long required,
+	idProfissional Long,
+	obs String maxlength(255),
+	ativo Integer,
+	dataPost Instant required,
+	idUsuario Long required
+}
+
+entity TbProfissionalStatusAtualNew {
+	id Long required,
+	idProfissional Long,
+	idStatusAtualProf Integer,
+	obs String maxlength(255),
+	ativo Integer,
+	dataPost Instant required,
+	idUsuario Long required
+}
+
+entity TbProntuarioMotivoInternacaoPs {
+	id Integer required,
+	idProntuario Integer required,
+	idPaciente Integer required,
+	idMotivo Integer required,
+	idUsuario Integer required,
+	dataPost Instant
+}
+
+entity TbProntuarioMotivoManifestacao {
+	id Integer required,
+	idProntuario Integer required,
+	idPaciente Integer required,
+	idMotivo Integer,
+	idMotivoFilho Integer,
+	idManifestacao Integer,
+	idManifestacaoFilho Integer,
+	sugestao TextBlob,
+	idUsuario Integer,
+	dataPost LocalDate,
+	informacaoAdicional TextBlob
+}
+
+entity TbProntuarioTipoManifestacao {
+	id Integer required,
+	nome String maxlength(45),
+	idPai Integer,
+	ativo Integer
+}
+
+entity TbProntuarioTipoMotivo {
+	id Integer required,
+	nome String maxlength(45),
+	idPai Integer,
+	ativo Integer,
+	class String maxlength(45),
+	name String maxlength(45),
+	idTipoProntuario Integer
+}
+
+entity TbProtocolos {
+	id Integer required,
+	protocolo Integer required
+}
+
+entity TbPushnotificationEnvios {
+	id Integer required,
+	referencia String required maxlength(50),
+	ultimoEnvio Instant
+}
+
+entity TbQuestionarios {
+	id Integer required,
+	dataCadastro Instant,
+	etapaAtual String maxlength(50),
+	finalizado Boolean,
+	ultimaPerguntaRespondida Integer
+}
+
+entity TbReportEmailAtendimento {
+	id Long required,
+	idAtendimento Integer,
+	tipoReport Integer,
+	dataPost Instant
+}
+
+entity TbRespostas {
+	id Integer required,
+	resposta String maxlength(245),
+	pontuacao Integer,
+	respostaAtiva Boolean
+}
+
+entity TbRespostasQuestionarios {
+	id Integer required,
+	dataResposta Instant,
+	informacaoAdicional String maxlength(255),
+	tbQuestionarioId Integer
+}
+
+entity TbResultados {
+	id Integer required,
+	objetivo String maxlength(145),
+	valor String maxlength(145),
+	prazo String maxlength(145),
+	complemento String maxlength(245),
+	dataCadastro Instant,
+	dataVencimentoPrazo LocalDate
+}
+
+entity TbSegmentosPerguntas {
+	id Integer required,
+	segmento String maxlength(100)
+}
+
+entity TbServico {
+	id Integer required,
+	servico String maxlength(40),
+	styleLabel String maxlength(40),
+	dataPost Instant required
+}
+
+entity TbStatusAtendimento {
+	id Integer required,
+	statusAtendimento String maxlength(40),
+	styleLabel String maxlength(40),
+	ordenacao Integer,
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbStatusAtual {
+	id Integer required,
+	statusAtual String maxlength(50),
+	styleLabel String maxlength(40),
+	dataPost Instant required
+}
+
+entity TbStatusAtualLigacao {
+	id Integer required,
+	statusAtualLigacao String maxlength(40),
+	styleLabel String maxlength(40),
+	dataPost Instant required
+}
+
+entity TbStatusAtualProf {
+	id Integer required,
+	statusAtualProf String maxlength(50),
+	styleLabel String maxlength(40),
+	dataPost Instant required
+}
+
+entity TbStatusFinanceiro {
+	id Integer required,
+	nome String maxlength(45),
+	ativo String maxlength(2),
+	dataPost String maxlength(45)
+}
+
+entity TbStatusPadItemMeta {
+	id Integer required,
+	statusItemMeta String maxlength(200),
+	styleLabel String maxlength(40),
+	ordenacao Integer,
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbTela {
+	id Integer required,
+	tela String maxlength(100),
+	dataPost Instant required
+}
+
+entity TbTempoExperiencia {
+	id Integer required,
+	tempoExperiencia String maxlength(60),
+	dataPost Instant required
+}
+
+entity TbTermosUso {
+	id Integer required,
+	termosUso String maxlength(255),
+	tipo Integer,
+	dataPost Instant required
+}
+
+entity TbTipoEspecialidade {
+	id Integer required,
+	tipoEspecialidade String maxlength(30),
+	dataPost Instant required
+}
+
+entity TbTipoExame {
+	id Integer required,
+	exame String required maxlength(45),
+	idPai Integer,
+	ativo Integer required
+}
+
+entity TbTipoMatMed {
+	id Integer required,
+	tipo String required maxlength(45),
+	ativo Integer,
+	dataPost LocalDate
+}
+
+entity TbTipoOperadora {
+	id Integer required,
+	tipo String maxlength(50),
+	ativo String maxlength(1),
+	dataPost LocalDate
+}
+
+entity TbTipoPreferenciaAtendimento {
+	id Integer required,
+	nome String maxlength(80),
+	ativo Integer
+}
+
+entity TbTipoProntuario {
+	id Integer required,
+	prontuario String required maxlength(45),
+	ativo Integer required
+}
+
+entity TbTipoUnidade {
+	id Integer required,
+	tipoUnidade String maxlength(30),
+	dataPost Instant required
+}
+
+entity TbTipoUsuario {
+	id Integer required,
+	tipoUsuario String maxlength(30),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbTokenUsuario {
+	id Integer required,
+	idPaciente Integer required,
+	token String maxlength(200),
+	dataValida Instant,
+	dataPost Instant
+}
+
+entity TbUf {
+	id Integer required,
+	siglaUf String maxlength(4),
+	descrUf String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbUnidadeEasy {
+	id Long required,
+	razaoSocial String maxlength(150),
+	nomeFantasia String maxlength(150),
+	cnpj String maxlength(20),
+	ie String maxlength(20),
+	telefone1 String maxlength(20),
+	telefone2 String maxlength(20),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	cep String maxlength(10),
+	regans String maxlength(20),
+	regcnes String maxlength(20),
+	tissresponsavel String maxlength(100),
+	tissconselho String maxlength(5),
+	tissinscricao String maxlength(20),
+	tisscbo String maxlength(20),
+	tisscoduf String maxlength(5),
+	ativo Integer,
+	dataPost Instant required
+}
+
+entity TbUnidadeEasyAreaAtuacao {
+	id Long required,
+	cepInicial String maxlength(10),
+	cepFinal String maxlength(10),
+	dataPost Instant required
+}
+
+entity TbUnidadeMedida {
+	id Integer required,
+	unidade String required maxlength(45),
+	descricao String maxlength(45)
+}
+
+entity TbUsuario {
+	id Long required,
+	idUnidade Long required,
+	idOperadora String maxlength(1000),
+	senha String maxlength(100),
+	nome String maxlength(60),
+	email String maxlength(100),
+	telefone String maxlength(20),
+	celular String maxlength(20),
+	cpf String maxlength(20),
+	rg String maxlength(30),
+	sexo Integer,
+	nascimento LocalDate,
+	verAtendimento Integer,
+	cadAtendimento Integer,
+	ediAtendimento Integer,
+	baixaManualAtendimento Integer,
+	delAtendimento Integer,
+	relAtendimento Integer,
+	verPad Integer,
+	cadPad Integer,
+	ediPad Integer,
+	delPad Integer,
+	relPad Integer,
+	verDiario Integer,
+	cadDiario Integer,
+	ediDiario Integer,
+	delDiario Integer,
+	relDiario Integer,
+	verCategoria Integer,
+	cadCategoria Integer,
+	ediCategoria Integer,
+	delCategoria Integer,
+	verEspecialidade Integer,
+	cadEspecialidade Integer,
+	ediEspecialidade Integer,
+	delEspecialidade Integer,
+	relEspecialidade Integer,
+	verEspecialidadeValor Integer,
+	cadEspecialidadeValor Integer,
+	ediEspecialidadeValor Integer,
+	delEspecialidadeValor Integer,
+	relEspecialidadeValor Integer,
+	verOperadora Integer,
+	cadOperadora Integer,
+	ediOperadora Integer,
+	delOperadora Integer,
+	verPaciente Integer,
+	cadPaciente Integer,
+	ediPaciente Integer,
+	delPaciente Integer,
+	relPaciente Integer,
+	verProfissional Integer,
+	cadProfissional Integer,
+	ediProfissional Integer,
+	delProfissional Integer,
+	ativProfissional Integer,
+	relProfissional Integer,
+	verPush Integer,
+	cadPushPaciente Integer,
+	cadPushProfissional Integer,
+	verTermoPaciente Integer,
+	ediTermoPaciente Integer,
+	verTermoProfissional Integer,
+	ediTermoProfissional Integer,
+	verOutros Integer,
+	cadOutros Integer,
+	ediOutros Integer,
+	delOutros Integer,
+	relOutros Integer,
+	verUnidadeEasy Integer,
+	cadUnidadeEasy Integer,
+	ediUnidadeEasy Integer,
+	delUnidadeEasy Integer,
+	verUsuario Integer,
+	cadUsuario Integer,
+	ediUsuario Integer,
+	delUsuario Integer,
+	verPtaResultado Integer,
+	cadPtaResultado Integer,
+	delPtaResultado Integer,
+	verPtaAtividade Integer,
+	cadPtaAtividade Integer,
+	delPtaAtividade Integer,
+	permissaoUsuario Integer,
+	verProntuario Integer,
+	cadProntuario Integer,
+	ediProntuario Integer,
+	delProntuario Integer,
+	delProntuarioFoto Integer,
+	valoresFinanceiro Integer,
+	autorizacaoValorFinanceiro Integer,
+	confirmarPagamentoFinanceiro Integer,
+	gerenciarSorteios Integer,
+	envioRecusa Integer,
+	envioIntercorrencia Integer,
+	envioCancelamento Integer,
+	envioAvaliacao Integer,
+	envioPedido Integer,
+	alertaAtendimento Integer,
+	ativo Integer,
+	dataPost Instant required,
+	envioGlosado Integer,
+	emergencia Integer,
+	token Integer,
+	editAtendimento Integer,
+	ouvirLigacao Integer required,
+	verPainelIndicadores Integer,
+	prorrogarPad Integer,
+	cancelarAtendMassa Integer,
+	cadMatMed Integer,
+	ediMatMed Integer,
+	delMatMed Integer,
+	verColPta Integer,
+	verColFoto Integer,
+	verColLc Integer,
+	verAtendCancelado Integer,
+	verAtendAgConfirmacao Integer,
+	ediGeoLocalizacaoAtendimento Integer,
+	copiarEvolucao Integer,
+	copiarNomeProf Integer,
+	copiarRegistroProf Integer,
+	idAreaAtuacao String maxlength(100),
+	envioCidSemPta Integer,
+	envioAnaliseResultadoEsperado Integer,
+	envioDescumprimento Integer,
+	envioMelhoraTempo Boolean,
+	senhaChat String maxlength(45)
+}
+
+entity TbUsuarioAcao {
+	id Long required,
+	idUsuario Long,
+	idAtendimento Integer,
+	descricao String maxlength(255),
+	dataPost Instant required
+}
+
+entity TbUsuarioPainelGerencial {
+	id Integer required,
+	idUsuario Integer required,
+	verCronicos Integer,
+	verPacientesAtivosCr Integer,
+	filtroPacientesAtivosCr Integer,
+	verNumHospCr Integer,
+	filtroNumHospCr Integer,
+	verNumDesospCr Integer,
+	filtroNumDesospCr Integer,
+	verNumPsCr Integer,
+	filtroNumPsCr Integer,
+	verNumObitoCr Integer,
+	filtroNumObitoCr Integer,
+	verIndCliEstaveisCr Integer,
+	filtroIndCliEstaveisCr Integer,
+	verNumConsMedInternasCr Integer,
+	filtroNumConsMedInternasCr Integer,
+	verNumConsMedExternasCr Integer,
+	filtroNumConsMedExternasCr Integer,
+	verNumLaboratorialCr Integer,
+	filtroNumLaboratorialCr Integer,
+	verNumImagemCr Integer,
+	filtroNumImagemCr Integer,
+	verNumOutrosCr Integer,
+	filtroNumOutrosCr Integer,
+	verNumAtCatCr Integer,
+	filtroNumAtCatCr Integer,
+	verNumCatCompCr Integer,
+	filtroNumCatCompCr Integer,
+	verAtCmSucessoCr Integer,
+	filtroAtCmSucessoCr Integer,
+	verMediaPadAbertoCr Integer,
+	filtroMediaPadAbertoCr Integer,
+	verAtIntercorrenciaCr Integer,
+	filtroAtIntercorrenciaCr Integer,
+	verTempoMedioAtCr Integer,
+	filtroTempoMedioAtCr Integer,
+	verMediaPtaCr Integer,
+	filtroMediaPtaCr Integer,
+	verIndicadorUsoAppCr Integer,
+	filtroIndicadorUsoAppCr Integer
+}
+
+entity TbUsuarioPanico {
+	id Integer required,
+	idPaciente Integer required,
+	idUsuario Integer required,
+	idProfissional Integer required,
+	observacao String maxlength(255),
+	resolvido Integer,
+	idUserResolvido Integer,
+	dataPost Instant
+}
+
+entity TbUsuarioStatusAtual {
+	id Long required,
+	idUsuario Long,
+	statusAtual Integer,
+	obs String maxlength(255),
+	ativo Integer,
+	dataPost Instant required
+}
+
+/** VIEW */
+entity VwApiAtendimentosAceite {
+	idPadItem Integer required,
+	idPaciente Integer required,
+	idPeriodo Integer required,
+	idPeriodicidade Integer required,
+	idProfissional Integer required,
+	aceito Integer required,
+	bairro Integer required,
+	cep Integer required,
+	cidade Integer required,
+	complemento Integer required,
+	endereco Integer required,
+	especialidade Integer required,
+	latitude Integer required,
+	longitude Integer required,
+	numero Integer required,
+	paciente Integer required,
+	periodo Integer required,
+	periodicidade Integer required,
+	qtdSessoes Integer required,
+	uf Integer required,
+	valor Integer required
+}
+
+
+
+// Relations
+relationship ManyToOne {
+	CepbrBairro{idCidade} to CepbrCidade{cepbrBairro}
+}
+
+relationship ManyToOne {
+	CepbrCidade{uf} to CepbrEstado{cepbrCidade}
+}
+
+relationship ManyToOne {
+	CepbrEndereco{idCidade} to CepbrCidade{cepbrEndereco}
+}
+
+relationship ManyToOne {
+	CepbrEndereco{idBairro} to CepbrBairro{cepbrEndereco}
+}
+
+relationship ManyToOne {
+	TbAcoesRespostas{tbRespostasId required} to TbRespostas{tbAcoesRespostas}
+}
+
+relationship ManyToOne {
+	TbAcoesRespostas{tbPerguntasQuestionarioId required} to TbPerguntasQuestionario{tbAcoesRespostas}
+}
+
+relationship ManyToOne {
+	TbAlertasIndicadores{tbPadItemIndicadoresId} to TbCidXPtaNovoTbPadItemIndicadores{tbAlertasIndicadores}
+}
+
+relationship ManyToOne {
+	TbAlertasResultadosEsperados{tbResultadosId} to TbResultados{tbAlertasResultadosEsperados}
+}
+
+relationship ManyToOne {
+	TbAtendimento{idPaciente} to TbPaciente{tbAtendimento}
+}
+
+relationship ManyToOne {
+	TbAtendimento{idOperadora} to TbOperadora{tbAtendimento}
+}
+
+relationship ManyToOne {
+	TbAtendimento{idEspecialidade} to TbEspecialidade{tbAtendimento}
+}
+
+relationship ManyToOne {
+	TbAtendimento{idPadItem} to TbPadItem{tbAtendimento}
+}
+
+relationship ManyToOne {
+	TbAtendimento{idStatusAtendimento} to TbStatusAtendimento{tbAtendimento}
+}
+
+relationship ManyToOne {
+	TbAtendimento{idPeriodo} to TbPeriodo{tbAtendimento}
+}
+
+relationship ManyToOne {
+	TbAtendimento{idCidade} to TbCidade{tbAtendimento}
+}
+
+relationship ManyToOne {
+	TbAtendimentoAceite{idProfissional required} to TbProfissional{tbAtendimentoAceite}
+}
+
+relationship ManyToOne {
+	TbAtendimentoAceite{idAtendimento required} to TbAtendimento{tbAtendimentoAceite}
+}
+
+relationship ManyToOne {
+	TbAtendimentoAssinaturas{idAtendimento required} to TbAtendimento{tbAtendimentoAssinaturas}
+}
+
+relationship ManyToOne {
+	TbAtendimentoAssinaturas{idProfissional required} to TbProfissional{tbAtendimentoAssinaturas}
+}
+
+relationship ManyToOne {
+	TbAtendimentoAssinaturas{idPaciente required} to TbPaciente{tbAtendimentoAssinaturas}
+}
+
+relationship ManyToOne {
+	TbAtendimentoAtividades{idAtividade required} to TbCategoriaAtividade{tbAtendimentoAtividades}
+}
+
+relationship ManyToOne {
+	TbAtendimentoAtividades{idAtendimento required} to TbAtendimento{tbAtendimentoAtividades}
+}
+
+relationship ManyToOne {
+	TbAtendimentoCepRecusado{idPadItem required} to TbPadItem{tbAtendimentoCepRecusado}
+}
+
+relationship ManyToOne {
+	TbAtendimentoSorteioFeito{idPadItem required} to TbPadItem{tbAtendimentoSorteioFeito}
+}
+
+relationship ManyToOne {
+	TbCategoriaAtividade{idCategoria} to TbCategoria{tbCategoriaAtividade}
+}
+
+relationship ManyToOne {
+	TbCategoriaContrato{idCategoria} to TbCategoria{tbCategoriaContrato}
+}
+
+relationship ManyToOne {
+	TbCategoriaUnidade{idUnidade required} to TbUnidadeEasy{tbCategoriaUnidade}
+}
+
+relationship ManyToOne {
+	TbCategoriaUnidade{idCategoria required} to TbCategoria{tbCategoriaUnidade}
+}
+
+relationship ManyToOne {
+	TbCidXPtaNovo{tbCidId required} to TbCid{tbCidXPtaNovo}
+}
+
+relationship ManyToOne {
+	TbCidXPtaNovo{tbCidXPtaNovoId} to TbCidXPtaNovo{tbCidXPtaNovo}
+}
+
+// TODO This is a pure ManyToMany relation (delete me and decide owner side)
+relationship ManyToMany {
+	TbCidXPtaNovoTbCategorias{tbCidXPtaNovoId required} to TbCidXPtaNovo{tbCidXPtaNovoTbCategorias}
+}
+
+// TODO This is a pure ManyToMany relation (delete me and decide owner side)
+relationship ManyToMany {
+	TbCidXPtaNovoTbCategorias{tbCategoriasId required} to TbCategoria{tbCidXPtaNovoTbCategorias}
+}
+
+relationship ManyToOne {
+	TbCidXPtaNovoTbPadItemIndicadores{tbPadItemIndicadoresId required} to TbPadItemIndicadores{tbCidXPtaNovoTbPadItemIndicadores}
+}
+
+relationship ManyToOne {
+	TbCidXPtaNovoTbPadItemIndicadores{tbCategoriasId} to TbCategoria{tbCidXPtaNovoTbPadItemIndicadores}
+}
+
+relationship ManyToOne {
+	TbCidXPtaNovoTbPadItemIndicadores{tbCidXPtaNovoId required} to TbCidXPtaNovo{tbCidXPtaNovoTbPadItemIndicadores}
+}
+
+relationship ManyToOne {
+	TbCidade{idUf} to TbUf{tbCidade}
+}
+
+relationship ManyToOne {
+	TbDiario{idUsuario} to TbUsuario{tbDiario}
+}
+
+relationship ManyToOne {
+	TbDiario{idPaciente} to TbPaciente{tbDiario}
+}
+
+relationship ManyToOne {
+	TbEmpresa{idCidade} to TbCidade{tbEmpresa}
+}
+
+relationship ManyToOne {
+	TbEspecialidade{idCategoria} to TbCategoria{tbEspecialidade}
+}
+
+relationship ManyToOne {
+	TbEspecialidade{idTipoEspecialidade} to TbTipoEspecialidade{tbEspecialidade}
+}
+
+relationship ManyToOne {
+	TbEspecialidade{idTipoUnidade} to TbTipoUnidade{tbEspecialidade}
+}
+
+relationship ManyToOne {
+	TbEspecialidadeOperadora{idOperadora} to TbOperadora{tbEspecialidadeOperadora}
+}
+
+relationship ManyToOne {
+	TbEspecialidadeOperadora{idEspecialidade} to TbEspecialidade{tbEspecialidadeOperadora}
+}
+
+relationship ManyToOne {
+	TbEspecialidadeUnidade{idUnidade required} to TbUnidadeEasy{tbEspecialidadeUnidade}
+}
+
+relationship ManyToOne {
+	TbEspecialidadeUnidade{idEspecialidade required} to TbEspecialidade{tbEspecialidadeUnidade}
+}
+
+relationship ManyToOne {
+	TbEspecialidadeValor{idEspecialidade} to TbEspecialidade{tbEspecialidadeValor}
+}
+
+relationship ManyToOne {
+	TbFranquiaAreaAtuacao{idFranquia} to TbFranquia{tbFranquiaAreaAtuacao}
+}
+
+relationship ManyToOne {
+	TbFranquiaStatusAtual{idFranquia} to TbFranquia{tbFranquiaStatusAtual}
+}
+
+relationship ManyToOne {
+	TbFranquiaUsuario{idFranquia} to TbFranquia{tbFranquiaUsuario}
+}
+
+relationship ManyToOne {
+	TbIndicadoresValores{tbIndicadoresId required} to TbIndicadores{tbIndicadoresValores}
+}
+
+relationship ManyToOne {
+	TbLogUser{idAcao} to TbAcao{tbLogUser}
+}
+
+relationship ManyToOne {
+	TbLogUser{idTela} to TbTela{tbLogUser}
+}
+
+relationship ManyToOne {
+	TbLogUserFranquia{idAcao} to TbAcao{tbLogUserFranquia}
+}
+
+relationship ManyToOne {
+	TbLogUserFranquia{idTela} to TbTela{tbLogUserFranquia}
+}
+
+relationship ManyToOne {
+	TbLogUserFranquia{idUsuario} to TbFranquiaUsuario{tbLogUserFranquia}
+}
+
+relationship ManyToOne {
+	TbPacienteDadosCartao{idPaciente} to TbPaciente{tbPacienteDadosCartao}
+}
+
+relationship ManyToOne {
+	TbPacienteDiagnostico{idPaciente} to TbPaciente{tbPacienteDiagnostico}
+}
+
+relationship ManyToOne {
+	TbPacienteDiagnostico{idCid} to TbCid{tbPacienteDiagnostico}
+}
+
+relationship ManyToOne {
+	TbPacienteDiario{idPaciente} to TbPaciente{tbPacienteDiario}
+}
+
+relationship ManyToOne {
+	TbPacienteDiario{idUsuario} to TbUsuario{tbPacienteDiario}
+}
+
+relationship ManyToOne {
+	TbPacienteEnqueteApp{idPaciente} to TbPaciente{tbPacienteEnqueteApp}
+}
+
+relationship ManyToOne {
+	TbPacienteOperadora{idPaciente} to TbPaciente{tbPacienteOperadora}
+}
+
+relationship ManyToOne {
+	TbPacienteOperadora{idOperadora} to TbOperadora{tbPacienteOperadora}
+}
+
+relationship ManyToOne {
+	TbPacientePedido{idUnidade} to TbUnidadeEasy{tbPacientePedido}
+}
+
+relationship ManyToOne {
+	TbPacientePedido{idPaciente} to TbPaciente{tbPacientePedido}
+}
+
+relationship ManyToOne {
+	TbPacientePedido{idCartao} to TbPacienteDadosCartao{tbPacientePedido}
+}
+
+relationship ManyToOne {
+	TbPacientePedido{idEspecialidade} to TbEspecialidade{tbPacientePedido}
+}
+
+relationship ManyToOne {
+	TbPacientePush{idPaciente} to TbPaciente{tbPacientePush}
+}
+
+relationship ManyToOne {
+	TbPacienteStatusAtual{idPaciente} to TbPaciente{tbPacienteStatusAtual}
+}
+
+relationship ManyToOne {
+	TbPacienteStatusAtual{idStatusAtual} to TbStatusAtual{tbPacienteStatusAtual}
+}
+
+relationship ManyToOne {
+	TbPad{idPaciente} to TbPaciente{tbPad}
+}
+
+relationship ManyToOne {
+	TbPadCid{idPad required} to TbPad{tbPadCid}
+}
+
+relationship ManyToOne {
+	TbPadCid{idCid required} to TbCid{tbPadCid}
+}
+
+relationship ManyToOne {
+	TbPadItem{idPad} to TbPad{tbPadItem}
+}
+
+relationship ManyToOne {
+	TbPadItem{idEspecialidade} to TbEspecialidade{tbPadItem}
+}
+
+relationship ManyToOne {
+	TbPadItem{idPeriodicidade} to TbPeriodicidade{tbPadItem}
+}
+
+relationship ManyToOne {
+	TbPadItem{idPeriodo} to TbPeriodo{tbPadItem}
+}
+
+relationship ManyToOne {
+	TbPadItemAtividade{idAtividade} to TbCategoriaAtividade{tbPadItemAtividade}
+}
+
+relationship ManyToOne {
+	TbPadItemAtividade{idPadItem} to TbPadItem{tbPadItemAtividade}
+}
+
+relationship ManyToOne {
+	TbPadItemCepRecusado{idPadItem required} to TbPadItem{tbPadItemCepRecusado}
+}
+
+relationship ManyToOne {
+	TbPadItemResultado{idPadItem} to TbPadItem{tbPadItemResultado}
+}
+
+relationship ManyToOne {
+	TbPadItemSorteioFeito{idPadItem required} to TbPadItem{tbPadItemSorteioFeito}
+}
+
+relationship ManyToOne {
+	TbPerguntasQuestionario{tbSegmentosPerguntasId required} to TbSegmentosPerguntas{tbPerguntasQuestionario}
+}
+
+relationship ManyToOne {
+	TbProfissionalStatusAtual{idStatusAtualProf} to TbStatusAtualProf{tbProfissionalStatusAtual}
+}
+
+relationship ManyToOne {
+	TbProtocolos{tbResultadosId} to TbResultados{tbProtocolos}
+}
+
+relationship ManyToOne {
+	TbProtocolos{tbCidXPtaNovoId required} to TbResultados{tbProtocolos}
+}
+
+relationship ManyToOne {
+	TbProtocolos{tbCategoriasId} to TbResultados{tbProtocolos}
+}
+
+relationship ManyToOne {
+	TbQuestionarios{tbPacienteId required} to TbPaciente{tbQuestionarios}
+}
+
+// TODO This is a pure ManyToMany relation (delete me and decide owner side)
+relationship ManyToMany {
+	TbQuestionariosTbSegmentosPerguntas{tbQuestionariosId required} to TbQuestionarios{tbQuestionariosTbSegmentosPerguntas}
+}
+
+// TODO This is a pure ManyToMany relation (delete me and decide owner side)
+relationship ManyToMany {
+	TbQuestionariosTbSegmentosPerguntas{tbSegmentosPerguntasId required} to TbSegmentosPerguntas{tbQuestionariosTbSegmentosPerguntas}
+}
+
+relationship ManyToOne {
+	TbRespostas{tbPerguntasQuestionarioId required} to TbPerguntasQuestionario{tbRespostas}
+}
+
+relationship ManyToOne {
+	TbRespostasQuestionarios{tbQuestionariosId required} to TbQuestionarios{tbRespostasQuestionarios}
+}
+
+relationship ManyToOne {
+	TbRespostasQuestionarios{tbRespostasId required} to TbRespostas{tbRespostasQuestionarios}
+}
+
+relationship ManyToOne {
+	TbRespostasQuestionarios{tbPerguntasQuestionarioId required} to TbRespostas{tbRespostasQuestionarios}
+}
+
+relationship ManyToOne {
+	TbResultados{tbCidXPtaNovoId required} to TbCidXPtaNovoTbCategorias{tbResultados}
+}
+
+relationship ManyToOne {
+	TbResultados{tbCategoriasId required} to TbCidXPtaNovoTbCategorias{tbResultados}
+}
+
+relationship ManyToOne {
+	TbUnidadeEasyAreaAtuacao{idUnidade} to TbUnidadeEasy{tbUnidadeEasyAreaAtuacao}
+}
+
+relationship ManyToOne {
+	TbUsuario{idTipoUsuario} to TbTipoUsuario{tbUsuario}
+}
+
+relationship ManyToOne {
+	TbUsuarioAcao{idTela} to TbTela{tbUsuarioAcao}
+}
+
+relationship ManyToOne {
+	TbUsuarioAcao{idAcao} to TbAcao{tbUsuarioAcao}
+}
+
+
+
+// Options
+service * with serviceClass
+paginate * with pagination
+dto * with mapstruct
+filter *
+

@@ -62,7 +62,7 @@ export interface IPaciente {
   expoToken?: string;
   profissionalPref?: number;
   senhaChat?: string;
-  cidade?: string | ICidade;
+  cidade?: string | any;
 }
 
 export const defaultValue: Readonly<IPaciente> = {};

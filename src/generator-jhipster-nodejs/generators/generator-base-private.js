@@ -1206,10 +1206,10 @@ module.exports = class extends Generator {
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
                         variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
                     }
-                    fieldType = 'string | I' + relationship.otherEntityAngularName; // review: added for mongodb-with-relations
+                    fieldType = 'string | any'; // review: added for mongodb-with-relations
                     fieldName = `${relationshipFieldName}`;
                 } else {
-                    fieldType = 'string | I' + relationship.otherEntityAngularName;
+                    fieldType = 'string | any';
                     fieldName = `${relationship.relationshipFieldName}`;
                 }
             }
