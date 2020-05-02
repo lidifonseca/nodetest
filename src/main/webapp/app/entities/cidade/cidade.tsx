@@ -48,7 +48,7 @@ export interface ICidadeState extends ICidadeBaseState, IPaginationBaseState {}
 export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
   private myFormRef: any;
 
-  constructor(props) {
+  constructor(props: ICidadeProps) {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
@@ -204,7 +204,7 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                             className="form-control"
                             name="dataPost"
                             placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.props.cidadeEntity ? convertDateTimeFromServer(this.props.cidadeEntity.dataPost) : null}
+                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
                             validate={{
                               required: { value: true, errorMessage: translate('entity.validation.required') }
                             }}

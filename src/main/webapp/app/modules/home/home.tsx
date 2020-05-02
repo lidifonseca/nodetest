@@ -9,7 +9,7 @@ export type IHomeProp = StateProps;
 export const Home = (props: IHomeProp) => {
   const {account} = props;
 
-  return (<Redirect to={'/pesquisa'} />)
+  return (null)
 };
 
 const mapStateToProps = storeState => ({

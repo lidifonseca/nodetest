@@ -1,6 +1,5 @@
 import { isPromise, translate } from 'react-jhipster';
 import { toast } from 'react-toastify';
-import configuracoes from 'app/shared/reducers/configuracoes';
 
 const addErrorAlert = (message, toastOptions?: {}, key?, data?) => {
   key = key ? key : message;
@@ -19,10 +18,7 @@ export default () => next => action => {
    */
   return next(action)
     .then(response => {
-      let toastOptions = {};
-      if (action.type == 'configuracoes/ENVIAR_DADOS') {
-        toastOptions = { autoClose: false };
-      }
+      const toastOptions = {};
 
       if (action.meta && action.meta.successMessage) {
         toast.success(action.meta.successMessage, toastOptions);
@@ -45,10 +41,7 @@ export default () => next => action => {
       return Promise.resolve(response);
     })
     .catch(error => {
-      let toastOptions = {};
-      if (action.type == 'configuracoes/ENVIAR_DADOS') {
-        toastOptions = { autoClose: false };
-      }
+      const toastOptions = {};
 
       if (action.meta && action.meta.errorMessage) {
         toast.error(action.meta.errorMessage, toastOptions);

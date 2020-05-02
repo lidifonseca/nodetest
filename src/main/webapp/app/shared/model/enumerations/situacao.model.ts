@@ -1,7 +1,0 @@
-export const enum Situacao {
-  AGUARDANDO = 'AGUARDANDO',
-  COLETANDO = 'COLETANDO',
-  SUCESSO = 'SUCESSO',
-  ERRO = 'ERRO',
-  CANCELADA = 'CANCELADA'
-}

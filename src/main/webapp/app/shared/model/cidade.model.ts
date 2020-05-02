@@ -2,7 +2,7 @@ import { Moment } from 'moment';
 import { IPaciente } from 'app/shared/model/paciente.model';
 
 export interface ICidade {
-  id?: number;
+  id?: string;
   descrCidade?: string;
   dataPost?: Moment;
   pacientes?: IPaciente[];

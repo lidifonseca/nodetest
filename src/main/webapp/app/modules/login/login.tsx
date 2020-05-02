@@ -19,11 +19,11 @@ export const Login = (props: ILoginProps) => {
 
   const handleClose = () => {
     setShowModal(false);
-    props.history.push('/pesquisa');
+    props.history.push('/');
   };
 
   const { location, isAuthenticated } = props;
-  const { from } = location.state || { from: { pathname: '/pesquisa', search: location.search } };
+  const { } = location.state || { from: { pathname: '/', search: location.search } };
 
   if (location.pathname !== '/') {
     return <Redirect to={'/'} />;

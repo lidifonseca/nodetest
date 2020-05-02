@@ -76,7 +76,16 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
           <li className="breadcrumb-item active">Cidades edit</li>
         </ol>
         <h1 className="page-header">&nbsp;&nbsp;</h1>
-        <AvForm model={isNew ? {} : cidadeEntity} onSubmit={this.saveEntity}>
+        <AvForm
+          model={
+            isNew
+              ? {}
+              : {
+                  ...cidadeEntity
+                }
+          }
+          onSubmit={this.saveEntity}
+        >
           <Panel>
             <PanelHeader>
               <h2 id="page-heading">

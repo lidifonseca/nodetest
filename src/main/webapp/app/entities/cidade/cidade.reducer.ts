@@ -117,7 +117,7 @@ export type ICrudGetAllActionCidade<T> = (
 export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, dataPost, pacientes, page, size, sort) => {
   const descrCidadeRequest = descrCidade ? `descrCidade.contains=${descrCidade}&` : '';
   const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
-  const pacientesRequest = pacientes ? `pacientesId.equals=${pacientes}&` : '';
+  const pacientesRequest = pacientes ? `pacientes.equals=${pacientes}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
@@ -136,6 +136,9 @@ export const getEntity: ICrudGetAction<ICidade> = id => {
 };
 
 export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
+  entity = {
+    ...entity
+  };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDADE,
     payload: axios.post(apiUrl, cleanEntity(entity))
@@ -145,6 +148,7 @@ export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch =>
 };
 
 export const updateEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))

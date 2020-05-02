@@ -37,9 +37,9 @@ export class CidadeService {
           first = false;
         }
         if (element['operation'] === 'contains') {
-          where += ' `Apenso`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+          where += ' `Cidade`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
         } else if (element['operation'] === 'equals') {
-          where += ' `Apenso`.`' + element['column'] + '` = "' + element['value'] + '" ';
+          where += ' `Cidade`.`' + element['column'] + '` = "' + element['value'] + '" ';
         }
       }
     }

@@ -49,12 +49,10 @@ export class PacienteService {
   }
 
   async save(paciente: Paciente): Promise<Paciente | undefined> {
-    console.info(paciente);
     return await this.pacienteRepository.save(paciente);
   }
-  
+
   async update(paciente: Paciente): Promise<Paciente | undefined> {
-    console.info(paciente);
     return await this.save(paciente);
   }
 

@@ -1,4 +1,5 @@
 import { Moment } from 'moment';
+import { ICidade } from 'app/shared/model/cidade.model';
 
 export interface IPaciente {
   id?: string;
@@ -61,7 +62,7 @@ export interface IPaciente {
   expoToken?: string;
   profissionalPref?: number;
   senhaChat?: string;
-  cidade?: string;
+  cidade?: string | ICidade;
 }
 
 export const defaultValue: Readonly<IPaciente> = {};

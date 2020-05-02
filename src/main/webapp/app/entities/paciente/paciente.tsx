@@ -108,7 +108,7 @@ export interface IPacienteState extends IPacienteBaseState, IPaginationBaseState
 export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
   private myFormRef: any;
 
-  constructor(props) {
+  constructor(props: IPacienteProps) {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),

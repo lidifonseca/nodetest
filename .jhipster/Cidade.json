@@ -25,7 +25,7 @@
             "relationshipName": "pacientes"
         }
     ],
-    "changelogDate": "20200502162300",
+    "changelogDate": "20200502200000",
     "entityTableName": "cidade",
     "dto": "mapstruct",
     "pagination": "pagination",

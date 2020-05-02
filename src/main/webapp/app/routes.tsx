@@ -19,7 +19,6 @@ import { Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 import Home from 'app/modules/home/home';
-import Configuracoes from 'app/modules/configuracoes/configuracoes';
 import {toggleSidebarMinify, toggleMobileSidebar} from 'app/shared/reducers/sidebar.ts';
 import Entities from 'app/entities';
 import PrivateRoute from 'app/shared/auth/private-route';
@@ -94,7 +93,6 @@ export const Routes = (props: IRoutesProps) => {
               <Switch>
                 <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]} />
                 <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]} />
-                <PrivateRoute path="/configuracoes" exact component={Configuracoes} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.COLLECTOR]} />
                 <ErrorBoundaryRoute path="/" exact component={Home} />
                 <PrivateRoute path="/" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER, AUTHORITIES.COLLECTOR]} />
               </Switch>

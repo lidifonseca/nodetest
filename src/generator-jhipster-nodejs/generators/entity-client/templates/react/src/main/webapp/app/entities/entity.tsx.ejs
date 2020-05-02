@@ -224,7 +224,7 @@ _%>
             className="form-control"
             name="<%= fieldName %>"
             placeholder={"YYYY-MM-DD HH:mm"}
-            value={this.props.<%= entityInstance %>Entity ? convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>) : null }
+            value={this.state.<%= fieldName %> ? convertDateTimeFromServer(this.state.<%= fieldName %>) : null }
             <%- include react_validators %>
           />
           <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -568,7 +568,7 @@ export interface I<%= entityReactName %>State extends I<%= entityReactName %>Bas
 export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch' || pagination !== 'no') { %>, I<%= entityReactName %>State<% } %>> {
   private myFormRef: any;
 
-  constructor(props) {
+  constructor(props: I<%= entityReactName %>Props) {
     super(props);
     <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
       this.state = {

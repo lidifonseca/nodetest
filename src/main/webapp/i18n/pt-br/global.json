@@ -7,18 +7,6 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
-        "processo": "Processo",
-        "parte": "Parte",
-        "movimentacao": "Movimentacao",
-        "peticao": "Peticao",
-        "incidente": "Incidente",
-        "apenso": "Apenso",
-        "audiencia": "Audiencia",
-        "historicoClase": "Historico Clase",
-        "cliente": "Cliente",
-        "pesquisa": "Pesquisa",
-        "estado": "Estado",
-        "comarca": "Comarca",
         "paciente": "Paciente",
         "cidade": "Cidade",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"

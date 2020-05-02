@@ -1206,10 +1206,10 @@ module.exports = class extends Generator {
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
                         variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
                     }
-                    fieldType = 'string'; // review: added for mongodb-with-relations
+                    fieldType = 'string | I' + relationship.otherEntityAngularName; // review: added for mongodb-with-relations
                     fieldName = `${relationshipFieldName}`;
                 } else {
-                    fieldType = 'string';
+                    fieldType = 'string | I' + relationship.otherEntityAngularName;
                     fieldName = `${relationship.relationshipFieldName}`;
                 }
             }
@@ -1231,7 +1231,7 @@ module.exports = class extends Generator {
         relationships.forEach(relationship => {
             const relationshipType = relationship.relationshipType;
             const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
-            let toBeImported = false;
+            let toBeImported = true;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many' || otherEntityIsEmbedded) {
                 toBeImported = true;
             } else if (dto === 'no') {

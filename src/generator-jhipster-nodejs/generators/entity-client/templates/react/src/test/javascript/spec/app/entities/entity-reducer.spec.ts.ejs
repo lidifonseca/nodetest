@@ -19,7 +19,7 @@
 <%_
 let entityActionName = entityInstance.toUpperCase();
 let entityActionNamePlural = entityInstancePlural.toUpperCase();
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const primaryKeyType = 'string';
 _%>
 import axios from 'axios';
 
