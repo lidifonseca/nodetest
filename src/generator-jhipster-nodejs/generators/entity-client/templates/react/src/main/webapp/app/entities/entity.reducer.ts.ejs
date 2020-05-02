@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+/* eslint complexity: ["error", 100] */
 <%_
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
@@ -223,9 +224,9 @@ export type ICrudGetAllAction<%= entityReactName %><T> = (
   <%_ relationships.forEach(rel => { _%>
     <%= rel.relationshipName %>?: any,
   <%_ }) _%>
-  page?: Number,
-  size?: Number,
-  sort?: String,
+  page?: number,
+  size?: number,
+  sort?: string,
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllAction<%= entityReactName %><I<%= entityReactName %>> = (
@@ -251,6 +252,7 @@ export const getEntities: ICrudGetAllAction<%= entityReactName %><I<%= entityRea
         payload: axios.get<I<%= entityReactName %>>(`${requestUrl}<%_ for (idx in fields) { _%>${<%= fields[idx].fieldName %>Request}<%_ } _%><%_ relationships.forEach(rel => { _%>${<%= rel.relationshipName %>Request}<%_ }) _%>cacheBuster=${new Date().getTime()}`)
       }
     <%_ } else { _%>
+      const requestUrl = `${apiUrl}?`;
       return {
         type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
         payload: axios.get<I<%= entityReactName %>>(`${requestUrl}<%_ for (idx in fields) { _%>${<%= fields[idx].fieldName %>Request}<%_ } _%><%_ relationships.forEach(rel => { _%>${<%= rel.relationshipName %>Request}<%_ }) _%>cacheBuster=${new Date().getTime()}}`)

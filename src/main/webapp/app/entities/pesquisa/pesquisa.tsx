@@ -1,63 +1,173 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Link, RouteComponentProps} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import {
-  Button, Row, Table, UncontrolledTooltip, Badge, UncontrolledDropdown, Progress,
-  DropdownToggle, DropdownMenu, DropdownItem, Tag
+  Button,
+  Col,
+  Row,
+  Table,
+  Label,
+  UncontrolledTooltip,
+  UncontrolledCollapse,
+  CardHeader,
+  CardBody,
+  UncontrolledAlert
 } from 'reactstrap';
+import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
   TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
   JhiItemCount
 } from 'react-jhipster';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import './pesquisa.scss';
-import {IRootState} from 'app/shared/reducers';
-import {getEntities, getPesquisaCSV, getPesquisaProcessoCSV, insertObservacaoPesquisa} from './pesquisa.reducer';
-import {
-  APP_LOCAL_DATETIME_FORMAT,
-} from 'app/config/constants';
-import {ITEMS_PER_PAGE} from 'app/shared/util/pagination.constants';
-import {Panel, PanelBody, PanelFooter, PanelHeader} from "app/shared/layout/panel/panel";
-import ModalEditarPesquisa from './pesquisa-update-dados';
-import moment from "moment";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export interface IPesquisaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {
+import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
+
+import { IRootState } from 'app/shared/reducers';
+import { getEntities } from './pesquisa.reducer';
+import { IPesquisa } from 'app/shared/model/pesquisa.model';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+
+import { IUser } from 'app/shared/model/user.model';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { IProcesso } from 'app/shared/model/processo.model';
+import { getEntities as getProcessos } from 'app/entities/processo/processo.reducer';
+import { IComarca } from 'app/shared/model/comarca.model';
+import { getEntities as getComarcas } from 'app/entities/comarca/comarca.reducer';
+import { IEstado } from 'app/shared/model/estado.model';
+import { getEntities as getEstados } from 'app/entities/estado/estado.reducer';
+
+export interface IPesquisaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+
+export interface IPesquisaBaseState {
+  nome: any;
+  classesIncluir: any;
+  incluirMovimentacoes: any;
+  descartarMovimentacoes: any;
+  incluirMovimentacoesAll: any;
+  anoInicial: any;
+  anoFinal: any;
+  csv: any;
+  dataCriacao: any;
+  dataFinalizacao: any;
+  situacao: any;
+  observacoes: any;
+  csvTotal: any;
+  csvVerificados: any;
+  comarcaPorComarca: any;
+  user: any;
+  processo: any;
+  comarcas: any;
+  estado: any;
 }
-
-export type IPesquisaState = IPaginationBaseState;
+export interface IPesquisaState extends IPesquisaBaseState, IPaginationBaseState {}
 
 export class Pesquisa extends React.Component<IPesquisaProps, IPesquisaState> {
-  timerId = null;
-  constructor(props) {
-    super(props);
-    this.getEntitiesAvanco = this.getEntitiesAvanco.bind(this);
-    this.timerId = 0;
-  }
+  private myFormRef: any;
+
+  getPesquisaState = (location): IPesquisaBaseState => {
+    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+    const nome = url.searchParams.get('nome') || '';
+    const classesIncluir = url.searchParams.get('classesIncluir') || '';
+    const incluirMovimentacoes = url.searchParams.get('incluirMovimentacoes') || '';
+    const descartarMovimentacoes = url.searchParams.get('descartarMovimentacoes') || '';
+    const incluirMovimentacoesAll = url.searchParams.get('incluirMovimentacoesAll') || '';
+    const anoInicial = url.searchParams.get('anoInicial') || '';
+    const anoFinal = url.searchParams.get('anoFinal') || '';
+    const csv = url.searchParams.get('csv') || '';
+    const dataCriacao = url.searchParams.get('dataCriacao') || '';
+    const dataFinalizacao = url.searchParams.get('dataFinalizacao') || '';
+    const situacao = url.searchParams.get('situacao') || '';
+    const observacoes = url.searchParams.get('observacoes') || '';
+    const csvTotal = url.searchParams.get('csvTotal') || '';
+    const csvVerificados = url.searchParams.get('csvVerificados') || '';
+    const comarcaPorComarca = url.searchParams.get('comarcaPorComarca') || '';
+
+    const user = url.searchParams.get('user') || '';
+    const processo = url.searchParams.get('processo') || '';
+    const comarcas = url.searchParams.get('comarcas') || '';
+    const estado = url.searchParams.get('estado') || '';
+
+    return {
+      nome,
+      classesIncluir,
+      incluirMovimentacoes,
+      descartarMovimentacoes,
+      incluirMovimentacoesAll,
+      anoInicial,
+      anoFinal,
+      csv,
+      dataCriacao,
+      dataFinalizacao,
+      situacao,
+      observacoes,
+      csvTotal,
+      csvVerificados,
+      comarcaPorComarca,
+      user,
+      processo,
+      comarcas,
+      estado
+    };
+  };
 
   state: IPesquisaState = {
     ...getSortState(this.props.location, ITEMS_PER_PAGE),
-    sort: 'id',
-    order: 'desc',
+    ...this.getPesquisaState(this.props.location)
   };
 
   componentDidMount() {
     this.getEntities();
-    const that = this;
-    clearTimeout(this.timerId);
-    this.timerId = setTimeout(() => that.getEntitiesAvanco(that), 60000);
+
+    this.props.getUsers();
+    this.props.getProcessos();
+    this.props.getComarcas();
+    this.props.getEstados();
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.timerId);
-  }
+  cancelCourse = () => {
+    this.setState(
+      {
+        nome: '',
+        classesIncluir: '',
+        incluirMovimentacoes: '',
+        descartarMovimentacoes: '',
+        incluirMovimentacoesAll: '',
+        anoInicial: '',
+        anoFinal: '',
+        csv: '',
+        dataCriacao: '',
+        dataFinalizacao: '',
+        situacao: '',
+        observacoes: '',
+        csvTotal: '',
+        csvVerificados: '',
+        comarcaPorComarca: '',
+        user: '',
+        processo: '',
+        comarcas: '',
+        estado: ''
+      },
+      () => this.sortEntities()
+    );
+  };
 
-  getEntitiesAvanco(that) {
-    that.getEntities();
-    that.timerId = setTimeout(() => that.getEntitiesAvanco(that), 60000);
-  }
+  filterEntity = (event, errors, values) => {
+    this.setState(
+      {
+        ...this.state,
+        ...values
+      },
+      () => this.sortEntities()
+    );
+  };
 
   sort = prop => () => {
     this.setState(
@@ -71,309 +181,545 @@ export class Pesquisa extends React.Component<IPesquisaProps, IPesquisaState> {
 
   sortEntities() {
     this.getEntities();
-    this.props.history.push(`${this.props.location.pathname}?page=${this.state.activePage}&sort=${this.state.sort},${this.state.order}`);
+    this.props.history.push(this.props.location.pathname + '?' + this.getFiltersURL());
   }
 
-  handlePagination = activePage => this.setState({activePage}, () => this.sortEntities());
-
-  getEntities = () => {
-    const {activePage, itemsPerPage, sort, order} = this.state;
-    this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
-  };
-
-  getPesquisaCSV = (pesquisaId) => {
-    this.props.getPesquisaCSV(pesquisaId);
-  };
-  getPesquisaProcessoCSV = (pesquisaId) => {
-    this.props.getPesquisaProcessoCSV(pesquisaId);
-  };d
-
-  situacaoColor = (situacao) => {
-    switch (situacao) {
-      case "SUCESSO":
-        return "green";
-      case "ERRO":
-        return "danger";
-      case "COLETANDO":
-        return "info";
-      default:
-        return "indigo";
-    }
-  };
-  insertObservacaoPesquisa = (event, errors, values, id) => {
-    const {activePage, itemsPerPage, sort, order} = this.state;
-    this.props.insertObservacaoPesquisa(
-      id,
-      values.nome,
-      values.observacao,
-      [activePage - 1, itemsPerPage, sort + "," + order]
+  getFiltersURL = (offset = null) => {
+    return (
+      'page=' +
+      this.state.activePage +
+      '&' +
+      'size=' +
+      this.state.itemsPerPage +
+      '&' +
+      (offset !== null ? 'offset=' + offset + '&' : '') +
+      'sort=' +
+      this.state.sort +
+      ',' +
+      this.state.order +
+      '&' +
+      'nome=' +
+      this.state.nome +
+      '&' +
+      'classesIncluir=' +
+      this.state.classesIncluir +
+      '&' +
+      'incluirMovimentacoes=' +
+      this.state.incluirMovimentacoes +
+      '&' +
+      'descartarMovimentacoes=' +
+      this.state.descartarMovimentacoes +
+      '&' +
+      'incluirMovimentacoesAll=' +
+      this.state.incluirMovimentacoesAll +
+      '&' +
+      'anoInicial=' +
+      this.state.anoInicial +
+      '&' +
+      'anoFinal=' +
+      this.state.anoFinal +
+      '&' +
+      'csv=' +
+      this.state.csv +
+      '&' +
+      'dataCriacao=' +
+      this.state.dataCriacao +
+      '&' +
+      'dataFinalizacao=' +
+      this.state.dataFinalizacao +
+      '&' +
+      'situacao=' +
+      this.state.situacao +
+      '&' +
+      'observacoes=' +
+      this.state.observacoes +
+      '&' +
+      'csvTotal=' +
+      this.state.csvTotal +
+      '&' +
+      'csvVerificados=' +
+      this.state.csvVerificados +
+      '&' +
+      'comarcaPorComarca=' +
+      this.state.comarcaPorComarca +
+      '&' +
+      'user=' +
+      this.state.user +
+      '&' +
+      'processo=' +
+      this.state.processo +
+      '&' +
+      'comarcas=' +
+      this.state.comarcas +
+      '&' +
+      'estado=' +
+      this.state.estado +
+      '&' +
+      ''
     );
   };
 
-  restDuration = (inicialDate, finalDate) => {
-    const initialDate = new Date(inicialDate);
-    const offsetinitialDate = initialDate.getTimezoneOffset() * 60 * 1000;
-    const withOffsetinitialDate = initialDate.getTime();
-    const withoutOffsetinitialDate = withOffsetinitialDate - offsetinitialDate;
+  handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
-    const finalityDate = new Date(finalDate);
-    const offsetinfinalityDate = finalityDate.getTimezoneOffset() * 60 * 1000;
-    const withOffsetfinalityDate = finalityDate.getTime();
-    const withoutOffsetifinalityDate = withOffsetfinalityDate - offsetinfinalityDate;
-
-
-    const startDate = moment(withoutOffsetinitialDate);
-    const timeEnd = moment(withoutOffsetifinalityDate);
-    const diff = timeEnd.diff(startDate);
-    const diffDuration = moment.duration(diff);
-    let duration = '';
-    duration = diffDuration.days() > 0 ? diffDuration.days() + ' d ' : '';
-    duration += diffDuration.hours() > 0 ? diffDuration.hours() + ' h ' : '';
-    duration += diffDuration.minutes() > 0 ? diffDuration.minutes() + ' m ' : '';
-    duration += diffDuration.seconds() > 0 ? diffDuration.seconds() + ' s ' : '';
-
-    return duration;
-  };
-
-  situacaoIcon = (situacao) => {
-    switch (situacao) {
-      case "SUCESSO":
-        return "fa fa-check";
-      case "ERRO":
-        return "fa fa-exclamation-triangle";
-      case "COLETANDO":
-        return "fas fa-spinner fa-pulse";
-      default:
-        return "indigo";
-    }
+  getEntities = () => {
+    const {
+      nome,
+      classesIncluir,
+      incluirMovimentacoes,
+      descartarMovimentacoes,
+      incluirMovimentacoesAll,
+      anoInicial,
+      anoFinal,
+      csv,
+      dataCriacao,
+      dataFinalizacao,
+      situacao,
+      observacoes,
+      csvTotal,
+      csvVerificados,
+      comarcaPorComarca,
+      user,
+      processo,
+      comarcas,
+      estado,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
+    this.props.getEntities(
+      nome,
+      classesIncluir,
+      incluirMovimentacoes,
+      descartarMovimentacoes,
+      incluirMovimentacoesAll,
+      anoInicial,
+      anoFinal,
+      csv,
+      dataCriacao,
+      dataFinalizacao,
+      situacao,
+      observacoes,
+      csvTotal,
+      csvVerificados,
+      comarcaPorComarca,
+      user,
+      processo,
+      comarcas,
+      estado,
+      activePage - 1,
+      itemsPerPage,
+      `${sort},${order}`
+    );
   };
 
   render() {
-    const {pesquisaList, match, totalItems} = this.props;
+    const { users, processos, comarcas, estados, pesquisaList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
-          <li className="breadcrumb-item"><Link to="/">Inicio</Link></li>
+          <li className="breadcrumb-item">
+            <Link to="/">Inicio</Link>
+          </li>
           <li className="breadcrumb-item active">Pesquisas</li>
         </ol>
-        <h1 className="page-header">Listagem de pesquisas <small></small></h1>
+        <h1 className="page-header">&nbsp;&nbsp;</h1>
         <Panel>
           <PanelHeader>
-            <span>Pesquisas</span>
-            <Link to={`/configuracoes`} className="btn-sm btn btn-success float-right jh-create-entity">
-              <FontAwesomeIcon icon="search"/> Nova pesquisa
-            </Link>
+            <h2 id="page-heading">
+              <span className="page-header ml-3">Pesquisas</span>
+              <Button id="togglerFilterPesquisa" className="btn btn-primary float-right jh-create-entity">
+                Filtros&nbsp;
+                <FontAwesomeIcon icon="caret-down" />
+              </Button>
+              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+                <FontAwesomeIcon icon="plus" />
+                &nbsp;
+                <Translate contentKey="generadorApp.pesquisa.home.createLabel">Create a new Pesquisa</Translate>
+              </Link>
+            </h2>
           </PanelHeader>
           <PanelBody>
-            {pesquisaList && pesquisaList.length > 0 ? (
-              <Table className={"table-striped"} responsive aria-describedby="pesquisa-heading">
-                <thead>
-                <tr>
-                  <th className="hand align-middle" onClick={this.sort('id')} style={{width: '5%'}}>
-                    No. <FontAwesomeIcon icon="sort"/>
-                  </th>
-                  <th className="hand align-middle" onClick={this.sort('nome')} style={{width: '20%'}}>
-                    Nome da pequisa <FontAwesomeIcon icon="sort"/>
-                  </th>
-                  <th className="hand align-middle" style={{width: '10%'}}>
-                    Comarca-UF
-                  </th>
-                  <th className="hand align-middle" style={{width: '10%'}}>
-                    Usuário
-                  </th>
-                  <th className="hand align-middle" onClick={this.sort('' +
-                    'situacao')} style={{width: '12%'}}>
-                    Situação <FontAwesomeIcon icon="sort"/>
-                  </th>
-                  <th className="hand align-middle" style={{width: '22%'}}>
-                    Observações
-                  </th>
-                  <th style={{width: '21%'}} className="align-middle text-center">Ações</th>
-                </tr>
-                </thead>
-                <tbody>
-                {pesquisaList.map((pesquisa, i) => (
-                  <tr key={`entity-${i}`}>
-                    <td className={"align-middle"} id={"pesquisaId" + pesquisa.id}>
-                      <strong>{pesquisa.id}</strong>
-                      <UncontrolledTooltip placement="right" target={"pesquisaId" + pesquisa.id}>
-                        <b>Detalhes</b>
-                        <div className="text-left">
-                          <b>Comarca: </b>
-                          { pesquisa.comarcaTjId === null ? ('Todas'): pesquisa.comarcaNome }
-                        </div>
-                        <div className="text-left">
-                          <b>Iniciado: </b>
-                          <TextFormat type="date" value={pesquisa.dataCriacao} format={APP_LOCAL_DATETIME_FORMAT}/>
-                        </div>
-                        {pesquisa.dataFinalizacao !== null ?
-                          (
-                            <div className="text-left">
-                              <b>Finalizado: </b>
-                              <TextFormat type="date" value={pesquisa.dataFinalizacao}
-                                          format={APP_LOCAL_DATETIME_FORMAT}/>
-                            </div>
-                          ) : null
-                        }
-                        {pesquisa.dataFinalizacao !== null ?
-                          <div className="text-left">
-                            <b>Duração: </b>
-                            {this.restDuration(pesquisa.dataCriacao, pesquisa.dataFinalizacao)}
-                          </div>
-                          :
-                          ('')}
+            <div className="table-responsive">
+              <UncontrolledCollapse toggler="#togglerFilterPesquisa">
+                <CardBody>
+                  <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
+                    <div className="row mt-1 ml-3 mr-3">
+                      <div className="col-md-3">
+                        <Label id="nomeLabel" for="pesquisa-nome">
+                          <Translate contentKey="generadorApp.pesquisa.nome">Nome</Translate>
+                        </Label>
 
-                        {pesquisa.classesIncluir ?
-                          (<div className="text-left">
-                            <b>Classes a incluir: </b>
-                            {JSON.parse(pesquisa.classesIncluir).map((classe, j, classesArray) => {
-                              if (j !== classesArray.length - 1) {
-                                return classe + ', ';
-                              }
-                              return classe;
-                            })}
-                          </div>)
-                          : null}
-                        {pesquisa.incluirMovimentacoes ?
-                          (<div className="text-left">
-                            <b>Movimentações selecionadas: </b>
-                            <div>
-                               {JSON.parse(pesquisa.incluirMovimentacoes).map((movimentacaoGrupo, j, movimentacoesArray) => {
-                                 let grupo = "Grupo " + (j + 1) + ": ";
-                                 return grupo + JSON.stringify(movimentacaoGrupo);
-                               })}
-                            </div>
-
-                          </div>)
-                          : null}
-                        {pesquisa.descartarMovimentacoes ?
-                          (<div className="text-left">
-                            <b>Movimentações descartadas: </b>
-                            {JSON.parse(pesquisa.descartarMovimentacoes).map((movimentacaoDescartar, j, movimentacaoDescartarArray) => {
-                              if (j !== movimentacaoDescartarArray.length - 1) {
-                                return movimentacaoDescartar + ', ';
-                              }
-                              return movimentacaoDescartar;
-                            })}
-                          </div>)
-                          : null}
-                        {pesquisa.anoInicial || pesquisa.anoFinal ?
-                          (
-                            <div className="text-left">
-                              <b>Período de busca: </b>
-                              {pesquisa.anoInicial} - {pesquisa.anoFinal}
-                            </div>
-                          ) : null}
-                        <div className="text-left">
-                          <b>CNPJ Analisados/Totais: </b>
-                          {pesquisa.csvVerificados + '/' + pesquisa.csvTotal}
-                        </div>
-                        <div className="text-left" hidden={pesquisa.estadoSigla !== "SP"}>
-                          <b>Comarca por comarca: </b>
-                          {pesquisa.comarcaPorComarca === true ? " Sim" : " Não"}
-                        </div>
-                      </UncontrolledTooltip>
-                    </td>
-                    <td className={"align-middle"}>
-                      <Badge color="dark">
-                        {pesquisa.quantidadeResultados}
-                      </Badge>&nbsp;
-                      <span className={"text-left align-middle"}>
-                        {pesquisa.nome}
-                      </span>
-                    </td>
-                    <td className={"align-middle"}>
-                      {pesquisa.comarcaNome === null ? 'Todas' : pesquisa.comarcaNome}{'-' + pesquisa.estadoSigla}
-                    </td>
-                    <td className={"align-middle"}>{pesquisa.userLogin}</td>
-                    <td className={"align-middle font-weight-bold text-" + this.situacaoColor(pesquisa.situacao)}>
-                      {pesquisa.situacao === 'COLETANDO' ?
-                        <div style={{textAlign: "center"}}>
-                         <Progress animated color="success" value={pesquisa.csvVerificados} max={pesquisa.csvTotal}/>
-                            <small className="text-black progressBar-process">
-                              {pesquisa.csvVerificados + '/' + pesquisa.csvTotal}
-                            </small>
-                        </div>
-                        :
-                        <span>
-                          <i className={this.situacaoIcon(pesquisa.situacao)}>&nbsp;</i>
-                          {pesquisa.situacao}
-                        </span>
-                        }
-                    </td>
-                    <td className={"align-middle"}>{pesquisa.observacoes}</td>
-                    <td className="align-middle text-center">
-                      <div className="btn-group flex-btn-group-container">
-                        <Button id={"btn-csv-processos-" + pesquisa.id} tag={Link}
-                                to={`processo/${pesquisa.estadoSigla}/pesquisa/${pesquisa.id}`}
-                                className="btn btn-sm btn-success">
-                          <span>
-                             <i className="fa fa-list" aria-hidden={"true"}></i>
-                          </span>
-                          <UncontrolledTooltip placement="top" target={"btn-csv-processos-" + pesquisa.id}>
-                            Visualizar processos
-                          </UncontrolledTooltip>
-                        </Button>
-                        &nbsp;
-                        <Button id={"btn-reutilizar-" + pesquisa.id} tag={Link}
-                                to={'configuracoes?' + (pesquisa.anoInicial ? `anoInicial=${pesquisa.anoInicial}&` : '&')
-                                + (pesquisa.anoFinal ? `anoFinal=${pesquisa.anoFinal}&` : '&')
-                                + (pesquisa.estadoId ? `estado=${pesquisa.estadoId}&` : '&')
-                                + (pesquisa.comarcaTjId ? `comarcaTjId=${pesquisa.comarcaTjId}&` : 'comarcaTjId=-1&')
-                                + (pesquisa.classesIncluir ? `classesIncluir=${pesquisa.classesIncluir}&` : '&')
-                                + (pesquisa.incluirMovimentacoes ? `incluirMovimentacoes=${pesquisa.incluirMovimentacoes}&` : '&')
-                                + (pesquisa.descartarMovimentacoes ? `descartarMovimentacoes=${pesquisa.descartarMovimentacoes}&` : '&')
-                                + (pesquisa.incluirMovimentacoesAll ? `incluirMovimentacoesAll=${pesquisa.incluirMovimentacoesAll}&` : '&')
-                                + (pesquisa.comarcaPorComarca ? `comarcaPorComarca=${pesquisa.comarcaPorComarca}&` : '&')
-                                }
-                                className="btn btn-sm btn-dark">
-                          <span>
-                             <i className="fa fa-history" aria-hidden={"true"}></i>
-                          </span>
-                          <UncontrolledTooltip placement="top" target={"btn-reutilizar-" + pesquisa.id}>
-                            Reutilizar pesquisa
-                          </UncontrolledTooltip>
-                        </Button>
-                        &nbsp;
-                        <ModalEditarPesquisa
-                          insertObservacaoPesquisa={(event, errors, values) => this.insertObservacaoPesquisa(event, errors, values, pesquisa.id)}
-                          nomePesquisa={pesquisa.nome}
-                          observacaoPesquisa={pesquisa.observacoes}/>
-                        &nbsp;
-                        <UncontrolledDropdown size="sm" className="d-inline-block">
-                          <DropdownToggle caret>
-                            Mais
-                          </DropdownToggle>
-                          <DropdownMenu>
-                            <DropdownItem onClick={() => this.getPesquisaProcessoCSV(pesquisa.id)}>
-                              <FontAwesomeIcon icon="download"/>&nbsp;CSV processos
-                            </DropdownItem>
-                            <DropdownItem onClick={() => this.getPesquisaCSV(pesquisa.id)}>
-                              <FontAwesomeIcon icon="download"/>&nbsp;CSV consulta
-                            </DropdownItem>
-                            <DropdownItem tag={Link} to={`${match.url}/${pesquisa.id}/delete/${this.props.history.location.search}`}>
-                              <FontAwesomeIcon icon="trash"/>&nbsp;Excluir
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
+                        <AvInput type="text" name="nome" id="pesquisa-nome" value={this.state.nome} />
                       </div>
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </Table>
-            ) : (
-              <div className="alert alert-warning">Nenhuma pesquisa foi realizada</div>
-            )}
+
+                      <div className="col-md-3">
+                        <Label id="classesIncluirLabel" for="pesquisa-classesIncluir">
+                          <Translate contentKey="generadorApp.pesquisa.classesIncluir">Classes Incluir</Translate>
+                        </Label>
+                        <AvInput id="pesquisa-classesIncluir" type="textarea" name="classesIncluir" />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="incluirMovimentacoesLabel" for="pesquisa-incluirMovimentacoes">
+                          <Translate contentKey="generadorApp.pesquisa.incluirMovimentacoes">Incluir Movimentacoes</Translate>
+                        </Label>
+                        <AvInput id="pesquisa-incluirMovimentacoes" type="textarea" name="incluirMovimentacoes" />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="descartarMovimentacoesLabel" for="pesquisa-descartarMovimentacoes">
+                          <Translate contentKey="generadorApp.pesquisa.descartarMovimentacoes">Descartar Movimentacoes</Translate>
+                        </Label>
+                        <AvInput id="pesquisa-descartarMovimentacoes" type="textarea" name="descartarMovimentacoes" />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="incluirMovimentacoesAllLabel" check>
+                          <AvInput
+                            id="pesquisa-incluirMovimentacoesAll"
+                            type="checkbox"
+                            className="form-control"
+                            name="incluirMovimentacoesAll"
+                          />
+                          <Translate contentKey="generadorApp.pesquisa.incluirMovimentacoesAll">Incluir Movimentacoes All</Translate>
+                        </Label>
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="anoInicialLabel" for="pesquisa-anoInicial">
+                          <Translate contentKey="generadorApp.pesquisa.anoInicial">Ano Inicial</Translate>
+                        </Label>
+                        <AvInput type="string" name="anoInicial" id="pesquisa-anoInicial" value={this.state.anoInicial} />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="anoFinalLabel" for="pesquisa-anoFinal">
+                          <Translate contentKey="generadorApp.pesquisa.anoFinal">Ano Final</Translate>
+                        </Label>
+                        <AvInput type="string" name="anoFinal" id="pesquisa-anoFinal" value={this.state.anoFinal} />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="csvLabel" for="pesquisa-csv">
+                          <Translate contentKey="generadorApp.pesquisa.csv">Csv</Translate>
+                        </Label>
+                        <AvInput id="pesquisa-csv" type="textarea" name="csv" />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="dataCriacaoLabel" for="pesquisa-dataCriacao">
+                          <Translate contentKey="generadorApp.pesquisa.dataCriacao">Data Criacao</Translate>
+                        </Label>
+                        <AvInput
+                          id="pesquisa-dataCriacao"
+                          type="datetime-local"
+                          className="form-control"
+                          name="dataCriacao"
+                          placeholder={'YYYY-MM-DD HH:mm'}
+                          value={isNew ? null : convertDateTimeFromServer(this.props.pesquisaEntity.dataCriacao)}
+                          validate={{
+                            required: { value: true, errorMessage: translate('entity.validation.required') }
+                          }}
+                        />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="dataFinalizacaoLabel" for="pesquisa-dataFinalizacao">
+                          <Translate contentKey="generadorApp.pesquisa.dataFinalizacao">Data Finalizacao</Translate>
+                        </Label>
+                        <AvInput
+                          id="pesquisa-dataFinalizacao"
+                          type="datetime-local"
+                          className="form-control"
+                          name="dataFinalizacao"
+                          placeholder={'YYYY-MM-DD HH:mm'}
+                          value={isNew ? null : convertDateTimeFromServer(this.props.pesquisaEntity.dataFinalizacao)}
+                        />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="situacaoLabel" for="pesquisa-situacao">
+                          <Translate contentKey="generadorApp.pesquisa.situacao">Situacao</Translate>
+                        </Label>
+                        <AvInput
+                          id="pesquisa-situacao"
+                          type="select"
+                          className="form-control"
+                          name="situacao"
+                          value={(!isNew && pesquisaEntity.situacao) || 'AGUARDANDO'}
+                        >
+                          <option value="AGUARDANDO">{translate('generadorApp.Situacao.AGUARDANDO')}</option>
+                          <option value="COLETANDO">{translate('generadorApp.Situacao.COLETANDO')}</option>
+                          <option value="SUCESSO">{translate('generadorApp.Situacao.SUCESSO')}</option>
+                          <option value="ERRO">{translate('generadorApp.Situacao.ERRO')}</option>
+                          <option value="CANCELADA">{translate('generadorApp.Situacao.CANCELADA')}</option>
+                        </AvInput>
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="observacoesLabel" for="pesquisa-observacoes">
+                          <Translate contentKey="generadorApp.pesquisa.observacoes">Observacoes</Translate>
+                        </Label>
+
+                        <AvInput type="text" name="observacoes" id="pesquisa-observacoes" value={this.state.observacoes} />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="csvTotalLabel" for="pesquisa-csvTotal">
+                          <Translate contentKey="generadorApp.pesquisa.csvTotal">Csv Total</Translate>
+                        </Label>
+                        <AvInput type="string" name="csvTotal" id="pesquisa-csvTotal" value={this.state.csvTotal} />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="csvVerificadosLabel" for="pesquisa-csvVerificados">
+                          <Translate contentKey="generadorApp.pesquisa.csvVerificados">Csv Verificados</Translate>
+                        </Label>
+                        <AvInput type="string" name="csvVerificados" id="pesquisa-csvVerificados" value={this.state.csvVerificados} />
+                      </div>
+
+                      <div className="col-md-3">
+                        <Label id="comarcaPorComarcaLabel" check>
+                          <AvInput id="pesquisa-comarcaPorComarca" type="checkbox" className="form-control" name="comarcaPorComarca" />
+                          <Translate contentKey="generadorApp.pesquisa.comarcaPorComarca">Comarca Por Comarca</Translate>
+                        </Label>
+                      </div>
+                      <div className="col-md-3">
+                        <div>
+                          <Label for="pesquisa-user">
+                            <Translate contentKey="generadorApp.pesquisa.user">User</Translate>
+                          </Label>
+                          <AvInput id="pesquisa-user" type="select" className="form-control" name="userId">
+                            <option value="" key="0" />
+                            {users
+                              ? users.map(otherEntity => (
+                                  <option value={otherEntity.id} key={otherEntity.id}>
+                                    {otherEntity.id}
+                                  </option>
+                                ))
+                              : null}
+                          </AvInput>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div>
+                          <Label for="pesquisa-processo">
+                            <Translate contentKey="generadorApp.pesquisa.processo">Processo</Translate>
+                          </Label>
+                          <AvInput
+                            id="pesquisa-processo"
+                            type="select"
+                            multiple
+                            className="form-control"
+                            name="processos"
+                            value={pesquisaEntity.processos && pesquisaEntity.processos.map(e => e.id)}
+                          >
+                            <option value="" key="0" />
+                            {processos
+                              ? processos.map(otherEntity => (
+                                  <option value={otherEntity.id} key={otherEntity.id}>
+                                    {otherEntity.id}
+                                  </option>
+                                ))
+                              : null}
+                          </AvInput>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div>
+                          <Label for="pesquisa-comarcas">
+                            <Translate contentKey="generadorApp.pesquisa.comarcas">Comarcas</Translate>
+                          </Label>
+                          <AvInput id="pesquisa-comarcas" type="select" className="form-control" name="comarcasId">
+                            <option value="" key="0" />
+                            {comarcas
+                              ? comarcas.map(otherEntity => (
+                                  <option value={otherEntity.id} key={otherEntity.id}>
+                                    {otherEntity.id}
+                                  </option>
+                                ))
+                              : null}
+                          </AvInput>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div>
+                          <Label for="pesquisa-estado">
+                            <Translate contentKey="generadorApp.pesquisa.estado">Estado</Translate>
+                          </Label>
+                          <AvInput id="pesquisa-estado" type="select" className="form-control" name="estadoId">
+                            <option value="" key="0" />
+                            {estados
+                              ? estados.map(otherEntity => (
+                                  <option value={otherEntity.id} key={otherEntity.id}>
+                                    {otherEntity.id}
+                                  </option>
+                                ))
+                              : null}
+                          </AvInput>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row mb-2 mr-4 justify-content-end">
+                      <Button className="btn btn-success" type="submit">
+                        <i className="fa fa-filter" aria-hidden={'true'}></i>
+                        &nbsp;
+                        <Translate contentKey="entity.validation.filter">Filter</Translate>
+                      </Button>
+                      &nbsp;
+                      <div className="btn btn-secondary hand" onClick={this.cancelCourse}>
+                        <FontAwesomeIcon icon="trash-alt" />
+                        &nbsp;
+                        <Translate contentKey="entity.validation.clean">Clean</Translate>
+                      </div>
+                    </div>
+                  </AvForm>
+                </CardBody>
+              </UncontrolledCollapse>
+
+              {pesquisaList && pesquisaList.length > 0 ? (
+                <Table responsive aria-describedby="pesquisa-heading" className={'table-hover table-striped mt-4'}>
+                  <thead className={'thead-light'}>
+                    <tr>
+                      <th className="hand" onClick={this.sort('id')}>
+                        <Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('nome')}>
+                        <Translate contentKey="generadorApp.pesquisa.nome">Nome</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('classesIncluir')}>
+                        <Translate contentKey="generadorApp.pesquisa.classesIncluir">Classes Incluir</Translate>{' '}
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('incluirMovimentacoes')}>
+                        <Translate contentKey="generadorApp.pesquisa.incluirMovimentacoes">Incluir Movimentacoes</Translate>{' '}
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('descartarMovimentacoes')}>
+                        <Translate contentKey="generadorApp.pesquisa.descartarMovimentacoes">Descartar Movimentacoes</Translate>{' '}
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('incluirMovimentacoesAll')}>
+                        <Translate contentKey="generadorApp.pesquisa.incluirMovimentacoesAll">Incluir Movimentacoes All</Translate>{' '}
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('anoInicial')}>
+                        <Translate contentKey="generadorApp.pesquisa.anoInicial">Ano Inicial</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('anoFinal')}>
+                        <Translate contentKey="generadorApp.pesquisa.anoFinal">Ano Final</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('csv')}>
+                        <Translate contentKey="generadorApp.pesquisa.csv">Csv</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('dataCriacao')}>
+                        <Translate contentKey="generadorApp.pesquisa.dataCriacao">Data Criacao</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('dataFinalizacao')}>
+                        <Translate contentKey="generadorApp.pesquisa.dataFinalizacao">Data Finalizacao</Translate>{' '}
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('situacao')}>
+                        <Translate contentKey="generadorApp.pesquisa.situacao">Situacao</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('observacoes')}>
+                        <Translate contentKey="generadorApp.pesquisa.observacoes">Observacoes</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('csvTotal')}>
+                        <Translate contentKey="generadorApp.pesquisa.csvTotal">Csv Total</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('csvVerificados')}>
+                        <Translate contentKey="generadorApp.pesquisa.csvVerificados">Csv Verificados</Translate>{' '}
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th className="hand" onClick={this.sort('comarcaPorComarca')}>
+                        <Translate contentKey="generadorApp.pesquisa.comarcaPorComarca">Comarca Por Comarca</Translate>{' '}
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th>
+                        <Translate contentKey="generadorApp.pesquisa.user">User</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th>
+                        <Translate contentKey="generadorApp.pesquisa.comarcas">Comarcas</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th>
+                        <Translate contentKey="generadorApp.pesquisa.estado">Estado</Translate> <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr></tr>
+                    {pesquisaList.map((pesquisa, i) => (
+                      <tr key={`entity-${i}`}>
+                        <td>
+                          <Button tag={Link} to={`${match.url}/${pesquisa.id}`} color="link" size="sm">
+                            {pesquisa.id}
+                          </Button>
+                        </td>
+                        <td>{pesquisa.nome}</td>
+                        <td>{pesquisa.classesIncluir}</td>
+                        <td>{pesquisa.incluirMovimentacoes}</td>
+                        <td>{pesquisa.descartarMovimentacoes}</td>
+                        <td>{pesquisa.incluirMovimentacoesAll ? 'true' : 'false'}</td>
+                        <td>{pesquisa.anoInicial}</td>
+                        <td>{pesquisa.anoFinal}</td>
+                        <td>{pesquisa.csv}</td>
+                        <td>
+                          <TextFormat type="date" value={pesquisa.dataCriacao} format={APP_DATE_FORMAT} />
+                        </td>
+                        <td>
+                          <TextFormat type="date" value={pesquisa.dataFinalizacao} format={APP_DATE_FORMAT} />
+                        </td>
+                        <td>
+                          <Translate contentKey={`generadorApp.Situacao.${pesquisa.situacao}`} />
+                        </td>
+                        <td>{pesquisa.observacoes}</td>
+                        <td>{pesquisa.csvTotal}</td>
+                        <td>{pesquisa.csvVerificados}</td>
+                        <td>{pesquisa.comarcaPorComarca ? 'true' : 'false'}</td>
+                        <td>{pesquisa.userId ? pesquisa.userId : ''}</td>
+                        <td>{pesquisa.comarcasId ? <Link to={`comarca/${pesquisa.comarcasId}`}>{pesquisa.comarcasId}</Link> : ''}</td>
+                        <td>{pesquisa.estadoId ? <Link to={`estado/${pesquisa.estadoId}`}>{pesquisa.estadoId}</Link> : ''}</td>
+                        <td className="text-right">
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${pesquisa.id}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${pesquisa.id}/edit`} color="primary" size="sm">
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${pesquisa.id}/delete`} color="danger" size="sm">
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              ) : (
+                <div className="alert alert-warning">
+                  <Translate contentKey="generadorApp.pesquisa.home.notFound">No Pesquisas found</Translate>
+                </div>
+              )}
+            </div>
           </PanelBody>
           <PanelFooter>
             <div className={pesquisaList && pesquisaList.length > 0 ? '' : 'd-none'}>
               <Row className="justify-content-center">
-                <JhiItemCount
-                  page={this.state.activePage}
-                  total={totalItems}
-                  itemsPerPage={this.state.itemsPerPage}
-                  i18nEnabled/>
+                <JhiItemCount page={this.state.activePage} total={totalItems} itemsPerPage={this.state.itemsPerPage} i18nEnabled />
               </Row>
               <Row className="justify-content-center">
                 <JhiPagination
@@ -392,20 +738,24 @@ export class Pesquisa extends React.Component<IPesquisaProps, IPesquisaState> {
   }
 }
 
-const mapStateToProps = ({pesquisa}: IRootState) => ({
+const mapStateToProps = ({ pesquisa, ...storeState }: IRootState) => ({
+  users: storeState.userManagement.users,
+  processos: storeState.processo.entities,
+  comarcas: storeState.comarca.entities,
+  estados: storeState.estado.entities,
   pesquisaList: pesquisa.entities,
-  totalItems: pesquisa.totalItems,
-  csvError: pesquisa.csvError
+  totalItems: pesquisa.totalItems
 });
 
 const mapDispatchToProps = {
-  getEntities, getPesquisaCSV, getPesquisaProcessoCSV, insertObservacaoPesquisa
+  getUsers,
+  getProcessos,
+  getComarcas,
+  getEstados,
+  getEntities
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Pesquisa);
+export default connect(mapStateToProps, mapDispatchToProps)(Pesquisa);

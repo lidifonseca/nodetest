@@ -1,31 +1,31 @@
 import { Body, Controller, Delete, Get, Logger, Param, Post as PostMethod, Put, UseGuards, Req, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { Request } from 'express';
-import Pesquisa from '../../domain/pesquisa.entity';
-import { PesquisaService } from '../../service/pesquisa.service';
+import Paciente from '../../domain/paciente.entity';
+import { PacienteService } from '../../service/paciente.service';
 import { PageRequest, Page } from '../../domain/base/pagination.entity';
 import { AuthGuard, Roles, RolesGuard, RoleType } from '../../security';
 import { HeaderUtil } from '../../client/header-util';
 import { LoggingInterceptor } from '../../client/interceptors/logging.interceptor';
 
-@Controller('api/pesquisas')
+@Controller('api/pacientes')
 @UseGuards(AuthGuard, RolesGuard)
 @UseInterceptors(LoggingInterceptor)
 @ApiBearerAuth()
-@ApiUseTags('pesquisas')
-export class PesquisaController {
-  logger = new Logger('PesquisaController');
+@ApiUseTags('pacientes')
+export class PacienteController {
+  logger = new Logger('PacienteController');
 
-  constructor(private readonly pesquisaService: PesquisaService) {}
+  constructor(private readonly pacienteService: PacienteService) {}
 
   @Get('/')
   @Roles(RoleType.USER)
   @ApiResponse({
     status: 200,
     description: 'List all records',
-    type: Pesquisa
+    type: Paciente
   })
-  async getAll(@Req() req: Request): Promise<Pesquisa[]> {
+  async getAll(@Req() req: Request): Promise<Paciente[]> {
     const pageRequest: PageRequest = new PageRequest(req.query.page, req.query.size, req.query.sort);
     let filters = [];
     for (var param in req.query) {
@@ -35,7 +35,7 @@ export class PesquisaController {
         filters.push({ column, value: req.query[param], operation });
       }
     }
-    const [results, count] = await this.pesquisaService.findAndCount(
+    const [results, count] = await this.pacienteService.findAndCount(
       {
         skip: +pageRequest.page * pageRequest.size,
         take: +pageRequest.size,
@@ -52,50 +52,50 @@ export class PesquisaController {
   @ApiResponse({
     status: 200,
     description: 'The found record',
-    type: Pesquisa
+    type: Paciente
   })
-  async getOne(@Param('id') id: string): Promise<Pesquisa> {
-    return await this.pesquisaService.findById(id);
+  async getOne(@Param('id') id: string): Promise<Paciente> {
+    return await this.pacienteService.findById(id);
   }
 
   @PostMethod('/')
   @Roles(RoleType.USER)
-  @ApiOperation({ title: 'Create pesquisa' })
+  @ApiOperation({ title: 'Create paciente' })
   @ApiResponse({
     status: 201,
     description: 'The record has been successfully created.',
-    type: Pesquisa
+    type: Paciente
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
-  async post(@Req() req: Request, @Body() pesquisa: Pesquisa): Promise<Pesquisa> {
-    const created = await this.pesquisaService.save(pesquisa);
-    HeaderUtil.addEntityCreatedHeaders(req.res, 'Pesquisa', created.id);
+  async post(@Req() req: Request, @Body() paciente: Paciente): Promise<Paciente> {
+    const created = await this.pacienteService.save(paciente);
+    HeaderUtil.addEntityCreatedHeaders(req.res, 'Paciente', created.id);
     return created;
   }
 
   @Put('/')
   @Roles(RoleType.USER)
-  @ApiOperation({ title: 'Update pesquisa' })
+  @ApiOperation({ title: 'Update paciente' })
   @ApiResponse({
     status: 200,
     description: 'The record has been successfully updated.',
-    type: Pesquisa
+    type: Paciente
   })
-  async put(@Req() req: Request, @Body() pesquisa: Pesquisa): Promise<Pesquisa> {
-    HeaderUtil.addEntityCreatedHeaders(req.res, 'Pesquisa', pesquisa.id);
-    return await this.pesquisaService.update(pesquisa);
+  async put(@Req() req: Request, @Body() paciente: Paciente): Promise<Paciente> {
+    HeaderUtil.addEntityCreatedHeaders(req.res, 'Paciente', paciente.id);
+    return await this.pacienteService.update(paciente);
   }
 
   @Delete('/:id')
   @Roles(RoleType.USER)
-  @ApiOperation({ title: 'Delete pesquisa' })
+  @ApiOperation({ title: 'Delete paciente' })
   @ApiResponse({
     status: 204,
     description: 'The record has been successfully deleted.'
   })
-  async remove(@Req() req: Request, @Param('id') id: string): Promise<Pesquisa> {
-    HeaderUtil.addEntityDeletedHeaders(req.res, 'Pesquisa', id);
-    const toDelete = await this.pesquisaService.findById(id);
-    return await this.pesquisaService.delete(toDelete);
+  async remove(@Req() req: Request, @Param('id') id: string): Promise<Paciente> {
+    HeaderUtil.addEntityDeletedHeaders(req.res, 'Paciente', id);
+    const toDelete = await this.pacienteService.findById(id);
+    return await this.pacienteService.delete(toDelete);
   }
 }

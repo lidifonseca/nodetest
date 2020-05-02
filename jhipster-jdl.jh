@@ -1,143 +1,215 @@
-entity Pesquisa {
-	nome String,
-    classesIncluir TextBlob
-    incluirMovimentacoes TextBlob,
-    descartarMovimentacoes TextBlob,
-    incluirMovimentacoesAll Boolean,
-    anoInicial Integer,
-    anoFinal Integer,
-    csv TextBlob,
-    dataCriacao Instant required
-    dataFinalizacao Instant 
-    situacao Situacao required
-    observacoes String
-    csvTotal Integer
-    csvVerificados Integer
-    comarcaPorComarca Boolean
-}
-
-enum Situacao {
-	AGUARDANDO, COLETANDO, SUCESSO, ERRO, CANCELADA
-}
-
-entity Estado {
-  	nome String required
-    sigla String required
-}
-
-entity Comarca {
-	tjid Integer required
-	nome String required
-}
-
-entity Processo {
-	numero String required
-    cnpj String required
-    razaoSocial String
-    classe String required
-    assunto String
-    vara String
-    juiz String 
-    dataDistribuicao LocalDate
-    distribuicao String
-    localFisico String
-    controle String
-    area String
-    estado String required
-    observacao TextBlob
-    interesse Boolean
-    dataCriacao Instant required
-    dataAtualicacao Instant
-    dataExclusao Instant
-    link TextBlob required
-    valor Double
-    moeda String
-}
-
-entity Parte {
-	categoria String
-    participante String 
-    advogados TextBlob
-}
-
-entity Movimentacao {
-	data LocalDate
-    movimento TextBlob    
-}
-
-entity Peticao {
-	data LocalDate
-    tipo TextBlob    
-}
-
-entity Incidente {
-    recebedoEm LocalDate
-    clase String
-}
-
-    /** 
-    @formTab primeiro<motivo>@@ 
-    @formTab segundo<processo,apensamento>@@ 
-    @viewLayout processo<top;6>, apensamento<top;6>@@ 
-    */
-entity Apenso {
-
-    /** @formTab primeiro@@ */
-    numero String required
-
-    /** @formTab segundo@@ 
-     Otro info */
-    clase String
-    apensamento LocalDate
-    motivo String
-
-}
-
-entity Audiencia {
-    data LocalDate
-    audencia String
-    situacao String
-    quatidadePessoas Integer
-}
-
-entity HistoricoClase {
-    data LocalDate
-    tipo String 
-    classe String
-    area String
-    motivo String
-}
-
-relationship ManyToOne {
-	Pesquisa{user} to User
-}
-
-relationship ManyToMany {
-	Pesquisa{processo} to Processo{pesquisa}
-}
-
-// defining multiple OneToMany relationships with comments
-relationship OneToMany {
-	Processo{movimentacoes} to Movimentacao{processo},
-    Processo{partes} to Parte{processo},
-    Processo{peticoes} to Peticao{processo},
-    Processo{incidentes} to Incidente{processo},
-    /** @formTab segundo@@ 
-     Otro info */
-    Processo{apensos} to Apenso{processo},
-    Processo{audioencias} to Audiencia{processo},
-    Processo{historicos} to HistoricoClase{processo}, 
-    Comarca{processos} to Processo{comarca}
-    Comarca{pesquisas} to Pesquisa{comarcas}
-    Estado{pesquisas} to Pesquisa{estado}
-    Estado{comarcas} to Comarca{estado}
+/**
+	@toStringFields nome cpf@@ 
+	@listTableLayout nome email cpf rg registro@@ 
+	@listFilterLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
+	@formLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
+	@viewLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
+*/
+entity Paciente {
+//idUnidade Long required,
+//idFranquia Long,
+//idCidade Long,
+//idCidadeFamiliar Long,
+//idGrauParentesco Integer required,
+	senha String maxlength(100),
+	nome String maxlength(60),
+	email String maxlength(100),
+	cpf String maxlength(20),
+	rg String maxlength(30),
+	registro String maxlength(50),
+	nascimento LocalDate,
+	sexo Integer,
+	telefone String maxlength(20),
+	telefone2 String maxlength(20),
+	celular String maxlength(20),
+	celular1 String maxlength(20),
+	cep String maxlength(10),
+	endereco String maxlength(100),
+	numero String maxlength(30),
+	complemento String maxlength(20),
+	bairro String maxlength(40),
+	cidade String maxlength(100),
+	uf String maxlength(5),
+	latitude String maxlength(60),
+	longitude String maxlength(60),
+	responsavelFamiliar String maxlength(60),
+	emailFamiliar String maxlength(100),
+	cpfFamiliar String maxlength(20),
+	rgFamiliar String maxlength(30),
+	nascimentoFamiliar LocalDate,
+	sexoFamiliar Integer,
+	telefoneFamiliar String maxlength(20),
+	telefone2Familiar String maxlength(20),
+	celularFamiliar String maxlength(20),
+	celular2Familiar String maxlength(20),
+	cepFamiliar String maxlength(10),
+	enderecoFamiliar String maxlength(100),
+	numeroFamiliar String maxlength(30),
+	complementoFamiliar String maxlength(20),
+	bairroFamiliar String maxlength(40),
+	cidadeFamiliar String maxlength(100),
+	ufFamiliar String maxlength(5),
+	latitudeFamiliar String maxlength(60),
+	longitudeFamiliar String maxlength(60),
+	observacao String maxlength(255),
+	aph Integer required,
+	nivelComplexidade Integer,
+	passagemPs Integer,
+	obsPs String maxlength(255),
+	passagemInternacao Integer,
+	obsInternacao String maxlength(255),
+	custoTotal Float,
+	observacaoFamiliar String maxlength(255),
+	mesmoEndereco Integer,
+	acessoFamiliar Integer,
+	comResponsavel Integer,
+	cadastroCompleto Integer,
+	ativo Integer,
+	dataPost Instant required,
+	detalhes String maxlength(255),
+	tipohospital Integer,
+	liminar String maxlength(50),
+	expoToken String maxlength(255),
+	profissionalPref Integer,
+	senhaChat String maxlength(45)
 }
 
 // Set pagination options
 paginate all with pagination
 
-// Use Data Transfert Objects (DTO)
-dto * with mapstruct
-filter *
-service * with serviceClass
-
+//   //  entity Pesquisa {
+//   //  	nome String,
+//   //      classesIncluir TextBlob
+//   //      incluirMovimentacoes TextBlob,
+//   //      descartarMovimentacoes TextBlob,
+//   //      incluirMovimentacoesAll Boolean,
+//   //      anoInicial Integer,
+//   //      anoFinal Integer,
+//   //      csv TextBlob,
+//   //      dataCriacao Instant required
+//   //      dataFinalizacao Instant 
+//   //      situacao Situacao required
+//   //      observacoes String
+//   //      csvTotal Integer
+//   //      csvVerificados Integer
+//   //      comarcaPorComarca Boolean
+//   //  }
+//   //  
+//   //  enum Situacao {
+//   //  	AGUARDANDO, COLETANDO, SUCESSO, ERRO, CANCELADA
+//   //  }
+//   //  
+//   //  entity Estado {
+//   //    	nome String required
+//   //      sigla String required
+//   //  }
+//   //  
+//   //  entity Comarca {
+//   //  	tjid Integer required
+//   //  	nome String required
+//   //  }
+//   //  
+//   //  entity Processo {
+//   //  	numero String required
+//   //      cnpj String required
+//   //      razaoSocial String
+//   //      classe String required
+//   //      assunto String
+//   //      vara String
+//   //      juiz String 
+//   //      dataDistribuicao LocalDate
+//   //      distribuicao String
+//   //      localFisico String
+//   //      controle String
+//   //      area String
+//   //      estado String required
+//   //      observacao TextBlob
+//   //      interesse Boolean
+//   //      dataCriacao Instant required
+//   //      dataAtualicacao Instant
+//   //      dataExclusao Instant
+//   //      link TextBlob required
+//   //      valor Double
+//   //      moeda String
+//   //  }
+//   //  
+//   //  entity Parte {
+//   //  	categoria String
+//   //      participante String 
+//   //      advogados TextBlob
+//   //  }
+//   //  
+//   //  entity Movimentacao {
+//   //  	data LocalDate
+//   //      movimento TextBlob    
+//   //  }
+//   //  
+//   //  entity Peticao {
+//   //  	data LocalDate
+//   //      tipo TextBlob    
+//   //  }
+//   //  
+//   //  entity Incidente {
+//   //      recebedoEm LocalDate
+//   //      clase String
+//   //  }
+//   //  
+//   //      /** 
+//   //      @formTab primeiro<motivo>@@ 
+//   //      @formTab segundo<processo,apensamento>@@ 
+//   //      @viewLayout processo<top;6>, apensamento<top;6>@@ 
+//   //      */
+//   //  entity Apenso {
+//   //  
+//   //      /** @formTab primeiro@@ */
+//   //      numero String required
+//   //  
+//   //      /** @formTab segundo@@ 
+//   //       Otro info */
+//   //      clase String
+//   //      apensamento LocalDate
+//   //      motivo String
+//   //  
+//   //  }
+//   //  
+//   //  entity HistoricoClase {
+//   //      data LocalDate
+//   //      tipo String 
+//   //      classe String
+//   //      area String
+//   //      motivo String
+//   //  }
+//   //  
+//   //  relationship ManyToOne {
+//   //  	Pesquisa{user} to User
+//   //  }
+//   //  
+//   //  relationship ManyToMany {
+//   //  	Pesquisa{processo} to Processo{pesquisa}
+//   //  }
+//   //  
+//   //  // defining multiple OneToMany relationships with comments
+//   //  relationship OneToMany {
+//   //  	Processo{movimentacoes} to Movimentacao{processo},
+//   //      Processo{partes} to Parte{processo},
+//   //      Processo{peticoes} to Peticao{processo},
+//   //      Processo{incidentes} to Incidente{processo},
+//   //      /** @formTab segundo@@ 
+//   //       Otro info */
+//   //      Processo{apensos} to Apenso{processo},
+//   //      Processo{historicos} to HistoricoClase{processo}, 
+//   //      Comarca{processos} to Processo{comarca}
+//   //      Comarca{pesquisas} to Pesquisa{comarcas}
+//   //      Estado{pesquisas} to Pesquisa{estado}
+//   //      Estado{comarcas} to Comarca{estado}
+//   //  }
+//   //  
+//   //  // Set pagination options
+//   //  paginate all with pagination
+//   //  
+//   //  // Use Data Transfert Objects (DTO)
+//   //  dto * with mapstruct
+//   //  filter *
+//   //  service * with serviceClass
+//   //  
+//   //  

@@ -5,9 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink as Link } from 'react-router-dom';
 import { Translate, translate } from 'react-jhipster';
 import { NavDropdown } from './menu-components';
+import { EntitiesMenu } from './entities';
 
 const accountMenuItemsAuthenticated = (
   <>
+  
+    <EntitiesMenu /> 
     <MenuItem icon="wrench" to="/account/settings">
       Conta
     </MenuItem>

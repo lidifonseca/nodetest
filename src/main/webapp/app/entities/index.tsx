@@ -17,13 +17,14 @@ import Pesquisa from './pesquisa';
 import Estado from './estado';
 import Comarca from './comarca';
 import PageNotFound from 'app/shared/error/page-not-found';
+import Paciente from './paciente';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 const Routes = ({ match }) => (
   <div>
     <Switch>
       {/* prettier-ignore */}
-      <ErrorBoundaryRoute path={`${match.url}apenso`} component={Apenso} />
+      <ErrorBoundaryRoute path={`${match.url}paciente`} component={Paciente} />
       <ErrorBoundaryRoute path={`${match.url}processo`} component={Processo} />
       <ErrorBoundaryRoute path={`${match.url}pesquisa`} component={Pesquisa} />
       <ErrorBoundaryRoute component={PageNotFound} />

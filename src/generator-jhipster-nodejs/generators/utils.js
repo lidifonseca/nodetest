@@ -589,6 +589,10 @@ function analizeJavadoc(generator) {
 
     generator.formTabs = [];
     generator.viewTabs = [];
+    generator.toStringFields = [];
+    generator.listTableLayout = [];
+    generator.listFilterLayout = [];
+    generator.formLayout = [];
     generator.viewLayout = [];
 
     let generatorJavadoc = generator.javadoc; 
@@ -631,22 +635,42 @@ function analizeJavadoc(generator) {
                         }
                     }
                 }
-                if(parameter[0] === "viewLayout") {
+                if((["listTableLayout","listFilterLayout", "formLayout", "viewLayout", "toStringFields"]).indexOf(parameter[0]) !== -1) {
                     for (const key in parameter) {
+                        
                         if (key > 0) {
                             const element = parameter[key];
                             const value = element.trim().split(">")[0].split("<");
-                            const fields = value[1].split(";");
                             for (idx in generator.fields) { 
                                 if(generator.fields[idx].fieldName === value[0] ){
-                                    generator.fields[idx].viewLayoutLabel = fields[0];
-                                    generator.fields[idx].viewLayoutSize = fields[1];
+                                    generator[parameter[0]].push({
+                                        name: generator.fields[idx].fieldName,
+                                        type: 'field',
+                                        entity: generator.fields[idx]
+                                    });
+                                    if(value.length > 1){
+                                        const fields = value[1].split(";");
+                                        generator.fields[idx][parameter[0]+'Label'] = fields[0];
+                                        generator.fields[idx][parameter[0]+'Size'] = fields[1];
+                                    } else {
+                                        generator.fields[idx][parameter[0]] = true;
+                                    }
                                 }
                             }
                             for (idx in generator.relationships) { 
                                 if(generator.relationships[idx].relationshipName === value[0] ){
-                                    generator.relationships[idx].viewLayoutLabel = fields[0];
-                                    generator.relationships[idx].viewLayoutSize = fields[1];
+                                    generator[parameter[0]].push({
+                                        name: generator.relationships[idx].relationshipName,
+                                        type: 'relationship',
+                                        entity: generator.relationships[idx]
+                                    });
+                                    if(value.length > 1){
+                                        const fields = value[1].split(";");
+                                        generator.relationships[idx][parameter[0]+'Label'] = fields[0];
+                                        generator.relationships[idx][parameter[0]+'Size'] = fields[1];
+                                    } else {
+                                        generator.relationships[idx][parameter[0]] = true;
+                                    }
                                 }
                             }
                         }
@@ -709,7 +733,10 @@ function analizeJavadoc(generator) {
         generator.defaultViewTab = true;
     }
 
-    console.info(generator.fields)
+    console.info(generator.toStringFields)
+    // console.info(generator.listFilterLayout)
+    // console.info(generator.formLayout)
+    // console.info(generator.viewLayout)
 
     return generator;
 }

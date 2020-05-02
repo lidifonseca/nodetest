@@ -25,8 +25,29 @@ export class PesquisaService {
     return await this.pesquisaRepository.findOne(options);
   }
 
-  async findAndCount(options: FindManyOptions<Pesquisa>): Promise<[Pesquisa[], number]> {
+  async findAndCount(
+    options: FindManyOptions<Pesquisa>,
+    filters?: Array<{ column: string; value: string; operation: string }>[]
+  ): Promise<[Pesquisa[], number]> {
     options.relations = relationshipNames;
+    let where = '';
+    let first = true;
+    for (const i in filters) {
+      if (filters.hasOwnProperty(i)) {
+        const element = filters[i];
+        if (!first) {
+          where += 'and';
+        } else {
+          first = false;
+        }
+        if (element['operation'] === 'contains') {
+          where += ' `Apenso`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+        } else if (element['operation'] === 'equals') {
+          where += ' `Apenso`.`' + element['column'] + '` = "' + element['value'] + '" ';
+        }
+      }
+    }
+    options.where = where;
     return await this.pesquisaRepository.findAndCount(options);
   }
 

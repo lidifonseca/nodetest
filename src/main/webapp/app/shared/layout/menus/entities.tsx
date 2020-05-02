@@ -7,18 +7,9 @@ import { NavLink as Link } from 'react-router-dom';
 import { NavDropdown } from './menu-components';
 
 export const EntitiesMenu = props => (
-  <NavDropdown icon="" name="Estados" id="entity-menu">
-    <MenuItem icon="angle-right" to="/processo">
-      TJ-SC
-    </MenuItem>
-    <MenuItem icon="asterisk" to="/pesquisa">
-      <Translate contentKey="global.menu.entities.pesquisa" />
-    </MenuItem>
-    <MenuItem icon="asterisk" to="/processo">
-      <Translate contentKey="global.menu.entities.processo" />
-    </MenuItem>
-    <MenuItem icon="asterisk" to="/apenso">
-      <Translate contentKey="global.menu.entities.apenso" />
+  <NavDropdown icon="" name="Estados" id="entity-menu" style={{ width: 100 }}>
+    <MenuItem icon="asterisk" to="/paciente">
+      <Translate contentKey="global.menu.entities.paciente" />
     </MenuItem>
     {/*   jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
   </NavDropdown>

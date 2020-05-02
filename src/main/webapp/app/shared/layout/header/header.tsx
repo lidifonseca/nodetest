@@ -6,6 +6,7 @@ import { Navbar, Nav, NavbarToggler, NavbarBrand, Collapse } from 'reactstrap';
 
 import LoadingBar from 'react-redux-loading-bar';
 
+import { EntitiesMenu } from '../menus/entities';
 import { Brand, Account, Logout, SwaggerMenu } from './header-components';
 import {connect} from "react-redux";
 import {toggleSidebarMobileOpen} from "app/shared/reducers/sidebar";
@@ -55,6 +56,7 @@ const Header = (props: IHeaderProps) => {
             <Collapse isOpen={menuOpen} navbar>
               <Nav id="header-tabs" className="ml-auto navbar-nav navbar-right pull-right" navbar>
                 {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
+                {props.isAuthenticated && <EntitiesMenu />}
                 {props.isAuthenticated && <Account />}
                 {props.isAuthenticated && <Logout />}
 
@@ -68,8 +70,9 @@ const Header = (props: IHeaderProps) => {
           </div>
         </div>
         <div className={"navbar-nav navbar-right d-none d-md-block"}>
-          <Nav id="header-tabs" className="ml-auto navbar-nav navbar-right pull-right mr-4" navbar>
+          <Nav id="header-tabs" style={{height: 40}} className="ml-auto navbar-nav navbar-right pull-right mr-4" navbar>
             {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
+            {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && <Account />}
             {props.isAuthenticated && <Logout />}
           </Nav>

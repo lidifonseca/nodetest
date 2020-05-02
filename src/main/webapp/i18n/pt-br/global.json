@@ -19,6 +19,7 @@
         "pesquisa": "Pesquisa",
         "estado": "Estado",
         "comarca": "Comarca",
+        "paciente": "Paciente",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
