@@ -1,0 +1,39 @@
+{
+    "name": "Cidade",
+    "fields": [
+        {
+            "fieldName": "descrCidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "cidade",
+            "relationshipName": "pacientes"
+        }
+    ],
+    "changelogDate": "20200502162300",
+    "entityTableName": "cidade",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

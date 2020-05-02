@@ -1,9 +1,9 @@
 /**
 	@toStringFields nome cpf@@ 
-	@listTableLayout nome email cpf rg registro@@ 
-	@listFilterLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
-	@formLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
-	@viewLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
+	@listTableLayout cidade nome email cpf rg registro@@ 
+	@listFilterLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
+	@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
+	@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
 */
 entity Paciente {
 //idUnidade Long required,
@@ -79,7 +79,7 @@ entity Cidade {
 }
 
 relationship OneToMany {
-	Paciente to Cidade
+	Cidade{pacientes} to Paciente{cidade}
 }
 
 // Set pagination options

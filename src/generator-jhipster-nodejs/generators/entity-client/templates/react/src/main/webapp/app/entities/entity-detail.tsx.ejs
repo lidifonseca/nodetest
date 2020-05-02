@@ -99,10 +99,9 @@
   const otherEntityName = rel.otherEntityName;
   const otherEntityStateName = rel.otherEntityStateName;
   const otherEntityField = rel.otherEntityField;
-  const otherEntityFieldCapitalized = rel.otherEntityFieldCapitalized;
-    if (relationshipType === 'many-to-one'
-    || (relationshipType === 'one-to-one' && ownerSide === true)
-    || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+  if (relationshipType === 'many-to-one'
+  || (relationshipType === 'one-to-one' && ownerSide === true)
+  || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
 
       <Col md="<%= viewLayoutSize %>">
         <Row>
@@ -127,7 +126,7 @@
                       <%_ if (dto === 'no') { _%>
               {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
                           <%_ } else { _%>
-              {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
+              {<%= entityInstance + "Entity." + relationshipFieldName %> ? <%= entityInstance + "Entity." + relationshipFieldName + ".id" %> : ''}
                       <%_ } _%>
                   <%_ } _%>
               <%_ } else { _%>
@@ -143,7 +142,7 @@
                       <%_ if (dto === 'no') { _%>
               {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
                       <%_ } else { _%>
-              {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
+              {<%= entityInstance + "Entity." + relationshipFieldName %> ? <%= entityInstance + "Entity." + relationshipFieldName + ".id" %> : ''}
                       <%_ } _%>
                   <%_ } _%>
               <%_ } _%>
@@ -240,7 +239,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                   <%_ if (toStringFields.length > 0) { _%>
                     <small>
                       <%_ for (idx in toStringFields) { _%>
-                        <%_ if(toStringFields[idx].type ='field'){ _%>
+                        <%_ if(toStringFields[idx].type == 'field'){ _%>
                           &nbsp; {<%= entityInstance %>Entity['<%= toStringFields[idx].entity.fieldName %>']}
                           <%_  } else { _%>
                           &nbsp; {<%= entityInstance %>Entity['<%= toStringFields[idx].entity.relationshipName %>']} 
@@ -257,7 +256,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                     <%_ if (viewTabs.length === 0) { _%>
                       <%_ if (viewLayout.length > 0) {  _%>
                         <%_ for (idx in viewLayout) { 
-                            if(viewLayout[idx].type ='field'){
+                            if(viewLayout[idx].type == 'field'){
                               printFields(viewLayout[idx].entity);
                             } else {
                               printRelationships(viewLayout[idx].entity);
@@ -302,7 +301,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                             <%_ if (viewLayout.length > 0) {  _%>
                               <%_ for (idx in viewLayout) { 
                                 if(viewTabs[iTabs] === viewLayout[idx].entity['viewTab']) { 
-                                  if(viewLayout[idx].type ='field'){
+                                  if(viewLayout[idx].type == 'field'){
                                     printFields(viewLayout[idx].entity);
                                   } else {
                                     printRelationships(viewLayout[idx].entity);
@@ -328,7 +327,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
                               <%_ if (viewLayout.length > 0) {  _%>
                                 <%_ for (idx in viewLayout) { 
                                   if(!viewLayout[idx].entity['viewTab'] || viewLayout[idx].entity['viewTab'] === "default") { 
-                                    if(viewLayout[idx].type ='field'){
+                                    if(viewLayout[idx].type == 'field'){
                                       printFields(viewLayout[idx].entity);
                                     } else {
                                       printRelationships(viewLayout[idx].entity);

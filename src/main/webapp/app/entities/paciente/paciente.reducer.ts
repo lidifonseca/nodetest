@@ -123,7 +123,6 @@ export type ICrudGetAllActionPaciente<T> = (
   numero?: any,
   complemento?: any,
   bairro?: any,
-  cidade?: any,
   uf?: any,
   latitude?: any,
   longitude?: any,
@@ -142,7 +141,6 @@ export type ICrudGetAllActionPaciente<T> = (
   numeroFamiliar?: any,
   complementoFamiliar?: any,
   bairroFamiliar?: any,
-  cidadeFamiliar?: any,
   ufFamiliar?: any,
   latitudeFamiliar?: any,
   longitudeFamiliar?: any,
@@ -167,6 +165,7 @@ export type ICrudGetAllActionPaciente<T> = (
   expoToken?: any,
   profissionalPref?: any,
   senhaChat?: any,
+  cidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -190,7 +189,6 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   numero,
   complemento,
   bairro,
-  cidade,
   uf,
   latitude,
   longitude,
@@ -209,7 +207,6 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   numeroFamiliar,
   complementoFamiliar,
   bairroFamiliar,
-  cidadeFamiliar,
   ufFamiliar,
   latitudeFamiliar,
   longitudeFamiliar,
@@ -234,6 +231,7 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   expoToken,
   profissionalPref,
   senhaChat,
+  cidade,
   page,
   size,
   sort
@@ -255,7 +253,6 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
-  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const latitudeRequest = latitude ? `latitude.contains=${latitude}&` : '';
   const longitudeRequest = longitude ? `longitude.contains=${longitude}&` : '';
@@ -274,7 +271,6 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const numeroFamiliarRequest = numeroFamiliar ? `numeroFamiliar.contains=${numeroFamiliar}&` : '';
   const complementoFamiliarRequest = complementoFamiliar ? `complementoFamiliar.contains=${complementoFamiliar}&` : '';
   const bairroFamiliarRequest = bairroFamiliar ? `bairroFamiliar.contains=${bairroFamiliar}&` : '';
-  const cidadeFamiliarRequest = cidadeFamiliar ? `cidadeFamiliar.contains=${cidadeFamiliar}&` : '';
   const ufFamiliarRequest = ufFamiliar ? `ufFamiliar.contains=${ufFamiliar}&` : '';
   const latitudeFamiliarRequest = latitudeFamiliar ? `latitudeFamiliar.contains=${latitudeFamiliar}&` : '';
   const longitudeFamiliarRequest = longitudeFamiliar ? `longitudeFamiliar.contains=${longitudeFamiliar}&` : '';
@@ -299,12 +295,13 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
   const profissionalPrefRequest = profissionalPref ? `profissionalPref.contains=${profissionalPref}&` : '';
   const senhaChatRequest = senhaChat ? `senhaChat.contains=${senhaChat}&` : '';
+  const cidadeRequest = cidade ? `cidadeId.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTE_LIST,
     payload: axios.get<IPaciente>(
-      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefoneRequest}${telefone2Request}${celularRequest}${celular1Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${responsavelFamiliarRequest}${emailFamiliarRequest}${cpfFamiliarRequest}${rgFamiliarRequest}${nascimentoFamiliarRequest}${sexoFamiliarRequest}${telefoneFamiliarRequest}${telefone2FamiliarRequest}${celularFamiliarRequest}${celular2FamiliarRequest}${cepFamiliarRequest}${enderecoFamiliarRequest}${numeroFamiliarRequest}${complementoFamiliarRequest}${bairroFamiliarRequest}${cidadeFamiliarRequest}${ufFamiliarRequest}${latitudeFamiliarRequest}${longitudeFamiliarRequest}${observacaoRequest}${aphRequest}${nivelComplexidadeRequest}${passagemPsRequest}${obsPsRequest}${passagemInternacaoRequest}${obsInternacaoRequest}${custoTotalRequest}${observacaoFamiliarRequest}${mesmoEnderecoRequest}${acessoFamiliarRequest}${comResponsavelRequest}${cadastroCompletoRequest}${ativoRequest}${dataPostRequest}${detalhesRequest}${tipohospitalRequest}${liminarRequest}${expoTokenRequest}${profissionalPrefRequest}${senhaChatRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefoneRequest}${telefone2Request}${celularRequest}${celular1Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${responsavelFamiliarRequest}${emailFamiliarRequest}${cpfFamiliarRequest}${rgFamiliarRequest}${nascimentoFamiliarRequest}${sexoFamiliarRequest}${telefoneFamiliarRequest}${telefone2FamiliarRequest}${celularFamiliarRequest}${celular2FamiliarRequest}${cepFamiliarRequest}${enderecoFamiliarRequest}${numeroFamiliarRequest}${complementoFamiliarRequest}${bairroFamiliarRequest}${ufFamiliarRequest}${latitudeFamiliarRequest}${longitudeFamiliarRequest}${observacaoRequest}${aphRequest}${nivelComplexidadeRequest}${passagemPsRequest}${obsPsRequest}${passagemInternacaoRequest}${obsInternacaoRequest}${custoTotalRequest}${observacaoFamiliarRequest}${mesmoEnderecoRequest}${acessoFamiliarRequest}${comResponsavelRequest}${cadastroCompletoRequest}${ativoRequest}${dataPostRequest}${detalhesRequest}${tipohospitalRequest}${liminarRequest}${expoTokenRequest}${profissionalPrefRequest}${senhaChatRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

@@ -36,6 +36,9 @@ import { IPaciente } from 'app/shared/model/paciente.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
+
 export interface IPacienteProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteBaseState {
@@ -56,7 +59,6 @@ export interface IPacienteBaseState {
   numero: any;
   complemento: any;
   bairro: any;
-  cidade: any;
   uf: any;
   latitude: any;
   longitude: any;
@@ -75,7 +77,6 @@ export interface IPacienteBaseState {
   numeroFamiliar: any;
   complementoFamiliar: any;
   bairroFamiliar: any;
-  cidadeFamiliar: any;
   ufFamiliar: any;
   latitudeFamiliar: any;
   longitudeFamiliar: any;
@@ -100,6 +101,7 @@ export interface IPacienteBaseState {
   expoToken: any;
   profissionalPref: any;
   senhaChat: any;
+  cidade: any;
 }
 export interface IPacienteState extends IPacienteBaseState, IPaginationBaseState {}
 
@@ -133,7 +135,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     const numero = url.searchParams.get('numero') || '';
     const complemento = url.searchParams.get('complemento') || '';
     const bairro = url.searchParams.get('bairro') || '';
-    const cidade = url.searchParams.get('cidade') || '';
     const uf = url.searchParams.get('uf') || '';
     const latitude = url.searchParams.get('latitude') || '';
     const longitude = url.searchParams.get('longitude') || '';
@@ -152,7 +153,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     const numeroFamiliar = url.searchParams.get('numeroFamiliar') || '';
     const complementoFamiliar = url.searchParams.get('complementoFamiliar') || '';
     const bairroFamiliar = url.searchParams.get('bairroFamiliar') || '';
-    const cidadeFamiliar = url.searchParams.get('cidadeFamiliar') || '';
     const ufFamiliar = url.searchParams.get('ufFamiliar') || '';
     const latitudeFamiliar = url.searchParams.get('latitudeFamiliar') || '';
     const longitudeFamiliar = url.searchParams.get('longitudeFamiliar') || '';
@@ -178,6 +178,8 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     const profissionalPref = url.searchParams.get('profissionalPref') || '';
     const senhaChat = url.searchParams.get('senhaChat') || '';
 
+    const cidade = url.searchParams.get('cidade') || '';
+
     return {
       senha,
       nome,
@@ -196,7 +198,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -215,7 +216,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numeroFamiliar,
       complementoFamiliar,
       bairroFamiliar,
-      cidadeFamiliar,
       ufFamiliar,
       latitudeFamiliar,
       longitudeFamiliar,
@@ -239,12 +239,15 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       liminar,
       expoToken,
       profissionalPref,
-      senhaChat
+      senhaChat,
+      cidade
     };
   };
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCidades();
   }
 
   cancelCourse = () => {
@@ -267,7 +270,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         numero: '',
         complemento: '',
         bairro: '',
-        cidade: '',
         uf: '',
         latitude: '',
         longitude: '',
@@ -286,7 +288,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         numeroFamiliar: '',
         complementoFamiliar: '',
         bairroFamiliar: '',
-        cidadeFamiliar: '',
         ufFamiliar: '',
         latitudeFamiliar: '',
         longitudeFamiliar: '',
@@ -310,7 +311,8 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         liminar: '',
         expoToken: '',
         profissionalPref: '',
-        senhaChat: ''
+        senhaChat: '',
+        cidade: ''
       },
       () => this.sortEntities()
     );
@@ -406,9 +408,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'bairro=' +
       this.state.bairro +
       '&' +
-      'cidade=' +
-      this.state.cidade +
-      '&' +
       'uf=' +
       this.state.uf +
       '&' +
@@ -462,9 +461,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       '&' +
       'bairroFamiliar=' +
       this.state.bairroFamiliar +
-      '&' +
-      'cidadeFamiliar=' +
-      this.state.cidadeFamiliar +
       '&' +
       'ufFamiliar=' +
       this.state.ufFamiliar +
@@ -538,6 +534,9 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'senhaChat=' +
       this.state.senhaChat +
       '&' +
+      'cidade=' +
+      this.state.cidade +
+      '&' +
       ''
     );
   };
@@ -563,7 +562,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -582,7 +580,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numeroFamiliar,
       complementoFamiliar,
       bairroFamiliar,
-      cidadeFamiliar,
       ufFamiliar,
       latitudeFamiliar,
       longitudeFamiliar,
@@ -607,6 +604,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       expoToken,
       profissionalPref,
       senhaChat,
+      cidade,
       activePage,
       itemsPerPage,
       sort,
@@ -630,7 +628,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -649,7 +646,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numeroFamiliar,
       complementoFamiliar,
       bairroFamiliar,
-      cidadeFamiliar,
       ufFamiliar,
       latitudeFamiliar,
       longitudeFamiliar,
@@ -674,6 +670,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       expoToken,
       profissionalPref,
       senhaChat,
+      cidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -681,7 +678,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
   };
 
   render() {
-    const { pacienteList, match, totalItems } = this.props;
+    const { cidades, pacienteList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -714,6 +711,26 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                     <div className="row mt-1 ml-3 mr-3">
                       <Col md="6">
                         <Row>
+                          <div>
+                            <Label for="paciente-cidade">
+                              <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
+                            </Label>
+                            <AvInput id="paciente-cidade" type="select" className="form-control" name="cidadeId">
+                              <option value="" key="0" />
+                              {cidades
+                                ? cidades.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.id}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
+                        </Row>
+                      </Col>
+
+                      <Col md="6">
+                        <Row>
                           <Label id="nomeLabel" for="paciente-nome">
                             <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
                           </Label>
@@ -724,7 +741,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             id="paciente-nome"
                             value={this.state.nome}
                             validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
+                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
                             }}
                           />
                         </Row>
@@ -741,7 +758,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             id="paciente-email"
                             value={this.state.email}
                             validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
+                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
                             }}
                           />
                         </Row>
@@ -758,7 +775,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             id="paciente-cpf"
                             value={this.state.cpf}
                             validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
+                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
                             }}
                           />
                         </Row>
@@ -775,7 +792,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             id="paciente-rg"
                             value={this.state.rg}
                             validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
+                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
                             }}
                           />
                         </Row>
@@ -792,7 +809,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             id="paciente-registro"
                             value={this.state.registro}
                             validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
+                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
                             }}
                           />
                         </Row>
@@ -822,6 +839,10 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                     <tr>
                       <th className="hand" onClick={this.sort('id')}>
                         <Translate contentKey="global.field.id">ID</Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th>
+                        <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th className="hand" onClick={this.sort('nome')}>
@@ -857,6 +878,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             {paciente.id}
                           </Button>
                         </td>
+                        <td>{paciente.cidade.id ? <Link to={`cidade/${paciente.cidade.id}`}>{paciente.cidade.id}</Link> : ''}</td>
 
                         <td>{paciente.nome}</td>
 
@@ -924,11 +946,13 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 }
 
 const mapStateToProps = ({ paciente, ...storeState }: IRootState) => ({
+  cidades: storeState.cidade.entities,
   pacienteList: paciente.entities,
   totalItems: paciente.totalItems
 });
 
 const mapDispatchToProps = {
+  getCidades,
   getEntities
 };
 

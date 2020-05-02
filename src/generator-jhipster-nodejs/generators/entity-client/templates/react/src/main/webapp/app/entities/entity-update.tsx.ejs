@@ -29,7 +29,6 @@
 <%_ const relationshipFieldName = rel.relationshipFieldName; _%>
 <%_ const relationshipFieldNamePlural = rel.relationshipFieldNamePlural; _%>
 <%_ const otherEntityField = rel.otherEntityField; _%>
-<%_ const otherEntityFieldCapitalized = rel.otherEntityFieldCapitalized; _%>
 <%_ const relationshipRequired = rel.relationshipRequired; _%>
 <%_ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
 <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
@@ -74,7 +73,7 @@
           <%_ } else { _%>
             <%_ if (!relationshipRequired) { _%>
               <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>Id">
+                name="<%= relationshipFieldName %>.id">
                 <option value="" key="0" />
                 {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -86,7 +85,7 @@
               </AvInput>
             <%_ } else { _%>
               <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>Id" required>
+                name="<%= relationshipFieldName %>.id" required>
                 {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                 <option value={otherEntity.id} key={otherEntity.id}>
@@ -649,7 +648,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                   <%_ if (formTabs.length === 0) { _%>
                         <%_ if (formLayout.length > 0) {  _%>
                             <%_ for (idx in formLayout) { 
-                                if(formLayout[idx].type ='field'){
+                                if(formLayout[idx].type == 'field'){
                                   printFields(formLayout[idx].entity);
                                 } else {
                                   printRelationships(formLayout[idx].entity);
@@ -701,7 +700,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                       <%_ if (formLayout.length > 0) {  _%>
                             <%_ for (idx in formLayout) { 
                               if(formTabs[iTabs] === formLayout[idx].entity['formTab']) { 
-                                if(formLayout[idx].type ='field'){
+                                if(formLayout[idx].type == 'field'){
                                   printFields(formLayout[idx].entity);
                                 } else {
                                   printRelationships(formLayout[idx].entity);
@@ -776,7 +775,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                       <%_ if (formLayout.length > 0) {  _%>
                               <%_ for (idx in formLayout) { 
                                 if(!formLayout[idx].entity['formTab'] || formLayout[idx].entity['formTab'] === "default") { 
-                                  if(formLayout[idx].type ='field'){
+                                  if(formLayout[idx].type == 'field'){
                                     printFields(formLayout[idx].entity);
                                   } else {
                                     printRelationships(formLayout[idx].entity);

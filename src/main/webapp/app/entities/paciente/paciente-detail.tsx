@@ -58,6 +58,19 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps> {
                     <Row>
                       <Col md="12">
                         <dt>
+                          <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="12">
+                        <dd>{pacienteEntity.cidade ? pacienteEntity.cidade.id : ''}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="6">
+                    <Row>
+                      <Col md="12">
+                        <dt>
                           <span id="nome">
                             <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
                           </span>

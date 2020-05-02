@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './paciente.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -17,12 +19,14 @@ export interface IPacienteUpdateProps extends StateProps, DispatchProps, RouteCo
 
 export interface IPacienteUpdateState {
   isNew: boolean;
+  cidadeId: string;
 }
 
 export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacienteUpdateState> {
   constructor(props: Readonly<IPacienteUpdateProps>) {
     super(props);
     this.state = {
+      cidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -38,6 +42,8 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getCidades();
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
@@ -63,7 +69,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
   };
 
   render() {
-    const { pacienteEntity, loading, updating } = this.props;
+    const { pacienteEntity, cidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -120,6 +126,29 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Col md="6">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" for="paciente-cidade">
+                                <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvInput id="paciente-cidade" type="select" className="form-control" name="cidade.id">
+                                <option value="" key="0" />
+                                {cidades
+                                  ? cidades.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.id}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
 
                       <Col md="6">
                         <AvGroup>
@@ -135,7 +164,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 type="text"
                                 name="nome"
                                 validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
+                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
                                 }}
                               />
                             </Col>
@@ -157,7 +186,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 type="text"
                                 name="email"
                                 validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
+                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
                                 }}
                               />
                             </Col>
@@ -179,7 +208,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 type="text"
                                 name="cpf"
                                 validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
+                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
                                 }}
                               />
                             </Col>
@@ -201,7 +230,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 type="text"
                                 name="rg"
                                 validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
+                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
                                 }}
                               />
                             </Col>
@@ -223,7 +252,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 type="text"
                                 name="registro"
                                 validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
+                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
                                 }}
                               />
                             </Col>
@@ -243,6 +272,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  cidades: storeState.cidade.entities,
   pacienteEntity: storeState.paciente.entity,
   loading: storeState.paciente.loading,
   updating: storeState.paciente.updating,
@@ -250,6 +280,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getCidades,
   getEntity,
   updateEntity,
   createEntity,

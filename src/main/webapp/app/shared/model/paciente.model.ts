@@ -19,7 +19,6 @@ export interface IPaciente {
   numero?: string;
   complemento?: string;
   bairro?: string;
-  cidade?: string;
   uf?: string;
   latitude?: string;
   longitude?: string;
@@ -38,7 +37,6 @@ export interface IPaciente {
   numeroFamiliar?: string;
   complementoFamiliar?: string;
   bairroFamiliar?: string;
-  cidadeFamiliar?: string;
   ufFamiliar?: string;
   latitudeFamiliar?: string;
   longitudeFamiliar?: string;
@@ -63,6 +61,7 @@ export interface IPaciente {
   expoToken?: string;
   profissionalPref?: number;
   senhaChat?: string;
+  cidadeId?: number;
 }
 
 export const defaultValue: Readonly<IPaciente> = {};

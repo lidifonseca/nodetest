@@ -66,6 +66,10 @@ import comarca, {
 import paciente, {
   PacienteState
 } from 'app/entities/paciente/paciente.reducer';
+// prettier-ignore
+import cidade, {
+  CidadeState
+} from 'app/entities/cidade/cidade.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -94,6 +98,7 @@ export interface IRootState {
   readonly estado: EstadoState;
   readonly comarca: ComarcaState;
   readonly paciente: PacienteState;
+  readonly cidade: CidadeState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -124,6 +129,7 @@ const rootReducer = combineReducers<IRootState>({
   estado,
   comarca,
   paciente,
+  cidade,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar
 });

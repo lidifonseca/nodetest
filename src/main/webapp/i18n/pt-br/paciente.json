@@ -33,7 +33,6 @@
       "numero": "Numero",
       "complemento": "Complemento",
       "bairro": "Bairro",
-      "cidade": "Cidade",
       "uf": "Uf",
       "latitude": "Latitude",
       "longitude": "Longitude",
@@ -52,7 +51,6 @@
       "numeroFamiliar": "Numero Familiar",
       "complementoFamiliar": "Complemento Familiar",
       "bairroFamiliar": "Bairro Familiar",
-      "cidadeFamiliar": "Cidade Familiar",
       "ufFamiliar": "Uf Familiar",
       "latitudeFamiliar": "Latitude Familiar",
       "longitudeFamiliar": "Longitude Familiar",
@@ -76,7 +74,8 @@
       "liminar": "Liminar",
       "expoToken": "Expo Token",
       "profissionalPref": "Profissional Pref",
-      "senhaChat": "Senha Chat"
+      "senhaChat": "Senha Chat",
+      "cidade": "Cidade"
     }
   }
 }

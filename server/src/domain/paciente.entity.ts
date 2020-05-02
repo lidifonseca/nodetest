@@ -4,8 +4,10 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import Cidade from './cidade.entity';
+
 /**
- * @toStringFields nome cpf@@\n@listTableLayout nome email cpf rg registro@@\n@listFilterLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@formLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@viewLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@
+ * @toStringFields nome cpf@@\n@listTableLayout cidade nome email cpf rg registro@@\n@listFilterLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@
  */
 @Entity('paciente')
 export default class Paciente extends BaseEntity {
@@ -60,9 +62,6 @@ export default class Paciente extends BaseEntity {
   @Column({ name: 'bairro', length: 40 })
   bairro: string;
 
-  @Column({ name: 'cidade', length: 100 })
-  cidade: string;
-
   @Column({ name: 'uf', length: 5 })
   uf: string;
 
@@ -116,9 +115,6 @@ export default class Paciente extends BaseEntity {
 
   @Column({ name: 'bairro_familiar', length: 40 })
   bairroFamiliar: string;
-
-  @Column({ name: 'cidade_familiar', length: 100 })
-  cidadeFamiliar: string;
 
   @Column({ name: 'uf_familiar', length: 5 })
   ufFamiliar: string;
@@ -191,6 +187,9 @@ export default class Paciente extends BaseEntity {
 
   @Column({ name: 'senha_chat', length: 45 })
   senhaChat: string;
+
+  @ManyToOne(type => Cidade)
+  cidade: Cidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

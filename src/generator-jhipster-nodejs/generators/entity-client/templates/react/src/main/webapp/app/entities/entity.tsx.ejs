@@ -431,9 +431,9 @@ _%>
         {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
       </Link> : ''}
             <%_ } else { _%>
-      {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ?
-      <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
-        {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}
+      {<%= entityInstance + "." + relationshipFieldName + ".id" %> ?
+      <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
+        {<%= entityInstance + "." + relationshipFieldName + ".id" %>}
       </Link> : ''}
             <%_ } _%>
         <%_ } _%>
@@ -814,7 +814,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       <div className="row mt-1 ml-3 mr-3">
                           <%_ if (listFilterLayout.length > 0) {  _%>
                             <%_ for (idx in listFilterLayout) { _%>
-                              <%_ if(listFilterLayout[idx].type ='field'){  _%>
+                              <%_ if(listFilterLayout[idx].type == 'field'){  _%>
                                 <%_ printFieldsFilters(listFilterLayout[idx].entity) _%>
                               <%_ } else {  _%>
                                 <%_ printRelationshipsFilters(listFilterLayout[idx].entity) _%>
@@ -857,7 +857,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                         </th>
                         <%_ if (listTableLayout.length > 0) {  _%>
                           <%_ for (idx in listTableLayout) { _%>
-                            <%_ if(listTableLayout[idx].type ='field'){  _%>
+                            <%_ if(listTableLayout[idx].type == 'field'){  _%>
                               <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=listTableLayout[idx].entity.fieldName%>')} <%_ } _%>>
                                 <Translate contentKey="<%= `${i18nKeyPrefix}.${listTableLayout[idx].entity.fieldName}` %>">
                                   <%= listTableLayout[idx].fieldNameHumanized %>
@@ -909,7 +909,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                           </td>
                           <%_ if (listTableLayout.length > 0) {  _%>
                             <%_ for (idx in listTableLayout) { _%>
-                              <%_ if(listTableLayout[idx].type ='field'){  _%>
+                              <%_ if(listTableLayout[idx].type == 'field'){  _%>
                                 <%_ printFieldsTable(listTableLayout[idx].entity) _%>
                               <%_ } else {  _%>
                                 <%_  printRelationshipsTable(listTableLayout[idx].entity)  _%>
