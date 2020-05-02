@@ -733,7 +733,7 @@ function analizeJavadoc(generator) {
         generator.defaultViewTab = true;
     }
 
-    console.info(generator.toStringFields)
+    // console.info(generator.toStringFields)
     // console.info(generator.listFilterLayout)
     // console.info(generator.formLayout)
     // console.info(generator.viewLayout)

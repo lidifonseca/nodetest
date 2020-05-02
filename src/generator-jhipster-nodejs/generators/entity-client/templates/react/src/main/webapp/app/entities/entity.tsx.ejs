@@ -386,15 +386,15 @@ _%>
 <%_ } _%>
 
 
-<%_ function printRelationshipsTable(field){ _%>
-  <%_ const relationshipType = relationships[idx].relationshipType; _%>
-  <%_ const ownerSide = relationships[idx].ownerSide; _%>
-  <%_ const relationshipFieldName = relationships[idx].relationshipFieldName; _%>
-  <%_ const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural; _%>
-  <%_ const otherEntityName = relationships[idx].otherEntityName; _%>
-  <%_ const otherEntityStateName = relationships[idx].otherEntityStateName; _%>
-  <%_ const otherEntityField = relationships[idx].otherEntityField; _%>
-  <%_ const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
+<%_ function printRelationshipsTable(rel) { _%>
+  <%_ const relationshipType = rel.relationshipType; _%>
+  <%_ const ownerSide = rel.ownerSide; _%>
+  <%_ const relationshipFieldName = rel.relationshipFieldName; _%>
+  <%_ const relationshipFieldNamePlural = rel.relationshipFieldNamePlural; _%>
+  <%_ const otherEntityName = rel.otherEntityName; _%>
+  <%_ const otherEntityStateName = rel.otherEntityStateName; _%>
+  <%_ const otherEntityField = rel.otherEntityField; _%>
+  <%_ const otherEntityFieldCapitalized = rel.otherEntityFieldCapitalized; _%>
     <%_ if (relationshipType === 'many-to-one'
     || (relationshipType === 'one-to-one' && ownerSide === true)
     || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>

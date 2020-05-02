@@ -28,7 +28,6 @@ entity Paciente {
 	numero String maxlength(30),
 	complemento String maxlength(20),
 	bairro String maxlength(40),
-	cidade String maxlength(100),
 	uf String maxlength(5),
 	latitude String maxlength(60),
 	longitude String maxlength(60),
@@ -47,7 +46,6 @@ entity Paciente {
 	numeroFamiliar String maxlength(30),
 	complementoFamiliar String maxlength(20),
 	bairroFamiliar String maxlength(40),
-	cidadeFamiliar String maxlength(100),
 	ufFamiliar String maxlength(5),
 	latitudeFamiliar String maxlength(60),
 	longitudeFamiliar String maxlength(60),
@@ -74,8 +72,23 @@ entity Paciente {
 	senhaChat String maxlength(45)
 }
 
+
+entity Cidade {
+	descrCidade String maxlength(255),
+	dataPost Instant required
+}
+
+relationship OneToMany {
+	Paciente to Cidade
+}
+
 // Set pagination options
 paginate all with pagination
+
+// Use Data Transfert Objects (DTO)
+dto * with mapstruct
+filter *
+service * with serviceClass
 
 //   //  entity Pesquisa {
 //   //  	nome String,
@@ -203,13 +216,5 @@ paginate all with pagination
 //   //      Estado{pesquisas} to Pesquisa{estado}
 //   //      Estado{comarcas} to Comarca{estado}
 //   //  }
-//   //  
-//   //  // Set pagination options
-//   //  paginate all with pagination
-//   //  
-//   //  // Use Data Transfert Objects (DTO)
-//   //  dto * with mapstruct
-//   //  filter *
-//   //  service * with serviceClass
 //   //  
 //   //  
