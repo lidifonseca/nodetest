@@ -1153,7 +1153,7 @@ module.exports = class extends Generator {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
         if (!embedded) {
-            variablesWithTypes.push(`id?: ${tsKeyType}`);
+            variablesWithTypes.push(`id?: string`);
         }
         fields.forEach(field => {
             const fieldType = field.fieldType;
@@ -1206,11 +1206,11 @@ module.exports = class extends Generator {
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
                         variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
                     }
-                    fieldType = tsKeyType; // review: added for mongodb-with-relations
-                    fieldName = `${relationshipFieldName}Id`;
+                    fieldType = 'string'; // review: added for mongodb-with-relations
+                    fieldName = `${relationshipFieldName}`;
                 } else {
-                    fieldType = tsKeyType;
-                    fieldName = `${relationship.relationshipFieldName}Id`;
+                    fieldType = 'string';
+                    fieldName = `${relationship.relationshipFieldName}`;
                 }
             }
             variablesWithTypes.push(`${fieldName}?: ${fieldType}`);

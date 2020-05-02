@@ -82,7 +82,17 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
           <li className="breadcrumb-item active">Pacientes edit</li>
         </ol>
         <h1 className="page-header">&nbsp;&nbsp;</h1>
-        <AvForm model={isNew ? {} : pacienteEntity} onSubmit={this.saveEntity}>
+        <AvForm
+          model={
+            isNew
+              ? {}
+              : {
+                  ...pacienteEntity,
+                  cidade: pacienteEntity.cidade ? pacienteEntity.cidade.id : null
+                }
+          }
+          onSubmit={this.saveEntity}
+        >
           <Panel>
             <PanelHeader>
               <h2 id="page-heading">
@@ -135,8 +145,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </Label>
                             </Col>
                             <Col md="12">
-                              <AvInput id="paciente-cidade" type="select" className="form-control" name="cidade.id">
-                                <option value="" key="0" />
+                              <AvInput id="paciente-cidade" type="select" className="form-control" name="cidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.paciente.cidade.empty')}
+                                </option>
                                 {cidades
                                   ? cidades.map(otherEntity => (
                                       <option value={otherEntity.id} key={otherEntity.id}>

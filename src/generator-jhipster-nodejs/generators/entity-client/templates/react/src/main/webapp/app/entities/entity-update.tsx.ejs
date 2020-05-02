@@ -44,8 +44,8 @@
           <%_ if (dto === 'no') { _%>
             <%_ if (!relationshipRequired) { _%>
               <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                  name="<%= relationshipFieldName %>.id">
-                  <option value="" key="0" />
+                  name="<%= relationshipFieldName %>">
+                  <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
                   {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                   <option value={otherEntity.id} key={otherEntity.id}>
@@ -56,7 +56,7 @@
               </AvInput>
             <%_ } else { _%>
               <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>.id" value={isNew ? <%= otherEntityNamePlural %>[0] &&
+                name="<%= relationshipFieldName %>" value={isNew ? <%= otherEntityNamePlural %>[0] &&
                 <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id} required>
                 {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -73,8 +73,8 @@
           <%_ } else { _%>
             <%_ if (!relationshipRequired) { _%>
               <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>.id">
-                <option value="" key="0" />
+                name="<%= relationshipFieldName %>">
+                <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
                 {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                 <option value={otherEntity.id} key={otherEntity.id}>
@@ -85,7 +85,7 @@
               </AvInput>
             <%_ } else { _%>
               <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>.id" required>
+                name="<%= relationshipFieldName %>" required>
                 {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                 <option value={otherEntity.id} key={otherEntity.id}>
@@ -116,8 +116,8 @@
       <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
       <%_ if (dto === 'no') { _%>
       <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-        name="<%= relationshipFieldName %>.id">
-        <option value="" key="0" />
+        name="<%= relationshipFieldName %>">
+        <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
         {
         <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
         <option value={otherEntity.id} key={otherEntity.id}>
@@ -128,7 +128,7 @@
       </AvInput>
       <%_ } else { _%>
       <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-        name="<%= relationshipFieldName %>Id">
+        name="<%= relationshipFieldName %>">
         <option value="" key="0" />
         {
         <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -157,7 +157,7 @@
           name="<%= relationshipFieldNamePlural %>" value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>
           && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e=> e.id)}
           >
-          <option value="" key="0" />
+          <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
           {
           (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
           <option value={otherEntity.id} key={otherEntity.id}>
@@ -600,7 +600,13 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
           <li className="breadcrumb-item active"><%= entityClassPluralHumanized %> edit</li>
         </ol>
         <h1 className="page-header">&nbsp;&nbsp;</h1>
-        <AvForm model={isNew ? {} : <%= entityInstance %>Entity} onSubmit={this.saveEntity}>
+        <AvForm model={isNew ? {} : {
+          ...<%= entityInstance %>Entity, 
+          <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
+          <%_ relFieldNames.forEach(val => { _%>
+            <%= val.relationshipFieldName %>:<%= entityInstance %>Entity.<%= val.relationshipFieldName %> ? <%= entityInstance %>Entity.<%= val.relationshipFieldName %>.id: null,
+          <%_ }) _%>
+        } } onSubmit={this.saveEntity}>
           <Panel>
             <PanelHeader>
               <h2 id="page-heading">

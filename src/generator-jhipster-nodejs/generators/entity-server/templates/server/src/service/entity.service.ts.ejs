@@ -49,9 +49,9 @@ export class <%= entityClass %>Service {
               first = false;
             }
             if(element['operation'] === "contains") {
-              where += ' `Apenso`.`'+element['column']+'` like "%'+element['value']+'%" '
+              where += ' `<%= entityClass %>`.`'+element['column']+'` like "%'+element['value']+'%" '
             } else if(element['operation'] === "equals") {
-              where += ' `Apenso`.`'+element['column']+'` = "'+element['value']+'" ';
+              where += ' `<%= entityClass %>`.`'+element['column']+'` = "'+element['value']+'" ';
             }
           }
         }

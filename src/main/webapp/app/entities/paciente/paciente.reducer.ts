@@ -295,7 +295,7 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
   const profissionalPrefRequest = profissionalPref ? `profissionalPref.contains=${profissionalPref}&` : '';
   const senhaChatRequest = senhaChat ? `senhaChat.contains=${senhaChat}&` : '';
-  const cidadeRequest = cidade ? `cidadeId.equals=${cidade}&` : '';
+  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
@@ -314,6 +314,10 @@ export const getEntity: ICrudGetAction<IPaciente> = id => {
 };
 
 export const createEntity: ICrudPutAction<IPaciente> = entity => async dispatch => {
+  entity = {
+    ...entity,
+    cidade: entity.cidade === 'null' ? null : entity.cidade
+  };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTE,
     payload: axios.post(apiUrl, cleanEntity(entity))
@@ -323,6 +327,7 @@ export const createEntity: ICrudPutAction<IPaciente> = entity => async dispatch 
 };
 
 export const updateEntity: ICrudPutAction<IPaciente> = entity => async dispatch => {
+  entity = { ...entity, cidade: entity.cidade === 'null' ? null : entity.cidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTE,
     payload: axios.put(apiUrl, cleanEntity(entity))

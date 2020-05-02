@@ -16,6 +16,46 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+
+
+<%_
+let hasRelationshipQuery = false;
+let otherEntityActions = new Set();
+let manyToManyOwners = new Set();
+let relFieldNames = new Set();
+let uniqueRealtionFields = new Set();
+
+
+Object.keys(differentRelationships).forEach(key => {
+
+  const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
+      (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')
+          || rel.relationshipType !== 'one-to-many'
+  );
+  if (hasAnyRelationshipQuery) {
+    hasRelationshipQuery = true;
+    differentRelationships[key].forEach(rel => {
+      if (rel.relationshipType === 'many-to-many' && rel.ownerSide === true) {
+        manyToManyOwners.add(rel);
+      } else {
+        relFieldNames.add(rel);
+      }
+    });
+  }
+  if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
+    const uniqueRel = differentRelationships[key][0];
+    uniqueRealtionFields.add(uniqueRel.otherEntityNamePlural);
+    otherEntityActions.add({
+      action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
+      instance: `${uniqueRel.otherEntityNamePlural}`,
+      entity: uniqueRel.otherEntityAngularName,
+      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
+    });
+  }
+}); _%>
+
+
+
 /* eslint complexity: ["error", 100] */
 <%_
     let entityActionName = entityInstance.toUpperCase();
@@ -241,7 +281,7 @@ export const getEntities: ICrudGetAllAction<%= entityReactName %><I<%= entityRea
       <%_ } _%>
     <%_ } _%>
     <%_ relationships.forEach(rel => { _%>
-      const <%= rel.relationshipName %>Request = <%= rel.relationshipName %> ? `<%= rel.relationshipName %>Id.equals=${<%= rel.relationshipName %>}&` : '';
+      const <%= rel.relationshipName %>Request = <%= rel.relationshipName %> ? `<%= rel.relationshipName %>.equals=${<%= rel.relationshipName %>}&` : '';
     <%_ }) _%>
 
     
@@ -269,6 +309,12 @@ export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
 
 <%_ if (!readOnly) { _%>
 export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
+    entity = {
+      ...entity, 
+      <%_ relFieldNames.forEach(val => { _%>
+        <%= val.relationshipFieldName %>: entity.<%= val.relationshipFieldName %> === "null" ? null : entity.<%= val.relationshipFieldName %> 
+      <%_ }) _%> 
+    };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
@@ -280,6 +326,9 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
+    entity = {...entity, <%_ relFieldNames.forEach(val => { _%>
+      <%= val.relationshipFieldName %>: entity.<%= val.relationshipFieldName %> === "null" ? null : entity.<%= val.relationshipFieldName %> 
+    <%_ }) _%> };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))

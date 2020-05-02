@@ -38,9 +38,9 @@ export class PacienteService {
           first = false;
         }
         if (element['operation'] === 'contains') {
-          where += ' `Apenso`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+          where += ' `Paciente`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
         } else if (element['operation'] === 'equals') {
-          where += ' `Apenso`.`' + element['column'] + '` = "' + element['value'] + '" ';
+          where += ' `Paciente`.`' + element['column'] + '` = "' + element['value'] + '" ';
         }
       }
     }
@@ -49,10 +49,12 @@ export class PacienteService {
   }
 
   async save(paciente: Paciente): Promise<Paciente | undefined> {
+    console.info(paciente);
     return await this.pacienteRepository.save(paciente);
   }
-
+  
   async update(paciente: Paciente): Promise<Paciente | undefined> {
+    console.info(paciente);
     return await this.save(paciente);
   }
 

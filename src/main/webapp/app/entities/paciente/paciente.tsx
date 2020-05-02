@@ -878,7 +878,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             {paciente.id}
                           </Button>
                         </td>
-                        <td>{paciente.cidade.id ? <Link to={`cidade/${paciente.cidade.id}`}>{paciente.cidade.id}</Link> : ''}</td>
+                        <td>{paciente.cidade ? <Link to={`cidade/${paciente.cidade.id}`}>{paciente.cidade.id}</Link> : ''}</td>
 
                         <td>{paciente.nome}</td>
 

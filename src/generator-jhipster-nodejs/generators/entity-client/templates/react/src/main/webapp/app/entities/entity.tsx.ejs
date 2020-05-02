@@ -431,7 +431,7 @@ _%>
         {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
       </Link> : ''}
             <%_ } else { _%>
-      {<%= entityInstance + "." + relationshipFieldName + ".id" %> ?
+      {<%= entityInstance + "." + relationshipFieldName %> ?
       <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
         {<%= entityInstance + "." + relationshipFieldName + ".id" %>}
       </Link> : ''}

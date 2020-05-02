@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 
 export interface IPaciente {
-  id?: number;
+  id?: string;
   senha?: string;
   nome?: string;
   email?: string;
@@ -61,7 +61,7 @@ export interface IPaciente {
   expoToken?: string;
   profissionalPref?: number;
   senhaChat?: string;
-  cidadeId?: number;
+  cidade?: string;
 }
 
 export const defaultValue: Readonly<IPaciente> = {};
