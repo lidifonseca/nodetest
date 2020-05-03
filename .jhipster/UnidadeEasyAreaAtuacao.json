@@ -23,8 +23,8 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "unidadeEasyAreaAtuacao",
-            "relationshipName": "idUnidade",
-            "otherEntityField": "id"
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial"
         }
     ],
     "changelogDate": "20200503012300",

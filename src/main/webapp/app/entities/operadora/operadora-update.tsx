@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 import { getEntities as getTipoOperadoras } from 'app/entities/tipo-operadora/tipo-operadora.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './operadora.reducer';
@@ -19,14 +21,16 @@ export interface IOperadoraUpdateProps extends StateProps, DispatchProps, RouteC
 
 export interface IOperadoraUpdateState {
   isNew: boolean;
-  idTipoOperadoraId: string;
+  unidadeId: string;
+  tipoOperadoraId: string;
 }
 
 export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOperadoraUpdateState> {
   constructor(props: Readonly<IOperadoraUpdateProps>) {
     super(props);
     this.state = {
-      idTipoOperadoraId: '0',
+      unidadeId: '0',
+      tipoOperadoraId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +47,7 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
       this.props.getEntity(this.props.match.params.id);
     }
 
+    this.props.getUnidadeEasies();
     this.props.getTipoOperadoras();
   }
 
@@ -67,7 +72,7 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
   };
 
   render() {
-    const { operadoraEntity, tipoOperadoras, loading, updating } = this.props;
+    const { operadoraEntity, unidadeEasies, tipoOperadoras, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -86,7 +91,8 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
               ? {}
               : {
                   ...operadoraEntity,
-                  idTipoOperadora: operadoraEntity.idTipoOperadora ? operadoraEntity.idTipoOperadora.id : null
+                  unidade: operadoraEntity.unidade ? operadoraEntity.unidade.id : null,
+                  tipoOperadora: operadoraEntity.tipoOperadora ? operadoraEntity.tipoOperadora.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -134,24 +140,68 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" for="operadora-tipoOperadora">
+                                <Translate contentKey="generadorApp.operadora.tipoOperadora">Tipo Operadora</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvInput id="operadora-tipoOperadora" type="select" className="form-control" name="tipoOperadora">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.operadora.tipoOperadora.empty')}
+                                </option>
+                                {tipoOperadoras
+                                  ? tipoOperadoras.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.tipo}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
 
                       <Col md="12">
                         <AvGroup>
                           <Row>
-                            <Col md="3">
+                            <Col md="12">
+                              <Label className="mt-2" for="operadora-unidade">
+                                <Translate contentKey="generadorApp.operadora.unidade">Unidade</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvInput id="operadora-unidade" type="select" className="form-control" name="unidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.operadora.unidade.empty')}
+                                </option>
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
                               <Label className="mt-2" id="nomeFantasiaLabel" for="operadora-nomeFantasia">
                                 <Translate contentKey="generadorApp.operadora.nomeFantasia">Nome Fantasia</Translate>
                               </Label>
                             </Col>
-                            <Col md="9">
-                              <AvField
-                                id="operadora-nomeFantasia"
-                                type="text"
-                                name="nomeFantasia"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                            <Col md="12">
+                              <AvField id="operadora-nomeFantasia" type="text" name="nomeFantasia" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -160,20 +210,13 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
                       <Col md="12">
                         <AvGroup>
                           <Row>
-                            <Col md="3">
+                            <Col md="12">
                               <Label className="mt-2" id="razaoSocialLabel" for="operadora-razaoSocial">
                                 <Translate contentKey="generadorApp.operadora.razaoSocial">Razao Social</Translate>
                               </Label>
                             </Col>
-                            <Col md="9">
-                              <AvField
-                                id="operadora-razaoSocial"
-                                type="text"
-                                name="razaoSocial"
-                                validate={{
-                                  maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                                }}
-                              />
+                            <Col md="12">
+                              <AvField id="operadora-razaoSocial" type="text" name="razaoSocial" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -182,42 +225,43 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
                       <Col md="12">
                         <AvGroup>
                           <Row>
-                            <Col md="3">
+                            <Col md="12">
+                              <Label className="mt-2" id="enderecoLabel" for="operadora-endereco">
+                                <Translate contentKey="generadorApp.operadora.endereco">Endereco</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-endereco" type="text" name="endereco" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="6">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
                               <Label className="mt-2" id="cnpjLabel" for="operadora-cnpj">
                                 <Translate contentKey="generadorApp.operadora.cnpj">Cnpj</Translate>
                               </Label>
                             </Col>
-                            <Col md="9">
-                              <AvField
-                                id="operadora-cnpj"
-                                type="text"
-                                name="cnpj"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                            <Col md="12">
+                              <AvField id="operadora-cnpj" type="text" name="cnpj" />
                             </Col>
                           </Row>
                         </AvGroup>
                       </Col>
 
-                      <Col md="12">
+                      <Col md="6">
                         <AvGroup>
                           <Row>
-                            <Col md="3">
+                            <Col md="12">
                               <Label className="mt-2" id="ieLabel" for="operadora-ie">
                                 <Translate contentKey="generadorApp.operadora.ie">Ie</Translate>
                               </Label>
                             </Col>
-                            <Col md="9">
-                              <AvField
-                                id="operadora-ie"
-                                type="text"
-                                name="ie"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
+                            <Col md="12">
+                              <AvField id="operadora-ie" type="text" name="ie" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -226,20 +270,135 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
                       <Col md="12">
                         <AvGroup>
                           <Row>
-                            <Col md="3">
+                            <Col md="12">
                               <Label className="mt-2" id="siteLabel" for="operadora-site">
                                 <Translate contentKey="generadorApp.operadora.site">Site</Translate>
                               </Label>
                             </Col>
-                            <Col md="9">
-                              <AvField
-                                id="operadora-site"
-                                type="text"
-                                name="site"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                            <Col md="12">
+                              <AvField id="operadora-site" type="text" name="site" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="8">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="contatoCentralAtendimentoLabel" for="operadora-contatoCentralAtendimento">
+                                <Translate contentKey="generadorApp.operadora.contatoCentralAtendimento">
+                                  Contato Central Atendimento
+                                </Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-contatoCentralAtendimento" type="text" name="contatoCentralAtendimento" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="emailCentralAtendimentoLabel" for="operadora-emailCentralAtendimento">
+                                <Translate contentKey="generadorApp.operadora.emailCentralAtendimento">Email Central Atendimento</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-emailCentralAtendimento" type="text" name="emailCentralAtendimento" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="nomeContatoComercialLabel" for="operadora-nomeContatoComercial">
+                                <Translate contentKey="generadorApp.operadora.nomeContatoComercial">Nome Contato Comercial</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-nomeContatoComercial" type="text" name="nomeContatoComercial" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="contatoComercialLabel" for="operadora-contatoComercial">
+                                <Translate contentKey="generadorApp.operadora.contatoComercial">Contato Comercial</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-contatoComercial" type="text" name="contatoComercial" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="emailComercialLabel" for="operadora-emailComercial">
+                                <Translate contentKey="generadorApp.operadora.emailComercial">Email Comercial</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-emailComercial" type="text" name="emailComercial" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="nomeContatoFinanceiroLabel" for="operadora-nomeContatoFinanceiro">
+                                <Translate contentKey="generadorApp.operadora.nomeContatoFinanceiro">Nome Contato Financeiro</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-nomeContatoFinanceiro" type="text" name="nomeContatoFinanceiro" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="contatoFinanceiroLabel" for="operadora-contatoFinanceiro">
+                                <Translate contentKey="generadorApp.operadora.contatoFinanceiro">Contato Financeiro</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-contatoFinanceiro" type="text" name="contatoFinanceiro" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
+                      <Col md="4">
+                        <AvGroup>
+                          <Row>
+                            <Col md="12">
+                              <Label className="mt-2" id="emailFinanceiroLabel" for="operadora-emailFinanceiro">
+                                <Translate contentKey="generadorApp.operadora.emailFinanceiro">Email Financeiro</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="12">
+                              <AvField id="operadora-emailFinanceiro" type="text" name="emailFinanceiro" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -257,6 +416,7 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   tipoOperadoras: storeState.tipoOperadora.entities,
   operadoraEntity: storeState.operadora.entity,
   loading: storeState.operadora.loading,
@@ -265,6 +425,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getTipoOperadoras,
   getEntity,
   updateEntity,

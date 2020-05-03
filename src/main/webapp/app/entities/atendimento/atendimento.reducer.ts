@@ -106,7 +106,6 @@ const apiUrl = 'api/atendimentos';
 
 // Actions
 export type ICrudGetAllActionAtendimento<T> = (
-  idUnidade?: any,
   idFranquia?: any,
   idProfissional?: any,
   cep?: any,
@@ -145,6 +144,7 @@ export type ICrudGetAllActionAtendimento<T> = (
   atendimentoAceite?: any,
   atendimentoAssinaturas?: any,
   atendimentoAtividades?: any,
+  unidade?: any,
   idPaciente?: any,
   idOperadora?: any,
   idEspecialidade?: any,
@@ -158,7 +158,6 @@ export type ICrudGetAllActionAtendimento<T> = (
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
-  idUnidade,
   idFranquia,
   idProfissional,
   cep,
@@ -197,6 +196,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   atendimentoAceite,
   atendimentoAssinaturas,
   atendimentoAtividades,
+  unidade,
   idPaciente,
   idOperadora,
   idEspecialidade,
@@ -208,7 +208,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   size,
   sort
 ) => {
-  const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const cepRequest = cep ? `cep.contains=${cep}&` : '';
@@ -247,6 +246,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
   const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
   const idOperadoraRequest = idOperadora ? `idOperadora.equals=${idOperadora}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
@@ -259,7 +259,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idUnidadeRequest}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${idPacienteRequest}${idOperadoraRequest}${idEspecialidadeRequest}${idPadItemRequest}${idStatusAtendimentoRequest}${idPeriodoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${idPacienteRequest}${idOperadoraRequest}${idEspecialidadeRequest}${idPadItemRequest}${idStatusAtendimentoRequest}${idPeriodoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -274,6 +274,7 @@ export const getEntity: ICrudGetAction<IAtendimento> = id => {
 export const createEntity: ICrudPutAction<IAtendimento> = entity => async dispatch => {
   entity = {
     ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
     idOperadora: entity.idOperadora === 'null' ? null : entity.idOperadora,
     idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade,
@@ -293,6 +294,7 @@ export const createEntity: ICrudPutAction<IAtendimento> = entity => async dispat
 export const updateEntity: ICrudPutAction<IAtendimento> = entity => async dispatch => {
   entity = {
     ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
     idOperadora: entity.idOperadora === 'null' ? null : entity.idOperadora,
     idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade,

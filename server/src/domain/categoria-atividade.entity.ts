@@ -6,6 +6,7 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 
 import AtendimentoAtividades from './atendimento-atividades.entity';
 import PadItemAtividade from './pad-item-atividade.entity';
+import UnidadeEasy from './unidade-easy.entity';
 import Categoria from './categoria.entity';
 
 /**
@@ -15,9 +16,6 @@ import Categoria from './categoria.entity';
 export default class CategoriaAtividade extends BaseEntity {
   @Column({ name: 'atividade', length: 100 })
   atividade: string;
-
-  @Column({ type: 'integer', name: 'id_unidade' })
-  idUnidade: number;
 
   @OneToMany(
     type => AtendimentoAtividades,
@@ -30,6 +28,9 @@ export default class CategoriaAtividade extends BaseEntity {
     other => other.idAtividade
   )
   padItemAtividades: PadItemAtividade[];
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => Categoria)
   idCategoria: Categoria;

@@ -16,11 +16,6 @@
       "detail": {
         "title": "Paciente"
       },
-      "idUnidade": "Id Unidade",
-      "idFranquia": "Id Franquia",
-      "idCidade": "Id Cidade",
-      "idCidadeFamiliar": "Id Cidade Familiar",
-      "idGrauParentesco": "Id Grau Parentesco",
       "senha": "Senha",
       "nome": "Nome",
       "email": "Email",
@@ -38,7 +33,6 @@
       "numero": "Numero",
       "complemento": "Complemento",
       "bairro": "Bairro",
-      "cidade": "Cidade",
       "uf": "Uf",
       "latitude": "Latitude",
       "longitude": "Longitude",
@@ -57,7 +51,6 @@
       "numeroFamiliar": "Numero Familiar",
       "complementoFamiliar": "Complemento Familiar",
       "bairroFamiliar": "Bairro Familiar",
-      "cidadeFamiliar": "Cidade Familiar",
       "ufFamiliar": "Uf Familiar",
       "latitudeFamiliar": "Latitude Familiar",
       "longitudeFamiliar": "Longitude Familiar",
@@ -76,10 +69,8 @@
       "cadastroCompleto": "Cadastro Completo",
       "ativo": "Ativo",
       "detalhes": "Detalhes",
-      "tipohospital": "Tipohospital",
       "liminar": "Liminar",
       "expoToken": "Expo Token",
-      "profissionalPref": "Profissional Pref",
       "senhaChat": "Senha Chat",
       "atendimento": "Atendimento",
       "atendimentoAssinaturas": "Atendimento Assinaturas",
@@ -93,7 +84,14 @@
       "pacientePush": "Paciente Push",
       "pacienteStatusAtual": "Paciente Status Atual",
       "pad": "Pad",
-      "questionarios": "Questionarios"
+      "questionarios": "Questionarios",
+      "unidade": "Unidade",
+      "franquia": "Franquia",
+      "cidade": "Cidade",
+      "cidadeFamiliar": "Cidade Familiar",
+      "grauParentesco": "Grau Parentesco",
+      "profissionalPref": "Profissional Pref",
+      "tipohospital": "Tipohospital"
     }
   }
 }

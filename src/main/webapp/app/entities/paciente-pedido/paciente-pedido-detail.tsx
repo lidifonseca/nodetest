@@ -164,11 +164,11 @@ export class PacientePedidoDetail extends React.Component<IPacientePedidoDetailP
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.pacientePedido.idUnidade">Id Unidade</Translate>
+                          <Translate contentKey="generadorApp.pacientePedido.unidade">Unidade</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacientePedidoEntity.idUnidade ? pacientePedidoEntity.idUnidade.id : ''}</dd>
+                        <dd>{pacientePedidoEntity.unidade ? pacientePedidoEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

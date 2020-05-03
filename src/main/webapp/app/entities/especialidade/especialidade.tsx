@@ -36,6 +36,8 @@ import { IEspecialidade } from 'app/shared/model/especialidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ICategoria } from 'app/shared/model/categoria.model';
 import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
@@ -52,13 +54,13 @@ export interface IEspecialidadeBaseState {
   duracao: any;
   importante: any;
   ativo: any;
-  idUnidade: any;
   atendimento: any;
   especialidadeOperadora: any;
   especialidadeUnidade: any;
   especialidadeValor: any;
   pacientePedido: any;
   padItem: any;
+  unidade: any;
   idCategoria: any;
   idTipoEspecialidade: any;
   idTipoUnidade: any;
@@ -84,7 +86,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
     const duracao = url.searchParams.get('duracao') || '';
     const importante = url.searchParams.get('importante') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const idUnidade = url.searchParams.get('idUnidade') || '';
 
     const atendimento = url.searchParams.get('atendimento') || '';
     const especialidadeOperadora = url.searchParams.get('especialidadeOperadora') || '';
@@ -92,6 +93,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
     const especialidadeValor = url.searchParams.get('especialidadeValor') || '';
     const pacientePedido = url.searchParams.get('pacientePedido') || '';
     const padItem = url.searchParams.get('padItem') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idCategoria = url.searchParams.get('idCategoria') || '';
     const idTipoEspecialidade = url.searchParams.get('idTipoEspecialidade') || '';
     const idTipoUnidade = url.searchParams.get('idTipoUnidade') || '';
@@ -103,13 +105,13 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       duracao,
       importante,
       ativo,
-      idUnidade,
       atendimento,
       especialidadeOperadora,
       especialidadeUnidade,
       especialidadeValor,
       pacientePedido,
       padItem,
+      unidade,
       idCategoria,
       idTipoEspecialidade,
       idTipoUnidade
@@ -119,6 +121,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
   componentDidMount() {
     this.getEntities();
 
+    this.props.getUnidadeEasies();
     this.props.getCategorias();
     this.props.getTipoEspecialidades();
     this.props.getTipoUnidades();
@@ -133,13 +136,13 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
         duracao: '',
         importante: '',
         ativo: '',
-        idUnidade: '',
         atendimento: '',
         especialidadeOperadora: '',
         especialidadeUnidade: '',
         especialidadeValor: '',
         pacientePedido: '',
         padItem: '',
+        unidade: '',
         idCategoria: '',
         idTipoEspecialidade: '',
         idTipoUnidade: ''
@@ -205,9 +208,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
-      '&' +
       'atendimento=' +
       this.state.atendimento +
       '&' +
@@ -225,6 +225,9 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       '&' +
       'padItem=' +
       this.state.padItem +
+      '&' +
+      'unidade=' +
+      this.state.unidade +
       '&' +
       'idCategoria=' +
       this.state.idCategoria +
@@ -249,13 +252,13 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       duracao,
       importante,
       ativo,
-      idUnidade,
       atendimento,
       especialidadeOperadora,
       especialidadeUnidade,
       especialidadeValor,
       pacientePedido,
       padItem,
+      unidade,
       idCategoria,
       idTipoEspecialidade,
       idTipoUnidade,
@@ -271,13 +274,13 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       duracao,
       importante,
       ativo,
-      idUnidade,
       atendimento,
       especialidadeOperadora,
       especialidadeUnidade,
       especialidadeValor,
       pacientePedido,
       padItem,
+      unidade,
       idCategoria,
       idTipoEspecialidade,
       idTipoUnidade,
@@ -288,7 +291,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
   };
 
   render() {
-    const { categorias, tipoEspecialidades, tipoUnidades, especialidadeList, match, totalItems } = this.props;
+    const { unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, especialidadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -370,37 +373,49 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                           <AvInput type="string" name="ativo" id="especialidade-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
                       <Col md="3">
                         <Row>
-                          <Label id="idUnidadeLabel" for="especialidade-idUnidade">
-                            <Translate contentKey="generadorApp.especialidade.idUnidade">Id Unidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="idUnidade" id="especialidade-idUnidade" value={this.state.idUnidade} />
+                          <div>
+                            <Label for="especialidade-unidade">
+                              <Translate contentKey="generadorApp.especialidade.unidade">Unidade</Translate>
+                            </Label>
+                            <AvInput id="especialidade-unidade" type="select" className="form-control" name="unidadeId">
+                              <option value="" key="0" />
+                              {unidadeEasies
+                                ? unidadeEasies.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.razaoSocial}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
                         </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
                       </Col>
 
                       <Col md="3">
@@ -518,8 +533,8 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                         <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idUnidade')}>
-                        <Translate contentKey="generadorApp.especialidade.idUnidade">Id Unidade</Translate>
+                      <th>
+                        <Translate contentKey="generadorApp.especialidade.unidade">Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
@@ -559,8 +574,13 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                         <td>{especialidade.importante}</td>
 
                         <td>{especialidade.ativo}</td>
-
-                        <td>{especialidade.idUnidade}</td>
+                        <td>
+                          {especialidade.unidade ? (
+                            <Link to={`unidade-easy/${especialidade.unidade.id}`}>{especialidade.unidade.id}</Link>
+                          ) : (
+                            ''
+                          )}
+                        </td>
                         <td>
                           {especialidade.idCategoria ? (
                             <Link to={`categoria/${especialidade.idCategoria.id}`}>{especialidade.idCategoria.id}</Link>
@@ -641,6 +661,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
 }
 
 const mapStateToProps = ({ especialidade, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   categorias: storeState.categoria.entities,
   tipoEspecialidades: storeState.tipoEspecialidade.entities,
   tipoUnidades: storeState.tipoUnidade.entities,
@@ -649,6 +670,7 @@ const mapStateToProps = ({ especialidade, ...storeState }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getCategorias,
   getTipoEspecialidades,
   getTipoUnidades,

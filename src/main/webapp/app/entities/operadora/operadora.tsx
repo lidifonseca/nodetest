@@ -27,6 +27,8 @@ import { IOperadora } from 'app/shared/model/operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 import { getEntities as getTipoOperadoras } from 'app/entities/tipo-operadora/tipo-operadora.reducer';
 
@@ -39,7 +41,6 @@ export interface IOperadoraBaseState {
   ie: any;
   site: any;
   ativo: any;
-  idUnidade: any;
   endereco: any;
   contatoCentralAtendimento: any;
   emailCentralAtendimento: any;
@@ -52,7 +53,8 @@ export interface IOperadoraBaseState {
   atendimento: any;
   especialidadeOperadora: any;
   pacienteOperadora: any;
-  idTipoOperadora: any;
+  unidade: any;
+  tipoOperadora: any;
 }
 export interface IOperadoraState extends IOperadoraBaseState, IPaginationBaseState {}
 
@@ -75,7 +77,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
     const ie = url.searchParams.get('ie') || '';
     const site = url.searchParams.get('site') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const idUnidade = url.searchParams.get('idUnidade') || '';
     const endereco = url.searchParams.get('endereco') || '';
     const contatoCentralAtendimento = url.searchParams.get('contatoCentralAtendimento') || '';
     const emailCentralAtendimento = url.searchParams.get('emailCentralAtendimento') || '';
@@ -89,7 +90,8 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
     const atendimento = url.searchParams.get('atendimento') || '';
     const especialidadeOperadora = url.searchParams.get('especialidadeOperadora') || '';
     const pacienteOperadora = url.searchParams.get('pacienteOperadora') || '';
-    const idTipoOperadora = url.searchParams.get('idTipoOperadora') || '';
+    const unidade = url.searchParams.get('unidade') || '';
+    const tipoOperadora = url.searchParams.get('tipoOperadora') || '';
 
     return {
       nomeFantasia,
@@ -98,7 +100,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       ie,
       site,
       ativo,
-      idUnidade,
       endereco,
       contatoCentralAtendimento,
       emailCentralAtendimento,
@@ -111,13 +112,15 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       atendimento,
       especialidadeOperadora,
       pacienteOperadora,
-      idTipoOperadora
+      unidade,
+      tipoOperadora
     };
   };
 
   componentDidMount() {
     this.getEntities();
 
+    this.props.getUnidadeEasies();
     this.props.getTipoOperadoras();
   }
 
@@ -130,7 +133,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
         ie: '',
         site: '',
         ativo: '',
-        idUnidade: '',
         endereco: '',
         contatoCentralAtendimento: '',
         emailCentralAtendimento: '',
@@ -143,7 +145,8 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
         atendimento: '',
         especialidadeOperadora: '',
         pacienteOperadora: '',
-        idTipoOperadora: ''
+        unidade: '',
+        tipoOperadora: ''
       },
       () => this.sortEntities()
     );
@@ -206,9 +209,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
-      '&' +
       'endereco=' +
       this.state.endereco +
       '&' +
@@ -245,8 +245,11 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       'pacienteOperadora=' +
       this.state.pacienteOperadora +
       '&' +
-      'idTipoOperadora=' +
-      this.state.idTipoOperadora +
+      'unidade=' +
+      this.state.unidade +
+      '&' +
+      'tipoOperadora=' +
+      this.state.tipoOperadora +
       '&' +
       ''
     );
@@ -262,7 +265,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       ie,
       site,
       ativo,
-      idUnidade,
       endereco,
       contatoCentralAtendimento,
       emailCentralAtendimento,
@@ -275,7 +277,8 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       atendimento,
       especialidadeOperadora,
       pacienteOperadora,
-      idTipoOperadora,
+      unidade,
+      tipoOperadora,
       activePage,
       itemsPerPage,
       sort,
@@ -288,7 +291,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       ie,
       site,
       ativo,
-      idUnidade,
       endereco,
       contatoCentralAtendimento,
       emailCentralAtendimento,
@@ -301,7 +303,8 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       atendimento,
       especialidadeOperadora,
       pacienteOperadora,
-      idTipoOperadora,
+      unidade,
+      tipoOperadora,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -309,7 +312,7 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
   };
 
   render() {
-    const { tipoOperadoras, operadoraList, match, totalItems } = this.props;
+    const { unidadeEasies, tipoOperadoras, operadoraList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -452,12 +455,14 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
 }
 
 const mapStateToProps = ({ operadora, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   tipoOperadoras: storeState.tipoOperadora.entities,
   operadoraList: operadora.entities,
   totalItems: operadora.totalItems
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getTipoOperadoras,
   getEntities
 };

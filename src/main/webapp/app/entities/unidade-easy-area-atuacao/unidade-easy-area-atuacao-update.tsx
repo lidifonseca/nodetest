@@ -19,14 +19,14 @@ export interface IUnidadeEasyAreaAtuacaoUpdateProps extends StateProps, Dispatch
 
 export interface IUnidadeEasyAreaAtuacaoUpdateState {
   isNew: boolean;
-  idUnidadeId: string;
+  unidadeId: string;
 }
 
 export class UnidadeEasyAreaAtuacaoUpdate extends React.Component<IUnidadeEasyAreaAtuacaoUpdateProps, IUnidadeEasyAreaAtuacaoUpdateState> {
   constructor(props: Readonly<IUnidadeEasyAreaAtuacaoUpdateProps>) {
     super(props);
     this.state = {
-      idUnidadeId: '0',
+      unidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -86,7 +86,7 @@ export class UnidadeEasyAreaAtuacaoUpdate extends React.Component<IUnidadeEasyAr
               ? {}
               : {
                   ...unidadeEasyAreaAtuacaoEntity,
-                  idUnidade: unidadeEasyAreaAtuacaoEntity.idUnidade ? unidadeEasyAreaAtuacaoEntity.idUnidade.id : null
+                  unidade: unidadeEasyAreaAtuacaoEntity.unidade ? unidadeEasyAreaAtuacaoEntity.unidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -160,14 +160,7 @@ export class UnidadeEasyAreaAtuacaoUpdate extends React.Component<IUnidadeEasyAr
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-area-atuacao-cepInicial"
-                                type="text"
-                                name="cepInicial"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-area-atuacao-cepInicial" type="text" name="cepInicial" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -182,14 +175,7 @@ export class UnidadeEasyAreaAtuacaoUpdate extends React.Component<IUnidadeEasyAr
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-area-atuacao-cepFinal"
-                                type="text"
-                                name="cepFinal"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-area-atuacao-cepFinal" type="text" name="cepFinal" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -198,19 +184,19 @@ export class UnidadeEasyAreaAtuacaoUpdate extends React.Component<IUnidadeEasyAr
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" for="unidade-easy-area-atuacao-idUnidade">
-                                <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.idUnidade">Id Unidade</Translate>
+                              <Label className="mt-2" for="unidade-easy-area-atuacao-unidade">
+                                <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvInput id="unidade-easy-area-atuacao-idUnidade" type="select" className="form-control" name="idUnidade">
+                              <AvInput id="unidade-easy-area-atuacao-unidade" type="select" className="form-control" name="unidade">
                                 <option value="null" key="0">
-                                  {translate('generadorApp.unidadeEasyAreaAtuacao.idUnidade.empty')}
+                                  {translate('generadorApp.unidadeEasyAreaAtuacao.unidade.empty')}
                                 </option>
                                 {unidadeEasies
                                   ? unidadeEasies.map(otherEntity => (
                                       <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
+                                        {otherEntity.razaoSocial}
                                       </option>
                                     ))
                                   : null}

@@ -107,23 +107,23 @@ const apiUrl = 'api/categoria-unidades';
 // Actions
 export type ICrudGetAllActionCategoriaUnidade<T> = (
   dataPost?: any,
-  idUnidade?: any,
+  unidade?: any,
   idCategoria?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCategoriaUnidade<ICategoriaUnidade> = (dataPost, idUnidade, idCategoria, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCategoriaUnidade<ICategoriaUnidade> = (dataPost, unidade, idCategoria, page, size, sort) => {
   const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
-  const idUnidadeRequest = idUnidade ? `idUnidade.equals=${idUnidade}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIAUNIDADE_LIST,
     payload: axios.get<ICategoriaUnidade>(
-      `${requestUrl}${dataPostRequest}${idUnidadeRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataPostRequest}${unidadeRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -138,7 +138,7 @@ export const getEntity: ICrudGetAction<ICategoriaUnidade> = id => {
 export const createEntity: ICrudPutAction<ICategoriaUnidade> = entity => async dispatch => {
   entity = {
     ...entity,
-    idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria
   };
   const result = await dispatch({
@@ -152,7 +152,7 @@ export const createEntity: ICrudPutAction<ICategoriaUnidade> = entity => async d
 export const updateEntity: ICrudPutAction<ICategoriaUnidade> = entity => async dispatch => {
   entity = {
     ...entity,
-    idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria
   };
   const result = await dispatch({

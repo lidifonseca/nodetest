@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, b
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { getEntity, updateEntity, createEntity, setBlob, reset } from './profissional.reducer';
 import { IProfissional } from 'app/shared/model/profissional.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -17,12 +19,14 @@ export interface IProfissionalUpdateProps extends StateProps, DispatchProps, Rou
 
 export interface IProfissionalUpdateState {
   isNew: boolean;
+  unidadeId: string;
 }
 
 export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps, IProfissionalUpdateState> {
   constructor(props: Readonly<IProfissionalUpdateProps>) {
     super(props);
     this.state = {
+      unidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -38,6 +42,8 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getUnidadeEasies();
   }
 
   onBlobChange = (isAnImage, name) => event => {
@@ -71,7 +77,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
   };
 
   render() {
-    const { profissionalEntity, loading, updating } = this.props;
+    const { profissionalEntity, unidadeEasies, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { obs } = profissionalEntity;
@@ -91,7 +97,8 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
             isNew
               ? {}
               : {
-                  ...profissionalEntity
+                  ...profissionalEntity,
+                  unidade: profissionalEntity.unidade ? profissionalEntity.unidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -139,28 +146,6 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUnidadeLabel" for="profissional-idUnidade">
-                                <Translate contentKey="generadorApp.profissional.idUnidade">Id Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-idUnidade"
-                                type="text"
-                                name="idUnidade"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
 
                       <Col md="12">
                         <AvGroup>
@@ -221,14 +206,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-senha"
-                                type="text"
-                                name="senha"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="profissional-senha" type="text" name="senha" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -243,14 +221,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-nome"
-                                type="text"
-                                name="nome"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="profissional-nome" type="text" name="nome" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -265,14 +236,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-email"
-                                type="text"
-                                name="email"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="profissional-email" type="text" name="email" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -287,14 +251,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-cpf"
-                                type="text"
-                                name="cpf"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-cpf" type="text" name="cpf" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -309,14 +266,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-rg"
-                                type="text"
-                                name="rg"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
+                              <AvField id="profissional-rg" type="text" name="rg" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -331,14 +281,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-nomeEmpresa"
-                                type="text"
-                                name="nomeEmpresa"
-                                validate={{
-                                  maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                                }}
-                              />
+                              <AvField id="profissional-nomeEmpresa" type="text" name="nomeEmpresa" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -353,14 +296,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-cnpj"
-                                type="text"
-                                name="cnpj"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-cnpj" type="text" name="cnpj" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -375,14 +311,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-registro"
-                                type="text"
-                                name="registro"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
+                              <AvField id="profissional-registro" type="text" name="registro" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -427,14 +356,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-telefone1"
-                                type="text"
-                                name="telefone1"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-telefone1" type="text" name="telefone1" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -449,14 +371,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-telefone2"
-                                type="text"
-                                name="telefone2"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-telefone2" type="text" name="telefone2" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -471,14 +386,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-celular1"
-                                type="text"
-                                name="celular1"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-celular1" type="text" name="celular1" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -493,14 +401,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-celular2"
-                                type="text"
-                                name="celular2"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-celular2" type="text" name="celular2" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -515,14 +416,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-cep"
-                                type="text"
-                                name="cep"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
+                              <AvField id="profissional-cep" type="text" name="cep" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -537,14 +431,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-endereco"
-                                type="text"
-                                name="endereco"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="profissional-endereco" type="text" name="endereco" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -559,14 +446,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-numero"
-                                type="text"
-                                name="numero"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
+                              <AvField id="profissional-numero" type="text" name="numero" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -581,14 +461,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-complemento"
-                                type="text"
-                                name="complemento"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-complemento" type="text" name="complemento" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -603,14 +476,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-bairro"
-                                type="text"
-                                name="bairro"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
+                              <AvField id="profissional-bairro" type="text" name="bairro" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -625,14 +491,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-cidade"
-                                type="text"
-                                name="cidade"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="profissional-cidade" type="text" name="cidade" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -647,14 +506,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-uf"
-                                type="text"
-                                name="uf"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
+                              <AvField id="profissional-uf" type="text" name="uf" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -699,14 +551,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-ag"
-                                type="text"
-                                name="ag"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
+                              <AvField id="profissional-ag" type="text" name="ag" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -721,14 +566,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-conta"
-                                type="text"
-                                name="conta"
-                                validate={{
-                                  maxLength: { value: 25, errorMessage: translate('entity.validation.maxlength', { max: 25 }) }
-                                }}
-                              />
+                              <AvField id="profissional-conta" type="text" name="conta" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -743,14 +581,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-tipoConta"
-                                type="text"
-                                name="tipoConta"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="profissional-tipoConta" type="text" name="tipoConta" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -765,14 +596,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-origemCadastro"
-                                type="text"
-                                name="origemCadastro"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="profissional-origemCadastro" type="text" name="origemCadastro" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -802,14 +626,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-chavePrivada"
-                                type="text"
-                                name="chavePrivada"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="profissional-chavePrivada" type="text" name="chavePrivada" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -839,14 +656,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-senhaOriginal"
-                                type="text"
-                                name="senhaOriginal"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="profissional-senhaOriginal" type="text" name="senhaOriginal" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -883,14 +693,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-expoToken"
-                                type="text"
-                                name="expoToken"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="profissional-expoToken" type="text" name="expoToken" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -925,14 +728,32 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-senhaChat"
-                                type="text"
-                                name="senhaChat"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
+                              <AvField id="profissional-senhaChat" type="text" name="senhaChat" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="3">
+                              <Label className="mt-2" for="profissional-unidade">
+                                <Translate contentKey="generadorApp.profissional.unidade">Unidade</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="9">
+                              <AvInput id="profissional-unidade" type="select" className="form-control" name="unidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.profissional.unidade.empty')}
+                                </option>
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
                             </Col>
                           </Row>
                         </AvGroup>
@@ -950,6 +771,7 @@ export class ProfissionalUpdate extends React.Component<IProfissionalUpdateProps
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   profissionalEntity: storeState.profissional.entity,
   loading: storeState.profissional.loading,
   updating: storeState.profissional.updating,
@@ -957,6 +779,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getEntity,
   updateEntity,
   setBlob,

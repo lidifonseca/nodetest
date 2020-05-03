@@ -113,7 +113,7 @@ export type ICrudGetAllActionPacientePedido<T> = (
   valor?: any,
   desconto?: any,
   tipoValor?: any,
-  idUnidade?: any,
+  unidade?: any,
   idPaciente?: any,
   idCartao?: any,
   idEspecialidade?: any,
@@ -130,7 +130,7 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   valor,
   desconto,
   tipoValor,
-  idUnidade,
+  unidade,
   idPaciente,
   idCartao,
   idEspecialidade,
@@ -145,7 +145,7 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const descontoRequest = desconto ? `desconto.contains=${desconto}&` : '';
   const tipoValorRequest = tipoValor ? `tipoValor.contains=${tipoValor}&` : '';
-  const idUnidadeRequest = idUnidade ? `idUnidade.equals=${idUnidade}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
   const idCartaoRequest = idCartao ? `idCartao.equals=${idCartao}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
@@ -154,7 +154,7 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST,
     payload: axios.get<IPacientePedido>(
-      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${idUnidadeRequest}${idPacienteRequest}${idCartaoRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}${idPacienteRequest}${idCartaoRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -169,7 +169,7 @@ export const getEntity: ICrudGetAction<IPacientePedido> = id => {
 export const createEntity: ICrudPutAction<IPacientePedido> = entity => async dispatch => {
   entity = {
     ...entity,
-    idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
     idCartao: entity.idCartao === 'null' ? null : entity.idCartao,
     idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
@@ -185,7 +185,7 @@ export const createEntity: ICrudPutAction<IPacientePedido> = entity => async dis
 export const updateEntity: ICrudPutAction<IPacientePedido> = entity => async dispatch => {
   entity = {
     ...entity,
-    idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
     idCartao: entity.idCartao === 'null' ? null : entity.idCartao,
     idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade

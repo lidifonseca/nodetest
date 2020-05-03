@@ -13,7 +13,8 @@ export interface IPacientePedido {
   valor?: number;
   desconto?: number;
   tipoValor?: number;
-  idUnidade?: string | any;
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
   idPaciente?: string | any;
   idCartao?: string | any;
   idEspecialidade?: string | any;

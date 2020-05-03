@@ -137,14 +137,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-razaoSocial"
-                                type="text"
-                                name="razaoSocial"
-                                validate={{
-                                  maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-razaoSocial" type="text" name="razaoSocial" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -159,14 +152,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-nomeFantasia"
-                                type="text"
-                                name="nomeFantasia"
-                                validate={{
-                                  maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-nomeFantasia" type="text" name="nomeFantasia" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -181,14 +167,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-cnpj"
-                                type="text"
-                                name="cnpj"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-cnpj" type="text" name="cnpj" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -203,14 +182,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-ie"
-                                type="text"
-                                name="ie"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-ie" type="text" name="ie" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -225,14 +197,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-telefone1"
-                                type="text"
-                                name="telefone1"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-telefone1" type="text" name="telefone1" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -247,14 +212,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-telefone2"
-                                type="text"
-                                name="telefone2"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-telefone2" type="text" name="telefone2" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -269,14 +227,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-endereco"
-                                type="text"
-                                name="endereco"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-endereco" type="text" name="endereco" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -291,14 +242,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-numero"
-                                type="text"
-                                name="numero"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-numero" type="text" name="numero" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -313,14 +257,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-complemento"
-                                type="text"
-                                name="complemento"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-complemento" type="text" name="complemento" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -335,14 +272,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-bairro"
-                                type="text"
-                                name="bairro"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-bairro" type="text" name="bairro" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -357,14 +287,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-cidade"
-                                type="text"
-                                name="cidade"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-cidade" type="text" name="cidade" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -379,14 +302,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-uf"
-                                type="text"
-                                name="uf"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-uf" type="text" name="uf" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -401,14 +317,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-cep"
-                                type="text"
-                                name="cep"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-cep" type="text" name="cep" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -423,14 +332,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-regans"
-                                type="text"
-                                name="regans"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-regans" type="text" name="regans" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -445,14 +347,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-regcnes"
-                                type="text"
-                                name="regcnes"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-regcnes" type="text" name="regcnes" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -467,14 +362,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-tissresponsavel"
-                                type="text"
-                                name="tissresponsavel"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-tissresponsavel" type="text" name="tissresponsavel" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -489,14 +377,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-tissconselho"
-                                type="text"
-                                name="tissconselho"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-tissconselho" type="text" name="tissconselho" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -511,14 +392,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-tissinscricao"
-                                type="text"
-                                name="tissinscricao"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-tissinscricao" type="text" name="tissinscricao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -533,14 +407,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-tisscbo"
-                                type="text"
-                                name="tisscbo"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-tisscbo" type="text" name="tisscbo" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -555,14 +422,7 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="unidade-easy-tisscoduf"
-                                type="text"
-                                name="tisscoduf"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
+                              <AvField id="unidade-easy-tisscoduf" type="text" name="tisscoduf" />
                             </Col>
                           </Row>
                         </AvGroup>

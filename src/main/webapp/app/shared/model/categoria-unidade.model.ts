@@ -5,7 +5,8 @@ import { ICategoria } from 'app/shared/model/categoria.model';
 export interface ICategoriaUnidade {
   id?: string;
   dataPost?: Moment;
-  idUnidade?: string | any;
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
   idCategoria?: string | any;
 }
 

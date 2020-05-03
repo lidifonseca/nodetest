@@ -16,7 +16,6 @@
       "detail": {
         "title": "Pad"
       },
-      "idUnidade": "Id Unidade",
       "idOperadora": "Id Operadora",
       "idFranquia": "Id Franquia",
       "nroPad": "Nro Pad",
@@ -31,6 +30,7 @@
       "score": "Score",
       "padCid": "Pad Cid",
       "padItem": "Pad Item",
+      "unidade": "Unidade",
       "idPaciente": "Id Paciente"
     }
   }

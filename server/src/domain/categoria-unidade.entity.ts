@@ -16,7 +16,7 @@ export default class CategoriaUnidade extends BaseEntity {
   dataPost: any;
 
   @ManyToOne(type => UnidadeEasy)
-  idUnidade: UnidadeEasy;
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => Categoria)
   idCategoria: Categoria;

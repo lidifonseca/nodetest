@@ -17,7 +17,7 @@
         "title": "Categoria Unidade"
       },
       "dataPost": "Data Post",
-      "idUnidade": "Id Unidade",
+      "unidade": "Unidade",
       "idCategoria": "Id Categoria"
     }
   }

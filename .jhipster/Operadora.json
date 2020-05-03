@@ -46,10 +46,6 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "idUnidade",
-            "fieldType": "Integer"
-        },
-        {
             "fieldName": "endereco",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -143,10 +139,17 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "operadora",
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "tipoOperadora",
             "otherEntityRelationshipName": "operadora",
-            "relationshipName": "idTipoOperadora",
-            "otherEntityField": "id"
+            "relationshipName": "tipoOperadora",
+            "otherEntityField": "tipo"
         }
     ],
     "changelogDate": "20200502235300",
@@ -160,5 +163,5 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "javadoc": "@toStringFields nome@@\\n@listTableLayout nomeFantasia@@\\n@listFilterLayout nomeFantasia<top;3>@@\\n@formLayout tipoOperadora<left;12> nomeFantasia<left;12> razaoSocial<left;12> cnpj<left;12> ie<left;12> rg<left;12> site<left;12>@@\\n@viewLayout nomeFantasia<left;12> razaoSocial<left;12> cnpj<left;12> ie<left;12> rg<left;12> site<left;12>@@"
+    "javadoc": "@toStringFields nomeFantasia@@\\n@listTableLayout nomeFantasia@@\\n@listFilterLayout nomeFantasia{Label:top,Size:3}@@\\n@formLayout\\ntipoOperadora{Label:top,Size:12}\\nunidade{Label:top,Size:12}\\nnomeFantasia{Label:top,Size:12}\\nrazaoSocial{Label:top,Size:12}\\nendereco{Label:top,Size:12}\\ncnpj{Label:top,Size:6}\\nie{Label:top,Size:6}\\nsite{Label:top,Size:12}\\ncontatoCentralAtendimento{Label:top,Size:8}\\nemailCentralAtendimento{Label:top,Size:4}\\nnomeContatoComercial{Label:top,Size:4}\\ncontatoComercial{Label:top,Size:4}\\nemailComercial{Label:top,Size:4}\\nnomeContatoFinanceiro{Label:top,Size:4}\\ncontatoFinanceiro{Label:top,Size:4}\\nemailFinanceiro{Label:top,Size:4}\\n@@\\n@viewLayout\\nnomeFantasia{Label:left,Size:12}\\nrazaoSocial{Label:left,Size:12}\\ncnpj{Label:left,Size:12}\\nie{Label:left,Size:12}\\nrg{Label:left,Size:12}\\nsite{Label:left,Size:12}\\n@@"
 }

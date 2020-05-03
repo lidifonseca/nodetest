@@ -1,11 +1,11 @@
 import { Moment } from 'moment';
 import { IDiario } from 'app/shared/model/diario.model';
 import { IPacienteDiario } from 'app/shared/model/paciente-diario.model';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
 
 export interface IUsuario {
   id?: string;
-  idUnidade?: string;
   idOperadora?: string;
   senha?: string;
   nome?: string;
@@ -132,6 +132,8 @@ export interface IUsuario {
   senhaChat?: string;
   diarios?: IDiario[];
   pacienteDiarios?: IPacienteDiario[];
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
   idTipoUsuario?: string | any;
 }
 

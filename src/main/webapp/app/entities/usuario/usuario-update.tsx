@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
 import { getEntities as getTipoUsuarios } from 'app/entities/tipo-usuario/tipo-usuario.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './usuario.reducer';
@@ -19,6 +21,7 @@ export interface IUsuarioUpdateProps extends StateProps, DispatchProps, RouteCom
 
 export interface IUsuarioUpdateState {
   isNew: boolean;
+  unidadeId: string;
   idTipoUsuarioId: string;
 }
 
@@ -26,6 +29,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
   constructor(props: Readonly<IUsuarioUpdateProps>) {
     super(props);
     this.state = {
+      unidadeId: '0',
       idTipoUsuarioId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -43,6 +47,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
       this.props.getEntity(this.props.match.params.id);
     }
 
+    this.props.getUnidadeEasies();
     this.props.getTipoUsuarios();
   }
 
@@ -67,7 +72,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
   };
 
   render() {
-    const { usuarioEntity, tipoUsuarios, loading, updating } = this.props;
+    const { usuarioEntity, unidadeEasies, tipoUsuarios, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -86,6 +91,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
               ? {}
               : {
                   ...usuarioEntity,
+                  unidade: usuarioEntity.unidade ? usuarioEntity.unidade.id : null,
                   idTipoUsuario: usuarioEntity.idTipoUsuario ? usuarioEntity.idTipoUsuario.id : null
                 }
           }
@@ -139,41 +145,12 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" id="idUnidadeLabel" for="usuario-idUnidade">
-                                <Translate contentKey="generadorApp.usuario.idUnidade">Id Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="usuario-idUnidade"
-                                type="text"
-                                name="idUnidade"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
                               <Label className="mt-2" id="idOperadoraLabel" for="usuario-idOperadora">
                                 <Translate contentKey="generadorApp.usuario.idOperadora">Id Operadora</Translate>
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-idOperadora"
-                                type="text"
-                                name="idOperadora"
-                                validate={{
-                                  maxLength: { value: 1000, errorMessage: translate('entity.validation.maxlength', { max: 1000 }) }
-                                }}
-                              />
+                              <AvField id="usuario-idOperadora" type="text" name="idOperadora" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -188,14 +165,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-senha"
-                                type="text"
-                                name="senha"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="usuario-senha" type="text" name="senha" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -210,14 +180,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-nome"
-                                type="text"
-                                name="nome"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="usuario-nome" type="text" name="nome" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -232,14 +195,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-email"
-                                type="text"
-                                name="email"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="usuario-email" type="text" name="email" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -254,14 +210,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-telefone"
-                                type="text"
-                                name="telefone"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="usuario-telefone" type="text" name="telefone" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -276,14 +225,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-celular"
-                                type="text"
-                                name="celular"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="usuario-celular" type="text" name="celular" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -298,14 +240,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-cpf"
-                                type="text"
-                                name="cpf"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="usuario-cpf" type="text" name="cpf" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -320,14 +255,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-rg"
-                                type="text"
-                                name="rg"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
+                              <AvField id="usuario-rg" type="text" name="rg" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -2072,14 +2000,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-idAreaAtuacao"
-                                type="text"
-                                name="idAreaAtuacao"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="usuario-idAreaAtuacao" type="text" name="idAreaAtuacao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -2159,18 +2080,37 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-senhaChat"
-                                type="text"
-                                name="senhaChat"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
+                              <AvField id="usuario-senhaChat" type="text" name="senhaChat" />
                             </Col>
                           </Row>
                         </AvGroup>
                       </Col>
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="3">
+                              <Label className="mt-2" for="usuario-unidade">
+                                <Translate contentKey="generadorApp.usuario.unidade">Unidade</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="9">
+                              <AvInput id="usuario-unidade" type="select" className="form-control" name="unidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.usuario.unidade.empty')}
+                                </option>
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
                       <Col md="12">
                         <AvGroup>
                           <Row>
@@ -2209,6 +2149,7 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   tipoUsuarios: storeState.tipoUsuario.entities,
   usuarioEntity: storeState.usuario.entity,
   loading: storeState.usuario.loading,
@@ -2217,6 +2158,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getTipoUsuarios,
   getEntity,
   updateEntity,

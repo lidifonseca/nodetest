@@ -54,21 +54,6 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idUnidade">
-                            <Translate contentKey="generadorApp.usuario.idUnidade">Id Unidade</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioEntity.idUnidade}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="idOperadora">
                             <Translate contentKey="generadorApp.usuario.idOperadora">Id Operadora</Translate>
                           </span>
@@ -1929,6 +1914,19 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{usuarioEntity.senhaChat}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.usuario.unidade">Unidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{usuarioEntity.unidade ? usuarioEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

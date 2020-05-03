@@ -130,11 +130,11 @@ export class EspecialidadeUnidadeDetail extends React.Component<IEspecialidadeUn
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.especialidadeUnidade.idUnidade">Id Unidade</Translate>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{especialidadeUnidadeEntity.idUnidade ? especialidadeUnidadeEntity.idUnidade.id : ''}</dd>
+                        <dd>{especialidadeUnidadeEntity.unidade ? especialidadeUnidadeEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

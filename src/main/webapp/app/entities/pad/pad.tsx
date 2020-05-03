@@ -36,13 +36,14 @@ import { IPad } from 'app/shared/model/pad.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 
 export interface IPadProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadBaseState {
-  idUnidade: any;
   idOperadora: any;
   idFranquia: any;
   nroPad: any;
@@ -57,6 +58,7 @@ export interface IPadBaseState {
   score: any;
   padCid: any;
   padItem: any;
+  unidade: any;
   idPaciente: any;
 }
 export interface IPadState extends IPadBaseState, IPaginationBaseState {}
@@ -74,7 +76,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
   getPadState = (location): IPadBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUnidade = url.searchParams.get('idUnidade') || '';
     const idOperadora = url.searchParams.get('idOperadora') || '';
     const idFranquia = url.searchParams.get('idFranquia') || '';
     const nroPad = url.searchParams.get('nroPad') || '';
@@ -90,10 +91,10 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
     const padCid = url.searchParams.get('padCid') || '';
     const padItem = url.searchParams.get('padItem') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idPaciente = url.searchParams.get('idPaciente') || '';
 
     return {
-      idUnidade,
       idOperadora,
       idFranquia,
       nroPad,
@@ -108,6 +109,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       score,
       padCid,
       padItem,
+      unidade,
       idPaciente
     };
   };
@@ -115,13 +117,13 @@ export class Pad extends React.Component<IPadProps, IPadState> {
   componentDidMount() {
     this.getEntities();
 
+    this.props.getUnidadeEasies();
     this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUnidade: '',
         idOperadora: '',
         idFranquia: '',
         nroPad: '',
@@ -136,6 +138,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         score: '',
         padCid: '',
         padItem: '',
+        unidade: '',
         idPaciente: ''
       },
       () => this.sortEntities()
@@ -181,9 +184,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       ',' +
       this.state.order +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
-      '&' +
       'idOperadora=' +
       this.state.idOperadora +
       '&' +
@@ -226,6 +226,9 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'padItem=' +
       this.state.padItem +
       '&' +
+      'unidade=' +
+      this.state.unidade +
+      '&' +
       'idPaciente=' +
       this.state.idPaciente +
       '&' +
@@ -237,7 +240,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
   getEntities = () => {
     const {
-      idUnidade,
       idOperadora,
       idFranquia,
       nroPad,
@@ -252,6 +254,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       score,
       padCid,
       padItem,
+      unidade,
       idPaciente,
       activePage,
       itemsPerPage,
@@ -259,7 +262,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       order
     } = this.state;
     this.props.getEntities(
-      idUnidade,
       idOperadora,
       idFranquia,
       nroPad,
@@ -274,6 +276,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       score,
       padCid,
       padItem,
+      unidade,
       idPaciente,
       activePage - 1,
       itemsPerPage,
@@ -282,7 +285,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
   };
 
   render() {
-    const { pacientes, padList, match, totalItems } = this.props;
+    const { unidadeEasies, pacientes, padList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -313,15 +316,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUnidadeLabel" for="pad-idUnidade">
-                            <Translate contentKey="generadorApp.pad.idUnidade">Id Unidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUnidade" id="pad-idUnidade" value={this.state.idUnidade} />
-                        </Row>
-                      </Col>
                       <Col md="3">
                         <Row>
                           <Label id="idOperadoraLabel" for="pad-idOperadora">
@@ -433,6 +427,26 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                       <Col md="3">
                         <Row>
                           <div>
+                            <Label for="pad-unidade">
+                              <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                            </Label>
+                            <AvInput id="pad-unidade" type="select" className="form-control" name="unidadeId">
+                              <option value="" key="0" />
+                              {unidadeEasies
+                                ? unidadeEasies.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.razaoSocial}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
+                        </Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row>
+                          <div>
                             <Label for="pad-idPaciente">
                               <Translate contentKey="generadorApp.pad.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -474,10 +488,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                     <tr>
                       <th className="hand" onClick={this.sort('id')}>
                         <Translate contentKey="global.field.id">ID</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUnidade')}>
-                        <Translate contentKey="generadorApp.pad.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th className="hand" onClick={this.sort('idOperadora')}>
@@ -529,6 +539,10 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
+                        <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th>
                         <Translate contentKey="generadorApp.pad.idPaciente">Id Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
@@ -545,8 +559,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                             {pad.id}
                           </Button>
                         </td>
-
-                        <td>{pad.idUnidade}</td>
 
                         <td>{pad.idOperadora}</td>
 
@@ -577,6 +589,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                         <td>{pad.imagePath}</td>
 
                         <td>{pad.score}</td>
+                        <td>{pad.unidade ? <Link to={`unidade-easy/${pad.unidade.id}`}>{pad.unidade.id}</Link> : ''}</td>
                         <td>{pad.idPaciente ? <Link to={`paciente/${pad.idPaciente.id}`}>{pad.idPaciente.id}</Link> : ''}</td>
 
                         <td className="text-right">
@@ -635,12 +648,14 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 }
 
 const mapStateToProps = ({ pad, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   pacientes: storeState.paciente.entities,
   padList: pad.entities,
   totalItems: pad.totalItems
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getPacientes,
   getEntities
 };

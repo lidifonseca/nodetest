@@ -4,14 +4,13 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
+import UnidadeEasy from './unidade-easy.entity';
+
 /**
  * A ProfissionalNew.
  */
 @Entity('profissional_new')
 export default class ProfissionalNew extends BaseEntity {
-  @Column({ name: 'id_unidade', nullable: false })
-  idUnidade: string;
-
   @Column({ name: 'id_cidade' })
   idCidade: string;
 
@@ -110,6 +109,9 @@ export default class ProfissionalNew extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

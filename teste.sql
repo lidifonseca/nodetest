@@ -14,6 +14,14 @@ licao_casa                      HORA_INICIO timestamp;
 
 
 
+/* UNIDADES */
+
+INSERT INTO nodetest_novo.unidade_easy 
+(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, razao_social, nome_fantasia, cnpj, ie, telefone_1, telefone_2, endereco, numero, complemento, bairro, cidade, uf, cep, regans, regcnes, tissresponsavel, tissconselho, tissinscricao, tisscbo, tisscoduf, ativo)
+SELECT id, '1' as createdBy, data_post as createdDate, '1' as lastModifiedBy, data_post as lastModifiedDate,
+razao_social, nome_fantasia, cnpj, ie, telefone1 as telefone_1, telefone2 as telefone_2, endereco, numero, complemento, bairro, cidade, uf, cep, regans, regcnes, tissresponsavel, tissconselho, tissinscricao, tisscbo, tisscoduf, ativo
+FROM concierge_db.unidade_easy;
+
 
 
 /* PACIENTE */

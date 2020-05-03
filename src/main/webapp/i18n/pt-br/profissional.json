@@ -16,7 +16,6 @@
       "detail": {
         "title": "Profissional"
       },
-      "idUnidade": "Id Unidade",
       "idCidade": "Id Cidade",
       "idTempoExperiencia": "Id Tempo Experiencia",
       "idBanco": "Id Banco",
@@ -56,7 +55,8 @@
       "preferenciaAtendimento": "Preferencia Atendimento",
       "senhaChat": "Senha Chat",
       "atendimentoAceite": "Atendimento Aceite",
-      "atendimentoAssinaturas": "Atendimento Assinaturas"
+      "atendimentoAssinaturas": "Atendimento Assinaturas",
+      "unidade": "Unidade"
     }
   }
 }

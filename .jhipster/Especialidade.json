@@ -37,10 +37,6 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "idUnidade",
-            "fieldType": "Integer"
         }
     ],
     "relationships": [
@@ -79,6 +75,13 @@
             "otherEntityName": "padItem",
             "otherEntityRelationshipName": "idEspecialidade",
             "relationshipName": "padItem"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "especialidade",
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial"
         },
         {
             "relationshipType": "many-to-one",

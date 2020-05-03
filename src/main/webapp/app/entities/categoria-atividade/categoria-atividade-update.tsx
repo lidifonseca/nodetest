@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ICategoria } from 'app/shared/model/categoria.model';
 import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './categoria-atividade.reducer';
@@ -19,6 +21,7 @@ export interface ICategoriaAtividadeUpdateProps extends StateProps, DispatchProp
 
 export interface ICategoriaAtividadeUpdateState {
   isNew: boolean;
+  unidadeId: string;
   idCategoriaId: string;
 }
 
@@ -26,6 +29,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
   constructor(props: Readonly<ICategoriaAtividadeUpdateProps>) {
     super(props);
     this.state = {
+      unidadeId: '0',
       idCategoriaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -43,6 +47,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
       this.props.getEntity(this.props.match.params.id);
     }
 
+    this.props.getUnidadeEasies();
     this.props.getCategorias();
   }
 
@@ -67,7 +72,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
   };
 
   render() {
-    const { categoriaAtividadeEntity, categorias, loading, updating } = this.props;
+    const { categoriaAtividadeEntity, unidadeEasies, categorias, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -86,6 +91,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
               ? {}
               : {
                   ...categoriaAtividadeEntity,
+                  unidade: categoriaAtividadeEntity.unidade ? categoriaAtividadeEntity.unidade.id : null,
                   idCategoria: categoriaAtividadeEntity.idCategoria ? categoriaAtividadeEntity.idCategoria.id : null
                 }
           }
@@ -146,33 +152,37 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="categoria-atividade-atividade"
-                                type="text"
-                                name="atividade"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="categoria-atividade-atividade" type="text" name="atividade" />
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="3">
+                              <Label className="mt-2" for="categoria-atividade-unidade">
+                                <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="9">
+                              <AvInput id="categoria-atividade-unidade" type="select" className="form-control" name="unidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.categoriaAtividade.unidade.empty')}
+                                </option>
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
                             </Col>
                           </Row>
                         </AvGroup>
                       </Col>
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUnidadeLabel" for="categoria-atividade-idUnidade">
-                                <Translate contentKey="generadorApp.categoriaAtividade.idUnidade">Id Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="categoria-atividade-idUnidade" type="string" className="form-control" name="idUnidade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                       <Col md="12">
                         <AvGroup>
                           <Row>
@@ -211,6 +221,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   categorias: storeState.categoria.entities,
   categoriaAtividadeEntity: storeState.categoriaAtividade.entity,
   loading: storeState.categoriaAtividade.loading,
@@ -219,6 +230,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getCategorias,
   getEntity,
   updateEntity,

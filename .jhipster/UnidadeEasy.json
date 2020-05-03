@@ -166,32 +166,7 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "categoriaUnidade",
-            "otherEntityRelationshipName": "idUnidade",
-            "relationshipName": "categoriaUnidade"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "especialidadeUnidade",
-            "otherEntityRelationshipName": "idUnidade",
-            "relationshipName": "especialidadeUnidade"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "pacientePedido",
-            "otherEntityRelationshipName": "idUnidade",
-            "relationshipName": "pacientePedido"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "unidadeEasyAreaAtuacao",
-            "otherEntityRelationshipName": "idUnidade",
-            "relationshipName": "unidadeEasyAreaAtuacao"
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20200503012200",
     "entityTableName": "unidade_easy",
     "dto": "mapstruct",

@@ -4,11 +4,6 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import CategoriaUnidade from './categoria-unidade.entity';
-import EspecialidadeUnidade from './especialidade-unidade.entity';
-import PacientePedido from './paciente-pedido.entity';
-import UnidadeEasyAreaAtuacao from './unidade-easy-area-atuacao.entity';
-
 /**
  * A UnidadeEasy.
  */
@@ -76,30 +71,6 @@ export default class UnidadeEasy extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @OneToMany(
-    type => CategoriaUnidade,
-    other => other.idUnidade
-  )
-  categoriaUnidades: CategoriaUnidade[];
-
-  @OneToMany(
-    type => EspecialidadeUnidade,
-    other => other.idUnidade
-  )
-  especialidadeUnidades: EspecialidadeUnidade[];
-
-  @OneToMany(
-    type => PacientePedido,
-    other => other.idUnidade
-  )
-  pacientePedidos: PacientePedido[];
-
-  @OneToMany(
-    type => UnidadeEasyAreaAtuacao,
-    other => other.idUnidade
-  )
-  unidadeEasyAreaAtuacaos: UnidadeEasyAreaAtuacao[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

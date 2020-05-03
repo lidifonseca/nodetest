@@ -2,13 +2,6 @@
     "name": "Pad",
     "fields": [
         {
-            "fieldName": "idUnidade",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idOperadora",
             "fieldType": "Integer"
         },
@@ -77,6 +70,13 @@
             "otherEntityName": "padItem",
             "otherEntityRelationshipName": "idPad",
             "relationshipName": "padItem"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "pad",
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial"
         },
         {
             "relationshipType": "many-to-one",

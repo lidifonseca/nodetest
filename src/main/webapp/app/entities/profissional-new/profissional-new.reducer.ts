@@ -118,7 +118,6 @@ const apiUrl = 'api/profissional-news';
 
 // Actions
 export type ICrudGetAllActionProfissionalNew<T> = (
-  idUnidade?: any,
   idCidade?: any,
   idTempoExperiencia?: any,
   idBanco?: any,
@@ -152,13 +151,13 @@ export type ICrudGetAllActionProfissionalNew<T> = (
   obs?: any,
   chavePrivada?: any,
   ativo?: any,
+  unidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionProfissionalNew<IProfissionalNew> = (
-  idUnidade,
   idCidade,
   idTempoExperiencia,
   idBanco,
@@ -192,11 +191,11 @@ export const getEntities: ICrudGetAllActionProfissionalNew<IProfissionalNew> = (
   obs,
   chavePrivada,
   ativo,
+  unidade,
   page,
   size,
   sort
 ) => {
-  const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const idCidadeRequest = idCidade ? `idCidade.contains=${idCidade}&` : '';
   const idTempoExperienciaRequest = idTempoExperiencia ? `idTempoExperiencia.contains=${idTempoExperiencia}&` : '';
   const idBancoRequest = idBanco ? `idBanco.contains=${idBanco}&` : '';
@@ -230,12 +229,13 @@ export const getEntities: ICrudGetAllActionProfissionalNew<IProfissionalNew> = (
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const chavePrivadaRequest = chavePrivada ? `chavePrivada.contains=${chavePrivada}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALNEW_LIST,
     payload: axios.get<IProfissionalNew>(
-      `${requestUrl}${idUnidadeRequest}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -249,7 +249,8 @@ export const getEntity: ICrudGetAction<IProfissionalNew> = id => {
 
 export const createEntity: ICrudPutAction<IProfissionalNew> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PROFISSIONALNEW,
@@ -260,7 +261,7 @@ export const createEntity: ICrudPutAction<IProfissionalNew> = entity => async di
 };
 
 export const updateEntity: ICrudPutAction<IProfissionalNew> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PROFISSIONALNEW,
     payload: axios.put(apiUrl, cleanEntity(entity))

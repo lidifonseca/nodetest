@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IOperadora } from 'app/shared/model/operadora.model';
@@ -31,6 +33,7 @@ export interface IAtendimentoUpdateProps extends StateProps, DispatchProps, Rout
 
 export interface IAtendimentoUpdateState {
   isNew: boolean;
+  unidadeId: string;
   idPacienteId: string;
   idOperadoraId: string;
   idEspecialidadeId: string;
@@ -44,6 +47,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
   constructor(props: Readonly<IAtendimentoUpdateProps>) {
     super(props);
     this.state = {
+      unidadeId: '0',
       idPacienteId: '0',
       idOperadoraId: '0',
       idEspecialidadeId: '0',
@@ -67,6 +71,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
       this.props.getEntity(this.props.match.params.id);
     }
 
+    this.props.getUnidadeEasies();
     this.props.getPacientes();
     this.props.getOperadoras();
     this.props.getEspecialidades();
@@ -104,6 +109,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
   render() {
     const {
       atendimentoEntity,
+      unidadeEasies,
       pacientes,
       operadoras,
       especialidades,
@@ -132,6 +138,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
               ? {}
               : {
                   ...atendimentoEntity,
+                  unidade: atendimentoEntity.unidade ? atendimentoEntity.unidade.id : null,
                   idPaciente: atendimentoEntity.idPaciente ? atendimentoEntity.idPaciente.id : null,
                   idOperadora: atendimentoEntity.idOperadora ? atendimentoEntity.idOperadora.id : null,
                   idEspecialidade: atendimentoEntity.idEspecialidade ? atendimentoEntity.idEspecialidade.id : null,
@@ -191,28 +198,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" id="idUnidadeLabel" for="atendimento-idUnidade">
-                                <Translate contentKey="generadorApp.atendimento.idUnidade">Id Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-idUnidade"
-                                type="text"
-                                name="idUnidade"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
                               <Label className="mt-2" id="idFranquiaLabel" for="atendimento-idFranquia">
                                 <Translate contentKey="generadorApp.atendimento.idFranquia">Id Franquia</Translate>
                               </Label>
@@ -248,14 +233,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-cep"
-                                type="text"
-                                name="cep"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-cep" type="text" name="cep" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -270,14 +248,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-endereco"
-                                type="text"
-                                name="endereco"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-endereco" type="text" name="endereco" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -292,14 +263,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-numero"
-                                type="text"
-                                name="numero"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-numero" type="text" name="numero" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -314,14 +278,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-complemento"
-                                type="text"
-                                name="complemento"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-complemento" type="text" name="complemento" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -336,14 +293,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-bairro"
-                                type="text"
-                                name="bairro"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-bairro" type="text" name="bairro" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -358,14 +308,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-cidade"
-                                type="text"
-                                name="cidade"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-cidade" type="text" name="cidade" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -380,14 +323,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-uf"
-                                type="text"
-                                name="uf"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-uf" type="text" name="uf" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -402,14 +338,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-latitude"
-                                type="text"
-                                name="latitude"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-latitude" type="text" name="latitude" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -424,14 +353,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-longitude"
-                                type="text"
-                                name="longitude"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-longitude" type="text" name="longitude" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -468,14 +390,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-horario"
-                                type="text"
-                                name="horario"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-horario" type="text" name="horario" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -512,14 +427,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-latitudeChegada"
-                                type="text"
-                                name="latitudeChegada"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-latitudeChegada" type="text" name="latitudeChegada" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -534,14 +442,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-longitudeChegada"
-                                type="text"
-                                name="longitudeChegada"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-longitudeChegada" type="text" name="longitudeChegada" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -578,14 +479,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-latitudeSaida"
-                                type="text"
-                                name="latitudeSaida"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-latitudeSaida" type="text" name="latitudeSaida" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -600,14 +494,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-longitudeSaida"
-                                type="text"
-                                name="longitudeSaida"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-longitudeSaida" type="text" name="longitudeSaida" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -622,14 +509,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-evolucao"
-                                type="text"
-                                name="evolucao"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-evolucao" type="text" name="evolucao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -644,14 +524,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-observacao"
-                                type="text"
-                                name="observacao"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-observacao" type="text" name="observacao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -711,14 +584,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-motivo"
-                                type="text"
-                                name="motivo"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-motivo" type="text" name="motivo" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -837,14 +703,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-tipoUsuarioCancelamento"
-                                type="text"
-                                name="tipoUsuarioCancelamento"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-tipoUsuarioCancelamento" type="text" name="tipoUsuarioCancelamento" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -861,14 +720,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-confidencialProfissional"
-                                type="text"
-                                name="confidencialProfissional"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-confidencialProfissional" type="text" name="confidencialProfissional" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -883,14 +735,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-confidencialPaciente"
-                                type="text"
-                                name="confidencialPaciente"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-confidencialPaciente" type="text" name="confidencialPaciente" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -905,18 +750,37 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="atendimento-imagemAssinatura"
-                                type="text"
-                                name="imagemAssinatura"
-                                validate={{
-                                  maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                                }}
-                              />
+                              <AvField id="atendimento-imagemAssinatura" type="text" name="imagemAssinatura" />
                             </Col>
                           </Row>
                         </AvGroup>
                       </Col>
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="3">
+                              <Label className="mt-2" for="atendimento-unidade">
+                                <Translate contentKey="generadorApp.atendimento.unidade">Unidade</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="9">
+                              <AvInput id="atendimento-unidade" type="select" className="form-control" name="unidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.atendimento.unidade.empty')}
+                                </option>
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
                       <Col md="12">
                         <AvGroup>
                           <Row>
@@ -1116,6 +980,7 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   pacientes: storeState.paciente.entities,
   operadoras: storeState.operadora.entities,
   especialidades: storeState.especialidade.entities,
@@ -1130,6 +995,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getPacientes,
   getOperadoras,
   getEspecialidades,

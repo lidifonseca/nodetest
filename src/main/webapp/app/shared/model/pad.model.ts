@@ -1,11 +1,11 @@
 import { Moment } from 'moment';
 import { IPadCid } from 'app/shared/model/pad-cid.model';
 import { IPadItem } from 'app/shared/model/pad-item.model';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { IPaciente } from 'app/shared/model/paciente.model';
 
 export interface IPad {
   id?: string;
-  idUnidade?: string;
   idOperadora?: number;
   idFranquia?: string;
   nroPad?: string;
@@ -20,6 +20,8 @@ export interface IPad {
   score?: number;
   padCids?: IPadCid[];
   padItems?: IPadItem[];
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
   idPaciente?: string | any;
 }
 

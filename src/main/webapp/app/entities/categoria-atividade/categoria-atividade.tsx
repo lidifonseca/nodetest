@@ -27,6 +27,8 @@ import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model'
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ICategoria } from 'app/shared/model/categoria.model';
 import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 
@@ -34,9 +36,9 @@ export interface ICategoriaAtividadeProps extends StateProps, DispatchProps, Rou
 
 export interface ICategoriaAtividadeBaseState {
   atividade: any;
-  idUnidade: any;
   atendimentoAtividades: any;
   padItemAtividade: any;
+  unidade: any;
   idCategoria: any;
 }
 export interface ICategoriaAtividadeState extends ICategoriaAtividadeBaseState, IPaginationBaseState {}
@@ -55,17 +57,17 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   getCategoriaAtividadeState = (location): ICategoriaAtividadeBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const atividade = url.searchParams.get('atividade') || '';
-    const idUnidade = url.searchParams.get('idUnidade') || '';
 
     const atendimentoAtividades = url.searchParams.get('atendimentoAtividades') || '';
     const padItemAtividade = url.searchParams.get('padItemAtividade') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idCategoria = url.searchParams.get('idCategoria') || '';
 
     return {
       atividade,
-      idUnidade,
       atendimentoAtividades,
       padItemAtividade,
+      unidade,
       idCategoria
     };
   };
@@ -73,6 +75,7 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   componentDidMount() {
     this.getEntities();
 
+    this.props.getUnidadeEasies();
     this.props.getCategorias();
   }
 
@@ -80,9 +83,9 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
     this.setState(
       {
         atividade: '',
-        idUnidade: '',
         atendimentoAtividades: '',
         padItemAtividade: '',
+        unidade: '',
         idCategoria: ''
       },
       () => this.sortEntities()
@@ -131,14 +134,14 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
       'atividade=' +
       this.state.atividade +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
-      '&' +
       'atendimentoAtividades=' +
       this.state.atendimentoAtividades +
       '&' +
       'padItemAtividade=' +
       this.state.padItemAtividade +
+      '&' +
+      'unidade=' +
+      this.state.unidade +
       '&' +
       'idCategoria=' +
       this.state.idCategoria +
@@ -150,22 +153,12 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      atividade,
-      idUnidade,
-      atendimentoAtividades,
-      padItemAtividade,
-      idCategoria,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { atividade, atendimentoAtividades, padItemAtividade, unidade, idCategoria, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       atividade,
-      idUnidade,
       atendimentoAtividades,
       padItemAtividade,
+      unidade,
       idCategoria,
       activePage - 1,
       itemsPerPage,
@@ -174,7 +167,7 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   };
 
   render() {
-    const { categorias, categoriaAtividadeList, match, totalItems } = this.props;
+    const { unidadeEasies, categorias, categoriaAtividadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -214,21 +207,33 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                           <AvInput type="text" name="atividade" id="categoria-atividade-atividade" value={this.state.atividade} />
                         </Row>
                       </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
                       <Col md="3">
                         <Row>
-                          <Label id="idUnidadeLabel" for="categoria-atividade-idUnidade">
-                            <Translate contentKey="generadorApp.categoriaAtividade.idUnidade">Id Unidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="idUnidade" id="categoria-atividade-idUnidade" value={this.state.idUnidade} />
+                          <div>
+                            <Label for="categoria-atividade-unidade">
+                              <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
+                            </Label>
+                            <AvInput id="categoria-atividade-unidade" type="select" className="form-control" name="unidadeId">
+                              <option value="" key="0" />
+                              {unidadeEasies
+                                ? unidadeEasies.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.razaoSocial}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
                         </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
                       </Col>
 
                       <Col md="3">
@@ -281,8 +286,8 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                         <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idUnidade')}>
-                        <Translate contentKey="generadorApp.categoriaAtividade.idUnidade">Id Unidade</Translate>
+                      <th>
+                        <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
@@ -304,8 +309,13 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                         </td>
 
                         <td>{categoriaAtividade.atividade}</td>
-
-                        <td>{categoriaAtividade.idUnidade}</td>
+                        <td>
+                          {categoriaAtividade.unidade ? (
+                            <Link to={`unidade-easy/${categoriaAtividade.unidade.id}`}>{categoriaAtividade.unidade.id}</Link>
+                          ) : (
+                            ''
+                          )}
+                        </td>
                         <td>
                           {categoriaAtividade.idCategoria ? (
                             <Link to={`categoria/${categoriaAtividade.idCategoria.id}`}>{categoriaAtividade.idCategoria.id}</Link>
@@ -370,12 +380,14 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
 }
 
 const mapStateToProps = ({ categoriaAtividade, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   categorias: storeState.categoria.entities,
   categoriaAtividadeList: categoriaAtividade.entities,
   totalItems: categoriaAtividade.totalItems
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getCategorias,
   getEntities
 };

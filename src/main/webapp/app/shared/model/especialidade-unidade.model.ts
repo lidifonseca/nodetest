@@ -8,7 +8,8 @@ export interface IEspecialidadeUnidade {
   valorPagar?: number;
   publicar?: number;
   comentarioPreco?: string;
-  idUnidade?: string | any;
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
   idEspecialidade?: string | any;
 }
 

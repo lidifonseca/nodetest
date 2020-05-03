@@ -7,6 +7,7 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 import AtendimentoAceite from './atendimento-aceite.entity';
 import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
 import AtendimentoAtividades from './atendimento-atividades.entity';
+import UnidadeEasy from './unidade-easy.entity';
 import Paciente from './paciente.entity';
 import Operadora from './operadora.entity';
 import Especialidade from './especialidade.entity';
@@ -20,9 +21,6 @@ import Cidade from './cidade.entity';
  */
 @Entity('atendimento')
 export default class Atendimento extends BaseEntity {
-  @Column({ name: 'id_unidade', nullable: false })
-  idUnidade: string;
-
   @Column({ name: 'id_franquia' })
   idFranquia: string;
 
@@ -145,6 +143,9 @@ export default class Atendimento extends BaseEntity {
     other => other.idAtendimento
   )
   atendimentoAtividades: AtendimentoAtividades[];
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => Paciente)
   idPaciente: Paciente;

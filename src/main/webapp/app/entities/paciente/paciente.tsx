@@ -37,14 +37,22 @@ import { IPaciente } from 'app/shared/model/paciente.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
+import { ICidade } from 'app/shared/model/cidade.model';
+import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
+import { IGrauParentesco } from 'app/shared/model/grau-parentesco.model';
+import { getEntities as getGrauParentescos } from 'app/entities/grau-parentesco/grau-parentesco.reducer';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
+import { IPacienteHospital } from 'app/shared/model/paciente-hospital.model';
+import { getEntities as getPacienteHospitals } from 'app/entities/paciente-hospital/paciente-hospital.reducer';
+
 export interface IPacienteProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPacienteBaseState {
-  idUnidade: any;
-  idFranquia: any;
-  idCidade: any;
-  idCidadeFamiliar: any;
-  idGrauParentesco: any;
   senha: any;
   nome: any;
   email: any;
@@ -62,7 +70,6 @@ export interface IPacienteBaseState {
   numero: any;
   complemento: any;
   bairro: any;
-  cidade: any;
   uf: any;
   latitude: any;
   longitude: any;
@@ -81,7 +88,6 @@ export interface IPacienteBaseState {
   numeroFamiliar: any;
   complementoFamiliar: any;
   bairroFamiliar: any;
-  cidadeFamiliar: any;
   ufFamiliar: any;
   latitudeFamiliar: any;
   longitudeFamiliar: any;
@@ -100,10 +106,8 @@ export interface IPacienteBaseState {
   cadastroCompleto: any;
   ativo: any;
   detalhes: any;
-  tipohospital: any;
   liminar: any;
   expoToken: any;
-  profissionalPref: any;
   senhaChat: any;
   atendimento: any;
   atendimentoAssinaturas: any;
@@ -118,6 +122,13 @@ export interface IPacienteBaseState {
   pacienteStatusAtual: any;
   pad: any;
   questionarios: any;
+  unidade: any;
+  franquia: any;
+  cidade: any;
+  cidadeFamiliar: any;
+  grauParentesco: any;
+  profissionalPref: any;
+  tipohospital: any;
 }
 export interface IPacienteState extends IPacienteBaseState, IPaginationBaseState {}
 
@@ -134,11 +145,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 
   getPacienteState = (location): IPacienteBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUnidade = url.searchParams.get('idUnidade') || '';
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-    const idCidade = url.searchParams.get('idCidade') || '';
-    const idCidadeFamiliar = url.searchParams.get('idCidadeFamiliar') || '';
-    const idGrauParentesco = url.searchParams.get('idGrauParentesco') || '';
     const senha = url.searchParams.get('senha') || '';
     const nome = url.searchParams.get('nome') || '';
     const email = url.searchParams.get('email') || '';
@@ -156,7 +162,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     const numero = url.searchParams.get('numero') || '';
     const complemento = url.searchParams.get('complemento') || '';
     const bairro = url.searchParams.get('bairro') || '';
-    const cidade = url.searchParams.get('cidade') || '';
     const uf = url.searchParams.get('uf') || '';
     const latitude = url.searchParams.get('latitude') || '';
     const longitude = url.searchParams.get('longitude') || '';
@@ -175,7 +180,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     const numeroFamiliar = url.searchParams.get('numeroFamiliar') || '';
     const complementoFamiliar = url.searchParams.get('complementoFamiliar') || '';
     const bairroFamiliar = url.searchParams.get('bairroFamiliar') || '';
-    const cidadeFamiliar = url.searchParams.get('cidadeFamiliar') || '';
     const ufFamiliar = url.searchParams.get('ufFamiliar') || '';
     const latitudeFamiliar = url.searchParams.get('latitudeFamiliar') || '';
     const longitudeFamiliar = url.searchParams.get('longitudeFamiliar') || '';
@@ -194,10 +198,8 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     const cadastroCompleto = url.searchParams.get('cadastroCompleto') || '';
     const ativo = url.searchParams.get('ativo') || '';
     const detalhes = url.searchParams.get('detalhes') || '';
-    const tipohospital = url.searchParams.get('tipohospital') || '';
     const liminar = url.searchParams.get('liminar') || '';
     const expoToken = url.searchParams.get('expoToken') || '';
-    const profissionalPref = url.searchParams.get('profissionalPref') || '';
     const senhaChat = url.searchParams.get('senhaChat') || '';
 
     const atendimento = url.searchParams.get('atendimento') || '';
@@ -213,13 +215,15 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     const pacienteStatusAtual = url.searchParams.get('pacienteStatusAtual') || '';
     const pad = url.searchParams.get('pad') || '';
     const questionarios = url.searchParams.get('questionarios') || '';
+    const unidade = url.searchParams.get('unidade') || '';
+    const franquia = url.searchParams.get('franquia') || '';
+    const cidade = url.searchParams.get('cidade') || '';
+    const cidadeFamiliar = url.searchParams.get('cidadeFamiliar') || '';
+    const grauParentesco = url.searchParams.get('grauParentesco') || '';
+    const profissionalPref = url.searchParams.get('profissionalPref') || '';
+    const tipohospital = url.searchParams.get('tipohospital') || '';
 
     return {
-      idUnidade,
-      idFranquia,
-      idCidade,
-      idCidadeFamiliar,
-      idGrauParentesco,
       senha,
       nome,
       email,
@@ -237,7 +241,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -256,7 +259,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numeroFamiliar,
       complementoFamiliar,
       bairroFamiliar,
-      cidadeFamiliar,
       ufFamiliar,
       latitudeFamiliar,
       longitudeFamiliar,
@@ -275,10 +277,8 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       cadastroCompleto,
       ativo,
       detalhes,
-      tipohospital,
       liminar,
       expoToken,
-      profissionalPref,
       senhaChat,
       atendimento,
       atendimentoAssinaturas,
@@ -292,22 +292,31 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacientePush,
       pacienteStatusAtual,
       pad,
-      questionarios
+      questionarios,
+      unidade,
+      franquia,
+      cidade,
+      cidadeFamiliar,
+      grauParentesco,
+      profissionalPref,
+      tipohospital
     };
   };
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUnidadeEasies();
+    this.props.getFranquias();
+    this.props.getCidades();
+    this.props.getGrauParentescos();
+    this.props.getProfissionals();
+    this.props.getPacienteHospitals();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUnidade: '',
-        idFranquia: '',
-        idCidade: '',
-        idCidadeFamiliar: '',
-        idGrauParentesco: '',
         senha: '',
         nome: '',
         email: '',
@@ -325,7 +334,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         numero: '',
         complemento: '',
         bairro: '',
-        cidade: '',
         uf: '',
         latitude: '',
         longitude: '',
@@ -344,7 +352,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         numeroFamiliar: '',
         complementoFamiliar: '',
         bairroFamiliar: '',
-        cidadeFamiliar: '',
         ufFamiliar: '',
         latitudeFamiliar: '',
         longitudeFamiliar: '',
@@ -363,10 +370,8 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         cadastroCompleto: '',
         ativo: '',
         detalhes: '',
-        tipohospital: '',
         liminar: '',
         expoToken: '',
-        profissionalPref: '',
         senhaChat: '',
         atendimento: '',
         atendimentoAssinaturas: '',
@@ -380,7 +385,14 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         pacientePush: '',
         pacienteStatusAtual: '',
         pad: '',
-        questionarios: ''
+        questionarios: '',
+        unidade: '',
+        franquia: '',
+        cidade: '',
+        cidadeFamiliar: '',
+        grauParentesco: '',
+        profissionalPref: '',
+        tipohospital: ''
       },
       () => this.sortEntities()
     );
@@ -424,21 +436,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       this.state.sort +
       ',' +
       this.state.order +
-      '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
-      '&' +
-      'idFranquia=' +
-      this.state.idFranquia +
-      '&' +
-      'idCidade=' +
-      this.state.idCidade +
-      '&' +
-      'idCidadeFamiliar=' +
-      this.state.idCidadeFamiliar +
-      '&' +
-      'idGrauParentesco=' +
-      this.state.idGrauParentesco +
       '&' +
       'senha=' +
       this.state.senha +
@@ -490,9 +487,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       '&' +
       'bairro=' +
       this.state.bairro +
-      '&' +
-      'cidade=' +
-      this.state.cidade +
       '&' +
       'uf=' +
       this.state.uf +
@@ -548,9 +542,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'bairroFamiliar=' +
       this.state.bairroFamiliar +
       '&' +
-      'cidadeFamiliar=' +
-      this.state.cidadeFamiliar +
-      '&' +
       'ufFamiliar=' +
       this.state.ufFamiliar +
       '&' +
@@ -605,17 +596,11 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'detalhes=' +
       this.state.detalhes +
       '&' +
-      'tipohospital=' +
-      this.state.tipohospital +
-      '&' +
       'liminar=' +
       this.state.liminar +
       '&' +
       'expoToken=' +
       this.state.expoToken +
-      '&' +
-      'profissionalPref=' +
-      this.state.profissionalPref +
       '&' +
       'senhaChat=' +
       this.state.senhaChat +
@@ -659,6 +644,27 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'questionarios=' +
       this.state.questionarios +
       '&' +
+      'unidade=' +
+      this.state.unidade +
+      '&' +
+      'franquia=' +
+      this.state.franquia +
+      '&' +
+      'cidade=' +
+      this.state.cidade +
+      '&' +
+      'cidadeFamiliar=' +
+      this.state.cidadeFamiliar +
+      '&' +
+      'grauParentesco=' +
+      this.state.grauParentesco +
+      '&' +
+      'profissionalPref=' +
+      this.state.profissionalPref +
+      '&' +
+      'tipohospital=' +
+      this.state.tipohospital +
+      '&' +
       ''
     );
   };
@@ -667,11 +673,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 
   getEntities = () => {
     const {
-      idUnidade,
-      idFranquia,
-      idCidade,
-      idCidadeFamiliar,
-      idGrauParentesco,
       senha,
       nome,
       email,
@@ -689,7 +690,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -708,7 +708,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numeroFamiliar,
       complementoFamiliar,
       bairroFamiliar,
-      cidadeFamiliar,
       ufFamiliar,
       latitudeFamiliar,
       longitudeFamiliar,
@@ -727,10 +726,8 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       cadastroCompleto,
       ativo,
       detalhes,
-      tipohospital,
       liminar,
       expoToken,
-      profissionalPref,
       senhaChat,
       atendimento,
       atendimentoAssinaturas,
@@ -745,17 +742,19 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacienteStatusAtual,
       pad,
       questionarios,
+      unidade,
+      franquia,
+      cidade,
+      cidadeFamiliar,
+      grauParentesco,
+      profissionalPref,
+      tipohospital,
       activePage,
       itemsPerPage,
       sort,
       order
     } = this.state;
     this.props.getEntities(
-      idUnidade,
-      idFranquia,
-      idCidade,
-      idCidadeFamiliar,
-      idGrauParentesco,
       senha,
       nome,
       email,
@@ -773,7 +772,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -792,7 +790,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       numeroFamiliar,
       complementoFamiliar,
       bairroFamiliar,
-      cidadeFamiliar,
       ufFamiliar,
       latitudeFamiliar,
       longitudeFamiliar,
@@ -811,10 +808,8 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       cadastroCompleto,
       ativo,
       detalhes,
-      tipohospital,
       liminar,
       expoToken,
-      profissionalPref,
       senhaChat,
       atendimento,
       atendimentoAssinaturas,
@@ -829,6 +824,13 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacienteStatusAtual,
       pad,
       questionarios,
+      unidade,
+      franquia,
+      cidade,
+      cidadeFamiliar,
+      grauParentesco,
+      profissionalPref,
+      tipohospital,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -836,7 +838,17 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
   };
 
   render() {
-    const { pacienteList, match, totalItems } = this.props;
+    const {
+      unidadeEasies,
+      franquias,
+      cidades,
+      grauParentescos,
+      profissionals,
+      pacienteHospitals,
+      pacienteList,
+      match,
+      totalItems
+    } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -867,7 +879,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="6">
+                      <Col md="6&gt;">
                         <Row>
                           <Label id="nomeLabel" for="paciente-nome">
                             <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
@@ -1039,11 +1051,23 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 }
 
 const mapStateToProps = ({ paciente, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
+  franquias: storeState.franquia.entities,
+  cidades: storeState.cidade.entities,
+  grauParentescos: storeState.grauParentesco.entities,
+  profissionals: storeState.profissional.entities,
+  pacienteHospitals: storeState.pacienteHospital.entities,
   pacienteList: paciente.entities,
   totalItems: paciente.totalItems
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
+  getFranquias,
+  getCidades,
+  getGrauParentescos,
+  getProfissionals,
+  getPacienteHospitals,
   getEntities
 };
 

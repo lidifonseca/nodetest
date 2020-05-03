@@ -1,10 +1,10 @@
 import { Moment } from 'moment';
 import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
 import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 
 export interface IProfissional {
   id?: string;
-  idUnidade?: string;
   idCidade?: string;
   idTempoExperiencia?: number;
   idBanco?: number;
@@ -45,6 +45,8 @@ export interface IProfissional {
   senhaChat?: string;
   atendimentoAceites?: IAtendimentoAceite[];
   atendimentoAssinaturas?: IAtendimentoAssinaturas[];
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
 }
 
 export const defaultValue: Readonly<IProfissional> = {};

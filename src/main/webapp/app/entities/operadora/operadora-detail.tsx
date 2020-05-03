@@ -47,7 +47,8 @@ export class OperadoraDetail extends React.Component<IOperadoraDetailProps> {
             <Row>
               <Col md="8">
                 <h2>
-                  <Translate contentKey="generadorApp.operadora.detail.title">Operadora</Translate>[<b>{operadoraEntity.id}</b>]
+                  <Translate contentKey="generadorApp.operadora.detail.title">Operadora</Translate>
+                  <small>&nbsp; {operadoraEntity['nomeFantasia']}</small>
                 </h2>
                 <Row className="jh-entity-details">
                   <Col md="12">

@@ -54,21 +54,6 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps> 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idUnidade">
-                            <Translate contentKey="generadorApp.atendimento.idUnidade">Id Unidade</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idUnidade}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="idFranquia">
                             <Translate contentKey="generadorApp.atendimento.idFranquia">Id Franquia</Translate>
                           </span>
@@ -596,6 +581,19 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps> 
                       </Col>
                       <Col md="9">
                         <dd>{atendimentoEntity.imagemAssinatura}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.atendimento.unidade">Unidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{atendimentoEntity.unidade ? atendimentoEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

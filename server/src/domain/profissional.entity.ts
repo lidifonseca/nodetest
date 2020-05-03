@@ -6,15 +6,13 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 
 import AtendimentoAceite from './atendimento-aceite.entity';
 import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
+import UnidadeEasy from './unidade-easy.entity';
 
 /**
  * A Profissional.
  */
 @Entity('profissional')
 export default class Profissional extends BaseEntity {
-  @Column({ name: 'id_unidade', nullable: false })
-  idUnidade: string;
-
   @Column({ name: 'id_cidade' })
   idCidade: string;
 
@@ -140,6 +138,9 @@ export default class Profissional extends BaseEntity {
     other => other.idProfissional
   )
   atendimentoAssinaturas: AtendimentoAssinaturas[];
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -40,7 +40,7 @@ export interface IEspecialidadeUnidadeBaseState {
   valorPagar: any;
   publicar: any;
   comentarioPreco: any;
-  idUnidade: any;
+  unidade: any;
   idEspecialidade: any;
 }
 export interface IEspecialidadeUnidadeState extends IEspecialidadeUnidadeBaseState, IPaginationBaseState {}
@@ -64,7 +64,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
     const publicar = url.searchParams.get('publicar') || '';
     const comentarioPreco = url.searchParams.get('comentarioPreco') || '';
 
-    const idUnidade = url.searchParams.get('idUnidade') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
 
     return {
@@ -73,7 +73,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       valorPagar,
       publicar,
       comentarioPreco,
-      idUnidade,
+      unidade,
       idEspecialidade
     };
   };
@@ -93,7 +93,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
         valorPagar: '',
         publicar: '',
         comentarioPreco: '',
-        idUnidade: '',
+        unidade: '',
         idEspecialidade: ''
       },
       () => this.sortEntities()
@@ -154,8 +154,8 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       'comentarioPreco=' +
       this.state.comentarioPreco +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
+      'unidade=' +
+      this.state.unidade +
       '&' +
       'idEspecialidade=' +
       this.state.idEspecialidade +
@@ -173,7 +173,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       valorPagar,
       publicar,
       comentarioPreco,
-      idUnidade,
+      unidade,
       idEspecialidade,
       activePage,
       itemsPerPage,
@@ -186,7 +186,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       valorPagar,
       publicar,
       comentarioPreco,
-      idUnidade,
+      unidade,
       idEspecialidade,
       activePage - 1,
       itemsPerPage,
@@ -286,15 +286,15 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                       <Col md="3">
                         <Row>
                           <div>
-                            <Label for="especialidade-unidade-idUnidade">
-                              <Translate contentKey="generadorApp.especialidadeUnidade.idUnidade">Id Unidade</Translate>
+                            <Label for="especialidade-unidade-unidade">
+                              <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
                             </Label>
-                            <AvInput id="especialidade-unidade-idUnidade" type="select" className="form-control" name="idUnidadeId">
+                            <AvInput id="especialidade-unidade-unidade" type="select" className="form-control" name="unidadeId">
                               <option value="" key="0" />
                               {unidadeEasies
                                 ? unidadeEasies.map(otherEntity => (
                                     <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
+                                      {otherEntity.razaoSocial}
                                     </option>
                                   ))
                                 : null}
@@ -375,7 +375,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.idUnidade">Id Unidade</Translate>
+                        <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
@@ -406,8 +406,8 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
                         <td>{especialidadeUnidade.comentarioPreco}</td>
                         <td>
-                          {especialidadeUnidade.idUnidade ? (
-                            <Link to={`unidade-easy/${especialidadeUnidade.idUnidade.id}`}>{especialidadeUnidade.idUnidade.id}</Link>
+                          {especialidadeUnidade.unidade ? (
+                            <Link to={`unidade-easy/${especialidadeUnidade.unidade.id}`}>{especialidadeUnidade.unidade.id}</Link>
                           ) : (
                             ''
                           )}

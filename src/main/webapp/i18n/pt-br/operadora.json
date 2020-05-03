@@ -22,7 +22,6 @@
       "ie": "Ie",
       "site": "Site",
       "ativo": "Ativo",
-      "idUnidade": "Id Unidade",
       "endereco": "Endereco",
       "contatoCentralAtendimento": "Contato Central Atendimento",
       "emailCentralAtendimento": "Email Central Atendimento",
@@ -35,7 +34,8 @@
       "atendimento": "Atendimento",
       "especialidadeOperadora": "Especialidade Operadora",
       "pacienteOperadora": "Paciente Operadora",
-      "idTipoOperadora": "Id Tipo Operadora"
+      "unidade": "Unidade",
+      "tipoOperadora": "Tipo Operadora"
     }
   }
 }

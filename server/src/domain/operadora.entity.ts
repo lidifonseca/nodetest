@@ -7,10 +7,11 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 import Atendimento from './atendimento.entity';
 import EspecialidadeOperadora from './especialidade-operadora.entity';
 import PacienteOperadora from './paciente-operadora.entity';
+import UnidadeEasy from './unidade-easy.entity';
 import TipoOperadora from './tipo-operadora.entity';
 
 /**
- * @toStringFields nome@@\n@listTableLayout nomeFantasia@@\n@listFilterLayout nomeFantasia<top;3>@@\n@formLayout tipoOperadora<left;12> nomeFantasia<left;12> razaoSocial<left;12> cnpj<left;12> ie<left;12> rg<left;12> site<left;12>@@\n@viewLayout nomeFantasia<left;12> razaoSocial<left;12> cnpj<left;12> ie<left;12> rg<left;12> site<left;12>@@
+ * @toStringFields nomeFantasia@@\n@listTableLayout nomeFantasia@@\n@listFilterLayout nomeFantasia{Label:top,Size:3}@@\n@formLayout\ntipoOperadora{Label:top,Size:12}\nunidade{Label:top,Size:12}\nnomeFantasia{Label:top,Size:12}\nrazaoSocial{Label:top,Size:12}\nendereco{Label:top,Size:12}\ncnpj{Label:top,Size:6}\nie{Label:top,Size:6}\nsite{Label:top,Size:12}\ncontatoCentralAtendimento{Label:top,Size:8}\nemailCentralAtendimento{Label:top,Size:4}\nnomeContatoComercial{Label:top,Size:4}\ncontatoComercial{Label:top,Size:4}\nemailComercial{Label:top,Size:4}\nnomeContatoFinanceiro{Label:top,Size:4}\ncontatoFinanceiro{Label:top,Size:4}\nemailFinanceiro{Label:top,Size:4}\n@@\n@viewLayout\nnomeFantasia{Label:left,Size:12}\nrazaoSocial{Label:left,Size:12}\ncnpj{Label:left,Size:12}\nie{Label:left,Size:12}\nrg{Label:left,Size:12}\nsite{Label:left,Size:12}\n@@
  */
 @Entity('operadora')
 export default class Operadora extends BaseEntity {
@@ -31,9 +32,6 @@ export default class Operadora extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @Column({ type: 'integer', name: 'id_unidade' })
-  idUnidade: number;
 
   @Column({ name: 'endereco', length: 200 })
   endereco: string;
@@ -80,8 +78,11 @@ export default class Operadora extends BaseEntity {
   )
   pacienteOperadoras: PacienteOperadora[];
 
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
+
   @ManyToOne(type => TipoOperadora)
-  idTipoOperadora: TipoOperadora;
+  tipoOperadora: TipoOperadora;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -16,7 +16,6 @@
       "detail": {
         "title": "Atendimento"
       },
-      "idUnidade": "Id Unidade",
       "idFranquia": "Id Franquia",
       "idProfissional": "Id Profissional",
       "cep": "Cep",
@@ -55,6 +54,7 @@
       "atendimentoAceite": "Atendimento Aceite",
       "atendimentoAssinaturas": "Atendimento Assinaturas",
       "atendimentoAtividades": "Atendimento Atividades",
+      "unidade": "Unidade",
       "idPaciente": "Id Paciente",
       "idOperadora": "Id Operadora",
       "idEspecialidade": "Id Especialidade",

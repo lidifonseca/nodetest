@@ -2,13 +2,6 @@
     "name": "Atendimento",
     "fields": [
         {
-            "fieldName": "idUnidade",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idFranquia",
             "fieldType": "String"
         },
@@ -251,6 +244,13 @@
             "otherEntityName": "atendimentoAtividades",
             "otherEntityRelationshipName": "idAtendimento",
             "relationshipName": "atendimentoAtividades"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "atendimento",
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial"
         },
         {
             "relationshipType": "many-to-one",

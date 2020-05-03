@@ -16,7 +16,6 @@
       "detail": {
         "title": "Profissional New"
       },
-      "idUnidade": "Id Unidade",
       "idCidade": "Id Cidade",
       "idTempoExperiencia": "Id Tempo Experiencia",
       "idBanco": "Id Banco",
@@ -49,7 +48,8 @@
       "origemCadastro": "Origem Cadastro",
       "obs": "Obs",
       "chavePrivada": "Chave Privada",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "unidade": "Unidade"
     }
   }
 }

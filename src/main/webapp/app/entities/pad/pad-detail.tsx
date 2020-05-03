@@ -54,21 +54,6 @@ export class PadDetail extends React.Component<IPadDetailProps> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idUnidade">
-                            <Translate contentKey="generadorApp.pad.idUnidade">Id Unidade</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.idUnidade}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="idOperadora">
                             <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
                           </span>
@@ -247,6 +232,19 @@ export class PadDetail extends React.Component<IPadDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{padEntity.score}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{padEntity.unidade ? padEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

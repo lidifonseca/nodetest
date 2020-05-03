@@ -128,7 +128,6 @@ entity ApiReturn {
 }
 
 entity Atendimento {
-	idUnidade String required,
 	idFranquia String,
 	idProfissional String,
 	cep String maxlength(10),
@@ -234,8 +233,7 @@ entity Categoria {
 }
 
 entity CategoriaAtividade {
-	atividade String maxlength(100),
-	idUnidade Integer
+	atividade String maxlength(100)
 }
 
 entity CategoriaContrato {
@@ -334,8 +332,7 @@ entity Especialidade {
 	descricao TextBlob,
 	duracao Integer,
 	importante String maxlength(255),
-	ativo Integer,
-	idUnidade Integer
+	ativo Integer
 }
 
 entity EspecialidadeOperadora {
@@ -600,17 +597,33 @@ entity OcorrenciaProntuario {
 /**
 	@toStringFields nomeFantasia@@ 
 	@listTableLayout nomeFantasia@@ 
-	@listFilterLayout nomeFantasia<top;3>@@ 
+	@listFilterLayout nomeFantasia{Label:top,Size:3}@@ 
 	@formLayout 
-			tipoOperadora<left;12> 
-			nomeFantasia<left;12> 
-			razaoSocial<left;12> 
-			cnpj<left;12> 
-			ie<left;12> 
-			rg<left;12> 
-			site<left;12>
+			tipoOperadora{Label:top,Size:12} 
+			unidade{Label:top,Size:12} 
+			nomeFantasia{Label:top,Size:12} 
+			razaoSocial{Label:top,Size:12} 
+			endereco{Label:top,Size:12} 
+			cnpj{Label:top,Size:6} 
+			ie{Label:top,Size:6} 
+			site{Label:top,Size:12}
+			contatoCentralAtendimento{Label:top,Size:8} 
+			emailCentralAtendimento{Label:top,Size:4} 
+			nomeContatoComercial{Label:top,Size:4} 
+			contatoComercial{Label:top,Size:4} 
+			emailComercial{Label:top,Size:4} 
+			nomeContatoFinanceiro{Label:top,Size:4} 
+			contatoFinanceiro{Label:top,Size:4} 
+			emailFinanceiro{Label:top,Size:4} 
 	@@ 
-	@viewLayout nomeFantasia<left;12> razaoSocial<left;12> cnpj<left;12> ie<left;12> rg<left;12> site<left;12>@@ 
+	@viewLayout 
+			nomeFantasia{Label:left,Size:12} 
+			razaoSocial{Label:left,Size:12} 
+			cnpj{Label:left,Size:12} 
+			ie{Label:left,Size:12} 
+			rg{Label:left,Size:12} 
+			site{Label:left,Size:12}
+	@@ 
 */
 
 entity Operadora {
@@ -620,7 +633,6 @@ entity Operadora {
 	ie String maxlength(30),
 	site String maxlength(100),
 	ativo Integer,
-	idUnidade Integer,
 	endereco String maxlength(200),
 	contatoCentralAtendimento String maxlength(20),
 	emailCentralAtendimento String maxlength(50),
@@ -631,20 +643,95 @@ entity Operadora {
 	contatoFinanceiro String maxlength(20),
 	emailFinanceiro String maxlength(50)
 }
-
 /**
 	@toStringFields nome@@ 
 	@listTableLayout nome cep bairro rg registro@@ 
-	@listFilterLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
-	@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
-	@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@ 
+	@listFilterLayout 
+		nome{Label:top,Size:6> 
+		email{Label:top,Size:6} 
+		cpf{Label:top,Size:6} 
+		rg{Label:top,Size:6} 
+		registro{Label:top,Size:6}
+	@@ 
+	@formTab DadosDoPaciente<unidade,email,nome,cpf,rg,cep,nascimento,sexo,endereco,telefone,celular,bairro,numero,complemento,cidade,uf,profissionalPref,tipohospital,liminar,detalhes,observacao>@@ 
+	@formTab DadosDoFamiliar<cepFamiliar,enderecoFamiliar,numeroFamiliar,complementoFamiliar,cidadeFamiliar,bairroFamiliar,ufFamiliar,latitudeFamiliar,longitudeFamiliar,acessoFamiliar,emailFamiliar,cpfFamiliar,rgFamiliar,nascimentoFamiliar,sexoFamiliar,telefoneFamiliar,celularFamiliar,observacaoFamiliar>@@ 
+	@formLayout
+		unidade{Label:top,Size:6}
+		email{Label:top,Size:6}
+		nome{Label:top,Size:6}
+		cpf{Label:top,Size:3}
+		rg{Label:top,Size:3}
+		cep{Label:top,Size:6}
+		nascimento{Label:top,Size:3}
+		sexo{Label:top,Size:3}
+		endereco{Label:top,Size:6}
+		telefone{Label:top,Size:3}
+		celular{Label:top,Size:3}
+		bairro{Label:top,Size:4}
+		numero{Label:top,Size:6}
+		complemento{Label:top,Size:6}
+		cidade{Label:top,Size:8}
+		uf{Label:top,Size:4}
+		profissionalPref{Label:top,Size:6}
+		tipohospital{Label:top,Size:6}
+		liminar{Label:top,Size:12}
+		detalhes{Label:top,Size:12}
+		observacao{Label:top,Size:12}
+		comResponsavel{Label:top,Size:12}
+
+		grauParentesco{Label:top,Size:12}
+		responsavelFamiliar{Label:top,Size:12}
+
+
+
+		cepFamiliar{Label:top,Size:12}
+		enderecoFamiliar{Label:top,Size:12}
+		numeroFamiliar{Label:top,Size:12}
+		complementoFamiliar{Label:top,Size:12}
+		cidadeFamiliar{Label:top,Size:12}
+		bairroFamiliar{Label:top,Size:12}
+		ufFamiliar{Label:top,Size:12}
+		latitudeFamiliar{Label:top,Size:12}
+		longitudeFamiliar{Label:top,Size:12}
+		acessoFamiliar{Label:top,Size:12}
+		emailFamiliar{Label:top,Size:12}
+		cpfFamiliar{Label:top,Size:12}
+		rgFamiliar{Label:top,Size:12}
+		nascimentoFamiliar{Label:top,Size:12}
+		sexoFamiliar{Label:top,Size:12}
+		telefoneFamiliar{Label:top,Size:12}
+		celularFamiliar{Label:top,Size:12}
+		observacaoFamiliar{Label:top,Size:12}
+
+
+		franquia{Label:top,Size:12}
+		senha{Label:top,Size:12}
+		registro{Label:top,Size:12}
+		latitude{Label:top,Size:12}
+		longitude{Label:top,Size:12}
+		aph{Label:top,Size:12}
+		nivelComplexidade{Label:top,Size:12}
+		passagemPs{Label:top,Size:12}
+		obsPs{Label:top,Size:12}
+		passagemInternacao{Label:top,Size:12}
+		obsInternacao{Label:top,Size:12}
+		custoTotal{Label:top,Size:12}
+		mesmoEndereco{Label:top,Size:12}
+		cadastroCompleto{Label:top,Size:12}
+		ativo{Label:top,Size:12}
+		expoToken{Label:top,Size:12}
+		senhaChat{Label:top,Size:12}
+	@@ 
+	@viewLayout 
+			cidade{Label:top,Size:6} 
+			nome{Label:top,Size:6} 
+			email{Label:top,Size:6} 
+			cpf{Label:top,Size:6} 
+			rg{Label:top,Size:6} 
+			registro{Label:top,Size:6}
+	@@ 
 */
 entity Paciente {
-	idUnidade String required,
-	idFranquia String,
-	idCidade String,
-	idCidadeFamiliar String,
-	idGrauParentesco Integer required,
 	senha String maxlength(100),
 	nome String maxlength(60),
 	email String maxlength(100),
@@ -662,7 +749,6 @@ entity Paciente {
 	numero String maxlength(30),
 	complemento String maxlength(20),
 	bairro String maxlength(40),
-	cidade String maxlength(100),
 	uf String maxlength(5),
 	latitude String maxlength(60),
 	longitude String maxlength(60),
@@ -681,7 +767,6 @@ entity Paciente {
 	numeroFamiliar String maxlength(30),
 	complementoFamiliar String maxlength(20),
 	bairroFamiliar String maxlength(40),
-	cidadeFamiliar String maxlength(100),
 	ufFamiliar String maxlength(5),
 	latitudeFamiliar String maxlength(60),
 	longitudeFamiliar String maxlength(60),
@@ -700,10 +785,8 @@ entity Paciente {
 	cadastroCompleto Integer,
 	ativo Integer,
 	detalhes TextBlob,
-	tipohospital Integer,
 	liminar String maxlength(50),
 	expoToken String maxlength(255),
-	profissionalPref Integer,
 	senhaChat String maxlength(45)
 }
 
@@ -946,7 +1029,6 @@ entity PacienteStatusAtual {
 }
 
 entity Pad {
-	idUnidade String required,
 	idOperadora Integer,
 	idFranquia String,
 	nroPad String maxlength(30),
@@ -1108,7 +1190,6 @@ entity Periodo {
 }
 
 entity Profissional {
-	idUnidade String required,
 	idCidade String,
 	idTempoExperiencia Integer,
 	idBanco Integer,
@@ -1246,7 +1327,6 @@ entity ProfissionalHorario {
 }
 
 entity ProfissionalNew {
-	idUnidade String required,
 	idCidade String,
 	idTempoExperiencia Integer,
 	idBanco Integer,
@@ -1521,7 +1601,6 @@ entity UnidadeMedida {
 }
 
 entity Usuario {
-	idUnidade String required,
 	idOperadora String maxlength(1000),
 	senha String maxlength(100),
 	nome String maxlength(60),
@@ -1742,7 +1821,38 @@ entity VwApiAtendimentosAceite {
 
 // Relations
 relationship ManyToOne {
-	 Operadora{tipoOperadora} to TipoOperadora
+	 
+	 Atendimento{unidade(razaoSocial)} to UnidadeEasy
+	 CategoriaAtividade{unidade(razaoSocial)} to UnidadeEasy
+	 Especialidade{unidade(razaoSocial)} to UnidadeEasy
+
+
+	 Paciente{unidade(razaoSocial)} to UnidadeEasy
+	 Paciente{franquia(nomeFantasia)} to Franquia
+	 Paciente{cidade(descrCidade)} to Cidade
+	 Paciente{cidadeFamiliar(descrCidade)} to Cidade
+	 Paciente{grauParentesco(grauParentesco)} to GrauParentesco
+	 Paciente{profissionalPref(nome)} to Profissional
+	 Paciente{tipohospital(servico)} to PacienteHospital
+
+	 Pad{unidade(razaoSocial)} to UnidadeEasy
+	 Profissional{unidade(razaoSocial)} to UnidadeEasy
+	 ProfissionalNew{unidade(razaoSocial)} to UnidadeEasy
+	 Usuario{unidade(razaoSocial)} to UnidadeEasy
+
+	 Operadora{unidade(razaoSocial)} to UnidadeEasy
+	 Operadora{tipoOperadora(tipo)} to TipoOperadora
+	 
+	 EspecialidadeUnidade{unidade(razaoSocial)} to UnidadeEasy
+	 CategoriaUnidade{unidade(razaoSocial)} to UnidadeEasy
+	 PacientePedido{unidade(razaoSocial)} to UnidadeEasy
+	 UnidadeEasyAreaAtuacao{unidade(razaoSocial)} to UnidadeEasy
+
+
+
+
+
+
 }
 
 relationship OneToMany {
@@ -1772,7 +1882,6 @@ relationship OneToMany {
 	 PadItem{atendimentoSorteioFeito} to AtendimentoSorteioFeito{idPadItem}
 	 Categoria{categoriaAtividade} to CategoriaAtividade{idCategoria}
 	 Categoria{categoriaContrato} to CategoriaContrato{idCategoria}
-	 UnidadeEasy{categoriaUnidade} to CategoriaUnidade{idUnidade}
 	 Categoria{categoriaUnidade} to CategoriaUnidade{idCategoria}
 	 Cid{cidXPtaNovo} to CidXPtaNovo{cidId}
 	 CidXPtaNovo{cidXPtaNovo} to CidXPtaNovo{cidXPtaNovoId}
@@ -1788,7 +1897,6 @@ relationship OneToMany {
 	 TipoUnidade{especialidade} to Especialidade{idTipoUnidade}
 	 Operadora{especialidadeOperadora} to EspecialidadeOperadora{idOperadora}
 	 Especialidade{especialidadeOperadora} to EspecialidadeOperadora{idEspecialidade}
-	 UnidadeEasy{especialidadeUnidade} to EspecialidadeUnidade{idUnidade}
 	 Especialidade{especialidadeUnidade} to EspecialidadeUnidade{idEspecialidade}
 	 Especialidade{especialidadeValor} to EspecialidadeValor{idEspecialidade}
 	 Franquia{franquiaAreaAtuacao} to FranquiaAreaAtuacao{idFranquia}
@@ -1808,7 +1916,6 @@ relationship OneToMany {
 	 Paciente{pacienteEnqueteApp} to PacienteEnqueteApp{idPaciente}
 	 Paciente{pacienteOperadora} to PacienteOperadora{idPaciente}
 	 Operadora{pacienteOperadora} to PacienteOperadora{idOperadora}
-	 UnidadeEasy{pacientePedido} to PacientePedido{idUnidade}
 	 Paciente{pacientePedido} to PacientePedido{idPaciente}
 	 PacienteDadosCartao{pacientePedido} to PacientePedido{idCartao}
 	 Especialidade{pacientePedido} to PacientePedido{idEspecialidade}
@@ -1839,7 +1946,6 @@ relationship OneToMany {
 //	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{perguntasQuestionarioId}
 //	 CidXPtaNovoCategorias{resultados required} to Resultados{cidXPtaNovoId}
 //	 CidXPtaNovoCategorias{resultados required} to Resultados{categoriasId}
-	 UnidadeEasy{unidadeEasyAreaAtuacao} to UnidadeEasyAreaAtuacao{idUnidade}
 	 TipoUsuario{usuario} to Usuario{idTipoUsuario}
 	 Tela{usuarioAcao} to UsuarioAcao{idTela}
 	 Acao{usuarioAcao} to UsuarioAcao{idAcao}

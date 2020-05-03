@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './pad.reducer';
@@ -19,6 +21,7 @@ export interface IPadUpdateProps extends StateProps, DispatchProps, RouteCompone
 
 export interface IPadUpdateState {
   isNew: boolean;
+  unidadeId: string;
   idPacienteId: string;
 }
 
@@ -26,6 +29,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
   constructor(props: Readonly<IPadUpdateProps>) {
     super(props);
     this.state = {
+      unidadeId: '0',
       idPacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -43,6 +47,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
       this.props.getEntity(this.props.match.params.id);
     }
 
+    this.props.getUnidadeEasies();
     this.props.getPacientes();
   }
 
@@ -67,7 +72,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
   };
 
   render() {
-    const { padEntity, pacientes, loading, updating } = this.props;
+    const { padEntity, unidadeEasies, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -86,6 +91,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
               ? {}
               : {
                   ...padEntity,
+                  unidade: padEntity.unidade ? padEntity.unidade.id : null,
                   idPaciente: padEntity.idPaciente ? padEntity.idPaciente.id : null
                 }
           }
@@ -139,28 +145,6 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" id="idUnidadeLabel" for="pad-idUnidade">
-                                <Translate contentKey="generadorApp.pad.idUnidade">Id Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-idUnidade"
-                                type="text"
-                                name="idUnidade"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
                               <Label className="mt-2" id="idOperadoraLabel" for="pad-idOperadora">
                                 <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
                               </Label>
@@ -196,14 +180,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="pad-nroPad"
-                                type="text"
-                                name="nroPad"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
+                              <AvField id="pad-nroPad" type="text" name="nroPad" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -321,14 +298,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="pad-imagePath"
-                                type="text"
-                                name="imagePath"
-                                validate={{
-                                  maxLength: { value: 250, errorMessage: translate('entity.validation.maxlength', { max: 250 }) }
-                                }}
-                              />
+                              <AvField id="pad-imagePath" type="text" name="imagePath" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -348,6 +318,32 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                           </Row>
                         </AvGroup>
                       </Col>
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="3">
+                              <Label className="mt-2" for="pad-unidade">
+                                <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="9">
+                              <AvInput id="pad-unidade" type="select" className="form-control" name="unidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.pad.unidade.empty')}
+                                </option>
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
+
                       <Col md="12">
                         <AvGroup>
                           <Row>
@@ -386,6 +382,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   pacientes: storeState.paciente.entities,
   padEntity: storeState.pad.entity,
   loading: storeState.pad.loading,
@@ -394,6 +391,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getPacientes,
   getEntity,
   updateEntity,

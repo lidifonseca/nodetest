@@ -1,6 +1,7 @@
 import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operadora.model';
 import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 
 export interface IOperadora {
@@ -11,7 +12,6 @@ export interface IOperadora {
   ie?: string;
   site?: string;
   ativo?: number;
-  idUnidade?: number;
   endereco?: string;
   contatoCentralAtendimento?: string;
   emailCentralAtendimento?: string;
@@ -24,7 +24,10 @@ export interface IOperadora {
   atendimentos?: IAtendimento[];
   especialidadeOperadoras?: IEspecialidadeOperadora[];
   pacienteOperadoras?: IPacienteOperadora[];
-  idTipoOperadora?: string | any;
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
+  tipoOperadoraTipo?: string;
+  tipoOperadora?: string | any;
 }
 
 export const defaultValue: Readonly<IOperadora> = {};

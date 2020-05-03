@@ -108,7 +108,6 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
     @ApiModelProperty({description = "<%- formatAsApiDescription(relationships.javadoc) %>"})
             <%_ }_%>
     <%_ }
-    console.info(relationship);
         if (relationshipType === 'one-to-many') {_%>
     @OneToMany(type => <%= relationship.otherEntityAngularName %> <%_ if (isUserRelationship === false) { _%>, other => other.<%= otherEntityRelationshipName %><%_ } _%>)
     <%= relationshipFieldNamePlural %>: <%= relationship.otherEntityAngularName %>[];

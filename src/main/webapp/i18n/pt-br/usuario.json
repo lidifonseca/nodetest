@@ -16,7 +16,6 @@
       "detail": {
         "title": "Usuario"
       },
-      "idUnidade": "Id Unidade",
       "idOperadora": "Id Operadora",
       "senha": "Senha",
       "nome": "Nome",
@@ -143,6 +142,7 @@
       "senhaChat": "Senha Chat",
       "diario": "Diario",
       "pacienteDiario": "Paciente Diario",
+      "unidade": "Unidade",
       "idTipoUsuario": "Id Tipo Usuario"
     }
   }

@@ -111,7 +111,7 @@ export type ICrudGetAllActionEspecialidadeUnidade<T> = (
   valorPagar?: any,
   publicar?: any,
   comentarioPreco?: any,
-  idUnidade?: any,
+  unidade?: any,
   idEspecialidade?: any,
   page?: number,
   size?: number,
@@ -124,7 +124,7 @@ export const getEntities: ICrudGetAllActionEspecialidadeUnidade<IEspecialidadeUn
   valorPagar,
   publicar,
   comentarioPreco,
-  idUnidade,
+  unidade,
   idEspecialidade,
   page,
   size,
@@ -135,14 +135,14 @@ export const getEntities: ICrudGetAllActionEspecialidadeUnidade<IEspecialidadeUn
   const valorPagarRequest = valorPagar ? `valorPagar.contains=${valorPagar}&` : '';
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
   const comentarioPrecoRequest = comentarioPreco ? `comentarioPreco.contains=${comentarioPreco}&` : '';
-  const idUnidadeRequest = idUnidade ? `idUnidade.equals=${idUnidade}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEUNIDADE_LIST,
     payload: axios.get<IEspecialidadeUnidade>(
-      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${idUnidadeRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${unidadeRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -157,7 +157,7 @@ export const getEntity: ICrudGetAction<IEspecialidadeUnidade> = id => {
 export const createEntity: ICrudPutAction<IEspecialidadeUnidade> = entity => async dispatch => {
   entity = {
     ...entity,
-    idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
   };
   const result = await dispatch({
@@ -171,7 +171,7 @@ export const createEntity: ICrudPutAction<IEspecialidadeUnidade> = entity => asy
 export const updateEntity: ICrudPutAction<IEspecialidadeUnidade> = entity => async dispatch => {
   entity = {
     ...entity,
-    idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
   };
   const result = await dispatch({

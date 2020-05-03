@@ -2,6 +2,7 @@ import { Moment } from 'moment';
 import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
 import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
 import { IAtendimentoAtividades } from 'app/shared/model/atendimento-atividades.model';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { IOperadora } from 'app/shared/model/operadora.model';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
@@ -12,7 +13,6 @@ import { ICidade } from 'app/shared/model/cidade.model';
 
 export interface IAtendimento {
   id?: string;
-  idUnidade?: string;
   idFranquia?: string;
   idProfissional?: string;
   cep?: string;
@@ -51,6 +51,8 @@ export interface IAtendimento {
   atendimentoAceites?: IAtendimentoAceite[];
   atendimentoAssinaturas?: IAtendimentoAssinaturas[];
   atendimentoAtividades?: IAtendimentoAtividades[];
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
   idPaciente?: string | any;
   idOperadora?: string | any;
   idEspecialidade?: string | any;

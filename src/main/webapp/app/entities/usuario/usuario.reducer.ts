@@ -106,7 +106,6 @@ const apiUrl = 'api/usuarios';
 
 // Actions
 export type ICrudGetAllActionUsuario<T> = (
-  idUnidade?: any,
   idOperadora?: any,
   senha?: any,
   nome?: any,
@@ -233,6 +232,7 @@ export type ICrudGetAllActionUsuario<T> = (
   senhaChat?: any,
   diario?: any,
   pacienteDiario?: any,
+  unidade?: any,
   idTipoUsuario?: any,
   page?: number,
   size?: number,
@@ -240,7 +240,6 @@ export type ICrudGetAllActionUsuario<T> = (
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionUsuario<IUsuario> = (
-  idUnidade,
   idOperadora,
   senha,
   nome,
@@ -367,12 +366,12 @@ export const getEntities: ICrudGetAllActionUsuario<IUsuario> = (
   senhaChat,
   diario,
   pacienteDiario,
+  unidade,
   idTipoUsuario,
   page,
   size,
   sort
 ) => {
-  const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
   const senhaRequest = senha ? `senha.contains=${senha}&` : '';
   const nomeRequest = nome ? `nome.contains=${nome}&` : '';
@@ -507,13 +506,14 @@ export const getEntities: ICrudGetAllActionUsuario<IUsuario> = (
   const senhaChatRequest = senhaChat ? `senhaChat.contains=${senhaChat}&` : '';
   const diarioRequest = diario ? `diario.equals=${diario}&` : '';
   const pacienteDiarioRequest = pacienteDiario ? `pacienteDiario.equals=${pacienteDiario}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const idTipoUsuarioRequest = idTipoUsuario ? `idTipoUsuario.equals=${idTipoUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_USUARIO_LIST,
     payload: axios.get<IUsuario>(
-      `${requestUrl}${idUnidadeRequest}${idOperadoraRequest}${senhaRequest}${nomeRequest}${emailRequest}${telefoneRequest}${celularRequest}${cpfRequest}${rgRequest}${sexoRequest}${nascimentoRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${baixaManualAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verDiarioRequest}${cadDiarioRequest}${ediDiarioRequest}${delDiarioRequest}${relDiarioRequest}${verCategoriaRequest}${cadCategoriaRequest}${ediCategoriaRequest}${delCategoriaRequest}${verEspecialidadeRequest}${cadEspecialidadeRequest}${ediEspecialidadeRequest}${delEspecialidadeRequest}${relEspecialidadeRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${relEspecialidadeValorRequest}${verOperadoraRequest}${cadOperadoraRequest}${ediOperadoraRequest}${delOperadoraRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${ativProfissionalRequest}${relProfissionalRequest}${verPushRequest}${cadPushPacienteRequest}${cadPushProfissionalRequest}${verTermoPacienteRequest}${ediTermoPacienteRequest}${verTermoProfissionalRequest}${ediTermoProfissionalRequest}${verOutrosRequest}${cadOutrosRequest}${ediOutrosRequest}${delOutrosRequest}${relOutrosRequest}${verUnidadeEasyRequest}${cadUnidadeEasyRequest}${ediUnidadeEasyRequest}${delUnidadeEasyRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${verPtaResultadoRequest}${cadPtaResultadoRequest}${delPtaResultadoRequest}${verPtaAtividadeRequest}${cadPtaAtividadeRequest}${delPtaAtividadeRequest}${permissaoUsuarioRequest}${verProntuarioRequest}${cadProntuarioRequest}${ediProntuarioRequest}${delProntuarioRequest}${delProntuarioFotoRequest}${valoresFinanceiroRequest}${autorizacaoValorFinanceiroRequest}${confirmarPagamentoFinanceiroRequest}${gerenciarSorteiosRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${envioAvaliacaoRequest}${envioPedidoRequest}${alertaAtendimentoRequest}${ativoRequest}${envioGlosadoRequest}${emergenciaRequest}${tokenRequest}${editAtendimentoRequest}${ouvirLigacaoRequest}${verPainelIndicadoresRequest}${prorrogarPadRequest}${cancelarAtendMassaRequest}${cadMatMedRequest}${ediMatMedRequest}${delMatMedRequest}${verColPtaRequest}${verColFotoRequest}${verColLcRequest}${verAtendCanceladoRequest}${verAtendAgConfirmacaoRequest}${ediGeoLocalizacaoAtendimentoRequest}${copiarEvolucaoRequest}${copiarNomeProfRequest}${copiarRegistroProfRequest}${idAreaAtuacaoRequest}${envioCidSemPtaRequest}${envioAnaliseResultadoEsperadoRequest}${envioDescumprimentoRequest}${envioMelhoraTempoRequest}${senhaChatRequest}${diarioRequest}${pacienteDiarioRequest}${idTipoUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${senhaRequest}${nomeRequest}${emailRequest}${telefoneRequest}${celularRequest}${cpfRequest}${rgRequest}${sexoRequest}${nascimentoRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${baixaManualAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verDiarioRequest}${cadDiarioRequest}${ediDiarioRequest}${delDiarioRequest}${relDiarioRequest}${verCategoriaRequest}${cadCategoriaRequest}${ediCategoriaRequest}${delCategoriaRequest}${verEspecialidadeRequest}${cadEspecialidadeRequest}${ediEspecialidadeRequest}${delEspecialidadeRequest}${relEspecialidadeRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${relEspecialidadeValorRequest}${verOperadoraRequest}${cadOperadoraRequest}${ediOperadoraRequest}${delOperadoraRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${ativProfissionalRequest}${relProfissionalRequest}${verPushRequest}${cadPushPacienteRequest}${cadPushProfissionalRequest}${verTermoPacienteRequest}${ediTermoPacienteRequest}${verTermoProfissionalRequest}${ediTermoProfissionalRequest}${verOutrosRequest}${cadOutrosRequest}${ediOutrosRequest}${delOutrosRequest}${relOutrosRequest}${verUnidadeEasyRequest}${cadUnidadeEasyRequest}${ediUnidadeEasyRequest}${delUnidadeEasyRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${verPtaResultadoRequest}${cadPtaResultadoRequest}${delPtaResultadoRequest}${verPtaAtividadeRequest}${cadPtaAtividadeRequest}${delPtaAtividadeRequest}${permissaoUsuarioRequest}${verProntuarioRequest}${cadProntuarioRequest}${ediProntuarioRequest}${delProntuarioRequest}${delProntuarioFotoRequest}${valoresFinanceiroRequest}${autorizacaoValorFinanceiroRequest}${confirmarPagamentoFinanceiroRequest}${gerenciarSorteiosRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${envioAvaliacaoRequest}${envioPedidoRequest}${alertaAtendimentoRequest}${ativoRequest}${envioGlosadoRequest}${emergenciaRequest}${tokenRequest}${editAtendimentoRequest}${ouvirLigacaoRequest}${verPainelIndicadoresRequest}${prorrogarPadRequest}${cancelarAtendMassaRequest}${cadMatMedRequest}${ediMatMedRequest}${delMatMedRequest}${verColPtaRequest}${verColFotoRequest}${verColLcRequest}${verAtendCanceladoRequest}${verAtendAgConfirmacaoRequest}${ediGeoLocalizacaoAtendimentoRequest}${copiarEvolucaoRequest}${copiarNomeProfRequest}${copiarRegistroProfRequest}${idAreaAtuacaoRequest}${envioCidSemPtaRequest}${envioAnaliseResultadoEsperadoRequest}${envioDescumprimentoRequest}${envioMelhoraTempoRequest}${senhaChatRequest}${diarioRequest}${pacienteDiarioRequest}${unidadeRequest}${idTipoUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -528,6 +528,7 @@ export const getEntity: ICrudGetAction<IUsuario> = id => {
 export const createEntity: ICrudPutAction<IUsuario> = entity => async dispatch => {
   entity = {
     ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idTipoUsuario: entity.idTipoUsuario === 'null' ? null : entity.idTipoUsuario
   };
   const result = await dispatch({
@@ -539,7 +540,11 @@ export const createEntity: ICrudPutAction<IUsuario> = entity => async dispatch =
 };
 
 export const updateEntity: ICrudPutAction<IUsuario> = entity => async dispatch => {
-  entity = { ...entity, idTipoUsuario: entity.idTipoUsuario === 'null' ? null : entity.idTipoUsuario };
+  entity = {
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    idTipoUsuario: entity.idTipoUsuario === 'null' ? null : entity.idTipoUsuario
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USUARIO,
     payload: axios.put(apiUrl, cleanEntity(entity))

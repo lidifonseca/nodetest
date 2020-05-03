@@ -12,14 +12,15 @@ import { IPacientePush } from 'app/shared/model/paciente-push.model';
 import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
 import { IPad } from 'app/shared/model/pad.model';
 import { IQuestionarios } from 'app/shared/model/questionarios.model';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { IFranquia } from 'app/shared/model/franquia.model';
+import { ICidade } from 'app/shared/model/cidade.model';
+import { IGrauParentesco } from 'app/shared/model/grau-parentesco.model';
+import { IProfissional } from 'app/shared/model/profissional.model';
+import { IPacienteHospital } from 'app/shared/model/paciente-hospital.model';
 
 export interface IPaciente {
   id?: string;
-  idUnidade?: string;
-  idFranquia?: string;
-  idCidade?: string;
-  idCidadeFamiliar?: string;
-  idGrauParentesco?: number;
   senha?: string;
   nome?: string;
   email?: string;
@@ -37,7 +38,6 @@ export interface IPaciente {
   numero?: string;
   complemento?: string;
   bairro?: string;
-  cidade?: string;
   uf?: string;
   latitude?: string;
   longitude?: string;
@@ -56,7 +56,6 @@ export interface IPaciente {
   numeroFamiliar?: string;
   complementoFamiliar?: string;
   bairroFamiliar?: string;
-  cidadeFamiliar?: string;
   ufFamiliar?: string;
   latitudeFamiliar?: string;
   longitudeFamiliar?: string;
@@ -75,10 +74,8 @@ export interface IPaciente {
   cadastroCompleto?: number;
   ativo?: number;
   detalhes?: any;
-  tipohospital?: number;
   liminar?: string;
   expoToken?: string;
-  profissionalPref?: number;
   senhaChat?: string;
   atendimentos?: IAtendimento[];
   atendimentoAssinaturas?: IAtendimentoAssinaturas[];
@@ -93,6 +90,20 @@ export interface IPaciente {
   pacienteStatusAtuals?: IPacienteStatusAtual[];
   pads?: IPad[];
   questionarios?: IQuestionarios[];
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
+  franquiaNomeFantasia?: string;
+  franquia?: string | any;
+  cidadeDescrCidade?: string;
+  cidade?: string | any;
+  cidadeFamiliarDescrCidade?: string;
+  cidadeFamiliar?: string | any;
+  grauParentescoGrauParentesco?: string;
+  grauParentesco?: string | any;
+  profissionalPrefNome?: string;
+  profissionalPref?: string | any;
+  tipohospitalServico?: string;
+  tipohospital?: string | any;
 }
 
 export const defaultValue: Readonly<IPaciente> = {};

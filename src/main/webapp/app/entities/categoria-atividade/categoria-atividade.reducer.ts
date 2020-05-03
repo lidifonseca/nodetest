@@ -107,9 +107,9 @@ const apiUrl = 'api/categoria-atividades';
 // Actions
 export type ICrudGetAllActionCategoriaAtividade<T> = (
   atividade?: any,
-  idUnidade?: any,
   atendimentoAtividades?: any,
   padItemAtividade?: any,
+  unidade?: any,
   idCategoria?: any,
   page?: number,
   size?: number,
@@ -118,25 +118,25 @@ export type ICrudGetAllActionCategoriaAtividade<T> = (
 
 export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (
   atividade,
-  idUnidade,
   atendimentoAtividades,
   padItemAtividade,
+  unidade,
   idCategoria,
   page,
   size,
   sort
 ) => {
   const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
-  const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
   const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST,
     payload: axios.get<ICategoriaAtividade>(
-      `${requestUrl}${atividadeRequest}${idUnidadeRequest}${atendimentoAtividadesRequest}${padItemAtividadeRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${atividadeRequest}${atendimentoAtividadesRequest}${padItemAtividadeRequest}${unidadeRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,6 +151,7 @@ export const getEntity: ICrudGetAction<ICategoriaAtividade> = id => {
 export const createEntity: ICrudPutAction<ICategoriaAtividade> = entity => async dispatch => {
   entity = {
     ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria
   };
   const result = await dispatch({
@@ -162,7 +163,11 @@ export const createEntity: ICrudPutAction<ICategoriaAtividade> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<ICategoriaAtividade> = entity => async dispatch => {
-  entity = { ...entity, idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria };
+  entity = {
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
+    idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria
+  };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CATEGORIAATIVIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))

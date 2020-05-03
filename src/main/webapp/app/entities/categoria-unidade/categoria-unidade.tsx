@@ -45,7 +45,7 @@ export interface ICategoriaUnidadeProps extends StateProps, DispatchProps, Route
 
 export interface ICategoriaUnidadeBaseState {
   dataPost: any;
-  idUnidade: any;
+  unidade: any;
   idCategoria: any;
 }
 export interface ICategoriaUnidadeState extends ICategoriaUnidadeBaseState, IPaginationBaseState {}
@@ -65,12 +65,12 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const dataPost = url.searchParams.get('dataPost') || '';
 
-    const idUnidade = url.searchParams.get('idUnidade') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idCategoria = url.searchParams.get('idCategoria') || '';
 
     return {
       dataPost,
-      idUnidade,
+      unidade,
       idCategoria
     };
   };
@@ -86,7 +86,7 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
     this.setState(
       {
         dataPost: '',
-        idUnidade: '',
+        unidade: '',
         idCategoria: ''
       },
       () => this.sortEntities()
@@ -135,8 +135,8 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
       'dataPost=' +
       this.state.dataPost +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
+      'unidade=' +
+      this.state.unidade +
       '&' +
       'idCategoria=' +
       this.state.idCategoria +
@@ -148,8 +148,8 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataPost, idUnidade, idCategoria, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(dataPost, idUnidade, idCategoria, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { dataPost, unidade, idCategoria, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(dataPost, unidade, idCategoria, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -196,9 +196,6 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
                             name="dataPost"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -206,15 +203,15 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
                       <Col md="3">
                         <Row>
                           <div>
-                            <Label for="categoria-unidade-idUnidade">
-                              <Translate contentKey="generadorApp.categoriaUnidade.idUnidade">Id Unidade</Translate>
+                            <Label for="categoria-unidade-unidade">
+                              <Translate contentKey="generadorApp.categoriaUnidade.unidade">Unidade</Translate>
                             </Label>
-                            <AvInput id="categoria-unidade-idUnidade" type="select" className="form-control" name="idUnidadeId">
+                            <AvInput id="categoria-unidade-unidade" type="select" className="form-control" name="unidadeId">
                               <option value="" key="0" />
                               {unidadeEasies
                                 ? unidadeEasies.map(otherEntity => (
                                     <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
+                                      {otherEntity.razaoSocial}
                                     </option>
                                   ))
                                 : null}
@@ -274,7 +271,7 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
-                        <Translate contentKey="generadorApp.categoriaUnidade.idUnidade">Id Unidade</Translate>
+                        <Translate contentKey="generadorApp.categoriaUnidade.unidade">Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
@@ -299,8 +296,8 @@ export class CategoriaUnidade extends React.Component<ICategoriaUnidadeProps, IC
                           <TextFormat type="date" value={categoriaUnidade.dataPost} format={APP_DATE_FORMAT} />
                         </td>
                         <td>
-                          {categoriaUnidade.idUnidade ? (
-                            <Link to={`unidade-easy/${categoriaUnidade.idUnidade.id}`}>{categoriaUnidade.idUnidade.id}</Link>
+                          {categoriaUnidade.unidade ? (
+                            <Link to={`unidade-easy/${categoriaUnidade.unidade.id}`}>{categoriaUnidade.unidade.id}</Link>
                           ) : (
                             ''
                           )}

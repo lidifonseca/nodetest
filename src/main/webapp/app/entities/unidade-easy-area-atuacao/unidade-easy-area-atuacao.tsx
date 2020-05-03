@@ -35,7 +35,7 @@ export interface IUnidadeEasyAreaAtuacaoProps extends StateProps, DispatchProps,
 export interface IUnidadeEasyAreaAtuacaoBaseState {
   cepInicial: any;
   cepFinal: any;
-  idUnidade: any;
+  unidade: any;
 }
 export interface IUnidadeEasyAreaAtuacaoState extends IUnidadeEasyAreaAtuacaoBaseState, IPaginationBaseState {}
 
@@ -55,12 +55,12 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
     const cepInicial = url.searchParams.get('cepInicial') || '';
     const cepFinal = url.searchParams.get('cepFinal') || '';
 
-    const idUnidade = url.searchParams.get('idUnidade') || '';
+    const unidade = url.searchParams.get('unidade') || '';
 
     return {
       cepInicial,
       cepFinal,
-      idUnidade
+      unidade
     };
   };
 
@@ -75,7 +75,7 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
       {
         cepInicial: '',
         cepFinal: '',
-        idUnidade: ''
+        unidade: ''
       },
       () => this.sortEntities()
     );
@@ -126,8 +126,8 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
       'cepFinal=' +
       this.state.cepFinal +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
+      'unidade=' +
+      this.state.unidade +
       '&' +
       ''
     );
@@ -136,8 +136,8 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cepInicial, cepFinal, idUnidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cepInicial, cepFinal, idUnidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cepInicial, cepFinal, unidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cepInicial, cepFinal, unidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -196,15 +196,15 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                       <Col md="3">
                         <Row>
                           <div>
-                            <Label for="unidade-easy-area-atuacao-idUnidade">
-                              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.idUnidade">Id Unidade</Translate>
+                            <Label for="unidade-easy-area-atuacao-unidade">
+                              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
                             </Label>
-                            <AvInput id="unidade-easy-area-atuacao-idUnidade" type="select" className="form-control" name="idUnidadeId">
+                            <AvInput id="unidade-easy-area-atuacao-unidade" type="select" className="form-control" name="unidadeId">
                               <option value="" key="0" />
                               {unidadeEasies
                                 ? unidadeEasies.map(otherEntity => (
                                     <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
+                                      {otherEntity.razaoSocial}
                                     </option>
                                   ))
                                 : null}
@@ -248,7 +248,7 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
-                        <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.idUnidade">Id Unidade</Translate>
+                        <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
 
@@ -269,8 +269,8 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
 
                         <td>{unidadeEasyAreaAtuacao.cepFinal}</td>
                         <td>
-                          {unidadeEasyAreaAtuacao.idUnidade ? (
-                            <Link to={`unidade-easy/${unidadeEasyAreaAtuacao.idUnidade.id}`}>{unidadeEasyAreaAtuacao.idUnidade.id}</Link>
+                          {unidadeEasyAreaAtuacao.unidade ? (
+                            <Link to={`unidade-easy/${unidadeEasyAreaAtuacao.unidade.id}`}>{unidadeEasyAreaAtuacao.unidade.id}</Link>
                           ) : (
                             ''
                           )}

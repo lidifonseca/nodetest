@@ -28,7 +28,7 @@ export default class EspecialidadeUnidade extends BaseEntity {
   comentarioPreco: string;
 
   @ManyToOne(type => UnidadeEasy)
-  idUnidade: UnidadeEasy;
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => Especialidade)
   idEspecialidade: Especialidade;

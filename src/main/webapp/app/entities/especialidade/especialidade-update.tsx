@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, b
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ICategoria } from 'app/shared/model/categoria.model';
 import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
@@ -23,6 +25,7 @@ export interface IEspecialidadeUpdateProps extends StateProps, DispatchProps, Ro
 
 export interface IEspecialidadeUpdateState {
   isNew: boolean;
+  unidadeId: string;
   idCategoriaId: string;
   idTipoEspecialidadeId: string;
   idTipoUnidadeId: string;
@@ -32,6 +35,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
   constructor(props: Readonly<IEspecialidadeUpdateProps>) {
     super(props);
     this.state = {
+      unidadeId: '0',
       idCategoriaId: '0',
       idTipoEspecialidadeId: '0',
       idTipoUnidadeId: '0',
@@ -51,6 +55,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
       this.props.getEntity(this.props.match.params.id);
     }
 
+    this.props.getUnidadeEasies();
     this.props.getCategorias();
     this.props.getTipoEspecialidades();
     this.props.getTipoUnidades();
@@ -85,7 +90,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
   };
 
   render() {
-    const { especialidadeEntity, categorias, tipoEspecialidades, tipoUnidades, loading, updating } = this.props;
+    const { especialidadeEntity, unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = especialidadeEntity;
@@ -106,6 +111,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
               ? {}
               : {
                   ...especialidadeEntity,
+                  unidade: especialidadeEntity.unidade ? especialidadeEntity.unidade.id : null,
                   idCategoria: especialidadeEntity.idCategoria ? especialidadeEntity.idCategoria.id : null,
                   idTipoEspecialidade: especialidadeEntity.idTipoEspecialidade ? especialidadeEntity.idTipoEspecialidade.id : null,
                   idTipoUnidade: especialidadeEntity.idTipoUnidade ? especialidadeEntity.idTipoUnidade.id : null
@@ -166,14 +172,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="especialidade-icon"
-                                type="text"
-                                name="icon"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvField id="especialidade-icon" type="text" name="icon" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -188,14 +187,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="especialidade-especialidade"
-                                type="text"
-                                name="especialidade"
-                                validate={{
-                                  maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                                }}
-                              />
+                              <AvField id="especialidade-especialidade" type="text" name="especialidade" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -240,14 +232,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="especialidade-importante"
-                                type="text"
-                                name="importante"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvField id="especialidade-importante" type="text" name="importante" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -267,21 +252,32 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                           </Row>
                         </AvGroup>
                       </Col>
-
                       <Col md="12">
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" id="idUnidadeLabel" for="especialidade-idUnidade">
-                                <Translate contentKey="generadorApp.especialidade.idUnidade">Id Unidade</Translate>
+                              <Label className="mt-2" for="especialidade-unidade">
+                                <Translate contentKey="generadorApp.especialidade.unidade">Unidade</Translate>
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField id="especialidade-idUnidade" type="string" className="form-control" name="idUnidade" />
+                              <AvInput id="especialidade-unidade" type="select" className="form-control" name="unidade">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.especialidade.unidade.empty')}
+                                </option>
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
                             </Col>
                           </Row>
                         </AvGroup>
                       </Col>
+
                       <Col md="12">
                         <AvGroup>
                           <Row>
@@ -377,6 +373,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   categorias: storeState.categoria.entities,
   tipoEspecialidades: storeState.tipoEspecialidade.entities,
   tipoUnidades: storeState.tipoUnidade.entities,
@@ -387,6 +384,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getCategorias,
   getTipoEspecialidades,
   getTipoUnidades,

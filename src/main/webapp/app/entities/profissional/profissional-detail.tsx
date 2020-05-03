@@ -54,21 +54,6 @@ export class ProfissionalDetail extends React.Component<IProfissionalDetailProps
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idUnidade">
-                            <Translate contentKey="generadorApp.profissional.idUnidade">Id Unidade</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{profissionalEntity.idUnidade}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="idCidade">
                             <Translate contentKey="generadorApp.profissional.idCidade">Id Cidade</Translate>
                           </span>
@@ -635,6 +620,19 @@ export class ProfissionalDetail extends React.Component<IProfissionalDetailProps
                       </Col>
                       <Col md="9">
                         <dd>{profissionalEntity.senhaChat}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.profissional.unidade">Unidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{profissionalEntity.unidade ? profissionalEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

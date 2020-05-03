@@ -2,13 +2,6 @@
     "name": "Profissional",
     "fields": [
         {
-            "fieldName": "idUnidade",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idCidade",
             "fieldType": "String"
         },
@@ -282,6 +275,13 @@
             "otherEntityName": "atendimentoAssinaturas",
             "otherEntityRelationshipName": "idProfissional",
             "relationshipName": "atendimentoAssinaturas"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "profissional",
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial"
         }
     ],
     "changelogDate": "20200503003300",

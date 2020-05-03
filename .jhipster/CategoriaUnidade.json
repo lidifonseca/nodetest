@@ -14,8 +14,8 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "categoriaUnidade",
-            "relationshipName": "idUnidade",
-            "otherEntityField": "id"
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial"
         },
         {
             "relationshipType": "many-to-one",

@@ -55,13 +55,11 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps> {
                     <Row>
                       <Col md="12">
                         <dt>
-                          <span id="cidade">
-                            <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
-                          </span>
+                          <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
                         </dt>
                       </Col>
                       <Col md="12">
-                        <dd>{pacienteEntity.cidade}</dd>
+                        <dd>{pacienteEntity.cidade ? pacienteEntity.cidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -37,10 +37,12 @@ import { IProfissionalNew } from 'app/shared/model/profissional-new.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+
 export interface IProfissionalNewProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IProfissionalNewBaseState {
-  idUnidade: any;
   idCidade: any;
   idTempoExperiencia: any;
   idBanco: any;
@@ -74,6 +76,7 @@ export interface IProfissionalNewBaseState {
   obs: any;
   chavePrivada: any;
   ativo: any;
+  unidade: any;
 }
 export interface IProfissionalNewState extends IProfissionalNewBaseState, IPaginationBaseState {}
 
@@ -90,7 +93,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
 
   getProfissionalNewState = (location): IProfissionalNewBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUnidade = url.searchParams.get('idUnidade') || '';
     const idCidade = url.searchParams.get('idCidade') || '';
     const idTempoExperiencia = url.searchParams.get('idTempoExperiencia') || '';
     const idBanco = url.searchParams.get('idBanco') || '';
@@ -125,8 +127,9 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
     const chavePrivada = url.searchParams.get('chavePrivada') || '';
     const ativo = url.searchParams.get('ativo') || '';
 
+    const unidade = url.searchParams.get('unidade') || '';
+
     return {
-      idUnidade,
       idCidade,
       idTempoExperiencia,
       idBanco,
@@ -159,18 +162,20 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       origemCadastro,
       obs,
       chavePrivada,
-      ativo
+      ativo,
+      unidade
     };
   };
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUnidadeEasies();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUnidade: '',
         idCidade: '',
         idTempoExperiencia: '',
         idBanco: '',
@@ -203,7 +208,8 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
         origemCadastro: '',
         obs: '',
         chavePrivada: '',
-        ativo: ''
+        ativo: '',
+        unidade: ''
       },
       () => this.sortEntities()
     );
@@ -247,9 +253,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       this.state.sort +
       ',' +
       this.state.order +
-      '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
       '&' +
       'idCidade=' +
       this.state.idCidade +
@@ -350,6 +353,9 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       'ativo=' +
       this.state.ativo +
       '&' +
+      'unidade=' +
+      this.state.unidade +
+      '&' +
       ''
     );
   };
@@ -358,7 +364,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
 
   getEntities = () => {
     const {
-      idUnidade,
       idCidade,
       idTempoExperiencia,
       idBanco,
@@ -392,13 +397,13 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       obs,
       chavePrivada,
       ativo,
+      unidade,
       activePage,
       itemsPerPage,
       sort,
       order
     } = this.state;
     this.props.getEntities(
-      idUnidade,
       idCidade,
       idTempoExperiencia,
       idBanco,
@@ -432,6 +437,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       obs,
       chavePrivada,
       ativo,
+      unidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -439,7 +445,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
   };
 
   render() {
-    const { profissionalNewList, match, totalItems } = this.props;
+    const { unidadeEasies, profissionalNewList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -470,15 +476,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUnidadeLabel" for="profissional-new-idUnidade">
-                            <Translate contentKey="generadorApp.profissionalNew.idUnidade">Id Unidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUnidade" id="profissional-new-idUnidade" value={this.state.idUnidade} />
-                        </Row>
-                      </Col>
                       <Col md="3">
                         <Row>
                           <Label id="idCidadeLabel" for="profissional-new-idCidade">
@@ -783,6 +780,26 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                           <AvInput type="string" name="ativo" id="profissional-new-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
+
+                      <Col md="3">
+                        <Row>
+                          <div>
+                            <Label for="profissional-new-unidade">
+                              <Translate contentKey="generadorApp.profissionalNew.unidade">Unidade</Translate>
+                            </Label>
+                            <AvInput id="profissional-new-unidade" type="select" className="form-control" name="unidadeId">
+                              <option value="" key="0" />
+                              {unidadeEasies
+                                ? unidadeEasies.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.razaoSocial}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
+                        </Row>
+                      </Col>
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -808,10 +825,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                     <tr>
                       <th className="hand" onClick={this.sort('id')}>
                         <Translate contentKey="global.field.id">ID</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUnidade')}>
-                        <Translate contentKey="generadorApp.profissionalNew.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th className="hand" onClick={this.sort('idCidade')}>
@@ -946,6 +959,10 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                         <Translate contentKey="generadorApp.profissionalNew.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
+                      <th>
+                        <Translate contentKey="generadorApp.profissionalNew.unidade">Unidade</Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
 
                       <th />
                     </tr>
@@ -959,8 +976,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             {profissionalNew.id}
                           </Button>
                         </td>
-
-                        <td>{profissionalNew.idUnidade}</td>
 
                         <td>{profissionalNew.idCidade}</td>
 
@@ -1029,6 +1044,13 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                         <td>{profissionalNew.chavePrivada}</td>
 
                         <td>{profissionalNew.ativo}</td>
+                        <td>
+                          {profissionalNew.unidade ? (
+                            <Link to={`unidade-easy/${profissionalNew.unidade.id}`}>{profissionalNew.unidade.id}</Link>
+                          ) : (
+                            ''
+                          )}
+                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -1086,11 +1108,13 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
 }
 
 const mapStateToProps = ({ profissionalNew, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   profissionalNewList: profissionalNew.entities,
   totalItems: profissionalNew.totalItems
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getEntities
 };
 

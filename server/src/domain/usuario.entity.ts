@@ -6,6 +6,7 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 
 import Diario from './diario.entity';
 import PacienteDiario from './paciente-diario.entity';
+import UnidadeEasy from './unidade-easy.entity';
 import TipoUsuario from './tipo-usuario.entity';
 
 /**
@@ -13,9 +14,6 @@ import TipoUsuario from './tipo-usuario.entity';
  */
 @Entity('usuario')
 export default class Usuario extends BaseEntity {
-  @Column({ name: 'id_unidade', nullable: false })
-  idUnidade: string;
-
   @Column({ name: 'id_operadora', length: 1000 })
   idOperadora: string;
 
@@ -399,6 +397,9 @@ export default class Usuario extends BaseEntity {
     other => other.idUsuario
   )
   pacienteDiarios: PacienteDiario[];
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => TipoUsuario)
   idTipoUsuario: TipoUsuario;

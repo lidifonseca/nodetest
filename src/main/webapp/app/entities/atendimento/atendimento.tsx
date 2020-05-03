@@ -36,6 +36,8 @@ import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IOperadora } from 'app/shared/model/operadora.model';
@@ -54,7 +56,6 @@ import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
 export interface IAtendimentoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IAtendimentoBaseState {
-  idUnidade: any;
   idFranquia: any;
   idProfissional: any;
   cep: any;
@@ -93,6 +94,7 @@ export interface IAtendimentoBaseState {
   atendimentoAceite: any;
   atendimentoAssinaturas: any;
   atendimentoAtividades: any;
+  unidade: any;
   idPaciente: any;
   idOperadora: any;
   idEspecialidade: any;
@@ -116,7 +118,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
   getAtendimentoState = (location): IAtendimentoBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUnidade = url.searchParams.get('idUnidade') || '';
     const idFranquia = url.searchParams.get('idFranquia') || '';
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const cep = url.searchParams.get('cep') || '';
@@ -156,6 +157,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
     const atendimentoAceite = url.searchParams.get('atendimentoAceite') || '';
     const atendimentoAssinaturas = url.searchParams.get('atendimentoAssinaturas') || '';
     const atendimentoAtividades = url.searchParams.get('atendimentoAtividades') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const idOperadora = url.searchParams.get('idOperadora') || '';
     const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
@@ -165,7 +167,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
     const idCidade = url.searchParams.get('idCidade') || '';
 
     return {
-      idUnidade,
       idFranquia,
       idProfissional,
       cep,
@@ -204,6 +205,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       atendimentoAceite,
       atendimentoAssinaturas,
       atendimentoAtividades,
+      unidade,
       idPaciente,
       idOperadora,
       idEspecialidade,
@@ -217,6 +219,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
   componentDidMount() {
     this.getEntities();
 
+    this.props.getUnidadeEasies();
     this.props.getPacientes();
     this.props.getOperadoras();
     this.props.getEspecialidades();
@@ -229,7 +232,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
   cancelCourse = () => {
     this.setState(
       {
-        idUnidade: '',
         idFranquia: '',
         idProfissional: '',
         cep: '',
@@ -268,6 +270,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         atendimentoAceite: '',
         atendimentoAssinaturas: '',
         atendimentoAtividades: '',
+        unidade: '',
         idPaciente: '',
         idOperadora: '',
         idEspecialidade: '',
@@ -318,9 +321,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       this.state.sort +
       ',' +
       this.state.order +
-      '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
       '&' +
       'idFranquia=' +
       this.state.idFranquia +
@@ -436,6 +436,9 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       'atendimentoAtividades=' +
       this.state.atendimentoAtividades +
       '&' +
+      'unidade=' +
+      this.state.unidade +
+      '&' +
       'idPaciente=' +
       this.state.idPaciente +
       '&' +
@@ -465,7 +468,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
   getEntities = () => {
     const {
-      idUnidade,
       idFranquia,
       idProfissional,
       cep,
@@ -504,6 +506,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       atendimentoAceite,
       atendimentoAssinaturas,
       atendimentoAtividades,
+      unidade,
       idPaciente,
       idOperadora,
       idEspecialidade,
@@ -517,7 +520,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       order
     } = this.state;
     this.props.getEntities(
-      idUnidade,
       idFranquia,
       idProfissional,
       cep,
@@ -556,6 +558,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       atendimentoAceite,
       atendimentoAssinaturas,
       atendimentoAtividades,
+      unidade,
       idPaciente,
       idOperadora,
       idEspecialidade,
@@ -571,6 +574,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 
   render() {
     const {
+      unidadeEasies,
       pacientes,
       operadoras,
       especialidades,
@@ -612,15 +616,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUnidadeLabel" for="atendimento-idUnidade">
-                            <Translate contentKey="generadorApp.atendimento.idUnidade">Id Unidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUnidade" id="atendimento-idUnidade" value={this.state.idUnidade} />
-                        </Row>
-                      </Col>
                       <Col md="3">
                         <Row>
                           <Label id="idFranquiaLabel" for="atendimento-idFranquia">
@@ -1008,6 +1003,26 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                       <Col md="3">
                         <Row>
                           <div>
+                            <Label for="atendimento-unidade">
+                              <Translate contentKey="generadorApp.atendimento.unidade">Unidade</Translate>
+                            </Label>
+                            <AvInput id="atendimento-unidade" type="select" className="form-control" name="unidadeId">
+                              <option value="" key="0" />
+                              {unidadeEasies
+                                ? unidadeEasies.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.razaoSocial}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
+                        </Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row>
+                          <div>
                             <Label for="atendimento-idPaciente">
                               <Translate contentKey="generadorApp.atendimento.idPaciente">Id Paciente</Translate>
                             </Label>
@@ -1176,10 +1191,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idUnidade')}>
-                        <Translate contentKey="generadorApp.atendimento.idUnidade">Id Unidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('idFranquia')}>
                         <Translate contentKey="generadorApp.atendimento.idFranquia">Id Franquia</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -1321,6 +1332,10 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
+                        <Translate contentKey="generadorApp.atendimento.unidade">Unidade</Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th>
                         <Translate contentKey="generadorApp.atendimento.idPaciente">Id Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
@@ -1361,8 +1376,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             {atendimento.id}
                           </Button>
                         </td>
-
-                        <td>{atendimento.idUnidade}</td>
 
                         <td>{atendimento.idFranquia}</td>
 
@@ -1443,6 +1456,9 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         <td>{atendimento.confidencialPaciente}</td>
 
                         <td>{atendimento.imagemAssinatura}</td>
+                        <td>
+                          {atendimento.unidade ? <Link to={`unidade-easy/${atendimento.unidade.id}`}>{atendimento.unidade.id}</Link> : ''}
+                        </td>
                         <td>
                           {atendimento.idPaciente ? (
                             <Link to={`paciente/${atendimento.idPaciente.id}`}>{atendimento.idPaciente.id}</Link>
@@ -1539,6 +1555,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
 }
 
 const mapStateToProps = ({ atendimento, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   pacientes: storeState.paciente.entities,
   operadoras: storeState.operadora.entities,
   especialidades: storeState.especialidade.entities,
@@ -1551,6 +1568,7 @@ const mapStateToProps = ({ atendimento, ...storeState }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getPacientes,
   getOperadoras,
   getEspecialidades,

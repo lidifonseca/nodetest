@@ -10,6 +10,7 @@ import EspecialidadeUnidade from './especialidade-unidade.entity';
 import EspecialidadeValor from './especialidade-valor.entity';
 import PacientePedido from './paciente-pedido.entity';
 import PadItem from './pad-item.entity';
+import UnidadeEasy from './unidade-easy.entity';
 import Categoria from './categoria.entity';
 import TipoEspecialidade from './tipo-especialidade.entity';
 import TipoUnidade from './tipo-unidade.entity';
@@ -36,9 +37,6 @@ export default class Especialidade extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @Column({ type: 'integer', name: 'id_unidade' })
-  idUnidade: number;
 
   @OneToMany(
     type => Atendimento,
@@ -75,6 +73,9 @@ export default class Especialidade extends BaseEntity {
     other => other.idEspecialidade
   )
   padItems: PadItem[];
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => Categoria)
   idCategoria: Categoria;

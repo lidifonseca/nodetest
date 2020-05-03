@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Like, Equal } from 'typeorm';
 import Profissional from '../domain/profissional.entity';
 import { ProfissionalRepository } from '../repository/profissional.repository';
 
 const relationshipNames = [];
+relationshipNames.push('unidade');
 
 @Injectable()
 export class ProfissionalService {
@@ -26,20 +27,14 @@ export class ProfissionalService {
     filters?: Array<{ column: string; value: string; operation: string }>[]
   ): Promise<[Profissional[], number]> {
     options.relations = relationshipNames;
-    let where = '';
-    let first = true;
+    let where = {};
     for (const i in filters) {
       if (filters.hasOwnProperty(i)) {
         const element = filters[i];
-        if (!first) {
-          where += 'and';
-        } else {
-          first = false;
-        }
         if (element['operation'] === 'contains') {
-          where += ' `Profissional`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+          where[element['column']] = Like('%' + element['value'] + '%');
         } else if (element['operation'] === 'equals') {
-          where += ' `Profissional`.`' + element['column'] + '` = "' + element['value'] + '" ';
+          where[element['column']] = Equal(element['value']);
         }
       }
     }

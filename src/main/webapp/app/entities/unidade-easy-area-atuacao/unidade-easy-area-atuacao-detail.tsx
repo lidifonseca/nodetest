@@ -85,11 +85,11 @@ export class UnidadeEasyAreaAtuacaoDetail extends React.Component<IUnidadeEasyAr
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.idUnidade">Id Unidade</Translate>
+                          <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{unidadeEasyAreaAtuacaoEntity.idUnidade ? unidadeEasyAreaAtuacaoEntity.idUnidade.id : ''}</dd>
+                        <dd>{unidadeEasyAreaAtuacaoEntity.unidade ? unidadeEasyAreaAtuacaoEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

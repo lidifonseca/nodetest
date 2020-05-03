@@ -36,13 +36,14 @@ import { IUsuario } from 'app/shared/model/usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
 import { getEntities as getTipoUsuarios } from 'app/entities/tipo-usuario/tipo-usuario.reducer';
 
 export interface IUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IUsuarioBaseState {
-  idUnidade: any;
   idOperadora: any;
   senha: any;
   nome: any;
@@ -169,6 +170,7 @@ export interface IUsuarioBaseState {
   senhaChat: any;
   diario: any;
   pacienteDiario: any;
+  unidade: any;
   idTipoUsuario: any;
 }
 export interface IUsuarioState extends IUsuarioBaseState, IPaginationBaseState {}
@@ -186,7 +188,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
   getUsuarioState = (location): IUsuarioBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUnidade = url.searchParams.get('idUnidade') || '';
     const idOperadora = url.searchParams.get('idOperadora') || '';
     const senha = url.searchParams.get('senha') || '';
     const nome = url.searchParams.get('nome') || '';
@@ -314,10 +315,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
     const diario = url.searchParams.get('diario') || '';
     const pacienteDiario = url.searchParams.get('pacienteDiario') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idTipoUsuario = url.searchParams.get('idTipoUsuario') || '';
 
     return {
-      idUnidade,
       idOperadora,
       senha,
       nome,
@@ -444,6 +445,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       senhaChat,
       diario,
       pacienteDiario,
+      unidade,
       idTipoUsuario
     };
   };
@@ -451,13 +453,13 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
   componentDidMount() {
     this.getEntities();
 
+    this.props.getUnidadeEasies();
     this.props.getTipoUsuarios();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUnidade: '',
         idOperadora: '',
         senha: '',
         nome: '',
@@ -584,6 +586,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
         senhaChat: '',
         diario: '',
         pacienteDiario: '',
+        unidade: '',
         idTipoUsuario: ''
       },
       () => this.sortEntities()
@@ -628,9 +631,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       this.state.sort +
       ',' +
       this.state.order +
-      '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
       '&' +
       'idOperadora=' +
       this.state.idOperadora +
@@ -1010,6 +1010,9 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       'pacienteDiario=' +
       this.state.pacienteDiario +
       '&' +
+      'unidade=' +
+      this.state.unidade +
+      '&' +
       'idTipoUsuario=' +
       this.state.idTipoUsuario +
       '&' +
@@ -1021,7 +1024,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 
   getEntities = () => {
     const {
-      idUnidade,
       idOperadora,
       senha,
       nome,
@@ -1148,6 +1150,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       senhaChat,
       diario,
       pacienteDiario,
+      unidade,
       idTipoUsuario,
       activePage,
       itemsPerPage,
@@ -1155,7 +1158,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       order
     } = this.state;
     this.props.getEntities(
-      idUnidade,
       idOperadora,
       senha,
       nome,
@@ -1282,6 +1284,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       senhaChat,
       diario,
       pacienteDiario,
+      unidade,
       idTipoUsuario,
       activePage - 1,
       itemsPerPage,
@@ -1290,7 +1293,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
   };
 
   render() {
-    const { tipoUsuarios, usuarioList, match, totalItems } = this.props;
+    const { unidadeEasies, tipoUsuarios, usuarioList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -1321,15 +1324,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUnidadeLabel" for="usuario-idUnidade">
-                            <Translate contentKey="generadorApp.usuario.idUnidade">Id Unidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUnidade" id="usuario-idUnidade" value={this.state.idUnidade} />
-                        </Row>
-                      </Col>
                       <Col md="3">
                         <Row>
                           <Label id="idOperadoraLabel" for="usuario-idOperadora">
@@ -2520,6 +2514,26 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       <Col md="3">
                         <Row>
                           <div>
+                            <Label for="usuario-unidade">
+                              <Translate contentKey="generadorApp.usuario.unidade">Unidade</Translate>
+                            </Label>
+                            <AvInput id="usuario-unidade" type="select" className="form-control" name="unidadeId">
+                              <option value="" key="0" />
+                              {unidadeEasies
+                                ? unidadeEasies.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.razaoSocial}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
+                        </Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row>
+                          <div>
                             <Label for="usuario-idTipoUsuario">
                               <Translate contentKey="generadorApp.usuario.idTipoUsuario">Id Tipo Usuario</Translate>
                             </Label>
@@ -2561,10 +2575,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                     <tr>
                       <th className="hand" onClick={this.sort('id')}>
                         <Translate contentKey="global.field.id">ID</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUnidade')}>
-                        <Translate contentKey="generadorApp.usuario.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th className="hand" onClick={this.sort('idOperadora')}>
@@ -3068,6 +3078,10 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
+                        <Translate contentKey="generadorApp.usuario.unidade">Unidade</Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
+                      <th>
                         <Translate contentKey="generadorApp.usuario.idTipoUsuario">Id Tipo Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
@@ -3084,8 +3098,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             {usuario.id}
                           </Button>
                         </td>
-
-                        <td>{usuario.idUnidade}</td>
 
                         <td>{usuario.idOperadora}</td>
 
@@ -3336,6 +3348,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         <td>{usuario.envioMelhoraTempo ? 'true' : 'false'}</td>
 
                         <td>{usuario.senhaChat}</td>
+                        <td>{usuario.unidade ? <Link to={`unidade-easy/${usuario.unidade.id}`}>{usuario.unidade.id}</Link> : ''}</td>
                         <td>
                           {usuario.idTipoUsuario ? (
                             <Link to={`tipo-usuario/${usuario.idTipoUsuario.id}`}>{usuario.idTipoUsuario.id}</Link>
@@ -3400,12 +3413,14 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
 }
 
 const mapStateToProps = ({ usuario, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   tipoUsuarios: storeState.tipoUsuario.entities,
   usuarioList: usuario.entities,
   totalItems: usuario.totalItems
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getTipoUsuarios,
   getEntities
 };

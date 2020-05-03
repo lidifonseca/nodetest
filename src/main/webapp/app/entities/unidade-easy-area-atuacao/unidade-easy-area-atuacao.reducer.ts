@@ -108,7 +108,7 @@ const apiUrl = 'api/unidade-easy-area-atuacaos';
 export type ICrudGetAllActionUnidadeEasyAreaAtuacao<T> = (
   cepInicial?: any,
   cepFinal?: any,
-  idUnidade?: any,
+  unidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -117,20 +117,20 @@ export type ICrudGetAllActionUnidadeEasyAreaAtuacao<T> = (
 export const getEntities: ICrudGetAllActionUnidadeEasyAreaAtuacao<IUnidadeEasyAreaAtuacao> = (
   cepInicial,
   cepFinal,
-  idUnidade,
+  unidade,
   page,
   size,
   sort
 ) => {
   const cepInicialRequest = cepInicial ? `cepInicial.contains=${cepInicial}&` : '';
   const cepFinalRequest = cepFinal ? `cepFinal.contains=${cepFinal}&` : '';
-  const idUnidadeRequest = idUnidade ? `idUnidade.equals=${idUnidade}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO_LIST,
     payload: axios.get<IUnidadeEasyAreaAtuacao>(
-      `${requestUrl}${cepInicialRequest}${cepFinalRequest}${idUnidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepInicialRequest}${cepFinalRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -145,7 +145,7 @@ export const getEntity: ICrudGetAction<IUnidadeEasyAreaAtuacao> = id => {
 export const createEntity: ICrudPutAction<IUnidadeEasyAreaAtuacao> = entity => async dispatch => {
   entity = {
     ...entity,
-    idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_UNIDADEEASYAREAATUACAO,
@@ -156,7 +156,7 @@ export const createEntity: ICrudPutAction<IUnidadeEasyAreaAtuacao> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IUnidadeEasyAreaAtuacao> = entity => async dispatch => {
-  entity = { ...entity, idUnidade: entity.idUnidade === 'null' ? null : entity.idUnidade };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_UNIDADEEASYAREAATUACAO,
     payload: axios.put(apiUrl, cleanEntity(entity))

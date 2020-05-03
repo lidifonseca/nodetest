@@ -34,7 +34,7 @@ export default class PacientePedido extends BaseEntity {
   tipoValor: number;
 
   @ManyToOne(type => UnidadeEasy)
-  idUnidade: UnidadeEasy;
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => Paciente)
   idPaciente: Paciente;

@@ -596,9 +596,11 @@ function analizeJavadoc(generator) {
     generator.viewLayout = [];
 
     let generatorJavadoc = generator.javadoc; 
+
     if(generatorJavadoc) {
         while(generatorJavadoc.indexOf('@') > -1 ) {
-            let parameter =  generatorJavadoc.substring(generatorJavadoc.indexOf('@')+1, generatorJavadoc.indexOf('@@')).split(" ");
+            let parameter =  generatorJavadoc.substring(generatorJavadoc.indexOf('@')+1, generatorJavadoc.indexOf('@@'))
+                                    .split(" ").join("_*JOIN*_").split("\\n").join("_*JOIN*_").split("_*JOIN*_");
             if(parameter.length > 1) {
                 // generator.fields[idx][parameter[0]] = parameter[1].trim();
                 if(parameter[0] === "formTab") {
@@ -640,7 +642,7 @@ function analizeJavadoc(generator) {
                         
                         if (key > 0) {
                             const element = parameter[key];
-                            const value = element.trim().split(">")[0].split("<");
+                            const value = element.trim().split("}")[0].split("{");
                             for (idx in generator.fields) { 
                                 if(generator.fields[idx].fieldName === value[0] ){
                                     generator[parameter[0]].push({
@@ -649,9 +651,11 @@ function analizeJavadoc(generator) {
                                         entity: generator.fields[idx]
                                     });
                                     if(value.length > 1){
-                                        const fields = value[1].split(";");
-                                        generator.fields[idx][parameter[0]+'Label'] = fields[0];
-                                        generator.fields[idx][parameter[0]+'Size'] = fields[1];
+                                        const fields = value[1].split(",");
+                                        for (const i in fields) {
+                                            const element = fields[i].split(":");
+                                            generator.fields[idx][parameter[0]+element[0]] = element[1];
+                                        }
                                     } else {
                                         generator.fields[idx][parameter[0]] = true;
                                     }
@@ -665,9 +669,11 @@ function analizeJavadoc(generator) {
                                         entity: generator.relationships[idx]
                                     });
                                     if(value.length > 1){
-                                        const fields = value[1].split(";");
-                                        generator.relationships[idx][parameter[0]+'Label'] = fields[0];
-                                        generator.relationships[idx][parameter[0]+'Size'] = fields[1];
+                                        const fields = value[1].split(",");
+                                        for (const i in fields) {
+                                            const element = fields[i].split(":");
+                                            generator.relationships[idx][parameter[0]+element[0]] = element[1];
+                                        }
                                     } else {
                                         generator.relationships[idx][parameter[0]] = true;
                                     }
@@ -735,7 +741,7 @@ function analizeJavadoc(generator) {
 
     // console.info(generator.toStringFields)
     // console.info(generator.listFilterLayout)
-    // console.info(generator.formLayout)
+    console.info(generator.formLayout)
     // console.info(generator.viewLayout)
 
     return generator;

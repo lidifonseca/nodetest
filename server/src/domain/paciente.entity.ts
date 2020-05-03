@@ -17,27 +17,18 @@ import PacientePush from './paciente-push.entity';
 import PacienteStatusAtual from './paciente-status-atual.entity';
 import Pad from './pad.entity';
 import Questionarios from './questionarios.entity';
+import UnidadeEasy from './unidade-easy.entity';
+import Franquia from './franquia.entity';
+import Cidade from './cidade.entity';
+import GrauParentesco from './grau-parentesco.entity';
+import Profissional from './profissional.entity';
+import PacienteHospital from './paciente-hospital.entity';
 
 /**
- * @toStringFields nome@@\n@listTableLayout nome cep bairro rg registro@@\n@listFilterLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@
+ * @toStringFields nome@@\n@listTableLayout nome cep bairro rg registro@@\n@listFilterLayout\nnome{Label:top,Size:6>\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@\n@formTab DadosDoPaciente<unidade,email,nome,cpf,rg,cep,nascimento,sexo,endereco,telefone,celular,bairro,numero,complemento,cidade,uf,profissionalPref,tipohospital,liminar,detalhes,observacao>@@\n@formTab DadosDoFamiliar<cepFamiliar,enderecoFamiliar,numeroFamiliar,complementoFamiliar,cidadeFamiliar,bairroFamiliar,ufFamiliar,latitudeFamiliar,longitudeFamiliar,acessoFamiliar,emailFamiliar,cpfFamiliar,rgFamiliar,nascimentoFamiliar,sexoFamiliar,telefoneFamiliar,celularFamiliar,observacaoFamiliar>@@\n@formLayout\nunidade{Label:top,Size:6}\nemail{Label:top,Size:6}\nnome{Label:top,Size:6}\ncpf{Label:top,Size:3}\nrg{Label:top,Size:3}\ncep{Label:top,Size:6}\nnascimento{Label:top,Size:3}\nsexo{Label:top,Size:3}\nendereco{Label:top,Size:6}\ntelefone{Label:top,Size:3}\ncelular{Label:top,Size:3}\nbairro{Label:top,Size:4}\nnumero{Label:top,Size:6}\ncomplemento{Label:top,Size:6}\ncidade{Label:top,Size:8}\nuf{Label:top,Size:4}\nprofissionalPref{Label:top,Size:6}\ntipohospital{Label:top,Size:6}\nliminar{Label:top,Size:12}\ndetalhes{Label:top,Size:12}\nobservacao{Label:top,Size:12}\ncomResponsavel{Label:top,Size:12}\n\ngrauParentesco{Label:top,Size:12}\nresponsavelFamiliar{Label:top,Size:12}\n\n\n\ncepFamiliar{Label:top,Size:12}\nenderecoFamiliar{Label:top,Size:12}\nnumeroFamiliar{Label:top,Size:12}\ncomplementoFamiliar{Label:top,Size:12}\ncidadeFamiliar{Label:top,Size:12}\nbairroFamiliar{Label:top,Size:12}\nufFamiliar{Label:top,Size:12}\nlatitudeFamiliar{Label:top,Size:12}\nlongitudeFamiliar{Label:top,Size:12}\nacessoFamiliar{Label:top,Size:12}\nemailFamiliar{Label:top,Size:12}\ncpfFamiliar{Label:top,Size:12}\nrgFamiliar{Label:top,Size:12}\nnascimentoFamiliar{Label:top,Size:12}\nsexoFamiliar{Label:top,Size:12}\ntelefoneFamiliar{Label:top,Size:12}\ncelularFamiliar{Label:top,Size:12}\nobservacaoFamiliar{Label:top,Size:12}\n\n\nfranquia{Label:top,Size:12}\nsenha{Label:top,Size:12}\nregistro{Label:top,Size:12}\nlatitude{Label:top,Size:12}\nlongitude{Label:top,Size:12}\naph{Label:top,Size:12}\nnivelComplexidade{Label:top,Size:12}\npassagemPs{Label:top,Size:12}\nobsPs{Label:top,Size:12}\npassagemInternacao{Label:top,Size:12}\nobsInternacao{Label:top,Size:12}\ncustoTotal{Label:top,Size:12}\nmesmoEndereco{Label:top,Size:12}\ncadastroCompleto{Label:top,Size:12}\nativo{Label:top,Size:12}\nexpoToken{Label:top,Size:12}\nsenhaChat{Label:top,Size:12}\n@@\n@viewLayout\ncidade{Label:top,Size:6}\nnome{Label:top,Size:6}\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@
  */
 @Entity('paciente')
 export default class Paciente extends BaseEntity {
-  @Column({ name: 'id_unidade', nullable: false })
-  idUnidade: string;
-
-  @Column({ name: 'id_franquia' })
-  idFranquia: string;
-
-  @Column({ name: 'id_cidade' })
-  idCidade: string;
-
-  @Column({ name: 'id_cidade_familiar' })
-  idCidadeFamiliar: string;
-
-  @Column({ type: 'integer', name: 'id_grau_parentesco', nullable: false })
-  idGrauParentesco: number;
-
   @Column({ name: 'senha', length: 100 })
   senha: string;
 
@@ -88,9 +79,6 @@ export default class Paciente extends BaseEntity {
 
   @Column({ name: 'bairro', length: 40 })
   bairro: string;
-
-  @Column({ name: 'cidade', length: 100 })
-  cidade: string;
 
   @Column({ name: 'uf', length: 5 })
   uf: string;
@@ -146,9 +134,6 @@ export default class Paciente extends BaseEntity {
   @Column({ name: 'bairro_familiar', length: 40 })
   bairroFamiliar: string;
 
-  @Column({ name: 'cidade_familiar', length: 100 })
-  cidadeFamiliar: string;
-
   @Column({ name: 'uf_familiar', length: 5 })
   ufFamiliar: string;
 
@@ -203,17 +188,11 @@ export default class Paciente extends BaseEntity {
   @Column({ type: 'blob', name: 'detalhes' })
   detalhes: any;
 
-  @Column({ type: 'integer', name: 'tipohospital' })
-  tipohospital: number;
-
   @Column({ name: 'liminar', length: 50 })
   liminar: string;
 
   @Column({ name: 'expo_token', length: 255 })
   expoToken: string;
-
-  @Column({ type: 'integer', name: 'profissional_pref' })
-  profissionalPref: number;
 
   @Column({ name: 'senha_chat', length: 45 })
   senhaChat: string;
@@ -295,6 +274,27 @@ export default class Paciente extends BaseEntity {
     other => other.pacienteId
   )
   questionarios: Questionarios[];
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
+
+  @ManyToOne(type => Franquia)
+  franquia: Franquia;
+
+  @ManyToOne(type => Cidade)
+  cidade: Cidade;
+
+  @ManyToOne(type => Cidade)
+  cidadeFamiliar: Cidade;
+
+  @ManyToOne(type => GrauParentesco)
+  grauParentesco: GrauParentesco;
+
+  @ManyToOne(type => Profissional)
+  profissionalPref: Profissional;
+
+  @ManyToOne(type => PacienteHospital)
+  tipohospital: PacienteHospital;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -1,8 +1,8 @@
 import { Moment } from 'moment';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 
 export interface IProfissionalNew {
   id?: string;
-  idUnidade?: string;
   idCidade?: string;
   idTempoExperiencia?: number;
   idBanco?: number;
@@ -36,6 +36,8 @@ export interface IProfissionalNew {
   obs?: any;
   chavePrivada?: string;
   ativo?: number;
+  unidadeRazaoSocial?: string;
+  unidade?: string | any;
 }
 
 export const defaultValue: Readonly<IProfissionalNew> = {};

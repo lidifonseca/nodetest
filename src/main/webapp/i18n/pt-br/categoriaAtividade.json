@@ -17,9 +17,9 @@
         "title": "Categoria Atividade"
       },
       "atividade": "Atividade",
-      "idUnidade": "Id Unidade",
       "atendimentoAtividades": "Atendimento Atividades",
       "padItemAtividade": "Pad Item Atividade",
+      "unidade": "Unidade",
       "idCategoria": "Id Categoria"
     }
   }

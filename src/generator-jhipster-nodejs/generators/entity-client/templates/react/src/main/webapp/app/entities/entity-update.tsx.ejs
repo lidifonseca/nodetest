@@ -259,7 +259,7 @@
             </Label>
           </Col>
           <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include react_validators %>/> 
+              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" /> 
           </Col>
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -332,7 +332,7 @@
         </Label>
       </Col>
       <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-        <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include react_validators %> />
+        <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>"  />
       </Col>
     <%_ } _%>
     <%_ if ( field.javadoc) { _%>
@@ -634,7 +634,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
               <Row className="justify-content-center">
                 <Col md="8">
                 { loading ? <p>Loading...</p> :
-                <Row>
+                <div>
                   { !isNew ?
                   <AvGroup>
                     <Row>
@@ -652,6 +652,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                   : null
                   }
                   <%_ if (formTabs.length === 0) { _%>
+                    <Row>
                         <%_ if (formLayout.length > 0) {  _%>
                             <%_ for (idx in formLayout) { 
                                 if(formLayout[idx].type == 'field'){
@@ -668,6 +669,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                                   printRelationships(rel);
                             }) _%>
                         <%_ } _%>
+                    </Row>
                   <%_ } else { _%>
                   { !isNew ? <Nav tabs>
                     <%_ for (idx in formTabs) { _%>
@@ -703,28 +705,30 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                         </Col>
                       </Row> : null }
 
-                      <%_ if (formLayout.length > 0) {  _%>
-                            <%_ for (idx in formLayout) { 
-                              if(formTabs[iTabs] === formLayout[idx].entity['formTab']) { 
-                                if(formLayout[idx].type == 'field'){
-                                  printFields(formLayout[idx].entity);
-                                } else {
-                                  printRelationships(formLayout[idx].entity);
-                                }
-                              } 
-                            } _%>
-                      <%_ } else { _%>
-                            <%_ for (idx in fields) { 
-                                  if(formTabs[iTabs] === fields[idx]['formTab']) { 
-                                    printFields(fields[idx]);
-                                  } 
-                                } _%>
-                            <%_ relationships.forEach(rel => { 
-                                if(formTabs[iTabs] === rel['formTab']) { 
-                                  printRelationships(rel);
-                                }
-                              }) _%>
-                      <%_ } _%>
+                      <Row>
+                        <%_ if (formLayout.length > 0) {  _%>
+                              <%_ for (idx in formLayout) { 
+                                if(formTabs[iTabs] === formLayout[idx].entity['formTab']) { 
+                                  if(formLayout[idx].type == 'field'){
+                                    printFields(formLayout[idx].entity);
+                                  } else {
+                                    printRelationships(formLayout[idx].entity);
+                                  }
+                                } 
+                              } _%>
+                        <%_ } else { _%>
+                              <%_ for (idx in fields) { 
+                                    if(formTabs[iTabs] === fields[idx]['formTab']) { 
+                                      printFields(fields[idx]);
+                                    } 
+                                  } _%>
+                              <%_ relationships.forEach(rel => { 
+                                  if(formTabs[iTabs] === rel['formTab']) { 
+                                    printRelationships(rel);
+                                  }
+                                }) _%>
+                        <%_ } _%>
+                      </Row> 
 
                       <%_ if(Number.parseInt(iTabs, 10) + 1 < formTabs.length + (defaultFormTab ? 1 : 0)  ) { _%>
                       { isNew ?
@@ -833,7 +837,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
 
 
 
-                </Row>
+                </div>
 
                 }
                 </Col>

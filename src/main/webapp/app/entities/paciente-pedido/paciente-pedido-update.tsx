@@ -25,7 +25,7 @@ export interface IPacientePedidoUpdateProps extends StateProps, DispatchProps, R
 
 export interface IPacientePedidoUpdateState {
   isNew: boolean;
-  idUnidadeId: string;
+  unidadeId: string;
   idPacienteId: string;
   idCartaoId: string;
   idEspecialidadeId: string;
@@ -35,7 +35,7 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
   constructor(props: Readonly<IPacientePedidoUpdateProps>) {
     super(props);
     this.state = {
-      idUnidadeId: '0',
+      unidadeId: '0',
       idPacienteId: '0',
       idCartaoId: '0',
       idEspecialidadeId: '0',
@@ -103,7 +103,7 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
               ? {}
               : {
                   ...pacientePedidoEntity,
-                  idUnidade: pacientePedidoEntity.idUnidade ? pacientePedidoEntity.idUnidade.id : null,
+                  unidade: pacientePedidoEntity.unidade ? pacientePedidoEntity.unidade.id : null,
                   idPaciente: pacientePedidoEntity.idPaciente ? pacientePedidoEntity.idPaciente.id : null,
                   idCartao: pacientePedidoEntity.idCartao ? pacientePedidoEntity.idCartao.id : null,
                   idEspecialidade: pacientePedidoEntity.idEspecialidade ? pacientePedidoEntity.idEspecialidade.id : null
@@ -270,19 +270,19 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" for="paciente-pedido-idUnidade">
-                                <Translate contentKey="generadorApp.pacientePedido.idUnidade">Id Unidade</Translate>
+                              <Label className="mt-2" for="paciente-pedido-unidade">
+                                <Translate contentKey="generadorApp.pacientePedido.unidade">Unidade</Translate>
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvInput id="paciente-pedido-idUnidade" type="select" className="form-control" name="idUnidade">
+                              <AvInput id="paciente-pedido-unidade" type="select" className="form-control" name="unidade">
                                 <option value="null" key="0">
-                                  {translate('generadorApp.pacientePedido.idUnidade.empty')}
+                                  {translate('generadorApp.pacientePedido.unidade.empty')}
                                 </option>
                                 {unidadeEasies
                                   ? unidadeEasies.map(otherEntity => (
                                       <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
+                                        {otherEntity.razaoSocial}
                                       </option>
                                     ))
                                   : null}

@@ -51,10 +51,6 @@ export interface IUnidadeEasyBaseState {
   tisscbo: any;
   tisscoduf: any;
   ativo: any;
-  categoriaUnidade: any;
-  especialidadeUnidade: any;
-  pacientePedido: any;
-  unidadeEasyAreaAtuacao: any;
 }
 export interface IUnidadeEasyState extends IUnidadeEasyBaseState, IPaginationBaseState {}
 
@@ -93,11 +89,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
     const tisscoduf = url.searchParams.get('tisscoduf') || '';
     const ativo = url.searchParams.get('ativo') || '';
 
-    const categoriaUnidade = url.searchParams.get('categoriaUnidade') || '';
-    const especialidadeUnidade = url.searchParams.get('especialidadeUnidade') || '';
-    const pacientePedido = url.searchParams.get('pacientePedido') || '';
-    const unidadeEasyAreaAtuacao = url.searchParams.get('unidadeEasyAreaAtuacao') || '';
-
     return {
       razaoSocial,
       nomeFantasia,
@@ -119,11 +110,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tissinscricao,
       tisscbo,
       tisscoduf,
-      ativo,
-      categoriaUnidade,
-      especialidadeUnidade,
-      pacientePedido,
-      unidadeEasyAreaAtuacao
+      ativo
     };
   };
 
@@ -154,11 +141,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
         tissinscricao: '',
         tisscbo: '',
         tisscoduf: '',
-        ativo: '',
-        categoriaUnidade: '',
-        especialidadeUnidade: '',
-        pacientePedido: '',
-        unidadeEasyAreaAtuacao: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -266,18 +249,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       'ativo=' +
       this.state.ativo +
       '&' +
-      'categoriaUnidade=' +
-      this.state.categoriaUnidade +
-      '&' +
-      'especialidadeUnidade=' +
-      this.state.especialidadeUnidade +
-      '&' +
-      'pacientePedido=' +
-      this.state.pacientePedido +
-      '&' +
-      'unidadeEasyAreaAtuacao=' +
-      this.state.unidadeEasyAreaAtuacao +
-      '&' +
       ''
     );
   };
@@ -307,10 +278,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tisscbo,
       tisscoduf,
       ativo,
-      categoriaUnidade,
-      especialidadeUnidade,
-      pacientePedido,
-      unidadeEasyAreaAtuacao,
       activePage,
       itemsPerPage,
       sort,
@@ -338,10 +305,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tisscbo,
       tisscoduf,
       ativo,
-      categoriaUnidade,
-      especialidadeUnidade,
-      pacientePedido,
-      unidadeEasyAreaAtuacao,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -572,22 +535,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                           </Label>
                           <AvInput type="string" name="ativo" id="unidade-easy-ativo" value={this.state.ativo} />
                         </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
                       </Col>
                     </div>
 

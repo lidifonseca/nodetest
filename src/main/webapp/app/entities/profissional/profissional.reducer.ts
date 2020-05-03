@@ -118,7 +118,6 @@ const apiUrl = 'api/profissionals';
 
 // Actions
 export type ICrudGetAllActionProfissional<T> = (
-  idUnidade?: any,
   idCidade?: any,
   idTempoExperiencia?: any,
   idBanco?: any,
@@ -159,13 +158,13 @@ export type ICrudGetAllActionProfissional<T> = (
   senhaChat?: any,
   atendimentoAceite?: any,
   atendimentoAssinaturas?: any,
+  unidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
-  idUnidade,
   idCidade,
   idTempoExperiencia,
   idBanco,
@@ -206,11 +205,11 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   senhaChat,
   atendimentoAceite,
   atendimentoAssinaturas,
+  unidade,
   page,
   size,
   sort
 ) => {
-  const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const idCidadeRequest = idCidade ? `idCidade.contains=${idCidade}&` : '';
   const idTempoExperienciaRequest = idTempoExperiencia ? `idTempoExperiencia.contains=${idTempoExperiencia}&` : '';
   const idBancoRequest = idBanco ? `idBanco.contains=${idBanco}&` : '';
@@ -251,12 +250,13 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   const senhaChatRequest = senhaChat ? `senhaChat.contains=${senhaChat}&` : '';
   const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
   const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONAL_LIST,
     payload: axios.get<IProfissional>(
-      `${requestUrl}${idUnidadeRequest}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${senhaChatRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${senhaChatRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -270,7 +270,8 @@ export const getEntity: ICrudGetAction<IProfissional> = id => {
 
 export const createEntity: ICrudPutAction<IProfissional> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PROFISSIONAL,
@@ -281,7 +282,7 @@ export const createEntity: ICrudPutAction<IProfissional> = entity => async dispa
 };
 
 export const updateEntity: ICrudPutAction<IProfissional> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PROFISSIONAL,
     payload: axios.put(apiUrl, cleanEntity(entity))

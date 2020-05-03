@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Like, Equal } from 'typeorm';
 import Operadora from '../domain/operadora.entity';
 import { OperadoraRepository } from '../repository/operadora.repository';
 
 const relationshipNames = [];
-relationshipNames.push('idTipoOperadora');
+relationshipNames.push('unidade');
+relationshipNames.push('tipoOperadora');
 
 @Injectable()
 export class OperadoraService {
@@ -27,20 +28,14 @@ export class OperadoraService {
     filters?: Array<{ column: string; value: string; operation: string }>[]
   ): Promise<[Operadora[], number]> {
     options.relations = relationshipNames;
-    let where = '';
-    let first = true;
+    let where = {};
     for (const i in filters) {
       if (filters.hasOwnProperty(i)) {
         const element = filters[i];
-        if (!first) {
-          where += 'and';
-        } else {
-          first = false;
-        }
         if (element['operation'] === 'contains') {
-          where += ' `Operadora`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+          where[element['column']] = Like('%' + element['value'] + '%');
         } else if (element['operation'] === 'equals') {
-          where += ' `Operadora`.`' + element['column'] + '` = "' + element['value'] + '" ';
+          where[element['column']] = Equal(element['value']);
         }
       }
     }

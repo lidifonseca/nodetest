@@ -55,7 +55,7 @@ export interface IPacientePedidoBaseState {
   valor: any;
   desconto: any;
   tipoValor: any;
-  idUnidade: any;
+  unidade: any;
   idPaciente: any;
   idCartao: any;
   idEspecialidade: any;
@@ -83,7 +83,7 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
     const desconto = url.searchParams.get('desconto') || '';
     const tipoValor = url.searchParams.get('tipoValor') || '';
 
-    const idUnidade = url.searchParams.get('idUnidade') || '';
+    const unidade = url.searchParams.get('unidade') || '';
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const idCartao = url.searchParams.get('idCartao') || '';
     const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
@@ -96,7 +96,7 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       valor,
       desconto,
       tipoValor,
-      idUnidade,
+      unidade,
       idPaciente,
       idCartao,
       idEspecialidade
@@ -122,7 +122,7 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
         valor: '',
         desconto: '',
         tipoValor: '',
-        idUnidade: '',
+        unidade: '',
         idPaciente: '',
         idCartao: '',
         idEspecialidade: ''
@@ -191,8 +191,8 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       'tipoValor=' +
       this.state.tipoValor +
       '&' +
-      'idUnidade=' +
-      this.state.idUnidade +
+      'unidade=' +
+      this.state.unidade +
       '&' +
       'idPaciente=' +
       this.state.idPaciente +
@@ -218,7 +218,7 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       valor,
       desconto,
       tipoValor,
-      idUnidade,
+      unidade,
       idPaciente,
       idCartao,
       idEspecialidade,
@@ -235,7 +235,7 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       valor,
       desconto,
       tipoValor,
-      idUnidade,
+      unidade,
       idPaciente,
       idCartao,
       idEspecialidade,
@@ -344,15 +344,15 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                       <Col md="3">
                         <Row>
                           <div>
-                            <Label for="paciente-pedido-idUnidade">
-                              <Translate contentKey="generadorApp.pacientePedido.idUnidade">Id Unidade</Translate>
+                            <Label for="paciente-pedido-unidade">
+                              <Translate contentKey="generadorApp.pacientePedido.unidade">Unidade</Translate>
                             </Label>
-                            <AvInput id="paciente-pedido-idUnidade" type="select" className="form-control" name="idUnidadeId">
+                            <AvInput id="paciente-pedido-unidade" type="select" className="form-control" name="unidadeId">
                               <option value="" key="0" />
                               {unidadeEasies
                                 ? unidadeEasies.map(otherEntity => (
                                     <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
+                                      {otherEntity.razaoSocial}
                                     </option>
                                   ))
                                 : null}
@@ -476,7 +476,7 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
-                        <Translate contentKey="generadorApp.pacientePedido.idUnidade">Id Unidade</Translate>
+                        <Translate contentKey="generadorApp.pacientePedido.unidade">Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
@@ -523,8 +523,8 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
 
                         <td>{pacientePedido.tipoValor}</td>
                         <td>
-                          {pacientePedido.idUnidade ? (
-                            <Link to={`unidade-easy/${pacientePedido.idUnidade.id}`}>{pacientePedido.idUnidade.id}</Link>
+                          {pacientePedido.unidade ? (
+                            <Link to={`unidade-easy/${pacientePedido.unidade.id}`}>{pacientePedido.unidade.id}</Link>
                           ) : (
                             ''
                           )}

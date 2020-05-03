@@ -124,13 +124,13 @@ export type ICrudGetAllActionEspecialidade<T> = (
   duracao?: any,
   importante?: any,
   ativo?: any,
-  idUnidade?: any,
   atendimento?: any,
   especialidadeOperadora?: any,
   especialidadeUnidade?: any,
   especialidadeValor?: any,
   pacientePedido?: any,
   padItem?: any,
+  unidade?: any,
   idCategoria?: any,
   idTipoEspecialidade?: any,
   idTipoUnidade?: any,
@@ -146,13 +146,13 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   duracao,
   importante,
   ativo,
-  idUnidade,
   atendimento,
   especialidadeOperadora,
   especialidadeUnidade,
   especialidadeValor,
   pacientePedido,
   padItem,
+  unidade,
   idCategoria,
   idTipoEspecialidade,
   idTipoUnidade,
@@ -166,13 +166,13 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   const duracaoRequest = duracao ? `duracao.contains=${duracao}&` : '';
   const importanteRequest = importante ? `importante.contains=${importante}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
   const especialidadeUnidadeRequest = especialidadeUnidade ? `especialidadeUnidade.equals=${especialidadeUnidade}&` : '';
   const especialidadeValorRequest = especialidadeValor ? `especialidadeValor.equals=${especialidadeValor}&` : '';
   const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
   const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
   const idTipoEspecialidadeRequest = idTipoEspecialidade ? `idTipoEspecialidade.equals=${idTipoEspecialidade}&` : '';
   const idTipoUnidadeRequest = idTipoUnidade ? `idTipoUnidade.equals=${idTipoUnidade}&` : '';
@@ -181,7 +181,7 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADE_LIST,
     payload: axios.get<IEspecialidade>(
-      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${idUnidadeRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${especialidadeUnidadeRequest}${especialidadeValorRequest}${pacientePedidoRequest}${padItemRequest}${idCategoriaRequest}${idTipoEspecialidadeRequest}${idTipoUnidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${especialidadeUnidadeRequest}${especialidadeValorRequest}${pacientePedidoRequest}${padItemRequest}${unidadeRequest}${idCategoriaRequest}${idTipoEspecialidadeRequest}${idTipoUnidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -196,6 +196,7 @@ export const getEntity: ICrudGetAction<IEspecialidade> = id => {
 export const createEntity: ICrudPutAction<IEspecialidade> = entity => async dispatch => {
   entity = {
     ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria,
     idTipoEspecialidade: entity.idTipoEspecialidade === 'null' ? null : entity.idTipoEspecialidade,
     idTipoUnidade: entity.idTipoUnidade === 'null' ? null : entity.idTipoUnidade
@@ -211,6 +212,7 @@ export const createEntity: ICrudPutAction<IEspecialidade> = entity => async disp
 export const updateEntity: ICrudPutAction<IEspecialidade> = entity => async dispatch => {
   entity = {
     ...entity,
+    unidade: entity.unidade === 'null' ? null : entity.unidade,
     idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria,
     idTipoEspecialidade: entity.idTipoEspecialidade === 'null' ? null : entity.idTipoEspecialidade,
     idTipoUnidade: entity.idTipoUnidade === 'null' ? null : entity.idTipoUnidade

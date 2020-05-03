@@ -21,7 +21,7 @@ export interface ICategoriaUnidadeUpdateProps extends StateProps, DispatchProps,
 
 export interface ICategoriaUnidadeUpdateState {
   isNew: boolean;
-  idUnidadeId: string;
+  unidadeId: string;
   idCategoriaId: string;
 }
 
@@ -29,7 +29,7 @@ export class CategoriaUnidadeUpdate extends React.Component<ICategoriaUnidadeUpd
   constructor(props: Readonly<ICategoriaUnidadeUpdateProps>) {
     super(props);
     this.state = {
-      idUnidadeId: '0',
+      unidadeId: '0',
       idCategoriaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -93,7 +93,7 @@ export class CategoriaUnidadeUpdate extends React.Component<ICategoriaUnidadeUpd
               ? {}
               : {
                   ...categoriaUnidadeEntity,
-                  idUnidade: categoriaUnidadeEntity.idUnidade ? categoriaUnidadeEntity.idUnidade.id : null,
+                  unidade: categoriaUnidadeEntity.unidade ? categoriaUnidadeEntity.unidade.id : null,
                   idCategoria: categoriaUnidadeEntity.idCategoria ? categoriaUnidadeEntity.idCategoria.id : null
                 }
           }
@@ -171,19 +171,19 @@ export class CategoriaUnidadeUpdate extends React.Component<ICategoriaUnidadeUpd
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" for="categoria-unidade-idUnidade">
-                                <Translate contentKey="generadorApp.categoriaUnidade.idUnidade">Id Unidade</Translate>
+                              <Label className="mt-2" for="categoria-unidade-unidade">
+                                <Translate contentKey="generadorApp.categoriaUnidade.unidade">Unidade</Translate>
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvInput id="categoria-unidade-idUnidade" type="select" className="form-control" name="idUnidade">
+                              <AvInput id="categoria-unidade-unidade" type="select" className="form-control" name="unidade">
                                 <option value="null" key="0">
-                                  {translate('generadorApp.categoriaUnidade.idUnidade.empty')}
+                                  {translate('generadorApp.categoriaUnidade.unidade.empty')}
                                 </option>
                                 {unidadeEasies
                                   ? unidadeEasies.map(otherEntity => (
                                       <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
+                                        {otherEntity.razaoSocial}
                                       </option>
                                     ))
                                   : null}

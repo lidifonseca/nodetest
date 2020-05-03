@@ -18,7 +18,7 @@ export default class UnidadeEasyAreaAtuacao extends BaseEntity {
   cepFinal: string;
 
   @ManyToOne(type => UnidadeEasy)
-  idUnidade: UnidadeEasy;
+  unidade: UnidadeEasy;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

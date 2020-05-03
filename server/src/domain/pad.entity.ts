@@ -6,6 +6,7 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 
 import PadCid from './pad-cid.entity';
 import PadItem from './pad-item.entity';
+import UnidadeEasy from './unidade-easy.entity';
 import Paciente from './paciente.entity';
 
 /**
@@ -13,9 +14,6 @@ import Paciente from './paciente.entity';
  */
 @Entity('pad')
 export default class Pad extends BaseEntity {
-  @Column({ name: 'id_unidade', nullable: false })
-  idUnidade: string;
-
   @Column({ type: 'integer', name: 'id_operadora' })
   idOperadora: number;
 
@@ -63,6 +61,9 @@ export default class Pad extends BaseEntity {
     other => other.idPad
   )
   padItems: PadItem[];
+
+  @ManyToOne(type => UnidadeEasy)
+  unidade: UnidadeEasy;
 
   @ManyToOne(type => Paciente)
   idPaciente: Paciente;

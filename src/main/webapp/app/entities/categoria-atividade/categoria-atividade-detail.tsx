@@ -70,13 +70,11 @@ export class CategoriaAtividadeDetail extends React.Component<ICategoriaAtividad
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idUnidade">
-                            <Translate contentKey="generadorApp.categoriaAtividade.idUnidade">Id Unidade</Translate>
-                          </span>
+                          <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{categoriaAtividadeEntity.idUnidade}</dd>
+                        <dd>{categoriaAtividadeEntity.unidade ? categoriaAtividadeEntity.unidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>
