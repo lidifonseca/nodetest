@@ -4,7 +4,9 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Paciente from './paciente.entity';
+import Atendimento from './atendimento.entity';
+import Empresa from './empresa.entity';
+import Uf from './uf.entity';
 
 /**
  * A Cidade.
@@ -18,10 +20,19 @@ export default class Cidade extends BaseEntity {
   dataPost: any;
 
   @OneToMany(
-    type => Paciente,
-    other => other.cidade
+    type => Atendimento,
+    other => other.idCidade
   )
-  pacientes: Paciente[];
+  atendimentos: Atendimento[];
+
+  @OneToMany(
+    type => Empresa,
+    other => other.idCidade
+  )
+  empresas: Empresa[];
+
+  @ManyToOne(type => Uf)
+  idUf: Uf;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

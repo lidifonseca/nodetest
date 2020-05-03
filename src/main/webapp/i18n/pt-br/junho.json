@@ -1,0 +1,30 @@
+{
+  "generadorApp": {
+    "junho": {
+      "home": {
+        "title": "Junhos",
+        "createLabel": "Criar novo Junho",
+        "createOrEditLabel": "Criar ou editar Junho",
+        "notFound": "Nenhum Junho encontrado"
+      },
+      "created": "Um novo Junho foi criado com o identificador {{ param }}",
+      "updated": "Um Junho foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Junho foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Junho {{ id }}?"
+      },
+      "detail": {
+        "title": "Junho"
+      },
+      "idFranquia": "Id Franquia",
+      "idPaciente": "Id Paciente",
+      "nroPad": "Nro Pad",
+      "dataInicio": "Data Inicio",
+      "dataFim": "Data Fim",
+      "idEspecialidade": "Id Especialidade",
+      "idPeriodicidade": "Id Periodicidade",
+      "idPeriodo": "Id Periodo",
+      "qtdSessoes": "Qtd Sessoes"
+    }
+  }
+}

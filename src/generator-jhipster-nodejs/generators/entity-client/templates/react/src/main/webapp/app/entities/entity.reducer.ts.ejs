@@ -312,7 +312,7 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     entity = {
       ...entity, 
       <%_ relFieldNames.forEach(val => { _%>
-        <%= val.relationshipFieldName %>: entity.<%= val.relationshipFieldName %> === "null" ? null : entity.<%= val.relationshipFieldName %> 
+        <%= val.relationshipFieldName %>: entity.<%= val.relationshipFieldName %> === "null" ? null : entity.<%= val.relationshipFieldName %>, 
       <%_ }) _%> 
     };
   const result = await dispatch({
@@ -327,7 +327,7 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
 
 export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
     entity = {...entity, <%_ relFieldNames.forEach(val => { _%>
-      <%= val.relationshipFieldName %>: entity.<%= val.relationshipFieldName %> === "null" ? null : entity.<%= val.relationshipFieldName %> 
+      <%= val.relationshipFieldName %>: entity.<%= val.relationshipFieldName %> === "null" ? null : entity.<%= val.relationshipFieldName %>, 
     <%_ }) _%> };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,

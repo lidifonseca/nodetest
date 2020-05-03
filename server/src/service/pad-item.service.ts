@@ -1,0 +1,65 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
+import PadItem from '../domain/pad-item.entity';
+import { PadItemRepository } from '../repository/pad-item.repository';
+
+const relationshipNames = [];
+relationshipNames.push('idPad');
+relationshipNames.push('idEspecialidade');
+relationshipNames.push('idPeriodicidade');
+relationshipNames.push('idPeriodo');
+
+@Injectable()
+export class PadItemService {
+  logger = new Logger('PadItemService');
+
+  constructor(@InjectRepository(PadItemRepository) private padItemRepository: PadItemRepository) {}
+
+  async findById(id: string): Promise<PadItem | undefined> {
+    const options = { relations: relationshipNames };
+    return await this.padItemRepository.findOne(id, options);
+  }
+
+  async findByfields(options: FindOneOptions<PadItem>): Promise<PadItem | undefined> {
+    return await this.padItemRepository.findOne(options);
+  }
+
+  async findAndCount(
+    options: FindManyOptions<PadItem>,
+    filters?: Array<{ column: string; value: string; operation: string }>[]
+  ): Promise<[PadItem[], number]> {
+    options.relations = relationshipNames;
+    let where = '';
+    let first = true;
+    for (const i in filters) {
+      if (filters.hasOwnProperty(i)) {
+        const element = filters[i];
+        if (!first) {
+          where += 'and';
+        } else {
+          first = false;
+        }
+        if (element['operation'] === 'contains') {
+          where += ' `PadItem`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+        } else if (element['operation'] === 'equals') {
+          where += ' `PadItem`.`' + element['column'] + '` = "' + element['value'] + '" ';
+        }
+      }
+    }
+    options.where = where;
+    return await this.padItemRepository.findAndCount(options);
+  }
+
+  async save(padItem: PadItem): Promise<PadItem | undefined> {
+    return await this.padItemRepository.save(padItem);
+  }
+
+  async update(padItem: PadItem): Promise<PadItem | undefined> {
+    return await this.save(padItem);
+  }
+
+  async delete(padItem: PadItem): Promise<PadItem | undefined> {
+    return await this.padItemRepository.remove(padItem);
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "profissionalHorario": {
+      "home": {
+        "title": "Profissional Horarios",
+        "createLabel": "Criar novo Profissional Horario",
+        "createOrEditLabel": "Criar ou editar Profissional Horario",
+        "notFound": "Nenhum Profissional Horario encontrado"
+      },
+      "created": "Um novo Profissional Horario foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Horario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Horario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Horario {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Horario"
+      },
+      "idAtendimento": "Id Atendimento",
+      "idProfissional": "Id Profissional",
+      "horario": "Horario",
+      "confirm": "Confirm",
+      "dataPost": "Data Post"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+    "name": "AtendimentoAtividades",
+    "fields": [
+        {
+            "fieldName": "feito",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "categoriaAtividade",
+            "otherEntityRelationshipName": "atendimentoAtividades",
+            "relationshipName": "idAtividade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "atendimentoAtividades",
+            "relationshipName": "idAtendimento",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502230300",
+    "entityTableName": "atendimento_atividades",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

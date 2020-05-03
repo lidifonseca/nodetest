@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "usuarioAcao": {
+      "home": {
+        "title": "Usuario Acaos",
+        "createLabel": "Criar novo Usuario Acao",
+        "createOrEditLabel": "Criar ou editar Usuario Acao",
+        "notFound": "Nenhum Usuario Acao encontrado"
+      },
+      "created": "Um novo Usuario Acao foi criado com o identificador {{ param }}",
+      "updated": "Um Usuario Acao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Usuario Acao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Usuario Acao {{ id }}?"
+      },
+      "detail": {
+        "title": "Usuario Acao"
+      },
+      "idUsuario": "Id Usuario",
+      "idAtendimento": "Id Atendimento",
+      "descricao": "Descricao",
+      "dataPost": "Data Post",
+      "idTela": "Id Tela",
+      "idAcao": "Id Acao"
+    }
+  }
+}

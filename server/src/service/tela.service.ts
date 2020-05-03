@@ -1,0 +1,61 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
+import Tela from '../domain/tela.entity';
+import { TelaRepository } from '../repository/tela.repository';
+
+const relationshipNames = [];
+
+@Injectable()
+export class TelaService {
+  logger = new Logger('TelaService');
+
+  constructor(@InjectRepository(TelaRepository) private telaRepository: TelaRepository) {}
+
+  async findById(id: string): Promise<Tela | undefined> {
+    const options = { relations: relationshipNames };
+    return await this.telaRepository.findOne(id, options);
+  }
+
+  async findByfields(options: FindOneOptions<Tela>): Promise<Tela | undefined> {
+    return await this.telaRepository.findOne(options);
+  }
+
+  async findAndCount(
+    options: FindManyOptions<Tela>,
+    filters?: Array<{ column: string; value: string; operation: string }>[]
+  ): Promise<[Tela[], number]> {
+    options.relations = relationshipNames;
+    let where = '';
+    let first = true;
+    for (const i in filters) {
+      if (filters.hasOwnProperty(i)) {
+        const element = filters[i];
+        if (!first) {
+          where += 'and';
+        } else {
+          first = false;
+        }
+        if (element['operation'] === 'contains') {
+          where += ' `Tela`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+        } else if (element['operation'] === 'equals') {
+          where += ' `Tela`.`' + element['column'] + '` = "' + element['value'] + '" ';
+        }
+      }
+    }
+    options.where = where;
+    return await this.telaRepository.findAndCount(options);
+  }
+
+  async save(tela: Tela): Promise<Tela | undefined> {
+    return await this.telaRepository.save(tela);
+  }
+
+  async update(tela: Tela): Promise<Tela | undefined> {
+    return await this.save(tela);
+  }
+
+  async delete(tela: Tela): Promise<Tela | undefined> {
+    return await this.telaRepository.remove(tela);
+  }
+}

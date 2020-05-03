@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "pacienteMotivoInternacao": {
+      "home": {
+        "title": "Paciente Motivo Internacaos",
+        "createLabel": "Criar novo Paciente Motivo Internacao",
+        "createOrEditLabel": "Criar ou editar Paciente Motivo Internacao",
+        "notFound": "Nenhum Paciente Motivo Internacao encontrado"
+      },
+      "created": "Um novo Paciente Motivo Internacao foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Motivo Internacao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Motivo Internacao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Motivo Internacao {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Motivo Internacao"
+      },
+      "idPaciente": "Id Paciente",
+      "idMotivoInternacao": "Id Motivo Internacao",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post"
+    }
+  }
+}

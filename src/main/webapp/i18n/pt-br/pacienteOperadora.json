@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "pacienteOperadora": {
+      "home": {
+        "title": "Paciente Operadoras",
+        "createLabel": "Criar novo Paciente Operadora",
+        "createOrEditLabel": "Criar ou editar Paciente Operadora",
+        "notFound": "Nenhum Paciente Operadora encontrado"
+      },
+      "created": "Um novo Paciente Operadora foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Operadora foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Operadora foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Operadora {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Operadora"
+      },
+      "registro": "Registro",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "idPaciente": "Id Paciente",
+      "idOperadora": "Id Operadora"
+    }
+  }
+}

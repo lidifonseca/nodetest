@@ -1,0 +1,61 @@
+{
+  "generadorApp": {
+    "franquiaUsuario": {
+      "home": {
+        "title": "Franquia Usuarios",
+        "createLabel": "Criar novo Franquia Usuario",
+        "createOrEditLabel": "Criar ou editar Franquia Usuario",
+        "notFound": "Nenhum Franquia Usuario encontrado"
+      },
+      "created": "Um novo Franquia Usuario foi criado com o identificador {{ param }}",
+      "updated": "Um Franquia Usuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Franquia Usuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Franquia Usuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Franquia Usuario"
+      },
+      "senha": "Senha",
+      "nome": "Nome",
+      "email": "Email",
+      "verProfissional": "Ver Profissional",
+      "cadProfissional": "Cad Profissional",
+      "ediProfissional": "Edi Profissional",
+      "delProfissional": "Del Profissional",
+      "relProfissional": "Rel Profissional",
+      "verPaciente": "Ver Paciente",
+      "cadPaciente": "Cad Paciente",
+      "ediPaciente": "Edi Paciente",
+      "delPaciente": "Del Paciente",
+      "relPaciente": "Rel Paciente",
+      "verPad": "Ver Pad",
+      "cadPad": "Cad Pad",
+      "ediPad": "Edi Pad",
+      "delPad": "Del Pad",
+      "relPad": "Rel Pad",
+      "verAtendimento": "Ver Atendimento",
+      "cadAtendimento": "Cad Atendimento",
+      "ediAtendimento": "Edi Atendimento",
+      "delAtendimento": "Del Atendimento",
+      "relAtendimento": "Rel Atendimento",
+      "verPush": "Ver Push",
+      "cadPush": "Cad Push",
+      "verEspecialidadeValor": "Ver Especialidade Valor",
+      "cadEspecialidadeValor": "Cad Especialidade Valor",
+      "ediEspecialidadeValor": "Edi Especialidade Valor",
+      "delEspecialidadeValor": "Del Especialidade Valor",
+      "verUsuario": "Ver Usuario",
+      "cadUsuario": "Cad Usuario",
+      "ediUsuario": "Edi Usuario",
+      "delUsuario": "Del Usuario",
+      "envioRecusa": "Envio Recusa",
+      "envioIntercorrencia": "Envio Intercorrencia",
+      "envioCancelamento": "Envio Cancelamento",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "logUserFranquia": "Log User Franquia",
+      "idFranquia": "Id Franquia"
+    }
+  }
+}

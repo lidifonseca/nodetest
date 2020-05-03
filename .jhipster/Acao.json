@@ -1,0 +1,51 @@
+{
+    "name": "Acao",
+    "fields": [
+        {
+            "fieldName": "acao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "logUser",
+            "otherEntityRelationshipName": "idAcao",
+            "relationshipName": "logUser"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "logUserFranquia",
+            "otherEntityRelationshipName": "idAcao",
+            "relationshipName": "logUserFranquia"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "usuarioAcao",
+            "otherEntityRelationshipName": "idAcao",
+            "relationshipName": "usuarioAcao"
+        }
+    ],
+    "changelogDate": "20200502225200",
+    "entityTableName": "acao",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

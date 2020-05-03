@@ -2,6 +2,32 @@
     "name": "Paciente",
     "fields": [
         {
+            "fieldName": "idUnidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idFranquia",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "idCidade",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "idCidadeFamiliar",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "idGrauParentesco",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "senha",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -128,6 +154,14 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "40"
+        },
+        {
+            "fieldName": "cidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
         },
         {
             "fieldName": "uf",
@@ -264,6 +298,14 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "40"
+        },
+        {
+            "fieldName": "cidadeFamiliar",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
         },
         {
             "fieldName": "ufFamiliar",
@@ -414,15 +456,87 @@
     ],
     "relationships": [
         {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cidade",
-            "otherEntityRelationshipName": "pacientes",
-            "relationshipName": "cidade",
-            "otherEntityField": "id"
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "atendimento"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoAssinaturas",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipValidateRules": "required",
+            "relationshipName": "atendimentoAssinaturas"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "diario",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "diario"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteDadosCartao",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacienteDadosCartao"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteDiagnostico",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacienteDiagnostico"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteDiario",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacienteDiario"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteEnqueteApp",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacienteEnqueteApp"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteOperadora",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacienteOperadora"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacientePedido",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacientePedido"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacientePush",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacientePush"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteStatusAtual",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pacienteStatusAtual"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pad",
+            "otherEntityRelationshipName": "idPaciente",
+            "relationshipName": "pad"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "questionarios",
+            "otherEntityRelationshipName": "pacienteId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "questionarios"
         }
     ],
-    "changelogDate": "20200502195900",
-    "javadoc": "@toStringFields nome cpf@@\\n@listTableLayout cidade nome email cpf rg registro@@\\n@listFilterLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\\n@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\\n@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@",
+    "changelogDate": "20200502235400",
     "entityTableName": "paciente",
     "dto": "mapstruct",
     "pagination": "pagination",

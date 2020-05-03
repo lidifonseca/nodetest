@@ -1,0 +1,81 @@
+{
+    "name": "PacientePedido",
+    "fields": [
+        {
+            "fieldName": "dataPedido",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataAgenda",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "qtdSessoes",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "parcelas",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "valor",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "desconto",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "tipoValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "pacientePedido",
+            "relationshipName": "idUnidade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacientePedido",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "pacienteDadosCartao",
+            "otherEntityRelationshipName": "pacientePedido",
+            "relationshipName": "idCartao",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "pacientePedido",
+            "relationshipName": "idEspecialidade",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503001000",
+    "entityTableName": "paciente_pedido",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "franquiaAreaAtuacao": {
+      "home": {
+        "title": "Franquia Area Atuacaos",
+        "createLabel": "Criar novo Franquia Area Atuacao",
+        "createOrEditLabel": "Criar ou editar Franquia Area Atuacao",
+        "notFound": "Nenhum Franquia Area Atuacao encontrado"
+      },
+      "created": "Um novo Franquia Area Atuacao foi criado com o identificador {{ param }}",
+      "updated": "Um Franquia Area Atuacao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Franquia Area Atuacao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Franquia Area Atuacao {{ id }}?"
+      },
+      "detail": {
+        "title": "Franquia Area Atuacao"
+      },
+      "cepIni": "Cep Ini",
+      "cepFim": "Cep Fim",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "idFranquia": "Id Franquia"
+    }
+  }
+}

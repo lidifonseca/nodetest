@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "pacienteArquivo": {
+      "home": {
+        "title": "Paciente Arquivos",
+        "createLabel": "Criar novo Paciente Arquivo",
+        "createOrEditLabel": "Criar ou editar Paciente Arquivo",
+        "notFound": "Nenhum Paciente Arquivo encontrado"
+      },
+      "created": "Um novo Paciente Arquivo foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Arquivo foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Arquivo foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Arquivo {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Arquivo"
+      },
+      "idPaciente": "Id Paciente",
+      "arquivo": "Arquivo",
+      "ativo": "Ativo",
+      "dataPost": "Data Post"
+    }
+  }
+}

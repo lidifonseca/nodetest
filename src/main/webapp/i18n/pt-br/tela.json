@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "tela": {
+      "home": {
+        "title": "Telas",
+        "createLabel": "Criar novo Tela",
+        "createOrEditLabel": "Criar ou editar Tela",
+        "notFound": "Nenhum Tela encontrado"
+      },
+      "created": "Um novo Tela foi criado com o identificador {{ param }}",
+      "updated": "Um Tela foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tela foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tela {{ id }}?"
+      },
+      "detail": {
+        "title": "Tela"
+      },
+      "tela": "Tela",
+      "dataPost": "Data Post",
+      "logUser": "Log User",
+      "logUserFranquia": "Log User Franquia",
+      "usuarioAcao": "Usuario Acao"
+    }
+  }
+}

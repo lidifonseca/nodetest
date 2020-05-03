@@ -1,0 +1,61 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
+import Uf from '../domain/uf.entity';
+import { UfRepository } from '../repository/uf.repository';
+
+const relationshipNames = [];
+
+@Injectable()
+export class UfService {
+  logger = new Logger('UfService');
+
+  constructor(@InjectRepository(UfRepository) private ufRepository: UfRepository) {}
+
+  async findById(id: string): Promise<Uf | undefined> {
+    const options = { relations: relationshipNames };
+    return await this.ufRepository.findOne(id, options);
+  }
+
+  async findByfields(options: FindOneOptions<Uf>): Promise<Uf | undefined> {
+    return await this.ufRepository.findOne(options);
+  }
+
+  async findAndCount(
+    options: FindManyOptions<Uf>,
+    filters?: Array<{ column: string; value: string; operation: string }>[]
+  ): Promise<[Uf[], number]> {
+    options.relations = relationshipNames;
+    let where = '';
+    let first = true;
+    for (const i in filters) {
+      if (filters.hasOwnProperty(i)) {
+        const element = filters[i];
+        if (!first) {
+          where += 'and';
+        } else {
+          first = false;
+        }
+        if (element['operation'] === 'contains') {
+          where += ' `Uf`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+        } else if (element['operation'] === 'equals') {
+          where += ' `Uf`.`' + element['column'] + '` = "' + element['value'] + '" ';
+        }
+      }
+    }
+    options.where = where;
+    return await this.ufRepository.findAndCount(options);
+  }
+
+  async save(uf: Uf): Promise<Uf | undefined> {
+    return await this.ufRepository.save(uf);
+  }
+
+  async update(uf: Uf): Promise<Uf | undefined> {
+    return await this.save(uf);
+  }
+
+  async delete(uf: Uf): Promise<Uf | undefined> {
+    return await this.ufRepository.remove(uf);
+  }
+}

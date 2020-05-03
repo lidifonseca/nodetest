@@ -8,6 +8,8 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUf } from 'app/shared/model/uf.model';
+import { getEntities as getUfs } from 'app/entities/uf/uf.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './cidade.reducer';
 import { ICidade } from 'app/shared/model/cidade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
@@ -17,12 +19,14 @@ export interface ICidadeUpdateProps extends StateProps, DispatchProps, RouteComp
 
 export interface ICidadeUpdateState {
   isNew: boolean;
+  idUfId: string;
 }
 
 export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpdateState> {
   constructor(props: Readonly<ICidadeUpdateProps>) {
     super(props);
     this.state = {
+      idUfId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -38,6 +42,8 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getUfs();
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
@@ -63,7 +69,7 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
   };
 
   render() {
-    const { cidadeEntity, loading, updating } = this.props;
+    const { cidadeEntity, ufs, loading, updating } = this.props;
     const { isNew } = this.state;
 
     return (
@@ -81,7 +87,8 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
             isNew
               ? {}
               : {
-                  ...cidadeEntity
+                  ...cidadeEntity,
+                  idUf: cidadeEntity.idUf ? cidadeEntity.idUf.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -176,6 +183,31 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
                           </Row>
                         </AvGroup>
                       </Col>
+                      <Col md="12">
+                        <AvGroup>
+                          <Row>
+                            <Col md="3">
+                              <Label className="mt-2" for="cidade-idUf">
+                                <Translate contentKey="generadorApp.cidade.idUf">Id Uf</Translate>
+                              </Label>
+                            </Col>
+                            <Col md="9">
+                              <AvInput id="cidade-idUf" type="select" className="form-control" name="idUf">
+                                <option value="null" key="0">
+                                  {translate('generadorApp.cidade.idUf.empty')}
+                                </option>
+                                {ufs
+                                  ? ufs.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.id}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </Col>
+                          </Row>
+                        </AvGroup>
+                      </Col>
                     </Row>
                   )}
                 </Col>
@@ -189,6 +221,7 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  ufs: storeState.uf.entities,
   cidadeEntity: storeState.cidade.entity,
   loading: storeState.cidade.loading,
   updating: storeState.cidade.updating,
@@ -196,6 +229,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUfs,
   getEntity,
   updateEntity,
   createEntity,

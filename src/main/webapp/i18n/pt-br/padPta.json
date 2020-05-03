@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "padPta": {
+      "home": {
+        "title": "Pad Ptas",
+        "createLabel": "Criar novo Pad Pta",
+        "createOrEditLabel": "Criar ou editar Pad Pta",
+        "notFound": "Nenhum Pad Pta encontrado"
+      },
+      "created": "Um novo Pad Pta foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Pta foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Pta foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Pta {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Pta"
+      },
+      "idPad": "Id Pad",
+      "idDescPta": "Id Desc Pta",
+      "idCid": "Id Cid",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post",
+      "idCidXPtaNovo": "Id Cid X Pta Novo"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+    "name": "CepbrBairro",
+    "fields": [
+        {
+            "fieldName": "idBairro",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "bairro",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cepbrEndereco",
+            "otherEntityRelationshipName": "idBairro",
+            "relationshipName": "cepbrEndereco"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cepbrCidade",
+            "otherEntityRelationshipName": "cepbrBairro",
+            "relationshipName": "idCidade",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502224200",
+    "entityTableName": "cepbr_bairro",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

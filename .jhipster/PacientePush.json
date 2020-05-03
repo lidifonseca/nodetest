@@ -1,0 +1,48 @@
+{
+    "name": "PacientePush",
+    "fields": [
+        {
+            "fieldName": "idFranquia",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mensagem",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacientePush",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503001200",
+    "entityTableName": "paciente_push",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

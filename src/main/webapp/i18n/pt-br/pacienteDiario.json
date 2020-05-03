@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "pacienteDiario": {
+      "home": {
+        "title": "Paciente Diarios",
+        "createLabel": "Criar novo Paciente Diario",
+        "createOrEditLabel": "Criar ou editar Paciente Diario",
+        "notFound": "Nenhum Paciente Diario encontrado"
+      },
+      "created": "Um novo Paciente Diario foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Diario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Diario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Diario {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Diario"
+      },
+      "idOperadora": "Id Operadora",
+      "historico": "Historico",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "idPaciente": "Id Paciente",
+      "idUsuario": "Id Usuario"
+    }
+  }
+}

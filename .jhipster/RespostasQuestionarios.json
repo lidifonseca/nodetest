@@ -1,0 +1,41 @@
+{
+    "name": "RespostasQuestionarios",
+    "fields": [
+        {
+            "fieldName": "dataResposta",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "informacaoAdicional",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "questionarioId",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "questionarios",
+            "otherEntityRelationshipName": "respostasQuestionarios",
+            "relationshipName": "questionariosId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503005900",
+    "entityTableName": "respostas_questionarios",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

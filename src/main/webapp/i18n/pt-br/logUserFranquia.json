@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "logUserFranquia": {
+      "home": {
+        "title": "Log User Franquias",
+        "createLabel": "Criar novo Log User Franquia",
+        "createOrEditLabel": "Criar ou editar Log User Franquia",
+        "notFound": "Nenhum Log User Franquia encontrado"
+      },
+      "created": "Um novo Log User Franquia foi criado com o identificador {{ param }}",
+      "updated": "Um Log User Franquia foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Log User Franquia foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Log User Franquia {{ id }}?"
+      },
+      "detail": {
+        "title": "Log User Franquia"
+      },
+      "descricao": "Descricao",
+      "dataPost": "Data Post",
+      "idAcao": "Id Acao",
+      "idTela": "Id Tela",
+      "idUsuario": "Id Usuario"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "categoriaUnidade": {
+      "home": {
+        "title": "Categoria Unidades",
+        "createLabel": "Criar novo Categoria Unidade",
+        "createOrEditLabel": "Criar ou editar Categoria Unidade",
+        "notFound": "Nenhum Categoria Unidade encontrado"
+      },
+      "created": "Um novo Categoria Unidade foi criado com o identificador {{ param }}",
+      "updated": "Um Categoria Unidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Categoria Unidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Categoria Unidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Categoria Unidade"
+      },
+      "dataPost": "Data Post",
+      "idUnidade": "Id Unidade",
+      "idCategoria": "Id Categoria"
+    }
+  }
+}

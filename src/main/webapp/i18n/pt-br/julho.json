@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "julho": {
+      "home": {
+        "title": "Julhos",
+        "createLabel": "Criar novo Julho",
+        "createOrEditLabel": "Criar ou editar Julho",
+        "notFound": "Nenhum Julho encontrado"
+      },
+      "created": "Um novo Julho foi criado com o identificador {{ param }}",
+      "updated": "Um Julho foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Julho foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Julho {{ id }}?"
+      },
+      "detail": {
+        "title": "Julho"
+      },
+      "dataInicio": "Data Inicio",
+      "dataFim": "Data Fim",
+      "especialidade": "Especialidade",
+      "periodicidade": "Periodicidade",
+      "periodo": "Periodo",
+      "qtd": "Qtd"
+    }
+  }
+}

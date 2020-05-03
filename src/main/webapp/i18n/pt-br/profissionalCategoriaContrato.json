@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "profissionalCategoriaContrato": {
+      "home": {
+        "title": "Profissional Categoria Contratoes",
+        "createLabel": "Criar novo Profissional Categoria Contrato",
+        "createOrEditLabel": "Criar ou editar Profissional Categoria Contrato",
+        "notFound": "Nenhum Profissional Categoria Contrato encontrado"
+      },
+      "created": "Um novo Profissional Categoria Contrato foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Categoria Contrato foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Categoria Contrato foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Categoria Contrato {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Categoria Contrato"
+      },
+      "idProfissional": "Id Profissional",
+      "idCategoriaContrato": "Id Categoria Contrato",
+      "aceito": "Aceito",
+      "dataPost": "Data Post"
+    }
+  }
+}

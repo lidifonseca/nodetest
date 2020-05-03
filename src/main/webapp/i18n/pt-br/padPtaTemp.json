@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "padPtaTemp": {
+      "home": {
+        "title": "Pad Pta Temps",
+        "createLabel": "Criar novo Pad Pta Temp",
+        "createOrEditLabel": "Criar ou editar Pad Pta Temp",
+        "notFound": "Nenhum Pad Pta Temp encontrado"
+      },
+      "created": "Um novo Pad Pta Temp foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Pta Temp foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Pta Temp foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Pta Temp {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Pta Temp"
+      },
+      "sessionId": "Session Id",
+      "idPta": "Id Pta",
+      "idCid": "Id Cid",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post",
+      "cidXPtaNovoId": "Cid X Pta Novo Id"
+    }
+  }
+}

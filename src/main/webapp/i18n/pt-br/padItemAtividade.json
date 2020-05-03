@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "padItemAtividade": {
+      "home": {
+        "title": "Pad Item Atividades",
+        "createLabel": "Criar novo Pad Item Atividade",
+        "createOrEditLabel": "Criar ou editar Pad Item Atividade",
+        "notFound": "Nenhum Pad Item Atividade encontrado"
+      },
+      "created": "Um novo Pad Item Atividade foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Atividade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Atividade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Atividade {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Atividade"
+      },
+      "dataInicio": "Data Inicio",
+      "dataFim": "Data Fim",
+      "dataPost": "Data Post",
+      "idAtividade": "Id Atividade",
+      "idPadItem": "Id Pad Item"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+    "name": "PacienteOperadora",
+    "fields": [
+        {
+            "fieldName": "registro",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteOperadora",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "operadora",
+            "otherEntityRelationshipName": "pacienteOperadora",
+            "relationshipName": "idOperadora",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503000900",
+    "entityTableName": "paciente_operadora",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

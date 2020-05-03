@@ -1,0 +1,95 @@
+{
+    "name": "Categoria",
+    "fields": [
+        {
+            "fieldName": "categoria",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "styleCategoria",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "icon",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "publicar",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "ordem",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "publicarSite",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "categoriaAtividade",
+            "otherEntityRelationshipName": "idCategoria",
+            "relationshipName": "categoriaAtividade"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "categoriaContrato",
+            "otherEntityRelationshipName": "idCategoria",
+            "relationshipName": "categoriaContrato"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "categoriaUnidade",
+            "otherEntityRelationshipName": "idCategoria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "categoriaUnidade"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovoPadItemIndi",
+            "otherEntityRelationshipName": "categoriasId",
+            "relationshipName": "cidXPtaNovoPadItemIndi"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "idCategoria",
+            "relationshipName": "especialidade"
+        }
+    ],
+    "changelogDate": "20200502231100",
+    "entityTableName": "categoria",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

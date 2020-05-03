@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "unidadeMedida": {
+      "home": {
+        "title": "Unidade Medidas",
+        "createLabel": "Criar novo Unidade Medida",
+        "createOrEditLabel": "Criar ou editar Unidade Medida",
+        "notFound": "Nenhum Unidade Medida encontrado"
+      },
+      "created": "Um novo Unidade Medida foi criado com o identificador {{ param }}",
+      "updated": "Um Unidade Medida foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Unidade Medida foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Unidade Medida {{ id }}?"
+      },
+      "detail": {
+        "title": "Unidade Medida"
+      },
+      "unidade": "Unidade",
+      "descricao": "Descricao"
+    }
+  }
+}

@@ -36,12 +36,17 @@ import { ICidade } from 'app/shared/model/cidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUf } from 'app/shared/model/uf.model';
+import { getEntities as getUfs } from 'app/entities/uf/uf.reducer';
+
 export interface ICidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICidadeBaseState {
   descrCidade: any;
   dataPost: any;
-  pacientes: any;
+  atendimento: any;
+  empresa: any;
+  idUf: any;
 }
 export interface ICidadeState extends ICidadeBaseState, IPaginationBaseState {}
 
@@ -61,17 +66,23 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
     const descrCidade = url.searchParams.get('descrCidade') || '';
     const dataPost = url.searchParams.get('dataPost') || '';
 
-    const pacientes = url.searchParams.get('pacientes') || '';
+    const atendimento = url.searchParams.get('atendimento') || '';
+    const empresa = url.searchParams.get('empresa') || '';
+    const idUf = url.searchParams.get('idUf') || '';
 
     return {
       descrCidade,
       dataPost,
-      pacientes
+      atendimento,
+      empresa,
+      idUf
     };
   };
 
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUfs();
   }
 
   cancelCourse = () => {
@@ -79,7 +90,9 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
       {
         descrCidade: '',
         dataPost: '',
-        pacientes: ''
+        atendimento: '',
+        empresa: '',
+        idUf: ''
       },
       () => this.sortEntities()
     );
@@ -130,8 +143,14 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
       'dataPost=' +
       this.state.dataPost +
       '&' +
-      'pacientes=' +
-      this.state.pacientes +
+      'atendimento=' +
+      this.state.atendimento +
+      '&' +
+      'empresa=' +
+      this.state.empresa +
+      '&' +
+      'idUf=' +
+      this.state.idUf +
       '&' +
       ''
     );
@@ -140,12 +159,12 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descrCidade, dataPost, pacientes, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(descrCidade, dataPost, pacientes, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descrCidade, dataPost, atendimento, empresa, idUf, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(descrCidade, dataPost, atendimento, empresa, idUf, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { cidadeList, match, totalItems } = this.props;
+    const { ufs, cidadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -215,6 +234,30 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                       <Col md="3">
                         <Row></Row>
                       </Col>
+
+                      <Col md="3">
+                        <Row></Row>
+                      </Col>
+
+                      <Col md="3">
+                        <Row>
+                          <div>
+                            <Label for="cidade-idUf">
+                              <Translate contentKey="generadorApp.cidade.idUf">Id Uf</Translate>
+                            </Label>
+                            <AvInput id="cidade-idUf" type="select" className="form-control" name="idUfId">
+                              <option value="" key="0" />
+                              {ufs
+                                ? ufs.map(otherEntity => (
+                                    <option value={otherEntity.id} key={otherEntity.id}>
+                                      {otherEntity.id}
+                                    </option>
+                                  ))
+                                : null}
+                            </AvInput>
+                          </div>
+                        </Row>
+                      </Col>
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -250,6 +293,10 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                         <Translate contentKey="generadorApp.cidade.dataPost">Data Post</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
+                      <th>
+                        <Translate contentKey="generadorApp.cidade.idUf">Id Uf</Translate>
+                        <FontAwesomeIcon icon="sort" />
+                      </th>
 
                       <th />
                     </tr>
@@ -269,6 +316,7 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                         <td>
                           <TextFormat type="date" value={cidade.dataPost} format={APP_DATE_FORMAT} />
                         </td>
+                        <td>{cidade.idUf ? <Link to={`uf/${cidade.idUf.id}`}>{cidade.idUf.id}</Link> : ''}</td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
@@ -326,11 +374,13 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
 }
 
 const mapStateToProps = ({ cidade, ...storeState }: IRootState) => ({
+  ufs: storeState.uf.entities,
   cidadeList: cidade.entities,
   totalItems: cidade.totalItems
 });
 
 const mapDispatchToProps = {
+  getUfs,
   getEntities
 };
 

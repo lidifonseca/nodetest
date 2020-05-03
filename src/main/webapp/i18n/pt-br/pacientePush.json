@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "pacientePush": {
+      "home": {
+        "title": "Paciente Pushes",
+        "createLabel": "Criar novo Paciente Push",
+        "createOrEditLabel": "Criar ou editar Paciente Push",
+        "notFound": "Nenhum Paciente Push encontrado"
+      },
+      "created": "Um novo Paciente Push foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Push foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Push foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Push {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Push"
+      },
+      "idFranquia": "Id Franquia",
+      "mensagem": "Mensagem",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "idPaciente": "Id Paciente"
+    }
+  }
+}

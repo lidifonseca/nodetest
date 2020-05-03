@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "padItemCepRecusado": {
+      "home": {
+        "title": "Pad Item Cep Recusados",
+        "createLabel": "Criar novo Pad Item Cep Recusado",
+        "createOrEditLabel": "Criar ou editar Pad Item Cep Recusado",
+        "notFound": "Nenhum Pad Item Cep Recusado encontrado"
+      },
+      "created": "Um novo Pad Item Cep Recusado foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Cep Recusado foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Cep Recusado foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Cep Recusado {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Cep Recusado"
+      },
+      "cep": "Cep",
+      "dataPost": "Data Post",
+      "idPadItem": "Id Pad Item"
+    }
+  }
+}

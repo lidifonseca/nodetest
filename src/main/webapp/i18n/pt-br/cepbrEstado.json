@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "cepbrEstado": {
+      "home": {
+        "title": "Cepbr Estados",
+        "createLabel": "Criar novo Cepbr Estado",
+        "createOrEditLabel": "Criar ou editar Cepbr Estado",
+        "notFound": "Nenhum Cepbr Estado encontrado"
+      },
+      "created": "Um novo Cepbr Estado foi criado com o identificador {{ param }}",
+      "updated": "Um Cepbr Estado foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cepbr Estado foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cepbr Estado {{ id }}?"
+      },
+      "detail": {
+        "title": "Cepbr Estado"
+      },
+      "uf": "Uf",
+      "estado": "Estado",
+      "codIbge": "Cod Ibge",
+      "cepbrCidade": "Cepbr Cidade"
+    }
+  }
+}

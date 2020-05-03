@@ -1,0 +1,32 @@
+{
+    "name": "ModulosPadConfig",
+    "fields": [
+        {
+            "fieldName": "idModulosPad",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idPeriodicidade",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200502234700",
+    "entityTableName": "modulos_pad_config",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

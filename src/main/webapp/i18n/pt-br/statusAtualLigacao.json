@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "statusAtualLigacao": {
+      "home": {
+        "title": "Status Atual Ligacaos",
+        "createLabel": "Criar novo Status Atual Ligacao",
+        "createOrEditLabel": "Criar ou editar Status Atual Ligacao",
+        "notFound": "Nenhum Status Atual Ligacao encontrado"
+      },
+      "created": "Um novo Status Atual Ligacao foi criado com o identificador {{ param }}",
+      "updated": "Um Status Atual Ligacao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Status Atual Ligacao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Status Atual Ligacao {{ id }}?"
+      },
+      "detail": {
+        "title": "Status Atual Ligacao"
+      },
+      "statusAtualLigacao": "Status Atual Ligacao",
+      "styleLabel": "Style Label",
+      "dataPost": "Data Post"
+    }
+  }
+}

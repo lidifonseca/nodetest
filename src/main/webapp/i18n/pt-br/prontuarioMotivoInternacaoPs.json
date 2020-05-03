@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "prontuarioMotivoInternacaoPs": {
+      "home": {
+        "title": "Prontuario Motivo Internacao Ps",
+        "createLabel": "Criar novo Prontuario Motivo Internacao Ps",
+        "createOrEditLabel": "Criar ou editar Prontuario Motivo Internacao Ps",
+        "notFound": "Nenhum Prontuario Motivo Internacao Ps encontrado"
+      },
+      "created": "Um novo Prontuario Motivo Internacao Ps foi criado com o identificador {{ param }}",
+      "updated": "Um Prontuario Motivo Internacao Ps foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Prontuario Motivo Internacao Ps foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Prontuario Motivo Internacao Ps {{ id }}?"
+      },
+      "detail": {
+        "title": "Prontuario Motivo Internacao Ps"
+      },
+      "idProntuario": "Id Prontuario",
+      "idPaciente": "Id Paciente",
+      "idMotivo": "Id Motivo",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post"
+    }
+  }
+}

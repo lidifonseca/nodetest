@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "modulosPadConfig": {
+      "home": {
+        "title": "Modulos Pad Configs",
+        "createLabel": "Criar novo Modulos Pad Config",
+        "createOrEditLabel": "Criar ou editar Modulos Pad Config",
+        "notFound": "Nenhum Modulos Pad Config encontrado"
+      },
+      "created": "Um novo Modulos Pad Config foi criado com o identificador {{ param }}",
+      "updated": "Um Modulos Pad Config foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Modulos Pad Config foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Modulos Pad Config {{ id }}?"
+      },
+      "detail": {
+        "title": "Modulos Pad Config"
+      },
+      "idModulosPad": "Id Modulos Pad",
+      "idEspecialidade": "Id Especialidade",
+      "idPeriodicidade": "Id Periodicidade"
+    }
+  }
+}

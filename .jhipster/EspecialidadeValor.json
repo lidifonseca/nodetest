@@ -1,0 +1,44 @@
+{
+    "name": "EspecialidadeValor",
+    "fields": [
+        {
+            "fieldName": "idFranquia",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "valor",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "especialidadeValor",
+            "relationshipName": "idEspecialidade",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502232700",
+    "entityTableName": "especialidade_valor",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

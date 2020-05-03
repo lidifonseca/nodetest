@@ -1,0 +1,385 @@
+{
+    "name": "PacienteDiarioTags",
+    "fields": [
+        {
+            "fieldName": "idPacienteDiario",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idDiarioTags",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "escalaDePlantao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "captacaoEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "implantacaoEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "furoDeEscalaEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "solicitacaoDeFolgaEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "trocaDeProfissionalEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "reclamacaoEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "elogioEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "recusaDeAtendimentoEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "duplicidadeEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "monitorarEdp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteEdp",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "escalaMultiProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "captacaoEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "implantacaoEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "solicitacaoDeFolgaEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "trocaDeProfissionalEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "reclamacaoEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "elogioEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "padIncompletoEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "visitaImprodutivaEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "monitorarEmp",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteEmp",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "intercorrencia",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "clinicaInter",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "aphInter",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteInter",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "solicitacoes",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "recargaDeOxigenioSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "equipamentosSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "matmedSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "prontuarioSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "prescricoesSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "examesSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ambulanciaSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "atendimentoDeEquipeSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "monitorarSolic",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteSolic",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "avaliacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "residenciaAval",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "hospitalAval",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "monitorarAval",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "captacaoAtivaAval",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteAval",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "implantacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "monitorarImpl",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteImpl",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "alta",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "hospitalizacaoAlt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "migracaoDeEmpresaAlt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "obitoEmCasaAlt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "terminoDeAtendimentoAlt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "atendimentoSuspensoAlt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "monitorarAlt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteAlt",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "eCommerceSegViagem",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "monitorarEcsv",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pendenteEcsv",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "farmacia",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "matMedFarm",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "receitaFarm",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "prontuarioFarm",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "romaneioManualFarm",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "outrosFarm",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "monitorarFarm",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "pendenteFarm",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "contatoTelefonico",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "ativoContTel",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "receptivoContTel",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "monitorarContTel",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "pendenteContTel",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dtPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503000200",
+    "entityTableName": "paciente_diario_tags",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

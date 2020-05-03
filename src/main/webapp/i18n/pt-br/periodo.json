@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "periodo": {
+      "home": {
+        "title": "Periodos",
+        "createLabel": "Criar novo Periodo",
+        "createOrEditLabel": "Criar ou editar Periodo",
+        "notFound": "Nenhum Periodo encontrado"
+      },
+      "created": "Um novo Periodo foi criado com o identificador {{ param }}",
+      "updated": "Um Periodo foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Periodo foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Periodo {{ id }}?"
+      },
+      "detail": {
+        "title": "Periodo"
+      },
+      "periodo": "Periodo",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "atendimento": "Atendimento",
+      "padItem": "Pad Item"
+    }
+  }
+}

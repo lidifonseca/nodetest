@@ -1,0 +1,45 @@
+export interface IUsuarioPainelGerencial {
+  id?: string;
+  idUsuario?: number;
+  verCronicos?: number;
+  verPacientesAtivosCr?: number;
+  filtroPacientesAtivosCr?: number;
+  verNumHospCr?: number;
+  filtroNumHospCr?: number;
+  verNumDesospCr?: number;
+  filtroNumDesospCr?: number;
+  verNumPsCr?: number;
+  filtroNumPsCr?: number;
+  verNumObitoCr?: number;
+  filtroNumObitoCr?: number;
+  verIndCliEstaveisCr?: number;
+  filtroIndCliEstaveisCr?: number;
+  verNumConsMedInternasCr?: number;
+  filtroNumConsMedInternasCr?: number;
+  verNumConsMedExternasCr?: number;
+  filtroNumConsMedExternasCr?: number;
+  verNumLaboratorialCr?: number;
+  filtroNumLaboratorialCr?: number;
+  verNumImagemCr?: number;
+  filtroNumImagemCr?: number;
+  verNumOutrosCr?: number;
+  filtroNumOutrosCr?: number;
+  verNumAtCatCr?: number;
+  filtroNumAtCatCr?: number;
+  verNumCatCompCr?: number;
+  filtroNumCatCompCr?: number;
+  verAtCmSucessoCr?: number;
+  filtroAtCmSucessoCr?: number;
+  verMediaPadAbertoCr?: number;
+  filtroMediaPadAbertoCr?: number;
+  verAtIntercorrenciaCr?: number;
+  filtroAtIntercorrenciaCr?: number;
+  verTempoMedioAtCr?: number;
+  filtroTempoMedioAtCr?: number;
+  verMediaPtaCr?: number;
+  filtroMediaPtaCr?: number;
+  verIndicadorUsoAppCr?: number;
+  filtroIndicadorUsoAppCr?: number;
+}
+
+export const defaultValue: Readonly<IUsuarioPainelGerencial> = {};

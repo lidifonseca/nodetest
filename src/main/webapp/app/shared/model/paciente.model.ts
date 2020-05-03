@@ -1,8 +1,25 @@
 import { Moment } from 'moment';
-import { ICidade } from 'app/shared/model/cidade.model';
+import { IAtendimento } from 'app/shared/model/atendimento.model';
+import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
+import { IDiario } from 'app/shared/model/diario.model';
+import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
+import { IPacienteDiagnostico } from 'app/shared/model/paciente-diagnostico.model';
+import { IPacienteDiario } from 'app/shared/model/paciente-diario.model';
+import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model';
+import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
+import { IPacientePedido } from 'app/shared/model/paciente-pedido.model';
+import { IPacientePush } from 'app/shared/model/paciente-push.model';
+import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
+import { IPad } from 'app/shared/model/pad.model';
+import { IQuestionarios } from 'app/shared/model/questionarios.model';
 
 export interface IPaciente {
   id?: string;
+  idUnidade?: string;
+  idFranquia?: string;
+  idCidade?: string;
+  idCidadeFamiliar?: string;
+  idGrauParentesco?: number;
   senha?: string;
   nome?: string;
   email?: string;
@@ -20,6 +37,7 @@ export interface IPaciente {
   numero?: string;
   complemento?: string;
   bairro?: string;
+  cidade?: string;
   uf?: string;
   latitude?: string;
   longitude?: string;
@@ -38,6 +56,7 @@ export interface IPaciente {
   numeroFamiliar?: string;
   complementoFamiliar?: string;
   bairroFamiliar?: string;
+  cidadeFamiliar?: string;
   ufFamiliar?: string;
   latitudeFamiliar?: string;
   longitudeFamiliar?: string;
@@ -62,7 +81,19 @@ export interface IPaciente {
   expoToken?: string;
   profissionalPref?: number;
   senhaChat?: string;
-  cidade?: string | any;
+  atendimentos?: IAtendimento[];
+  atendimentoAssinaturas?: IAtendimentoAssinaturas[];
+  diarios?: IDiario[];
+  pacienteDadosCartaos?: IPacienteDadosCartao[];
+  pacienteDiagnosticos?: IPacienteDiagnostico[];
+  pacienteDiarios?: IPacienteDiario[];
+  pacienteEnqueteApps?: IPacienteEnqueteApp[];
+  pacienteOperadoras?: IPacienteOperadora[];
+  pacientePedidos?: IPacientePedido[];
+  pacientePushes?: IPacientePush[];
+  pacienteStatusAtuals?: IPacienteStatusAtual[];
+  pads?: IPad[];
+  questionarios?: IQuestionarios[];
 }
 
 export const defaultValue: Readonly<IPaciente> = {};

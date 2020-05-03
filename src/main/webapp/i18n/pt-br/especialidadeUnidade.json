@@ -1,0 +1,29 @@
+{
+  "generadorApp": {
+    "especialidadeUnidade": {
+      "home": {
+        "title": "Especialidade Unidades",
+        "createLabel": "Criar novo Especialidade Unidade",
+        "createOrEditLabel": "Criar ou editar Especialidade Unidade",
+        "notFound": "Nenhum Especialidade Unidade encontrado"
+      },
+      "created": "Um novo Especialidade Unidade foi criado com o identificador {{ param }}",
+      "updated": "Um Especialidade Unidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Especialidade Unidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Especialidade Unidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Especialidade Unidade"
+      },
+      "valorBaixaUrg": "Valor Baixa Urg",
+      "valorAltaUrg": "Valor Alta Urg",
+      "valorPagar": "Valor Pagar",
+      "publicar": "Publicar",
+      "comentarioPreco": "Comentario Preco",
+      "dataPost": "Data Post",
+      "idUnidade": "Id Unidade",
+      "idEspecialidade": "Id Especialidade"
+    }
+  }
+}

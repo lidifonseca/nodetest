@@ -1,0 +1,39 @@
+{
+    "name": "PadItemSorteioFeito",
+    "fields": [
+        {
+            "fieldName": "sorteioFeito",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "padItem",
+            "otherEntityRelationshipName": "padItemSorteioFeito",
+            "relationshipName": "idPadItem",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503002500",
+    "entityTableName": "pad_item_sorteio_feito",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

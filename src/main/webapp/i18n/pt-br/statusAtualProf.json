@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "statusAtualProf": {
+      "home": {
+        "title": "Status Atual Profs",
+        "createLabel": "Criar novo Status Atual Prof",
+        "createOrEditLabel": "Criar ou editar Status Atual Prof",
+        "notFound": "Nenhum Status Atual Prof encontrado"
+      },
+      "created": "Um novo Status Atual Prof foi criado com o identificador {{ param }}",
+      "updated": "Um Status Atual Prof foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Status Atual Prof foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Status Atual Prof {{ id }}?"
+      },
+      "detail": {
+        "title": "Status Atual Prof"
+      },
+      "statusAtualProf": "Status Atual Prof",
+      "styleLabel": "Style Label",
+      "dataPost": "Data Post",
+      "profissionalStatusAtual": "Profissional Status Atual"
+    }
+  }
+}

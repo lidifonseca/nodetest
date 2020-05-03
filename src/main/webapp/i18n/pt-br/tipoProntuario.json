@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "tipoProntuario": {
+      "home": {
+        "title": "Tipo Prontuarios",
+        "createLabel": "Criar novo Tipo Prontuario",
+        "createOrEditLabel": "Criar ou editar Tipo Prontuario",
+        "notFound": "Nenhum Tipo Prontuario encontrado"
+      },
+      "created": "Um novo Tipo Prontuario foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Prontuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Prontuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Prontuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Prontuario"
+      },
+      "prontuario": "Prontuario",
+      "ativo": "Ativo"
+    }
+  }
+}

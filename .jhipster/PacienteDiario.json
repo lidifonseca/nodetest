@@ -1,0 +1,55 @@
+{
+    "name": "PacienteDiario",
+    "fields": [
+        {
+            "fieldName": "idOperadora",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "historico",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteDiario",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "usuario",
+            "otherEntityRelationshipName": "pacienteDiario",
+            "relationshipName": "idUsuario",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503000100",
+    "entityTableName": "paciente_diario",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

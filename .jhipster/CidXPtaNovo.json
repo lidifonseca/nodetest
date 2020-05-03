@@ -1,0 +1,69 @@
+{
+    "name": "CidXPtaNovo",
+    "fields": [
+        {
+            "fieldName": "complexidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        },
+        {
+            "fieldName": "versao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "score",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "titulo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "245"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovo",
+            "otherEntityRelationshipName": "cidXPtaNovoId",
+            "relationshipName": "cidXPtaNovo"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovoPadItemIndi",
+            "otherEntityRelationshipName": "cidXPtaNovoId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cidXPtaNovoPadItemIndi"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cid",
+            "otherEntityRelationshipName": "cidXPtaNovo",
+            "relationshipName": "cidId",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cidXPtaNovo",
+            "otherEntityRelationshipName": "cidXPtaNovo",
+            "relationshipName": "cidXPtaNovoId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502231600",
+    "entityTableName": "cid_x_pta_novo",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

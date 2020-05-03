@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "prontuarioTipoManifestacao": {
+      "home": {
+        "title": "Prontuario Tipo Manifestacaos",
+        "createLabel": "Criar novo Prontuario Tipo Manifestacao",
+        "createOrEditLabel": "Criar ou editar Prontuario Tipo Manifestacao",
+        "notFound": "Nenhum Prontuario Tipo Manifestacao encontrado"
+      },
+      "created": "Um novo Prontuario Tipo Manifestacao foi criado com o identificador {{ param }}",
+      "updated": "Um Prontuario Tipo Manifestacao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Prontuario Tipo Manifestacao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Prontuario Tipo Manifestacao {{ id }}?"
+      },
+      "detail": {
+        "title": "Prontuario Tipo Manifestacao"
+      },
+      "nome": "Nome",
+      "idPai": "Id Pai",
+      "ativo": "Ativo"
+    }
+  }
+}

@@ -16,8 +16,10 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import {validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max} from "class-validator";
 <%_ } _%>
 
-<%_ Object.keys(uniqueEntities).forEach(function(entityClass) { _%>
-import <%= entityClass %> from './<%= uniqueEntities[entityClass] %>.entity';
+<%_ Object.keys(uniqueEntities).forEach(function(_entityClass) { _%>
+    <%_ if( entityClass !== _entityClass) {_%>
+        import <%= _entityClass %> from './<%= uniqueEntities[_entityClass] %>.entity';
+    <%_ } _%>
 <%_ }); _%>
 <%_ Object.keys(uniqueEnums).forEach(function(enumClass) { _%>
 import { <%= enumClass %> } from './enumeration/<%= uniqueEnums[enumClass] %>';
@@ -106,6 +108,7 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
     @ApiModelProperty({description = "<%- formatAsApiDescription(relationships.javadoc) %>"})
             <%_ }_%>
     <%_ }
+    console.info(relationship);
         if (relationshipType === 'one-to-many') {_%>
     @OneToMany(type => <%= relationship.otherEntityAngularName %> <%_ if (isUserRelationship === false) { _%>, other => other.<%= otherEntityRelationshipName %><%_ } _%>)
     <%= relationshipFieldNamePlural %>: <%= relationship.otherEntityAngularName %>[];

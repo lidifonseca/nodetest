@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "unidadeEasyAreaAtuacao": {
+      "home": {
+        "title": "Unidade Easy Area Atuacaos",
+        "createLabel": "Criar novo Unidade Easy Area Atuacao",
+        "createOrEditLabel": "Criar ou editar Unidade Easy Area Atuacao",
+        "notFound": "Nenhum Unidade Easy Area Atuacao encontrado"
+      },
+      "created": "Um novo Unidade Easy Area Atuacao foi criado com o identificador {{ param }}",
+      "updated": "Um Unidade Easy Area Atuacao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Unidade Easy Area Atuacao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Unidade Easy Area Atuacao {{ id }}?"
+      },
+      "detail": {
+        "title": "Unidade Easy Area Atuacao"
+      },
+      "cepInicial": "Cep Inicial",
+      "cepFinal": "Cep Final",
+      "dataPost": "Data Post",
+      "idUnidade": "Id Unidade"
+    }
+  }
+}

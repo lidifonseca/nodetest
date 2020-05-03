@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "profissionalStatusAtualNew": {
+      "home": {
+        "title": "Profissional Status Atual News",
+        "createLabel": "Criar novo Profissional Status Atual New",
+        "createOrEditLabel": "Criar ou editar Profissional Status Atual New",
+        "notFound": "Nenhum Profissional Status Atual New encontrado"
+      },
+      "created": "Um novo Profissional Status Atual New foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Status Atual New foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Status Atual New foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Status Atual New {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Status Atual New"
+      },
+      "idProfissional": "Id Profissional",
+      "idStatusAtualProf": "Id Status Atual Prof",
+      "obs": "Obs",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "idUsuario": "Id Usuario"
+    }
+  }
+}

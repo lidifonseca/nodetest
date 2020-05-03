@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "atendimentoGlosado": {
+      "home": {
+        "title": "Atendimento Glosados",
+        "createLabel": "Criar novo Atendimento Glosado",
+        "createOrEditLabel": "Criar ou editar Atendimento Glosado",
+        "notFound": "Nenhum Atendimento Glosado encontrado"
+      },
+      "created": "Um novo Atendimento Glosado foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Glosado foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Glosado foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Glosado {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Glosado"
+      },
+      "idAtendimento": "Id Atendimento",
+      "glosado": "Glosado",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post"
+    }
+  }
+}

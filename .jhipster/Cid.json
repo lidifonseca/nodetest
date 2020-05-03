@@ -1,0 +1,85 @@
+{
+    "name": "Cid",
+    "fields": [
+        {
+            "fieldName": "codigo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "diagnostico",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "400"
+        },
+        {
+            "fieldName": "gr",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "temp",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "apelido",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovo",
+            "otherEntityRelationshipName": "cidId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cidXPtaNovo"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteDiagnostico",
+            "otherEntityRelationshipName": "idCid",
+            "relationshipName": "pacienteDiagnostico"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padCid",
+            "otherEntityRelationshipName": "idCid",
+            "relationshipValidateRules": "required",
+            "relationshipName": "padCid"
+        }
+    ],
+    "changelogDate": "20200502224600",
+    "entityTableName": "cid",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

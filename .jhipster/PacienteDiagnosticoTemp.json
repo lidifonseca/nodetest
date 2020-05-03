@@ -1,0 +1,53 @@
+{
+    "name": "PacienteDiagnosticoTemp",
+    "fields": [
+        {
+            "fieldName": "idCid",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cidPrimario",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "complexidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        },
+        {
+            "fieldName": "createdAt",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "sessionId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "observacao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "245"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503000000",
+    "entityTableName": "paciente_diagnostico_temp",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

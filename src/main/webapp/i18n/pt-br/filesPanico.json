@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "filesPanico": {
+      "home": {
+        "title": "Files Panicos",
+        "createLabel": "Criar novo Files Panico",
+        "createOrEditLabel": "Criar ou editar Files Panico",
+        "notFound": "Nenhum Files Panico encontrado"
+      },
+      "created": "Um novo Files Panico foi criado com o identificador {{ param }}",
+      "updated": "Um Files Panico foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Files Panico foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Files Panico {{ id }}?"
+      },
+      "detail": {
+        "title": "Files Panico"
+      },
+      "idPanico": "Id Panico",
+      "idPaciente": "Id Paciente",
+      "tipo": "Tipo",
+      "imagem": "Imagem",
+      "criadoEm": "Criado Em"
+    }
+  }
+}

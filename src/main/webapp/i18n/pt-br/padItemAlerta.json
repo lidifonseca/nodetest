@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "padItemAlerta": {
+      "home": {
+        "title": "Pad Item Alertas",
+        "createLabel": "Criar novo Pad Item Alerta",
+        "createOrEditLabel": "Criar ou editar Pad Item Alerta",
+        "notFound": "Nenhum Pad Item Alerta encontrado"
+      },
+      "created": "Um novo Pad Item Alerta foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Alerta foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Alerta foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Alerta {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Alerta"
+      },
+      "padItemMetaId": "Pad Item Meta Id",
+      "envioEmailEm": "Envio Email Em",
+      "visualizadoEm": "Visualizado Em",
+      "criadoEm": "Criado Em",
+      "ativo": "Ativo",
+      "mensagem": "Mensagem"
+    }
+  }
+}

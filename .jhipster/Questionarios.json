@@ -1,0 +1,52 @@
+{
+    "name": "Questionarios",
+    "fields": [
+        {
+            "fieldName": "dataCadastro",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "etapaAtual",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
+        },
+        {
+            "fieldName": "finalizado",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "ultimaPerguntaRespondida",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "respostasQuestionarios",
+            "otherEntityRelationshipName": "questionariosId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "respostasQuestionarios"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "questionarios",
+            "relationshipName": "pacienteId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503005600",
+    "entityTableName": "questionarios",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

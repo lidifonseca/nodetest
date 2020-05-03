@@ -1,0 +1,29 @@
+{
+  "generadorApp": {
+    "cidXPtaNovo": {
+      "home": {
+        "title": "Cid X Pta Novos",
+        "createLabel": "Criar novo Cid X Pta Novo",
+        "createOrEditLabel": "Criar ou editar Cid X Pta Novo",
+        "notFound": "Nenhum Cid X Pta Novo encontrado"
+      },
+      "created": "Um novo Cid X Pta Novo foi criado com o identificador {{ param }}",
+      "updated": "Um Cid X Pta Novo foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cid X Pta Novo foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cid X Pta Novo {{ id }}?"
+      },
+      "detail": {
+        "title": "Cid X Pta Novo"
+      },
+      "complexidade": "Complexidade",
+      "versao": "Versao",
+      "score": "Score",
+      "titulo": "Titulo",
+      "cidXPtaNovo": "Cid X Pta Novo",
+      "cidXPtaNovoPadItemIndi": "Cid X Pta Novo Pad Item Indi",
+      "cidId": "Cid Id",
+      "cidXPtaNovoId": "Cid X Pta Novo Id"
+    }
+  }
+}

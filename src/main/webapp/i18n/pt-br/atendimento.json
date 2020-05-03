@@ -1,0 +1,68 @@
+{
+  "generadorApp": {
+    "atendimento": {
+      "home": {
+        "title": "Atendimentos",
+        "createLabel": "Criar novo Atendimento",
+        "createOrEditLabel": "Criar ou editar Atendimento",
+        "notFound": "Nenhum Atendimento encontrado"
+      },
+      "created": "Um novo Atendimento foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento"
+      },
+      "idUnidade": "Id Unidade",
+      "idFranquia": "Id Franquia",
+      "idProfissional": "Id Profissional",
+      "cep": "Cep",
+      "endereco": "Endereco",
+      "numero": "Numero",
+      "complemento": "Complemento",
+      "bairro": "Bairro",
+      "cidade": "Cidade",
+      "uf": "Uf",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "dataAgenda": "Data Agenda",
+      "horario": "Horario",
+      "dataChegada": "Data Chegada",
+      "latitudeChegada": "Latitude Chegada",
+      "longitudeChegada": "Longitude Chegada",
+      "dataSaida": "Data Saida",
+      "latitudeSaida": "Latitude Saida",
+      "longitudeSaida": "Longitude Saida",
+      "evolucao": "Evolucao",
+      "observacao": "Observacao",
+      "intercorrencia": "Intercorrencia",
+      "avaliacao": "Avaliacao",
+      "aceito": "Aceito",
+      "motivo": "Motivo",
+      "valor": "Valor",
+      "ordemAtendimento": "Ordem Atendimento",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "dataForaHora": "Data Fora Hora",
+      "idUsuarioCancelamento": "Id Usuario Cancelamento",
+      "dataCancelamento": "Data Cancelamento",
+      "tipoUsuarioCancelamento": "Tipo Usuario Cancelamento",
+      "confidencialProfissional": "Confidencial Profissional",
+      "confidencialPaciente": "Confidencial Paciente",
+      "imagemAssinatura": "Imagem Assinatura",
+      "atendimentoAceite": "Atendimento Aceite",
+      "atendimentoAssinaturas": "Atendimento Assinaturas",
+      "atendimentoAtividades": "Atendimento Atividades",
+      "idPaciente": "Id Paciente",
+      "idOperadora": "Id Operadora",
+      "idEspecialidade": "Id Especialidade",
+      "idPadItem": "Id Pad Item",
+      "idStatusAtendimento": "Id Status Atendimento",
+      "idPeriodo": "Id Periodo",
+      "idCidade": "Id Cidade"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "controleDisparoAviso": {
+      "home": {
+        "title": "Controle Disparo Avisos",
+        "createLabel": "Criar novo Controle Disparo Aviso",
+        "createOrEditLabel": "Criar ou editar Controle Disparo Aviso",
+        "notFound": "Nenhum Controle Disparo Aviso encontrado"
+      },
+      "created": "Um novo Controle Disparo Aviso foi criado com o identificador {{ param }}",
+      "updated": "Um Controle Disparo Aviso foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Controle Disparo Aviso foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Controle Disparo Aviso {{ id }}?"
+      },
+      "detail": {
+        "title": "Controle Disparo Aviso"
+      },
+      "idAtendimento": "Id Atendimento",
+      "qtdDisparo": "Qtd Disparo",
+      "avisopush": "Avisopush",
+      "dataPost": "Data Post"
+    }
+  }
+}

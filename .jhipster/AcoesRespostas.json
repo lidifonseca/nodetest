@@ -1,0 +1,68 @@
+{
+    "name": "AcoesRespostas",
+    "fields": [
+        {
+            "fieldName": "abrirCampoPersonalizado",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "condicaoSexo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        },
+        {
+            "fieldName": "observacoes",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "125"
+        },
+        {
+            "fieldName": "tipoCampo1",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        },
+        {
+            "fieldName": "tipoCampo2",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "respostas",
+            "otherEntityRelationshipName": "acoesRespostas",
+            "relationshipName": "respostasId",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "perguntasQuestionario",
+            "otherEntityRelationshipName": "acoesRespostas",
+            "relationshipName": "perguntasQuestionarioId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502225300",
+    "entityTableName": "acoes_respostas",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

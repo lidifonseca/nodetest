@@ -1,0 +1,36 @@
+{
+    "name": "PacienteEnqueteApp",
+    "fields": [
+        {
+            "fieldName": "votacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteEnqueteApp",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503000500",
+    "entityTableName": "paciente_enquete_app",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

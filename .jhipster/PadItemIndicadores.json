@@ -1,0 +1,58 @@
+{
+    "name": "PadItemIndicadores",
+    "fields": [
+        {
+            "fieldName": "idUnidadeMedida",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "titulo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        },
+        {
+            "fieldName": "descricao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "meta",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maximoSt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "minimoSt",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cidXPtaNovoPadItemIndi",
+            "otherEntityRelationshipName": "padItemIndicadoresId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cidXPtaNovoPadItemIndi"
+        }
+    ],
+    "changelogDate": "20200503002200",
+    "entityTableName": "pad_item_indicadores",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

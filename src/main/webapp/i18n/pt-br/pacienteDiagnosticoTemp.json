@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "pacienteDiagnosticoTemp": {
+      "home": {
+        "title": "Paciente Diagnostico Temps",
+        "createLabel": "Criar novo Paciente Diagnostico Temp",
+        "createOrEditLabel": "Criar ou editar Paciente Diagnostico Temp",
+        "notFound": "Nenhum Paciente Diagnostico Temp encontrado"
+      },
+      "created": "Um novo Paciente Diagnostico Temp foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Diagnostico Temp foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Diagnostico Temp foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Diagnostico Temp {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Diagnostico Temp"
+      },
+      "idCid": "Id Cid",
+      "cidPrimario": "Cid Primario",
+      "complexidade": "Complexidade",
+      "createdAt": "Created At",
+      "sessionId": "Session Id",
+      "observacao": "Observacao"
+    }
+  }
+}

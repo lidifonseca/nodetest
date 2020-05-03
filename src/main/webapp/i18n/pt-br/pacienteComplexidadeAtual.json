@@ -1,0 +1,30 @@
+{
+  "generadorApp": {
+    "pacienteComplexidadeAtual": {
+      "home": {
+        "title": "Paciente Complexidade Atuals",
+        "createLabel": "Criar novo Paciente Complexidade Atual",
+        "createOrEditLabel": "Criar ou editar Paciente Complexidade Atual",
+        "notFound": "Nenhum Paciente Complexidade Atual encontrado"
+      },
+      "created": "Um novo Paciente Complexidade Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Complexidade Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Complexidade Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Complexidade Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Complexidade Atual"
+      },
+      "idPaciente": "Id Paciente",
+      "idPacienteComplexidade": "Id Paciente Complexidade",
+      "baixa": "Baixa",
+      "media": "Media",
+      "alta": "Alta",
+      "ventilacaoMecanica": "Ventilacao Mecanica",
+      "telemonitoramente": "Telemonitoramente",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post"
+    }
+  }
+}

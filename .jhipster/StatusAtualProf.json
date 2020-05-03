@@ -1,0 +1,47 @@
+{
+    "name": "StatusAtualProf",
+    "fields": [
+        {
+            "fieldName": "statusAtualProf",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
+        },
+        {
+            "fieldName": "styleLabel",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "40"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "profissionalStatusAtual",
+            "otherEntityRelationshipName": "idStatusAtualProf",
+            "relationshipName": "profissionalStatusAtual"
+        }
+    ],
+    "changelogDate": "20200503010600",
+    "entityTableName": "status_atual_prof",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

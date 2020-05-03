@@ -4,13 +4,40 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Cidade from './cidade.entity';
+import Atendimento from './atendimento.entity';
+import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
+import Diario from './diario.entity';
+import PacienteDadosCartao from './paciente-dados-cartao.entity';
+import PacienteDiagnostico from './paciente-diagnostico.entity';
+import PacienteDiario from './paciente-diario.entity';
+import PacienteEnqueteApp from './paciente-enquete-app.entity';
+import PacienteOperadora from './paciente-operadora.entity';
+import PacientePedido from './paciente-pedido.entity';
+import PacientePush from './paciente-push.entity';
+import PacienteStatusAtual from './paciente-status-atual.entity';
+import Pad from './pad.entity';
+import Questionarios from './questionarios.entity';
 
 /**
- * @toStringFields nome cpf@@\n@listTableLayout cidade nome email cpf rg registro@@\n@listFilterLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@
+ * A Paciente.
  */
 @Entity('paciente')
 export default class Paciente extends BaseEntity {
+  @Column({ name: 'id_unidade', nullable: false })
+  idUnidade: string;
+
+  @Column({ name: 'id_franquia' })
+  idFranquia: string;
+
+  @Column({ name: 'id_cidade' })
+  idCidade: string;
+
+  @Column({ name: 'id_cidade_familiar' })
+  idCidadeFamiliar: string;
+
+  @Column({ type: 'integer', name: 'id_grau_parentesco', nullable: false })
+  idGrauParentesco: number;
+
   @Column({ name: 'senha', length: 100 })
   senha: string;
 
@@ -61,6 +88,9 @@ export default class Paciente extends BaseEntity {
 
   @Column({ name: 'bairro', length: 40 })
   bairro: string;
+
+  @Column({ name: 'cidade', length: 100 })
+  cidade: string;
 
   @Column({ name: 'uf', length: 5 })
   uf: string;
@@ -115,6 +145,9 @@ export default class Paciente extends BaseEntity {
 
   @Column({ name: 'bairro_familiar', length: 40 })
   bairroFamiliar: string;
+
+  @Column({ name: 'cidade_familiar', length: 100 })
+  cidadeFamiliar: string;
 
   @Column({ name: 'uf_familiar', length: 5 })
   ufFamiliar: string;
@@ -188,8 +221,83 @@ export default class Paciente extends BaseEntity {
   @Column({ name: 'senha_chat', length: 45 })
   senhaChat: string;
 
-  @ManyToOne(type => Cidade)
-  cidade: Cidade;
+  @OneToMany(
+    type => Atendimento,
+    other => other.idPaciente
+  )
+  atendimentos: Atendimento[];
+
+  @OneToMany(
+    type => AtendimentoAssinaturas,
+    other => other.idPaciente
+  )
+  atendimentoAssinaturas: AtendimentoAssinaturas[];
+
+  @OneToMany(
+    type => Diario,
+    other => other.idPaciente
+  )
+  diarios: Diario[];
+
+  @OneToMany(
+    type => PacienteDadosCartao,
+    other => other.idPaciente
+  )
+  pacienteDadosCartaos: PacienteDadosCartao[];
+
+  @OneToMany(
+    type => PacienteDiagnostico,
+    other => other.idPaciente
+  )
+  pacienteDiagnosticos: PacienteDiagnostico[];
+
+  @OneToMany(
+    type => PacienteDiario,
+    other => other.idPaciente
+  )
+  pacienteDiarios: PacienteDiario[];
+
+  @OneToMany(
+    type => PacienteEnqueteApp,
+    other => other.idPaciente
+  )
+  pacienteEnqueteApps: PacienteEnqueteApp[];
+
+  @OneToMany(
+    type => PacienteOperadora,
+    other => other.idPaciente
+  )
+  pacienteOperadoras: PacienteOperadora[];
+
+  @OneToMany(
+    type => PacientePedido,
+    other => other.idPaciente
+  )
+  pacientePedidos: PacientePedido[];
+
+  @OneToMany(
+    type => PacientePush,
+    other => other.idPaciente
+  )
+  pacientePushes: PacientePush[];
+
+  @OneToMany(
+    type => PacienteStatusAtual,
+    other => other.idPaciente
+  )
+  pacienteStatusAtuals: PacienteStatusAtual[];
+
+  @OneToMany(
+    type => Pad,
+    other => other.idPaciente
+  )
+  pads: Pad[];
+
+  @OneToMany(
+    type => Questionarios,
+    other => other.pacienteId
+  )
+  questionarios: Questionarios[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

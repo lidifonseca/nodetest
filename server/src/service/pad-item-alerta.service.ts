@@ -1,0 +1,61 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
+import PadItemAlerta from '../domain/pad-item-alerta.entity';
+import { PadItemAlertaRepository } from '../repository/pad-item-alerta.repository';
+
+const relationshipNames = [];
+
+@Injectable()
+export class PadItemAlertaService {
+  logger = new Logger('PadItemAlertaService');
+
+  constructor(@InjectRepository(PadItemAlertaRepository) private padItemAlertaRepository: PadItemAlertaRepository) {}
+
+  async findById(id: string): Promise<PadItemAlerta | undefined> {
+    const options = { relations: relationshipNames };
+    return await this.padItemAlertaRepository.findOne(id, options);
+  }
+
+  async findByfields(options: FindOneOptions<PadItemAlerta>): Promise<PadItemAlerta | undefined> {
+    return await this.padItemAlertaRepository.findOne(options);
+  }
+
+  async findAndCount(
+    options: FindManyOptions<PadItemAlerta>,
+    filters?: Array<{ column: string; value: string; operation: string }>[]
+  ): Promise<[PadItemAlerta[], number]> {
+    options.relations = relationshipNames;
+    let where = '';
+    let first = true;
+    for (const i in filters) {
+      if (filters.hasOwnProperty(i)) {
+        const element = filters[i];
+        if (!first) {
+          where += 'and';
+        } else {
+          first = false;
+        }
+        if (element['operation'] === 'contains') {
+          where += ' `PadItemAlerta`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+        } else if (element['operation'] === 'equals') {
+          where += ' `PadItemAlerta`.`' + element['column'] + '` = "' + element['value'] + '" ';
+        }
+      }
+    }
+    options.where = where;
+    return await this.padItemAlertaRepository.findAndCount(options);
+  }
+
+  async save(padItemAlerta: PadItemAlerta): Promise<PadItemAlerta | undefined> {
+    return await this.padItemAlertaRepository.save(padItemAlerta);
+  }
+
+  async update(padItemAlerta: PadItemAlerta): Promise<PadItemAlerta | undefined> {
+    return await this.save(padItemAlerta);
+  }
+
+  async delete(padItemAlerta: PadItemAlerta): Promise<PadItemAlerta | undefined> {
+    return await this.padItemAlertaRepository.remove(padItemAlerta);
+  }
+}

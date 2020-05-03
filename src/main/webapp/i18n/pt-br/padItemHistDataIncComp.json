@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "padItemHistDataIncComp": {
+      "home": {
+        "title": "Pad Item Hist Data Inc Comps",
+        "createLabel": "Criar novo Pad Item Hist Data Inc Comp",
+        "createOrEditLabel": "Criar ou editar Pad Item Hist Data Inc Comp",
+        "notFound": "Nenhum Pad Item Hist Data Inc Comp encontrado"
+      },
+      "created": "Um novo Pad Item Hist Data Inc Comp foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Hist Data Inc Comp foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Hist Data Inc Comp foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Hist Data Inc Comp {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Hist Data Inc Comp"
+      },
+      "idPadItem": "Id Pad Item",
+      "dataPadItemIncompleto": "Data Pad Item Incompleto",
+      "dataPadItemCompleto": "Data Pad Item Completo"
+    }
+  }
+}

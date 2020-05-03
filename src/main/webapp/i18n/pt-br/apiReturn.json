@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "apiReturn": {
+      "home": {
+        "title": "Api Returns",
+        "createLabel": "Criar novo Api Return",
+        "createOrEditLabel": "Criar ou editar Api Return",
+        "notFound": "Nenhum Api Return encontrado"
+      },
+      "created": "Um novo Api Return foi criado com o identificador {{ param }}",
+      "updated": "Um Api Return foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Api Return foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Api Return {{ id }}?"
+      },
+      "detail": {
+        "title": "Api Return"
+      },
+      "idApiName": "Id Api Name",
+      "apiReturn": "Api Return",
+      "apiType": "Api Type",
+      "obs": "Obs",
+      "ativo": "Ativo",
+      "dataPost": "Data Post"
+    }
+  }
+}

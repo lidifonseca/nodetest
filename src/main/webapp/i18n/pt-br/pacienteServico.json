@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "pacienteServico": {
+      "home": {
+        "title": "Paciente Servicos",
+        "createLabel": "Criar novo Paciente Servico",
+        "createOrEditLabel": "Criar ou editar Paciente Servico",
+        "notFound": "Nenhum Paciente Servico encontrado"
+      },
+      "created": "Um novo Paciente Servico foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Servico foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Servico foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Servico {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Servico"
+      },
+      "idPaciente": "Id Paciente",
+      "servico": "Servico",
+      "dataPost": "Data Post"
+    }
+  }
+}

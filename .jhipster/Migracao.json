@@ -1,0 +1,25 @@
+{
+    "name": "Migracao",
+    "fields": [
+        {
+            "fieldName": "idPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataHoraMigracao",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200502234500",
+    "entityTableName": "migracao",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

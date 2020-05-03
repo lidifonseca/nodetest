@@ -1,0 +1,61 @@
+{
+  "generadorApp": {
+    "usuarioPainelGerencial": {
+      "home": {
+        "title": "Usuario Painel Gerencials",
+        "createLabel": "Criar novo Usuario Painel Gerencial",
+        "createOrEditLabel": "Criar ou editar Usuario Painel Gerencial",
+        "notFound": "Nenhum Usuario Painel Gerencial encontrado"
+      },
+      "created": "Um novo Usuario Painel Gerencial foi criado com o identificador {{ param }}",
+      "updated": "Um Usuario Painel Gerencial foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Usuario Painel Gerencial foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Usuario Painel Gerencial {{ id }}?"
+      },
+      "detail": {
+        "title": "Usuario Painel Gerencial"
+      },
+      "idUsuario": "Id Usuario",
+      "verCronicos": "Ver Cronicos",
+      "verPacientesAtivosCr": "Ver Pacientes Ativos Cr",
+      "filtroPacientesAtivosCr": "Filtro Pacientes Ativos Cr",
+      "verNumHospCr": "Ver Num Hosp Cr",
+      "filtroNumHospCr": "Filtro Num Hosp Cr",
+      "verNumDesospCr": "Ver Num Desosp Cr",
+      "filtroNumDesospCr": "Filtro Num Desosp Cr",
+      "verNumPsCr": "Ver Num Ps Cr",
+      "filtroNumPsCr": "Filtro Num Ps Cr",
+      "verNumObitoCr": "Ver Num Obito Cr",
+      "filtroNumObitoCr": "Filtro Num Obito Cr",
+      "verIndCliEstaveisCr": "Ver Ind Cli Estaveis Cr",
+      "filtroIndCliEstaveisCr": "Filtro Ind Cli Estaveis Cr",
+      "verNumConsMedInternasCr": "Ver Num Cons Med Internas Cr",
+      "filtroNumConsMedInternasCr": "Filtro Num Cons Med Internas Cr",
+      "verNumConsMedExternasCr": "Ver Num Cons Med Externas Cr",
+      "filtroNumConsMedExternasCr": "Filtro Num Cons Med Externas Cr",
+      "verNumLaboratorialCr": "Ver Num Laboratorial Cr",
+      "filtroNumLaboratorialCr": "Filtro Num Laboratorial Cr",
+      "verNumImagemCr": "Ver Num Imagem Cr",
+      "filtroNumImagemCr": "Filtro Num Imagem Cr",
+      "verNumOutrosCr": "Ver Num Outros Cr",
+      "filtroNumOutrosCr": "Filtro Num Outros Cr",
+      "verNumAtCatCr": "Ver Num At Cat Cr",
+      "filtroNumAtCatCr": "Filtro Num At Cat Cr",
+      "verNumCatCompCr": "Ver Num Cat Comp Cr",
+      "filtroNumCatCompCr": "Filtro Num Cat Comp Cr",
+      "verAtCmSucessoCr": "Ver At Cm Sucesso Cr",
+      "filtroAtCmSucessoCr": "Filtro At Cm Sucesso Cr",
+      "verMediaPadAbertoCr": "Ver Media Pad Aberto Cr",
+      "filtroMediaPadAbertoCr": "Filtro Media Pad Aberto Cr",
+      "verAtIntercorrenciaCr": "Ver At Intercorrencia Cr",
+      "filtroAtIntercorrenciaCr": "Filtro At Intercorrencia Cr",
+      "verTempoMedioAtCr": "Ver Tempo Medio At Cr",
+      "filtroTempoMedioAtCr": "Filtro Tempo Medio At Cr",
+      "verMediaPtaCr": "Ver Media Pta Cr",
+      "filtroMediaPtaCr": "Filtro Media Pta Cr",
+      "verIndicadorUsoAppCr": "Ver Indicador Uso App Cr",
+      "filtroIndicadorUsoAppCr": "Filtro Indicador Uso App Cr"
+    }
+  }
+}

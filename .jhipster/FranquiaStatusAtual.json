@@ -1,0 +1,48 @@
+{
+    "name": "FranquiaStatusAtual",
+    "fields": [
+        {
+            "fieldName": "statusAtual",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "obs",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "franquia",
+            "otherEntityRelationshipName": "franquiaStatusAtual",
+            "relationshipName": "idFranquia",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502233100",
+    "entityTableName": "franquia_status_atual",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,56 @@
+{
+  "generadorApp": {
+    "profissionalNew": {
+      "home": {
+        "title": "Profissional News",
+        "createLabel": "Criar novo Profissional New",
+        "createOrEditLabel": "Criar ou editar Profissional New",
+        "notFound": "Nenhum Profissional New encontrado"
+      },
+      "created": "Um novo Profissional New foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional New foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional New foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional New {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional New"
+      },
+      "idUnidade": "Id Unidade",
+      "idCidade": "Id Cidade",
+      "idTempoExperiencia": "Id Tempo Experiencia",
+      "idBanco": "Id Banco",
+      "senha": "Senha",
+      "nome": "Nome",
+      "email": "Email",
+      "cpf": "Cpf",
+      "rg": "Rg",
+      "nomeEmpresa": "Nome Empresa",
+      "cnpj": "Cnpj",
+      "registro": "Registro",
+      "nascimento": "Nascimento",
+      "sexo": "Sexo",
+      "telefone1": "Telefone 1",
+      "telefone2": "Telefone 2",
+      "celular1": "Celular 1",
+      "celular2": "Celular 2",
+      "cep": "Cep",
+      "endereco": "Endereco",
+      "numero": "Numero",
+      "complemento": "Complemento",
+      "bairro": "Bairro",
+      "cidade": "Cidade",
+      "uf": "Uf",
+      "atendeCrianca": "Atende Crianca",
+      "atendeIdoso": "Atende Idoso",
+      "ag": "Ag",
+      "conta": "Conta",
+      "tipoConta": "Tipo Conta",
+      "origemCadastro": "Origem Cadastro",
+      "obs": "Obs",
+      "chavePrivada": "Chave Privada",
+      "ativo": "Ativo",
+      "dataPost": "Data Post"
+    }
+  }
+}

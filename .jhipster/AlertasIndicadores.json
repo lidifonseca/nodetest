@@ -1,0 +1,45 @@
+{
+    "name": "AlertasIndicadores",
+    "fields": [
+        {
+            "fieldName": "pontuacao",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "alteracaoEsperada",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "observacoes",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "usuarioId",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cidXPtaNovoPadItemIndi",
+            "otherEntityRelationshipName": "alertasIndicadores",
+            "relationshipName": "padItemIndicadoresId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502225400",
+    "entityTableName": "alertas_indicadores",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

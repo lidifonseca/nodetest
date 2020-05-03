@@ -1,0 +1,29 @@
+{
+    "name": "ReportEmailAtendimento",
+    "fields": [
+        {
+            "fieldName": "idAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "tipoReport",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503005700",
+    "entityTableName": "report_email_atendimento",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

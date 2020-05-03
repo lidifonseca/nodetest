@@ -1,0 +1,106 @@
+{
+    "name": "PacienteProntuario",
+    "fields": [
+        {
+            "fieldName": "idPaciente",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idTipoProntuario",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "oQue",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "resultado",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "idEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataConsulta",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "idExame",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idTipoExame",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataExame",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataInternacao",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataAlta",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataPs",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataOcorrencia",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "idOcorrenciaProntuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "dataManifestacao",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503001100",
+    "entityTableName": "paciente_prontuario",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

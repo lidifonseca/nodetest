@@ -1,0 +1,159 @@
+{
+    "name": "PadItem",
+    "fields": [
+        {
+            "fieldName": "idPedido",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dataInicio",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataFim",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "qtdSessoes",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "observacao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "sub",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataPadItemIncompleto",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "dataPadItemCompleto",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "numGhc",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "40"
+        },
+        {
+            "fieldName": "cidXPtaNovo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "categoriaId",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "score",
+            "fieldType": "Double"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "idPadItem",
+            "relationshipName": "atendimento"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoCepRecusado",
+            "otherEntityRelationshipName": "idPadItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "atendimentoCepRecusado"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoSorteioFeito",
+            "otherEntityRelationshipName": "idPadItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "atendimentoSorteioFeito"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padItemAtividade",
+            "otherEntityRelationshipName": "idPadItem",
+            "relationshipName": "padItemAtividade"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padItemCepRecusado",
+            "otherEntityRelationshipName": "idPadItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "padItemCepRecusado"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padItemResultado",
+            "otherEntityRelationshipName": "idPadItem",
+            "relationshipName": "padItemResultado"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padItemSorteioFeito",
+            "otherEntityRelationshipName": "idPadItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "padItemSorteioFeito"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "pad",
+            "otherEntityRelationshipName": "padItem",
+            "relationshipName": "idPad",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "padItem",
+            "relationshipName": "idEspecialidade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "periodicidade",
+            "otherEntityRelationshipName": "padItem",
+            "relationshipName": "idPeriodicidade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "periodo",
+            "otherEntityRelationshipName": "padItem",
+            "relationshipName": "idPeriodo",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503001700",
+    "entityTableName": "pad_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

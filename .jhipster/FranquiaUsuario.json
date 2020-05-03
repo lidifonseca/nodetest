@@ -1,0 +1,198 @@
+{
+    "name": "FranquiaUsuario",
+    "fields": [
+        {
+            "fieldName": "senha",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "nome",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "60"
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "verProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPush",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPush",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioRecusa",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioIntercorrencia",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioCancelamento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "logUserFranquia",
+            "otherEntityRelationshipName": "idUsuario",
+            "relationshipName": "logUserFranquia"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "franquia",
+            "otherEntityRelationshipName": "franquiaUsuario",
+            "relationshipName": "idFranquia",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502233200",
+    "entityTableName": "franquia_usuario",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

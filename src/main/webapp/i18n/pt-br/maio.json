@@ -1,0 +1,30 @@
+{
+  "generadorApp": {
+    "maio": {
+      "home": {
+        "title": "Maios",
+        "createLabel": "Criar novo Maio",
+        "createOrEditLabel": "Criar ou editar Maio",
+        "notFound": "Nenhum Maio encontrado"
+      },
+      "created": "Um novo Maio foi criado com o identificador {{ param }}",
+      "updated": "Um Maio foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Maio foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Maio {{ id }}?"
+      },
+      "detail": {
+        "title": "Maio"
+      },
+      "idFranquia": "Id Franquia",
+      "idPaciente": "Id Paciente",
+      "nroPad": "Nro Pad",
+      "dataInicio": "Data Inicio",
+      "dataFim": "Data Fim",
+      "idEspecialidade": "Id Especialidade",
+      "idPeriodicidade": "Id Periodicidade",
+      "idPeriodo": "Id Periodo",
+      "qtdSessoes": "Qtd Sessoes"
+    }
+  }
+}

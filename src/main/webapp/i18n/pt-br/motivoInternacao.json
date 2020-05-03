@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "motivoInternacao": {
+      "home": {
+        "title": "Motivo Internacaos",
+        "createLabel": "Criar novo Motivo Internacao",
+        "createOrEditLabel": "Criar ou editar Motivo Internacao",
+        "notFound": "Nenhum Motivo Internacao encontrado"
+      },
+      "created": "Um novo Motivo Internacao foi criado com o identificador {{ param }}",
+      "updated": "Um Motivo Internacao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Motivo Internacao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Motivo Internacao {{ id }}?"
+      },
+      "detail": {
+        "title": "Motivo Internacao"
+      },
+      "nome": "Nome",
+      "idPai": "Id Pai",
+      "ativo": "Ativo",
+      "classe": "Classe",
+      "name": "Name"
+    }
+  }
+}

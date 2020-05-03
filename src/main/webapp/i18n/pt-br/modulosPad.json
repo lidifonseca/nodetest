@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "modulosPad": {
+      "home": {
+        "title": "Modulos Pads",
+        "createLabel": "Criar novo Modulos Pad",
+        "createOrEditLabel": "Criar ou editar Modulos Pad",
+        "notFound": "Nenhum Modulos Pad encontrado"
+      },
+      "created": "Um novo Modulos Pad foi criado com o identificador {{ param }}",
+      "updated": "Um Modulos Pad foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Modulos Pad foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Modulos Pad {{ id }}?"
+      },
+      "detail": {
+        "title": "Modulos Pad"
+      },
+      "nomeModulo": "Nome Modulo",
+      "ativo": "Ativo",
+      "dataPost": "Data Post"
+    }
+  }
+}

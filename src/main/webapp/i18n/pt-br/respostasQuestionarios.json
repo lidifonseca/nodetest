@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "respostasQuestionarios": {
+      "home": {
+        "title": "Respostas Questionarios",
+        "createLabel": "Criar novo Respostas Questionarios",
+        "createOrEditLabel": "Criar ou editar Respostas Questionarios",
+        "notFound": "Nenhum Respostas Questionarios encontrado"
+      },
+      "created": "Um novo Respostas Questionarios foi criado com o identificador {{ param }}",
+      "updated": "Um Respostas Questionarios foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Respostas Questionarios foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Respostas Questionarios {{ id }}?"
+      },
+      "detail": {
+        "title": "Respostas Questionarios"
+      },
+      "dataResposta": "Data Resposta",
+      "informacaoAdicional": "Informacao Adicional",
+      "questionarioId": "Questionario Id",
+      "questionariosId": "Questionarios Id"
+    }
+  }
+}

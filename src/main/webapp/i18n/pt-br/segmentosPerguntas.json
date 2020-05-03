@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "segmentosPerguntas": {
+      "home": {
+        "title": "Segmentos Perguntas",
+        "createLabel": "Criar novo Segmentos Perguntas",
+        "createOrEditLabel": "Criar ou editar Segmentos Perguntas",
+        "notFound": "Nenhum Segmentos Perguntas encontrado"
+      },
+      "created": "Um novo Segmentos Perguntas foi criado com o identificador {{ param }}",
+      "updated": "Um Segmentos Perguntas foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Segmentos Perguntas foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Segmentos Perguntas {{ id }}?"
+      },
+      "detail": {
+        "title": "Segmentos Perguntas"
+      },
+      "segmento": "Segmento",
+      "perguntasQuestionario": "Perguntas Questionario"
+    }
+  }
+}

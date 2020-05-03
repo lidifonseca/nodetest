@@ -1,0 +1,39 @@
+{
+    "name": "ControleDisparoAviso",
+    "fields": [
+        {
+            "fieldName": "idAtendimento",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "qtdDisparo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "avisopush",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200502231900",
+    "entityTableName": "controle_disparo_aviso",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

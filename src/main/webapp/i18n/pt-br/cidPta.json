@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "cidPta": {
+      "home": {
+        "title": "Cid Ptas",
+        "createLabel": "Criar novo Cid Pta",
+        "createOrEditLabel": "Criar ou editar Cid Pta",
+        "notFound": "Nenhum Cid Pta encontrado"
+      },
+      "created": "Um novo Cid Pta foi criado com o identificador {{ param }}",
+      "updated": "Um Cid Pta foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cid Pta foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cid Pta {{ id }}?"
+      },
+      "detail": {
+        "title": "Cid Pta"
+      },
+      "idDescPta": "Id Desc Pta",
+      "idCid": "Id Cid",
+      "idAtividade": "Id Atividade",
+      "ativo": "Ativo",
+      "dataPost": "Data Post"
+    }
+  }
+}

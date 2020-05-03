@@ -1,0 +1,55 @@
+{
+    "name": "UsuarioAcao",
+    "fields": [
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "idAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "descricao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "tela",
+            "otherEntityRelationshipName": "usuarioAcao",
+            "relationshipName": "idTela",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "acao",
+            "otherEntityRelationshipName": "usuarioAcao",
+            "relationshipName": "idAcao",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503012600",
+    "entityTableName": "usuario_acao",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

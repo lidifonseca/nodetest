@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "indicadores": {
+      "home": {
+        "title": "Indicadores",
+        "createLabel": "Criar novo Indicadores",
+        "createOrEditLabel": "Criar ou editar Indicadores",
+        "notFound": "Nenhum Indicadores encontrado"
+      },
+      "created": "Um novo Indicadores foi criado com o identificador {{ param }}",
+      "updated": "Um Indicadores foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Indicadores foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Indicadores {{ id }}?"
+      },
+      "detail": {
+        "title": "Indicadores"
+      },
+      "titulo": "Titulo",
+      "indicadoresValores": "Indicadores Valores"
+    }
+  }
+}

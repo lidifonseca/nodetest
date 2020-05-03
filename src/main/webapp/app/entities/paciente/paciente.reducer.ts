@@ -106,6 +106,11 @@ const apiUrl = 'api/pacientes';
 
 // Actions
 export type ICrudGetAllActionPaciente<T> = (
+  idUnidade?: any,
+  idFranquia?: any,
+  idCidade?: any,
+  idCidadeFamiliar?: any,
+  idGrauParentesco?: any,
   senha?: any,
   nome?: any,
   email?: any,
@@ -123,6 +128,7 @@ export type ICrudGetAllActionPaciente<T> = (
   numero?: any,
   complemento?: any,
   bairro?: any,
+  cidade?: any,
   uf?: any,
   latitude?: any,
   longitude?: any,
@@ -141,6 +147,7 @@ export type ICrudGetAllActionPaciente<T> = (
   numeroFamiliar?: any,
   complementoFamiliar?: any,
   bairroFamiliar?: any,
+  cidadeFamiliar?: any,
   ufFamiliar?: any,
   latitudeFamiliar?: any,
   longitudeFamiliar?: any,
@@ -165,13 +172,30 @@ export type ICrudGetAllActionPaciente<T> = (
   expoToken?: any,
   profissionalPref?: any,
   senhaChat?: any,
-  cidade?: any,
+  atendimento?: any,
+  atendimentoAssinaturas?: any,
+  diario?: any,
+  pacienteDadosCartao?: any,
+  pacienteDiagnostico?: any,
+  pacienteDiario?: any,
+  pacienteEnqueteApp?: any,
+  pacienteOperadora?: any,
+  pacientePedido?: any,
+  pacientePush?: any,
+  pacienteStatusAtual?: any,
+  pad?: any,
+  questionarios?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
 export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
+  idUnidade,
+  idFranquia,
+  idCidade,
+  idCidadeFamiliar,
+  idGrauParentesco,
   senha,
   nome,
   email,
@@ -189,6 +213,7 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   numero,
   complemento,
   bairro,
+  cidade,
   uf,
   latitude,
   longitude,
@@ -207,6 +232,7 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   numeroFamiliar,
   complementoFamiliar,
   bairroFamiliar,
+  cidadeFamiliar,
   ufFamiliar,
   latitudeFamiliar,
   longitudeFamiliar,
@@ -231,11 +257,28 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   expoToken,
   profissionalPref,
   senhaChat,
-  cidade,
+  atendimento,
+  atendimentoAssinaturas,
+  diario,
+  pacienteDadosCartao,
+  pacienteDiagnostico,
+  pacienteDiario,
+  pacienteEnqueteApp,
+  pacienteOperadora,
+  pacientePedido,
+  pacientePush,
+  pacienteStatusAtual,
+  pad,
+  questionarios,
   page,
   size,
   sort
 ) => {
+  const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+  const idCidadeRequest = idCidade ? `idCidade.contains=${idCidade}&` : '';
+  const idCidadeFamiliarRequest = idCidadeFamiliar ? `idCidadeFamiliar.contains=${idCidadeFamiliar}&` : '';
+  const idGrauParentescoRequest = idGrauParentesco ? `idGrauParentesco.contains=${idGrauParentesco}&` : '';
   const senhaRequest = senha ? `senha.contains=${senha}&` : '';
   const nomeRequest = nome ? `nome.contains=${nome}&` : '';
   const emailRequest = email ? `email.contains=${email}&` : '';
@@ -253,6 +296,7 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
+  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const latitudeRequest = latitude ? `latitude.contains=${latitude}&` : '';
   const longitudeRequest = longitude ? `longitude.contains=${longitude}&` : '';
@@ -271,6 +315,7 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const numeroFamiliarRequest = numeroFamiliar ? `numeroFamiliar.contains=${numeroFamiliar}&` : '';
   const complementoFamiliarRequest = complementoFamiliar ? `complementoFamiliar.contains=${complementoFamiliar}&` : '';
   const bairroFamiliarRequest = bairroFamiliar ? `bairroFamiliar.contains=${bairroFamiliar}&` : '';
+  const cidadeFamiliarRequest = cidadeFamiliar ? `cidadeFamiliar.contains=${cidadeFamiliar}&` : '';
   const ufFamiliarRequest = ufFamiliar ? `ufFamiliar.contains=${ufFamiliar}&` : '';
   const latitudeFamiliarRequest = latitudeFamiliar ? `latitudeFamiliar.contains=${latitudeFamiliar}&` : '';
   const longitudeFamiliarRequest = longitudeFamiliar ? `longitudeFamiliar.contains=${longitudeFamiliar}&` : '';
@@ -295,13 +340,25 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
   const profissionalPrefRequest = profissionalPref ? `profissionalPref.contains=${profissionalPref}&` : '';
   const senhaChatRequest = senhaChat ? `senhaChat.contains=${senhaChat}&` : '';
-  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
+  const diarioRequest = diario ? `diario.equals=${diario}&` : '';
+  const pacienteDadosCartaoRequest = pacienteDadosCartao ? `pacienteDadosCartao.equals=${pacienteDadosCartao}&` : '';
+  const pacienteDiagnosticoRequest = pacienteDiagnostico ? `pacienteDiagnostico.equals=${pacienteDiagnostico}&` : '';
+  const pacienteDiarioRequest = pacienteDiario ? `pacienteDiario.equals=${pacienteDiario}&` : '';
+  const pacienteEnqueteAppRequest = pacienteEnqueteApp ? `pacienteEnqueteApp.equals=${pacienteEnqueteApp}&` : '';
+  const pacienteOperadoraRequest = pacienteOperadora ? `pacienteOperadora.equals=${pacienteOperadora}&` : '';
+  const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
+  const pacientePushRequest = pacientePush ? `pacientePush.equals=${pacientePush}&` : '';
+  const pacienteStatusAtualRequest = pacienteStatusAtual ? `pacienteStatusAtual.equals=${pacienteStatusAtual}&` : '';
+  const padRequest = pad ? `pad.equals=${pad}&` : '';
+  const questionariosRequest = questionarios ? `questionarios.equals=${questionarios}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTE_LIST,
     payload: axios.get<IPaciente>(
-      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefoneRequest}${telefone2Request}${celularRequest}${celular1Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${responsavelFamiliarRequest}${emailFamiliarRequest}${cpfFamiliarRequest}${rgFamiliarRequest}${nascimentoFamiliarRequest}${sexoFamiliarRequest}${telefoneFamiliarRequest}${telefone2FamiliarRequest}${celularFamiliarRequest}${celular2FamiliarRequest}${cepFamiliarRequest}${enderecoFamiliarRequest}${numeroFamiliarRequest}${complementoFamiliarRequest}${bairroFamiliarRequest}${ufFamiliarRequest}${latitudeFamiliarRequest}${longitudeFamiliarRequest}${observacaoRequest}${aphRequest}${nivelComplexidadeRequest}${passagemPsRequest}${obsPsRequest}${passagemInternacaoRequest}${obsInternacaoRequest}${custoTotalRequest}${observacaoFamiliarRequest}${mesmoEnderecoRequest}${acessoFamiliarRequest}${comResponsavelRequest}${cadastroCompletoRequest}${ativoRequest}${dataPostRequest}${detalhesRequest}${tipohospitalRequest}${liminarRequest}${expoTokenRequest}${profissionalPrefRequest}${senhaChatRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeRequest}${idFranquiaRequest}${idCidadeRequest}${idCidadeFamiliarRequest}${idGrauParentescoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefoneRequest}${telefone2Request}${celularRequest}${celular1Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${responsavelFamiliarRequest}${emailFamiliarRequest}${cpfFamiliarRequest}${rgFamiliarRequest}${nascimentoFamiliarRequest}${sexoFamiliarRequest}${telefoneFamiliarRequest}${telefone2FamiliarRequest}${celularFamiliarRequest}${celular2FamiliarRequest}${cepFamiliarRequest}${enderecoFamiliarRequest}${numeroFamiliarRequest}${complementoFamiliarRequest}${bairroFamiliarRequest}${cidadeFamiliarRequest}${ufFamiliarRequest}${latitudeFamiliarRequest}${longitudeFamiliarRequest}${observacaoRequest}${aphRequest}${nivelComplexidadeRequest}${passagemPsRequest}${obsPsRequest}${passagemInternacaoRequest}${obsInternacaoRequest}${custoTotalRequest}${observacaoFamiliarRequest}${mesmoEnderecoRequest}${acessoFamiliarRequest}${comResponsavelRequest}${cadastroCompletoRequest}${ativoRequest}${dataPostRequest}${detalhesRequest}${tipohospitalRequest}${liminarRequest}${expoTokenRequest}${profissionalPrefRequest}${senhaChatRequest}${atendimentoRequest}${atendimentoAssinaturasRequest}${diarioRequest}${pacienteDadosCartaoRequest}${pacienteDiagnosticoRequest}${pacienteDiarioRequest}${pacienteEnqueteAppRequest}${pacienteOperadoraRequest}${pacientePedidoRequest}${pacientePushRequest}${pacienteStatusAtualRequest}${padRequest}${questionariosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -315,8 +372,7 @@ export const getEntity: ICrudGetAction<IPaciente> = id => {
 
 export const createEntity: ICrudPutAction<IPaciente> = entity => async dispatch => {
   entity = {
-    ...entity,
-    cidade: entity.cidade === 'null' ? null : entity.cidade
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTE,
@@ -327,7 +383,7 @@ export const createEntity: ICrudPutAction<IPaciente> = entity => async dispatch 
 };
 
 export const updateEntity: ICrudPutAction<IPaciente> = entity => async dispatch => {
-  entity = { ...entity, cidade: entity.cidade === 'null' ? null : entity.cidade };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTE,
     payload: axios.put(apiUrl, cleanEntity(entity))

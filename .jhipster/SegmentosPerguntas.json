@@ -1,0 +1,33 @@
+{
+    "name": "SegmentosPerguntas",
+    "fields": [
+        {
+            "fieldName": "segmento",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "perguntasQuestionario",
+            "otherEntityRelationshipName": "segmentosPerguntasId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "perguntasQuestionario"
+        }
+    ],
+    "changelogDate": "20200503010100",
+    "entityTableName": "segmentos_perguntas",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

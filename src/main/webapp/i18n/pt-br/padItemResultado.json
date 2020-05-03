@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "padItemResultado": {
+      "home": {
+        "title": "Pad Item Resultados",
+        "createLabel": "Criar novo Pad Item Resultado",
+        "createOrEditLabel": "Criar ou editar Pad Item Resultado",
+        "notFound": "Nenhum Pad Item Resultado encontrado"
+      },
+      "created": "Um novo Pad Item Resultado foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Resultado foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Resultado foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Resultado {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Resultado"
+      },
+      "resultado": "Resultado",
+      "dataPost": "Data Post",
+      "dataFim": "Data Fim",
+      "resultadoAnalisado": "Resultado Analisado",
+      "usuarioId": "Usuario Id",
+      "idPadItem": "Id Pad Item"
+    }
+  }
+}

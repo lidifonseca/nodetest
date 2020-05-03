@@ -108,22 +108,26 @@ const apiUrl = 'api/cidades';
 export type ICrudGetAllActionCidade<T> = (
   descrCidade?: any,
   dataPost?: any,
-  pacientes?: any,
+  atendimento?: any,
+  empresa?: any,
+  idUf?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, dataPost, pacientes, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, dataPost, atendimento, empresa, idUf, page, size, sort) => {
   const descrCidadeRequest = descrCidade ? `descrCidade.contains=${descrCidade}&` : '';
   const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
-  const pacientesRequest = pacientes ? `pacientes.equals=${pacientes}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const empresaRequest = empresa ? `empresa.equals=${empresa}&` : '';
+  const idUfRequest = idUf ? `idUf.equals=${idUf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDADE_LIST,
     payload: axios.get<ICidade>(
-      `${requestUrl}${descrCidadeRequest}${dataPostRequest}${pacientesRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${descrCidadeRequest}${dataPostRequest}${atendimentoRequest}${empresaRequest}${idUfRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -137,7 +141,8 @@ export const getEntity: ICrudGetAction<ICidade> = id => {
 
 export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    idUf: entity.idUf === 'null' ? null : entity.idUf
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDADE,
@@ -148,7 +153,7 @@ export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch =>
 };
 
 export const updateEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, idUf: entity.idUf === 'null' ? null : entity.idUf };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))

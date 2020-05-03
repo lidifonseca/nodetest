@@ -1,0 +1,67 @@
+{
+    "name": "PerguntasQuestionario",
+    "fields": [
+        {
+            "fieldName": "pergunta",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "245"
+        },
+        {
+            "fieldName": "tipoResposta",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "60"
+        },
+        {
+            "fieldName": "obrigatorio",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "tipoCampo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "acoesRespostas",
+            "otherEntityRelationshipName": "perguntasQuestionarioId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "acoesRespostas"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "respostas",
+            "otherEntityRelationshipName": "perguntasQuestionarioId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "respostas"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "segmentosPerguntas",
+            "otherEntityRelationshipName": "perguntasQuestionario",
+            "relationshipName": "segmentosPerguntasId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503003000",
+    "entityTableName": "perguntas_questionario",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -25,7 +25,6 @@ entity CepbrEstado {
 }
 
 entity Cid {
-	id Integer,
 	codigo String maxlength(5),
 	diagnostico String maxlength(264),
 	gr String maxlength(10),
@@ -36,7 +35,6 @@ entity Cid {
 entity Julho {
 	dataInicio String maxlength(10),
 	dataFim String maxlength(10),
-	id Integer,
 	especialidade Integer,
 	periodicidade Integer,
 	periodo Integer,
@@ -80,21 +78,19 @@ entity PadCsv {
 }
 
 entity Phinxlog {
-	version Long required,
+	version String required,
 	migrationName String maxlength(100),
 	startTime Instant,
 	endTime Instant,
 	breakpoint Boolean required
 }
 
-entity TbAcao {
-	id Integer required,
+entity Acao {
 	acao String maxlength(100),
 	dataPost Instant required
 }
 
-entity TbAcoesRespostas {
-	id Integer required,
+entity AcoesRespostas {
 	abrirCampoPersonalizado Boolean,
 	condicaoSexo String maxlength(45),
 	observacoes String maxlength(125),
@@ -102,16 +98,14 @@ entity TbAcoesRespostas {
 	tipoCampo2 String maxlength(45)
 }
 
-entity TbAlertasIndicadores {
-	id Integer required,
+entity AlertasIndicadores {
 	pontuacao Double,
 	alteracaoEsperada Boolean,
 	observacoes String maxlength(255),
 	usuarioId Integer
 }
 
-entity TbAlertasResultadosEsperados {
-	id Integer required,
+entity AlertasResultadosEsperados {
 	pontuacao Double,
 	alteracaoEsperada Boolean,
 	observacoes String maxlength(255),
@@ -119,8 +113,7 @@ entity TbAlertasResultadosEsperados {
 	valor Integer
 }
 
-entity TbApiInput {
-	id Integer required,
+entity ApiInput {
 	idApiName Integer,
 	apiInput String maxlength(100),
 	apiType String maxlength(50),
@@ -129,8 +122,7 @@ entity TbApiInput {
 	dataPost Instant required
 }
 
-entity TbApiName {
-	id Integer required,
+entity ApiName {
 	apiName String maxlength(100),
 	apiReceiver String maxlength(60),
 	apiObs String maxlength(255),
@@ -138,8 +130,7 @@ entity TbApiName {
 	dataPost Instant required
 }
 
-entity TbApiReturn {
-	id Integer required,
+entity ApiReturn {
 	idApiName Integer,
 	apiReturn String maxlength(100),
 	apiType String maxlength(50),
@@ -148,11 +139,10 @@ entity TbApiReturn {
 	dataPost Instant required
 }
 
-entity TbAtendimento {
-	id Long required,
-	idUnidade Long required,
-	idFranquia Long,
-	idProfissional Long,
+entity Atendimento {
+	idUnidade String required,
+	idFranquia String,
+	idProfissional String,
 	cep String maxlength(10),
 	endereco String maxlength(100),
 	numero String maxlength(30),
@@ -189,13 +179,12 @@ entity TbAtendimento {
 	imagemAssinatura String maxlength(245)
 }
 
-entity TbAtendimentoAceite {
+entity AtendimentoAceite {
 	msgPush String maxlength(255),
 	dataPost Instant required
 }
 
-entity TbAtendimentoAcompanhamentoPush {
-	id Integer required,
+entity AtendimentoAcompanhamentoPush {
 	atendimentoId Integer required,
 	pacienteId Integer required,
 	profissionalId Integer required,
@@ -206,63 +195,58 @@ entity TbAtendimentoAcompanhamentoPush {
 	dataPost Instant
 }
 
-entity TbAtendimentoAssinaturas {
+entity AtendimentoAssinaturas {
 	arquivoAssinatura String maxlength(150),
 	dataPost Instant required
 }
 
-entity TbAtendimentoAtividades {
+entity AtendimentoAtividades {
 	feito Integer,
 	dataPost Instant required
 }
 
-entity TbAtendimentoCepRecusado {
+entity AtendimentoCepRecusado {
 	cep String required maxlength(10),
 	dataPost Instant required
 }
 
-entity TbAtendimentoGlosado {
-	id Integer required,
+entity AtendimentoGlosado {
 	idAtendimento Integer required,
 	glosado String maxlength(1),
 	idUsuario Integer,
 	dataPost LocalDate
 }
 
-entity TbAtendimentoImagem {
-	id Integer required,
+entity AtendimentoImagem {
 	atendimentoId Integer required,
 	imagem String required maxlength(200),
 	criadoEm Instant required
 }
 
-entity TbAtendimentoSorteioFeito {
+entity AtendimentoSorteioFeito {
 	sorteioFeito Integer required,
 	dataPost Instant required
 }
 
-entity TbAtendimentoStatusFinanceiro {
+entity AtendimentoStatusFinanceiro {
 	idAtendimento Integer required,
 	idStatusFinanceiro Integer required,
 	idUsuario Integer,
 	dataPost LocalDate
 }
 
-entity TbAtividades {
-	id Integer required,
+entity Atividades {
 	atividade String maxlength(100),
 	ativo Integer
 }
 
-entity TbBanco {
-	id Integer required,
+entity Banco {
 	codBanco String maxlength(15),
 	banco String maxlength(100),
 	dataPost Instant required
 }
 
-entity TbCategoria {
-	id Integer required,
+entity Categoria {
 	categoria String maxlength(100),
 	styleCategoria String maxlength(100),
 	icon String maxlength(100),
@@ -272,26 +256,23 @@ entity TbCategoria {
 	publicarSite Integer required
 }
 
-entity TbCategoriaAtividade {
-	id Long required,
+entity CategoriaAtividade {
 	atividade String maxlength(100),
 	dataPost Instant required,
 	idUnidade Integer
 }
 
-entity TbCategoriaContrato {
-	id Integer required,
+entity CategoriaContrato {
 	contrato String maxlength(255),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbCategoriaUnidade {
+entity CategoriaUnidade {
 	dataPost Instant required
 }
 
-entity TbCid {
-	id Long required,
+entity Cid {
 	codigo String maxlength(10),
 	diagnostico String maxlength(400),
 	gr String maxlength(20),
@@ -300,8 +281,7 @@ entity TbCid {
 	dataPost Instant required
 }
 
-entity TbCidPta {
-	id Integer required,
+entity CidPta {
 	idDescPta Integer required,
 	idCid Integer required,
 	idAtividade Integer required,
@@ -309,62 +289,54 @@ entity TbCidPta {
 	dataPost Instant required
 }
 
-entity TbCidXPtaNovo {
-	id Integer required,
+entity CidXPtaNovo {
 	complexidade String maxlength(45),
 	versao Integer,
 	score Integer,
 	titulo String maxlength(245)
 }
 
-entity TbCidXPtaNovoTbPadItemIndicadores {
-	id Integer required,
+entity CidXPtaNovoPadItemIndi {
 	meta String maxlength(145),
 	maximo String maxlength(145),
 	minimo String maxlength(145),
 	unidadeMedidaExtra String maxlength(145),
-	tbUnidadeMedidaId Integer,
+	unidadeMedidaId Integer,
 	score Double
 }
 
-entity TbCidade {
-	id Long required,
+entity Cidade {
 	descrCidade String maxlength(255),
 	dataPost Instant required
 }
 
-entity TbControleDisparoAviso {
-	id Integer required,
+entity ControleDisparoAviso {
 	idAtendimento Integer required,
 	qtdDisparo Integer,
 	avisopush Integer,
 	dataPost Instant required
 }
 
-entity TbDescPta {
-	id Integer required,
+entity DescPta {
 	nome String maxlength(45),
 	resultadoEsperado String maxlength(255),
 	ativo Integer required
 }
 
-entity TbDiario {
-	id Long required,
+entity Diario {
 	historico String maxlength(255),
 	gerarPdf Integer,
 	dataPost Instant required
 }
 
-entity TbDiarioTags {
-	id Integer required,
+entity DiarioTags {
 	nome String required maxlength(45),
 	idPai Integer,
 	nomeId String maxlength(45),
 	ativo Integer
 }
 
-entity TbEmpresa {
-	id Long required,
+entity Empresa {
 	empresa String maxlength(100),
 	nome String maxlength(60),
 	email String maxlength(100),
@@ -387,8 +359,7 @@ entity TbEmpresa {
 	dataPost Instant required
 }
 
-entity TbEspecialidade {
-	id Integer required,
+entity Especialidade {
 	icon String maxlength(100),
 	especialidade String maxlength(150),
 	descricao String maxlength(255),
@@ -399,8 +370,7 @@ entity TbEspecialidade {
 	idUnidade Integer
 }
 
-entity TbEspecialidadeOperadora {
-	id Long required,
+entity EspecialidadeOperadora {
 	codTuss String maxlength(30),
 	codDespesa String maxlength(5),
 	codTabela String maxlength(5),
@@ -412,7 +382,7 @@ entity TbEspecialidadeOperadora {
 	dataPost Instant required
 }
 
-entity TbEspecialidadeUnidade {
+entity EspecialidadeUnidade {
 	valorBaixaUrg Float,
 	valorAltaUrg Float,
 	valorPagar Float,
@@ -421,16 +391,14 @@ entity TbEspecialidadeUnidade {
 	dataPost Instant required
 }
 
-entity TbEspecialidadeValor {
-	id Long required,
-	idFranquia Long,
+entity EspecialidadeValor {
+	idFranquia String,
 	valor Float,
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbFilesPanico {
-	id Integer required,
+entity FilesPanico {
 	idPanico Integer required,
 	idPaciente Integer required,
 	tipo String maxlength(3),
@@ -438,9 +406,8 @@ entity TbFilesPanico {
 	criadoEm Instant required
 }
 
-entity TbFranquia {
-	id Long required,
-	idCidade Long,
+entity Franquia {
+	idCidade String,
 	nomeFantasia String maxlength(100),
 	razaoSocial String maxlength(150),
 	cnpj String maxlength(20),
@@ -461,24 +428,21 @@ entity TbFranquia {
 	dataPost Instant required
 }
 
-entity TbFranquiaAreaAtuacao {
-	id Long required,
+entity FranquiaAreaAtuacao {
 	cepIni String maxlength(10),
 	cepFim String maxlength(10),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbFranquiaStatusAtual {
-	id Long required,
+entity FranquiaStatusAtual {
 	statusAtual Integer,
 	obs String maxlength(255),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbFranquiaUsuario {
-	id Long required,
+entity FranquiaUsuario {
 	senha String maxlength(100),
 	nome String maxlength(60),
 	email String maxlength(100),
@@ -519,8 +483,7 @@ entity TbFranquiaUsuario {
 	dataPost Instant required
 }
 
-entity TbGeoPanico {
-	id Integer required,
+entity GeoPanico {
 	idPanico Integer required,
 	idPaciente Integer required,
 	latitude String maxlength(300),
@@ -528,34 +491,29 @@ entity TbGeoPanico {
 	dataPost Instant required
 }
 
-entity TbGrauParentesco {
-	id Integer required,
+entity GrauParentesco {
 	grauParentesco String maxlength(60),
 	dataPost Instant required
 }
 
-entity TbGrupoRisco {
-	id Integer required,
+entity GrupoRisco {
 	grupoRisco String maxlength(40),
 	styleLabel String maxlength(40),
 	dataPost Instant required
 }
 
-entity TbImagemProntuario {
-	id Integer required,
-	idProntuario Long required,
+entity ImagemProntuario {
+	idProntuario String required,
 	imagem String required maxlength(100),
 	ativo Integer required,
 	diretorio String maxlength(500)
 }
 
-entity TbIndicadores {
-	id Integer required,
+entity Indicadores {
 	titulo String maxlength(145)
 }
 
-entity TbIndicadoresValores {
-	id Integer required,
+entity IndicadoresValores {
 	sexo String maxlength(45),
 	vlMinimo String maxlength(45),
 	vlMaximo String maxlength(45),
@@ -564,8 +522,7 @@ entity TbIndicadoresValores {
 	idadeMaxima String maxlength(45)
 }
 
-entity TbLicaoCasa {
-	id Integer required,
+entity LicaoCasa {
 	atendimentoId Integer required,
 	pacienteId Integer required,
 	profissionalId Integer required,
@@ -584,8 +541,7 @@ entity TbLicaoCasa {
 	replicarAtividade String maxlength(1)
 }
 
-entity TbLicaoCasaEvolucao {
-	id Integer required,
+entity LicaoCasaEvolucao {
 	licaoCasaId Integer required,
 	atualizadoEm Instant required,
 	realizada Boolean required,
@@ -596,8 +552,7 @@ entity TbLicaoCasaEvolucao {
 	qtdLembrete Boolean required
 }
 
-entity TbLogPacAcesso {
-	id Integer required,
+entity LogPacAcesso {
 	idPaciente Integer required,
 	profissional String maxlength(255),
 	token String maxlength(200),
@@ -606,21 +561,18 @@ entity TbLogPacAcesso {
 	dataPost Instant required
 }
 
-entity TbLogUser {
-	id Long required,
-	idUsuario Long,
+entity LogUser {
+	idUsuario String,
 	descricao String maxlength(255),
 	dataPost Instant required
 }
 
-entity TbLogUserFranquia {
-	id Long required,
+entity LogUserFranquia {
 	descricao String maxlength(255),
 	dataPost Instant required
 }
 
-entity TbMatMed {
-	id Integer required,
+entity MatMed {
 	nome String maxlength(80),
 	/** Tipo 1 - Medicamento, Tipo 2 - Materiais, Tipo 3 - Equipamento */
 	idTipoMatMed Integer,
@@ -629,46 +581,40 @@ entity TbMatMed {
 	dataPost LocalDate
 }
 
-entity TbMigracao {
-	id Integer required,
+entity Migracao {
 	idPad Integer,
 	dataHoraMigracao Instant
 }
 
-entity TbModulosPad {
-	id Integer required,
+entity ModulosPad {
 	nomeModulo String maxlength(45),
 	ativo String maxlength(1),
 	dataPost LocalDate
 }
 
-entity TbModulosPadConfig {
-	id Integer required,
+entity ModulosPadConfig {
 	idModulosPad Integer required,
 	idEspecialidade Integer,
 	idPeriodicidade Integer
 }
 
-entity TbMotivoInternacao {
-	id Integer required,
+entity MotivoInternacao {
 	nome String maxlength(255),
 	idPai Integer,
 	ativo Integer,
-	class String maxlength(40),
+	classe String maxlength(40),
 	name String maxlength(20)
 }
 
-entity TbMotivoPs {
-	id Integer required,
+entity MotivoPs {
 	nome String maxlength(255),
 	idPai Integer,
 	ativo Integer,
-	class String maxlength(40),
+	classe String maxlength(40),
 	name String maxlength(20)
 }
 
-entity TbNotificacaoConfig {
-	id Integer required,
+entity NotificacaoConfig {
 	criadoEm Instant required,
 	titulo String required maxlength(50),
 	/** Este campo é usado como uma chave para identificar qual a notificação à ser tratada. Pode ser o nome da função que controla o envio de push/email para o paciente e/ou profissionais. */
@@ -682,8 +628,7 @@ entity TbNotificacaoConfig {
 	servePaciente Boolean required
 }
 
-entity TbNotificacaoConfigUsuario {
-	id Integer required,
+entity NotificacaoConfigUsuario {
 	notificacaoConfigId Integer required,
 	profissionalId Integer,
 	pacienteId Integer,
@@ -694,15 +639,13 @@ entity TbNotificacaoConfigUsuario {
 	observacao String maxlength(100)
 }
 
-entity TbOcorrenciaProntuario {
-	id Integer required,
+entity OcorrenciaProntuario {
 	nome String maxlength(45),
 	ativo String maxlength(1),
 	dataPost LocalDate
 }
 
-entity TbOperadora {
-	id Integer required,
+entity Operadora {
 	nomeFantasia String maxlength(100),
 	razaoSocial String maxlength(150),
 	cnpj String maxlength(20),
@@ -723,12 +666,11 @@ entity TbOperadora {
 	idTipoOperadora Integer
 }
 
-entity TbPaciente {
-	id Long required,
-	idUnidade Long required,
-	idFranquia Long,
-	idCidade Long,
-	idCidadeFamiliar Long,
+entity Paciente {
+	idUnidade String required,
+	idFranquia String,
+	idCidade String,
+	idCidadeFamiliar String,
 	idGrauParentesco Integer required,
 	senha String maxlength(100),
 	nome String maxlength(60),
@@ -793,24 +735,21 @@ entity TbPaciente {
 	senhaChat String maxlength(45)
 }
 
-entity TbPacienteArquivo {
-	id Integer required,
-	idPaciente Long,
+entity PacienteArquivo {
+	idPaciente String,
 	arquivo String maxlength(100),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbPacienteCaracteristicaAtual {
-	id Integer required,
+entity PacienteCaracteristicaAtual {
 	idPaciente Integer required,
 	idPacienteCaracteristica Integer required,
 	idUsuario Integer required,
 	dataPost Instant
 }
 
-entity TbPacienteComplexidadeAtual {
-	id Integer required,
+entity PacienteComplexidadeAtual {
 	idPaciente Integer,
 	idPacienteComplexidade Integer,
 	baixa Integer,
@@ -822,8 +761,7 @@ entity TbPacienteComplexidadeAtual {
 	dataPost Instant
 }
 
-entity TbPacienteDadosCartao {
-	id Long required,
+entity PacienteDadosCartao {
 	bandeira String maxlength(40),
 	numeroCartao String maxlength(30),
 	validade LocalDate,
@@ -832,8 +770,7 @@ entity TbPacienteDadosCartao {
 	dataPost Instant required
 }
 
-entity TbPacienteDiagnostico {
-	id Long required,
+entity PacienteDiagnostico {
 	observacao String maxlength(255),
 	ativo Integer,
 	dataPost Instant required,
@@ -842,8 +779,7 @@ entity TbPacienteDiagnostico {
 	cidComAlta Boolean
 }
 
-entity TbPacienteDiagnosticoTemp {
-	id Integer required,
+entity PacienteDiagnosticoTemp {
 	idCid Integer,
 	cidPrimario Boolean,
 	complexidade String maxlength(45),
@@ -852,16 +788,14 @@ entity TbPacienteDiagnosticoTemp {
 	observacao String maxlength(245)
 }
 
-entity TbPacienteDiario {
-	id Long required,
+entity PacienteDiario {
 	idOperadora Integer,
 	historico String maxlength(255),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbPacienteDiarioTags {
-	id Integer required,
+entity PacienteDiarioTags {
 	idPacienteDiario Integer required,
 	idDiarioTags Integer required,
 	escalaDePlantao Integer,
@@ -938,8 +872,7 @@ entity TbPacienteDiarioTags {
 	dtPost Instant required
 }
 
-entity TbPacienteDispositivoAtual {
-	id Integer required,
+entity PacienteDispositivoAtual {
 	idPaciente Integer required,
 	idPacienteDispositivo Integer required,
 	tqtTraqueostomia Integer required,
@@ -968,50 +901,43 @@ entity TbPacienteDispositivoAtual {
 	dataPost Instant required
 }
 
-entity TbPacienteDispositivoComplexidade {
-	id Integer required,
+entity PacienteDispositivoComplexidade {
 	caracteristica String required maxlength(100),
 	ativo Integer required,
 	tipo String maxlength(45)
 }
 
-entity TbPacienteEnqueteApp {
-	id Long required,
+entity PacienteEnqueteApp {
 	votacao Integer,
 	dataPost Instant required
 }
 
-entity TbPacienteGrauParentesco {
-	id Integer required,
+entity PacienteGrauParentesco {
 	grauParentesco String maxlength(60),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbPacienteHospital {
-	id Integer required,
+entity PacienteHospital {
 	servico String maxlength(40),
 	styleLabel String maxlength(40),
 	dataPost Instant required
 }
 
-entity TbPacienteMotivoInternacao {
-	id Integer required,
+entity PacienteMotivoInternacao {
 	idPaciente Integer required,
 	idMotivoInternacao Integer required,
 	idUsuario Integer required,
 	dataPost String maxlength(45)
 }
 
-entity TbPacienteOperadora {
-	id Long required,
+entity PacienteOperadora {
 	registro String maxlength(100),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbPacientePedido {
-	id Long required,
+entity PacientePedido {
 	dataPedido LocalDate,
 	dataAgenda Instant,
 	qtdSessoes Integer,
@@ -1022,14 +948,13 @@ entity TbPacientePedido {
 	dataPost Instant required
 }
 
-entity TbPacienteProntuario {
-	id Integer required,
-	idPaciente Long required,
+entity PacienteProntuario {
+	idPaciente String required,
 	idTipoProntuario Integer required,
 	oQue String maxlength(255),
 	resultado String maxlength(255),
 	ativo Integer required,
-	idUsuario Long,
+	idUsuario String,
 	idEspecialidade Integer,
 	dataConsulta Instant,
 	idExame Integer,
@@ -1044,35 +969,31 @@ entity TbPacienteProntuario {
 	dataManifestacao LocalDate
 }
 
-entity TbPacientePush {
-	id Long required,
-	idFranquia Long,
+entity PacientePush {
+	idFranquia String,
 	mensagem String maxlength(255),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbPacienteServico {
-	id Integer required,
+entity PacienteServico {
 	idPaciente Integer required,
 	servico Integer required,
 	dataPost Instant required
 }
 
-entity TbPacienteStatusAtual {
-	id Long required,
+entity PacienteStatusAtual {
 	dataStatus LocalDate,
 	observacao String maxlength(255),
 	ativo Integer,
 	dataPost Instant required,
-	idUsuario Long required
+	idUsuario String required
 }
 
-entity TbPad {
-	id Long required,
-	idUnidade Long required,
+entity Pad {
+	idUnidade String required,
 	idOperadora Integer,
-	idFranquia Long,
+	idFranquia String,
 	nroPad String maxlength(30),
 	dataInicio LocalDate,
 	dataFim LocalDate,
@@ -1086,15 +1007,14 @@ entity TbPad {
 	score Double
 }
 
-entity TbPadCid {
+entity PadCid {
 	observacao String maxlength(255),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbPadItem {
-	id Long required,
-	idPedido Long,
+entity PadItem {
+	idPedido String,
 	dataInicio LocalDate,
 	dataFim LocalDate,
 	qtdSessoes Integer,
@@ -1105,13 +1025,12 @@ entity TbPadItem {
 	dataPadItemIncompleto Instant,
 	dataPadItemCompleto Instant,
 	numGhc String maxlength(40),
-	tbCidXPtaNovo Integer,
-	tbCategoriaId Integer,
+	cidXPtaNovo Integer,
+	categoriaId Integer,
 	score Double
 }
 
-entity TbPadItemAlerta {
-	id Integer required,
+entity PadItemAlerta {
 	padItemMetaId Integer required,
 	envioEmailEm Instant,
 	visualizadoEm Instant,
@@ -1120,27 +1039,24 @@ entity TbPadItemAlerta {
 	mensagem String maxlength(100)
 }
 
-entity TbPadItemAtividade {
-	id Long required,
+entity PadItemAtividade {
 	dataInicio LocalDate,
 	dataFim LocalDate,
 	dataPost Instant required
 }
 
-entity TbPadItemCepRecusado {
+entity PadItemCepRecusado {
 	cep String required maxlength(10),
 	dataPost Instant required
 }
 
-entity TbPadItemHistDataIncComp {
-	id Integer required,
-	idPadItem Long,
+entity PadItemHistDataIncComp {
+	idPadItem String,
 	dataPadItemIncompleto Instant,
 	dataPadItemCompleto Instant
 }
 
-entity TbPadItemIndicadores {
-	id Integer required,
+entity PadItemIndicadores {
 	idUnidadeMedida Integer,
 	titulo String required maxlength(45),
 	descricao String maxlength(100),
@@ -1149,8 +1065,7 @@ entity TbPadItemIndicadores {
 	minimoSt Integer
 }
 
-entity TbPadItemMeta {
-	id Integer required,
+entity PadItemMeta {
 	unidadeMedidaId Integer,
 	indicadorId Integer required,
 	idPaciente Integer required,
@@ -1176,8 +1091,7 @@ entity TbPadItemMeta {
 	alteracaoEsperada Boolean
 }
 
-entity TbPadItemResultado {
-	id Long required,
+entity PadItemResultado {
 	resultado String maxlength(255),
 	dataPost Instant required,
 	dataFim LocalDate,
@@ -1185,13 +1099,12 @@ entity TbPadItemResultado {
 	usuarioId Integer
 }
 
-entity TbPadItemSorteioFeito {
+entity PadItemSorteioFeito {
 	sorteioFeito Integer required,
 	dataPost Instant required
 }
 
-entity TbPadItemTemp {
-	id Long required,
+entity PadItemTemp {
 	sessionId String maxlength(100),
 	idEspecialidade Integer,
 	idPeriodicidade Integer,
@@ -1201,13 +1114,12 @@ entity TbPadItemTemp {
 	qtdSessoes Integer,
 	observacao String maxlength(255),
 	dataPost Instant,
-	tbCidXPtaNovoId Integer,
-	tbCategoriaId Integer,
+	cidXPtaNovoId Integer,
+	categoriaId Integer,
 	numGhc String maxlength(40)
 }
 
-entity TbPadMatMed {
-	id Integer required,
+entity PadMatMed {
 	idPad Integer required,
 	idMatMed Integer required,
 	qtd Integer required,
@@ -1216,52 +1128,46 @@ entity TbPadMatMed {
 	ativo Integer required
 }
 
-entity TbPadPta {
-	id Integer required,
-	idPad Long required,
-	idDescPta Long,
-	idCid Long required,
-	idUsuario Long required,
+entity PadPta {
+	idPad String required,
+	idDescPta String,
+	idCid String required,
+	idUsuario String required,
 	dataPost Instant required,
 	idCidXPtaNovo Integer required
 }
 
-entity TbPadPtaTemp {
-	id Integer required,
+entity PadPtaTemp {
 	sessionId String maxlength(100),
 	idPta Integer required,
 	idCid Integer required,
 	idUsuario Integer required,
 	dataPost Instant,
-	tbCidXPtaNovoId Integer
+	cidXPtaNovoId Integer
 }
 
-entity TbPerguntasQuestionario {
-	id Integer required,
+entity PerguntasQuestionario {
 	pergunta String maxlength(245),
 	tipoResposta String maxlength(60),
 	obrigatorio Boolean,
 	tipoCampo String maxlength(45)
 }
 
-entity TbPeriodicidade {
-	id Integer required,
+entity Periodicidade {
 	periodicidade String maxlength(40),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbPeriodo {
-	id Integer required,
+entity Periodo {
 	periodo String maxlength(40),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbProfissional {
-	id Long required,
-	idUnidade Long required,
-	idCidade Long,
+entity Profissional {
+	idUnidade String required,
+	idCidade String,
 	idTempoExperiencia Integer,
 	idBanco Integer,
 	senha String maxlength(100),
@@ -1302,9 +1208,8 @@ entity TbProfissional {
 	senhaChat String maxlength(45)
 }
 
-entity TbProfissionalAreaAtuacao {
-	id Long required,
-	idProfissional Long,
+entity ProfissionalAreaAtuacao {
+	idProfissional String,
 	cepArea String maxlength(10),
 	cepFim String maxlength(10),
 	ativo Integer,
@@ -1312,9 +1217,8 @@ entity TbProfissionalAreaAtuacao {
 	cepIni String maxlength(45)
 }
 
-entity TbProfissionalAreaAtuacaoNew {
-	id Long required,
-	idProfissional Long,
+entity ProfissionalAreaAtuacaoNew {
+	idProfissional String,
 	cepArea String maxlength(10),
 	cepFim String maxlength(10),
 	ativo Integer,
@@ -1322,23 +1226,21 @@ entity TbProfissionalAreaAtuacaoNew {
 	cepIni String maxlength(45)
 }
 
-entity TbProfissionalArquivo {
-	id Long required,
-	idProfissional Long,
+entity ProfissionalArquivo {
+	idProfissional String,
 	arquivo String maxlength(100),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbProfissionalCategoriaContrato {
-	idProfissional Long required,
+entity ProfissionalCategoriaContrato {
+	idProfissional String required,
 	idCategoriaContrato Integer required,
 	aceito Integer,
 	dataPost Instant required
 }
 
-entity TbProfissionalComplexidadeAtual {
-	id Integer required,
+entity ProfissionalComplexidadeAtual {
 	idProfissional Integer required,
 	baixa Integer,
 	media Integer,
@@ -1349,8 +1251,7 @@ entity TbProfissionalComplexidadeAtual {
 	dataPost Instant
 }
 
-entity TbProfissionalDispositivoAtual {
-	id Integer required,
+entity ProfissionalDispositivoAtual {
 	idProfissional Integer required,
 	tqtTraqueostomia Integer,
 	gttGastrostomia Integer,
@@ -1375,41 +1276,38 @@ entity TbProfissionalDispositivoAtual {
 	dataPost Instant required
 }
 
-entity TbProfissionalDispositivoComplexidade {
-	id Integer required,
+entity ProfissionalDispositivoComplexidade {
 	caracteristica String required maxlength(100),
 	ativo Integer required,
 	tipo String required maxlength(1)
 }
 
-entity TbProfissionalDispositivoComplexidadeAtual {
-	id Integer required,
+entity ProfissionalDispositivoComplexidadeAtual {
 	idProfissional Integer required,
 	idProfissionalDispositivoComplexidade Integer required,
 	idUsuario Integer required,
 	dataPost Instant required
 }
 
-entity TbProfissionalEspecialidade {
+entity ProfissionalEspecialidade {
 	idEspecialidade Integer required,
-	idProfissional Long required,
+	idProfissional String required,
 	dataPost Instant required
 }
 
-entity TbProfissionalEspecialidadeNew {
+entity ProfissionalEspecialidadeNew {
 	idEspecialidade Integer required,
-	idProfissional Long required,
+	idProfissional String required,
 	dataPost Instant required
 }
 
-entity TbProfissionalFranquia {
-	idProfissional Long required,
-	idFranquia Long required,
+entity ProfissionalFranquia {
+	idProfissional String required,
+	idFranquia String required,
 	dataPost Instant required
 }
 
-entity TbProfissionalHorario {
-	id Integer required,
+entity ProfissionalHorario {
 	idAtendimento Integer required,
 	idProfissional Integer required,
 	horario Instant required,
@@ -1417,10 +1315,9 @@ entity TbProfissionalHorario {
 	dataPost Instant required
 }
 
-entity TbProfissionalNew {
-	id Long required,
-	idUnidade Long required,
-	idCidade Long,
+entity ProfissionalNew {
+	idUnidade String required,
+	idCidade String,
 	idTempoExperiencia Integer,
 	idBanco Integer,
 	senha String maxlength(100),
@@ -1456,36 +1353,32 @@ entity TbProfissionalNew {
 	dataPost Instant required
 }
 
-entity TbProfissionalPush {
-	id Long required,
-	idProfissional Long,
-	idFranquia Long,
+entity ProfissionalPush {
+	idProfissional String,
+	idFranquia String,
 	mensagem String maxlength(255),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbProfissionalStatusAtual {
-	id Long required,
-	idProfissional Long,
+entity ProfissionalStatusAtual {
+	idProfissional String,
 	obs String maxlength(255),
 	ativo Integer,
 	dataPost Instant required,
-	idUsuario Long required
+	idUsuario String required
 }
 
-entity TbProfissionalStatusAtualNew {
-	id Long required,
-	idProfissional Long,
+entity ProfissionalStatusAtualNew {
+	idProfissional String,
 	idStatusAtualProf Integer,
 	obs String maxlength(255),
 	ativo Integer,
 	dataPost Instant required,
-	idUsuario Long required
+	idUsuario String required
 }
 
-entity TbProntuarioMotivoInternacaoPs {
-	id Integer required,
+entity ProntuarioMotivoInternacaoPs {
 	idProntuario Integer required,
 	idPaciente Integer required,
 	idMotivo Integer required,
@@ -1493,8 +1386,7 @@ entity TbProntuarioMotivoInternacaoPs {
 	dataPost Instant
 }
 
-entity TbProntuarioMotivoManifestacao {
-	id Integer required,
+entity ProntuarioMotivoManifestacao {
 	idProntuario Integer required,
 	idPaciente Integer required,
 	idMotivo Integer,
@@ -1507,65 +1399,56 @@ entity TbProntuarioMotivoManifestacao {
 	informacaoAdicional TextBlob
 }
 
-entity TbProntuarioTipoManifestacao {
-	id Integer required,
+entity ProntuarioTipoManifestacao {
 	nome String maxlength(45),
 	idPai Integer,
 	ativo Integer
 }
 
-entity TbProntuarioTipoMotivo {
-	id Integer required,
+entity ProntuarioTipoMotivo {
 	nome String maxlength(45),
 	idPai Integer,
 	ativo Integer,
-	class String maxlength(45),
+	classe String maxlength(45),
 	name String maxlength(45),
 	idTipoProntuario Integer
 }
 
-entity TbProtocolos {
-	id Integer required,
+entity Protocolos {
 	protocolo Integer required
 }
 
-entity TbPushnotificationEnvios {
-	id Integer required,
+entity PushnotificationEnvios {
 	referencia String required maxlength(50),
 	ultimoEnvio Instant
 }
 
-entity TbQuestionarios {
-	id Integer required,
+entity Questionarios {
 	dataCadastro Instant,
 	etapaAtual String maxlength(50),
 	finalizado Boolean,
 	ultimaPerguntaRespondida Integer
 }
 
-entity TbReportEmailAtendimento {
-	id Long required,
+entity ReportEmailAtendimento {
 	idAtendimento Integer,
 	tipoReport Integer,
 	dataPost Instant
 }
 
-entity TbRespostas {
-	id Integer required,
+entity Respostas {
 	resposta String maxlength(245),
 	pontuacao Integer,
 	respostaAtiva Boolean
 }
 
-entity TbRespostasQuestionarios {
-	id Integer required,
+entity RespostasQuestionarios {
 	dataResposta Instant,
 	informacaoAdicional String maxlength(255),
-	tbQuestionarioId Integer
+	questionarioId Integer
 }
 
-entity TbResultados {
-	id Integer required,
+entity Resultados {
 	objetivo String maxlength(145),
 	valor String maxlength(145),
 	prazo String maxlength(145),
@@ -1574,20 +1457,17 @@ entity TbResultados {
 	dataVencimentoPrazo LocalDate
 }
 
-entity TbSegmentosPerguntas {
-	id Integer required,
+entity SegmentosPerguntas {
 	segmento String maxlength(100)
 }
 
-entity TbServico {
-	id Integer required,
+entity Servico {
 	servico String maxlength(40),
 	styleLabel String maxlength(40),
 	dataPost Instant required
 }
 
-entity TbStatusAtendimento {
-	id Integer required,
+entity StatusAtendimento {
 	statusAtendimento String maxlength(40),
 	styleLabel String maxlength(40),
 	ordenacao Integer,
@@ -1595,36 +1475,31 @@ entity TbStatusAtendimento {
 	dataPost Instant required
 }
 
-entity TbStatusAtual {
-	id Integer required,
+entity StatusAtual {
 	statusAtual String maxlength(50),
 	styleLabel String maxlength(40),
 	dataPost Instant required
 }
 
-entity TbStatusAtualLigacao {
-	id Integer required,
+entity StatusAtualLigacao {
 	statusAtualLigacao String maxlength(40),
 	styleLabel String maxlength(40),
 	dataPost Instant required
 }
 
-entity TbStatusAtualProf {
-	id Integer required,
+entity StatusAtualProf {
 	statusAtualProf String maxlength(50),
 	styleLabel String maxlength(40),
 	dataPost Instant required
 }
 
-entity TbStatusFinanceiro {
-	id Integer required,
+entity StatusFinanceiro {
 	nome String maxlength(45),
 	ativo String maxlength(2),
 	dataPost String maxlength(45)
 }
 
-entity TbStatusPadItemMeta {
-	id Integer required,
+entity StatusPadItemMeta {
 	statusItemMeta String maxlength(200),
 	styleLabel String maxlength(40),
 	ordenacao Integer,
@@ -1632,94 +1507,80 @@ entity TbStatusPadItemMeta {
 	dataPost Instant required
 }
 
-entity TbTela {
-	id Integer required,
+entity Tela {
 	tela String maxlength(100),
 	dataPost Instant required
 }
 
-entity TbTempoExperiencia {
-	id Integer required,
+entity TempoExperiencia {
 	tempoExperiencia String maxlength(60),
 	dataPost Instant required
 }
 
-entity TbTermosUso {
-	id Integer required,
+entity TermosUso {
 	termosUso String maxlength(255),
 	tipo Integer,
 	dataPost Instant required
 }
 
-entity TbTipoEspecialidade {
-	id Integer required,
+entity TipoEspecialidade {
 	tipoEspecialidade String maxlength(30),
 	dataPost Instant required
 }
 
-entity TbTipoExame {
-	id Integer required,
+entity TipoExame {
 	exame String required maxlength(45),
 	idPai Integer,
 	ativo Integer required
 }
 
-entity TbTipoMatMed {
-	id Integer required,
+entity TipoMatMed {
 	tipo String required maxlength(45),
 	ativo Integer,
 	dataPost LocalDate
 }
 
-entity TbTipoOperadora {
-	id Integer required,
+entity TipoOperadora {
 	tipo String maxlength(50),
 	ativo String maxlength(1),
 	dataPost LocalDate
 }
 
-entity TbTipoPreferenciaAtendimento {
-	id Integer required,
+entity TipoPreferenciaAtendimento {
 	nome String maxlength(80),
 	ativo Integer
 }
 
-entity TbTipoProntuario {
-	id Integer required,
+entity TipoProntuario {
 	prontuario String required maxlength(45),
 	ativo Integer required
 }
 
-entity TbTipoUnidade {
-	id Integer required,
+entity TipoUnidade {
 	tipoUnidade String maxlength(30),
 	dataPost Instant required
 }
 
-entity TbTipoUsuario {
-	id Integer required,
+entity TipoUsuario {
 	tipoUsuario String maxlength(30),
 	ativo Integer,
 	dataPost Instant required
 }
 
-entity TbTokenUsuario {
-	id Integer required,
+entity TokenUsuario {
 	idPaciente Integer required,
 	token String maxlength(200),
 	dataValida Instant,
 	dataPost Instant
 }
 
-entity TbUf {
-	id Integer required,
+entity Uf {
 	siglaUf String maxlength(4),
 	descrUf String maxlength(255),
 	dataPost Instant required
 }
 
-entity TbUnidadeEasy {
-	id Long required,
+entity UnidadeEasy {
 	razaoSocial String maxlength(150),
 	nomeFantasia String maxlength(150),
 	cnpj String maxlength(20),
@@ -1744,22 +1605,19 @@ entity TbUnidadeEasy {
 	dataPost Instant required
 }
 
-entity TbUnidadeEasyAreaAtuacao {
-	id Long required,
+entity UnidadeEasyAreaAtuacao {
 	cepInicial String maxlength(10),
 	cepFinal String maxlength(10),
 	dataPost Instant required
 }
 
-entity TbUnidadeMedida {
-	id Integer required,
+entity UnidadeMedida {
 	unidade String required maxlength(45),
 	descricao String maxlength(45)
 }
 
-entity TbUsuario {
-	id Long required,
-	idUnidade Long required,
+entity Usuario {
+	idUnidade String required,
 	idOperadora String maxlength(1000),
 	senha String maxlength(100),
 	nome String maxlength(60),
@@ -1887,16 +1745,14 @@ entity TbUsuario {
 	senhaChat String maxlength(45)
 }
 
-entity TbUsuarioAcao {
-	id Long required,
-	idUsuario Long,
+entity UsuarioAcao {
+	idUsuario String,
 	idAtendimento Integer,
 	descricao String maxlength(255),
 	dataPost Instant required
 }
 
-entity TbUsuarioPainelGerencial {
-	id Integer required,
+entity UsuarioPainelGerencial {
 	idUsuario Integer required,
 	verCronicos Integer,
 	verPacientesAtivosCr Integer,
@@ -1939,8 +1795,7 @@ entity TbUsuarioPainelGerencial {
 	filtroIndicadorUsoAppCr Integer
 }
 
-entity TbUsuarioPanico {
-	id Integer required,
+entity UsuarioPanico {
 	idPaciente Integer required,
 	idUsuario Integer required,
 	idProfissional Integer required,
@@ -1950,9 +1805,8 @@ entity TbUsuarioPanico {
 	dataPost Instant
 }
 
-entity TbUsuarioStatusAtual {
-	id Long required,
-	idUsuario Long,
+entity UsuarioStatusAtual {
+	idUsuario String,
 	statusAtual Integer,
 	obs String maxlength(255),
 	ativo Integer,
@@ -1987,415 +1841,112 @@ entity VwApiAtendimentosAceite {
 
 
 // Relations
-relationship ManyToOne {
-	CepbrBairro{idCidade} to CepbrCidade{cepbrBairro}
-}
-
-relationship ManyToOne {
-	CepbrCidade{uf} to CepbrEstado{cepbrCidade}
-}
-
-relationship ManyToOne {
-	CepbrEndereco{idCidade} to CepbrCidade{cepbrEndereco}
-}
-
-relationship ManyToOne {
-	CepbrEndereco{idBairro} to CepbrBairro{cepbrEndereco}
-}
-
-relationship ManyToOne {
-	TbAcoesRespostas{tbRespostasId required} to TbRespostas{tbAcoesRespostas}
-}
-
-relationship ManyToOne {
-	TbAcoesRespostas{tbPerguntasQuestionarioId required} to TbPerguntasQuestionario{tbAcoesRespostas}
-}
-
-relationship ManyToOne {
-	TbAlertasIndicadores{tbPadItemIndicadoresId} to TbCidXPtaNovoTbPadItemIndicadores{tbAlertasIndicadores}
-}
-
-relationship ManyToOne {
-	TbAlertasResultadosEsperados{tbResultadosId} to TbResultados{tbAlertasResultadosEsperados}
-}
-
-relationship ManyToOne {
-	TbAtendimento{idPaciente} to TbPaciente{tbAtendimento}
-}
-
-relationship ManyToOne {
-	TbAtendimento{idOperadora} to TbOperadora{tbAtendimento}
-}
-
-relationship ManyToOne {
-	TbAtendimento{idEspecialidade} to TbEspecialidade{tbAtendimento}
-}
-
-relationship ManyToOne {
-	TbAtendimento{idPadItem} to TbPadItem{tbAtendimento}
-}
-
-relationship ManyToOne {
-	TbAtendimento{idStatusAtendimento} to TbStatusAtendimento{tbAtendimento}
-}
-
-relationship ManyToOne {
-	TbAtendimento{idPeriodo} to TbPeriodo{tbAtendimento}
-}
-
-relationship ManyToOne {
-	TbAtendimento{idCidade} to TbCidade{tbAtendimento}
-}
-
-relationship ManyToOne {
-	TbAtendimentoAceite{idProfissional required} to TbProfissional{tbAtendimentoAceite}
-}
-
-relationship ManyToOne {
-	TbAtendimentoAceite{idAtendimento required} to TbAtendimento{tbAtendimentoAceite}
-}
-
-relationship ManyToOne {
-	TbAtendimentoAssinaturas{idAtendimento required} to TbAtendimento{tbAtendimentoAssinaturas}
-}
-
-relationship ManyToOne {
-	TbAtendimentoAssinaturas{idProfissional required} to TbProfissional{tbAtendimentoAssinaturas}
-}
-
-relationship ManyToOne {
-	TbAtendimentoAssinaturas{idPaciente required} to TbPaciente{tbAtendimentoAssinaturas}
-}
-
-relationship ManyToOne {
-	TbAtendimentoAtividades{idAtividade required} to TbCategoriaAtividade{tbAtendimentoAtividades}
-}
-
-relationship ManyToOne {
-	TbAtendimentoAtividades{idAtendimento required} to TbAtendimento{tbAtendimentoAtividades}
-}
-
-relationship ManyToOne {
-	TbAtendimentoCepRecusado{idPadItem required} to TbPadItem{tbAtendimentoCepRecusado}
-}
-
-relationship ManyToOne {
-	TbAtendimentoSorteioFeito{idPadItem required} to TbPadItem{tbAtendimentoSorteioFeito}
-}
-
-relationship ManyToOne {
-	TbCategoriaAtividade{idCategoria} to TbCategoria{tbCategoriaAtividade}
-}
-
-relationship ManyToOne {
-	TbCategoriaContrato{idCategoria} to TbCategoria{tbCategoriaContrato}
-}
-
-relationship ManyToOne {
-	TbCategoriaUnidade{idUnidade required} to TbUnidadeEasy{tbCategoriaUnidade}
-}
-
-relationship ManyToOne {
-	TbCategoriaUnidade{idCategoria required} to TbCategoria{tbCategoriaUnidade}
-}
-
-relationship ManyToOne {
-	TbCidXPtaNovo{tbCidId required} to TbCid{tbCidXPtaNovo}
-}
-
-relationship ManyToOne {
-	TbCidXPtaNovo{tbCidXPtaNovoId} to TbCidXPtaNovo{tbCidXPtaNovo}
-}
-
-// TODO This is a pure ManyToMany relation (delete me and decide owner side)
-relationship ManyToMany {
-	TbCidXPtaNovoTbCategorias{tbCidXPtaNovoId required} to TbCidXPtaNovo{tbCidXPtaNovoTbCategorias}
-}
-
-// TODO This is a pure ManyToMany relation (delete me and decide owner side)
-relationship ManyToMany {
-	TbCidXPtaNovoTbCategorias{tbCategoriasId required} to TbCategoria{tbCidXPtaNovoTbCategorias}
-}
-
-relationship ManyToOne {
-	TbCidXPtaNovoTbPadItemIndicadores{tbPadItemIndicadoresId required} to TbPadItemIndicadores{tbCidXPtaNovoTbPadItemIndicadores}
-}
-
-relationship ManyToOne {
-	TbCidXPtaNovoTbPadItemIndicadores{tbCategoriasId} to TbCategoria{tbCidXPtaNovoTbPadItemIndicadores}
-}
-
-relationship ManyToOne {
-	TbCidXPtaNovoTbPadItemIndicadores{tbCidXPtaNovoId required} to TbCidXPtaNovo{tbCidXPtaNovoTbPadItemIndicadores}
-}
-
-relationship ManyToOne {
-	TbCidade{idUf} to TbUf{tbCidade}
-}
-
-relationship ManyToOne {
-	TbDiario{idUsuario} to TbUsuario{tbDiario}
-}
-
-relationship ManyToOne {
-	TbDiario{idPaciente} to TbPaciente{tbDiario}
-}
-
-relationship ManyToOne {
-	TbEmpresa{idCidade} to TbCidade{tbEmpresa}
-}
-
-relationship ManyToOne {
-	TbEspecialidade{idCategoria} to TbCategoria{tbEspecialidade}
-}
-
-relationship ManyToOne {
-	TbEspecialidade{idTipoEspecialidade} to TbTipoEspecialidade{tbEspecialidade}
-}
-
-relationship ManyToOne {
-	TbEspecialidade{idTipoUnidade} to TbTipoUnidade{tbEspecialidade}
-}
-
-relationship ManyToOne {
-	TbEspecialidadeOperadora{idOperadora} to TbOperadora{tbEspecialidadeOperadora}
-}
-
-relationship ManyToOne {
-	TbEspecialidadeOperadora{idEspecialidade} to TbEspecialidade{tbEspecialidadeOperadora}
-}
-
-relationship ManyToOne {
-	TbEspecialidadeUnidade{idUnidade required} to TbUnidadeEasy{tbEspecialidadeUnidade}
-}
-
-relationship ManyToOne {
-	TbEspecialidadeUnidade{idEspecialidade required} to TbEspecialidade{tbEspecialidadeUnidade}
-}
-
-relationship ManyToOne {
-	TbEspecialidadeValor{idEspecialidade} to TbEspecialidade{tbEspecialidadeValor}
-}
-
-relationship ManyToOne {
-	TbFranquiaAreaAtuacao{idFranquia} to TbFranquia{tbFranquiaAreaAtuacao}
-}
-
-relationship ManyToOne {
-	TbFranquiaStatusAtual{idFranquia} to TbFranquia{tbFranquiaStatusAtual}
-}
-
-relationship ManyToOne {
-	TbFranquiaUsuario{idFranquia} to TbFranquia{tbFranquiaUsuario}
-}
-
-relationship ManyToOne {
-	TbIndicadoresValores{tbIndicadoresId required} to TbIndicadores{tbIndicadoresValores}
-}
-
-relationship ManyToOne {
-	TbLogUser{idAcao} to TbAcao{tbLogUser}
-}
-
-relationship ManyToOne {
-	TbLogUser{idTela} to TbTela{tbLogUser}
-}
-
-relationship ManyToOne {
-	TbLogUserFranquia{idAcao} to TbAcao{tbLogUserFranquia}
-}
-
-relationship ManyToOne {
-	TbLogUserFranquia{idTela} to TbTela{tbLogUserFranquia}
-}
-
-relationship ManyToOne {
-	TbLogUserFranquia{idUsuario} to TbFranquiaUsuario{tbLogUserFranquia}
-}
-
-relationship ManyToOne {
-	TbPacienteDadosCartao{idPaciente} to TbPaciente{tbPacienteDadosCartao}
-}
-
-relationship ManyToOne {
-	TbPacienteDiagnostico{idPaciente} to TbPaciente{tbPacienteDiagnostico}
-}
-
-relationship ManyToOne {
-	TbPacienteDiagnostico{idCid} to TbCid{tbPacienteDiagnostico}
-}
-
-relationship ManyToOne {
-	TbPacienteDiario{idPaciente} to TbPaciente{tbPacienteDiario}
-}
-
-relationship ManyToOne {
-	TbPacienteDiario{idUsuario} to TbUsuario{tbPacienteDiario}
-}
-
-relationship ManyToOne {
-	TbPacienteEnqueteApp{idPaciente} to TbPaciente{tbPacienteEnqueteApp}
-}
-
-relationship ManyToOne {
-	TbPacienteOperadora{idPaciente} to TbPaciente{tbPacienteOperadora}
-}
-
-relationship ManyToOne {
-	TbPacienteOperadora{idOperadora} to TbOperadora{tbPacienteOperadora}
-}
-
-relationship ManyToOne {
-	TbPacientePedido{idUnidade} to TbUnidadeEasy{tbPacientePedido}
-}
-
-relationship ManyToOne {
-	TbPacientePedido{idPaciente} to TbPaciente{tbPacientePedido}
-}
-
-relationship ManyToOne {
-	TbPacientePedido{idCartao} to TbPacienteDadosCartao{tbPacientePedido}
-}
-
-relationship ManyToOne {
-	TbPacientePedido{idEspecialidade} to TbEspecialidade{tbPacientePedido}
-}
-
-relationship ManyToOne {
-	TbPacientePush{idPaciente} to TbPaciente{tbPacientePush}
-}
-
-relationship ManyToOne {
-	TbPacienteStatusAtual{idPaciente} to TbPaciente{tbPacienteStatusAtual}
-}
-
-relationship ManyToOne {
-	TbPacienteStatusAtual{idStatusAtual} to TbStatusAtual{tbPacienteStatusAtual}
-}
-
-relationship ManyToOne {
-	TbPad{idPaciente} to TbPaciente{tbPad}
-}
-
-relationship ManyToOne {
-	TbPadCid{idPad required} to TbPad{tbPadCid}
-}
-
-relationship ManyToOne {
-	TbPadCid{idCid required} to TbCid{tbPadCid}
-}
-
-relationship ManyToOne {
-	TbPadItem{idPad} to TbPad{tbPadItem}
-}
-
-relationship ManyToOne {
-	TbPadItem{idEspecialidade} to TbEspecialidade{tbPadItem}
-}
-
-relationship ManyToOne {
-	TbPadItem{idPeriodicidade} to TbPeriodicidade{tbPadItem}
-}
-
-relationship ManyToOne {
-	TbPadItem{idPeriodo} to TbPeriodo{tbPadItem}
-}
-
-relationship ManyToOne {
-	TbPadItemAtividade{idAtividade} to TbCategoriaAtividade{tbPadItemAtividade}
-}
-
-relationship ManyToOne {
-	TbPadItemAtividade{idPadItem} to TbPadItem{tbPadItemAtividade}
-}
-
-relationship ManyToOne {
-	TbPadItemCepRecusado{idPadItem required} to TbPadItem{tbPadItemCepRecusado}
-}
-
-relationship ManyToOne {
-	TbPadItemResultado{idPadItem} to TbPadItem{tbPadItemResultado}
-}
-
-relationship ManyToOne {
-	TbPadItemSorteioFeito{idPadItem required} to TbPadItem{tbPadItemSorteioFeito}
-}
-
-relationship ManyToOne {
-	TbPerguntasQuestionario{tbSegmentosPerguntasId required} to TbSegmentosPerguntas{tbPerguntasQuestionario}
-}
-
-relationship ManyToOne {
-	TbProfissionalStatusAtual{idStatusAtualProf} to TbStatusAtualProf{tbProfissionalStatusAtual}
-}
-
-relationship ManyToOne {
-	TbProtocolos{tbResultadosId} to TbResultados{tbProtocolos}
-}
-
-relationship ManyToOne {
-	TbProtocolos{tbCidXPtaNovoId required} to TbResultados{tbProtocolos}
-}
-
-relationship ManyToOne {
-	TbProtocolos{tbCategoriasId} to TbResultados{tbProtocolos}
-}
-
-relationship ManyToOne {
-	TbQuestionarios{tbPacienteId required} to TbPaciente{tbQuestionarios}
-}
-
-// TODO This is a pure ManyToMany relation (delete me and decide owner side)
-relationship ManyToMany {
-	TbQuestionariosTbSegmentosPerguntas{tbQuestionariosId required} to TbQuestionarios{tbQuestionariosTbSegmentosPerguntas}
-}
-
-// TODO This is a pure ManyToMany relation (delete me and decide owner side)
-relationship ManyToMany {
-	TbQuestionariosTbSegmentosPerguntas{tbSegmentosPerguntasId required} to TbSegmentosPerguntas{tbQuestionariosTbSegmentosPerguntas}
-}
-
-relationship ManyToOne {
-	TbRespostas{tbPerguntasQuestionarioId required} to TbPerguntasQuestionario{tbRespostas}
-}
-
-relationship ManyToOne {
-	TbRespostasQuestionarios{tbQuestionariosId required} to TbQuestionarios{tbRespostasQuestionarios}
-}
-
-relationship ManyToOne {
-	TbRespostasQuestionarios{tbRespostasId required} to TbRespostas{tbRespostasQuestionarios}
-}
-
-relationship ManyToOne {
-	TbRespostasQuestionarios{tbPerguntasQuestionarioId required} to TbRespostas{tbRespostasQuestionarios}
-}
-
-relationship ManyToOne {
-	TbResultados{tbCidXPtaNovoId required} to TbCidXPtaNovoTbCategorias{tbResultados}
-}
-
-relationship ManyToOne {
-	TbResultados{tbCategoriasId required} to TbCidXPtaNovoTbCategorias{tbResultados}
-}
-
-relationship ManyToOne {
-	TbUnidadeEasyAreaAtuacao{idUnidade} to TbUnidadeEasy{tbUnidadeEasyAreaAtuacao}
-}
-
-relationship ManyToOne {
-	TbUsuario{idTipoUsuario} to TbTipoUsuario{tbUsuario}
-}
-
-relationship ManyToOne {
-	TbUsuarioAcao{idTela} to TbTela{tbUsuarioAcao}
-}
-
-relationship ManyToOne {
-	TbUsuarioAcao{idAcao} to TbAcao{tbUsuarioAcao}
-}
-
-
+relationship OneToMany {
+	 CepbrCidade{cepbrBairro} to CepbrBairro{idCidade}
+	 CepbrEstado{cepbrCidade} to CepbrCidade{uf}
+	 CepbrCidade{cepbrEndereco} to CepbrEndereco{idCidade}
+	 CepbrBairro{cepbrEndereco} to CepbrEndereco{idBairro}
+	 Respostas{acoesRespostas required} to AcoesRespostas{respostasId}
+	 PerguntasQuestionario{acoesRespostas required} to AcoesRespostas{perguntasQuestionarioId}
+	 CidXPtaNovoPadItemIndi{alertasIndicadores} to AlertasIndicadores{padItemIndicadoresId}
+	 Resultados{alertasResultadosEsperados} to AlertasResultadosEsperados{resultadosId}
+	 Paciente{atendimento} to Atendimento{idPaciente}
+	 Operadora{atendimento} to Atendimento{idOperadora}
+	 Especialidade{atendimento} to Atendimento{idEspecialidade}
+	 PadItem{atendimento} to Atendimento{idPadItem}
+	 StatusAtendimento{atendimento} to Atendimento{idStatusAtendimento}
+	 Periodo{atendimento} to Atendimento{idPeriodo}
+	 Cidade{atendimento} to Atendimento{idCidade}
+	 Profissional{atendimentoAceite required} to AtendimentoAceite{idProfissional}
+	 Atendimento{atendimentoAceite required} to AtendimentoAceite{idAtendimento}
+	 Atendimento{atendimentoAssinaturas required} to AtendimentoAssinaturas{idAtendimento}
+	 Profissional{atendimentoAssinaturas required} to AtendimentoAssinaturas{idProfissional}
+	 Paciente{atendimentoAssinaturas required} to AtendimentoAssinaturas{idPaciente}
+	 CategoriaAtividade{atendimentoAtividades required} to AtendimentoAtividades{idAtividade}
+	 Atendimento{atendimentoAtividades required} to AtendimentoAtividades{idAtendimento}
+	 PadItem{atendimentoCepRecusado required} to AtendimentoCepRecusado{idPadItem}
+	 PadItem{atendimentoSorteioFeito required} to AtendimentoSorteioFeito{idPadItem}
+	 Categoria{categoriaAtividade} to CategoriaAtividade{idCategoria}
+	 Categoria{categoriaContrato} to CategoriaContrato{idCategoria}
+	 UnidadeEasy{categoriaUnidade required} to CategoriaUnidade{idUnidade}
+	 Categoria{categoriaUnidade required} to CategoriaUnidade{idCategoria}
+	 Cid{cidXPtaNovo required} to CidXPtaNovo{cidId}
+	 CidXPtaNovo{cidXPtaNovo} to CidXPtaNovo{cidXPtaNovoId}
+	 PadItemIndicadores{cidXPtaNovoPadItemIndi required} to CidXPtaNovoPadItemIndi{padItemIndicadoresId}
+	 Categoria{cidXPtaNovoPadItemIndi} to CidXPtaNovoPadItemIndi{categoriasId}
+	 CidXPtaNovo{cidXPtaNovoPadItemIndi required} to CidXPtaNovoPadItemIndi{cidXPtaNovoId}
+	 Uf{cidade} to Cidade{idUf}
+	 Usuario{diario} to Diario{idUsuario}
+	 Paciente{diario} to Diario{idPaciente}
+	 Cidade{empresa} to Empresa{idCidade}
+	 Categoria{especialidade} to Especialidade{idCategoria}
+	 TipoEspecialidade{especialidade} to Especialidade{idTipoEspecialidade}
+	 TipoUnidade{especialidade} to Especialidade{idTipoUnidade}
+	 Operadora{especialidadeOperadora} to EspecialidadeOperadora{idOperadora}
+	 Especialidade{especialidadeOperadora} to EspecialidadeOperadora{idEspecialidade}
+	 UnidadeEasy{especialidadeUnidade required} to EspecialidadeUnidade{idUnidade}
+	 Especialidade{especialidadeUnidade required} to EspecialidadeUnidade{idEspecialidade}
+	 Especialidade{especialidadeValor} to EspecialidadeValor{idEspecialidade}
+	 Franquia{franquiaAreaAtuacao} to FranquiaAreaAtuacao{idFranquia}
+	 Franquia{franquiaStatusAtual} to FranquiaStatusAtual{idFranquia}
+	 Franquia{franquiaUsuario} to FranquiaUsuario{idFranquia}
+	 Indicadores{indicadoresValores required} to IndicadoresValores{indicadoresId}
+	 Acao{logUser} to LogUser{idAcao}
+	 Tela{logUser} to LogUser{idTela}
+	 Acao{logUserFranquia} to LogUserFranquia{idAcao}
+	 Tela{logUserFranquia} to LogUserFranquia{idTela}
+	 FranquiaUsuario{logUserFranquia} to LogUserFranquia{idUsuario}
+	 Paciente{pacienteDadosCartao} to PacienteDadosCartao{idPaciente}
+	 Paciente{pacienteDiagnostico} to PacienteDiagnostico{idPaciente}
+	 Cid{pacienteDiagnostico} to PacienteDiagnostico{idCid}
+	 Paciente{pacienteDiario} to PacienteDiario{idPaciente}
+	 Usuario{pacienteDiario} to PacienteDiario{idUsuario}
+	 Paciente{pacienteEnqueteApp} to PacienteEnqueteApp{idPaciente}
+	 Paciente{pacienteOperadora} to PacienteOperadora{idPaciente}
+	 Operadora{pacienteOperadora} to PacienteOperadora{idOperadora}
+	 UnidadeEasy{pacientePedido} to PacientePedido{idUnidade}
+	 Paciente{pacientePedido} to PacientePedido{idPaciente}
+	 PacienteDadosCartao{pacientePedido} to PacientePedido{idCartao}
+	 Especialidade{pacientePedido} to PacientePedido{idEspecialidade}
+	 Paciente{pacientePush} to PacientePush{idPaciente}
+	 Paciente{pacienteStatusAtual} to PacienteStatusAtual{idPaciente}
+	 StatusAtual{pacienteStatusAtual} to PacienteStatusAtual{idStatusAtual}
+	 Paciente{pad} to Pad{idPaciente}
+	 Pad{padCid required} to PadCid{idPad}
+	 Cid{padCid required} to PadCid{idCid}
+	 Pad{padItem} to PadItem{idPad}
+	 Especialidade{padItem} to PadItem{idEspecialidade}
+	 Periodicidade{padItem} to PadItem{idPeriodicidade}
+	 Periodo{padItem} to PadItem{idPeriodo}
+	 CategoriaAtividade{padItemAtividade} to PadItemAtividade{idAtividade}
+	 PadItem{padItemAtividade} to PadItemAtividade{idPadItem}
+	 PadItem{padItemCepRecusado required} to PadItemCepRecusado{idPadItem}
+	 PadItem{padItemResultado} to PadItemResultado{idPadItem}
+	 PadItem{padItemSorteioFeito required} to PadItemSorteioFeito{idPadItem}
+	 SegmentosPerguntas{perguntasQuestionario required} to PerguntasQuestionario{segmentosPerguntasId}
+	 StatusAtualProf{profissionalStatusAtual} to ProfissionalStatusAtual{idStatusAtualProf}
+//	 Resultados{protocolos} to Protocolos{resultadosId}
+//	 Resultados{protocolos required} to Protocolos{cidXPtaNovoId}
+//	 Resultados{protocolos} to Protocolos{categoriasId}
+	 Paciente{questionarios required} to Questionarios{pacienteId}
+	 PerguntasQuestionario{respostas required} to Respostas{perguntasQuestionarioId}
+	 Questionarios{respostasQuestionarios required} to RespostasQuestionarios{questionariosId}
+//	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{respostasId}
+//	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{perguntasQuestionarioId}
+//	 CidXPtaNovoCategorias{resultados required} to Resultados{cidXPtaNovoId}
+//	 CidXPtaNovoCategorias{resultados required} to Resultados{categoriasId}
+	 UnidadeEasy{unidadeEasyAreaAtuacao} to UnidadeEasyAreaAtuacao{idUnidade}
+	 TipoUsuario{usuario} to Usuario{idTipoUsuario}
+	 Tela{usuarioAcao} to UsuarioAcao{idTela}
+	 Acao{usuarioAcao} to UsuarioAcao{idAcao}
+}
+
+// relationship ManyToMany {
+	// CidXPtaNovoCategorias{cidXPtaNovoId required} to CidXPtaNovo{cidXPtaNovoCategorias}
+	// CidXPtaNovoCategorias{categoriasId required} to Categoria{cidXPtaNovoCategorias}
+	// QuestionariosSegmentosPerguntas{questionariosId required} to Questionarios{questionariosSegmentosPerguntas}
+	// QuestionariosSegmentosPerguntas{segmentosPerguntasId required} to SegmentosPerguntas{questionariosSegmentosPerguntas}
+//}
 
 // Options
 service * with serviceClass

@@ -1,0 +1,44 @@
+{
+    "name": "UsuarioStatusAtual",
+    "fields": [
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "statusAtual",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "obs",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503012900",
+    "entityTableName": "usuario_status_atual",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

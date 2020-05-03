@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "statusAtual": {
+      "home": {
+        "title": "Status Atuals",
+        "createLabel": "Criar novo Status Atual",
+        "createOrEditLabel": "Criar ou editar Status Atual",
+        "notFound": "Nenhum Status Atual encontrado"
+      },
+      "created": "Um novo Status Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Status Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Status Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Status Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Status Atual"
+      },
+      "statusAtual": "Status Atual",
+      "styleLabel": "Style Label",
+      "dataPost": "Data Post",
+      "pacienteStatusAtual": "Paciente Status Atual"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "grauParentesco": {
+      "home": {
+        "title": "Grau Parentescos",
+        "createLabel": "Criar novo Grau Parentesco",
+        "createOrEditLabel": "Criar ou editar Grau Parentesco",
+        "notFound": "Nenhum Grau Parentesco encontrado"
+      },
+      "created": "Um novo Grau Parentesco foi criado com o identificador {{ param }}",
+      "updated": "Um Grau Parentesco foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Grau Parentesco foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Grau Parentesco {{ id }}?"
+      },
+      "detail": {
+        "title": "Grau Parentesco"
+      },
+      "grauParentesco": "Grau Parentesco",
+      "dataPost": "Data Post"
+    }
+  }
+}

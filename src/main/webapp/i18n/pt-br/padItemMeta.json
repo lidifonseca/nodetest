@@ -1,0 +1,46 @@
+{
+  "generadorApp": {
+    "padItemMeta": {
+      "home": {
+        "title": "Pad Item Metas",
+        "createLabel": "Criar novo Pad Item Meta",
+        "createOrEditLabel": "Criar ou editar Pad Item Meta",
+        "notFound": "Nenhum Pad Item Meta encontrado"
+      },
+      "created": "Um novo Pad Item Meta foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Meta foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Meta foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Meta {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Meta"
+      },
+      "unidadeMedidaId": "Unidade Medida Id",
+      "indicadorId": "Indicador Id",
+      "idPaciente": "Id Paciente",
+      "idPad": "Id Pad",
+      "idPadItem": "Id Pad Item",
+      "minimo": "Minimo",
+      "maximo": "Maximo",
+      "meta": "Meta",
+      "valorAtual": "Valor Atual",
+      "atualizadoEm": "Atualizado Em",
+      "dataLimite": "Data Limite",
+      "frequenciaMedicaoHoras": "Frequencia Medicao Horas",
+      "tipoAcompanhamento": "Tipo Acompanhamento",
+      "atendimentoId": "Atendimento Id",
+      "email": "Email",
+      "minimoSistolica": "Minimo Sistolica",
+      "maximoSistolica": "Maximo Sistolica",
+      "minimoDiastolica": "Minimo Diastolica",
+      "maximoDiastolica": "Maximo Diastolica",
+      "idUsuario": "Id Usuario",
+      "score": "Score",
+      "alteracaoEsperada": "Alteracao Esperada",
+      "help": {
+        "tipoAcompanhamento": "melhoria ou manutencao"
+      }
+    }
+  }
+}

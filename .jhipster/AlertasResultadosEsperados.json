@@ -1,0 +1,49 @@
+{
+    "name": "AlertasResultadosEsperados",
+    "fields": [
+        {
+            "fieldName": "pontuacao",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "alteracaoEsperada",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "observacoes",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "usuarioId",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "valor",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "resultados",
+            "otherEntityRelationshipName": "alertasResultadosEsperados",
+            "relationshipName": "resultadosId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502225500",
+    "entityTableName": "alertas_resultados_esperados",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

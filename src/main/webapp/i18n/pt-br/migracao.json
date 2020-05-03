@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "migracao": {
+      "home": {
+        "title": "Migracaos",
+        "createLabel": "Criar novo Migracao",
+        "createOrEditLabel": "Criar ou editar Migracao",
+        "notFound": "Nenhum Migracao encontrado"
+      },
+      "created": "Um novo Migracao foi criado com o identificador {{ param }}",
+      "updated": "Um Migracao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Migracao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Migracao {{ id }}?"
+      },
+      "detail": {
+        "title": "Migracao"
+      },
+      "idPad": "Id Pad",
+      "dataHoraMigracao": "Data Hora Migracao"
+    }
+  }
+}

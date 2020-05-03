@@ -1,0 +1,65 @@
+{
+    "name": "NotificacaoConfigUsuario",
+    "fields": [
+        {
+            "fieldName": "notificacaoConfigId",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "profissionalId",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "pacienteId",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "atualizadoEm",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "atualizadoPor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "enviarPush",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "enviarEmail",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "observacao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200502235100",
+    "entityTableName": "notificacao_config_usuario",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

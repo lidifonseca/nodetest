@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "alertasResultadosEsperados": {
+      "home": {
+        "title": "Alertas Resultados Esperados",
+        "createLabel": "Criar novo Alertas Resultados Esperados",
+        "createOrEditLabel": "Criar ou editar Alertas Resultados Esperados",
+        "notFound": "Nenhum Alertas Resultados Esperados encontrado"
+      },
+      "created": "Um novo Alertas Resultados Esperados foi criado com o identificador {{ param }}",
+      "updated": "Um Alertas Resultados Esperados foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Alertas Resultados Esperados foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Alertas Resultados Esperados {{ id }}?"
+      },
+      "detail": {
+        "title": "Alertas Resultados Esperados"
+      },
+      "pontuacao": "Pontuacao",
+      "alteracaoEsperada": "Alteracao Esperada",
+      "observacoes": "Observacoes",
+      "usuarioId": "Usuario Id",
+      "valor": "Valor",
+      "resultadosId": "Resultados Id"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+    "name": "PadItemResultado",
+    "fields": [
+        {
+            "fieldName": "resultado",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataFim",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "resultadoAnalisado",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "usuarioId",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "padItem",
+            "otherEntityRelationshipName": "padItemResultado",
+            "relationshipName": "idPadItem",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503002400",
+    "entityTableName": "pad_item_resultado",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

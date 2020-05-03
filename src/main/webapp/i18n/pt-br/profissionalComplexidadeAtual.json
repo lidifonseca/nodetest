@@ -1,0 +1,29 @@
+{
+  "generadorApp": {
+    "profissionalComplexidadeAtual": {
+      "home": {
+        "title": "Profissional Complexidade Atuals",
+        "createLabel": "Criar novo Profissional Complexidade Atual",
+        "createOrEditLabel": "Criar ou editar Profissional Complexidade Atual",
+        "notFound": "Nenhum Profissional Complexidade Atual encontrado"
+      },
+      "created": "Um novo Profissional Complexidade Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Complexidade Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Complexidade Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Complexidade Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Complexidade Atual"
+      },
+      "idProfissional": "Id Profissional",
+      "baixa": "Baixa",
+      "media": "Media",
+      "alta": "Alta",
+      "ventilacaoMecanica": "Ventilacao Mecanica",
+      "telemonitoramente": "Telemonitoramente",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "perguntasQuestionario": {
+      "home": {
+        "title": "Perguntas Questionarios",
+        "createLabel": "Criar novo Perguntas Questionario",
+        "createOrEditLabel": "Criar ou editar Perguntas Questionario",
+        "notFound": "Nenhum Perguntas Questionario encontrado"
+      },
+      "created": "Um novo Perguntas Questionario foi criado com o identificador {{ param }}",
+      "updated": "Um Perguntas Questionario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Perguntas Questionario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Perguntas Questionario {{ id }}?"
+      },
+      "detail": {
+        "title": "Perguntas Questionario"
+      },
+      "pergunta": "Pergunta",
+      "tipoResposta": "Tipo Resposta",
+      "obrigatorio": "Obrigatorio",
+      "tipoCampo": "Tipo Campo",
+      "acoesRespostas": "Acoes Respostas",
+      "respostas": "Respostas",
+      "segmentosPerguntasId": "Segmentos Perguntas Id"
+    }
+  }
+}

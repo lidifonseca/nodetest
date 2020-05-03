@@ -1,0 +1,590 @@
+{
+    "name": "Usuario",
+    "fields": [
+        {
+            "fieldName": "idUnidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idOperadora",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1000"
+        },
+        {
+            "fieldName": "senha",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "nome",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "60"
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "telefone",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "celular",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "cpf",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "rg",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "sexo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "nascimento",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "verAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "baixaManualAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verDiario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadDiario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediDiario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delDiario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relDiario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verCategoria",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadCategoria",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediCategoria",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delCategoria",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relEspecialidadeValor",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verOperadora",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadOperadora",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediOperadora",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delOperadora",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ativProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPush",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPushPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPushProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verTermoPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediTermoPaciente",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verTermoProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediTermoProfissional",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verOutros",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadOutros",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediOutros",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delOutros",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "relOutros",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verUnidadeEasy",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadUnidadeEasy",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediUnidadeEasy",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delUnidadeEasy",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPtaResultado",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPtaResultado",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delPtaResultado",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPtaAtividade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadPtaAtividade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delPtaAtividade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "permissaoUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verProntuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadProntuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediProntuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delProntuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delProntuarioFoto",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "valoresFinanceiro",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "autorizacaoValorFinanceiro",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "confirmarPagamentoFinanceiro",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "gerenciarSorteios",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioRecusa",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioIntercorrencia",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioCancelamento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioAvaliacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioPedido",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "alertaAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "envioGlosado",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "emergencia",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "token",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "editAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ouvirLigacao",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "verPainelIndicadores",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "prorrogarPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cancelarAtendMassa",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cadMatMed",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediMatMed",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "delMatMed",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verColPta",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verColFoto",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verColLc",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verAtendCancelado",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verAtendAgConfirmacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ediGeoLocalizacaoAtendimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "copiarEvolucao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "copiarNomeProf",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "copiarRegistroProf",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idAreaAtuacao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "envioCidSemPta",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioAnaliseResultadoEsperado",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioDescumprimento",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "envioMelhoraTempo",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "senhaChat",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "45"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "diario",
+            "otherEntityRelationshipName": "idUsuario",
+            "relationshipName": "diario"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacienteDiario",
+            "otherEntityRelationshipName": "idUsuario",
+            "relationshipName": "pacienteDiario"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "tipoUsuario",
+            "otherEntityRelationshipName": "usuario",
+            "relationshipName": "idTipoUsuario",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503012500",
+    "entityTableName": "usuario",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

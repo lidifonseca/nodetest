@@ -1,0 +1,51 @@
+{
+    "name": "PadItemAlerta",
+    "fields": [
+        {
+            "fieldName": "padItemMetaId",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "envioEmailEm",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "visualizadoEm",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "criadoEm",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "mensagem",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503001800",
+    "entityTableName": "pad_item_alerta",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

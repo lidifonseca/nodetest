@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "grupoRisco": {
+      "home": {
+        "title": "Grupo Riscos",
+        "createLabel": "Criar novo Grupo Risco",
+        "createOrEditLabel": "Criar ou editar Grupo Risco",
+        "notFound": "Nenhum Grupo Risco encontrado"
+      },
+      "created": "Um novo Grupo Risco foi criado com o identificador {{ param }}",
+      "updated": "Um Grupo Risco foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Grupo Risco foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Grupo Risco {{ id }}?"
+      },
+      "detail": {
+        "title": "Grupo Risco"
+      },
+      "grupoRisco": "Grupo Risco",
+      "styleLabel": "Style Label",
+      "dataPost": "Data Post"
+    }
+  }
+}

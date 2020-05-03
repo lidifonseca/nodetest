@@ -1,0 +1,62 @@
+{
+    "name": "PacienteStatusAtual",
+    "fields": [
+        {
+            "fieldName": "dataStatus",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "observacao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteStatusAtual",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "statusAtual",
+            "otherEntityRelationshipName": "pacienteStatusAtual",
+            "relationshipName": "idStatusAtual",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503001400",
+    "entityTableName": "paciente_status_atual",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

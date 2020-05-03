@@ -18,7 +18,9 @@
       },
       "descrCidade": "Descr Cidade",
       "dataPost": "Data Post",
-      "pacientes": "Pacientes"
+      "atendimento": "Atendimento",
+      "empresa": "Empresa",
+      "idUf": "Id Uf"
     }
   }
 }

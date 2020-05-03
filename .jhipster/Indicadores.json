@@ -1,0 +1,33 @@
+{
+    "name": "Indicadores",
+    "fields": [
+        {
+            "fieldName": "titulo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "145"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "indicadoresValores",
+            "otherEntityRelationshipName": "indicadoresId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "indicadoresValores"
+        }
+    ],
+    "changelogDate": "20200502233700",
+    "entityTableName": "indicadores",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

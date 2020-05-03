@@ -1,0 +1,39 @@
+{
+    "name": "TipoEspecialidade",
+    "fields": [
+        {
+            "fieldName": "tipoEspecialidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "idTipoEspecialidade",
+            "relationshipName": "especialidade"
+        }
+    ],
+    "changelogDate": "20200503011200",
+    "entityTableName": "tipo_especialidade",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

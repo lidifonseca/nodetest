@@ -1,0 +1,33 @@
+{
+  "generadorApp": {
+    "pacientePedido": {
+      "home": {
+        "title": "Paciente Pedidos",
+        "createLabel": "Criar novo Paciente Pedido",
+        "createOrEditLabel": "Criar ou editar Paciente Pedido",
+        "notFound": "Nenhum Paciente Pedido encontrado"
+      },
+      "created": "Um novo Paciente Pedido foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Pedido foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Pedido foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Pedido {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Pedido"
+      },
+      "dataPedido": "Data Pedido",
+      "dataAgenda": "Data Agenda",
+      "qtdSessoes": "Qtd Sessoes",
+      "parcelas": "Parcelas",
+      "valor": "Valor",
+      "desconto": "Desconto",
+      "tipoValor": "Tipo Valor",
+      "dataPost": "Data Post",
+      "idUnidade": "Id Unidade",
+      "idPaciente": "Id Paciente",
+      "idCartao": "Id Cartao",
+      "idEspecialidade": "Id Especialidade"
+    }
+  }
+}

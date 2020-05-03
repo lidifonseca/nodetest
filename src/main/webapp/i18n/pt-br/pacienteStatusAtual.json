@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "pacienteStatusAtual": {
+      "home": {
+        "title": "Paciente Status Atuals",
+        "createLabel": "Criar novo Paciente Status Atual",
+        "createOrEditLabel": "Criar ou editar Paciente Status Atual",
+        "notFound": "Nenhum Paciente Status Atual encontrado"
+      },
+      "created": "Um novo Paciente Status Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Status Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Status Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Status Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Status Atual"
+      },
+      "dataStatus": "Data Status",
+      "observacao": "Observacao",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "idUsuario": "Id Usuario",
+      "idPaciente": "Id Paciente",
+      "idStatusAtual": "Id Status Atual"
+    }
+  }
+}

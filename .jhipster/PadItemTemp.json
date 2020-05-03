@@ -1,0 +1,77 @@
+{
+    "name": "PadItemTemp",
+    "fields": [
+        {
+            "fieldName": "sessionId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "idEspecialidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idPeriodicidade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idPeriodo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataInicio",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataFim",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "qtdSessoes",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "observacao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "cidXPtaNovoId",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "categoriaId",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "numGhc",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "40"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503002600",
+    "entityTableName": "pad_item_temp",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

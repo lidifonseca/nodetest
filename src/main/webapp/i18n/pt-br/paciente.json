@@ -16,6 +16,11 @@
       "detail": {
         "title": "Paciente"
       },
+      "idUnidade": "Id Unidade",
+      "idFranquia": "Id Franquia",
+      "idCidade": "Id Cidade",
+      "idCidadeFamiliar": "Id Cidade Familiar",
+      "idGrauParentesco": "Id Grau Parentesco",
       "senha": "Senha",
       "nome": "Nome",
       "email": "Email",
@@ -33,6 +38,7 @@
       "numero": "Numero",
       "complemento": "Complemento",
       "bairro": "Bairro",
+      "cidade": "Cidade",
       "uf": "Uf",
       "latitude": "Latitude",
       "longitude": "Longitude",
@@ -51,6 +57,7 @@
       "numeroFamiliar": "Numero Familiar",
       "complementoFamiliar": "Complemento Familiar",
       "bairroFamiliar": "Bairro Familiar",
+      "cidadeFamiliar": "Cidade Familiar",
       "ufFamiliar": "Uf Familiar",
       "latitudeFamiliar": "Latitude Familiar",
       "longitudeFamiliar": "Longitude Familiar",
@@ -75,7 +82,19 @@
       "expoToken": "Expo Token",
       "profissionalPref": "Profissional Pref",
       "senhaChat": "Senha Chat",
-      "cidade": "Cidade"
+      "atendimento": "Atendimento",
+      "atendimentoAssinaturas": "Atendimento Assinaturas",
+      "diario": "Diario",
+      "pacienteDadosCartao": "Paciente Dados Cartao",
+      "pacienteDiagnostico": "Paciente Diagnostico",
+      "pacienteDiario": "Paciente Diario",
+      "pacienteEnqueteApp": "Paciente Enquete App",
+      "pacienteOperadora": "Paciente Operadora",
+      "pacientePedido": "Paciente Pedido",
+      "pacientePush": "Paciente Push",
+      "pacienteStatusAtual": "Paciente Status Atual",
+      "pad": "Pad",
+      "questionarios": "Questionarios"
     }
   }
 }

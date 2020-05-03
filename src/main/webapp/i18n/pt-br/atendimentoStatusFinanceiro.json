@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "atendimentoStatusFinanceiro": {
+      "home": {
+        "title": "Atendimento Status Financeiros",
+        "createLabel": "Criar novo Atendimento Status Financeiro",
+        "createOrEditLabel": "Criar ou editar Atendimento Status Financeiro",
+        "notFound": "Nenhum Atendimento Status Financeiro encontrado"
+      },
+      "created": "Um novo Atendimento Status Financeiro foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Status Financeiro foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Status Financeiro foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Status Financeiro {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Status Financeiro"
+      },
+      "idAtendimento": "Id Atendimento",
+      "idStatusFinanceiro": "Id Status Financeiro",
+      "idUsuario": "Id Usuario",
+      "dataPost": "Data Post"
+    }
+  }
+}

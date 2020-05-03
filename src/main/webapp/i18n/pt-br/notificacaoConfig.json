@@ -1,0 +1,34 @@
+{
+  "generadorApp": {
+    "notificacaoConfig": {
+      "home": {
+        "title": "Notificacao Configs",
+        "createLabel": "Criar novo Notificacao Config",
+        "createOrEditLabel": "Criar ou editar Notificacao Config",
+        "notFound": "Nenhum Notificacao Config encontrado"
+      },
+      "created": "Um novo Notificacao Config foi criado com o identificador {{ param }}",
+      "updated": "Um Notificacao Config foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Notificacao Config foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Notificacao Config {{ id }}?"
+      },
+      "detail": {
+        "title": "Notificacao Config"
+      },
+      "criadoEm": "Criado Em",
+      "titulo": "Titulo",
+      "referencia": "Referencia",
+      "descricao": "Descricao",
+      "ativo": "Ativo",
+      "envioObrigatorio": "Envio Obrigatorio",
+      "serveProfissional": "Serve Profissional",
+      "servePaciente": "Serve Paciente",
+      "help": {
+        "referencia": "Este campo é usado como uma chave para identificar qual a notificação à ser tratada. Pode ser o nome da função que controla o envio de push/email para o paciente e/ou profissionais.",
+        "ativo": "0 = Inativo / 1 = Ativo",
+        "envioObrigatorio": "Caso valor=1 o app obriga o usário escolher envios por push e/ou email."
+      }
+    }
+  }
+}

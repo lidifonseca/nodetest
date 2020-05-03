@@ -1,0 +1,30 @@
+{
+  "generadorApp": {
+    "cid": {
+      "home": {
+        "title": "Cids",
+        "createLabel": "Criar novo Cid",
+        "createOrEditLabel": "Criar ou editar Cid",
+        "notFound": "Nenhum Cid encontrado"
+      },
+      "created": "Um novo Cid foi criado com o identificador {{ param }}",
+      "updated": "Um Cid foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cid foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cid {{ id }}?"
+      },
+      "detail": {
+        "title": "Cid"
+      },
+      "codigo": "Codigo",
+      "diagnostico": "Diagnostico",
+      "gr": "Gr",
+      "temp": "Temp",
+      "apelido": "Apelido",
+      "dataPost": "Data Post",
+      "cidXPtaNovo": "Cid X Pta Novo",
+      "pacienteDiagnostico": "Paciente Diagnostico",
+      "padCid": "Pad Cid"
+    }
+  }
+}

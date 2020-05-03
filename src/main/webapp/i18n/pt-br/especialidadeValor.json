@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "especialidadeValor": {
+      "home": {
+        "title": "Especialidade Valors",
+        "createLabel": "Criar novo Especialidade Valor",
+        "createOrEditLabel": "Criar ou editar Especialidade Valor",
+        "notFound": "Nenhum Especialidade Valor encontrado"
+      },
+      "created": "Um novo Especialidade Valor foi criado com o identificador {{ param }}",
+      "updated": "Um Especialidade Valor foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Especialidade Valor foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Especialidade Valor {{ id }}?"
+      },
+      "detail": {
+        "title": "Especialidade Valor"
+      },
+      "idFranquia": "Id Franquia",
+      "valor": "Valor",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "idEspecialidade": "Id Especialidade"
+    }
+  }
+}

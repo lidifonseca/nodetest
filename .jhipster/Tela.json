@@ -1,0 +1,51 @@
+{
+    "name": "Tela",
+    "fields": [
+        {
+            "fieldName": "tela",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "logUser",
+            "otherEntityRelationshipName": "idTela",
+            "relationshipName": "logUser"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "logUserFranquia",
+            "otherEntityRelationshipName": "idTela",
+            "relationshipName": "logUserFranquia"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "usuarioAcao",
+            "otherEntityRelationshipName": "idTela",
+            "relationshipName": "usuarioAcao"
+        }
+    ],
+    "changelogDate": "20200503010900",
+    "entityTableName": "tela",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

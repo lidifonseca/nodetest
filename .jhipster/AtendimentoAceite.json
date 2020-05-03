@@ -1,0 +1,47 @@
+{
+    "name": "AtendimentoAceite",
+    "fields": [
+        {
+            "fieldName": "msgPush",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "profissional",
+            "otherEntityRelationshipName": "atendimentoAceite",
+            "relationshipName": "idProfissional",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "atendimentoAceite",
+            "relationshipName": "idAtendimento",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502230000",
+    "entityTableName": "atendimento_aceite",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

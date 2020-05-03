@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "profissionalEspecialidadeNew": {
+      "home": {
+        "title": "Profissional Especialidade News",
+        "createLabel": "Criar novo Profissional Especialidade New",
+        "createOrEditLabel": "Criar ou editar Profissional Especialidade New",
+        "notFound": "Nenhum Profissional Especialidade New encontrado"
+      },
+      "created": "Um novo Profissional Especialidade New foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Especialidade New foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Especialidade New foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Especialidade New {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Especialidade New"
+      },
+      "idEspecialidade": "Id Especialidade",
+      "idProfissional": "Id Profissional",
+      "dataPost": "Data Post"
+    }
+  }
+}

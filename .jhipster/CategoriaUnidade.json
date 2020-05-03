@@ -1,0 +1,39 @@
+{
+    "name": "CategoriaUnidade",
+    "fields": [
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "categoriaUnidade",
+            "relationshipName": "idUnidade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "categoria",
+            "otherEntityRelationshipName": "categoriaUnidade",
+            "relationshipName": "idCategoria",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502231400",
+    "entityTableName": "categoria_unidade",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

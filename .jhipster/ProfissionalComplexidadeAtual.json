@@ -1,0 +1,55 @@
+{
+    "name": "ProfissionalComplexidadeAtual",
+    "fields": [
+        {
+            "fieldName": "idProfissional",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "baixa",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "media",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "alta",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ventilacaoMecanica",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "telemonitoramente",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503003800",
+    "entityTableName": "profissional_complexidade_atual",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

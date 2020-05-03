@@ -1,0 +1,114 @@
+{
+    "name": "ProfissionalDispositivoAtual",
+    "fields": [
+        {
+            "fieldName": "idProfissional",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "tqtTraqueostomia",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "gttGastrostomia",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "sneSondaNasoenteral",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "svdSondaVesicalDeDemora",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "svaSondaVesicalDeAlivio",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "portACath",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "piccAcessoVenosoCentral",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ventiladores",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "uppUlceraPorPressao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "avpAcessoVenosoPeriferico",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "uripen",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "fraldaGeriatrica",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "sngSondaNasogastrica",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "bipap",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cpap",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cistostomia",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "cateterNasalDeOxigenio",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "mascaraDeVentilacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "entubacaoOrotraqueal",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503003900",
+    "entityTableName": "profissional_dispositivo_atual",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

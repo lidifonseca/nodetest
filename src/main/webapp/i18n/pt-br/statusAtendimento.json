@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "statusAtendimento": {
+      "home": {
+        "title": "Status Atendimentos",
+        "createLabel": "Criar novo Status Atendimento",
+        "createOrEditLabel": "Criar ou editar Status Atendimento",
+        "notFound": "Nenhum Status Atendimento encontrado"
+      },
+      "created": "Um novo Status Atendimento foi criado com o identificador {{ param }}",
+      "updated": "Um Status Atendimento foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Status Atendimento foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Status Atendimento {{ id }}?"
+      },
+      "detail": {
+        "title": "Status Atendimento"
+      },
+      "statusAtendimento": "Status Atendimento",
+      "styleLabel": "Style Label",
+      "ordenacao": "Ordenacao",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "atendimento": "Atendimento"
+    }
+  }
+}

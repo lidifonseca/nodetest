@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "atendimentoAtividades": {
+      "home": {
+        "title": "Atendimento Atividades",
+        "createLabel": "Criar novo Atendimento Atividades",
+        "createOrEditLabel": "Criar ou editar Atendimento Atividades",
+        "notFound": "Nenhum Atendimento Atividades encontrado"
+      },
+      "created": "Um novo Atendimento Atividades foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Atividades foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Atividades foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Atividades {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Atividades"
+      },
+      "feito": "Feito",
+      "dataPost": "Data Post",
+      "idAtividade": "Id Atividade",
+      "idAtendimento": "Id Atendimento"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+    "name": "ProntuarioMotivoManifestacao",
+    "fields": [
+        {
+            "fieldName": "idProntuario",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idPaciente",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idMotivo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idMotivoFilho",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idManifestacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idManifestacaoFilho",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "sugestao",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "informacaoAdicional",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503005100",
+    "entityTableName": "prontuario_motivo_manifestacao",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

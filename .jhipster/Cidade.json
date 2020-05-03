@@ -20,12 +20,25 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "paciente",
+            "otherEntityName": "atendimento",
+            "otherEntityRelationshipName": "idCidade",
+            "relationshipName": "atendimento"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "empresa",
+            "otherEntityRelationshipName": "idCidade",
+            "relationshipName": "empresa"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "uf",
             "otherEntityRelationshipName": "cidade",
-            "relationshipName": "pacientes"
+            "relationshipName": "idUf",
+            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200502200000",
+    "changelogDate": "20200502231800",
     "entityTableName": "cidade",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "logPacAcesso": {
+      "home": {
+        "title": "Log Pac Acessos",
+        "createLabel": "Criar novo Log Pac Acesso",
+        "createOrEditLabel": "Criar ou editar Log Pac Acesso",
+        "notFound": "Nenhum Log Pac Acesso encontrado"
+      },
+      "created": "Um novo Log Pac Acesso foi criado com o identificador {{ param }}",
+      "updated": "Um Log Pac Acesso foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Log Pac Acesso foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Log Pac Acesso {{ id }}?"
+      },
+      "detail": {
+        "title": "Log Pac Acesso"
+      },
+      "idPaciente": "Id Paciente",
+      "profissional": "Profissional",
+      "token": "Token",
+      "ipLocal": "Ip Local",
+      "inforAcesso": "Infor Acesso",
+      "dataPost": "Data Post"
+    }
+  }
+}

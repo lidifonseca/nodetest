@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "tokenUsuario": {
+      "home": {
+        "title": "Token Usuarios",
+        "createLabel": "Criar novo Token Usuario",
+        "createOrEditLabel": "Criar ou editar Token Usuario",
+        "notFound": "Nenhum Token Usuario encontrado"
+      },
+      "created": "Um novo Token Usuario foi criado com o identificador {{ param }}",
+      "updated": "Um Token Usuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Token Usuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Token Usuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Token Usuario"
+      },
+      "idPaciente": "Id Paciente",
+      "token": "Token",
+      "dataValida": "Data Valida",
+      "dataPost": "Data Post"
+    }
+  }
+}

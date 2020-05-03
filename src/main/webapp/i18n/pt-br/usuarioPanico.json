@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "usuarioPanico": {
+      "home": {
+        "title": "Usuario Panicos",
+        "createLabel": "Criar novo Usuario Panico",
+        "createOrEditLabel": "Criar ou editar Usuario Panico",
+        "notFound": "Nenhum Usuario Panico encontrado"
+      },
+      "created": "Um novo Usuario Panico foi criado com o identificador {{ param }}",
+      "updated": "Um Usuario Panico foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Usuario Panico foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Usuario Panico {{ id }}?"
+      },
+      "detail": {
+        "title": "Usuario Panico"
+      },
+      "idPaciente": "Id Paciente",
+      "idUsuario": "Id Usuario",
+      "idProfissional": "Id Profissional",
+      "observacao": "Observacao",
+      "resolvido": "Resolvido",
+      "idUserResolvido": "Id User Resolvido",
+      "dataPost": "Data Post"
+    }
+  }
+}

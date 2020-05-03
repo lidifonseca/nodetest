@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "atividades": {
+      "home": {
+        "title": "Atividades",
+        "createLabel": "Criar novo Atividades",
+        "createOrEditLabel": "Criar ou editar Atividades",
+        "notFound": "Nenhum Atividades encontrado"
+      },
+      "created": "Um novo Atividades foi criado com o identificador {{ param }}",
+      "updated": "Um Atividades foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atividades foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atividades {{ id }}?"
+      },
+      "detail": {
+        "title": "Atividades"
+      },
+      "atividade": "Atividade",
+      "ativo": "Ativo"
+    }
+  }
+}

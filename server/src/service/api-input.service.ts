@@ -1,0 +1,61 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
+import ApiInput from '../domain/api-input.entity';
+import { ApiInputRepository } from '../repository/api-input.repository';
+
+const relationshipNames = [];
+
+@Injectable()
+export class ApiInputService {
+  logger = new Logger('ApiInputService');
+
+  constructor(@InjectRepository(ApiInputRepository) private apiInputRepository: ApiInputRepository) {}
+
+  async findById(id: string): Promise<ApiInput | undefined> {
+    const options = { relations: relationshipNames };
+    return await this.apiInputRepository.findOne(id, options);
+  }
+
+  async findByfields(options: FindOneOptions<ApiInput>): Promise<ApiInput | undefined> {
+    return await this.apiInputRepository.findOne(options);
+  }
+
+  async findAndCount(
+    options: FindManyOptions<ApiInput>,
+    filters?: Array<{ column: string; value: string; operation: string }>[]
+  ): Promise<[ApiInput[], number]> {
+    options.relations = relationshipNames;
+    let where = '';
+    let first = true;
+    for (const i in filters) {
+      if (filters.hasOwnProperty(i)) {
+        const element = filters[i];
+        if (!first) {
+          where += 'and';
+        } else {
+          first = false;
+        }
+        if (element['operation'] === 'contains') {
+          where += ' `ApiInput`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+        } else if (element['operation'] === 'equals') {
+          where += ' `ApiInput`.`' + element['column'] + '` = "' + element['value'] + '" ';
+        }
+      }
+    }
+    options.where = where;
+    return await this.apiInputRepository.findAndCount(options);
+  }
+
+  async save(apiInput: ApiInput): Promise<ApiInput | undefined> {
+    return await this.apiInputRepository.save(apiInput);
+  }
+
+  async update(apiInput: ApiInput): Promise<ApiInput | undefined> {
+    return await this.save(apiInput);
+  }
+
+  async delete(apiInput: ApiInput): Promise<ApiInput | undefined> {
+    return await this.apiInputRepository.remove(apiInput);
+  }
+}

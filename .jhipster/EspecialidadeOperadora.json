@@ -1,0 +1,83 @@
+{
+    "name": "EspecialidadeOperadora",
+    "fields": [
+        {
+            "fieldName": "codTuss",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "codDespesa",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "5"
+        },
+        {
+            "fieldName": "codTabela",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "5"
+        },
+        {
+            "fieldName": "valorCusto",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "valorVenda",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "descontoCusto",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "descontoVenda",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "operadora",
+            "otherEntityRelationshipName": "especialidadeOperadora",
+            "relationshipName": "idOperadora",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "especialidadeOperadora",
+            "relationshipName": "idEspecialidade",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502232500",
+    "entityTableName": "especialidade_operadora",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

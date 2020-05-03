@@ -1,0 +1,66 @@
+{
+    "name": "PacienteDadosCartao",
+    "fields": [
+        {
+            "fieldName": "bandeira",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "40"
+        },
+        {
+            "fieldName": "numeroCartao",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "validade",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "codAtivacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "pacientePedido",
+            "otherEntityRelationshipName": "idCartao",
+            "relationshipName": "pacientePedido"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteDadosCartao",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502235800",
+    "entityTableName": "paciente_dados_cartao",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

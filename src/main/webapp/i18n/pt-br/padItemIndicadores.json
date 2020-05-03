@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "padItemIndicadores": {
+      "home": {
+        "title": "Pad Item Indicadores",
+        "createLabel": "Criar novo Pad Item Indicadores",
+        "createOrEditLabel": "Criar ou editar Pad Item Indicadores",
+        "notFound": "Nenhum Pad Item Indicadores encontrado"
+      },
+      "created": "Um novo Pad Item Indicadores foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Indicadores foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Indicadores foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Indicadores {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Indicadores"
+      },
+      "idUnidadeMedida": "Id Unidade Medida",
+      "titulo": "Titulo",
+      "descricao": "Descricao",
+      "meta": "Meta",
+      "maximoSt": "Maximo St",
+      "minimoSt": "Minimo St",
+      "cidXPtaNovoPadItemIndi": "Cid X Pta Novo Pad Item Indi"
+    }
+  }
+}

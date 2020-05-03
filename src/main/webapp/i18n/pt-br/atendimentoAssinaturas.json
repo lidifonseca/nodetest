@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "atendimentoAssinaturas": {
+      "home": {
+        "title": "Atendimento Assinaturas",
+        "createLabel": "Criar novo Atendimento Assinaturas",
+        "createOrEditLabel": "Criar ou editar Atendimento Assinaturas",
+        "notFound": "Nenhum Atendimento Assinaturas encontrado"
+      },
+      "created": "Um novo Atendimento Assinaturas foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Assinaturas foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Assinaturas foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Assinaturas {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Assinaturas"
+      },
+      "arquivoAssinatura": "Arquivo Assinatura",
+      "dataPost": "Data Post",
+      "idAtendimento": "Id Atendimento",
+      "idProfissional": "Id Profissional",
+      "idPaciente": "Id Paciente"
+    }
+  }
+}

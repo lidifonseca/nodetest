@@ -1,0 +1,30 @@
+{
+  "generadorApp": {
+    "padCsv": {
+      "home": {
+        "title": "Pad Csvs",
+        "createLabel": "Criar novo Pad Csv",
+        "createOrEditLabel": "Criar ou editar Pad Csv",
+        "notFound": "Nenhum Pad Csv encontrado"
+      },
+      "created": "Um novo Pad Csv foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Csv foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Csv foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Csv {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Csv"
+      },
+      "idFranquia": "Id Franquia",
+      "idPaciente": "Id Paciente",
+      "nroPad": "Nro Pad",
+      "dataInicio": "Data Inicio",
+      "dataFim": "Data Fim",
+      "idEspecialidade": "Id Especialidade",
+      "idPeriodicidade": "Id Periodicidade",
+      "idPeriodo": "Id Periodo",
+      "qtdSessoes": "Qtd Sessoes"
+    }
+  }
+}

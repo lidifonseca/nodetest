@@ -1,0 +1,29 @@
+{
+  "generadorApp": {
+    "pacienteDiagnostico": {
+      "home": {
+        "title": "Paciente Diagnosticos",
+        "createLabel": "Criar novo Paciente Diagnostico",
+        "createOrEditLabel": "Criar ou editar Paciente Diagnostico",
+        "notFound": "Nenhum Paciente Diagnostico encontrado"
+      },
+      "created": "Um novo Paciente Diagnostico foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Diagnostico foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Diagnostico foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Diagnostico {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Diagnostico"
+      },
+      "observacao": "Observacao",
+      "ativo": "Ativo",
+      "dataPost": "Data Post",
+      "cidPrimario": "Cid Primario",
+      "complexidade": "Complexidade",
+      "cidComAlta": "Cid Com Alta",
+      "idPaciente": "Id Paciente",
+      "idCid": "Id Cid"
+    }
+  }
+}

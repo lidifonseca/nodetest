@@ -1,0 +1,29 @@
+{
+    "name": "PadItemHistDataIncComp",
+    "fields": [
+        {
+            "fieldName": "idPadItem",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dataPadItemIncompleto",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "dataPadItemCompleto",
+            "fieldType": "Instant"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503002100",
+    "entityTableName": "pad_item_hist_data_inc_comp",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

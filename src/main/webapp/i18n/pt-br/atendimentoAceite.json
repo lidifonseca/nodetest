@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "atendimentoAceite": {
+      "home": {
+        "title": "Atendimento Aceites",
+        "createLabel": "Criar novo Atendimento Aceite",
+        "createOrEditLabel": "Criar ou editar Atendimento Aceite",
+        "notFound": "Nenhum Atendimento Aceite encontrado"
+      },
+      "created": "Um novo Atendimento Aceite foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Aceite foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Aceite foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Aceite {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Aceite"
+      },
+      "msgPush": "Msg Push",
+      "dataPost": "Data Post",
+      "idProfissional": "Id Profissional",
+      "idAtendimento": "Id Atendimento"
+    }
+  }
+}

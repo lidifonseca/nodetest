@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "prontuarioTipoMotivo": {
+      "home": {
+        "title": "Prontuario Tipo Motivos",
+        "createLabel": "Criar novo Prontuario Tipo Motivo",
+        "createOrEditLabel": "Criar ou editar Prontuario Tipo Motivo",
+        "notFound": "Nenhum Prontuario Tipo Motivo encontrado"
+      },
+      "created": "Um novo Prontuario Tipo Motivo foi criado com o identificador {{ param }}",
+      "updated": "Um Prontuario Tipo Motivo foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Prontuario Tipo Motivo foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Prontuario Tipo Motivo {{ id }}?"
+      },
+      "detail": {
+        "title": "Prontuario Tipo Motivo"
+      },
+      "nome": "Nome",
+      "idPai": "Id Pai",
+      "ativo": "Ativo",
+      "classe": "Classe",
+      "name": "Name",
+      "idTipoProntuario": "Id Tipo Prontuario"
+    }
+  }
+}

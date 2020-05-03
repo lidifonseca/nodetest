@@ -1,0 +1,48 @@
+{
+    "name": "Respostas",
+    "fields": [
+        {
+            "fieldName": "resposta",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "245"
+        },
+        {
+            "fieldName": "pontuacao",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "respostaAtiva",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "acoesRespostas",
+            "otherEntityRelationshipName": "respostasId",
+            "relationshipValidateRules": "required",
+            "relationshipName": "acoesRespostas"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "perguntasQuestionario",
+            "otherEntityRelationshipName": "respostas",
+            "relationshipName": "perguntasQuestionarioId",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503005800",
+    "entityTableName": "respostas",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,57 @@
+{
+    "name": "CategoriaAtividade",
+    "fields": [
+        {
+            "fieldName": "atividade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idUnidade",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "atendimentoAtividades",
+            "otherEntityRelationshipName": "idAtividade",
+            "relationshipValidateRules": "required",
+            "relationshipName": "atendimentoAtividades"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padItemAtividade",
+            "otherEntityRelationshipName": "idAtividade",
+            "relationshipName": "padItemAtividade"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "categoria",
+            "otherEntityRelationshipName": "categoriaAtividade",
+            "relationshipName": "idCategoria",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502231200",
+    "entityTableName": "categoria_atividade",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

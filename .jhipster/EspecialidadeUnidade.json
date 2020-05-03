@@ -1,0 +1,63 @@
+{
+    "name": "EspecialidadeUnidade",
+    "fields": [
+        {
+            "fieldName": "valorBaixaUrg",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "valorAltaUrg",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "valorPagar",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "publicar",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "comentarioPreco",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "255"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "especialidadeUnidade",
+            "relationshipName": "idUnidade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "especialidade",
+            "otherEntityRelationshipName": "especialidadeUnidade",
+            "relationshipName": "idEspecialidade",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200502232600",
+    "entityTableName": "especialidade_unidade",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

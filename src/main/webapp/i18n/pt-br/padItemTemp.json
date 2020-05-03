@@ -1,0 +1,33 @@
+{
+  "generadorApp": {
+    "padItemTemp": {
+      "home": {
+        "title": "Pad Item Temps",
+        "createLabel": "Criar novo Pad Item Temp",
+        "createOrEditLabel": "Criar ou editar Pad Item Temp",
+        "notFound": "Nenhum Pad Item Temp encontrado"
+      },
+      "created": "Um novo Pad Item Temp foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Temp foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Temp foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Temp {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Temp"
+      },
+      "sessionId": "Session Id",
+      "idEspecialidade": "Id Especialidade",
+      "idPeriodicidade": "Id Periodicidade",
+      "idPeriodo": "Id Periodo",
+      "dataInicio": "Data Inicio",
+      "dataFim": "Data Fim",
+      "qtdSessoes": "Qtd Sessoes",
+      "observacao": "Observacao",
+      "dataPost": "Data Post",
+      "cidXPtaNovoId": "Cid X Pta Novo Id",
+      "categoriaId": "Categoria Id",
+      "numGhc": "Num Ghc"
+    }
+  }
+}

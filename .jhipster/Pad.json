@@ -1,0 +1,108 @@
+{
+    "name": "Pad",
+    "fields": [
+        {
+            "fieldName": "idUnidade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idOperadora",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "idFranquia",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "nroPad",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "dataInicio",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataFim",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dataConferido",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "ativo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dataPost",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "statusPad",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "novoModelo",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "imagePath",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "250"
+        },
+        {
+            "fieldName": "score",
+            "fieldType": "Double"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padCid",
+            "otherEntityRelationshipName": "idPad",
+            "relationshipValidateRules": "required",
+            "relationshipName": "padCid"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "padItem",
+            "otherEntityRelationshipName": "idPad",
+            "relationshipName": "padItem"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pad",
+            "relationshipName": "idPaciente",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200503001500",
+    "entityTableName": "pad",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

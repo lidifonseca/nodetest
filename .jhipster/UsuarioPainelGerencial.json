@@ -1,0 +1,180 @@
+{
+    "name": "UsuarioPainelGerencial",
+    "fields": [
+        {
+            "fieldName": "idUsuario",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "verCronicos",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verPacientesAtivosCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroPacientesAtivosCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumHospCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumHospCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumDesospCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumDesospCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumPsCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumPsCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumObitoCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumObitoCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verIndCliEstaveisCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroIndCliEstaveisCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumConsMedInternasCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumConsMedInternasCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumConsMedExternasCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumConsMedExternasCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumLaboratorialCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumLaboratorialCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumImagemCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumImagemCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumOutrosCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumOutrosCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumAtCatCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumAtCatCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verNumCatCompCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroNumCatCompCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verAtCmSucessoCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroAtCmSucessoCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verMediaPadAbertoCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroMediaPadAbertoCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verAtIntercorrenciaCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroAtIntercorrenciaCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verTempoMedioAtCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroTempoMedioAtCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verMediaPtaCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroMediaPtaCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "verIndicadorUsoAppCr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "filtroIndicadorUsoAppCr",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200503012700",
+    "entityTableName": "usuario_painel_gerencial",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}
