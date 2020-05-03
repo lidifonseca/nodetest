@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -45,7 +45,6 @@ export interface IProfissionalStatusAtualBaseState {
   idProfissional: any;
   obs: any;
   ativo: any;
-  dataPost: any;
   idUsuario: any;
   idStatusAtualProf: any;
 }
@@ -67,7 +66,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const obs = url.searchParams.get('obs') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
 
     const idStatusAtualProf = url.searchParams.get('idStatusAtualProf') || '';
@@ -76,7 +74,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       idProfissional,
       obs,
       ativo,
-      dataPost,
       idUsuario,
       idStatusAtualProf
     };
@@ -94,7 +91,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
         idProfissional: '',
         obs: '',
         ativo: '',
-        dataPost: '',
         idUsuario: '',
         idStatusAtualProf: ''
       },
@@ -150,9 +146,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
@@ -166,18 +159,8 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, obs, ativo, dataPost, idUsuario, idStatusAtualProf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      idProfissional,
-      obs,
-      ativo,
-      dataPost,
-      idUsuario,
-      idStatusAtualProf,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idProfissional, obs, ativo, idUsuario, idStatusAtualProf, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, obs, ativo, idUsuario, idStatusAtualProf, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -233,16 +216,7 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                           <Label id="obsLabel" for="profissional-status-atual-obs">
                             <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="obs"
-                            id="profissional-status-atual-obs"
-                            value={this.state.obs}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -255,37 +229,11 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                       </Col>
                       <Col md="3">
                         <Row>
-                          <Label id="dataPostLabel" for="profissional-status-atual-dataPost">
-                            <Translate contentKey="generadorApp.profissionalStatusAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-status-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
                           <Label id="idUsuarioLabel" for="profissional-status-atual-idUsuario">
                             <Translate contentKey="generadorApp.profissionalStatusAtual.idUsuario">Id Usuario</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUsuario"
-                            id="profissional-status-atual-idUsuario"
-                            value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUsuario" id="profissional-status-atual-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
 
@@ -354,10 +302,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                         <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalStatusAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('idUsuario')}>
                         <Translate contentKey="generadorApp.profissionalStatusAtual.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -385,10 +329,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                         <td>{profissionalStatusAtual.obs}</td>
 
                         <td>{profissionalStatusAtual.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalStatusAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{profissionalStatusAtual.idUsuario}</td>
                         <td>

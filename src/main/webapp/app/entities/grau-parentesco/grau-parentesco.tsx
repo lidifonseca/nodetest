@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -40,7 +31,6 @@ export interface IGrauParentescoProps extends StateProps, DispatchProps, RouteCo
 
 export interface IGrauParentescoBaseState {
   grauParentesco: any;
-  dataPost: any;
 }
 export interface IGrauParentescoState extends IGrauParentescoBaseState, IPaginationBaseState {}
 
@@ -58,11 +48,9 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
   getGrauParentescoState = (location): IGrauParentescoBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const grauParentesco = url.searchParams.get('grauParentesco') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
-      grauParentesco,
-      dataPost
+      grauParentesco
     };
   };
 
@@ -73,8 +61,7 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
   cancelCourse = () => {
     this.setState(
       {
-        grauParentesco: '',
-        dataPost: ''
+        grauParentesco: ''
       },
       () => this.sortEntities()
     );
@@ -122,9 +109,6 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
       'grauParentesco=' +
       this.state.grauParentesco +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -132,8 +116,8 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { grauParentesco, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(grauParentesco, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { grauParentesco, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(grauParentesco, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -179,27 +163,6 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
                             name="grauParentesco"
                             id="grau-parentesco-grauParentesco"
                             value={this.state.grauParentesco}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="grau-parentesco-dataPost">
-                            <Translate contentKey="generadorApp.grauParentesco.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="grau-parentesco-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -234,10 +197,6 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
                         <Translate contentKey="generadorApp.grauParentesco.grauParentesco">Grau Parentesco</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.grauParentesco.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -253,10 +212,6 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
                         </td>
 
                         <td>{grauParentesco.grauParentesco}</td>
-
-                        <td>
-                          <TextFormat type="date" value={grauParentesco.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

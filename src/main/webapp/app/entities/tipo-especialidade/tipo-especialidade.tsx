@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -40,7 +31,6 @@ export interface ITipoEspecialidadeProps extends StateProps, DispatchProps, Rout
 
 export interface ITipoEspecialidadeBaseState {
   tipoEspecialidade: any;
-  dataPost: any;
   especialidade: any;
 }
 export interface ITipoEspecialidadeState extends ITipoEspecialidadeBaseState, IPaginationBaseState {}
@@ -59,13 +49,11 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
   getTipoEspecialidadeState = (location): ITipoEspecialidadeBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const tipoEspecialidade = url.searchParams.get('tipoEspecialidade') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const especialidade = url.searchParams.get('especialidade') || '';
 
     return {
       tipoEspecialidade,
-      dataPost,
       especialidade
     };
   };
@@ -78,7 +66,6 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
     this.setState(
       {
         tipoEspecialidade: '',
-        dataPost: '',
         especialidade: ''
       },
       () => this.sortEntities()
@@ -127,9 +114,6 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
       'tipoEspecialidade=' +
       this.state.tipoEspecialidade +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'especialidade=' +
       this.state.especialidade +
       '&' +
@@ -140,8 +124,8 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipoEspecialidade, dataPost, especialidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tipoEspecialidade, dataPost, especialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipoEspecialidade, especialidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tipoEspecialidade, especialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -187,27 +171,6 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
                             name="tipoEspecialidade"
                             id="tipo-especialidade-tipoEspecialidade"
                             value={this.state.tipoEspecialidade}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="tipo-especialidade-dataPost">
-                            <Translate contentKey="generadorApp.tipoEspecialidade.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="tipo-especialidade-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -246,10 +209,6 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
                         <Translate contentKey="generadorApp.tipoEspecialidade.tipoEspecialidade">Tipo Especialidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tipoEspecialidade.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -265,10 +224,6 @@ export class TipoEspecialidade extends React.Component<ITipoEspecialidadeProps, 
                         </td>
 
                         <td>{tipoEspecialidade.tipoEspecialidade}</td>
-
-                        <td>
-                          <TextFormat type="date" value={tipoEspecialidade.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

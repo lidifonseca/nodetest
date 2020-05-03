@@ -27,13 +27,6 @@
             ]
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idCidXPtaNovo",
             "fieldType": "Integer",
             "fieldValidateRules": [

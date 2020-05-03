@@ -47,7 +47,6 @@ export interface IPacienteDadosCartaoBaseState {
   validade: any;
   codAtivacao: any;
   ativo: any;
-  dataPost: any;
   pacientePedido: any;
   idPaciente: any;
 }
@@ -71,7 +70,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
     const validade = url.searchParams.get('validade') || '';
     const codAtivacao = url.searchParams.get('codAtivacao') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const pacientePedido = url.searchParams.get('pacientePedido') || '';
     const idPaciente = url.searchParams.get('idPaciente') || '';
@@ -82,7 +80,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
       validade,
       codAtivacao,
       ativo,
-      dataPost,
       pacientePedido,
       idPaciente
     };
@@ -102,7 +99,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
         validade: '',
         codAtivacao: '',
         ativo: '',
-        dataPost: '',
         pacientePedido: '',
         idPaciente: ''
       },
@@ -164,9 +160,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'pacientePedido=' +
       this.state.pacientePedido +
       '&' +
@@ -186,7 +179,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
       validade,
       codAtivacao,
       ativo,
-      dataPost,
       pacientePedido,
       idPaciente,
       activePage,
@@ -200,7 +192,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
       validade,
       codAtivacao,
       ativo,
-      dataPost,
       pacientePedido,
       idPaciente,
       activePage - 1,
@@ -247,15 +238,7 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                             <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bandeira"
-                            id="paciente-dados-cartao-bandeira"
-                            value={this.state.bandeira}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bandeira" id="paciente-dados-cartao-bandeira" value={this.state.bandeira} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -269,9 +252,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                             name="numeroCartao"
                             id="paciente-dados-cartao-numeroCartao"
                             value={this.state.numeroCartao}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -297,24 +277,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                             <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="paciente-dados-cartao-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-dados-cartao-dataPost">
-                            <Translate contentKey="generadorApp.pacienteDadosCartao.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-dados-cartao-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -388,10 +350,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                         <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteDadosCartao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.pacienteDadosCartao.idPaciente">Id Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -421,10 +379,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                         <td>{pacienteDadosCartao.codAtivacao}</td>
 
                         <td>{pacienteDadosCartao.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteDadosCartao.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {pacienteDadosCartao.idPaciente ? (
                             <Link to={`paciente/${pacienteDadosCartao.idPaciente.id}`}>{pacienteDadosCartao.idPaciente.id}</Link>

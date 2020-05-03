@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -40,7 +31,6 @@ export interface ITelaProps extends StateProps, DispatchProps, RouteComponentPro
 
 export interface ITelaBaseState {
   tela: any;
-  dataPost: any;
   logUser: any;
   logUserFranquia: any;
   usuarioAcao: any;
@@ -61,7 +51,6 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   getTelaState = (location): ITelaBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const tela = url.searchParams.get('tela') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const logUser = url.searchParams.get('logUser') || '';
     const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
@@ -69,7 +58,6 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
 
     return {
       tela,
-      dataPost,
       logUser,
       logUserFranquia,
       usuarioAcao
@@ -84,7 +72,6 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
     this.setState(
       {
         tela: '',
-        dataPost: '',
         logUser: '',
         logUserFranquia: '',
         usuarioAcao: ''
@@ -135,9 +122,6 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
       'tela=' +
       this.state.tela +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'logUser=' +
       this.state.logUser +
       '&' +
@@ -154,8 +138,8 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tela, dataPost, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tela, dataPost, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tela, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tela, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -196,33 +180,7 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
                             <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tela"
-                            id="tela-tela"
-                            value={this.state.tela}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="tela-dataPost">
-                            <Translate contentKey="generadorApp.tela.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="tela-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="tela" id="tela-tela" value={this.state.tela} />
                         </Row>
                       </Col>
 
@@ -268,10 +226,6 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
                         <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tela.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -287,10 +241,6 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
                         </td>
 
                         <td>{tela.tela}</td>
-
-                        <td>
-                          <TextFormat type="date" value={tela.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -14,7 +14,7 @@ import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
 import { getEntities as getTipoEspecialidades } from 'app/entities/tipo-especialidade/tipo-especialidade.reducer';
 import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
 import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-unidade.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './especialidade.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './especialidade.reducer';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -56,9 +56,15 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
     this.props.getTipoUnidades();
   }
 
-  saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
 
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
+  saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { especialidadeEntity } = this.props;
       const entity = {
@@ -81,6 +87,8 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
   render() {
     const { especialidadeEntity, categorias, tipoEspecialidades, tipoUnidades, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = especialidadeEntity;
 
     return (
       <div>
@@ -202,14 +210,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="especialidade-descricao"
-                                type="text"
-                                name="descricao"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvInput id="especialidade-descricao" type="textarea" name="descricao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -262,31 +263,6 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </Col>
                             <Col md="9">
                               <AvField id="especialidade-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="especialidade-dataPost">
-                                <Translate contentKey="generadorApp.especialidade.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="especialidade-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.especialidadeEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -416,6 +392,7 @@ const mapDispatchToProps = {
   getTipoUnidades,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

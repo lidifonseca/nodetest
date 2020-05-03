@@ -4,13 +4,6 @@
         {
             "fieldName": "votacao",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [

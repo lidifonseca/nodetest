@@ -109,23 +109,21 @@ export type ICrudGetAllActionTokenUsuario<T> = (
   idPaciente?: any,
   token?: any,
   dataValida?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTokenUsuario<ITokenUsuario> = (idPaciente, token, dataValida, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTokenUsuario<ITokenUsuario> = (idPaciente, token, dataValida, page, size, sort) => {
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const tokenRequest = token ? `token.contains=${token}&` : '';
   const dataValidaRequest = dataValida ? `dataValida.contains=${dataValida}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TOKENUSUARIO_LIST,
     payload: axios.get<ITokenUsuario>(
-      `${requestUrl}${idPacienteRequest}${tokenRequest}${dataValidaRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${tokenRequest}${dataValidaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

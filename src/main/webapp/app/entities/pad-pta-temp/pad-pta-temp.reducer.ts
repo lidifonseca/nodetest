@@ -110,7 +110,6 @@ export type ICrudGetAllActionPadPtaTemp<T> = (
   idPta?: any,
   idCid?: any,
   idUsuario?: any,
-  dataPost?: any,
   cidXPtaNovoId?: any,
   page?: number,
   size?: number,
@@ -122,7 +121,6 @@ export const getEntities: ICrudGetAllActionPadPtaTemp<IPadPtaTemp> = (
   idPta,
   idCid,
   idUsuario,
-  dataPost,
   cidXPtaNovoId,
   page,
   size,
@@ -132,14 +130,13 @@ export const getEntities: ICrudGetAllActionPadPtaTemp<IPadPtaTemp> = (
   const idPtaRequest = idPta ? `idPta.contains=${idPta}&` : '';
   const idCidRequest = idCid ? `idCid.contains=${idCid}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const cidXPtaNovoIdRequest = cidXPtaNovoId ? `cidXPtaNovoId.contains=${cidXPtaNovoId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADPTATEMP_LIST,
     payload: axios.get<IPadPtaTemp>(
-      `${requestUrl}${sessionIdRequest}${idPtaRequest}${idCidRequest}${idUsuarioRequest}${dataPostRequest}${cidXPtaNovoIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${sessionIdRequest}${idPtaRequest}${idCidRequest}${idUsuarioRequest}${cidXPtaNovoIdRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

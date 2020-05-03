@@ -108,21 +108,19 @@ const apiUrl = 'api/tipo-mat-meds';
 export type ICrudGetAllActionTipoMatMed<T> = (
   tipo?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoMatMed<ITipoMatMed> = (tipo, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoMatMed<ITipoMatMed> = (tipo, ativo, page, size, sort) => {
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOMATMED_LIST,
-    payload: axios.get<ITipoMatMed>(`${requestUrl}${tipoRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoMatMed>(`${requestUrl}${tipoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITipoMatMed> = id => {

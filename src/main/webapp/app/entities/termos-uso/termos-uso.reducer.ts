@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_TERMOSUSO: 'termosUso/CREATE_TERMOSUSO',
   UPDATE_TERMOSUSO: 'termosUso/UPDATE_TERMOSUSO',
   DELETE_TERMOSUSO: 'termosUso/DELETE_TERMOSUSO',
+  SET_BLOB: 'termosUso/SET_BLOB',
   RESET: 'termosUso/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: TermosUsoState = initialState, action): TermosUsoState =>
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -108,21 +120,19 @@ const apiUrl = 'api/termos-usos';
 export type ICrudGetAllActionTermosUso<T> = (
   termosUso?: any,
   tipo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTermosUso<ITermosUso> = (termosUso, tipo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTermosUso<ITermosUso> = (termosUso, tipo, page, size, sort) => {
   const termosUsoRequest = termosUso ? `termosUso.contains=${termosUso}&` : '';
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TERMOSUSO_LIST,
-    payload: axios.get<ITermosUso>(`${requestUrl}${termosUsoRequest}${tipoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITermosUso>(`${requestUrl}${termosUsoRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITermosUso> = id => {
@@ -164,6 +174,15 @@ export const deleteEntity: ICrudDeleteAction<ITermosUso> = id => async dispatch 
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

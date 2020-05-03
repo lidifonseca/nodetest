@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PROFISSIONALSTATUSATUAL: 'profissionalStatusAtual/CREATE_PROFISSIONALSTATUSATUAL',
   UPDATE_PROFISSIONALSTATUSATUAL: 'profissionalStatusAtual/UPDATE_PROFISSIONALSTATUSATUAL',
   DELETE_PROFISSIONALSTATUSATUAL: 'profissionalStatusAtual/DELETE_PROFISSIONALSTATUSATUAL',
+  SET_BLOB: 'profissionalStatusAtual/SET_BLOB',
   RESET: 'profissionalStatusAtual/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: ProfissionalStatusAtualState = initialState, action): Pro
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -109,7 +121,6 @@ export type ICrudGetAllActionProfissionalStatusAtual<T> = (
   idProfissional?: any,
   obs?: any,
   ativo?: any,
-  dataPost?: any,
   idUsuario?: any,
   idStatusAtualProf?: any,
   page?: number,
@@ -121,7 +132,6 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtual<IProfissional
   idProfissional,
   obs,
   ativo,
-  dataPost,
   idUsuario,
   idStatusAtualProf,
   page,
@@ -131,7 +141,6 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtual<IProfissional
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const idStatusAtualProfRequest = idStatusAtualProf ? `idStatusAtualProf.equals=${idStatusAtualProf}&` : '';
 
@@ -139,7 +148,7 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtual<IProfissional
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUAL_LIST,
     payload: axios.get<IProfissionalStatusAtual>(
-      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}${dataPostRequest}${idUsuarioRequest}${idStatusAtualProfRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}${idUsuarioRequest}${idStatusAtualProfRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -183,6 +192,15 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalStatusAtual> = id => a
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

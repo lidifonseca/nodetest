@@ -20,7 +20,6 @@
       "idTipoMatMed": "Id Tipo Mat Med",
       "valor": "Valor",
       "ativo": "Ativo",
-      "dataPost": "Data Post",
       "help": {
         "idTipoMatMed": "Tipo 1 - Medicamento, Tipo 2 - Materiais, Tipo 3 - Equipamento"
       }

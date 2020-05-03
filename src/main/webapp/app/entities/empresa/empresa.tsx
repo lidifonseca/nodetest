@@ -61,7 +61,6 @@ export interface IEmpresaBaseState {
   cidade: any;
   uf: any;
   tipo: any;
-  dataPost: any;
   idCidade: any;
 }
 export interface IEmpresaState extends IEmpresaBaseState, IPaginationBaseState {}
@@ -98,7 +97,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
     const cidade = url.searchParams.get('cidade') || '';
     const uf = url.searchParams.get('uf') || '';
     const tipo = url.searchParams.get('tipo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idCidade = url.searchParams.get('idCidade') || '';
 
@@ -122,7 +120,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
-      dataPost,
       idCidade
     };
   };
@@ -155,7 +152,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
         cidade: '',
         uf: '',
         tipo: '',
-        dataPost: '',
         idCidade: ''
       },
       () => this.sortEntities()
@@ -258,9 +254,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       'tipo=' +
       this.state.tipo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idCidade=' +
       this.state.idCidade +
       '&' +
@@ -291,7 +284,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
-      dataPost,
       idCidade,
       activePage,
       itemsPerPage,
@@ -318,7 +310,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
-      dataPost,
       idCidade,
       activePage - 1,
       itemsPerPage,
@@ -364,15 +355,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.empresa">Empresa</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="empresa"
-                            id="empresa-empresa"
-                            value={this.state.empresa}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="empresa" id="empresa-empresa" value={this.state.empresa} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -381,15 +364,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.nome">Nome</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="empresa-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nome" id="empresa-nome" value={this.state.nome} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -398,15 +373,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.email">Email</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="email"
-                            id="empresa-email"
-                            value={this.state.email}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="email" id="empresa-email" value={this.state.email} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -415,15 +382,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.cpf">Cpf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cpf"
-                            id="empresa-cpf"
-                            value={this.state.cpf}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cpf" id="empresa-cpf" value={this.state.cpf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -432,15 +391,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.rg">Rg</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="rg"
-                            id="empresa-rg"
-                            value={this.state.rg}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="rg" id="empresa-rg" value={this.state.rg} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -465,15 +416,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.telefone1">Telefone 1</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone1"
-                            id="empresa-telefone1"
-                            value={this.state.telefone1}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone1" id="empresa-telefone1" value={this.state.telefone1} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -482,15 +425,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.telefone2">Telefone 2</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone2"
-                            id="empresa-telefone2"
-                            value={this.state.telefone2}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone2" id="empresa-telefone2" value={this.state.telefone2} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -499,15 +434,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.celular1">Celular 1</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular1"
-                            id="empresa-celular1"
-                            value={this.state.celular1}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular1" id="empresa-celular1" value={this.state.celular1} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -516,15 +443,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.celular2">Celular 2</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular2"
-                            id="empresa-celular2"
-                            value={this.state.celular2}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular2" id="empresa-celular2" value={this.state.celular2} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -533,15 +452,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.cep">Cep</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="empresa-cep"
-                            value={this.state.cep}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cep" id="empresa-cep" value={this.state.cep} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -550,15 +461,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.endereco">Endereco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="endereco"
-                            id="empresa-endereco"
-                            value={this.state.endereco}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="endereco" id="empresa-endereco" value={this.state.endereco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -567,15 +470,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.numero">Numero</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numero"
-                            id="empresa-numero"
-                            value={this.state.numero}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numero" id="empresa-numero" value={this.state.numero} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -584,15 +479,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.complemento">Complemento</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complemento"
-                            id="empresa-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complemento" id="empresa-complemento" value={this.state.complemento} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -601,15 +488,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.bairro">Bairro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bairro"
-                            id="empresa-bairro"
-                            value={this.state.bairro}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bairro" id="empresa-bairro" value={this.state.bairro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -618,15 +497,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cidade"
-                            id="empresa-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cidade" id="empresa-cidade" value={this.state.cidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -635,15 +506,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                             <Translate contentKey="generadorApp.empresa.uf">Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="uf"
-                            id="empresa-uf"
-                            value={this.state.uf}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="uf" id="empresa-uf" value={this.state.uf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -651,34 +514,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                           <Label id="tipoLabel" for="empresa-tipo">
                             <Translate contentKey="generadorApp.empresa.tipo">Tipo</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="tipo"
-                            id="empresa-tipo"
-                            value={this.state.tipo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="empresa-dataPost">
-                            <Translate contentKey="generadorApp.empresa.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="empresa-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="string" name="tipo" id="empresa-tipo" value={this.state.tipo} />
                         </Row>
                       </Col>
 
@@ -804,10 +640,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                         <Translate contentKey="generadorApp.empresa.tipo">Tipo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.empresa.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.empresa.idCidade">Id Cidade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -865,10 +697,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                         <td>{empresa.uf}</td>
 
                         <td>{empresa.tipo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={empresa.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>{empresa.idCidade ? <Link to={`cidade/${empresa.idCidade.id}`}>{empresa.idCidade.id}</Link> : ''}</td>
 
                         <td className="text-right">

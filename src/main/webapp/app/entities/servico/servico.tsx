@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IServicoProps extends StateProps, DispatchProps, RouteComponent
 export interface IServicoBaseState {
   servico: any;
   styleLabel: any;
-  dataPost: any;
 }
 export interface IServicoState extends IServicoBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const servico = url.searchParams.get('servico') || '';
     const styleLabel = url.searchParams.get('styleLabel') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       servico,
-      styleLabel,
-      dataPost
+      styleLabel
     };
   };
 
@@ -77,8 +65,7 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
     this.setState(
       {
         servico: '',
-        styleLabel: '',
-        dataPost: ''
+        styleLabel: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { servico, styleLabel, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(servico, styleLabel, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { servico, styleLabel, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(servico, styleLabel, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -181,15 +165,7 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
                             <Translate contentKey="generadorApp.servico.servico">Servico</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="servico"
-                            id="servico-servico"
-                            value={this.state.servico}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="servico" id="servico-servico" value={this.state.servico} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -198,33 +174,7 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
                             <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="styleLabel"
-                            id="servico-styleLabel"
-                            value={this.state.styleLabel}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="servico-dataPost">
-                            <Translate contentKey="generadorApp.servico.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="servico-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="styleLabel" id="servico-styleLabel" value={this.state.styleLabel} />
                         </Row>
                       </Col>
                     </div>
@@ -262,10 +212,6 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
                         <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.servico.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -283,10 +229,6 @@ export class Servico extends React.Component<IServicoProps, IServicoState> {
                         <td>{servico.servico}</td>
 
                         <td>{servico.styleLabel}</td>
-
-                        <td>
-                          <TextFormat type="date" value={servico.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

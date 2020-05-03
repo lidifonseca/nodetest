@@ -17,8 +17,7 @@
         "title": "Status Financeiro"
       },
       "nome": "Nome",
-      "ativo": "Ativo",
-      "dataPost": "Data Post"
+      "ativo": "Ativo"
     }
   }
 }

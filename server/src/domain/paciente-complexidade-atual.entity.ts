@@ -31,8 +31,5 @@ export default class PacienteComplexidadeAtual extends BaseEntity {
   @Column({ type: 'integer', name: 'id_usuario' })
   idUsuario: number;
 
-  @Column({ type: 'timestamp', name: 'data_post' })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -114,7 +114,6 @@ export type ICrudGetAllActionPacienteComplexidadeAtual<T> = (
   ventilacaoMecanica?: any,
   telemonitoramente?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -129,7 +128,6 @@ export const getEntities: ICrudGetAllActionPacienteComplexidadeAtual<IPacienteCo
   ventilacaoMecanica,
   telemonitoramente,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -142,13 +140,12 @@ export const getEntities: ICrudGetAllActionPacienteComplexidadeAtual<IPacienteCo
   const ventilacaoMecanicaRequest = ventilacaoMecanica ? `ventilacaoMecanica.contains=${ventilacaoMecanica}&` : '';
   const telemonitoramenteRequest = telemonitoramente ? `telemonitoramente.contains=${telemonitoramente}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL_LIST,
     payload: axios.get<IPacienteComplexidadeAtual>(
-      `${requestUrl}${idPacienteRequest}${idPacienteComplexidadeRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idPacienteComplexidadeRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

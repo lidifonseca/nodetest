@@ -2,8 +2,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
-import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
-
 import UnidadeEasy from './unidade-easy.entity';
 import Paciente from './paciente.entity';
 import PacienteDadosCartao from './paciente-dados-cartao.entity';
@@ -34,9 +32,6 @@ export default class PacientePedido extends BaseEntity {
 
   @Column({ type: 'integer', name: 'tipo_valor' })
   tipoValor: number;
-
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
 
   @ManyToOne(type => UnidadeEasy)
   idUnidade: UnidadeEasy;

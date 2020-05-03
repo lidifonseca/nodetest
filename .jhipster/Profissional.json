@@ -222,11 +222,8 @@
         },
         {
             "fieldName": "obs",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "255"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "chavePrivada",
@@ -239,13 +236,6 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         },
         {
             "fieldName": "senhaOriginal",
@@ -285,14 +275,12 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoAceite",
             "otherEntityRelationshipName": "idProfissional",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoAceite"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoAssinaturas",
             "otherEntityRelationshipName": "idProfissional",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoAssinaturas"
         }
     ],

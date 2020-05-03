@@ -164,13 +164,6 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [
@@ -178,14 +171,12 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "categoriaUnidade",
             "otherEntityRelationshipName": "idUnidade",
-            "relationshipValidateRules": "required",
             "relationshipName": "categoriaUnidade"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "especialidadeUnidade",
             "otherEntityRelationshipName": "idUnidade",
-            "relationshipValidateRules": "required",
             "relationshipName": "especialidadeUnidade"
         },
         {

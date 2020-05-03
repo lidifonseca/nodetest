@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -42,7 +33,6 @@ export interface IAtendimentoStatusFinanceiroBaseState {
   idAtendimento: any;
   idStatusFinanceiro: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IAtendimentoStatusFinanceiroState extends IAtendimentoStatusFinanceiroBaseState, IPaginationBaseState {}
 
@@ -62,13 +52,11 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
     const idStatusFinanceiro = url.searchParams.get('idStatusFinanceiro') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idAtendimento,
       idStatusFinanceiro,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -81,8 +69,7 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
       {
         idAtendimento: '',
         idStatusFinanceiro: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -136,9 +123,6 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -146,8 +130,8 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, idStatusFinanceiro, idUsuario, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, idStatusFinanceiro, idUsuario, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, idStatusFinanceiro, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, idStatusFinanceiro, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -194,10 +178,6 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                             name="idAtendimento"
                             id="atendimento-status-financeiro-idAtendimento"
                             value={this.state.idAtendimento}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -213,10 +193,6 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                             name="idStatusFinanceiro"
                             id="atendimento-status-financeiro-idStatusFinanceiro"
                             value={this.state.idStatusFinanceiro}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -231,14 +207,6 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                             id="atendimento-status-financeiro-idUsuario"
                             value={this.state.idUsuario}
                           />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="atendimento-status-financeiro-dataPost">
-                            <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="atendimento-status-financeiro-dataPost" value={this.state.dataPost} />
                         </Row>
                       </Col>
                     </div>
@@ -280,10 +248,6 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                         <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -303,10 +267,6 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                         <td>{atendimentoStatusFinanceiro.idStatusFinanceiro}</td>
 
                         <td>{atendimentoStatusFinanceiro.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={atendimentoStatusFinanceiro.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

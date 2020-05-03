@@ -41,8 +41,6 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { apiReturnEntity } = this.props;
       const entity = {
@@ -221,31 +219,6 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
                             </Col>
                             <Col md="9">
                               <AvField id="api-return-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="api-return-dataPost">
-                                <Translate contentKey="generadorApp.apiReturn.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="api-return-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.apiReturnEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

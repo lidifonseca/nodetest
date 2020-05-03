@@ -108,7 +108,6 @@ const apiUrl = 'api/periodos';
 export type ICrudGetAllActionPeriodo<T> = (
   periodo?: any,
   ativo?: any,
-  dataPost?: any,
   atendimento?: any,
   padItem?: any,
   page?: number,
@@ -116,10 +115,9 @@ export type ICrudGetAllActionPeriodo<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, dataPost, atendimento, padItem, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, atendimento, padItem, page, size, sort) => {
   const periodoRequest = periodo ? `periodo.contains=${periodo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
@@ -127,7 +125,7 @@ export const getEntities: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, 
   return {
     type: ACTION_TYPES.FETCH_PERIODO_LIST,
     payload: axios.get<IPeriodo>(
-      `${requestUrl}${periodoRequest}${ativoRequest}${dataPostRequest}${atendimentoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${periodoRequest}${ativoRequest}${atendimentoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

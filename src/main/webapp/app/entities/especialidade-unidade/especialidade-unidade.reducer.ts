@@ -111,7 +111,6 @@ export type ICrudGetAllActionEspecialidadeUnidade<T> = (
   valorPagar?: any,
   publicar?: any,
   comentarioPreco?: any,
-  dataPost?: any,
   idUnidade?: any,
   idEspecialidade?: any,
   page?: number,
@@ -125,7 +124,6 @@ export const getEntities: ICrudGetAllActionEspecialidadeUnidade<IEspecialidadeUn
   valorPagar,
   publicar,
   comentarioPreco,
-  dataPost,
   idUnidade,
   idEspecialidade,
   page,
@@ -137,7 +135,6 @@ export const getEntities: ICrudGetAllActionEspecialidadeUnidade<IEspecialidadeUn
   const valorPagarRequest = valorPagar ? `valorPagar.contains=${valorPagar}&` : '';
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
   const comentarioPrecoRequest = comentarioPreco ? `comentarioPreco.contains=${comentarioPreco}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUnidadeRequest = idUnidade ? `idUnidade.equals=${idUnidade}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
 
@@ -145,7 +142,7 @@ export const getEntities: ICrudGetAllActionEspecialidadeUnidade<IEspecialidadeUn
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEUNIDADE_LIST,
     payload: axios.get<IEspecialidadeUnidade>(
-      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${dataPostRequest}${idUnidadeRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${valorBaixaUrgRequest}${valorAltaUrgRequest}${valorPagarRequest}${publicarRequest}${comentarioPrecoRequest}${idUnidadeRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

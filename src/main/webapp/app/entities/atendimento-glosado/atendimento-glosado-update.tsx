@@ -190,21 +190,6 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
                           </Row>
                         </AvGroup>
                       </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="atendimento-glosado-dataPost">
-                                <Translate contentKey="generadorApp.atendimentoGlosado.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="atendimento-glosado-dataPost" type="date" className="form-control" name="dataPost" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                     </Row>
                   )}
                 </Col>

@@ -125,7 +125,6 @@ export type ICrudGetAllActionEmpresa<T> = (
   cidade?: any,
   uf?: any,
   tipo?: any,
-  dataPost?: any,
   idCidade?: any,
   page?: number,
   size?: number,
@@ -152,7 +151,6 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   cidade,
   uf,
   tipo,
-  dataPost,
   idCidade,
   page,
   size,
@@ -177,14 +175,13 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idCidadeRequest = idCidade ? `idCidade.equals=${idCidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_EMPRESA_LIST,
     payload: axios.get<IEmpresa>(
-      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}${dataPostRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

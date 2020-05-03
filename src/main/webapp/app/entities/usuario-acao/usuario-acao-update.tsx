@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -12,7 +12,7 @@ import { ITela } from 'app/shared/model/tela.model';
 import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
 import { IAcao } from 'app/shared/model/acao.model';
 import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './usuario-acao.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './usuario-acao.reducer';
 import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -51,9 +51,15 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
     this.props.getAcaos();
   }
 
-  saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
 
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
+  saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { usuarioAcaoEntity } = this.props;
       const entity = {
@@ -76,6 +82,8 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
   render() {
     const { usuarioAcaoEntity, telas, acaos, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = usuarioAcaoEntity;
 
     return (
       <div>
@@ -182,39 +190,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="usuario-acao-descricao"
-                                type="text"
-                                name="descricao"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="usuario-acao-dataPost">
-                                <Translate contentKey="generadorApp.usuarioAcao.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="usuario-acao-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.usuarioAcaoEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
+                              <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -296,6 +272,7 @@ const mapDispatchToProps = {
   getAcaos,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

@@ -110,36 +110,24 @@ export type ICrudGetAllActionPadPta<T> = (
   idDescPta?: any,
   idCid?: any,
   idUsuario?: any,
-  dataPost?: any,
   idCidXPtaNovo?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadPta<IPadPta> = (
-  idPad,
-  idDescPta,
-  idCid,
-  idUsuario,
-  dataPost,
-  idCidXPtaNovo,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionPadPta<IPadPta> = (idPad, idDescPta, idCid, idUsuario, idCidXPtaNovo, page, size, sort) => {
   const idPadRequest = idPad ? `idPad.contains=${idPad}&` : '';
   const idDescPtaRequest = idDescPta ? `idDescPta.contains=${idDescPta}&` : '';
   const idCidRequest = idCid ? `idCid.contains=${idCid}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idCidXPtaNovoRequest = idCidXPtaNovo ? `idCidXPtaNovo.contains=${idCidXPtaNovo}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADPTA_LIST,
     payload: axios.get<IPadPta>(
-      `${requestUrl}${idPadRequest}${idDescPtaRequest}${idCidRequest}${idUsuarioRequest}${dataPostRequest}${idCidXPtaNovoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPadRequest}${idDescPtaRequest}${idCidRequest}${idUsuarioRequest}${idCidXPtaNovoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -44,7 +44,6 @@ export interface ILogPacAcessoBaseState {
   token: any;
   ipLocal: any;
   inforAcesso: any;
-  dataPost: any;
 }
 export interface ILogPacAcessoState extends ILogPacAcessoBaseState, IPaginationBaseState {}
 
@@ -66,15 +65,13 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
     const token = url.searchParams.get('token') || '';
     const ipLocal = url.searchParams.get('ipLocal') || '';
     const inforAcesso = url.searchParams.get('inforAcesso') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPaciente,
       profissional,
       token,
       ipLocal,
-      inforAcesso,
-      dataPost
+      inforAcesso
     };
   };
 
@@ -89,8 +86,7 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
         profissional: '',
         token: '',
         ipLocal: '',
-        inforAcesso: '',
-        dataPost: ''
+        inforAcesso: ''
       },
       () => this.sortEntities()
     );
@@ -150,9 +146,6 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
       'inforAcesso=' +
       this.state.inforAcesso +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -160,18 +153,8 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPaciente, profissional, token, ipLocal, inforAcesso, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      idPaciente,
-      profissional,
-      token,
-      ipLocal,
-      inforAcesso,
-      dataPost,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idPaciente, profissional, token, ipLocal, inforAcesso, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPaciente, profissional, token, ipLocal, inforAcesso, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -211,16 +194,7 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                           <Label id="idPacienteLabel" for="log-pac-acesso-idPaciente">
                             <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="log-pac-acesso-idPaciente"
-                            value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idPaciente" id="log-pac-acesso-idPaciente" value={this.state.idPaciente} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -229,15 +203,7 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                             <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="profissional"
-                            id="log-pac-acesso-profissional"
-                            value={this.state.profissional}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="profissional" id="log-pac-acesso-profissional" value={this.state.profissional} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -246,15 +212,7 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                             <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="token"
-                            id="log-pac-acesso-token"
-                            value={this.state.token}
-                            validate={{
-                              maxLength: { value: 200, errorMessage: translate('entity.validation.maxlength', { max: 200 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="token" id="log-pac-acesso-token" value={this.state.token} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -263,15 +221,7 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                             <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ipLocal"
-                            id="log-pac-acesso-ipLocal"
-                            value={this.state.ipLocal}
-                            validate={{
-                              maxLength: { value: 25, errorMessage: translate('entity.validation.maxlength', { max: 25 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="ipLocal" id="log-pac-acesso-ipLocal" value={this.state.ipLocal} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -279,34 +229,7 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                           <Label id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
                             <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="inforAcesso"
-                            id="log-pac-acesso-inforAcesso"
-                            value={this.state.inforAcesso}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="log-pac-acesso-dataPost">
-                            <Translate contentKey="generadorApp.logPacAcesso.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="log-pac-acesso-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
                         </Row>
                       </Col>
                     </div>
@@ -356,10 +279,6 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                         <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.logPacAcesso.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -383,10 +302,6 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                         <td>{logPacAcesso.ipLocal}</td>
 
                         <td>{logPacAcesso.inforAcesso}</td>
-
-                        <td>
-                          <TextFormat type="date" value={logPacAcesso.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

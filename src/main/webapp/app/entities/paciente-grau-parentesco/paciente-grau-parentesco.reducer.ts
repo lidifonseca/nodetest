@@ -108,30 +108,19 @@ const apiUrl = 'api/paciente-grau-parentescos';
 export type ICrudGetAllActionPacienteGrauParentesco<T> = (
   grauParentesco?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteGrauParentesco<IPacienteGrauParentesco> = (
-  grauParentesco,
-  ativo,
-  dataPost,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionPacienteGrauParentesco<IPacienteGrauParentesco> = (grauParentesco, ativo, page, size, sort) => {
   const grauParentescoRequest = grauParentesco ? `grauParentesco.contains=${grauParentesco}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO_LIST,
-    payload: axios.get<IPacienteGrauParentesco>(
-      `${requestUrl}${grauParentescoRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPacienteGrauParentesco>(`${requestUrl}${grauParentescoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPacienteGrauParentesco> = id => {

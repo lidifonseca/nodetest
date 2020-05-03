@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PADITEMRESULTADO: 'padItemResultado/CREATE_PADITEMRESULTADO',
   UPDATE_PADITEMRESULTADO: 'padItemResultado/UPDATE_PADITEMRESULTADO',
   DELETE_PADITEMRESULTADO: 'padItemResultado/DELETE_PADITEMRESULTADO',
+  SET_BLOB: 'padItemResultado/SET_BLOB',
   RESET: 'padItemResultado/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: PadItemResultadoState = initialState, action): PadItemRes
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -107,7 +119,6 @@ const apiUrl = 'api/pad-item-resultados';
 // Actions
 export type ICrudGetAllActionPadItemResultado<T> = (
   resultado?: any,
-  dataPost?: any,
   dataFim?: any,
   resultadoAnalisado?: any,
   usuarioId?: any,
@@ -119,7 +130,6 @@ export type ICrudGetAllActionPadItemResultado<T> = (
 
 export const getEntities: ICrudGetAllActionPadItemResultado<IPadItemResultado> = (
   resultado,
-  dataPost,
   dataFim,
   resultadoAnalisado,
   usuarioId,
@@ -129,7 +139,6 @@ export const getEntities: ICrudGetAllActionPadItemResultado<IPadItemResultado> =
   sort
 ) => {
   const resultadoRequest = resultado ? `resultado.contains=${resultado}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
   const resultadoAnalisadoRequest = resultadoAnalisado ? `resultadoAnalisado.contains=${resultadoAnalisado}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
@@ -139,7 +148,7 @@ export const getEntities: ICrudGetAllActionPadItemResultado<IPadItemResultado> =
   return {
     type: ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST,
     payload: axios.get<IPadItemResultado>(
-      `${requestUrl}${resultadoRequest}${dataPostRequest}${dataFimRequest}${resultadoAnalisadoRequest}${usuarioIdRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${resultadoRequest}${dataFimRequest}${resultadoAnalisadoRequest}${usuarioIdRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -183,6 +192,15 @@ export const deleteEntity: ICrudDeleteAction<IPadItemResultado> = id => async di
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IProfissionalEspecialidadeProps extends StateProps, DispatchPro
 export interface IProfissionalEspecialidadeBaseState {
   idEspecialidade: any;
   idProfissional: any;
-  dataPost: any;
 }
 export interface IProfissionalEspecialidadeState extends IProfissionalEspecialidadeBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
     const idProfissional = url.searchParams.get('idProfissional') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idEspecialidade,
-      idProfissional,
-      dataPost
+      idProfissional
     };
   };
 
@@ -77,8 +65,7 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
     this.setState(
       {
         idEspecialidade: '',
-        idProfissional: '',
-        dataPost: ''
+        idProfissional: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
       'idProfissional=' +
       this.state.idProfissional +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idEspecialidade, idProfissional, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idEspecialidade, idProfissional, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idEspecialidade, idProfissional, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idEspecialidade, idProfissional, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -187,10 +171,6 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
                             name="idEspecialidade"
                             id="profissional-especialidade-idEspecialidade"
                             value={this.state.idEspecialidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -205,27 +185,6 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
                             name="idProfissional"
                             id="profissional-especialidade-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-especialidade-dataPost">
-                            <Translate contentKey="generadorApp.profissionalEspecialidade.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-especialidade-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -264,10 +223,6 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
                         <Translate contentKey="generadorApp.profissionalEspecialidade.idProfissional">Id Profissional</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalEspecialidade.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -285,10 +240,6 @@ export class ProfissionalEspecialidade extends React.Component<IProfissionalEspe
                         <td>{profissionalEspecialidade.idEspecialidade}</td>
 
                         <td>{profissionalEspecialidade.idProfissional}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalEspecialidade.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

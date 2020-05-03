@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -46,7 +37,6 @@ export interface IProfissionalComplexidadeAtualBaseState {
   ventilacaoMecanica: any;
   telemonitoramente: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IProfissionalComplexidadeAtualState extends IProfissionalComplexidadeAtualBaseState, IPaginationBaseState {}
 
@@ -73,7 +63,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
     const ventilacaoMecanica = url.searchParams.get('ventilacaoMecanica') || '';
     const telemonitoramente = url.searchParams.get('telemonitoramente') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProfissional,
@@ -82,8 +71,7 @@ export class ProfissionalComplexidadeAtual extends React.Component<
       alta,
       ventilacaoMecanica,
       telemonitoramente,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -100,8 +88,7 @@ export class ProfissionalComplexidadeAtual extends React.Component<
         alta: '',
         ventilacaoMecanica: '',
         telemonitoramente: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -167,9 +154,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -185,7 +169,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
       ventilacaoMecanica,
       telemonitoramente,
       idUsuario,
-      dataPost,
       activePage,
       itemsPerPage,
       sort,
@@ -199,7 +182,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
       ventilacaoMecanica,
       telemonitoramente,
       idUsuario,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -250,10 +232,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
                             name="idProfissional"
                             id="profissional-complexidade-atual-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -308,10 +286,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
                             name="telemonitoramente"
                             id="profissional-complexidade-atual-telemonitoramente"
                             value={this.state.telemonitoramente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -325,21 +299,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
                             name="idUsuario"
                             id="profissional-complexidade-atual-idUsuario"
                             value={this.state.idUsuario}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-complexidade-atual-dataPost">
-                            <Translate contentKey="generadorApp.profissionalComplexidadeAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-complexidade-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
                           />
                         </Row>
                       </Col>
@@ -400,10 +359,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
                         <Translate contentKey="generadorApp.profissionalComplexidadeAtual.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalComplexidadeAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -431,10 +386,6 @@ export class ProfissionalComplexidadeAtual extends React.Component<
                         <td>{profissionalComplexidadeAtual.telemonitoramente}</td>
 
                         <td>{profissionalComplexidadeAtual.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalComplexidadeAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

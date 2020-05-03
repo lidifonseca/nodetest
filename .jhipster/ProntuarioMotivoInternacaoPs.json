@@ -28,10 +28,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant"
         }
     ],
     "relationships": [],

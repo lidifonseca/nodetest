@@ -109,23 +109,21 @@ export type ICrudGetAllActionPacienteArquivo<T> = (
   idPaciente?: any,
   arquivo?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteArquivo<IPacienteArquivo> = (idPaciente, arquivo, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacienteArquivo<IPacienteArquivo> = (idPaciente, arquivo, ativo, page, size, sort) => {
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const arquivoRequest = arquivo ? `arquivo.contains=${arquivo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEARQUIVO_LIST,
     payload: axios.get<IPacienteArquivo>(
-      `${requestUrl}${idPacienteRequest}${arquivoRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${arquivoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

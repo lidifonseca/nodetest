@@ -17,8 +17,7 @@
         "title": "Profissional Franquia"
       },
       "idProfissional": "Id Profissional",
-      "idFranquia": "Id Franquia",
-      "dataPost": "Data Post"
+      "idFranquia": "Id Franquia"
     }
   }
 }

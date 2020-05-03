@@ -19,8 +19,7 @@
       "idPanico": "Id Panico",
       "idPaciente": "Id Paciente",
       "latitude": "Latitude",
-      "longitude": "Longitude",
-      "dataPost": "Data Post"
+      "longitude": "Longitude"
     }
   }
 }

@@ -173,23 +173,6 @@ export class AtendimentoAcompanhamentoPushDetail extends React.Component<IAtendi
                       </Col>
                     </Row>
                   </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={atendimentoAcompanhamentoPushEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
                 </Row>
                 <Button tag={Link} to="/atendimento-acompanhamento-push" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

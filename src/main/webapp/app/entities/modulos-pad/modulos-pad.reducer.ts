@@ -108,21 +108,19 @@ const apiUrl = 'api/modulos-pads';
 export type ICrudGetAllActionModulosPad<T> = (
   nomeModulo?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionModulosPad<IModulosPad> = (nomeModulo, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionModulosPad<IModulosPad> = (nomeModulo, ativo, page, size, sort) => {
   const nomeModuloRequest = nomeModulo ? `nomeModulo.contains=${nomeModulo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_MODULOSPAD_LIST,
-    payload: axios.get<IModulosPad>(`${requestUrl}${nomeModuloRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IModulosPad>(`${requestUrl}${nomeModuloRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IModulosPad> = id => {

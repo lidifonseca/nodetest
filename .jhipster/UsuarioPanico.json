@@ -37,10 +37,6 @@
         {
             "fieldName": "idUserResolvido",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant"
         }
     ],
     "relationships": [],

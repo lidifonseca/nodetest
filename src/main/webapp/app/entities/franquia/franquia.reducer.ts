@@ -124,7 +124,6 @@ export type ICrudGetAllActionFranquia<T> = (
   uf?: any,
   observacao?: any,
   ativo?: any,
-  dataPost?: any,
   franquiaAreaAtuacao?: any,
   franquiaStatusAtual?: any,
   franquiaUsuario?: any,
@@ -152,7 +151,6 @@ export const getEntities: ICrudGetAllActionFranquia<IFranquia> = (
   uf,
   observacao,
   ativo,
-  dataPost,
   franquiaAreaAtuacao,
   franquiaStatusAtual,
   franquiaUsuario,
@@ -178,7 +176,6 @@ export const getEntities: ICrudGetAllActionFranquia<IFranquia> = (
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const franquiaAreaAtuacaoRequest = franquiaAreaAtuacao ? `franquiaAreaAtuacao.equals=${franquiaAreaAtuacao}&` : '';
   const franquiaStatusAtualRequest = franquiaStatusAtual ? `franquiaStatusAtual.equals=${franquiaStatusAtual}&` : '';
   const franquiaUsuarioRequest = franquiaUsuario ? `franquiaUsuario.equals=${franquiaUsuario}&` : '';
@@ -187,7 +184,7 @@ export const getEntities: ICrudGetAllActionFranquia<IFranquia> = (
   return {
     type: ACTION_TYPES.FETCH_FRANQUIA_LIST,
     payload: axios.get<IFranquia>(
-      `${requestUrl}${idCidadeRequest}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${telefone1Request}${telefone2Request}${celularRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${observacaoRequest}${ativoRequest}${dataPostRequest}${franquiaAreaAtuacaoRequest}${franquiaStatusAtualRequest}${franquiaUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${telefone1Request}${telefone2Request}${celularRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${observacaoRequest}${ativoRequest}${franquiaAreaAtuacaoRequest}${franquiaStatusAtualRequest}${franquiaUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

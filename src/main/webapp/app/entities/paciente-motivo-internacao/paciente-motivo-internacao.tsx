@@ -33,7 +33,6 @@ export interface IPacienteMotivoInternacaoBaseState {
   idPaciente: any;
   idMotivoInternacao: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IPacienteMotivoInternacaoState extends IPacienteMotivoInternacaoBaseState, IPaginationBaseState {}
 
@@ -53,13 +52,11 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const idMotivoInternacao = url.searchParams.get('idMotivoInternacao') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPaciente,
       idMotivoInternacao,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -72,8 +69,7 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
       {
         idPaciente: '',
         idMotivoInternacao: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -127,9 +123,6 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -137,8 +130,8 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPaciente, idMotivoInternacao, idUsuario, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPaciente, idMotivoInternacao, idUsuario, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPaciente, idMotivoInternacao, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPaciente, idMotivoInternacao, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -185,10 +178,6 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
                             name="idPaciente"
                             id="paciente-motivo-internacao-idPaciente"
                             value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -204,10 +193,6 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
                             name="idMotivoInternacao"
                             id="paciente-motivo-internacao-idMotivoInternacao"
                             value={this.state.idMotivoInternacao}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -216,33 +201,7 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
                           <Label id="idUsuarioLabel" for="paciente-motivo-internacao-idUsuario">
                             <Translate contentKey="generadorApp.pacienteMotivoInternacao.idUsuario">Id Usuario</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="paciente-motivo-internacao-idUsuario"
-                            value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-motivo-internacao-dataPost">
-                            <Translate contentKey="generadorApp.pacienteMotivoInternacao.dataPost">Data Post</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="dataPost"
-                            id="paciente-motivo-internacao-dataPost"
-                            value={this.state.dataPost}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="string" name="idUsuario" id="paciente-motivo-internacao-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
                     </div>
@@ -284,10 +243,6 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
                         <Translate contentKey="generadorApp.pacienteMotivoInternacao.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteMotivoInternacao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -307,8 +262,6 @@ export class PacienteMotivoInternacao extends React.Component<IPacienteMotivoInt
                         <td>{pacienteMotivoInternacao.idMotivoInternacao}</td>
 
                         <td>{pacienteMotivoInternacao.idUsuario}</td>
-
-                        <td>{pacienteMotivoInternacao.dataPost}</td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

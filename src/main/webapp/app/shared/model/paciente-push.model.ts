@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { IPaciente } from 'app/shared/model/paciente.model';
 
 export interface IPacientePush {
@@ -6,7 +5,6 @@ export interface IPacientePush {
   idFranquia?: string;
   mensagem?: string;
   ativo?: number;
-  dataPost?: Moment;
   idPaciente?: string | any;
 }
 

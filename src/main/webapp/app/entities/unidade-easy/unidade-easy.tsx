@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -60,7 +51,6 @@ export interface IUnidadeEasyBaseState {
   tisscbo: any;
   tisscoduf: any;
   ativo: any;
-  dataPost: any;
   categoriaUnidade: any;
   especialidadeUnidade: any;
   pacientePedido: any;
@@ -102,7 +92,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
     const tisscbo = url.searchParams.get('tisscbo') || '';
     const tisscoduf = url.searchParams.get('tisscoduf') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const categoriaUnidade = url.searchParams.get('categoriaUnidade') || '';
     const especialidadeUnidade = url.searchParams.get('especialidadeUnidade') || '';
@@ -131,7 +120,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tisscbo,
       tisscoduf,
       ativo,
-      dataPost,
       categoriaUnidade,
       especialidadeUnidade,
       pacientePedido,
@@ -167,7 +155,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
         tisscbo: '',
         tisscoduf: '',
         ativo: '',
-        dataPost: '',
         categoriaUnidade: '',
         especialidadeUnidade: '',
         pacientePedido: '',
@@ -279,9 +266,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'categoriaUnidade=' +
       this.state.categoriaUnidade +
       '&' +
@@ -323,7 +307,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tisscbo,
       tisscoduf,
       ativo,
-      dataPost,
       categoriaUnidade,
       especialidadeUnidade,
       pacientePedido,
@@ -355,7 +338,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tisscbo,
       tisscoduf,
       ativo,
-      dataPost,
       categoriaUnidade,
       especialidadeUnidade,
       pacientePedido,
@@ -404,15 +386,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.razaoSocial">Razao Social</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="razaoSocial"
-                            id="unidade-easy-razaoSocial"
-                            value={this.state.razaoSocial}
-                            validate={{
-                              maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="razaoSocial" id="unidade-easy-razaoSocial" value={this.state.razaoSocial} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -421,15 +395,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.nomeFantasia">Nome Fantasia</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nomeFantasia"
-                            id="unidade-easy-nomeFantasia"
-                            value={this.state.nomeFantasia}
-                            validate={{
-                              maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nomeFantasia" id="unidade-easy-nomeFantasia" value={this.state.nomeFantasia} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -438,15 +404,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.cnpj">Cnpj</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cnpj"
-                            id="unidade-easy-cnpj"
-                            value={this.state.cnpj}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cnpj" id="unidade-easy-cnpj" value={this.state.cnpj} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -455,15 +413,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.ie">Ie</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ie"
-                            id="unidade-easy-ie"
-                            value={this.state.ie}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="ie" id="unidade-easy-ie" value={this.state.ie} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -472,15 +422,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.telefone1">Telefone 1</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone1"
-                            id="unidade-easy-telefone1"
-                            value={this.state.telefone1}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone1" id="unidade-easy-telefone1" value={this.state.telefone1} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -489,15 +431,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.telefone2">Telefone 2</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone2"
-                            id="unidade-easy-telefone2"
-                            value={this.state.telefone2}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone2" id="unidade-easy-telefone2" value={this.state.telefone2} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -506,15 +440,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.endereco">Endereco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="endereco"
-                            id="unidade-easy-endereco"
-                            value={this.state.endereco}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="endereco" id="unidade-easy-endereco" value={this.state.endereco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -523,15 +449,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.numero">Numero</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numero"
-                            id="unidade-easy-numero"
-                            value={this.state.numero}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numero" id="unidade-easy-numero" value={this.state.numero} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -540,15 +458,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.complemento">Complemento</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complemento"
-                            id="unidade-easy-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complemento" id="unidade-easy-complemento" value={this.state.complemento} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -557,15 +467,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.bairro">Bairro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bairro"
-                            id="unidade-easy-bairro"
-                            value={this.state.bairro}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bairro" id="unidade-easy-bairro" value={this.state.bairro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -574,15 +476,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.cidade">Cidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cidade"
-                            id="unidade-easy-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cidade" id="unidade-easy-cidade" value={this.state.cidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -591,15 +485,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.uf">Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="uf"
-                            id="unidade-easy-uf"
-                            value={this.state.uf}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="uf" id="unidade-easy-uf" value={this.state.uf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -608,15 +494,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.cep">Cep</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="unidade-easy-cep"
-                            value={this.state.cep}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cep" id="unidade-easy-cep" value={this.state.cep} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -625,15 +503,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.regans">Regans</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="regans"
-                            id="unidade-easy-regans"
-                            value={this.state.regans}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="regans" id="unidade-easy-regans" value={this.state.regans} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -642,15 +512,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.regcnes">Regcnes</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="regcnes"
-                            id="unidade-easy-regcnes"
-                            value={this.state.regcnes}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="regcnes" id="unidade-easy-regcnes" value={this.state.regcnes} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -664,9 +526,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             name="tissresponsavel"
                             id="unidade-easy-tissresponsavel"
                             value={this.state.tissresponsavel}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -676,15 +535,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.tissconselho">Tissconselho</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tissconselho"
-                            id="unidade-easy-tissconselho"
-                            value={this.state.tissconselho}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tissconselho" id="unidade-easy-tissconselho" value={this.state.tissconselho} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -693,15 +544,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.tissinscricao">Tissinscricao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tissinscricao"
-                            id="unidade-easy-tissinscricao"
-                            value={this.state.tissinscricao}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tissinscricao" id="unidade-easy-tissinscricao" value={this.state.tissinscricao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -710,15 +553,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.tisscbo">Tisscbo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tisscbo"
-                            id="unidade-easy-tisscbo"
-                            value={this.state.tisscbo}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tisscbo" id="unidade-easy-tisscbo" value={this.state.tisscbo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -727,15 +562,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.tisscoduf">Tisscoduf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tisscoduf"
-                            id="unidade-easy-tisscoduf"
-                            value={this.state.tisscoduf}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tisscoduf" id="unidade-easy-tisscoduf" value={this.state.tisscoduf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -744,24 +571,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                             <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="unidade-easy-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="unidade-easy-dataPost">
-                            <Translate contentKey="generadorApp.unidadeEasy.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="unidade-easy-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -891,10 +700,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                         <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -950,10 +755,6 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                         <td>{unidadeEasy.tisscoduf}</td>
 
                         <td>{unidadeEasy.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={unidadeEasy.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

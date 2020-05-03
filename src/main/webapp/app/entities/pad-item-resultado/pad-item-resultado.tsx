@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -43,7 +44,6 @@ export interface IPadItemResultadoProps extends StateProps, DispatchProps, Route
 
 export interface IPadItemResultadoBaseState {
   resultado: any;
-  dataPost: any;
   dataFim: any;
   resultadoAnalisado: any;
   usuarioId: any;
@@ -65,7 +65,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
   getPadItemResultadoState = (location): IPadItemResultadoBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const resultado = url.searchParams.get('resultado') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const dataFim = url.searchParams.get('dataFim') || '';
     const resultadoAnalisado = url.searchParams.get('resultadoAnalisado') || '';
     const usuarioId = url.searchParams.get('usuarioId') || '';
@@ -74,7 +73,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 
     return {
       resultado,
-      dataPost,
       dataFim,
       resultadoAnalisado,
       usuarioId,
@@ -92,7 +90,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
     this.setState(
       {
         resultado: '',
-        dataPost: '',
         dataFim: '',
         resultadoAnalisado: '',
         usuarioId: '',
@@ -144,9 +141,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
       'resultado=' +
       this.state.resultado +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'dataFim=' +
       this.state.dataFim +
       '&' +
@@ -166,18 +160,8 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { resultado, dataPost, dataFim, resultadoAnalisado, usuarioId, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      resultado,
-      dataPost,
-      dataFim,
-      resultadoAnalisado,
-      usuarioId,
-      idPadItem,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { resultado, dataFim, resultadoAnalisado, usuarioId, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(resultado, dataFim, resultadoAnalisado, usuarioId, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -217,34 +201,7 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                           <Label id="resultadoLabel" for="pad-item-resultado-resultado">
                             <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="resultado"
-                            id="pad-item-resultado-resultado"
-                            value={this.state.resultado}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-item-resultado-dataPost">
-                            <Translate contentKey="generadorApp.padItemResultado.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-resultado-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -327,10 +284,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                         <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padItemResultado.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('dataFim')}>
                         <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -362,10 +315,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                         </td>
 
                         <td>{padItemResultado.resultado}</td>
-
-                        <td>
-                          <TextFormat type="date" value={padItemResultado.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>
                           <TextFormat type="date" value={padItemResultado.dataFim} format={APP_LOCAL_DATE_FORMAT} />

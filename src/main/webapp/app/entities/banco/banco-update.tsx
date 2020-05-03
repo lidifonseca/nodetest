@@ -41,8 +41,6 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { bancoEntity } = this.props;
       const entity = {
@@ -167,31 +165,6 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
                                 name="banco"
                                 validate={{
                                   maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="banco-dataPost">
-                                <Translate contentKey="generadorApp.banco.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="banco-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.bancoEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
                                 }}
                               />
                             </Col>

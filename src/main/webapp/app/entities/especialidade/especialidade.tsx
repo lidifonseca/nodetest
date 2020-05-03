@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -52,7 +52,6 @@ export interface IEspecialidadeBaseState {
   duracao: any;
   importante: any;
   ativo: any;
-  dataPost: any;
   idUnidade: any;
   atendimento: any;
   especialidadeOperadora: any;
@@ -85,7 +84,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
     const duracao = url.searchParams.get('duracao') || '';
     const importante = url.searchParams.get('importante') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const idUnidade = url.searchParams.get('idUnidade') || '';
 
     const atendimento = url.searchParams.get('atendimento') || '';
@@ -105,7 +103,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       duracao,
       importante,
       ativo,
-      dataPost,
       idUnidade,
       atendimento,
       especialidadeOperadora,
@@ -136,7 +133,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
         duracao: '',
         importante: '',
         ativo: '',
-        dataPost: '',
         idUnidade: '',
         atendimento: '',
         especialidadeOperadora: '',
@@ -209,9 +205,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUnidade=' +
       this.state.idUnidade +
       '&' +
@@ -256,7 +249,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       duracao,
       importante,
       ativo,
-      dataPost,
       idUnidade,
       atendimento,
       especialidadeOperadora,
@@ -279,7 +271,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       duracao,
       importante,
       ativo,
-      dataPost,
       idUnidade,
       atendimento,
       especialidadeOperadora,
@@ -334,15 +325,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                             <Translate contentKey="generadorApp.especialidade.icon">Icon</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="icon"
-                            id="especialidade-icon"
-                            value={this.state.icon}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="icon" id="especialidade-icon" value={this.state.icon} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -351,15 +334,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                             <Translate contentKey="generadorApp.especialidade.especialidade">Especialidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="especialidade"
-                            id="especialidade-especialidade"
-                            value={this.state.especialidade}
-                            validate={{
-                              maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="especialidade" id="especialidade-especialidade" value={this.state.especialidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -367,16 +342,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                           <Label id="descricaoLabel" for="especialidade-descricao">
                             <Translate contentKey="generadorApp.especialidade.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="descricao"
-                            id="especialidade-descricao"
-                            value={this.state.descricao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="especialidade-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -393,15 +359,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                             <Translate contentKey="generadorApp.especialidade.importante">Importante</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="importante"
-                            id="especialidade-importante"
-                            value={this.state.importante}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="importante" id="especialidade-importante" value={this.state.importante} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -410,24 +368,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                             <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="especialidade-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="especialidade-dataPost">
-                            <Translate contentKey="generadorApp.especialidade.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="especialidade-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -578,10 +518,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                         <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.especialidade.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('idUnidade')}>
                         <Translate contentKey="generadorApp.especialidade.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -623,10 +559,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                         <td>{especialidade.importante}</td>
 
                         <td>{especialidade.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={especialidade.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{especialidade.idUnidade}</td>
                         <td>

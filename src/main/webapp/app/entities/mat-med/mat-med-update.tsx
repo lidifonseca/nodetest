@@ -197,21 +197,6 @@ export class MatMedUpdate extends React.Component<IMatMedUpdateProps, IMatMedUpd
                           </Row>
                         </AvGroup>
                       </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="mat-med-dataPost">
-                                <Translate contentKey="generadorApp.matMed.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="mat-med-dataPost" type="date" className="form-control" name="dataPost" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                     </Row>
                   )}
                 </Col>

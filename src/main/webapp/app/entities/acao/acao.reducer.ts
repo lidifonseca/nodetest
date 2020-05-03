@@ -107,7 +107,6 @@ const apiUrl = 'api/acaos';
 // Actions
 export type ICrudGetAllActionAcao<T> = (
   acao?: any,
-  dataPost?: any,
   logUser?: any,
   logUserFranquia?: any,
   usuarioAcao?: any,
@@ -116,9 +115,8 @@ export type ICrudGetAllActionAcao<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAcao<IAcao> = (acao, dataPost, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionAcao<IAcao> = (acao, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
   const acaoRequest = acao ? `acao.contains=${acao}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const logUserRequest = logUser ? `logUser.equals=${logUser}&` : '';
   const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
   const usuarioAcaoRequest = usuarioAcao ? `usuarioAcao.equals=${usuarioAcao}&` : '';
@@ -127,7 +125,7 @@ export const getEntities: ICrudGetAllActionAcao<IAcao> = (acao, dataPost, logUse
   return {
     type: ACTION_TYPES.FETCH_ACAO_LIST,
     payload: axios.get<IAcao>(
-      `${requestUrl}${acaoRequest}${dataPostRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${acaoRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

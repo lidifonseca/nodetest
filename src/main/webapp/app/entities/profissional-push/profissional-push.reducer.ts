@@ -110,7 +110,6 @@ export type ICrudGetAllActionProfissionalPush<T> = (
   idFranquia?: any,
   mensagem?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -121,7 +120,6 @@ export const getEntities: ICrudGetAllActionProfissionalPush<IProfissionalPush> =
   idFranquia,
   mensagem,
   ativo,
-  dataPost,
   page,
   size,
   sort
@@ -130,13 +128,12 @@ export const getEntities: ICrudGetAllActionProfissionalPush<IProfissionalPush> =
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALPUSH_LIST,
     payload: axios.get<IProfissionalPush>(
-      `${requestUrl}${idProfissionalRequest}${idFranquiaRequest}${mensagemRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idFranquiaRequest}${mensagemRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

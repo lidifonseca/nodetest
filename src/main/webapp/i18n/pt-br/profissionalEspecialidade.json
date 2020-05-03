@@ -17,8 +17,7 @@
         "title": "Profissional Especialidade"
       },
       "idEspecialidade": "Id Especialidade",
-      "idProfissional": "Id Profissional",
-      "dataPost": "Data Post"
+      "idProfissional": "Id Profissional"
     }
   }
 }

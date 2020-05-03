@@ -107,24 +107,20 @@ const apiUrl = 'api/tipo-unidades';
 // Actions
 export type ICrudGetAllActionTipoUnidade<T> = (
   tipoUnidade?: any,
-  dataPost?: any,
   especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, dataPost, especialidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, especialidade, page, size, sort) => {
   const tipoUnidadeRequest = tipoUnidade ? `tipoUnidade.contains=${tipoUnidade}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOUNIDADE_LIST,
-    payload: axios.get<ITipoUnidade>(
-      `${requestUrl}${tipoUnidadeRequest}${dataPostRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITipoUnidade> = id => {

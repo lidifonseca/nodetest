@@ -16,9 +16,6 @@ export default class Acao extends BaseEntity {
   @Column({ name: 'acao', length: 100 })
   acao: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => LogUser,
     other => other.idAcao

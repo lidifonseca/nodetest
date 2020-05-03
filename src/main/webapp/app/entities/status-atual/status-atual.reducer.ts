@@ -108,32 +108,22 @@ const apiUrl = 'api/status-atuals';
 export type ICrudGetAllActionStatusAtual<T> = (
   statusAtual?: any,
   styleLabel?: any,
-  dataPost?: any,
   pacienteStatusAtual?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionStatusAtual<IStatusAtual> = (
-  statusAtual,
-  styleLabel,
-  dataPost,
-  pacienteStatusAtual,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionStatusAtual<IStatusAtual> = (statusAtual, styleLabel, pacienteStatusAtual, page, size, sort) => {
   const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const pacienteStatusAtualRequest = pacienteStatusAtual ? `pacienteStatusAtual.equals=${pacienteStatusAtual}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_STATUSATUAL_LIST,
     payload: axios.get<IStatusAtual>(
-      `${requestUrl}${statusAtualRequest}${styleLabelRequest}${dataPostRequest}${pacienteStatusAtualRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtualRequest}${styleLabelRequest}${pacienteStatusAtualRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

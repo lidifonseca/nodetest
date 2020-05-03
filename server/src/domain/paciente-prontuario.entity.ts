@@ -15,11 +15,11 @@ export default class PacienteProntuario extends BaseEntity {
   @Column({ type: 'integer', name: 'id_tipo_prontuario', nullable: false })
   idTipoProntuario: number;
 
-  @Column({ name: 'o_que', length: 255 })
-  oQue: string;
+  @Column({ type: 'blob', name: 'o_que' })
+  oQue: any;
 
-  @Column({ name: 'resultado', length: 255 })
-  resultado: string;
+  @Column({ type: 'blob', name: 'resultado' })
+  resultado: any;
 
   @Column({ type: 'integer', name: 'ativo', nullable: false })
   ativo: number;
@@ -56,9 +56,6 @@ export default class PacienteProntuario extends BaseEntity {
 
   @Column({ type: 'integer', name: 'id_ocorrencia_prontuario' })
   idOcorrenciaProntuario: number;
-
-  @Column({ type: 'timestamp', name: 'data_post' })
-  dataPost: any;
 
   @Column({ type: 'date', name: 'data_manifestacao' })
   dataManifestacao: any;

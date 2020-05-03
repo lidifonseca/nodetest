@@ -21,8 +21,7 @@
       "idProfissional": "Id Profissional",
       "observacao": "Observacao",
       "resolvido": "Resolvido",
-      "idUserResolvido": "Id User Resolvido",
-      "dataPost": "Data Post"
+      "idUserResolvido": "Id User Resolvido"
     }
   }
 }

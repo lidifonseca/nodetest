@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -47,7 +38,6 @@ export interface IAtendimentoAssinaturasProps extends StateProps, DispatchProps,
 
 export interface IAtendimentoAssinaturasBaseState {
   arquivoAssinatura: any;
-  dataPost: any;
   idAtendimento: any;
   idProfissional: any;
   idPaciente: any;
@@ -68,7 +58,6 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
   getAtendimentoAssinaturasState = (location): IAtendimentoAssinaturasBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const arquivoAssinatura = url.searchParams.get('arquivoAssinatura') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
     const idProfissional = url.searchParams.get('idProfissional') || '';
@@ -76,7 +65,6 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
 
     return {
       arquivoAssinatura,
-      dataPost,
       idAtendimento,
       idProfissional,
       idPaciente
@@ -95,7 +83,6 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
     this.setState(
       {
         arquivoAssinatura: '',
-        dataPost: '',
         idAtendimento: '',
         idProfissional: '',
         idPaciente: ''
@@ -146,9 +133,6 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
       'arquivoAssinatura=' +
       this.state.arquivoAssinatura +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idAtendimento=' +
       this.state.idAtendimento +
       '&' +
@@ -165,17 +149,8 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { arquivoAssinatura, dataPost, idAtendimento, idProfissional, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      arquivoAssinatura,
-      dataPost,
-      idAtendimento,
-      idProfissional,
-      idPaciente,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { arquivoAssinatura, idAtendimento, idProfissional, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(arquivoAssinatura, idAtendimento, idProfissional, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -223,27 +198,6 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
                             name="arquivoAssinatura"
                             id="atendimento-assinaturas-arquivoAssinatura"
                             value={this.state.arquivoAssinatura}
-                            validate={{
-                              maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="atendimento-assinaturas-dataPost">
-                            <Translate contentKey="generadorApp.atendimentoAssinaturas.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-assinaturas-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -348,10 +302,6 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
                         <Translate contentKey="generadorApp.atendimentoAssinaturas.arquivoAssinatura">Arquivo Assinatura</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.atendimentoAssinaturas.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.atendimentoAssinaturas.idAtendimento">Id Atendimento</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -379,10 +329,6 @@ export class AtendimentoAssinaturas extends React.Component<IAtendimentoAssinatu
                         </td>
 
                         <td>{atendimentoAssinaturas.arquivoAssinatura}</td>
-
-                        <td>
-                          <TextFormat type="date" value={atendimentoAssinaturas.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {atendimentoAssinaturas.idAtendimento ? (
                             <Link to={`atendimento/${atendimentoAssinaturas.idAtendimento.id}`}>

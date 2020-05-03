@@ -35,14 +35,12 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "acoesRespostas",
             "otherEntityRelationshipName": "perguntasQuestionarioId",
-            "relationshipValidateRules": "required",
             "relationshipName": "acoesRespostas"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "respostas",
             "otherEntityRelationshipName": "perguntasQuestionarioId",
-            "relationshipValidateRules": "required",
             "relationshipName": "respostas"
         },
         {

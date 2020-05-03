@@ -21,9 +21,6 @@ export default class ProfissionalAreaAtuacaoNew extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @Column({ name: 'cep_ini', length: 45 })
   cepIni: string;
 

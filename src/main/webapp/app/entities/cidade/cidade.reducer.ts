@@ -107,7 +107,6 @@ const apiUrl = 'api/cidades';
 // Actions
 export type ICrudGetAllActionCidade<T> = (
   descrCidade?: any,
-  dataPost?: any,
   atendimento?: any,
   empresa?: any,
   idUf?: any,
@@ -116,9 +115,8 @@ export type ICrudGetAllActionCidade<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, dataPost, atendimento, empresa, idUf, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, atendimento, empresa, idUf, page, size, sort) => {
   const descrCidadeRequest = descrCidade ? `descrCidade.contains=${descrCidade}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const empresaRequest = empresa ? `empresa.equals=${empresa}&` : '';
   const idUfRequest = idUf ? `idUf.equals=${idUf}&` : '';
@@ -127,7 +125,7 @@ export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, dataP
   return {
     type: ACTION_TYPES.FETCH_CIDADE_LIST,
     payload: axios.get<ICidade>(
-      `${requestUrl}${descrCidadeRequest}${dataPostRequest}${atendimentoRequest}${empresaRequest}${idUfRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${descrCidadeRequest}${atendimentoRequest}${empresaRequest}${idUfRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

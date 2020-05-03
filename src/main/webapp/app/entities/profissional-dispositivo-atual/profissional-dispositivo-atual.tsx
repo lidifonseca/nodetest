@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -60,7 +51,6 @@ export interface IProfissionalDispositivoAtualBaseState {
   mascaraDeVentilacao: any;
   entubacaoOrotraqueal: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IProfissionalDispositivoAtualState extends IProfissionalDispositivoAtualBaseState, IPaginationBaseState {}
 
@@ -98,7 +88,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
     const mascaraDeVentilacao = url.searchParams.get('mascaraDeVentilacao') || '';
     const entubacaoOrotraqueal = url.searchParams.get('entubacaoOrotraqueal') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProfissional,
@@ -121,8 +110,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
       cateterNasalDeOxigenio,
       mascaraDeVentilacao,
       entubacaoOrotraqueal,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -153,8 +141,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
         cateterNasalDeOxigenio: '',
         mascaraDeVentilacao: '',
         entubacaoOrotraqueal: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -262,9 +249,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -294,7 +278,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
       mascaraDeVentilacao,
       entubacaoOrotraqueal,
       idUsuario,
-      dataPost,
       activePage,
       itemsPerPage,
       sort,
@@ -322,7 +305,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
       mascaraDeVentilacao,
       entubacaoOrotraqueal,
       idUsuario,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -373,10 +355,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                             name="idProfissional"
                             id="profissional-dispositivo-atual-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -642,28 +620,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                             name="idUsuario"
                             id="profissional-dispositivo-atual-idUsuario"
                             value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-dispositivo-atual-dataPost">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-dispositivo-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -798,10 +754,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                         <Translate contentKey="generadorApp.profissionalDispositivoAtual.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -857,10 +809,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                         <td>{profissionalDispositivoAtual.entubacaoOrotraqueal}</td>
 
                         <td>{profissionalDispositivoAtual.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalDispositivoAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -30,13 +30,6 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "ordem",
             "fieldType": "Integer"
         },
@@ -65,7 +58,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "categoriaUnidade",
             "otherEntityRelationshipName": "idCategoria",
-            "relationshipValidateRules": "required",
             "relationshipName": "categoriaUnidade"
         },
         {

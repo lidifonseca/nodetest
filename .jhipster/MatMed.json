@@ -21,10 +21,6 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "LocalDate"
         }
     ],
     "relationships": [],

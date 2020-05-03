@@ -41,8 +41,6 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { tipoUnidadeEntity } = this.props;
       const entity = {
@@ -145,31 +143,6 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
                                 name="tipoUnidade"
                                 validate={{
                                   maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="tipo-unidade-dataPost">
-                                <Translate contentKey="generadorApp.tipoUnidade.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="tipo-unidade-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.tipoUnidadeEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
                                 }}
                               />
                             </Col>

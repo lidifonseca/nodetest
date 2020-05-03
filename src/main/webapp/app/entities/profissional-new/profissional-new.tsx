@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -73,7 +74,6 @@ export interface IProfissionalNewBaseState {
   obs: any;
   chavePrivada: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IProfissionalNewState extends IProfissionalNewBaseState, IPaginationBaseState {}
 
@@ -124,7 +124,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
     const obs = url.searchParams.get('obs') || '';
     const chavePrivada = url.searchParams.get('chavePrivada') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idUnidade,
@@ -160,8 +159,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       origemCadastro,
       obs,
       chavePrivada,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -205,8 +203,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
         origemCadastro: '',
         obs: '',
         chavePrivada: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -353,9 +350,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -398,7 +392,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       obs,
       chavePrivada,
       ativo,
-      dataPost,
       activePage,
       itemsPerPage,
       sort,
@@ -439,7 +432,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
       obs,
       chavePrivada,
       ativo,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -484,15 +476,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.idUnidade">Id Unidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUnidade"
-                            id="profissional-new-idUnidade"
-                            value={this.state.idUnidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUnidade" id="profissional-new-idUnidade" value={this.state.idUnidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -531,15 +515,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.senha">Senha</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="senha"
-                            id="profissional-new-senha"
-                            value={this.state.senha}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="senha" id="profissional-new-senha" value={this.state.senha} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -548,15 +524,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.nome">Nome</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="profissional-new-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nome" id="profissional-new-nome" value={this.state.nome} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -565,15 +533,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.email">Email</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="email"
-                            id="profissional-new-email"
-                            value={this.state.email}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="email" id="profissional-new-email" value={this.state.email} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -582,15 +542,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.cpf">Cpf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cpf"
-                            id="profissional-new-cpf"
-                            value={this.state.cpf}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cpf" id="profissional-new-cpf" value={this.state.cpf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -599,15 +551,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.rg">Rg</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="rg"
-                            id="profissional-new-rg"
-                            value={this.state.rg}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="rg" id="profissional-new-rg" value={this.state.rg} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -616,15 +560,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.nomeEmpresa">Nome Empresa</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nomeEmpresa"
-                            id="profissional-new-nomeEmpresa"
-                            value={this.state.nomeEmpresa}
-                            validate={{
-                              maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nomeEmpresa" id="profissional-new-nomeEmpresa" value={this.state.nomeEmpresa} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -633,15 +569,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.cnpj">Cnpj</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cnpj"
-                            id="profissional-new-cnpj"
-                            value={this.state.cnpj}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cnpj" id="profissional-new-cnpj" value={this.state.cnpj} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -650,15 +578,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.registro">Registro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="registro"
-                            id="profissional-new-registro"
-                            value={this.state.registro}
-                            validate={{
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="registro" id="profissional-new-registro" value={this.state.registro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -683,15 +603,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.telefone1">Telefone 1</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone1"
-                            id="profissional-new-telefone1"
-                            value={this.state.telefone1}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone1" id="profissional-new-telefone1" value={this.state.telefone1} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -700,15 +612,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.telefone2">Telefone 2</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone2"
-                            id="profissional-new-telefone2"
-                            value={this.state.telefone2}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone2" id="profissional-new-telefone2" value={this.state.telefone2} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -717,15 +621,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.celular1">Celular 1</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular1"
-                            id="profissional-new-celular1"
-                            value={this.state.celular1}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular1" id="profissional-new-celular1" value={this.state.celular1} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -734,15 +630,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.celular2">Celular 2</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular2"
-                            id="profissional-new-celular2"
-                            value={this.state.celular2}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular2" id="profissional-new-celular2" value={this.state.celular2} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -751,15 +639,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.cep">Cep</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="profissional-new-cep"
-                            value={this.state.cep}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cep" id="profissional-new-cep" value={this.state.cep} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -768,15 +648,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.endereco">Endereco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="endereco"
-                            id="profissional-new-endereco"
-                            value={this.state.endereco}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="endereco" id="profissional-new-endereco" value={this.state.endereco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -785,15 +657,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.numero">Numero</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numero"
-                            id="profissional-new-numero"
-                            value={this.state.numero}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numero" id="profissional-new-numero" value={this.state.numero} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -802,15 +666,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.complemento">Complemento</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complemento"
-                            id="profissional-new-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complemento" id="profissional-new-complemento" value={this.state.complemento} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -819,15 +675,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.bairro">Bairro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bairro"
-                            id="profissional-new-bairro"
-                            value={this.state.bairro}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bairro" id="profissional-new-bairro" value={this.state.bairro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -836,15 +684,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.cidade">Cidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cidade"
-                            id="profissional-new-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cidade" id="profissional-new-cidade" value={this.state.cidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -853,15 +693,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.uf">Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="uf"
-                            id="profissional-new-uf"
-                            value={this.state.uf}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="uf" id="profissional-new-uf" value={this.state.uf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -891,15 +723,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.ag">Ag</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ag"
-                            id="profissional-new-ag"
-                            value={this.state.ag}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="ag" id="profissional-new-ag" value={this.state.ag} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -908,15 +732,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.conta">Conta</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="conta"
-                            id="profissional-new-conta"
-                            value={this.state.conta}
-                            validate={{
-                              maxLength: { value: 25, errorMessage: translate('entity.validation.maxlength', { max: 25 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="conta" id="profissional-new-conta" value={this.state.conta} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -925,15 +741,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.tipoConta">Tipo Conta</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tipoConta"
-                            id="profissional-new-tipoConta"
-                            value={this.state.tipoConta}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tipoConta" id="profissional-new-tipoConta" value={this.state.tipoConta} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -947,9 +755,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             name="origemCadastro"
                             id="profissional-new-origemCadastro"
                             value={this.state.origemCadastro}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -958,16 +763,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                           <Label id="obsLabel" for="profissional-new-obs">
                             <Translate contentKey="generadorApp.profissionalNew.obs">Obs</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="obs"
-                            id="profissional-new-obs"
-                            value={this.state.obs}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="profissional-new-obs" type="textarea" name="obs" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -976,15 +772,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.chavePrivada">Chave Privada</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="chavePrivada"
-                            id="profissional-new-chavePrivada"
-                            value={this.state.chavePrivada}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="chavePrivada" id="profissional-new-chavePrivada" value={this.state.chavePrivada} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -993,24 +781,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                             <Translate contentKey="generadorApp.profissionalNew.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="profissional-new-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-new-dataPost">
-                            <Translate contentKey="generadorApp.profissionalNew.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-new-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -1176,10 +946,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                         <Translate contentKey="generadorApp.profissionalNew.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalNew.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -1263,10 +1029,6 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                         <td>{profissionalNew.chavePrivada}</td>
 
                         <td>{profissionalNew.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalNew.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -15,7 +15,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "indicadoresValores",
             "otherEntityRelationshipName": "indicadoresId",
-            "relationshipValidateRules": "required",
             "relationshipName": "indicadoresValores"
         }
     ],

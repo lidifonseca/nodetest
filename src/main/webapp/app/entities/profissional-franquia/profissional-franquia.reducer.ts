@@ -108,29 +108,20 @@ const apiUrl = 'api/profissional-franquias';
 export type ICrudGetAllActionProfissionalFranquia<T> = (
   idProfissional?: any,
   idFranquia?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionProfissionalFranquia<IProfissionalFranquia> = (
-  idProfissional,
-  idFranquia,
-  dataPost,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionProfissionalFranquia<IProfissionalFranquia> = (idProfissional, idFranquia, page, size, sort) => {
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA_LIST,
     payload: axios.get<IProfissionalFranquia>(
-      `${requestUrl}${idProfissionalRequest}${idFranquiaRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

@@ -9,7 +9,6 @@ export interface IAtendimentoAcompanhamentoPush {
   nomePaciente?: string;
   nomeProfissioinal?: string;
   timestampConfirmacao?: Moment;
-  dataPost?: Moment;
 }
 
 export const defaultValue: Readonly<IAtendimentoAcompanhamentoPush> = {};

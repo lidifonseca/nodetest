@@ -109,7 +109,6 @@ export type ICrudGetAllActionProfissionalCategoriaContrato<T> = (
   idProfissional?: any,
   idCategoriaContrato?: any,
   aceito?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +118,6 @@ export const getEntities: ICrudGetAllActionProfissionalCategoriaContrato<IProfis
   idProfissional,
   idCategoriaContrato,
   aceito,
-  dataPost,
   page,
   size,
   sort
@@ -127,13 +125,12 @@ export const getEntities: ICrudGetAllActionProfissionalCategoriaContrato<IProfis
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const idCategoriaContratoRequest = idCategoriaContrato ? `idCategoriaContrato.contains=${idCategoriaContrato}&` : '';
   const aceitoRequest = aceito ? `aceito.contains=${aceito}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO_LIST,
     payload: axios.get<IProfissionalCategoriaContrato>(
-      `${requestUrl}${idProfissionalRequest}${idCategoriaContratoRequest}${aceitoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idCategoriaContratoRequest}${aceitoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

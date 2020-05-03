@@ -6,7 +6,6 @@ export interface IPadItemAtividade {
   id?: string;
   dataInicio?: Moment;
   dataFim?: Moment;
-  dataPost?: Moment;
   idAtividade?: string | any;
   idPadItem?: string | any;
 }

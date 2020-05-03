@@ -135,7 +135,6 @@ export type ICrudGetAllActionAtendimento<T> = (
   valor?: any,
   ordemAtendimento?: any,
   ativo?: any,
-  dataPost?: any,
   dataForaHora?: any,
   idUsuarioCancelamento?: any,
   dataCancelamento?: any,
@@ -188,7 +187,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   valor,
   ordemAtendimento,
   ativo,
-  dataPost,
   dataForaHora,
   idUsuarioCancelamento,
   dataCancelamento,
@@ -239,7 +237,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const ordemAtendimentoRequest = ordemAtendimento ? `ordemAtendimento.contains=${ordemAtendimento}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const dataForaHoraRequest = dataForaHora ? `dataForaHora.contains=${dataForaHora}&` : '';
   const idUsuarioCancelamentoRequest = idUsuarioCancelamento ? `idUsuarioCancelamento.contains=${idUsuarioCancelamento}&` : '';
   const dataCancelamentoRequest = dataCancelamento ? `dataCancelamento.equals=${dataCancelamento}&` : '';
@@ -262,7 +259,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idUnidadeRequest}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataPostRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${idPacienteRequest}${idOperadoraRequest}${idEspecialidadeRequest}${idPadItemRequest}${idStatusAtendimentoRequest}${idPeriodoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeRequest}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${idPacienteRequest}${idOperadoraRequest}${idEspecialidadeRequest}${idPadItemRequest}${idStatusAtendimentoRequest}${idPeriodoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

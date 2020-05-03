@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -52,7 +43,6 @@ export interface IEspecialidadeOperadoraBaseState {
   descontoCusto: any;
   descontoVenda: any;
   ativo: any;
-  dataPost: any;
   idOperadora: any;
   idEspecialidade: any;
 }
@@ -79,7 +69,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
     const descontoCusto = url.searchParams.get('descontoCusto') || '';
     const descontoVenda = url.searchParams.get('descontoVenda') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idOperadora = url.searchParams.get('idOperadora') || '';
     const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
@@ -93,7 +82,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
-      dataPost,
       idOperadora,
       idEspecialidade
     };
@@ -117,7 +105,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
         descontoCusto: '',
         descontoVenda: '',
         ativo: '',
-        dataPost: '',
         idOperadora: '',
         idEspecialidade: ''
       },
@@ -188,9 +175,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idOperadora=' +
       this.state.idOperadora +
       '&' +
@@ -213,7 +197,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
-      dataPost,
       idOperadora,
       idEspecialidade,
       activePage,
@@ -230,7 +213,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
-      dataPost,
       idOperadora,
       idEspecialidade,
       activePage - 1,
@@ -279,15 +261,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                             <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="codTuss"
-                            id="especialidade-operadora-codTuss"
-                            value={this.state.codTuss}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="codTuss" id="especialidade-operadora-codTuss" value={this.state.codTuss} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -296,15 +270,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                             <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="codDespesa"
-                            id="especialidade-operadora-codDespesa"
-                            value={this.state.codDespesa}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="codDespesa" id="especialidade-operadora-codDespesa" value={this.state.codDespesa} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -313,15 +279,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                             <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="codTabela"
-                            id="especialidade-operadora-codTabela"
-                            value={this.state.codTabela}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="codTabela" id="especialidade-operadora-codTabela" value={this.state.codTabela} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -372,24 +330,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                             <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="especialidade-operadora-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="especialidade-operadora-dataPost">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="especialidade-operadora-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -496,10 +436,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                         <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.especialidadeOperadora.idOperadora">Id Operadora</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -537,10 +473,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                         <td>{especialidadeOperadora.descontoVenda}</td>
 
                         <td>{especialidadeOperadora.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={especialidadeOperadora.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {especialidadeOperadora.idOperadora ? (
                             <Link to={`operadora/${especialidadeOperadora.idOperadora.id}`}>{especialidadeOperadora.idOperadora.id}</Link>

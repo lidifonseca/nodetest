@@ -37,7 +37,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "cidXPtaNovoPadItemIndi",
             "otherEntityRelationshipName": "cidXPtaNovoId",
-            "relationshipValidateRules": "required",
             "relationshipName": "cidXPtaNovoPadItemIndi"
         },
         {

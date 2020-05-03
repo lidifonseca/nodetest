@@ -166,15 +166,7 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
                             <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="segmento"
-                            id="segmentos-perguntas-segmento"
-                            value={this.state.segmento}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="segmento" id="segmentos-perguntas-segmento" value={this.state.segmento} />
                         </Row>
                       </Col>
 

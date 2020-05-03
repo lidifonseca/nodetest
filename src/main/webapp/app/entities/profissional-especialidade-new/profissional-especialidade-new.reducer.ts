@@ -108,7 +108,6 @@ const apiUrl = 'api/profissional-especialidade-news';
 export type ICrudGetAllActionProfissionalEspecialidadeNew<T> = (
   idEspecialidade?: any,
   idProfissional?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -117,20 +116,18 @@ export type ICrudGetAllActionProfissionalEspecialidadeNew<T> = (
 export const getEntities: ICrudGetAllActionProfissionalEspecialidadeNew<IProfissionalEspecialidadeNew> = (
   idEspecialidade,
   idProfissional,
-  dataPost,
   page,
   size,
   sort
 ) => {
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.contains=${idEspecialidade}&` : '';
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW_LIST,
     payload: axios.get<IProfissionalEspecialidadeNew>(
-      `${requestUrl}${idEspecialidadeRequest}${idProfissionalRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idEspecialidadeRequest}${idProfissionalRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

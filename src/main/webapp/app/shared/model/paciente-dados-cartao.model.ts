@@ -9,7 +9,6 @@ export interface IPacienteDadosCartao {
   validade?: Moment;
   codAtivacao?: number;
   ativo?: number;
-  dataPost?: Moment;
   pacientePedidos?: IPacientePedido[];
   idPaciente?: string | any;
 }

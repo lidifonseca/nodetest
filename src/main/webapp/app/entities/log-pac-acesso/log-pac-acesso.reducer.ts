@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_LOGPACACESSO: 'logPacAcesso/CREATE_LOGPACACESSO',
   UPDATE_LOGPACACESSO: 'logPacAcesso/UPDATE_LOGPACACESSO',
   DELETE_LOGPACACESSO: 'logPacAcesso/DELETE_LOGPACACESSO',
+  SET_BLOB: 'logPacAcesso/SET_BLOB',
   RESET: 'logPacAcesso/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: LogPacAcessoState = initialState, action): LogPacAcessoSt
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -111,7 +123,6 @@ export type ICrudGetAllActionLogPacAcesso<T> = (
   token?: any,
   ipLocal?: any,
   inforAcesso?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -123,7 +134,6 @@ export const getEntities: ICrudGetAllActionLogPacAcesso<ILogPacAcesso> = (
   token,
   ipLocal,
   inforAcesso,
-  dataPost,
   page,
   size,
   sort
@@ -133,13 +143,12 @@ export const getEntities: ICrudGetAllActionLogPacAcesso<ILogPacAcesso> = (
   const tokenRequest = token ? `token.contains=${token}&` : '';
   const ipLocalRequest = ipLocal ? `ipLocal.contains=${ipLocal}&` : '';
   const inforAcessoRequest = inforAcesso ? `inforAcesso.contains=${inforAcesso}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGPACACESSO_LIST,
     payload: axios.get<ILogPacAcesso>(
-      `${requestUrl}${idPacienteRequest}${profissionalRequest}${tokenRequest}${ipLocalRequest}${inforAcessoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${profissionalRequest}${tokenRequest}${ipLocalRequest}${inforAcessoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -182,6 +191,15 @@ export const deleteEntity: ICrudDeleteAction<ILogPacAcesso> = id => async dispat
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

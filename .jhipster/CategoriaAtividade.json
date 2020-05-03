@@ -10,13 +10,6 @@
             "fieldValidateRulesMaxlength": "100"
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idUnidade",
             "fieldType": "Integer"
         }
@@ -26,7 +19,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoAtividades",
             "otherEntityRelationshipName": "idAtividade",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoAtividades"
         },
         {

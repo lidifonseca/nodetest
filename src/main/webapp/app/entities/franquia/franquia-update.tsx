@@ -41,8 +41,6 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { franquiaEntity } = this.props;
       const entity = {
@@ -507,31 +505,6 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
                             </Col>
                             <Col md="9">
                               <AvField id="franquia-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="franquia-dataPost">
-                                <Translate contentKey="generadorApp.franquia.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="franquia-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.franquiaEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

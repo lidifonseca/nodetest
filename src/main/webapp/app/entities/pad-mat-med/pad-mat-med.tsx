@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IPadMatMedBaseState {
   idMatMed: any;
   qtd: any;
   idUsuario: any;
-  dataPost: any;
   ativo: any;
 }
 export interface IPadMatMedState extends IPadMatMedBaseState, IPaginationBaseState {}
@@ -65,7 +55,6 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
     const idMatMed = url.searchParams.get('idMatMed') || '';
     const qtd = url.searchParams.get('qtd') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const ativo = url.searchParams.get('ativo') || '';
 
     return {
@@ -73,7 +62,6 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
       idMatMed,
       qtd,
       idUsuario,
-      dataPost,
       ativo
     };
   };
@@ -89,7 +77,6 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
         idMatMed: '',
         qtd: '',
         idUsuario: '',
-        dataPost: '',
         ativo: ''
       },
       () => this.sortEntities()
@@ -147,9 +134,6 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'ativo=' +
       this.state.ativo +
       '&' +
@@ -160,8 +144,8 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPad, idMatMed, qtd, idUsuario, dataPost, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPad, idMatMed, qtd, idUsuario, dataPost, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPad, idMatMed, qtd, idUsuario, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPad, idMatMed, qtd, idUsuario, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -201,16 +185,7 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                           <Label id="idPadLabel" for="pad-mat-med-idPad">
                             <Translate contentKey="generadorApp.padMatMed.idPad">Id Pad</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idPad"
-                            id="pad-mat-med-idPad"
-                            value={this.state.idPad}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idPad" id="pad-mat-med-idPad" value={this.state.idPad} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -218,16 +193,7 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                           <Label id="idMatMedLabel" for="pad-mat-med-idMatMed">
                             <Translate contentKey="generadorApp.padMatMed.idMatMed">Id Mat Med</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idMatMed"
-                            id="pad-mat-med-idMatMed"
-                            value={this.state.idMatMed}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idMatMed" id="pad-mat-med-idMatMed" value={this.state.idMatMed} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -235,16 +201,7 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                           <Label id="qtdLabel" for="pad-mat-med-qtd">
                             <Translate contentKey="generadorApp.padMatMed.qtd">Qtd</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="qtd"
-                            id="pad-mat-med-qtd"
-                            value={this.state.qtd}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="qtd" id="pad-mat-med-qtd" value={this.state.qtd} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -252,24 +209,7 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                           <Label id="idUsuarioLabel" for="pad-mat-med-idUsuario">
                             <Translate contentKey="generadorApp.padMatMed.idUsuario">Id Usuario</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="pad-mat-med-idUsuario"
-                            value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-mat-med-dataPost">
-                            <Translate contentKey="generadorApp.padMatMed.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="pad-mat-med-dataPost" value={this.state.dataPost} />
+                          <AvInput type="string" name="idUsuario" id="pad-mat-med-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -277,16 +217,7 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                           <Label id="ativoLabel" for="pad-mat-med-ativo">
                             <Translate contentKey="generadorApp.padMatMed.ativo">Ativo</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="ativo"
-                            id="pad-mat-med-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="ativo" id="pad-mat-med-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
                     </div>
@@ -332,10 +263,6 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                         <Translate contentKey="generadorApp.padMatMed.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padMatMed.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('ativo')}>
                         <Translate contentKey="generadorApp.padMatMed.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -361,10 +288,6 @@ export class PadMatMed extends React.Component<IPadMatMedProps, IPadMatMedState>
                         <td>{padMatMed.qtd}</td>
 
                         <td>{padMatMed.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={padMatMed.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td>{padMatMed.ativo}</td>
 

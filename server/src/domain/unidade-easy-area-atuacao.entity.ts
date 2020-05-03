@@ -17,9 +17,6 @@ export default class UnidadeEasyAreaAtuacao extends BaseEntity {
   @Column({ name: 'cep_final', length: 10 })
   cepFinal: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => UnidadeEasy)
   idUnidade: UnidadeEasy;
 

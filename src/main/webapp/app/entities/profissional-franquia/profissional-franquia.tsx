@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IProfissionalFranquiaProps extends StateProps, DispatchProps, R
 export interface IProfissionalFranquiaBaseState {
   idProfissional: any;
   idFranquia: any;
-  dataPost: any;
 }
 export interface IProfissionalFranquiaState extends IProfissionalFranquiaBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const idFranquia = url.searchParams.get('idFranquia') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProfissional,
-      idFranquia,
-      dataPost
+      idFranquia
     };
   };
 
@@ -77,8 +65,7 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
     this.setState(
       {
         idProfissional: '',
-        idFranquia: '',
-        dataPost: ''
+        idFranquia: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
       'idFranquia=' +
       this.state.idFranquia +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, idFranquia, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProfissional, idFranquia, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProfissional, idFranquia, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, idFranquia, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -186,9 +170,6 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                             name="idProfissional"
                             id="profissional-franquia-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -198,33 +179,7 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                             <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idFranquia"
-                            id="profissional-franquia-idFranquia"
-                            value={this.state.idFranquia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-franquia-dataPost">
-                            <Translate contentKey="generadorApp.profissionalFranquia.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-franquia-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idFranquia" id="profissional-franquia-idFranquia" value={this.state.idFranquia} />
                         </Row>
                       </Col>
                     </div>
@@ -262,10 +217,6 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                         <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalFranquia.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -283,10 +234,6 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                         <td>{profissionalFranquia.idProfissional}</td>
 
                         <td>{profissionalFranquia.idFranquia}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalFranquia.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

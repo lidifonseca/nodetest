@@ -1,12 +1,9 @@
-import { Moment } from 'moment';
-
 export interface IProfissionalStatusAtualNew {
   id?: string;
   idProfissional?: string;
   idStatusAtualProf?: number;
-  obs?: string;
+  obs?: any;
   ativo?: number;
-  dataPost?: Moment;
   idUsuario?: string;
 }
 

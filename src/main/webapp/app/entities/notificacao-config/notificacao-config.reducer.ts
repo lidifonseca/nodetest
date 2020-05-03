@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_NOTIFICACAOCONFIG: 'notificacaoConfig/CREATE_NOTIFICACAOCONFIG',
   UPDATE_NOTIFICACAOCONFIG: 'notificacaoConfig/UPDATE_NOTIFICACAOCONFIG',
   DELETE_NOTIFICACAOCONFIG: 'notificacaoConfig/DELETE_NOTIFICACAOCONFIG',
+  SET_BLOB: 'notificacaoConfig/SET_BLOB',
   RESET: 'notificacaoConfig/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: NotificacaoConfigState = initialState, action): Notificac
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -188,6 +200,15 @@ export const deleteEntity: ICrudDeleteAction<INotificacaoConfig> = id => async d
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

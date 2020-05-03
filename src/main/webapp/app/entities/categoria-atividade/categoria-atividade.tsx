@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface ICategoriaAtividadeProps extends StateProps, DispatchProps, Rou
 
 export interface ICategoriaAtividadeBaseState {
   atividade: any;
-  dataPost: any;
   idUnidade: any;
   atendimentoAtividades: any;
   padItemAtividade: any;
@@ -65,7 +55,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   getCategoriaAtividadeState = (location): ICategoriaAtividadeBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const atividade = url.searchParams.get('atividade') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const idUnidade = url.searchParams.get('idUnidade') || '';
 
     const atendimentoAtividades = url.searchParams.get('atendimentoAtividades') || '';
@@ -74,7 +63,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
 
     return {
       atividade,
-      dataPost,
       idUnidade,
       atendimentoAtividades,
       padItemAtividade,
@@ -92,7 +80,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
     this.setState(
       {
         atividade: '',
-        dataPost: '',
         idUnidade: '',
         atendimentoAtividades: '',
         padItemAtividade: '',
@@ -144,9 +131,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
       'atividade=' +
       this.state.atividade +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUnidade=' +
       this.state.idUnidade +
       '&' +
@@ -168,7 +152,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   getEntities = () => {
     const {
       atividade,
-      dataPost,
       idUnidade,
       atendimentoAtividades,
       padItemAtividade,
@@ -180,7 +163,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
     } = this.state;
     this.props.getEntities(
       atividade,
-      dataPost,
       idUnidade,
       atendimentoAtividades,
       padItemAtividade,
@@ -229,33 +211,7 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                             <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="atividade"
-                            id="categoria-atividade-atividade"
-                            value={this.state.atividade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="categoria-atividade-dataPost">
-                            <Translate contentKey="generadorApp.categoriaAtividade.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="categoria-atividade-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="atividade" id="categoria-atividade-atividade" value={this.state.atividade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -325,10 +281,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                         <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.categoriaAtividade.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('idUnidade')}>
                         <Translate contentKey="generadorApp.categoriaAtividade.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -352,10 +304,6 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                         </td>
 
                         <td>{categoriaAtividade.atividade}</td>
-
-                        <td>
-                          <TextFormat type="date" value={categoriaAtividade.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{categoriaAtividade.idUnidade}</td>
                         <td>

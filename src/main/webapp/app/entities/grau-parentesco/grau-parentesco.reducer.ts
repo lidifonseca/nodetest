@@ -107,20 +107,18 @@ const apiUrl = 'api/grau-parentescos';
 // Actions
 export type ICrudGetAllActionGrauParentesco<T> = (
   grauParentesco?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionGrauParentesco<IGrauParentesco> = (grauParentesco, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionGrauParentesco<IGrauParentesco> = (grauParentesco, page, size, sort) => {
   const grauParentescoRequest = grauParentesco ? `grauParentesco.contains=${grauParentesco}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_GRAUPARENTESCO_LIST,
-    payload: axios.get<IGrauParentesco>(`${requestUrl}${grauParentescoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IGrauParentesco>(`${requestUrl}${grauParentescoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IGrauParentesco> = id => {

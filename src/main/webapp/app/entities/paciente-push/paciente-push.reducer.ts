@@ -109,34 +109,23 @@ export type ICrudGetAllActionPacientePush<T> = (
   idFranquia?: any,
   mensagem?: any,
   ativo?: any,
-  dataPost?: any,
   idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacientePush<IPacientePush> = (
-  idFranquia,
-  mensagem,
-  ativo,
-  dataPost,
-  idPaciente,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionPacientePush<IPacientePush> = (idFranquia, mensagem, ativo, idPaciente, page, size, sort) => {
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPUSH_LIST,
     payload: axios.get<IPacientePush>(
-      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}${dataPostRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

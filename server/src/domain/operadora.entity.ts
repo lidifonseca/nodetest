@@ -7,9 +7,10 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 import Atendimento from './atendimento.entity';
 import EspecialidadeOperadora from './especialidade-operadora.entity';
 import PacienteOperadora from './paciente-operadora.entity';
+import TipoOperadora from './tipo-operadora.entity';
 
 /**
- * A Operadora.
+ * @toStringFields nome@@\n@listTableLayout nomeFantasia@@\n@listFilterLayout nomeFantasia<top;3>@@\n@formLayout tipoOperadora<left;12> nomeFantasia<left;12> razaoSocial<left;12> cnpj<left;12> ie<left;12> rg<left;12> site<left;12>@@\n@viewLayout nomeFantasia<left;12> razaoSocial<left;12> cnpj<left;12> ie<left;12> rg<left;12> site<left;12>@@
  */
 @Entity('operadora')
 export default class Operadora extends BaseEntity {
@@ -30,9 +31,6 @@ export default class Operadora extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
 
   @Column({ type: 'integer', name: 'id_unidade' })
   idUnidade: number;
@@ -64,9 +62,6 @@ export default class Operadora extends BaseEntity {
   @Column({ name: 'email_financeiro', length: 50 })
   emailFinanceiro: string;
 
-  @Column({ type: 'integer', name: 'id_tipo_operadora' })
-  idTipoOperadora: number;
-
   @OneToMany(
     type => Atendimento,
     other => other.idOperadora
@@ -84,6 +79,9 @@ export default class Operadora extends BaseEntity {
     other => other.idOperadora
   )
   pacienteOperadoras: PacienteOperadora[];
+
+  @ManyToOne(type => TipoOperadora)
+  idTipoOperadora: TipoOperadora;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -110,7 +110,6 @@ export type ICrudGetAllActionStatusAtendimento<T> = (
   styleLabel?: any,
   ordenacao?: any,
   ativo?: any,
-  dataPost?: any,
   atendimento?: any,
   page?: number,
   size?: number,
@@ -122,7 +121,6 @@ export const getEntities: ICrudGetAllActionStatusAtendimento<IStatusAtendimento>
   styleLabel,
   ordenacao,
   ativo,
-  dataPost,
   atendimento,
   page,
   size,
@@ -132,14 +130,13 @@ export const getEntities: ICrudGetAllActionStatusAtendimento<IStatusAtendimento>
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
   const ordenacaoRequest = ordenacao ? `ordenacao.contains=${ordenacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_STATUSATENDIMENTO_LIST,
     payload: axios.get<IStatusAtendimento>(
-      `${requestUrl}${statusAtendimentoRequest}${styleLabelRequest}${ordenacaoRequest}${ativoRequest}${dataPostRequest}${atendimentoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtendimentoRequest}${styleLabelRequest}${ordenacaoRequest}${ativoRequest}${atendimentoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

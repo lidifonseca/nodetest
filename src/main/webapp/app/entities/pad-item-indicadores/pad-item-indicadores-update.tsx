@@ -4,11 +4,11 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './pad-item-indicadores.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './pad-item-indicadores.reducer';
 import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -40,6 +40,14 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padItemIndicadoresEntity } = this.props;
@@ -63,6 +71,8 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
   render() {
     const { padItemIndicadoresEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = padItemIndicadoresEntity;
 
     return (
       <div>
@@ -189,14 +199,7 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="pad-item-indicadores-descricao"
-                                type="text"
-                                name="descricao"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
+                              <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -268,6 +271,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

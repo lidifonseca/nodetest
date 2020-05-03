@@ -23,7 +23,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "acoesRespostas",
             "otherEntityRelationshipName": "respostasId",
-            "relationshipValidateRules": "required",
             "relationshipName": "acoesRespostas"
         },
         {

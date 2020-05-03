@@ -41,8 +41,6 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { unidadeEasyEntity } = this.props;
       const entity = {
@@ -580,31 +578,6 @@ export class UnidadeEasyUpdate extends React.Component<IUnidadeEasyUpdateProps, 
                             </Col>
                             <Col md="9">
                               <AvField id="unidade-easy-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="unidade-easy-dataPost">
-                                <Translate contentKey="generadorApp.unidadeEasy.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="unidade-easy-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.unidadeEasyEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

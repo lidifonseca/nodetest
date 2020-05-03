@@ -333,11 +333,8 @@
         },
         {
             "fieldName": "observacao",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "255"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "aph",
@@ -407,19 +404,9 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "detalhes",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "255"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "tipohospital",
@@ -465,7 +452,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoAssinaturas",
             "otherEntityRelationshipName": "idPaciente",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoAssinaturas"
         },
         {
@@ -532,7 +518,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "questionarios",
             "otherEntityRelationshipName": "pacienteId",
-            "relationshipValidateRules": "required",
             "relationshipName": "questionarios"
         }
     ],
@@ -546,5 +531,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "javadoc": "@toStringFields nome@@\\n@listTableLayout nome cep bairro rg registro@@\\n@listFilterLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\\n@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\\n@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@"
 }

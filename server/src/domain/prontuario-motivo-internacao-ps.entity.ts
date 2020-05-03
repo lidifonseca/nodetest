@@ -21,8 +21,5 @@ export default class ProntuarioMotivoInternacaoPs extends BaseEntity {
   @Column({ type: 'integer', name: 'id_usuario', nullable: false })
   idUsuario: number;
 
-  @Column({ type: 'timestamp', name: 'data_post' })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

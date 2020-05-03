@@ -13,7 +13,6 @@ export interface IPacientePedido {
   valor?: number;
   desconto?: number;
   tipoValor?: number;
-  dataPost?: Moment;
   idUnidade?: string | any;
   idPaciente?: string | any;
   idCartao?: string | any;

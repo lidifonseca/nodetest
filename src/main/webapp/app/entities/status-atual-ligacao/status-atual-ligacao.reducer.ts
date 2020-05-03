@@ -108,29 +108,20 @@ const apiUrl = 'api/status-atual-ligacaos';
 export type ICrudGetAllActionStatusAtualLigacao<T> = (
   statusAtualLigacao?: any,
   styleLabel?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionStatusAtualLigacao<IStatusAtualLigacao> = (
-  statusAtualLigacao,
-  styleLabel,
-  dataPost,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionStatusAtualLigacao<IStatusAtualLigacao> = (statusAtualLigacao, styleLabel, page, size, sort) => {
   const statusAtualLigacaoRequest = statusAtualLigacao ? `statusAtualLigacao.contains=${statusAtualLigacao}&` : '';
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_STATUSATUALLIGACAO_LIST,
     payload: axios.get<IStatusAtualLigacao>(
-      `${requestUrl}${statusAtualLigacaoRequest}${styleLabelRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtualLigacaoRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

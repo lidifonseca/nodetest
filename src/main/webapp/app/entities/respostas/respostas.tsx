@@ -211,15 +211,7 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
                             <Translate contentKey="generadorApp.respostas.resposta">Resposta</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="resposta"
-                            id="respostas-resposta"
-                            value={this.state.resposta}
-                            validate={{
-                              maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="resposta" id="respostas-resposta" value={this.state.resposta} />
                         </Row>
                       </Col>
                       <Col md="3">

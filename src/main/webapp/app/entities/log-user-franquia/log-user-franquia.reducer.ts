@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_LOGUSERFRANQUIA: 'logUserFranquia/CREATE_LOGUSERFRANQUIA',
   UPDATE_LOGUSERFRANQUIA: 'logUserFranquia/UPDATE_LOGUSERFRANQUIA',
   DELETE_LOGUSERFRANQUIA: 'logUserFranquia/DELETE_LOGUSERFRANQUIA',
+  SET_BLOB: 'logUserFranquia/SET_BLOB',
   RESET: 'logUserFranquia/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: LogUserFranquiaState = initialState, action): LogUserFran
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -107,7 +119,6 @@ const apiUrl = 'api/log-user-franquias';
 // Actions
 export type ICrudGetAllActionLogUserFranquia<T> = (
   descricao?: any,
-  dataPost?: any,
   idAcao?: any,
   idTela?: any,
   idUsuario?: any,
@@ -116,18 +127,8 @@ export type ICrudGetAllActionLogUserFranquia<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (
-  descricao,
-  dataPost,
-  idAcao,
-  idTela,
-  idUsuario,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, idAcao, idTela, idUsuario, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
   const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
@@ -136,7 +137,7 @@ export const getEntities: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (
   return {
     type: ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST,
     payload: axios.get<ILogUserFranquia>(
-      `${requestUrl}${descricaoRequest}${dataPostRequest}${idAcaoRequest}${idTelaRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${descricaoRequest}${idAcaoRequest}${idTelaRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -187,6 +188,15 @@ export const deleteEntity: ICrudDeleteAction<ILogUserFranquia> = id => async dis
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

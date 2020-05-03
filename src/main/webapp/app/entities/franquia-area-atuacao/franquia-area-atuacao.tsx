@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -45,7 +36,6 @@ export interface IFranquiaAreaAtuacaoBaseState {
   cepIni: any;
   cepFim: any;
   ativo: any;
-  dataPost: any;
   idFranquia: any;
 }
 export interface IFranquiaAreaAtuacaoState extends IFranquiaAreaAtuacaoBaseState, IPaginationBaseState {}
@@ -66,7 +56,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
     const cepIni = url.searchParams.get('cepIni') || '';
     const cepFim = url.searchParams.get('cepFim') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idFranquia = url.searchParams.get('idFranquia') || '';
 
@@ -74,7 +63,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       cepIni,
       cepFim,
       ativo,
-      dataPost,
       idFranquia
     };
   };
@@ -91,7 +79,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
         cepIni: '',
         cepFim: '',
         ativo: '',
-        dataPost: '',
         idFranquia: ''
       },
       () => this.sortEntities()
@@ -146,9 +133,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idFranquia=' +
       this.state.idFranquia +
       '&' +
@@ -159,8 +143,8 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cepIni, cepFim, ativo, dataPost, idFranquia, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cepIni, cepFim, ativo, dataPost, idFranquia, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cepIni, cepFim, ativo, idFranquia, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cepIni, cepFim, ativo, idFranquia, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -201,15 +185,7 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                             <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepIni"
-                            id="franquia-area-atuacao-cepIni"
-                            value={this.state.cepIni}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cepIni" id="franquia-area-atuacao-cepIni" value={this.state.cepIni} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -218,15 +194,7 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                             <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepFim"
-                            id="franquia-area-atuacao-cepFim"
-                            value={this.state.cepFim}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cepFim" id="franquia-area-atuacao-cepFim" value={this.state.cepFim} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -235,24 +203,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                             <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="franquia-area-atuacao-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="franquia-area-atuacao-dataPost">
-                            <Translate contentKey="generadorApp.franquiaAreaAtuacao.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="franquia-area-atuacao-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -314,10 +264,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                         <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.franquiaAreaAtuacao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.franquiaAreaAtuacao.idFranquia">Id Franquia</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -341,10 +287,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                         <td>{franquiaAreaAtuacao.cepFim}</td>
 
                         <td>{franquiaAreaAtuacao.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={franquiaAreaAtuacao.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {franquiaAreaAtuacao.idFranquia ? (
                             <Link to={`franquia/${franquiaAreaAtuacao.idFranquia.id}`}>{franquiaAreaAtuacao.idFranquia.id}</Link>

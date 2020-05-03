@@ -41,8 +41,6 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { reportEmailAtendimentoEntity } = this.props;
       const entity = {
@@ -176,28 +174,6 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
                             </Col>
                             <Col md="9">
                               <AvField id="report-email-atendimento-tipoReport" type="string" className="form-control" name="tipoReport" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="report-email-atendimento-dataPost">
-                                <Translate contentKey="generadorApp.reportEmailAtendimento.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="report-email-atendimento-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.reportEmailAtendimentoEntity.dataPost)}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

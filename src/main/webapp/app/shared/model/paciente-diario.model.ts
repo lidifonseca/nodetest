@@ -1,13 +1,11 @@
-import { Moment } from 'moment';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { IUsuario } from 'app/shared/model/usuario.model';
 
 export interface IPacienteDiario {
   id?: string;
   idOperadora?: number;
-  historico?: string;
+  historico?: any;
   ativo?: number;
-  dataPost?: Moment;
   idPaciente?: string | any;
   idUsuario?: string | any;
 }

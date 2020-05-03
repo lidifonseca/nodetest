@@ -18,8 +18,5 @@ export default class PacienteMotivoInternacao extends BaseEntity {
   @Column({ type: 'integer', name: 'id_usuario', nullable: false })
   idUsuario: number;
 
-  @Column({ name: 'data_post', length: 45 })
-  dataPost: string;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

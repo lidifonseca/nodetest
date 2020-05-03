@@ -27,9 +27,6 @@ export default class PacienteDadosCartao extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => PacientePedido,
     other => other.idCartao

@@ -41,8 +41,6 @@ export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateSta
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { acaoEntity } = this.props;
       const entity = {
@@ -145,31 +143,6 @@ export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateSta
                                 name="acao"
                                 validate={{
                                   maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="acao-dataPost">
-                                <Translate contentKey="generadorApp.acao.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="acao-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.acaoEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
                                 }}
                               />
                             </Col>

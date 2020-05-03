@@ -46,7 +46,6 @@ export class AtendimentoAcompanhamentoPushUpdate extends React.Component<
   saveEntity = (event: any, errors: any, values: any) => {
     values.timestampAtendimento = convertDateTimeToServer(values.timestampAtendimento);
     values.timestampConfirmacao = convertDateTimeToServer(values.timestampConfirmacao);
-    values.dataPost = convertDateTimeToServer(values.dataPost);
 
     if (errors.length === 0) {
       const { atendimentoAcompanhamentoPushEntity } = this.props;
@@ -329,28 +328,6 @@ export class AtendimentoAcompanhamentoPushUpdate extends React.Component<
                                     ? null
                                     : convertDateTimeFromServer(this.props.atendimentoAcompanhamentoPushEntity.timestampConfirmacao)
                                 }
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="atendimento-acompanhamento-push-dataPost">
-                                <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="atendimento-acompanhamento-push-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.atendimentoAcompanhamentoPushEntity.dataPost)}
                               />
                             </Col>
                           </Row>

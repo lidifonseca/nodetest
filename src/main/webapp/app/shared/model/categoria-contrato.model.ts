@@ -1,11 +1,10 @@
-import { Moment } from 'moment';
 import { ICategoria } from 'app/shared/model/categoria.model';
 
 export interface ICategoriaContrato {
   id?: string;
-  contrato?: string;
+  contratoContentType?: string;
+  contrato?: any;
   ativo?: number;
-  dataPost?: Moment;
   idCategoria?: string | any;
 }
 

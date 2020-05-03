@@ -113,7 +113,6 @@ export type ICrudGetAllActionProfissionalComplexidadeAtual<T> = (
   ventilacaoMecanica?: any,
   telemonitoramente?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -127,7 +126,6 @@ export const getEntities: ICrudGetAllActionProfissionalComplexidadeAtual<IProfis
   ventilacaoMecanica,
   telemonitoramente,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -139,13 +137,12 @@ export const getEntities: ICrudGetAllActionProfissionalComplexidadeAtual<IProfis
   const ventilacaoMecanicaRequest = ventilacaoMecanica ? `ventilacaoMecanica.contains=${ventilacaoMecanica}&` : '';
   const telemonitoramenteRequest = telemonitoramente ? `telemonitoramente.contains=${telemonitoramente}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST,
     payload: axios.get<IProfissionalComplexidadeAtual>(
-      `${requestUrl}${idProfissionalRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

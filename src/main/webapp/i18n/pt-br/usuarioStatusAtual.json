@@ -19,8 +19,7 @@
       "idUsuario": "Id Usuario",
       "statusAtual": "Status Atual",
       "obs": "Obs",
-      "ativo": "Ativo",
-      "dataPost": "Data Post"
+      "ativo": "Ativo"
     }
   }
 }

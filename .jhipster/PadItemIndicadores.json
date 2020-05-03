@@ -16,11 +16,8 @@
         },
         {
             "fieldName": "descricao",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "100"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "meta",
@@ -40,7 +37,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "cidXPtaNovoPadItemIndi",
             "otherEntityRelationshipName": "padItemIndicadoresId",
-            "relationshipValidateRules": "required",
             "relationshipName": "cidXPtaNovoPadItemIndi"
         }
     ],

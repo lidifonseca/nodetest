@@ -18,8 +18,7 @@
       },
       "idAtendimento": "Id Atendimento",
       "glosado": "Glosado",
-      "idUsuario": "Id Usuario",
-      "dataPost": "Data Post"
+      "idUsuario": "Id Usuario"
     }
   }
 }

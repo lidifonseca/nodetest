@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -247,9 +248,6 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                             name="criadoEm"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={this.state.criadoEm ? convertDateTimeFromServer(this.state.criadoEm) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -259,16 +257,7 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                             <Translate contentKey="generadorApp.notificacaoConfig.titulo">Titulo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="titulo"
-                            id="notificacao-config-titulo"
-                            value={this.state.titulo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="titulo" id="notificacao-config-titulo" value={this.state.titulo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -277,16 +266,7 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                             <Translate contentKey="generadorApp.notificacaoConfig.referencia">Referencia</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="referencia"
-                            id="notificacao-config-referencia"
-                            value={this.state.referencia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="referencia" id="notificacao-config-referencia" value={this.state.referencia} />
                           <UncontrolledTooltip target="referenciaLabel">
                             <Translate contentKey="generadorApp.notificacaoConfig.help.referencia" />
                           </UncontrolledTooltip>
@@ -297,16 +277,7 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                           <Label id="descricaoLabel" for="notificacao-config-descricao">
                             <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="descricao"
-                            id="notificacao-config-descricao"
-                            value={this.state.descricao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
                       <Col md="3">

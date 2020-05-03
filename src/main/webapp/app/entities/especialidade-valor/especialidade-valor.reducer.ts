@@ -109,7 +109,6 @@ export type ICrudGetAllActionEspecialidadeValor<T> = (
   idFranquia?: any,
   valor?: any,
   ativo?: any,
-  dataPost?: any,
   idEspecialidade?: any,
   page?: number,
   size?: number,
@@ -120,7 +119,6 @@ export const getEntities: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValo
   idFranquia,
   valor,
   ativo,
-  dataPost,
   idEspecialidade,
   page,
   size,
@@ -129,14 +127,13 @@ export const getEntities: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValo
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST,
     payload: axios.get<IEspecialidadeValor>(
-      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}${dataPostRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

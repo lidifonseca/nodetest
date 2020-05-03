@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -44,7 +35,6 @@ export interface ICidBaseState {
   gr: any;
   temp: any;
   apelido: any;
-  dataPost: any;
   cidXPtaNovo: any;
   pacienteDiagnostico: any;
   padCid: any;
@@ -69,7 +59,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
     const gr = url.searchParams.get('gr') || '';
     const temp = url.searchParams.get('temp') || '';
     const apelido = url.searchParams.get('apelido') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const cidXPtaNovo = url.searchParams.get('cidXPtaNovo') || '';
     const pacienteDiagnostico = url.searchParams.get('pacienteDiagnostico') || '';
@@ -81,7 +70,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
       gr,
       temp,
       apelido,
-      dataPost,
       cidXPtaNovo,
       pacienteDiagnostico,
       padCid
@@ -100,7 +88,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
         gr: '',
         temp: '',
         apelido: '',
-        dataPost: '',
         cidXPtaNovo: '',
         pacienteDiagnostico: '',
         padCid: ''
@@ -163,9 +150,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
       'apelido=' +
       this.state.apelido +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'cidXPtaNovo=' +
       this.state.cidXPtaNovo +
       '&' +
@@ -188,7 +172,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
       gr,
       temp,
       apelido,
-      dataPost,
       cidXPtaNovo,
       pacienteDiagnostico,
       padCid,
@@ -203,7 +186,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
       gr,
       temp,
       apelido,
-      dataPost,
       cidXPtaNovo,
       pacienteDiagnostico,
       padCid,
@@ -251,15 +233,7 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                             <Translate contentKey="generadorApp.cid.codigo">Codigo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="codigo"
-                            id="cid-codigo"
-                            value={this.state.codigo}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="codigo" id="cid-codigo" value={this.state.codigo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -268,15 +242,7 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                             <Translate contentKey="generadorApp.cid.diagnostico">Diagnostico</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="diagnostico"
-                            id="cid-diagnostico"
-                            value={this.state.diagnostico}
-                            validate={{
-                              maxLength: { value: 400, errorMessage: translate('entity.validation.maxlength', { max: 400 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="diagnostico" id="cid-diagnostico" value={this.state.diagnostico} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -285,15 +251,7 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                             <Translate contentKey="generadorApp.cid.gr">Gr</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="gr"
-                            id="cid-gr"
-                            value={this.state.gr}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="gr" id="cid-gr" value={this.state.gr} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -302,15 +260,7 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                             <Translate contentKey="generadorApp.cid.temp">Temp</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="temp"
-                            id="cid-temp"
-                            value={this.state.temp}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="temp" id="cid-temp" value={this.state.temp} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -319,33 +269,7 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                             <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="apelido"
-                            id="cid-apelido"
-                            value={this.state.apelido}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="cid-dataPost">
-                            <Translate contentKey="generadorApp.cid.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="cid-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="apelido" id="cid-apelido" value={this.state.apelido} />
                         </Row>
                       </Col>
 
@@ -407,10 +331,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                         <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.cid.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -434,10 +354,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                         <td>{cid.temp}</td>
 
                         <td>{cid.apelido}</td>
-
-                        <td>
-                          <TextFormat type="date" value={cid.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

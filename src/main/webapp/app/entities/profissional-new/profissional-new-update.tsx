@@ -4,11 +4,11 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './profissional-new.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './profissional-new.reducer';
 import { IProfissionalNew } from 'app/shared/model/profissional-new.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -40,9 +40,15 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
     }
   }
 
-  saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
 
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
+  saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalNewEntity } = this.props;
       const entity = {
@@ -65,6 +71,8 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
   render() {
     const { profissionalNewEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { obs } = profissionalNewEntity;
 
     return (
       <div>
@@ -777,14 +785,7 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-new-obs"
-                                type="text"
-                                name="obs"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvInput id="profissional-new-obs" type="textarea" name="obs" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -826,31 +827,6 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                           </Row>
                         </AvGroup>
                       </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="profissional-new-dataPost">
-                                <Translate contentKey="generadorApp.profissionalNew.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="profissional-new-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.profissionalNewEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                     </Row>
                   )}
                 </Col>
@@ -873,6 +849,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

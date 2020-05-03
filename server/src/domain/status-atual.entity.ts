@@ -17,9 +17,6 @@ export default class StatusAtual extends BaseEntity {
   @Column({ name: 'style_label', length: 40 })
   styleLabel: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => PacienteStatusAtual,
     other => other.idStatusAtual

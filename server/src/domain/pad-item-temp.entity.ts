@@ -33,9 +33,6 @@ export default class PadItemTemp extends BaseEntity {
   @Column({ name: 'observacao', length: 255 })
   observacao: string;
 
-  @Column({ type: 'timestamp', name: 'data_post' })
-  dataPost: any;
-
   @Column({ type: 'integer', name: 'cid_x_pta_novo_id' })
   cidXPtaNovoId: number;
 

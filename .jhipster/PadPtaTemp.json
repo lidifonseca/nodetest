@@ -31,10 +31,6 @@
             ]
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant"
-        },
-        {
             "fieldName": "cidXPtaNovoId",
             "fieldType": "Integer"
         }

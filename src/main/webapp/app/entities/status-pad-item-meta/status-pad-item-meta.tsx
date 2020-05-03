@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IStatusPadItemMetaBaseState {
   styleLabel: any;
   ordenacao: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IStatusPadItemMetaState extends IStatusPadItemMetaBaseState, IPaginationBaseState {}
 
@@ -64,14 +54,12 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
     const styleLabel = url.searchParams.get('styleLabel') || '';
     const ordenacao = url.searchParams.get('ordenacao') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       statusItemMeta,
       styleLabel,
       ordenacao,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -85,8 +73,7 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
         statusItemMeta: '',
         styleLabel: '',
         ordenacao: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +130,6 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +137,8 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusItemMeta, styleLabel, ordenacao, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusItemMeta, styleLabel, ordenacao, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusItemMeta, styleLabel, ordenacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusItemMeta, styleLabel, ordenacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -200,9 +184,6 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                             name="statusItemMeta"
                             id="status-pad-item-meta-statusItemMeta"
                             value={this.state.statusItemMeta}
-                            validate={{
-                              maxLength: { value: 200, errorMessage: translate('entity.validation.maxlength', { max: 200 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -212,15 +193,7 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                             <Translate contentKey="generadorApp.statusPadItemMeta.styleLabel">Style Label</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="styleLabel"
-                            id="status-pad-item-meta-styleLabel"
-                            value={this.state.styleLabel}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="styleLabel" id="status-pad-item-meta-styleLabel" value={this.state.styleLabel} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -237,24 +210,6 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                             <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="status-pad-item-meta-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="status-pad-item-meta-dataPost">
-                            <Translate contentKey="generadorApp.statusPadItemMeta.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="status-pad-item-meta-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -300,10 +255,6 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                         <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.statusPadItemMeta.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -325,10 +276,6 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                         <td>{statusPadItemMeta.ordenacao}</td>
 
                         <td>{statusPadItemMeta.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={statusPadItemMeta.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

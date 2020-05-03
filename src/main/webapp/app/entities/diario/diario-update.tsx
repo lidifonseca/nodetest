@@ -52,8 +52,6 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { diarioEntity } = this.props;
       const entity = {
@@ -175,31 +173,6 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
                             </Col>
                             <Col md="9">
                               <AvField id="diario-gerarPdf" type="string" className="form-control" name="gerarPdf" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="diario-dataPost">
-                                <Translate contentKey="generadorApp.diario.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="diario-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.diarioEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

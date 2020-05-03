@@ -1,12 +1,10 @@
-import { Moment } from 'moment';
 import { IAcao } from 'app/shared/model/acao.model';
 import { ITela } from 'app/shared/model/tela.model';
 
 export interface ILogUser {
   id?: string;
   idUsuario?: string;
-  descricao?: string;
-  dataPost?: Moment;
+  descricao?: any;
   idAcao?: string | any;
   idTela?: string | any;
 }

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IProfissionalAreaAtuacaoNewBaseState {
   cepArea: any;
   cepFim: any;
   ativo: any;
-  dataPost: any;
   cepIni: any;
 }
 export interface IProfissionalAreaAtuacaoNewState extends IProfissionalAreaAtuacaoNewBaseState, IPaginationBaseState {}
@@ -65,7 +55,6 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
     const cepArea = url.searchParams.get('cepArea') || '';
     const cepFim = url.searchParams.get('cepFim') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const cepIni = url.searchParams.get('cepIni') || '';
 
     return {
@@ -73,7 +62,6 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
       cepArea,
       cepFim,
       ativo,
-      dataPost,
       cepIni
     };
   };
@@ -89,7 +77,6 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
         cepArea: '',
         cepFim: '',
         ativo: '',
-        dataPost: '',
         cepIni: ''
       },
       () => this.sortEntities()
@@ -147,9 +134,6 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'cepIni=' +
       this.state.cepIni +
       '&' +
@@ -160,8 +144,8 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, cepArea, cepFim, ativo, dataPost, cepIni, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProfissional, cepArea, cepFim, ativo, dataPost, cepIni, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProfissional, cepArea, cepFim, ativo, cepIni, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, cepArea, cepFim, ativo, cepIni, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -218,15 +202,7 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                             <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepArea">Cep Area</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepArea"
-                            id="profissional-area-atuacao-new-cepArea"
-                            value={this.state.cepArea}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cepArea" id="profissional-area-atuacao-new-cepArea" value={this.state.cepArea} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -235,15 +211,7 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                             <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepFim">Cep Fim</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepFim"
-                            id="profissional-area-atuacao-new-cepFim"
-                            value={this.state.cepFim}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cepFim" id="profissional-area-atuacao-new-cepFim" value={this.state.cepFim} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -256,37 +224,11 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                       </Col>
                       <Col md="3">
                         <Row>
-                          <Label id="dataPostLabel" for="profissional-area-atuacao-new-dataPost">
-                            <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-area-atuacao-new-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
                           <Label id="cepIniLabel" for="profissional-area-atuacao-new-cepIni">
                             <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepIni"
-                            id="profissional-area-atuacao-new-cepIni"
-                            value={this.state.cepIni}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cepIni" id="profissional-area-atuacao-new-cepIni" value={this.state.cepIni} />
                         </Row>
                       </Col>
                     </div>
@@ -332,10 +274,6 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                         <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('cepIni')}>
                         <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -361,10 +299,6 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                         <td>{profissionalAreaAtuacaoNew.cepFim}</td>
 
                         <td>{profissionalAreaAtuacaoNew.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalAreaAtuacaoNew.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{profissionalAreaAtuacaoNew.cepIni}</td>
 

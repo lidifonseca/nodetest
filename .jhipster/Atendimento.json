@@ -189,13 +189,6 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "dataForaHora",
             "fieldType": "Instant"
         },
@@ -245,21 +238,18 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoAceite",
             "otherEntityRelationshipName": "idAtendimento",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoAceite"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoAssinaturas",
             "otherEntityRelationshipName": "idAtendimento",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoAssinaturas"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoAtividades",
             "otherEntityRelationshipName": "idAtendimento",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoAtividades"
         },
         {

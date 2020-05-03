@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IPadItemSorteioFeitoProps extends StateProps, DispatchProps, Ro
 
 export interface IPadItemSorteioFeitoBaseState {
   sorteioFeito: any;
-  dataPost: any;
   idPadItem: any;
 }
 export interface IPadItemSorteioFeitoState extends IPadItemSorteioFeitoBaseState, IPaginationBaseState {}
@@ -62,13 +52,11 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
   getPadItemSorteioFeitoState = (location): IPadItemSorteioFeitoBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const sorteioFeito = url.searchParams.get('sorteioFeito') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idPadItem = url.searchParams.get('idPadItem') || '';
 
     return {
       sorteioFeito,
-      dataPost,
       idPadItem
     };
   };
@@ -83,7 +71,6 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
     this.setState(
       {
         sorteioFeito: '',
-        dataPost: '',
         idPadItem: ''
       },
       () => this.sortEntities()
@@ -132,9 +119,6 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
       'sorteioFeito=' +
       this.state.sorteioFeito +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idPadItem=' +
       this.state.idPadItem +
       '&' +
@@ -145,8 +129,8 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { sorteioFeito, dataPost, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(sorteioFeito, dataPost, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { sorteioFeito, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(sorteioFeito, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -191,28 +175,6 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
                             name="sorteioFeito"
                             id="pad-item-sorteio-feito-sorteioFeito"
                             value={this.state.sorteioFeito}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-item-sorteio-feito-dataPost">
-                            <Translate contentKey="generadorApp.padItemSorteioFeito.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-sorteio-feito-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -267,10 +229,6 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
                         <Translate contentKey="generadorApp.padItemSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padItemSorteioFeito.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.padItemSorteioFeito.idPadItem">Id Pad Item</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -290,10 +248,6 @@ export class PadItemSorteioFeito extends React.Component<IPadItemSorteioFeitoPro
                         </td>
 
                         <td>{padItemSorteioFeito.sorteioFeito}</td>
-
-                        <td>
-                          <TextFormat type="date" value={padItemSorteioFeito.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {padItemSorteioFeito.idPadItem ? (
                             <Link to={`pad-item/${padItemSorteioFeito.idPadItem.id}`}>{padItemSorteioFeito.idPadItem.id}</Link>

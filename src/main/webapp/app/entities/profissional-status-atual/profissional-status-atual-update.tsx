@@ -4,13 +4,13 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
 import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-prof/status-atual-prof.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './profissional-status-atual.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './profissional-status-atual.reducer';
 import { IProfissionalStatusAtual } from 'app/shared/model/profissional-status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -49,9 +49,15 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
     this.props.getStatusAtualProfs();
   }
 
-  saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
 
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
+  saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalStatusAtualEntity } = this.props;
       const entity = {
@@ -74,6 +80,8 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
   render() {
     const { profissionalStatusAtualEntity, statusAtualProfs, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { obs } = profissionalStatusAtualEntity;
 
     return (
       <div>
@@ -182,14 +190,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="profissional-status-atual-obs"
-                                type="text"
-                                name="obs"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -205,31 +206,6 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                             </Col>
                             <Col md="9">
                               <AvField id="profissional-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="profissional-status-atual-dataPost">
-                                <Translate contentKey="generadorApp.profissionalStatusAtual.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="profissional-status-atual-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.profissionalStatusAtualEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -312,6 +288,7 @@ const mapDispatchToProps = {
   getStatusAtualProfs,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

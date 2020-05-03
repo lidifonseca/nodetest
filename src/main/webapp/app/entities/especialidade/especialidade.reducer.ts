@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_ESPECIALIDADE: 'especialidade/CREATE_ESPECIALIDADE',
   UPDATE_ESPECIALIDADE: 'especialidade/UPDATE_ESPECIALIDADE',
   DELETE_ESPECIALIDADE: 'especialidade/DELETE_ESPECIALIDADE',
+  SET_BLOB: 'especialidade/SET_BLOB',
   RESET: 'especialidade/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: EspecialidadeState = initialState, action): Especialidade
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -112,7 +124,6 @@ export type ICrudGetAllActionEspecialidade<T> = (
   duracao?: any,
   importante?: any,
   ativo?: any,
-  dataPost?: any,
   idUnidade?: any,
   atendimento?: any,
   especialidadeOperadora?: any,
@@ -135,7 +146,6 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   duracao,
   importante,
   ativo,
-  dataPost,
   idUnidade,
   atendimento,
   especialidadeOperadora,
@@ -156,7 +166,6 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   const duracaoRequest = duracao ? `duracao.contains=${duracao}&` : '';
   const importanteRequest = importante ? `importante.contains=${importante}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
@@ -172,7 +181,7 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADE_LIST,
     payload: axios.get<IEspecialidade>(
-      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${dataPostRequest}${idUnidadeRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${especialidadeUnidadeRequest}${especialidadeValorRequest}${pacientePedidoRequest}${padItemRequest}${idCategoriaRequest}${idTipoEspecialidadeRequest}${idTipoUnidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${idUnidadeRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${especialidadeUnidadeRequest}${especialidadeValorRequest}${pacientePedidoRequest}${padItemRequest}${idCategoriaRequest}${idTipoEspecialidadeRequest}${idTipoUnidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -223,6 +232,15 @@ export const deleteEntity: ICrudDeleteAction<IEspecialidade> = id => async dispa
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

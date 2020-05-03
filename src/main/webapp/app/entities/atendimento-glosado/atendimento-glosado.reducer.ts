@@ -109,7 +109,6 @@ export type ICrudGetAllActionAtendimentoGlosado<T> = (
   idAtendimento?: any,
   glosado?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +118,6 @@ export const getEntities: ICrudGetAllActionAtendimentoGlosado<IAtendimentoGlosad
   idAtendimento,
   glosado,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -127,13 +125,12 @@ export const getEntities: ICrudGetAllActionAtendimentoGlosado<IAtendimentoGlosad
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const glosadoRequest = glosado ? `glosado.contains=${glosado}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO_LIST,
     payload: axios.get<IAtendimentoGlosado>(
-      `${requestUrl}${idAtendimentoRequest}${glosadoRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idAtendimentoRequest}${glosadoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

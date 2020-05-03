@@ -22,7 +22,6 @@
       "ie": "Ie",
       "site": "Site",
       "ativo": "Ativo",
-      "dataPost": "Data Post",
       "idUnidade": "Id Unidade",
       "endereco": "Endereco",
       "contatoCentralAtendimento": "Contato Central Atendimento",
@@ -33,10 +32,10 @@
       "nomeContatoFinanceiro": "Nome Contato Financeiro",
       "contatoFinanceiro": "Contato Financeiro",
       "emailFinanceiro": "Email Financeiro",
-      "idTipoOperadora": "Id Tipo Operadora",
       "atendimento": "Atendimento",
       "especialidadeOperadora": "Especialidade Operadora",
-      "pacienteOperadora": "Paciente Operadora"
+      "pacienteOperadora": "Paciente Operadora",
+      "idTipoOperadora": "Id Tipo Operadora"
     }
   }
 }

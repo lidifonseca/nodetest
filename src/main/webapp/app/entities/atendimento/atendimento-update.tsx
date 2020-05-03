@@ -80,7 +80,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
     values.dataAgenda = convertDateTimeToServer(values.dataAgenda);
     values.dataChegada = convertDateTimeToServer(values.dataChegada);
     values.dataSaida = convertDateTimeToServer(values.dataSaida);
-    values.dataPost = convertDateTimeToServer(values.dataPost);
     values.dataForaHora = convertDateTimeToServer(values.dataForaHora);
 
     if (errors.length === 0) {
@@ -765,31 +764,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
                             </Col>
                             <Col md="9">
                               <AvField id="atendimento-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="atendimento-dataPost">
-                                <Translate contentKey="generadorApp.atendimento.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="atendimento-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.atendimentoEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

@@ -18,8 +18,5 @@ export default class AtendimentoGlosado extends BaseEntity {
   @Column({ type: 'integer', name: 'id_usuario' })
   idUsuario: number;
 
-  @Column({ type: 'date', name: 'data_post' })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

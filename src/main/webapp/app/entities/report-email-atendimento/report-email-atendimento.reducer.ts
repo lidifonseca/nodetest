@@ -108,7 +108,6 @@ const apiUrl = 'api/report-email-atendimentos';
 export type ICrudGetAllActionReportEmailAtendimento<T> = (
   idAtendimento?: any,
   tipoReport?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -117,20 +116,18 @@ export type ICrudGetAllActionReportEmailAtendimento<T> = (
 export const getEntities: ICrudGetAllActionReportEmailAtendimento<IReportEmailAtendimento> = (
   idAtendimento,
   tipoReport,
-  dataPost,
   page,
   size,
   sort
 ) => {
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const tipoReportRequest = tipoReport ? `tipoReport.contains=${tipoReport}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO_LIST,
     payload: axios.get<IReportEmailAtendimento>(
-      `${requestUrl}${idAtendimentoRequest}${tipoReportRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idAtendimentoRequest}${tipoReportRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

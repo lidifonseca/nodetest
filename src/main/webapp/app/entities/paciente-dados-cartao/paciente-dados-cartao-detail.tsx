@@ -132,23 +132,6 @@ export class PacienteDadosCartaoDetail extends React.Component<IPacienteDadosCar
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.pacienteDadosCartao.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={pacienteDadosCartaoEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.pacienteDadosCartao.idPaciente">Id Paciente</Translate>
                         </dt>
                       </Col>

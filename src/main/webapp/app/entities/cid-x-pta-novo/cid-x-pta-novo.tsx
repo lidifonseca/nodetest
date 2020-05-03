@@ -240,15 +240,7 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                             <Translate contentKey="generadorApp.cidXPtaNovo.complexidade">Complexidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complexidade"
-                            id="cid-x-pta-novo-complexidade"
-                            value={this.state.complexidade}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complexidade" id="cid-x-pta-novo-complexidade" value={this.state.complexidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -273,15 +265,7 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                             <Translate contentKey="generadorApp.cidXPtaNovo.titulo">Titulo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="titulo"
-                            id="cid-x-pta-novo-titulo"
-                            value={this.state.titulo}
-                            validate={{
-                              maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="titulo" id="cid-x-pta-novo-titulo" value={this.state.titulo} />
                         </Row>
                       </Col>
 

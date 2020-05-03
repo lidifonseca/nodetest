@@ -18,8 +18,7 @@
       },
       "idPaciente": "Id Paciente",
       "idPacienteCaracteristica": "Id Paciente Caracteristica",
-      "idUsuario": "Id Usuario",
-      "dataPost": "Data Post"
+      "idUsuario": "Id Usuario"
     }
   }
 }

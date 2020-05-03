@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -44,7 +35,6 @@ export interface IUnidadeEasyAreaAtuacaoProps extends StateProps, DispatchProps,
 export interface IUnidadeEasyAreaAtuacaoBaseState {
   cepInicial: any;
   cepFinal: any;
-  dataPost: any;
   idUnidade: any;
 }
 export interface IUnidadeEasyAreaAtuacaoState extends IUnidadeEasyAreaAtuacaoBaseState, IPaginationBaseState {}
@@ -64,14 +54,12 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const cepInicial = url.searchParams.get('cepInicial') || '';
     const cepFinal = url.searchParams.get('cepFinal') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idUnidade = url.searchParams.get('idUnidade') || '';
 
     return {
       cepInicial,
       cepFinal,
-      dataPost,
       idUnidade
     };
   };
@@ -87,7 +75,6 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
       {
         cepInicial: '',
         cepFinal: '',
-        dataPost: '',
         idUnidade: ''
       },
       () => this.sortEntities()
@@ -139,9 +126,6 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
       'cepFinal=' +
       this.state.cepFinal +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUnidade=' +
       this.state.idUnidade +
       '&' +
@@ -152,8 +136,8 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cepInicial, cepFinal, dataPost, idUnidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cepInicial, cepFinal, dataPost, idUnidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cepInicial, cepFinal, idUnidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cepInicial, cepFinal, idUnidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -196,15 +180,7 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                             <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepInicial">Cep Inicial</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepInicial"
-                            id="unidade-easy-area-atuacao-cepInicial"
-                            value={this.state.cepInicial}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cepInicial" id="unidade-easy-area-atuacao-cepInicial" value={this.state.cepInicial} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -213,33 +189,7 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                             <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepFinal"
-                            id="unidade-easy-area-atuacao-cepFinal"
-                            value={this.state.cepFinal}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="unidade-easy-area-atuacao-dataPost">
-                            <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="unidade-easy-area-atuacao-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="cepFinal" id="unidade-easy-area-atuacao-cepFinal" value={this.state.cepFinal} />
                         </Row>
                       </Col>
 
@@ -297,10 +247,6 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                         <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -322,10 +268,6 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                         <td>{unidadeEasyAreaAtuacao.cepInicial}</td>
 
                         <td>{unidadeEasyAreaAtuacao.cepFinal}</td>
-
-                        <td>
-                          <TextFormat type="date" value={unidadeEasyAreaAtuacao.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {unidadeEasyAreaAtuacao.idUnidade ? (
                             <Link to={`unidade-easy/${unidadeEasyAreaAtuacao.idUnidade.id}`}>{unidadeEasyAreaAtuacao.idUnidade.id}</Link>

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IPeriodoProps extends StateProps, DispatchProps, RouteComponent
 export interface IPeriodoBaseState {
   periodo: any;
   ativo: any;
-  dataPost: any;
   atendimento: any;
   padItem: any;
 }
@@ -62,7 +52,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const periodo = url.searchParams.get('periodo') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const atendimento = url.searchParams.get('atendimento') || '';
     const padItem = url.searchParams.get('padItem') || '';
@@ -70,7 +59,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
     return {
       periodo,
       ativo,
-      dataPost,
       atendimento,
       padItem
     };
@@ -85,7 +73,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
       {
         periodo: '',
         ativo: '',
-        dataPost: '',
         atendimento: '',
         padItem: ''
       },
@@ -138,9 +125,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'atendimento=' +
       this.state.atendimento +
       '&' +
@@ -154,8 +138,8 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { periodo, ativo, dataPost, atendimento, padItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(periodo, ativo, dataPost, atendimento, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { periodo, ativo, atendimento, padItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(periodo, ativo, atendimento, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -196,15 +180,7 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                             <Translate contentKey="generadorApp.periodo.periodo">Periodo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="periodo"
-                            id="periodo-periodo"
-                            value={this.state.periodo}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="periodo" id="periodo-periodo" value={this.state.periodo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -213,24 +189,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                             <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="periodo-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="periodo-dataPost">
-                            <Translate contentKey="generadorApp.periodo.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="periodo-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -276,10 +234,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                         <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.periodo.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -297,10 +251,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                         <td>{periodo.periodo}</td>
 
                         <td>{periodo.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={periodo.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

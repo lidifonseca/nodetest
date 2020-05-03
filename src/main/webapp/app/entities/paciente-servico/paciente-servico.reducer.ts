@@ -108,23 +108,19 @@ const apiUrl = 'api/paciente-servicos';
 export type ICrudGetAllActionPacienteServico<T> = (
   idPaciente?: any,
   servico?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteServico<IPacienteServico> = (idPaciente, servico, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacienteServico<IPacienteServico> = (idPaciente, servico, page, size, sort) => {
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const servicoRequest = servico ? `servico.contains=${servico}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTESERVICO_LIST,
-    payload: axios.get<IPacienteServico>(
-      `${requestUrl}${idPacienteRequest}${servicoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPacienteServico>(`${requestUrl}${idPacienteRequest}${servicoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPacienteServico> = id => {

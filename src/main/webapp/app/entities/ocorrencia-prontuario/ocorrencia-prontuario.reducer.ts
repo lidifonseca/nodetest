@@ -108,23 +108,19 @@ const apiUrl = 'api/ocorrencia-prontuarios';
 export type ICrudGetAllActionOcorrenciaProntuario<T> = (
   nome?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionOcorrenciaProntuario<IOcorrenciaProntuario> = (nome, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionOcorrenciaProntuario<IOcorrenciaProntuario> = (nome, ativo, page, size, sort) => {
   const nomeRequest = nome ? `nome.contains=${nome}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO_LIST,
-    payload: axios.get<IOcorrenciaProntuario>(
-      `${requestUrl}${nomeRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IOcorrenciaProntuario>(`${requestUrl}${nomeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IOcorrenciaProntuario> = id => {

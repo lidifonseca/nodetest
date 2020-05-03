@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -45,7 +36,6 @@ export interface IPacientePushBaseState {
   idFranquia: any;
   mensagem: any;
   ativo: any;
-  dataPost: any;
   idPaciente: any;
 }
 export interface IPacientePushState extends IPacientePushBaseState, IPaginationBaseState {}
@@ -66,7 +56,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
     const idFranquia = url.searchParams.get('idFranquia') || '';
     const mensagem = url.searchParams.get('mensagem') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idPaciente = url.searchParams.get('idPaciente') || '';
 
@@ -74,7 +63,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       idFranquia,
       mensagem,
       ativo,
-      dataPost,
       idPaciente
     };
   };
@@ -91,7 +79,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
         idFranquia: '',
         mensagem: '',
         ativo: '',
-        dataPost: '',
         idPaciente: ''
       },
       () => this.sortEntities()
@@ -146,9 +133,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idPaciente=' +
       this.state.idPaciente +
       '&' +
@@ -159,8 +143,8 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, mensagem, ativo, dataPost, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idFranquia, mensagem, ativo, dataPost, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, mensagem, ativo, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idFranquia, mensagem, ativo, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -210,15 +194,7 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                             <Translate contentKey="generadorApp.pacientePush.mensagem">Mensagem</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="mensagem"
-                            id="paciente-push-mensagem"
-                            value={this.state.mensagem}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="mensagem" id="paciente-push-mensagem" value={this.state.mensagem} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -227,24 +203,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                             <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="paciente-push-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-push-dataPost">
-                            <Translate contentKey="generadorApp.pacientePush.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-push-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -306,10 +264,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                         <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacientePush.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.pacientePush.idPaciente">Id Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -333,10 +287,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                         <td>{pacientePush.mensagem}</td>
 
                         <td>{pacientePush.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacientePush.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {pacientePush.idPaciente ? (
                             <Link to={`paciente/${pacientePush.idPaciente.id}`}>{pacientePush.idPaciente.id}</Link>

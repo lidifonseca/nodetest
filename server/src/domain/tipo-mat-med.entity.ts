@@ -15,8 +15,5 @@ export default class TipoMatMed extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ type: 'date', name: 'data_post' })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

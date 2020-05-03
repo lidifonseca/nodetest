@@ -46,7 +46,6 @@ export interface IPadItemAtividadeProps extends StateProps, DispatchProps, Route
 export interface IPadItemAtividadeBaseState {
   dataInicio: any;
   dataFim: any;
-  dataPost: any;
   idAtividade: any;
   idPadItem: any;
 }
@@ -67,7 +66,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const dataInicio = url.searchParams.get('dataInicio') || '';
     const dataFim = url.searchParams.get('dataFim') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idAtividade = url.searchParams.get('idAtividade') || '';
     const idPadItem = url.searchParams.get('idPadItem') || '';
@@ -75,7 +73,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
     return {
       dataInicio,
       dataFim,
-      dataPost,
       idAtividade,
       idPadItem
     };
@@ -93,7 +90,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
       {
         dataInicio: '',
         dataFim: '',
-        dataPost: '',
         idAtividade: '',
         idPadItem: ''
       },
@@ -146,9 +142,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
       'dataFim=' +
       this.state.dataFim +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idAtividade=' +
       this.state.idAtividade +
       '&' +
@@ -162,8 +155,8 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataInicio, dataFim, dataPost, idAtividade, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(dataInicio, dataFim, dataPost, idAtividade, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { dataInicio, dataFim, idAtividade, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(dataInicio, dataFim, idAtividade, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -212,24 +205,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                             <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
                           </Label>
                           <AvInput type="date" name="dataFim" id="pad-item-atividade-dataFim" value={this.state.dataFim} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-item-atividade-dataPost">
-                            <Translate contentKey="generadorApp.padItemAtividade.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-atividade-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -307,10 +282,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                         <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padItemAtividade.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.padItemAtividade.idAtividade">Id Atividade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -339,10 +310,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
 
                         <td>
                           <TextFormat type="date" value={padItemAtividade.dataFim} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
-
-                        <td>
-                          <TextFormat type="date" value={padItemAtividade.dataPost} format={APP_DATE_FORMAT} />
                         </td>
                         <td>
                           {padItemAtividade.idAtividade ? (

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface ICidPtaBaseState {
   idCid: any;
   idAtividade: any;
   ativo: any;
-  dataPost: any;
 }
 export interface ICidPtaState extends ICidPtaBaseState, IPaginationBaseState {}
 
@@ -64,14 +54,12 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
     const idCid = url.searchParams.get('idCid') || '';
     const idAtividade = url.searchParams.get('idAtividade') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idDescPta,
       idCid,
       idAtividade,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -85,8 +73,7 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
         idDescPta: '',
         idCid: '',
         idAtividade: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +130,6 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +137,8 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idDescPta, idCid, idAtividade, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idDescPta, idCid, idAtividade, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idDescPta, idCid, idAtividade, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idDescPta, idCid, idAtividade, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -194,16 +178,7 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
                           <Label id="idDescPtaLabel" for="cid-pta-idDescPta">
                             <Translate contentKey="generadorApp.cidPta.idDescPta">Id Desc Pta</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idDescPta"
-                            id="cid-pta-idDescPta"
-                            value={this.state.idDescPta}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idDescPta" id="cid-pta-idDescPta" value={this.state.idDescPta} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -211,16 +186,7 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
                           <Label id="idCidLabel" for="cid-pta-idCid">
                             <Translate contentKey="generadorApp.cidPta.idCid">Id Cid</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idCid"
-                            id="cid-pta-idCid"
-                            value={this.state.idCid}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idCid" id="cid-pta-idCid" value={this.state.idCid} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -228,16 +194,7 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
                           <Label id="idAtividadeLabel" for="cid-pta-idAtividade">
                             <Translate contentKey="generadorApp.cidPta.idAtividade">Id Atividade</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idAtividade"
-                            id="cid-pta-idAtividade"
-                            value={this.state.idAtividade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idAtividade" id="cid-pta-idAtividade" value={this.state.idAtividade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -245,34 +202,7 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
                           <Label id="ativoLabel" for="cid-pta-ativo">
                             <Translate contentKey="generadorApp.cidPta.ativo">Ativo</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="ativo"
-                            id="cid-pta-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="cid-pta-dataPost">
-                            <Translate contentKey="generadorApp.cidPta.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="cid-pta-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="string" name="ativo" id="cid-pta-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
                     </div>
@@ -318,10 +248,6 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
                         <Translate contentKey="generadorApp.cidPta.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.cidPta.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -343,10 +269,6 @@ export class CidPta extends React.Component<ICidPtaProps, ICidPtaState> {
                         <td>{cidPta.idAtividade}</td>
 
                         <td>{cidPta.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={cidPta.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

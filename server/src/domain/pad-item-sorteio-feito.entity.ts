@@ -14,9 +14,6 @@ export default class PadItemSorteioFeito extends BaseEntity {
   @Column({ type: 'integer', name: 'sorteio_feito', nullable: false })
   sorteioFeito: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => PadItem)
   idPadItem: PadItem;
 

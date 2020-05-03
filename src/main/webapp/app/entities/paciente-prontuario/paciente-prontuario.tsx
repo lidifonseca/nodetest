@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -55,7 +56,6 @@ export interface IPacienteProntuarioBaseState {
   dataPs: any;
   dataOcorrencia: any;
   idOcorrenciaProntuario: any;
-  dataPost: any;
   dataManifestacao: any;
 }
 export interface IPacienteProntuarioState extends IPacienteProntuarioBaseState, IPaginationBaseState {}
@@ -89,7 +89,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
     const dataPs = url.searchParams.get('dataPs') || '';
     const dataOcorrencia = url.searchParams.get('dataOcorrencia') || '';
     const idOcorrenciaProntuario = url.searchParams.get('idOcorrenciaProntuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const dataManifestacao = url.searchParams.get('dataManifestacao') || '';
 
     return {
@@ -109,7 +108,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       dataPs,
       dataOcorrencia,
       idOcorrenciaProntuario,
-      dataPost,
       dataManifestacao
     };
   };
@@ -137,7 +135,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
         dataPs: '',
         dataOcorrencia: '',
         idOcorrenciaProntuario: '',
-        dataPost: '',
         dataManifestacao: ''
       },
       () => this.sortEntities()
@@ -231,9 +228,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       'idOcorrenciaProntuario=' +
       this.state.idOcorrenciaProntuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'dataManifestacao=' +
       this.state.dataManifestacao +
       '&' +
@@ -261,7 +255,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       dataPs,
       dataOcorrencia,
       idOcorrenciaProntuario,
-      dataPost,
       dataManifestacao,
       activePage,
       itemsPerPage,
@@ -285,7 +278,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       dataPs,
       dataOcorrencia,
       idOcorrenciaProntuario,
-      dataPost,
       dataManifestacao,
       activePage - 1,
       itemsPerPage,
@@ -331,15 +323,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                             <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idPaciente"
-                            id="paciente-prontuario-idPaciente"
-                            value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idPaciente" id="paciente-prontuario-idPaciente" value={this.state.idPaciente} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -352,10 +336,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                             name="idTipoProntuario"
                             id="paciente-prontuario-idTipoProntuario"
                             value={this.state.idTipoProntuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -364,16 +344,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <Label id="oQueLabel" for="paciente-prontuario-oQue">
                             <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="oQue"
-                            id="paciente-prontuario-oQue"
-                            value={this.state.oQue}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -381,16 +352,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <Label id="resultadoLabel" for="paciente-prontuario-resultado">
                             <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="resultado"
-                            id="paciente-prontuario-resultado"
-                            value={this.state.resultado}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -398,16 +360,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <Label id="ativoLabel" for="paciente-prontuario-ativo">
                             <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="ativo"
-                            id="paciente-prontuario-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="ativo" id="paciente-prontuario-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -530,21 +483,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                       </Col>
                       <Col md="3">
                         <Row>
-                          <Label id="dataPostLabel" for="paciente-prontuario-dataPost">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-prontuario-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
                           <Label id="dataManifestacaoLabel" for="paciente-prontuario-dataManifestacao">
                             <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
                           </Label>
@@ -647,10 +585,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                         <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">Id Ocorrencia Prontuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('dataManifestacao')}>
                         <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -712,10 +646,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                         </td>
 
                         <td>{pacienteProntuario.idOcorrenciaProntuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>
                           <TextFormat type="date" value={pacienteProntuario.dataManifestacao} format={APP_LOCAL_DATE_FORMAT} />

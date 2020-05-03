@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -91,23 +91,6 @@ export class UsuarioAcaoDetail extends React.Component<IUsuarioAcaoDetailProps> 
                       </Col>
                       <Col md="9">
                         <dd>{usuarioAcaoEntity.descricao}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.usuarioAcao.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={usuarioAcaoEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
                       </Col>
                     </Row>
                   </Col>

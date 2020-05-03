@@ -52,8 +52,6 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { atendimentoAceiteEntity } = this.props;
       const entity = {
@@ -160,31 +158,6 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
                                 name="msgPush"
                                 validate={{
                                   maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="atendimento-aceite-dataPost">
-                                <Translate contentKey="generadorApp.atendimentoAceite.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="atendimento-aceite-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.atendimentoAceiteEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
                                 }}
                               />
                             </Col>

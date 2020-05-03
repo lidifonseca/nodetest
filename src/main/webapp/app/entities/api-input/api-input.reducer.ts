@@ -111,25 +111,23 @@ export type ICrudGetAllActionApiInput<T> = (
   apiType?: any,
   obs?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionApiInput<IApiInput> = (idApiName, apiInput, apiType, obs, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionApiInput<IApiInput> = (idApiName, apiInput, apiType, obs, ativo, page, size, sort) => {
   const idApiNameRequest = idApiName ? `idApiName.contains=${idApiName}&` : '';
   const apiInputRequest = apiInput ? `apiInput.contains=${apiInput}&` : '';
   const apiTypeRequest = apiType ? `apiType.contains=${apiType}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_APIINPUT_LIST,
     payload: axios.get<IApiInput>(
-      `${requestUrl}${idApiNameRequest}${apiInputRequest}${apiTypeRequest}${obsRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idApiNameRequest}${apiInputRequest}${apiTypeRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

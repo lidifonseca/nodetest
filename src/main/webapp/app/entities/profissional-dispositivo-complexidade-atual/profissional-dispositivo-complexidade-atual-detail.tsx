@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -101,27 +101,6 @@ export class ProfissionalDispositivoComplexidadeAtualDetail extends React.Compon
                       </Col>
                       <Col md="9">
                         <dd>{profissionalDispositivoComplexidadeAtualEntity.idUsuario}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat
-                            value={profissionalDispositivoComplexidadeAtualEntity.dataPost}
-                            type="date"
-                            format={APP_DATE_FORMAT}
-                          />
-                        </dd>
                       </Col>
                     </Row>
                   </Col>

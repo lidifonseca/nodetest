@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -47,7 +47,6 @@ export interface IPacienteDiarioBaseState {
   idOperadora: any;
   historico: any;
   ativo: any;
-  dataPost: any;
   idPaciente: any;
   idUsuario: any;
 }
@@ -69,7 +68,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
     const idOperadora = url.searchParams.get('idOperadora') || '';
     const historico = url.searchParams.get('historico') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
@@ -78,7 +76,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
       idOperadora,
       historico,
       ativo,
-      dataPost,
       idPaciente,
       idUsuario
     };
@@ -97,7 +94,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
         idOperadora: '',
         historico: '',
         ativo: '',
-        dataPost: '',
         idPaciente: '',
         idUsuario: ''
       },
@@ -153,9 +149,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idPaciente=' +
       this.state.idPaciente +
       '&' +
@@ -169,18 +162,8 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idOperadora, historico, ativo, dataPost, idPaciente, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      idOperadora,
-      historico,
-      ativo,
-      dataPost,
-      idPaciente,
-      idUsuario,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idOperadora, historico, ativo, idPaciente, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idOperadora, historico, ativo, idPaciente, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -228,16 +211,7 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                           <Label id="historicoLabel" for="paciente-diario-historico">
                             <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="historico"
-                            id="paciente-diario-historico"
-                            value={this.state.historico}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -246,24 +220,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                             <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="paciente-diario-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-diario-dataPost">
-                            <Translate contentKey="generadorApp.pacienteDiario.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-diario-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -345,10 +301,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                         <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteDiario.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.pacienteDiario.idPaciente">Id Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -376,10 +328,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                         <td>{pacienteDiario.historico}</td>
 
                         <td>{pacienteDiario.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteDiario.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {pacienteDiario.idPaciente ? (
                             <Link to={`paciente/${pacienteDiario.idPaciente.id}`}>{pacienteDiario.idPaciente.id}</Link>

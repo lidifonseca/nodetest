@@ -47,8 +47,6 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { pacienteEnqueteAppEntity } = this.props;
       const entity = {
@@ -156,31 +154,6 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
                             </Col>
                             <Col md="9">
                               <AvField id="paciente-enquete-app-votacao" type="string" className="form-control" name="votacao" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="paciente-enquete-app-dataPost">
-                                <Translate contentKey="generadorApp.pacienteEnqueteApp.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="paciente-enquete-app-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.pacienteEnqueteAppEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IReportEmailAtendimentoProps extends StateProps, DispatchProps,
 export interface IReportEmailAtendimentoBaseState {
   idAtendimento: any;
   tipoReport: any;
-  dataPost: any;
 }
 export interface IReportEmailAtendimentoState extends IReportEmailAtendimentoBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class ReportEmailAtendimento extends React.Component<IReportEmailAtendime
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
     const tipoReport = url.searchParams.get('tipoReport') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idAtendimento,
-      tipoReport,
-      dataPost
+      tipoReport
     };
   };
 
@@ -77,8 +65,7 @@ export class ReportEmailAtendimento extends React.Component<IReportEmailAtendime
     this.setState(
       {
         idAtendimento: '',
-        tipoReport: '',
-        dataPost: ''
+        tipoReport: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class ReportEmailAtendimento extends React.Component<IReportEmailAtendime
       'tipoReport=' +
       this.state.tipoReport +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class ReportEmailAtendimento extends React.Component<IReportEmailAtendime
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, tipoReport, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, tipoReport, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, tipoReport, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, tipoReport, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -198,21 +182,6 @@ export class ReportEmailAtendimento extends React.Component<IReportEmailAtendime
                           <AvInput type="string" name="tipoReport" id="report-email-atendimento-tipoReport" value={this.state.tipoReport} />
                         </Row>
                       </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="report-email-atendimento-dataPost">
-                            <Translate contentKey="generadorApp.reportEmailAtendimento.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="report-email-atendimento-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                          />
-                        </Row>
-                      </Col>
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -248,10 +217,6 @@ export class ReportEmailAtendimento extends React.Component<IReportEmailAtendime
                         <Translate contentKey="generadorApp.reportEmailAtendimento.tipoReport">Tipo Report</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.reportEmailAtendimento.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -269,10 +234,6 @@ export class ReportEmailAtendimento extends React.Component<IReportEmailAtendime
                         <td>{reportEmailAtendimento.idAtendimento}</td>
 
                         <td>{reportEmailAtendimento.tipoReport}</td>
-
-                        <td>
-                          <TextFormat type="date" value={reportEmailAtendimento.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

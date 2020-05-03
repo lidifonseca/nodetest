@@ -107,7 +107,6 @@ const apiUrl = 'api/atendimento-sorteio-feitos';
 // Actions
 export type ICrudGetAllActionAtendimentoSorteioFeito<T> = (
   sorteioFeito?: any,
-  dataPost?: any,
   idPadItem?: any,
   page?: number,
   size?: number,
@@ -116,21 +115,19 @@ export type ICrudGetAllActionAtendimentoSorteioFeito<T> = (
 
 export const getEntities: ICrudGetAllActionAtendimentoSorteioFeito<IAtendimentoSorteioFeito> = (
   sorteioFeito,
-  dataPost,
   idPadItem,
   page,
   size,
   sort
 ) => {
   const sorteioFeitoRequest = sorteioFeito ? `sorteioFeito.contains=${sorteioFeito}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPadItemRequest = idPadItem ? `idPadItem.equals=${idPadItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOSORTEIOFEITO_LIST,
     payload: axios.get<IAtendimentoSorteioFeito>(
-      `${requestUrl}${sorteioFeitoRequest}${dataPostRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${sorteioFeitoRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

@@ -18,9 +18,6 @@ export default class Diario extends BaseEntity {
   @Column({ type: 'integer', name: 'gerar_pdf' })
   gerarPdf: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => Usuario)
   idUsuario: Usuario;
 

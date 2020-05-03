@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -44,7 +35,6 @@ export interface IApiInputBaseState {
   apiType: any;
   obs: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IApiInputState extends IApiInputBaseState, IPaginationBaseState {}
 
@@ -66,15 +56,13 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
     const apiType = url.searchParams.get('apiType') || '';
     const obs = url.searchParams.get('obs') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idApiName,
       apiInput,
       apiType,
       obs,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -89,8 +77,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
         apiInput: '',
         apiType: '',
         obs: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -150,9 +137,6 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -160,8 +144,8 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idApiName, apiInput, apiType, obs, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idApiName, apiInput, apiType, obs, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idApiName, apiInput, apiType, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idApiName, apiInput, apiType, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -210,15 +194,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                             <Translate contentKey="generadorApp.apiInput.apiInput">Api Input</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="apiInput"
-                            id="api-input-apiInput"
-                            value={this.state.apiInput}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="apiInput" id="api-input-apiInput" value={this.state.apiInput} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -227,15 +203,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                             <Translate contentKey="generadorApp.apiInput.apiType">Api Type</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="apiType"
-                            id="api-input-apiType"
-                            value={this.state.apiType}
-                            validate={{
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="apiType" id="api-input-apiType" value={this.state.apiType} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -244,15 +212,7 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                             <Translate contentKey="generadorApp.apiInput.obs">Obs</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="obs"
-                            id="api-input-obs"
-                            value={this.state.obs}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="obs" id="api-input-obs" value={this.state.obs} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -261,24 +221,6 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                             <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="api-input-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="api-input-dataPost">
-                            <Translate contentKey="generadorApp.apiInput.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="api-input-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -328,10 +270,6 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                         <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.apiInput.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -355,10 +293,6 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                         <td>{apiInput.obs}</td>
 
                         <td>{apiInput.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={apiInput.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

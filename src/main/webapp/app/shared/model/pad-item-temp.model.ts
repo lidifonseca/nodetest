@@ -10,7 +10,6 @@ export interface IPadItemTemp {
   dataFim?: Moment;
   qtdSessoes?: number;
   observacao?: string;
-  dataPost?: Moment;
   cidXPtaNovoId?: number;
   categoriaId?: number;
   numGhc?: string;

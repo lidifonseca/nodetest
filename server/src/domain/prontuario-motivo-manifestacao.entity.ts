@@ -33,9 +33,6 @@ export default class ProntuarioMotivoManifestacao extends BaseEntity {
   @Column({ type: 'integer', name: 'id_usuario' })
   idUsuario: number;
 
-  @Column({ type: 'date', name: 'data_post' })
-  dataPost: any;
-
   @Column({ type: 'blob', name: 'informacao_adicional' })
   informacaoAdicional: any;
 

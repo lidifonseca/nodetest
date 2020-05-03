@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -40,7 +31,6 @@ export interface ITempoExperienciaProps extends StateProps, DispatchProps, Route
 
 export interface ITempoExperienciaBaseState {
   tempoExperiencia: any;
-  dataPost: any;
 }
 export interface ITempoExperienciaState extends ITempoExperienciaBaseState, IPaginationBaseState {}
 
@@ -58,11 +48,9 @@ export class TempoExperiencia extends React.Component<ITempoExperienciaProps, IT
   getTempoExperienciaState = (location): ITempoExperienciaBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const tempoExperiencia = url.searchParams.get('tempoExperiencia') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
-      tempoExperiencia,
-      dataPost
+      tempoExperiencia
     };
   };
 
@@ -73,8 +61,7 @@ export class TempoExperiencia extends React.Component<ITempoExperienciaProps, IT
   cancelCourse = () => {
     this.setState(
       {
-        tempoExperiencia: '',
-        dataPost: ''
+        tempoExperiencia: ''
       },
       () => this.sortEntities()
     );
@@ -122,9 +109,6 @@ export class TempoExperiencia extends React.Component<ITempoExperienciaProps, IT
       'tempoExperiencia=' +
       this.state.tempoExperiencia +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -132,8 +116,8 @@ export class TempoExperiencia extends React.Component<ITempoExperienciaProps, IT
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tempoExperiencia, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tempoExperiencia, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tempoExperiencia, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tempoExperiencia, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -179,27 +163,6 @@ export class TempoExperiencia extends React.Component<ITempoExperienciaProps, IT
                             name="tempoExperiencia"
                             id="tempo-experiencia-tempoExperiencia"
                             value={this.state.tempoExperiencia}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="tempo-experiencia-dataPost">
-                            <Translate contentKey="generadorApp.tempoExperiencia.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="tempo-experiencia-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -234,10 +197,6 @@ export class TempoExperiencia extends React.Component<ITempoExperienciaProps, IT
                         <Translate contentKey="generadorApp.tempoExperiencia.tempoExperiencia">Tempo Experiencia</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tempoExperiencia.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -253,10 +212,6 @@ export class TempoExperiencia extends React.Component<ITempoExperienciaProps, IT
                         </td>
 
                         <td>{tempoExperiencia.tempoExperiencia}</td>
-
-                        <td>
-                          <TextFormat type="date" value={tempoExperiencia.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

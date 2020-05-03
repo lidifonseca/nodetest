@@ -108,7 +108,6 @@ const apiUrl = 'api/paciente-operadoras';
 export type ICrudGetAllActionPacienteOperadora<T> = (
   registro?: any,
   ativo?: any,
-  dataPost?: any,
   idPaciente?: any,
   idOperadora?: any,
   page?: number,
@@ -119,7 +118,6 @@ export type ICrudGetAllActionPacienteOperadora<T> = (
 export const getEntities: ICrudGetAllActionPacienteOperadora<IPacienteOperadora> = (
   registro,
   ativo,
-  dataPost,
   idPaciente,
   idOperadora,
   page,
@@ -128,7 +126,6 @@ export const getEntities: ICrudGetAllActionPacienteOperadora<IPacienteOperadora>
 ) => {
   const registroRequest = registro ? `registro.contains=${registro}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
   const idOperadoraRequest = idOperadora ? `idOperadora.equals=${idOperadora}&` : '';
 
@@ -136,7 +133,7 @@ export const getEntities: ICrudGetAllActionPacienteOperadora<IPacienteOperadora>
   return {
     type: ACTION_TYPES.FETCH_PACIENTEOPERADORA_LIST,
     payload: axios.get<IPacienteOperadora>(
-      `${requestUrl}${registroRequest}${ativoRequest}${dataPostRequest}${idPacienteRequest}${idOperadoraRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${registroRequest}${ativoRequest}${idPacienteRequest}${idOperadoraRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

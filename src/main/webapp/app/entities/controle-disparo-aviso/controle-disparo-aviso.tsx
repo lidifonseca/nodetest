@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -42,7 +33,6 @@ export interface IControleDisparoAvisoBaseState {
   idAtendimento: any;
   qtdDisparo: any;
   avisopush: any;
-  dataPost: any;
 }
 export interface IControleDisparoAvisoState extends IControleDisparoAvisoBaseState, IPaginationBaseState {}
 
@@ -62,13 +52,11 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
     const qtdDisparo = url.searchParams.get('qtdDisparo') || '';
     const avisopush = url.searchParams.get('avisopush') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idAtendimento,
       qtdDisparo,
-      avisopush,
-      dataPost
+      avisopush
     };
   };
 
@@ -81,8 +69,7 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
       {
         idAtendimento: '',
         qtdDisparo: '',
-        avisopush: '',
-        dataPost: ''
+        avisopush: ''
       },
       () => this.sortEntities()
     );
@@ -136,9 +123,6 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
       'avisopush=' +
       this.state.avisopush +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -146,8 +130,8 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, qtdDisparo, avisopush, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, qtdDisparo, avisopush, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, qtdDisparo, avisopush, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, qtdDisparo, avisopush, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -192,10 +176,6 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                             name="idAtendimento"
                             id="controle-disparo-aviso-idAtendimento"
                             value={this.state.idAtendimento}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -213,24 +193,6 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                             <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
                           </Label>
                           <AvInput type="string" name="avisopush" id="controle-disparo-aviso-avisopush" value={this.state.avisopush} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="controle-disparo-aviso-dataPost">
-                            <Translate contentKey="generadorApp.controleDisparoAviso.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="controle-disparo-aviso-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -272,10 +234,6 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                         <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.controleDisparoAviso.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -295,10 +253,6 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                         <td>{controleDisparoAviso.qtdDisparo}</td>
 
                         <td>{controleDisparoAviso.avisopush}</td>
-
-                        <td>
-                          <TextFormat type="date" value={controleDisparoAviso.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

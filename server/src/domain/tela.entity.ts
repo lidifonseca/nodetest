@@ -16,9 +16,6 @@ export default class Tela extends BaseEntity {
   @Column({ name: 'tela', length: 100 })
   tela: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => LogUser,
     other => other.idTela

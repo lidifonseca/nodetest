@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -47,7 +47,6 @@ export interface IUsuarioAcaoBaseState {
   idUsuario: any;
   idAtendimento: any;
   descricao: any;
-  dataPost: any;
   idTela: any;
   idAcao: any;
 }
@@ -69,7 +68,6 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
     const idUsuario = url.searchParams.get('idUsuario') || '';
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
     const descricao = url.searchParams.get('descricao') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idTela = url.searchParams.get('idTela') || '';
     const idAcao = url.searchParams.get('idAcao') || '';
@@ -78,7 +76,6 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
       idUsuario,
       idAtendimento,
       descricao,
-      dataPost,
       idTela,
       idAcao
     };
@@ -97,7 +94,6 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
         idUsuario: '',
         idAtendimento: '',
         descricao: '',
-        dataPost: '',
         idTela: '',
         idAcao: ''
       },
@@ -153,9 +149,6 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
       'descricao=' +
       this.state.descricao +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idTela=' +
       this.state.idTela +
       '&' +
@@ -169,8 +162,8 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, idAtendimento, descricao, dataPost, idTela, idAcao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idUsuario, idAtendimento, descricao, dataPost, idTela, idAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idUsuario, idAtendimento, descricao, idTela, idAcao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idUsuario, idAtendimento, descricao, idTela, idAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -227,34 +220,7 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                           <Label id="descricaoLabel" for="usuario-acao-descricao">
                             <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="descricao"
-                            id="usuario-acao-descricao"
-                            value={this.state.descricao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="usuario-acao-dataPost">
-                            <Translate contentKey="generadorApp.usuarioAcao.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="usuario-acao-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
 
@@ -336,10 +302,6 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                         <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.usuarioAcao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.usuarioAcao.idTela">Id Tela</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -367,10 +329,6 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                         <td>{usuarioAcao.idAtendimento}</td>
 
                         <td>{usuarioAcao.descricao}</td>
-
-                        <td>
-                          <TextFormat type="date" value={usuarioAcao.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>{usuarioAcao.idTela ? <Link to={`tela/${usuarioAcao.idTela.id}`}>{usuarioAcao.idTela.id}</Link> : ''}</td>
                         <td>{usuarioAcao.idAcao ? <Link to={`acao/${usuarioAcao.idAcao.id}`}>{usuarioAcao.idAcao.id}</Link> : ''}</td>
 

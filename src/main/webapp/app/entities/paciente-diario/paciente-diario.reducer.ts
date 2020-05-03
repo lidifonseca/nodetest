@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PACIENTEDIARIO: 'pacienteDiario/CREATE_PACIENTEDIARIO',
   UPDATE_PACIENTEDIARIO: 'pacienteDiario/UPDATE_PACIENTEDIARIO',
   DELETE_PACIENTEDIARIO: 'pacienteDiario/DELETE_PACIENTEDIARIO',
+  SET_BLOB: 'pacienteDiario/SET_BLOB',
   RESET: 'pacienteDiario/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: PacienteDiarioState = initialState, action): PacienteDiar
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -109,7 +121,6 @@ export type ICrudGetAllActionPacienteDiario<T> = (
   idOperadora?: any,
   historico?: any,
   ativo?: any,
-  dataPost?: any,
   idPaciente?: any,
   idUsuario?: any,
   page?: number,
@@ -121,7 +132,6 @@ export const getEntities: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
   idOperadora,
   historico,
   ativo,
-  dataPost,
   idPaciente,
   idUsuario,
   page,
@@ -131,7 +141,6 @@ export const getEntities: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
   const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
   const historicoRequest = historico ? `historico.contains=${historico}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
 
@@ -139,7 +148,7 @@ export const getEntities: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST,
     payload: axios.get<IPacienteDiario>(
-      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}${dataPostRequest}${idPacienteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}${idPacienteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -188,6 +197,15 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDiario> = id => async disp
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

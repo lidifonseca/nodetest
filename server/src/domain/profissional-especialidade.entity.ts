@@ -15,8 +15,5 @@ export default class ProfissionalEspecialidade extends BaseEntity {
   @Column({ name: 'id_profissional', nullable: false })
   idProfissional: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

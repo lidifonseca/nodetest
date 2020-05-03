@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -45,7 +36,6 @@ export interface IEspecialidadeValorBaseState {
   idFranquia: any;
   valor: any;
   ativo: any;
-  dataPost: any;
   idEspecialidade: any;
 }
 export interface IEspecialidadeValorState extends IEspecialidadeValorBaseState, IPaginationBaseState {}
@@ -66,7 +56,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
     const idFranquia = url.searchParams.get('idFranquia') || '';
     const valor = url.searchParams.get('valor') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
 
@@ -74,7 +63,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       idFranquia,
       valor,
       ativo,
-      dataPost,
       idEspecialidade
     };
   };
@@ -91,7 +79,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
         idFranquia: '',
         valor: '',
         ativo: '',
-        dataPost: '',
         idEspecialidade: ''
       },
       () => this.sortEntities()
@@ -146,9 +133,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idEspecialidade=' +
       this.state.idEspecialidade +
       '&' +
@@ -159,8 +143,8 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, valor, ativo, dataPost, idEspecialidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idFranquia, valor, ativo, dataPost, idEspecialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, valor, ativo, idEspecialidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idFranquia, valor, ativo, idEspecialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -218,24 +202,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                             <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="especialidade-valor-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="especialidade-valor-dataPost">
-                            <Translate contentKey="generadorApp.especialidadeValor.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="especialidade-valor-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -302,10 +268,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                         <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.especialidadeValor.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.especialidadeValor.idEspecialidade">Id Especialidade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -329,10 +291,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                         <td>{especialidadeValor.valor}</td>
 
                         <td>{especialidadeValor.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={especialidadeValor.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {especialidadeValor.idEspecialidade ? (
                             <Link to={`especialidade/${especialidadeValor.idEspecialidade.id}`}>

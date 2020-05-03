@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -47,7 +48,6 @@ export interface IPacienteStatusAtualBaseState {
   dataStatus: any;
   observacao: any;
   ativo: any;
-  dataPost: any;
   idUsuario: any;
   idPaciente: any;
   idStatusAtual: any;
@@ -70,7 +70,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
     const dataStatus = url.searchParams.get('dataStatus') || '';
     const observacao = url.searchParams.get('observacao') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
 
     const idPaciente = url.searchParams.get('idPaciente') || '';
@@ -80,7 +79,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
       dataStatus,
       observacao,
       ativo,
-      dataPost,
       idUsuario,
       idPaciente,
       idStatusAtual
@@ -100,7 +98,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
         dataStatus: '',
         observacao: '',
         ativo: '',
-        dataPost: '',
         idUsuario: '',
         idPaciente: '',
         idStatusAtual: ''
@@ -157,9 +154,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
@@ -176,24 +170,11 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      dataStatus,
-      observacao,
-      ativo,
-      dataPost,
-      idUsuario,
-      idPaciente,
-      idStatusAtual,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { dataStatus, observacao, ativo, idUsuario, idPaciente, idStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       dataStatus,
       observacao,
       ativo,
-      dataPost,
       idUsuario,
       idPaciente,
       idStatusAtual,
@@ -248,16 +229,7 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                           <Label id="observacaoLabel" for="paciente-status-atual-observacao">
                             <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="paciente-status-atual-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -270,37 +242,11 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                       </Col>
                       <Col md="3">
                         <Row>
-                          <Label id="dataPostLabel" for="paciente-status-atual-dataPost">
-                            <Translate contentKey="generadorApp.pacienteStatusAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-status-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
                           <Label id="idUsuarioLabel" for="paciente-status-atual-idUsuario">
                             <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUsuario"
-                            id="paciente-status-atual-idUsuario"
-                            value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUsuario" id="paciente-status-atual-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
 
@@ -382,10 +328,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                         <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('idUsuario')}>
                         <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -419,10 +361,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                         <td>{pacienteStatusAtual.observacao}</td>
 
                         <td>{pacienteStatusAtual.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteStatusAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{pacienteStatusAtual.idUsuario}</td>
                         <td>

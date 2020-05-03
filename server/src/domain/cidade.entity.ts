@@ -16,9 +16,6 @@ export default class Cidade extends BaseEntity {
   @Column({ name: 'descr_cidade', length: 255 })
   descrCidade: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => Atendimento,
     other => other.idCidade

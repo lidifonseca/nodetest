@@ -107,9 +107,6 @@ export default class Atendimento extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @Column({ type: 'timestamp', name: 'data_fora_hora' })
   dataForaHora: any;
 

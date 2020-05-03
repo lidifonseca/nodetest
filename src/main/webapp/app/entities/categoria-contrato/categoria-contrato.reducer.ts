@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_CATEGORIACONTRATO: 'categoriaContrato/CREATE_CATEGORIACONTRATO',
   UPDATE_CATEGORIACONTRATO: 'categoriaContrato/UPDATE_CATEGORIACONTRATO',
   DELETE_CATEGORIACONTRATO: 'categoriaContrato/DELETE_CATEGORIACONTRATO',
+  SET_BLOB: 'categoriaContrato/SET_BLOB',
   RESET: 'categoriaContrato/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: CategoriaContratoState = initialState, action): Categoria
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -108,32 +120,22 @@ const apiUrl = 'api/categoria-contratoes';
 export type ICrudGetAllActionCategoriaContrato<T> = (
   contrato?: any,
   ativo?: any,
-  dataPost?: any,
   idCategoria?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (
-  contrato,
-  ativo,
-  dataPost,
-  idCategoria,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, idCategoria, page, size, sort) => {
   const contratoRequest = contrato ? `contrato.contains=${contrato}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIACONTRATO_LIST,
     payload: axios.get<ICategoriaContrato>(
-      `${requestUrl}${contratoRequest}${ativoRequest}${dataPostRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${contratoRequest}${ativoRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -177,6 +179,15 @@ export const deleteEntity: ICrudDeleteAction<ICategoriaContrato> = id => async d
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

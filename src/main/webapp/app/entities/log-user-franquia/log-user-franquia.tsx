@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -47,7 +47,6 @@ export interface ILogUserFranquiaProps extends StateProps, DispatchProps, RouteC
 
 export interface ILogUserFranquiaBaseState {
   descricao: any;
-  dataPost: any;
   idAcao: any;
   idTela: any;
   idUsuario: any;
@@ -68,7 +67,6 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
   getLogUserFranquiaState = (location): ILogUserFranquiaBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const descricao = url.searchParams.get('descricao') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idAcao = url.searchParams.get('idAcao') || '';
     const idTela = url.searchParams.get('idTela') || '';
@@ -76,7 +74,6 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
 
     return {
       descricao,
-      dataPost,
       idAcao,
       idTela,
       idUsuario
@@ -95,7 +92,6 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
     this.setState(
       {
         descricao: '',
-        dataPost: '',
         idAcao: '',
         idTela: '',
         idUsuario: ''
@@ -146,9 +142,6 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
       'descricao=' +
       this.state.descricao +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idAcao=' +
       this.state.idAcao +
       '&' +
@@ -165,8 +158,8 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descricao, dataPost, idAcao, idTela, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(descricao, dataPost, idAcao, idTela, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descricao, idAcao, idTela, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(descricao, idAcao, idTela, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -206,34 +199,7 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
                           <Label id="descricaoLabel" for="log-user-franquia-descricao">
                             <Translate contentKey="generadorApp.logUserFranquia.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="descricao"
-                            id="log-user-franquia-descricao"
-                            value={this.state.descricao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="log-user-franquia-dataPost">
-                            <Translate contentKey="generadorApp.logUserFranquia.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="log-user-franquia-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput id="log-user-franquia-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
 
@@ -327,10 +293,6 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
                         <Translate contentKey="generadorApp.logUserFranquia.descricao">Descricao</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.logUserFranquia.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.logUserFranquia.idAcao">Id Acao</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -358,10 +320,6 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
                         </td>
 
                         <td>{logUserFranquia.descricao}</td>
-
-                        <td>
-                          <TextFormat type="date" value={logUserFranquia.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {logUserFranquia.idAcao ? <Link to={`acao/${logUserFranquia.idAcao.id}`}>{logUserFranquia.idAcao.id}</Link> : ''}
                         </td>

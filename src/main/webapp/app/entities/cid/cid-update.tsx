@@ -41,8 +41,6 @@ export class CidUpdate extends React.Component<ICidUpdateProps, ICidUpdateState>
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { cidEntity } = this.props;
       const entity = {
@@ -233,31 +231,6 @@ export class CidUpdate extends React.Component<ICidUpdateProps, ICidUpdateState>
                                 name="apelido"
                                 validate={{
                                   maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="cid-dataPost">
-                                <Translate contentKey="generadorApp.cid.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="cid-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.cidEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
                                 }}
                               />
                             </Col>

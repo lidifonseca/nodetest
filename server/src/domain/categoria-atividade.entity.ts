@@ -16,9 +16,6 @@ export default class CategoriaAtividade extends BaseEntity {
   @Column({ name: 'atividade', length: 100 })
   atividade: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @Column({ type: 'integer', name: 'id_unidade' })
   idUnidade: number;
 

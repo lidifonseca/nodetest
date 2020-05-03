@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -45,7 +36,6 @@ export interface IFranquiaStatusAtualBaseState {
   statusAtual: any;
   obs: any;
   ativo: any;
-  dataPost: any;
   idFranquia: any;
 }
 export interface IFranquiaStatusAtualState extends IFranquiaStatusAtualBaseState, IPaginationBaseState {}
@@ -66,7 +56,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
     const statusAtual = url.searchParams.get('statusAtual') || '';
     const obs = url.searchParams.get('obs') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idFranquia = url.searchParams.get('idFranquia') || '';
 
@@ -74,7 +63,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
       statusAtual,
       obs,
       ativo,
-      dataPost,
       idFranquia
     };
   };
@@ -91,7 +79,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
         statusAtual: '',
         obs: '',
         ativo: '',
-        dataPost: '',
         idFranquia: ''
       },
       () => this.sortEntities()
@@ -146,9 +133,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idFranquia=' +
       this.state.idFranquia +
       '&' +
@@ -159,8 +143,8 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtual, obs, ativo, dataPost, idFranquia, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtual, obs, ativo, dataPost, idFranquia, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtual, obs, ativo, idFranquia, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtual, obs, ativo, idFranquia, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -209,15 +193,7 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                             <Translate contentKey="generadorApp.franquiaStatusAtual.obs">Obs</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="obs"
-                            id="franquia-status-atual-obs"
-                            value={this.state.obs}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="obs" id="franquia-status-atual-obs" value={this.state.obs} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -226,24 +202,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                             <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="franquia-status-atual-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="franquia-status-atual-dataPost">
-                            <Translate contentKey="generadorApp.franquiaStatusAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="franquia-status-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -305,10 +263,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                         <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.franquiaStatusAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.franquiaStatusAtual.idFranquia">Id Franquia</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -332,10 +286,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                         <td>{franquiaStatusAtual.obs}</td>
 
                         <td>{franquiaStatusAtual.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={franquiaStatusAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {franquiaStatusAtual.idFranquia ? (
                             <Link to={`franquia/${franquiaStatusAtual.idFranquia.id}`}>{franquiaStatusAtual.idFranquia.id}</Link>

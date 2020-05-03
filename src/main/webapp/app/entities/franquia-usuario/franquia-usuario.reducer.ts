@@ -143,7 +143,6 @@ export type ICrudGetAllActionFranquiaUsuario<T> = (
   envioIntercorrencia?: any,
   envioCancelamento?: any,
   ativo?: any,
-  dataPost?: any,
   logUserFranquia?: any,
   idFranquia?: any,
   page?: number,
@@ -189,7 +188,6 @@ export const getEntities: ICrudGetAllActionFranquiaUsuario<IFranquiaUsuario> = (
   envioIntercorrencia,
   envioCancelamento,
   ativo,
-  dataPost,
   logUserFranquia,
   idFranquia,
   page,
@@ -233,7 +231,6 @@ export const getEntities: ICrudGetAllActionFranquiaUsuario<IFranquiaUsuario> = (
   const envioIntercorrenciaRequest = envioIntercorrencia ? `envioIntercorrencia.contains=${envioIntercorrencia}&` : '';
   const envioCancelamentoRequest = envioCancelamento ? `envioCancelamento.contains=${envioCancelamento}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
   const idFranquiaRequest = idFranquia ? `idFranquia.equals=${idFranquia}&` : '';
 
@@ -241,7 +238,7 @@ export const getEntities: ICrudGetAllActionFranquiaUsuario<IFranquiaUsuario> = (
   return {
     type: ACTION_TYPES.FETCH_FRANQUIAUSUARIO_LIST,
     payload: axios.get<IFranquiaUsuario>(
-      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${relProfissionalRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPushRequest}${cadPushRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${ativoRequest}${dataPostRequest}${logUserFranquiaRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${senhaRequest}${nomeRequest}${emailRequest}${verProfissionalRequest}${cadProfissionalRequest}${ediProfissionalRequest}${delProfissionalRequest}${relProfissionalRequest}${verPacienteRequest}${cadPacienteRequest}${ediPacienteRequest}${delPacienteRequest}${relPacienteRequest}${verPadRequest}${cadPadRequest}${ediPadRequest}${delPadRequest}${relPadRequest}${verAtendimentoRequest}${cadAtendimentoRequest}${ediAtendimentoRequest}${delAtendimentoRequest}${relAtendimentoRequest}${verPushRequest}${cadPushRequest}${verEspecialidadeValorRequest}${cadEspecialidadeValorRequest}${ediEspecialidadeValorRequest}${delEspecialidadeValorRequest}${verUsuarioRequest}${cadUsuarioRequest}${ediUsuarioRequest}${delUsuarioRequest}${envioRecusaRequest}${envioIntercorrenciaRequest}${envioCancelamentoRequest}${ativoRequest}${logUserFranquiaRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

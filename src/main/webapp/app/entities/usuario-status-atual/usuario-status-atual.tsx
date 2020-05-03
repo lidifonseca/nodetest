@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IUsuarioStatusAtualBaseState {
   statusAtual: any;
   obs: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IUsuarioStatusAtualState extends IUsuarioStatusAtualBaseState, IPaginationBaseState {}
 
@@ -64,14 +54,12 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
     const statusAtual = url.searchParams.get('statusAtual') || '';
     const obs = url.searchParams.get('obs') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idUsuario,
       statusAtual,
       obs,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -85,8 +73,7 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
         idUsuario: '',
         statusAtual: '',
         obs: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +130,6 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +137,8 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, statusAtual, obs, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idUsuario, statusAtual, obs, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idUsuario, statusAtual, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idUsuario, statusAtual, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -212,15 +196,7 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                             <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="obs"
-                            id="usuario-status-atual-obs"
-                            value={this.state.obs}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="obs" id="usuario-status-atual-obs" value={this.state.obs} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -229,24 +205,6 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                             <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="usuario-status-atual-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="usuario-status-atual-dataPost">
-                            <Translate contentKey="generadorApp.usuarioStatusAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="usuario-status-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -292,10 +250,6 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                         <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.usuarioStatusAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -317,10 +271,6 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                         <td>{usuarioStatusAtual.obs}</td>
 
                         <td>{usuarioStatusAtual.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={usuarioStatusAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

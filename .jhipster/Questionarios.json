@@ -27,7 +27,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "respostasQuestionarios",
             "otherEntityRelationshipName": "questionariosId",
-            "relationshipValidateRules": "required",
             "relationshipName": "respostasQuestionarios"
         },
         {

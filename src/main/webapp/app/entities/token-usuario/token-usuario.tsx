@@ -42,7 +42,6 @@ export interface ITokenUsuarioBaseState {
   idPaciente: any;
   token: any;
   dataValida: any;
-  dataPost: any;
 }
 export interface ITokenUsuarioState extends ITokenUsuarioBaseState, IPaginationBaseState {}
 
@@ -62,13 +61,11 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const token = url.searchParams.get('token') || '';
     const dataValida = url.searchParams.get('dataValida') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPaciente,
       token,
-      dataValida,
-      dataPost
+      dataValida
     };
   };
 
@@ -81,8 +78,7 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
       {
         idPaciente: '',
         token: '',
-        dataValida: '',
-        dataPost: ''
+        dataValida: ''
       },
       () => this.sortEntities()
     );
@@ -136,9 +132,6 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
       'dataValida=' +
       this.state.dataValida +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -146,8 +139,8 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPaciente, token, dataValida, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPaciente, token, dataValida, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPaciente, token, dataValida, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPaciente, token, dataValida, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -187,16 +180,7 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                           <Label id="idPacienteLabel" for="token-usuario-idPaciente">
                             <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="token-usuario-idPaciente"
-                            value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idPaciente" id="token-usuario-idPaciente" value={this.state.idPaciente} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -205,15 +189,7 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                             <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="token"
-                            id="token-usuario-token"
-                            value={this.state.token}
-                            validate={{
-                              maxLength: { value: 200, errorMessage: translate('entity.validation.maxlength', { max: 200 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="token" id="token-usuario-token" value={this.state.token} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -228,21 +204,6 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                             name="dataValida"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={this.state.dataValida ? convertDateTimeFromServer(this.state.dataValida) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="token-usuario-dataPost">
-                            <Translate contentKey="generadorApp.tokenUsuario.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="token-usuario-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
                           />
                         </Row>
                       </Col>
@@ -285,10 +246,6 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                         <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tokenUsuario.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -309,10 +266,6 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
 
                         <td>
                           <TextFormat type="date" value={tokenUsuario.dataValida} format={APP_DATE_FORMAT} />
-                        </td>
-
-                        <td>
-                          <TextFormat type="date" value={tokenUsuario.dataPost} format={APP_DATE_FORMAT} />
                         </td>
 
                         <td className="text-right">

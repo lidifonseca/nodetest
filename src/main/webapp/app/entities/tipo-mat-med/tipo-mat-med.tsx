@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface ITipoMatMedProps extends StateProps, DispatchProps, RouteCompon
 export interface ITipoMatMedBaseState {
   tipo: any;
   ativo: any;
-  dataPost: any;
 }
 export interface ITipoMatMedState extends ITipoMatMedBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const tipo = url.searchParams.get('tipo') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       tipo,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -77,8 +65,7 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
     this.setState(
       {
         tipo: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipo, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tipo, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipo, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tipo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -181,16 +165,7 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
                             <Translate contentKey="generadorApp.tipoMatMed.tipo">Tipo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tipo"
-                            id="tipo-mat-med-tipo"
-                            value={this.state.tipo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tipo" id="tipo-mat-med-tipo" value={this.state.tipo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -199,14 +174,6 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
                             <Translate contentKey="generadorApp.tipoMatMed.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="tipo-mat-med-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="tipo-mat-med-dataPost">
-                            <Translate contentKey="generadorApp.tipoMatMed.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="tipo-mat-med-dataPost" value={this.state.dataPost} />
                         </Row>
                       </Col>
                     </div>
@@ -244,10 +211,6 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
                         <Translate contentKey="generadorApp.tipoMatMed.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tipoMatMed.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -265,10 +228,6 @@ export class TipoMatMed extends React.Component<ITipoMatMedProps, ITipoMatMedSta
                         <td>{tipoMatMed.tipo}</td>
 
                         <td>{tipoMatMed.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={tipoMatMed.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

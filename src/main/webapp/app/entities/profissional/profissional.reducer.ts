@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PROFISSIONAL: 'profissional/CREATE_PROFISSIONAL',
   UPDATE_PROFISSIONAL: 'profissional/UPDATE_PROFISSIONAL',
   DELETE_PROFISSIONAL: 'profissional/DELETE_PROFISSIONAL',
+  SET_BLOB: 'profissional/SET_BLOB',
   RESET: 'profissional/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: ProfissionalState = initialState, action): ProfissionalSt
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -140,7 +152,6 @@ export type ICrudGetAllActionProfissional<T> = (
   obs?: any,
   chavePrivada?: any,
   ativo?: any,
-  dataPost?: any,
   senhaOriginal?: any,
   dataSenha?: any,
   expoToken?: any,
@@ -188,7 +199,6 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   obs,
   chavePrivada,
   ativo,
-  dataPost,
   senhaOriginal,
   dataSenha,
   expoToken,
@@ -234,7 +244,6 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const chavePrivadaRequest = chavePrivada ? `chavePrivada.contains=${chavePrivada}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const senhaOriginalRequest = senhaOriginal ? `senhaOriginal.contains=${senhaOriginal}&` : '';
   const dataSenhaRequest = dataSenha ? `dataSenha.contains=${dataSenha}&` : '';
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
@@ -247,7 +256,7 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONAL_LIST,
     payload: axios.get<IProfissional>(
-      `${requestUrl}${idUnidadeRequest}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${dataPostRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${senhaChatRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeRequest}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${senhaChatRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -290,6 +299,15 @@ export const deleteEntity: ICrudDeleteAction<IProfissional> = id => async dispat
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

@@ -19,11 +19,8 @@
         },
         {
             "fieldName": "observacao",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "255"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "sub",
@@ -32,13 +29,6 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         },
         {
             "fieldName": "dataPadItemIncompleto",
@@ -80,14 +70,12 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoCepRecusado",
             "otherEntityRelationshipName": "idPadItem",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoCepRecusado"
         },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "atendimentoSorteioFeito",
             "otherEntityRelationshipName": "idPadItem",
-            "relationshipValidateRules": "required",
             "relationshipName": "atendimentoSorteioFeito"
         },
         {
@@ -100,7 +88,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "padItemCepRecusado",
             "otherEntityRelationshipName": "idPadItem",
-            "relationshipValidateRules": "required",
             "relationshipName": "padItemCepRecusado"
         },
         {
@@ -113,7 +100,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "padItemSorteioFeito",
             "otherEntityRelationshipName": "idPadItem",
-            "relationshipValidateRules": "required",
             "relationshipName": "padItemSorteioFeito"
         },
         {

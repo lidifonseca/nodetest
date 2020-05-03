@@ -60,7 +60,7 @@ export interface IPaciente {
   ufFamiliar?: string;
   latitudeFamiliar?: string;
   longitudeFamiliar?: string;
-  observacao?: string;
+  observacao?: any;
   aph?: number;
   nivelComplexidade?: number;
   passagemPs?: number;
@@ -74,8 +74,7 @@ export interface IPaciente {
   comResponsavel?: number;
   cadastroCompleto?: number;
   ativo?: number;
-  dataPost?: Moment;
-  detalhes?: string;
+  detalhes?: any;
   tipohospital?: number;
   liminar?: string;
   expoToken?: string;

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -45,7 +36,6 @@ export interface IUsuarioPanicoBaseState {
   observacao: any;
   resolvido: any;
   idUserResolvido: any;
-  dataPost: any;
 }
 export interface IUsuarioPanicoState extends IUsuarioPanicoBaseState, IPaginationBaseState {}
 
@@ -68,7 +58,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
     const observacao = url.searchParams.get('observacao') || '';
     const resolvido = url.searchParams.get('resolvido') || '';
     const idUserResolvido = url.searchParams.get('idUserResolvido') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPaciente,
@@ -76,8 +65,7 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
       idProfissional,
       observacao,
       resolvido,
-      idUserResolvido,
-      dataPost
+      idUserResolvido
     };
   };
 
@@ -93,8 +81,7 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
         idProfissional: '',
         observacao: '',
         resolvido: '',
-        idUserResolvido: '',
-        dataPost: ''
+        idUserResolvido: ''
       },
       () => this.sortEntities()
     );
@@ -157,9 +144,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
       'idUserResolvido=' +
       this.state.idUserResolvido +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -174,7 +158,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
       observacao,
       resolvido,
       idUserResolvido,
-      dataPost,
       activePage,
       itemsPerPage,
       sort,
@@ -187,7 +170,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
       observacao,
       resolvido,
       idUserResolvido,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -231,16 +213,7 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                           <Label id="idPacienteLabel" for="usuario-panico-idPaciente">
                             <Translate contentKey="generadorApp.usuarioPanico.idPaciente">Id Paciente</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="usuario-panico-idPaciente"
-                            value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idPaciente" id="usuario-panico-idPaciente" value={this.state.idPaciente} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -248,16 +221,7 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                           <Label id="idUsuarioLabel" for="usuario-panico-idUsuario">
                             <Translate contentKey="generadorApp.usuarioPanico.idUsuario">Id Usuario</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="usuario-panico-idUsuario"
-                            value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idUsuario" id="usuario-panico-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -270,10 +234,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                             name="idProfissional"
                             id="usuario-panico-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -283,15 +243,7 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                             <Translate contentKey="generadorApp.usuarioPanico.observacao">Observacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="usuario-panico-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="observacao" id="usuario-panico-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -312,21 +264,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                             name="idUserResolvido"
                             id="usuario-panico-idUserResolvido"
                             value={this.state.idUserResolvido}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="usuario-panico-dataPost">
-                            <Translate contentKey="generadorApp.usuarioPanico.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="usuario-panico-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
                           />
                         </Row>
                       </Col>
@@ -381,10 +318,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                         <Translate contentKey="generadorApp.usuarioPanico.idUserResolvido">Id User Resolvido</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.usuarioPanico.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -410,10 +343,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                         <td>{usuarioPanico.resolvido}</td>
 
                         <td>{usuarioPanico.idUserResolvido}</td>
-
-                        <td>
-                          <TextFormat type="date" value={usuarioPanico.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -50,7 +50,6 @@ export interface IPadBaseState {
   dataFim: any;
   dataConferido: any;
   ativo: any;
-  dataPost: any;
   idUsuario: any;
   statusPad: any;
   novoModelo: any;
@@ -83,7 +82,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
     const dataFim = url.searchParams.get('dataFim') || '';
     const dataConferido = url.searchParams.get('dataConferido') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
     const statusPad = url.searchParams.get('statusPad') || '';
     const novoModelo = url.searchParams.get('novoModelo') || '';
@@ -103,7 +101,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataFim,
       dataConferido,
       ativo,
-      dataPost,
       idUsuario,
       statusPad,
       novoModelo,
@@ -132,7 +129,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         dataFim: '',
         dataConferido: '',
         ativo: '',
-        dataPost: '',
         idUsuario: '',
         statusPad: '',
         novoModelo: '',
@@ -209,9 +205,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
@@ -252,7 +245,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataFim,
       dataConferido,
       ativo,
-      dataPost,
       idUsuario,
       statusPad,
       novoModelo,
@@ -275,7 +267,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataFim,
       dataConferido,
       ativo,
-      dataPost,
       idUsuario,
       statusPad,
       novoModelo,
@@ -328,15 +319,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                             <Translate contentKey="generadorApp.pad.idUnidade">Id Unidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUnidade"
-                            id="pad-idUnidade"
-                            value={this.state.idUnidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUnidade" id="pad-idUnidade" value={this.state.idUnidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -362,15 +345,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                             <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nroPad"
-                            id="pad-nroPad"
-                            value={this.state.nroPad}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nroPad" id="pad-nroPad" value={this.state.nroPad} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -407,24 +382,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                       </Col>
                       <Col md="3">
                         <Row>
-                          <Label id="dataPostLabel" for="pad-dataPost">
-                            <Translate contentKey="generadorApp.pad.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
                           <Label id="idUsuarioLabel" for="pad-idUsuario">
                             <Translate contentKey="generadorApp.pad.idUsuario">Id Usuario</Translate>
                           </Label>
@@ -453,15 +410,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                             <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="imagePath"
-                            id="pad-imagePath"
-                            value={this.state.imagePath}
-                            validate={{
-                              maxLength: { value: 250, errorMessage: translate('entity.validation.maxlength', { max: 250 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="imagePath" id="pad-imagePath" value={this.state.imagePath} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -559,10 +508,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                         <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pad.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('idUsuario')}>
                         <Translate contentKey="generadorApp.pad.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -622,10 +567,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                         </td>
 
                         <td>{pad.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pad.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{pad.idUsuario}</td>
 

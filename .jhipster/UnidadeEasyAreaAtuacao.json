@@ -16,13 +16,6 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "10"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [

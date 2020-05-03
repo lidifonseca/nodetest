@@ -44,8 +44,6 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { profissionalComplexidadeAtualEntity } = this.props;
       const entity = {
@@ -282,28 +280,6 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
                                 type="string"
                                 className="form-control"
                                 name="idUsuario"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="profissional-complexidade-atual-dataPost">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="profissional-complexidade-atual-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.profissionalComplexidadeAtualEntity.dataPost)}
                               />
                             </Col>
                           </Row>

@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { IFranquiaAreaAtuacao } from 'app/shared/model/franquia-area-atuacao.model';
 import { IFranquiaStatusAtual } from 'app/shared/model/franquia-status-atual.model';
 import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
@@ -23,7 +22,6 @@ export interface IFranquia {
   uf?: string;
   observacao?: string;
   ativo?: number;
-  dataPost?: Moment;
   franquiaAreaAtuacaos?: IFranquiaAreaAtuacao[];
   franquiaStatusAtuals?: IFranquiaStatusAtual[];
   franquiaUsuarios?: IFranquiaUsuario[];

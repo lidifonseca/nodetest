@@ -40,13 +40,6 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "30"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [
@@ -54,7 +47,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "cidXPtaNovo",
             "otherEntityRelationshipName": "cidId",
-            "relationshipValidateRules": "required",
             "relationshipName": "cidXPtaNovo"
         },
         {
@@ -67,7 +59,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "padCid",
             "otherEntityRelationshipName": "idCid",
-            "relationshipValidateRules": "required",
             "relationshipName": "padCid"
         }
     ],

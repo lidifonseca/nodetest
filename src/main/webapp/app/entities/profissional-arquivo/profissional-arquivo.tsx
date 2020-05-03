@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -42,7 +33,6 @@ export interface IProfissionalArquivoBaseState {
   idProfissional: any;
   arquivo: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IProfissionalArquivoState extends IProfissionalArquivoBaseState, IPaginationBaseState {}
 
@@ -62,13 +52,11 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const arquivo = url.searchParams.get('arquivo') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProfissional,
       arquivo,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -81,8 +69,7 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
       {
         idProfissional: '',
         arquivo: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -136,9 +123,6 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -146,8 +130,8 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, arquivo, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProfissional, arquivo, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProfissional, arquivo, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, arquivo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -202,15 +186,7 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                             <Translate contentKey="generadorApp.profissionalArquivo.arquivo">Arquivo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="arquivo"
-                            id="profissional-arquivo-arquivo"
-                            value={this.state.arquivo}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="arquivo" id="profissional-arquivo-arquivo" value={this.state.arquivo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -219,24 +195,6 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                             <Translate contentKey="generadorApp.profissionalArquivo.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="profissional-arquivo-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-arquivo-dataPost">
-                            <Translate contentKey="generadorApp.profissionalArquivo.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-arquivo-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -278,10 +236,6 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                         <Translate contentKey="generadorApp.profissionalArquivo.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalArquivo.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -301,10 +255,6 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                         <td>{profissionalArquivo.arquivo}</td>
 
                         <td>{profissionalArquivo.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalArquivo.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

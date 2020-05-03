@@ -12,8 +12,5 @@ export default class TempoExperiencia extends BaseEntity {
   @Column({ name: 'tempo_experiencia', length: 60 })
   tempoExperiencia: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

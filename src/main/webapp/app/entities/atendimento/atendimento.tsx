@@ -83,7 +83,6 @@ export interface IAtendimentoBaseState {
   valor: any;
   ordemAtendimento: any;
   ativo: any;
-  dataPost: any;
   dataForaHora: any;
   idUsuarioCancelamento: any;
   dataCancelamento: any;
@@ -146,7 +145,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
     const valor = url.searchParams.get('valor') || '';
     const ordemAtendimento = url.searchParams.get('ordemAtendimento') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const dataForaHora = url.searchParams.get('dataForaHora') || '';
     const idUsuarioCancelamento = url.searchParams.get('idUsuarioCancelamento') || '';
     const dataCancelamento = url.searchParams.get('dataCancelamento') || '';
@@ -196,7 +194,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       valor,
       ordemAtendimento,
       ativo,
-      dataPost,
       dataForaHora,
       idUsuarioCancelamento,
       dataCancelamento,
@@ -261,7 +258,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         valor: '',
         ordemAtendimento: '',
         ativo: '',
-        dataPost: '',
         dataForaHora: '',
         idUsuarioCancelamento: '',
         dataCancelamento: '',
@@ -410,9 +406,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'dataForaHora=' +
       this.state.dataForaHora +
       '&' +
@@ -501,7 +494,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       valor,
       ordemAtendimento,
       ativo,
-      dataPost,
       dataForaHora,
       idUsuarioCancelamento,
       dataCancelamento,
@@ -554,7 +546,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       valor,
       ordemAtendimento,
       ativo,
-      dataPost,
       dataForaHora,
       idUsuarioCancelamento,
       dataCancelamento,
@@ -627,15 +618,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.idUnidade">Id Unidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUnidade"
-                            id="atendimento-idUnidade"
-                            value={this.state.idUnidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUnidade" id="atendimento-idUnidade" value={this.state.idUnidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -662,15 +645,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.cep">Cep</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="atendimento-cep"
-                            value={this.state.cep}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cep" id="atendimento-cep" value={this.state.cep} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -679,15 +654,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.endereco">Endereco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="endereco"
-                            id="atendimento-endereco"
-                            value={this.state.endereco}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="endereco" id="atendimento-endereco" value={this.state.endereco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -696,15 +663,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.numero">Numero</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numero"
-                            id="atendimento-numero"
-                            value={this.state.numero}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numero" id="atendimento-numero" value={this.state.numero} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -713,15 +672,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.complemento">Complemento</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complemento"
-                            id="atendimento-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complemento" id="atendimento-complemento" value={this.state.complemento} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -730,15 +681,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.bairro">Bairro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bairro"
-                            id="atendimento-bairro"
-                            value={this.state.bairro}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bairro" id="atendimento-bairro" value={this.state.bairro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -747,15 +690,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cidade"
-                            id="atendimento-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cidade" id="atendimento-cidade" value={this.state.cidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -764,15 +699,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.uf">Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="uf"
-                            id="atendimento-uf"
-                            value={this.state.uf}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="uf" id="atendimento-uf" value={this.state.uf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -781,15 +708,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.latitude">Latitude</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="latitude"
-                            id="atendimento-latitude"
-                            value={this.state.latitude}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="latitude" id="atendimento-latitude" value={this.state.latitude} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -798,15 +717,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.longitude">Longitude</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="longitude"
-                            id="atendimento-longitude"
-                            value={this.state.longitude}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="longitude" id="atendimento-longitude" value={this.state.longitude} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -830,15 +741,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.horario">Horario</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="horario"
-                            id="atendimento-horario"
-                            value={this.state.horario}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="horario" id="atendimento-horario" value={this.state.horario} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -862,15 +765,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.latitudeChegada">Latitude Chegada</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="latitudeChegada"
-                            id="atendimento-latitudeChegada"
-                            value={this.state.latitudeChegada}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="latitudeChegada" id="atendimento-latitudeChegada" value={this.state.latitudeChegada} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -884,9 +779,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             name="longitudeChegada"
                             id="atendimento-longitudeChegada"
                             value={this.state.longitudeChegada}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -911,15 +803,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.latitudeSaida">Latitude Saida</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="latitudeSaida"
-                            id="atendimento-latitudeSaida"
-                            value={this.state.latitudeSaida}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="latitudeSaida" id="atendimento-latitudeSaida" value={this.state.latitudeSaida} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -928,15 +812,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.longitudeSaida">Longitude Saida</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="longitudeSaida"
-                            id="atendimento-longitudeSaida"
-                            value={this.state.longitudeSaida}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="longitudeSaida" id="atendimento-longitudeSaida" value={this.state.longitudeSaida} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -945,15 +821,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.evolucao">Evolucao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="evolucao"
-                            id="atendimento-evolucao"
-                            value={this.state.evolucao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="evolucao" id="atendimento-evolucao" value={this.state.evolucao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -962,15 +830,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.observacao">Observacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="atendimento-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="observacao" id="atendimento-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1003,15 +863,7 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.motivo">Motivo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="motivo"
-                            id="atendimento-motivo"
-                            value={this.state.motivo}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="motivo" id="atendimento-motivo" value={this.state.motivo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1041,24 +893,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             <Translate contentKey="generadorApp.atendimento.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="atendimento-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="atendimento-dataPost">
-                            <Translate contentKey="generadorApp.atendimento.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1113,9 +947,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             name="tipoUsuarioCancelamento"
                             id="atendimento-tipoUsuarioCancelamento"
                             value={this.state.tipoUsuarioCancelamento}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1130,9 +961,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             name="confidencialProfissional"
                             id="atendimento-confidencialProfissional"
                             value={this.state.confidencialProfissional}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1147,9 +975,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             name="confidencialPaciente"
                             id="atendimento-confidencialPaciente"
                             value={this.state.confidencialPaciente}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1164,9 +989,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             name="imagemAssinatura"
                             id="atendimento-imagemAssinatura"
                             value={this.state.imagemAssinatura}
-                            validate={{
-                              maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1470,10 +1292,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         <Translate contentKey="generadorApp.atendimento.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.atendimento.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('dataForaHora')}>
                         <Translate contentKey="generadorApp.atendimento.dataForaHora">Data Fora Hora</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -1607,10 +1425,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         <td>{atendimento.ordemAtendimento}</td>
 
                         <td>{atendimento.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={atendimento.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>
                           <TextFormat type="date" value={atendimento.dataForaHora} format={APP_DATE_FORMAT} />

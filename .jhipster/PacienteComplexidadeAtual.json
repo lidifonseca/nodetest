@@ -32,10 +32,6 @@
         {
             "fieldName": "idUsuario",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant"
         }
     ],
     "relationships": [],

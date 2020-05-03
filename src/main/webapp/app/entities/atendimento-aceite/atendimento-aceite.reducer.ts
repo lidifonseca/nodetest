@@ -107,7 +107,6 @@ const apiUrl = 'api/atendimento-aceites';
 // Actions
 export type ICrudGetAllActionAtendimentoAceite<T> = (
   msgPush?: any,
-  dataPost?: any,
   idProfissional?: any,
   idAtendimento?: any,
   page?: number,
@@ -117,7 +116,6 @@ export type ICrudGetAllActionAtendimentoAceite<T> = (
 
 export const getEntities: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (
   msgPush,
-  dataPost,
   idProfissional,
   idAtendimento,
   page,
@@ -125,7 +123,6 @@ export const getEntities: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite>
   sort
 ) => {
   const msgPushRequest = msgPush ? `msgPush.contains=${msgPush}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idProfissionalRequest = idProfissional ? `idProfissional.equals=${idProfissional}&` : '';
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.equals=${idAtendimento}&` : '';
 
@@ -133,7 +130,7 @@ export const getEntities: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite>
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST,
     payload: axios.get<IAtendimentoAceite>(
-      `${requestUrl}${msgPushRequest}${dataPostRequest}${idProfissionalRequest}${idAtendimentoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${msgPushRequest}${idProfissionalRequest}${idAtendimentoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

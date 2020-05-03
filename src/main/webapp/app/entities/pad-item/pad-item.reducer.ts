@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PADITEM: 'padItem/CREATE_PADITEM',
   UPDATE_PADITEM: 'padItem/UPDATE_PADITEM',
   DELETE_PADITEM: 'padItem/DELETE_PADITEM',
+  SET_BLOB: 'padItem/SET_BLOB',
   RESET: 'padItem/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: PadItemState = initialState, action): PadItemState => {
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -113,7 +125,6 @@ export type ICrudGetAllActionPadItem<T> = (
   observacao?: any,
   sub?: any,
   ativo?: any,
-  dataPost?: any,
   dataPadItemIncompleto?: any,
   dataPadItemCompleto?: any,
   numGhc?: any,
@@ -144,7 +155,6 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   observacao,
   sub,
   ativo,
-  dataPost,
   dataPadItemIncompleto,
   dataPadItemCompleto,
   numGhc,
@@ -173,7 +183,6 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const subRequest = sub ? `sub.contains=${sub}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const dataPadItemIncompletoRequest = dataPadItemIncompleto ? `dataPadItemIncompleto.contains=${dataPadItemIncompleto}&` : '';
   const dataPadItemCompletoRequest = dataPadItemCompleto ? `dataPadItemCompleto.contains=${dataPadItemCompleto}&` : '';
   const numGhcRequest = numGhc ? `numGhc.contains=${numGhc}&` : '';
@@ -196,7 +205,7 @@ export const getEntities: ICrudGetAllActionPadItem<IPadItem> = (
   return {
     type: ACTION_TYPES.FETCH_PADITEM_LIST,
     payload: axios.get<IPadItem>(
-      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPostRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${cidXPtaNovoRequest}${categoriaIdRequest}${scoreRequest}${atendimentoRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${idPadRequest}${idEspecialidadeRequest}${idPeriodicidadeRequest}${idPeriodoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${cidXPtaNovoRequest}${categoriaIdRequest}${scoreRequest}${atendimentoRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${idPadRequest}${idEspecialidadeRequest}${idPeriodicidadeRequest}${idPeriodoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -249,6 +258,15 @@ export const deleteEntity: ICrudDeleteAction<IPadItem> = id => async dispatch =>
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

@@ -18,8 +18,7 @@
       },
       "idPaciente": "Id Paciente",
       "idMotivoInternacao": "Id Motivo Internacao",
-      "idUsuario": "Id Usuario",
-      "dataPost": "Data Post"
+      "idUsuario": "Id Usuario"
     }
   }
 }

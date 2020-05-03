@@ -165,21 +165,6 @@ export class TipoMatMedUpdate extends React.Component<ITipoMatMedUpdateProps, IT
                           </Row>
                         </AvGroup>
                       </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="tipo-mat-med-dataPost">
-                                <Translate contentKey="generadorApp.tipoMatMed.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="tipo-mat-med-dataPost" type="date" className="form-control" name="dataPost" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                     </Row>
                   )}
                 </Col>

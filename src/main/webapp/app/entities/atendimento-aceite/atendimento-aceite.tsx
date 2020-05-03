@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -45,7 +36,6 @@ export interface IAtendimentoAceiteProps extends StateProps, DispatchProps, Rout
 
 export interface IAtendimentoAceiteBaseState {
   msgPush: any;
-  dataPost: any;
   idProfissional: any;
   idAtendimento: any;
 }
@@ -65,14 +55,12 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
   getAtendimentoAceiteState = (location): IAtendimentoAceiteBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const msgPush = url.searchParams.get('msgPush') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
 
     return {
       msgPush,
-      dataPost,
       idProfissional,
       idAtendimento
     };
@@ -89,7 +77,6 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
     this.setState(
       {
         msgPush: '',
-        dataPost: '',
         idProfissional: '',
         idAtendimento: ''
       },
@@ -139,9 +126,6 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
       'msgPush=' +
       this.state.msgPush +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idProfissional=' +
       this.state.idProfissional +
       '&' +
@@ -155,8 +139,8 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { msgPush, dataPost, idProfissional, idAtendimento, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(msgPush, dataPost, idProfissional, idAtendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { msgPush, idProfissional, idAtendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(msgPush, idProfissional, idAtendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -197,33 +181,7 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                             <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="msgPush"
-                            id="atendimento-aceite-msgPush"
-                            value={this.state.msgPush}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="atendimento-aceite-dataPost">
-                            <Translate contentKey="generadorApp.atendimentoAceite.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-aceite-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="msgPush" id="atendimento-aceite-msgPush" value={this.state.msgPush} />
                         </Row>
                       </Col>
 
@@ -297,10 +255,6 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                         <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.atendimentoAceite.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.atendimentoAceite.idProfissional">Id Profissional</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -324,10 +278,6 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                         </td>
 
                         <td>{atendimentoAceite.msgPush}</td>
-
-                        <td>
-                          <TextFormat type="date" value={atendimentoAceite.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {atendimentoAceite.idProfissional ? (
                             <Link to={`profissional/${atendimentoAceite.idProfissional.id}`}>{atendimentoAceite.idProfissional.id}</Link>

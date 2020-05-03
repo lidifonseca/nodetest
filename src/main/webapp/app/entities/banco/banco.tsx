@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IBancoProps extends StateProps, DispatchProps, RouteComponentPr
 export interface IBancoBaseState {
   codBanco: any;
   banco: any;
-  dataPost: any;
 }
 export interface IBancoState extends IBancoBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const codBanco = url.searchParams.get('codBanco') || '';
     const banco = url.searchParams.get('banco') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       codBanco,
-      banco,
-      dataPost
+      banco
     };
   };
 
@@ -77,8 +65,7 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
     this.setState(
       {
         codBanco: '',
-        banco: '',
-        dataPost: ''
+        banco: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
       'banco=' +
       this.state.banco +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { codBanco, banco, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(codBanco, banco, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { codBanco, banco, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(codBanco, banco, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -181,15 +165,7 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                             <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="codBanco"
-                            id="banco-codBanco"
-                            value={this.state.codBanco}
-                            validate={{
-                              maxLength: { value: 15, errorMessage: translate('entity.validation.maxlength', { max: 15 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="codBanco" id="banco-codBanco" value={this.state.codBanco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -198,33 +174,7 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                             <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="banco"
-                            id="banco-banco"
-                            value={this.state.banco}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="banco-dataPost">
-                            <Translate contentKey="generadorApp.banco.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="banco-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="banco" id="banco-banco" value={this.state.banco} />
                         </Row>
                       </Col>
                     </div>
@@ -262,10 +212,6 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                         <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.banco.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -283,10 +229,6 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                         <td>{banco.codBanco}</td>
 
                         <td>{banco.banco}</td>
-
-                        <td>
-                          <TextFormat type="date" value={banco.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -97,21 +97,6 @@ export class PacienteMotivoInternacaoDetail extends React.Component<IPacienteMot
                       </Col>
                     </Row>
                   </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.pacienteMotivoInternacao.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteMotivoInternacaoEntity.dataPost}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
                 </Row>
                 <Button tag={Link} to="/paciente-motivo-internacao" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

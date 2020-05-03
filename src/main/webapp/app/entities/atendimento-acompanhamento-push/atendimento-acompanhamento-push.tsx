@@ -46,7 +46,6 @@ export interface IAtendimentoAcompanhamentoPushBaseState {
   nomePaciente: any;
   nomeProfissioinal: any;
   timestampConfirmacao: any;
-  dataPost: any;
 }
 export interface IAtendimentoAcompanhamentoPushState extends IAtendimentoAcompanhamentoPushBaseState, IPaginationBaseState {}
 
@@ -73,7 +72,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
     const nomePaciente = url.searchParams.get('nomePaciente') || '';
     const nomeProfissioinal = url.searchParams.get('nomeProfissioinal') || '';
     const timestampConfirmacao = url.searchParams.get('timestampConfirmacao') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       atendimentoId,
@@ -82,8 +80,7 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
       timestampAtendimento,
       nomePaciente,
       nomeProfissioinal,
-      timestampConfirmacao,
-      dataPost
+      timestampConfirmacao
     };
   };
 
@@ -100,8 +97,7 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
         timestampAtendimento: '',
         nomePaciente: '',
         nomeProfissioinal: '',
-        timestampConfirmacao: '',
-        dataPost: ''
+        timestampConfirmacao: ''
       },
       () => this.sortEntities()
     );
@@ -167,9 +163,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
       'timestampConfirmacao=' +
       this.state.timestampConfirmacao +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -185,7 +178,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
       nomePaciente,
       nomeProfissioinal,
       timestampConfirmacao,
-      dataPost,
       activePage,
       itemsPerPage,
       sort,
@@ -199,7 +191,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
       nomePaciente,
       nomeProfissioinal,
       timestampConfirmacao,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -250,10 +241,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                             name="atendimentoId"
                             id="atendimento-acompanhamento-push-atendimentoId"
                             value={this.state.atendimentoId}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -267,10 +254,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                             name="pacienteId"
                             id="atendimento-acompanhamento-push-pacienteId"
                             value={this.state.pacienteId}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -284,10 +267,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                             name="profissionalId"
                             id="atendimento-acompanhamento-push-profissionalId"
                             value={this.state.profissionalId}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -319,9 +298,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                             name="nomePaciente"
                             id="atendimento-acompanhamento-push-nomePaciente"
                             value={this.state.nomePaciente}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -338,9 +314,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                             name="nomeProfissioinal"
                             id="atendimento-acompanhamento-push-nomeProfissioinal"
                             value={this.state.nomeProfissioinal}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -358,21 +331,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                             name="timestampConfirmacao"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={this.state.timestampConfirmacao ? convertDateTimeFromServer(this.state.timestampConfirmacao) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="atendimento-acompanhamento-push-dataPost">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-acompanhamento-push-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
                           />
                         </Row>
                       </Col>
@@ -435,10 +393,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                         </Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -469,10 +423,6 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
 
                         <td>
                           <TextFormat type="date" value={atendimentoAcompanhamentoPush.timestampConfirmacao} format={APP_DATE_FORMAT} />
-                        </td>
-
-                        <td>
-                          <TextFormat type="date" value={atendimentoAcompanhamentoPush.dataPost} format={APP_DATE_FORMAT} />
                         </td>
 
                         <td className="text-right">

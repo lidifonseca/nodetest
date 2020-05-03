@@ -19,8 +19,7 @@
       "idAtendimento": "Id Atendimento",
       "idProfissional": "Id Profissional",
       "horario": "Horario",
-      "confirm": "Confirm",
-      "dataPost": "Data Post"
+      "confirm": "Confirm"
     }
   }
 }

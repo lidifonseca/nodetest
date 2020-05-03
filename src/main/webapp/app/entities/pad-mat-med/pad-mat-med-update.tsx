@@ -228,21 +228,6 @@ export class PadMatMedUpdate extends React.Component<IPadMatMedUpdateProps, IPad
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="pad-mat-med-dataPost">
-                                <Translate contentKey="generadorApp.padMatMed.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-mat-med-dataPost" type="date" className="form-control" name="dataPost" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
                               <Label className="mt-2" id="ativoLabel" for="pad-mat-med-ativo">
                                 <Translate contentKey="generadorApp.padMatMed.ativo">Ativo</Translate>
                               </Label>

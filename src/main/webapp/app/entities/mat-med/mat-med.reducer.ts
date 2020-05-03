@@ -110,24 +110,22 @@ export type ICrudGetAllActionMatMed<T> = (
   idTipoMatMed?: any,
   valor?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionMatMed<IMatMed> = (nome, idTipoMatMed, valor, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionMatMed<IMatMed> = (nome, idTipoMatMed, valor, ativo, page, size, sort) => {
   const nomeRequest = nome ? `nome.contains=${nome}&` : '';
   const idTipoMatMedRequest = idTipoMatMed ? `idTipoMatMed.contains=${idTipoMatMed}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_MATMED_LIST,
     payload: axios.get<IMatMed>(
-      `${requestUrl}${nomeRequest}${idTipoMatMedRequest}${valorRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${nomeRequest}${idTipoMatMedRequest}${valorRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

@@ -107,7 +107,6 @@ const apiUrl = 'api/telas';
 // Actions
 export type ICrudGetAllActionTela<T> = (
   tela?: any,
-  dataPost?: any,
   logUser?: any,
   logUserFranquia?: any,
   usuarioAcao?: any,
@@ -116,9 +115,8 @@ export type ICrudGetAllActionTela<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTela<ITela> = (tela, dataPost, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTela<ITela> = (tela, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
   const telaRequest = tela ? `tela.contains=${tela}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const logUserRequest = logUser ? `logUser.equals=${logUser}&` : '';
   const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
   const usuarioAcaoRequest = usuarioAcao ? `usuarioAcao.equals=${usuarioAcao}&` : '';
@@ -127,7 +125,7 @@ export const getEntities: ICrudGetAllActionTela<ITela> = (tela, dataPost, logUse
   return {
     type: ACTION_TYPES.FETCH_TELA_LIST,
     payload: axios.get<ITela>(
-      `${requestUrl}${telaRequest}${dataPostRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${telaRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

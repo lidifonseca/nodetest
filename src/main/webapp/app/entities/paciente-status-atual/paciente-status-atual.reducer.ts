@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PACIENTESTATUSATUAL: 'pacienteStatusAtual/CREATE_PACIENTESTATUSATUAL',
   UPDATE_PACIENTESTATUSATUAL: 'pacienteStatusAtual/UPDATE_PACIENTESTATUSATUAL',
   DELETE_PACIENTESTATUSATUAL: 'pacienteStatusAtual/DELETE_PACIENTESTATUSATUAL',
+  SET_BLOB: 'pacienteStatusAtual/SET_BLOB',
   RESET: 'pacienteStatusAtual/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: PacienteStatusAtualState = initialState, action): Pacient
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -109,7 +121,6 @@ export type ICrudGetAllActionPacienteStatusAtual<T> = (
   dataStatus?: any,
   observacao?: any,
   ativo?: any,
-  dataPost?: any,
   idUsuario?: any,
   idPaciente?: any,
   idStatusAtual?: any,
@@ -122,7 +133,6 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   dataStatus,
   observacao,
   ativo,
-  dataPost,
   idUsuario,
   idPaciente,
   idStatusAtual,
@@ -133,7 +143,6 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   const dataStatusRequest = dataStatus ? `dataStatus.equals=${dataStatus}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
   const idStatusAtualRequest = idStatusAtual ? `idStatusAtual.equals=${idStatusAtual}&` : '';
@@ -142,7 +151,7 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   return {
     type: ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST,
     payload: axios.get<IPacienteStatusAtual>(
-      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${dataPostRequest}${idUsuarioRequest}${idPacienteRequest}${idStatusAtualRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${idUsuarioRequest}${idPacienteRequest}${idStatusAtualRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -191,6 +200,15 @@ export const deleteEntity: ICrudDeleteAction<IPacienteStatusAtual> = id => async
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

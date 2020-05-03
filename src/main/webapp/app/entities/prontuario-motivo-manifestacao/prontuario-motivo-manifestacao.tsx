@@ -21,7 +21,6 @@ import {
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -48,7 +47,6 @@ export interface IProntuarioMotivoManifestacaoBaseState {
   idManifestacaoFilho: any;
   sugestao: any;
   idUsuario: any;
-  dataPost: any;
   informacaoAdicional: any;
 }
 export interface IProntuarioMotivoManifestacaoState extends IProntuarioMotivoManifestacaoBaseState, IPaginationBaseState {}
@@ -74,7 +72,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
     const idManifestacaoFilho = url.searchParams.get('idManifestacaoFilho') || '';
     const sugestao = url.searchParams.get('sugestao') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const informacaoAdicional = url.searchParams.get('informacaoAdicional') || '';
 
     return {
@@ -86,7 +83,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
       idManifestacaoFilho,
       sugestao,
       idUsuario,
-      dataPost,
       informacaoAdicional
     };
   };
@@ -106,7 +102,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
         idManifestacaoFilho: '',
         sugestao: '',
         idUsuario: '',
-        dataPost: '',
         informacaoAdicional: ''
       },
       () => this.sortEntities()
@@ -176,9 +171,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'informacaoAdicional=' +
       this.state.informacaoAdicional +
       '&' +
@@ -198,7 +190,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
       idManifestacaoFilho,
       sugestao,
       idUsuario,
-      dataPost,
       informacaoAdicional,
       activePage,
       itemsPerPage,
@@ -214,7 +205,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
       idManifestacaoFilho,
       sugestao,
       idUsuario,
-      dataPost,
       informacaoAdicional,
       activePage - 1,
       itemsPerPage,
@@ -266,10 +256,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                             name="idProntuario"
                             id="prontuario-motivo-manifestacao-idProntuario"
                             value={this.state.idProntuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -283,10 +269,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                             name="idPaciente"
                             id="prontuario-motivo-manifestacao-idPaciente"
                             value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -362,14 +344,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                       </Col>
                       <Col md="3">
                         <Row>
-                          <Label id="dataPostLabel" for="prontuario-motivo-manifestacao-dataPost">
-                            <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="prontuario-motivo-manifestacao-dataPost" value={this.state.dataPost} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
                           <Label id="informacaoAdicionalLabel" for="prontuario-motivo-manifestacao-informacaoAdicional">
                             <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.informacaoAdicional">
                               Informacao Adicional
@@ -439,10 +413,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                         <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('informacaoAdicional')}>
                         <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.informacaoAdicional">
                           Informacao Adicional
@@ -478,10 +448,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                         <td>{prontuarioMotivoManifestacao.sugestao}</td>
 
                         <td>{prontuarioMotivoManifestacao.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={prontuarioMotivoManifestacao.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td>{prontuarioMotivoManifestacao.informacaoAdicional}</td>
 

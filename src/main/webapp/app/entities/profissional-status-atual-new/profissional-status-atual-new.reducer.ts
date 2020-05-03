@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PROFISSIONALSTATUSATUALNEW: 'profissionalStatusAtualNew/CREATE_PROFISSIONALSTATUSATUALNEW',
   UPDATE_PROFISSIONALSTATUSATUALNEW: 'profissionalStatusAtualNew/UPDATE_PROFISSIONALSTATUSATUALNEW',
   DELETE_PROFISSIONALSTATUSATUALNEW: 'profissionalStatusAtualNew/DELETE_PROFISSIONALSTATUSATUALNEW',
+  SET_BLOB: 'profissionalStatusAtualNew/SET_BLOB',
   RESET: 'profissionalStatusAtualNew/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: ProfissionalStatusAtualNewState = initialState, action): 
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -110,7 +122,6 @@ export type ICrudGetAllActionProfissionalStatusAtualNew<T> = (
   idStatusAtualProf?: any,
   obs?: any,
   ativo?: any,
-  dataPost?: any,
   idUsuario?: any,
   page?: number,
   size?: number,
@@ -122,7 +133,6 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtualNew<IProfissio
   idStatusAtualProf,
   obs,
   ativo,
-  dataPost,
   idUsuario,
   page,
   size,
@@ -132,14 +142,13 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtualNew<IProfissio
   const idStatusAtualProfRequest = idStatusAtualProf ? `idStatusAtualProf.contains=${idStatusAtualProf}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST,
     payload: axios.get<IProfissionalStatusAtualNew>(
-      `${requestUrl}${idProfissionalRequest}${idStatusAtualProfRequest}${obsRequest}${ativoRequest}${dataPostRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idStatusAtualProfRequest}${obsRequest}${ativoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -182,6 +191,15 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalStatusAtualNew> = id =
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

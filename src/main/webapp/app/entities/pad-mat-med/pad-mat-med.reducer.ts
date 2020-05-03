@@ -110,26 +110,24 @@ export type ICrudGetAllActionPadMatMed<T> = (
   idMatMed?: any,
   qtd?: any,
   idUsuario?: any,
-  dataPost?: any,
   ativo?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadMatMed<IPadMatMed> = (idPad, idMatMed, qtd, idUsuario, dataPost, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPadMatMed<IPadMatMed> = (idPad, idMatMed, qtd, idUsuario, ativo, page, size, sort) => {
   const idPadRequest = idPad ? `idPad.contains=${idPad}&` : '';
   const idMatMedRequest = idMatMed ? `idMatMed.contains=${idMatMed}&` : '';
   const qtdRequest = qtd ? `qtd.contains=${qtd}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADMATMED_LIST,
     payload: axios.get<IPadMatMed>(
-      `${requestUrl}${idPadRequest}${idMatMedRequest}${qtdRequest}${idUsuarioRequest}${dataPostRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPadRequest}${idMatMedRequest}${qtdRequest}${idUsuarioRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

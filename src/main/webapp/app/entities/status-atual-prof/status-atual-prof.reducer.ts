@@ -108,7 +108,6 @@ const apiUrl = 'api/status-atual-profs';
 export type ICrudGetAllActionStatusAtualProf<T> = (
   statusAtualProf?: any,
   styleLabel?: any,
-  dataPost?: any,
   profissionalStatusAtual?: any,
   page?: number,
   size?: number,
@@ -118,7 +117,6 @@ export type ICrudGetAllActionStatusAtualProf<T> = (
 export const getEntities: ICrudGetAllActionStatusAtualProf<IStatusAtualProf> = (
   statusAtualProf,
   styleLabel,
-  dataPost,
   profissionalStatusAtual,
   page,
   size,
@@ -126,14 +124,13 @@ export const getEntities: ICrudGetAllActionStatusAtualProf<IStatusAtualProf> = (
 ) => {
   const statusAtualProfRequest = statusAtualProf ? `statusAtualProf.contains=${statusAtualProf}&` : '';
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const profissionalStatusAtualRequest = profissionalStatusAtual ? `profissionalStatusAtual.equals=${profissionalStatusAtual}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_STATUSATUALPROF_LIST,
     payload: axios.get<IStatusAtualProf>(
-      `${requestUrl}${statusAtualProfRequest}${styleLabelRequest}${dataPostRequest}${profissionalStatusAtualRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtualProfRequest}${styleLabelRequest}${profissionalStatusAtualRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

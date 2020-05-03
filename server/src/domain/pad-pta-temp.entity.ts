@@ -21,9 +21,6 @@ export default class PadPtaTemp extends BaseEntity {
   @Column({ type: 'integer', name: 'id_usuario', nullable: false })
   idUsuario: number;
 
-  @Column({ type: 'timestamp', name: 'data_post' })
-  dataPost: any;
-
   @Column({ type: 'integer', name: 'cid_x_pta_novo_id' })
   cidXPtaNovoId: number;
 

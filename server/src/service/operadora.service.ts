@@ -5,6 +5,7 @@ import Operadora from '../domain/operadora.entity';
 import { OperadoraRepository } from '../repository/operadora.repository';
 
 const relationshipNames = [];
+relationshipNames.push('idTipoOperadora');
 
 @Injectable()
 export class OperadoraService {

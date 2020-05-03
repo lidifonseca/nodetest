@@ -113,7 +113,6 @@ export type ICrudGetAllActionPacientePedido<T> = (
   valor?: any,
   desconto?: any,
   tipoValor?: any,
-  dataPost?: any,
   idUnidade?: any,
   idPaciente?: any,
   idCartao?: any,
@@ -131,7 +130,6 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   valor,
   desconto,
   tipoValor,
-  dataPost,
   idUnidade,
   idPaciente,
   idCartao,
@@ -147,7 +145,6 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const descontoRequest = desconto ? `desconto.contains=${desconto}&` : '';
   const tipoValorRequest = tipoValor ? `tipoValor.contains=${tipoValor}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUnidadeRequest = idUnidade ? `idUnidade.equals=${idUnidade}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
   const idCartaoRequest = idCartao ? `idCartao.equals=${idCartao}&` : '';
@@ -157,7 +154,7 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST,
     payload: axios.get<IPacientePedido>(
-      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${dataPostRequest}${idUnidadeRequest}${idPacienteRequest}${idCartaoRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${idUnidadeRequest}${idPacienteRequest}${idCartaoRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

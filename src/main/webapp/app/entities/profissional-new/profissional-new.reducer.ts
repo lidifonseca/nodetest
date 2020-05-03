@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PROFISSIONALNEW: 'profissionalNew/CREATE_PROFISSIONALNEW',
   UPDATE_PROFISSIONALNEW: 'profissionalNew/UPDATE_PROFISSIONALNEW',
   DELETE_PROFISSIONALNEW: 'profissionalNew/DELETE_PROFISSIONALNEW',
+  SET_BLOB: 'profissionalNew/SET_BLOB',
   RESET: 'profissionalNew/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: ProfissionalNewState = initialState, action): Profissiona
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -140,7 +152,6 @@ export type ICrudGetAllActionProfissionalNew<T> = (
   obs?: any,
   chavePrivada?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -181,7 +192,6 @@ export const getEntities: ICrudGetAllActionProfissionalNew<IProfissionalNew> = (
   obs,
   chavePrivada,
   ativo,
-  dataPost,
   page,
   size,
   sort
@@ -220,13 +230,12 @@ export const getEntities: ICrudGetAllActionProfissionalNew<IProfissionalNew> = (
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const chavePrivadaRequest = chavePrivada ? `chavePrivada.contains=${chavePrivada}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALNEW_LIST,
     payload: axios.get<IProfissionalNew>(
-      `${requestUrl}${idUnidadeRequest}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeRequest}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -269,6 +278,15 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalNew> = id => async dis
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

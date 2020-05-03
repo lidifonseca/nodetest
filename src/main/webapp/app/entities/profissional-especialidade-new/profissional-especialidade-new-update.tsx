@@ -44,8 +44,6 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { profissionalEspecialidadeNewEntity } = this.props;
       const entity = {
@@ -188,31 +186,6 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
                                 id="profissional-especialidade-new-idProfissional"
                                 type="text"
                                 name="idProfissional"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="profissional-especialidade-new-dataPost">
-                                <Translate contentKey="generadorApp.profissionalEspecialidadeNew.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="profissional-especialidade-new-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.profissionalEspecialidadeNewEntity.dataPost)}
                                 validate={{
                                   required: { value: true, errorMessage: translate('entity.validation.required') }
                                 }}

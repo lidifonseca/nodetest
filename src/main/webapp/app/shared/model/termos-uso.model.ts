@@ -1,10 +1,7 @@
-import { Moment } from 'moment';
-
 export interface ITermosUso {
   id?: string;
-  termosUso?: string;
+  termosUso?: any;
   tipo?: number;
-  dataPost?: Moment;
 }
 
 export const defaultValue: Readonly<ITermosUso> = {};

@@ -8,13 +8,6 @@
         {
             "fieldName": "dataFim",
             "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [

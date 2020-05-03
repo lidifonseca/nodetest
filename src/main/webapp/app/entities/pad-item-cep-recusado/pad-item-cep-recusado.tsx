@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IPadItemCepRecusadoProps extends StateProps, DispatchProps, Rou
 
 export interface IPadItemCepRecusadoBaseState {
   cep: any;
-  dataPost: any;
   idPadItem: any;
 }
 export interface IPadItemCepRecusadoState extends IPadItemCepRecusadoBaseState, IPaginationBaseState {}
@@ -62,13 +52,11 @@ export class PadItemCepRecusado extends React.Component<IPadItemCepRecusadoProps
   getPadItemCepRecusadoState = (location): IPadItemCepRecusadoBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const cep = url.searchParams.get('cep') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idPadItem = url.searchParams.get('idPadItem') || '';
 
     return {
       cep,
-      dataPost,
       idPadItem
     };
   };
@@ -83,7 +71,6 @@ export class PadItemCepRecusado extends React.Component<IPadItemCepRecusadoProps
     this.setState(
       {
         cep: '',
-        dataPost: '',
         idPadItem: ''
       },
       () => this.sortEntities()
@@ -132,9 +119,6 @@ export class PadItemCepRecusado extends React.Component<IPadItemCepRecusadoProps
       'cep=' +
       this.state.cep +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idPadItem=' +
       this.state.idPadItem +
       '&' +
@@ -145,8 +129,8 @@ export class PadItemCepRecusado extends React.Component<IPadItemCepRecusadoProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cep, dataPost, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cep, dataPost, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cep, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cep, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -187,34 +171,7 @@ export class PadItemCepRecusado extends React.Component<IPadItemCepRecusadoProps
                             <Translate contentKey="generadorApp.padItemCepRecusado.cep">Cep</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="pad-item-cep-recusado-cep"
-                            value={this.state.cep}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-item-cep-recusado-dataPost">
-                            <Translate contentKey="generadorApp.padItemCepRecusado.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-cep-recusado-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="cep" id="pad-item-cep-recusado-cep" value={this.state.cep} />
                         </Row>
                       </Col>
 
@@ -268,10 +225,6 @@ export class PadItemCepRecusado extends React.Component<IPadItemCepRecusadoProps
                         <Translate contentKey="generadorApp.padItemCepRecusado.cep">Cep</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padItemCepRecusado.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.padItemCepRecusado.idPadItem">Id Pad Item</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -291,10 +244,6 @@ export class PadItemCepRecusado extends React.Component<IPadItemCepRecusadoProps
                         </td>
 
                         <td>{padItemCepRecusado.cep}</td>
-
-                        <td>
-                          <TextFormat type="date" value={padItemCepRecusado.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {padItemCepRecusado.idPadItem ? (
                             <Link to={`pad-item/${padItemCepRecusado.idPadItem.id}`}>{padItemCepRecusado.idPadItem.id}</Link>

@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -41,7 +41,6 @@ export interface ITermosUsoProps extends StateProps, DispatchProps, RouteCompone
 export interface ITermosUsoBaseState {
   termosUso: any;
   tipo: any;
-  dataPost: any;
 }
 export interface ITermosUsoState extends ITermosUsoBaseState, IPaginationBaseState {}
 
@@ -60,12 +59,10 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const termosUso = url.searchParams.get('termosUso') || '';
     const tipo = url.searchParams.get('tipo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       termosUso,
-      tipo,
-      dataPost
+      tipo
     };
   };
 
@@ -77,8 +74,7 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
     this.setState(
       {
         termosUso: '',
-        tipo: '',
-        dataPost: ''
+        tipo: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +125,6 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
       'tipo=' +
       this.state.tipo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +132,8 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { termosUso, tipo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(termosUso, tipo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { termosUso, tipo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(termosUso, tipo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -180,16 +173,7 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                           <Label id="termosUsoLabel" for="termos-uso-termosUso">
                             <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="termosUso"
-                            id="termos-uso-termosUso"
-                            value={this.state.termosUso}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -198,24 +182,6 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                             <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
                           </Label>
                           <AvInput type="string" name="tipo" id="termos-uso-tipo" value={this.state.tipo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="termos-uso-dataPost">
-                            <Translate contentKey="generadorApp.termosUso.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="termos-uso-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -253,10 +219,6 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                         <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.termosUso.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -274,10 +236,6 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                         <td>{termosUso.termosUso}</td>
 
                         <td>{termosUso.tipo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={termosUso.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

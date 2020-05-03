@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface ICategoriaBaseState {
   styleCategoria: any;
   icon: any;
   publicar: any;
-  dataPost: any;
   ordem: any;
   publicarSite: any;
   categoriaAtividade: any;
@@ -71,7 +61,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
     const styleCategoria = url.searchParams.get('styleCategoria') || '';
     const icon = url.searchParams.get('icon') || '';
     const publicar = url.searchParams.get('publicar') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const ordem = url.searchParams.get('ordem') || '';
     const publicarSite = url.searchParams.get('publicarSite') || '';
 
@@ -86,7 +75,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       styleCategoria,
       icon,
       publicar,
-      dataPost,
       ordem,
       publicarSite,
       categoriaAtividade,
@@ -108,7 +96,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
         styleCategoria: '',
         icon: '',
         publicar: '',
-        dataPost: '',
         ordem: '',
         publicarSite: '',
         categoriaAtividade: '',
@@ -172,9 +159,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       'publicar=' +
       this.state.publicar +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'ordem=' +
       this.state.ordem +
       '&' +
@@ -208,7 +192,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       styleCategoria,
       icon,
       publicar,
-      dataPost,
       ordem,
       publicarSite,
       categoriaAtividade,
@@ -226,7 +209,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       styleCategoria,
       icon,
       publicar,
-      dataPost,
       ordem,
       publicarSite,
       categoriaAtividade,
@@ -278,15 +260,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                             <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="categoria"
-                            id="categoria-categoria"
-                            value={this.state.categoria}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="categoria" id="categoria-categoria" value={this.state.categoria} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -295,15 +269,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                             <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="styleCategoria"
-                            id="categoria-styleCategoria"
-                            value={this.state.styleCategoria}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="styleCategoria" id="categoria-styleCategoria" value={this.state.styleCategoria} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -312,15 +278,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                             <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="icon"
-                            id="categoria-icon"
-                            value={this.state.icon}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="icon" id="categoria-icon" value={this.state.icon} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -329,24 +287,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                             <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
                           </Label>
                           <AvInput type="string" name="publicar" id="categoria-publicar" value={this.state.publicar} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="categoria-dataPost">
-                            <Translate contentKey="generadorApp.categoria.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="categoria-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -362,16 +302,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                           <Label id="publicarSiteLabel" for="categoria-publicarSite">
                             <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="publicarSite"
-                            id="categoria-publicarSite"
-                            value={this.state.publicarSite}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="publicarSite" id="categoria-publicarSite" value={this.state.publicarSite} />
                         </Row>
                       </Col>
 
@@ -437,10 +368,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                         <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.categoria.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('ordem')}>
                         <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -470,10 +397,6 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                         <td>{categoria.icon}</td>
 
                         <td>{categoria.publicar}</td>
-
-                        <td>
-                          <TextFormat type="date" value={categoria.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{categoria.ordem}</td>
 

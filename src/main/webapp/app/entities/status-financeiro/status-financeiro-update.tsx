@@ -171,28 +171,6 @@ export class StatusFinanceiroUpdate extends React.Component<IStatusFinanceiroUpd
                           </Row>
                         </AvGroup>
                       </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="status-financeiro-dataPost">
-                                <Translate contentKey="generadorApp.statusFinanceiro.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="status-financeiro-dataPost"
-                                type="text"
-                                name="dataPost"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                     </Row>
                   )}
                 </Col>

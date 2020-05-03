@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IStatusAtualLigacaoProps extends StateProps, DispatchProps, Rou
 export interface IStatusAtualLigacaoBaseState {
   statusAtualLigacao: any;
   styleLabel: any;
-  dataPost: any;
 }
 export interface IStatusAtualLigacaoState extends IStatusAtualLigacaoBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const statusAtualLigacao = url.searchParams.get('statusAtualLigacao') || '';
     const styleLabel = url.searchParams.get('styleLabel') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       statusAtualLigacao,
-      styleLabel,
-      dataPost
+      styleLabel
     };
   };
 
@@ -77,8 +65,7 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
     this.setState(
       {
         statusAtualLigacao: '',
-        styleLabel: '',
-        dataPost: ''
+        styleLabel: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtualLigacao, styleLabel, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtualLigacao, styleLabel, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtualLigacao, styleLabel, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtualLigacao, styleLabel, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -186,9 +170,6 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
                             name="statusAtualLigacao"
                             id="status-atual-ligacao-statusAtualLigacao"
                             value={this.state.statusAtualLigacao}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -198,33 +179,7 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
                             <Translate contentKey="generadorApp.statusAtualLigacao.styleLabel">Style Label</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="styleLabel"
-                            id="status-atual-ligacao-styleLabel"
-                            value={this.state.styleLabel}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="status-atual-ligacao-dataPost">
-                            <Translate contentKey="generadorApp.statusAtualLigacao.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="status-atual-ligacao-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="styleLabel" id="status-atual-ligacao-styleLabel" value={this.state.styleLabel} />
                         </Row>
                       </Col>
                     </div>
@@ -262,10 +217,6 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
                         <Translate contentKey="generadorApp.statusAtualLigacao.styleLabel">Style Label</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.statusAtualLigacao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -283,10 +234,6 @@ export class StatusAtualLigacao extends React.Component<IStatusAtualLigacaoProps
                         <td>{statusAtualLigacao.statusAtualLigacao}</td>
 
                         <td>{statusAtualLigacao.styleLabel}</td>
-
-                        <td>
-                          <TextFormat type="date" value={statusAtualLigacao.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -40,7 +31,6 @@ export interface IAcaoProps extends StateProps, DispatchProps, RouteComponentPro
 
 export interface IAcaoBaseState {
   acao: any;
-  dataPost: any;
   logUser: any;
   logUserFranquia: any;
   usuarioAcao: any;
@@ -61,7 +51,6 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   getAcaoState = (location): IAcaoBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const acao = url.searchParams.get('acao') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const logUser = url.searchParams.get('logUser') || '';
     const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
@@ -69,7 +58,6 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
 
     return {
       acao,
-      dataPost,
       logUser,
       logUserFranquia,
       usuarioAcao
@@ -84,7 +72,6 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
     this.setState(
       {
         acao: '',
-        dataPost: '',
         logUser: '',
         logUserFranquia: '',
         usuarioAcao: ''
@@ -135,9 +122,6 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
       'acao=' +
       this.state.acao +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'logUser=' +
       this.state.logUser +
       '&' +
@@ -154,8 +138,8 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { acao, dataPost, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(acao, dataPost, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { acao, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(acao, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -196,33 +180,7 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
                             <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="acao"
-                            id="acao-acao"
-                            value={this.state.acao}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="acao-dataPost">
-                            <Translate contentKey="generadorApp.acao.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="acao-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="acao" id="acao-acao" value={this.state.acao} />
                         </Row>
                       </Col>
 
@@ -268,10 +226,6 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
                         <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.acao.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -287,10 +241,6 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
                         </td>
 
                         <td>{acao.acao}</td>
-
-                        <td>
-                          <TextFormat type="date" value={acao.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

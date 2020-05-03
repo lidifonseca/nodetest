@@ -4,13 +4,13 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IPadItem } from 'app/shared/model/pad-item.model';
 import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './pad-item-resultado.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './pad-item-resultado.reducer';
 import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -46,9 +46,15 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
     this.props.getPadItems();
   }
 
-  saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
 
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
+  saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padItemResultadoEntity } = this.props;
       const entity = {
@@ -71,6 +77,8 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
   render() {
     const { padItemResultadoEntity, padItems, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { resultado } = padItemResultadoEntity;
 
     return (
       <div>
@@ -146,39 +154,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="pad-item-resultado-resultado"
-                                type="text"
-                                name="resultado"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="pad-item-resultado-dataPost">
-                                <Translate contentKey="generadorApp.padItemResultado.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="pad-item-resultado-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.padItemResultadoEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
+                              <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -280,6 +256,7 @@ const mapDispatchToProps = {
   getPadItems,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

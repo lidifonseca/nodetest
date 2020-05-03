@@ -43,7 +43,6 @@ export interface IProfissionalHorarioBaseState {
   idProfissional: any;
   horario: any;
   confirm: any;
-  dataPost: any;
 }
 export interface IProfissionalHorarioState extends IProfissionalHorarioBaseState, IPaginationBaseState {}
 
@@ -64,14 +63,12 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const horario = url.searchParams.get('horario') || '';
     const confirm = url.searchParams.get('confirm') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idAtendimento,
       idProfissional,
       horario,
-      confirm,
-      dataPost
+      confirm
     };
   };
 
@@ -85,8 +82,7 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
         idAtendimento: '',
         idProfissional: '',
         horario: '',
-        confirm: '',
-        dataPost: ''
+        confirm: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +139,6 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
       'confirm=' +
       this.state.confirm +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +146,8 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, idProfissional, horario, confirm, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, idProfissional, horario, confirm, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, idProfissional, horario, confirm, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, idProfissional, horario, confirm, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -199,10 +192,6 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                             name="idAtendimento"
                             id="profissional-horario-idAtendimento"
                             value={this.state.idAtendimento}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -216,10 +205,6 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                             name="idProfissional"
                             id="profissional-horario-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -235,9 +220,6 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                             name="horario"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={this.state.horario ? convertDateTimeFromServer(this.state.horario) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -247,24 +229,6 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                             <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
                           </Label>
                           <AvInput type="string" name="confirm" id="profissional-horario-confirm" value={this.state.confirm} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-horario-dataPost">
-                            <Translate contentKey="generadorApp.profissionalHorario.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-horario-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -310,10 +274,6 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                         <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalHorario.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -337,10 +297,6 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                         </td>
 
                         <td>{profissionalHorario.confirm}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalHorario.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

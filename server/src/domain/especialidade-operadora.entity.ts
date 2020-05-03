@@ -36,9 +36,6 @@ export default class EspecialidadeOperadora extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => Operadora)
   idOperadora: Operadora;
 

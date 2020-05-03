@@ -126,7 +126,6 @@ export type ICrudGetAllActionProntuarioMotivoManifestacao<T> = (
   idManifestacaoFilho?: any,
   sugestao?: any,
   idUsuario?: any,
-  dataPost?: any,
   informacaoAdicional?: any,
   page?: number,
   size?: number,
@@ -142,7 +141,6 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoManifestacao<IProntua
   idManifestacaoFilho,
   sugestao,
   idUsuario,
-  dataPost,
   informacaoAdicional,
   page,
   size,
@@ -156,14 +154,13 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoManifestacao<IProntua
   const idManifestacaoFilhoRequest = idManifestacaoFilho ? `idManifestacaoFilho.contains=${idManifestacaoFilho}&` : '';
   const sugestaoRequest = sugestao ? `sugestao.contains=${sugestao}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
   const informacaoAdicionalRequest = informacaoAdicional ? `informacaoAdicional.contains=${informacaoAdicional}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PRONTUARIOMOTIVOMANIFESTACAO_LIST,
     payload: axios.get<IProntuarioMotivoManifestacao>(
-      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idMotivoFilhoRequest}${idManifestacaoRequest}${idManifestacaoFilhoRequest}${sugestaoRequest}${idUsuarioRequest}${dataPostRequest}${informacaoAdicionalRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idMotivoFilhoRequest}${idManifestacaoRequest}${idManifestacaoFilhoRequest}${sugestaoRequest}${idUsuarioRequest}${informacaoAdicionalRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

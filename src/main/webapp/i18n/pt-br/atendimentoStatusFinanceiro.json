@@ -18,8 +18,7 @@
       },
       "idAtendimento": "Id Atendimento",
       "idStatusFinanceiro": "Id Status Financeiro",
-      "idUsuario": "Id Usuario",
-      "dataPost": "Data Post"
+      "idUsuario": "Id Usuario"
     }
   }
 }

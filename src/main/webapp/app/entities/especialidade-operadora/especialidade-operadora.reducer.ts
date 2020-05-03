@@ -114,7 +114,6 @@ export type ICrudGetAllActionEspecialidadeOperadora<T> = (
   descontoCusto?: any,
   descontoVenda?: any,
   ativo?: any,
-  dataPost?: any,
   idOperadora?: any,
   idEspecialidade?: any,
   page?: number,
@@ -131,7 +130,6 @@ export const getEntities: ICrudGetAllActionEspecialidadeOperadora<IEspecialidade
   descontoCusto,
   descontoVenda,
   ativo,
-  dataPost,
   idOperadora,
   idEspecialidade,
   page,
@@ -146,7 +144,6 @@ export const getEntities: ICrudGetAllActionEspecialidadeOperadora<IEspecialidade
   const descontoCustoRequest = descontoCusto ? `descontoCusto.contains=${descontoCusto}&` : '';
   const descontoVendaRequest = descontoVenda ? `descontoVenda.contains=${descontoVenda}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idOperadoraRequest = idOperadora ? `idOperadora.equals=${idOperadora}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
 
@@ -154,7 +151,7 @@ export const getEntities: ICrudGetAllActionEspecialidadeOperadora<IEspecialidade
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST,
     payload: axios.get<IEspecialidadeOperadora>(
-      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}${dataPostRequest}${idOperadoraRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}${idOperadoraRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

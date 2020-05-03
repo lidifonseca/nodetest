@@ -14,9 +14,6 @@ export default class TipoEspecialidade extends BaseEntity {
   @Column({ name: 'tipo_especialidade', length: 30 })
   tipoEspecialidade: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => Especialidade,
     other => other.idTipoEspecialidade

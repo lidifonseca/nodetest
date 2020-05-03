@@ -108,24 +108,22 @@ const apiUrl = 'api/periodicidades';
 export type ICrudGetAllActionPeriodicidade<T> = (
   periodicidade?: any,
   ativo?: any,
-  dataPost?: any,
   padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, dataPost, padItem, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, padItem, page, size, sort) => {
   const periodicidadeRequest = periodicidade ? `periodicidade.contains=${periodicidade}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERIODICIDADE_LIST,
     payload: axios.get<IPeriodicidade>(
-      `${requestUrl}${periodicidadeRequest}${ativoRequest}${dataPostRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${periodicidadeRequest}${ativoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

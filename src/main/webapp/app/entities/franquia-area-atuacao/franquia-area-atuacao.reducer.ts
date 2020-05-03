@@ -109,7 +109,6 @@ export type ICrudGetAllActionFranquiaAreaAtuacao<T> = (
   cepIni?: any,
   cepFim?: any,
   ativo?: any,
-  dataPost?: any,
   idFranquia?: any,
   page?: number,
   size?: number,
@@ -120,7 +119,6 @@ export const getEntities: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtua
   cepIni,
   cepFim,
   ativo,
-  dataPost,
   idFranquia,
   page,
   size,
@@ -129,14 +127,13 @@ export const getEntities: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtua
   const cepIniRequest = cepIni ? `cepIni.contains=${cepIni}&` : '';
   const cepFimRequest = cepFim ? `cepFim.contains=${cepFim}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idFranquiaRequest = idFranquia ? `idFranquia.equals=${idFranquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST,
     payload: axios.get<IFranquiaAreaAtuacao>(
-      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}${dataPostRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

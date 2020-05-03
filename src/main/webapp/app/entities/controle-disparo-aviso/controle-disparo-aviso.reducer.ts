@@ -109,7 +109,6 @@ export type ICrudGetAllActionControleDisparoAviso<T> = (
   idAtendimento?: any,
   qtdDisparo?: any,
   avisopush?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +118,6 @@ export const getEntities: ICrudGetAllActionControleDisparoAviso<IControleDisparo
   idAtendimento,
   qtdDisparo,
   avisopush,
-  dataPost,
   page,
   size,
   sort
@@ -127,13 +125,12 @@ export const getEntities: ICrudGetAllActionControleDisparoAviso<IControleDisparo
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const qtdDisparoRequest = qtdDisparo ? `qtdDisparo.contains=${qtdDisparo}&` : '';
   const avisopushRequest = avisopush ? `avisopush.contains=${avisopush}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO_LIST,
     payload: axios.get<IControleDisparoAviso>(
-      `${requestUrl}${idAtendimentoRequest}${qtdDisparoRequest}${avisopushRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idAtendimentoRequest}${qtdDisparoRequest}${avisopushRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

@@ -25,8 +25,8 @@ export default class Especialidade extends BaseEntity {
   @Column({ name: 'especialidade', length: 150 })
   especialidade: string;
 
-  @Column({ name: 'descricao', length: 255 })
-  descricao: string;
+  @Column({ type: 'blob', name: 'descricao' })
+  descricao: any;
 
   @Column({ type: 'integer', name: 'duracao' })
   duracao: number;
@@ -36,9 +36,6 @@ export default class Especialidade extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
 
   @Column({ type: 'integer', name: 'id_unidade' })
   idUnidade: number;

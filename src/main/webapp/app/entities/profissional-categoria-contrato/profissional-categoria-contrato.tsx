@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -42,7 +33,6 @@ export interface IProfissionalCategoriaContratoBaseState {
   idProfissional: any;
   idCategoriaContrato: any;
   aceito: any;
-  dataPost: any;
 }
 export interface IProfissionalCategoriaContratoState extends IProfissionalCategoriaContratoBaseState, IPaginationBaseState {}
 
@@ -65,13 +55,11 @@ export class ProfissionalCategoriaContrato extends React.Component<
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const idCategoriaContrato = url.searchParams.get('idCategoriaContrato') || '';
     const aceito = url.searchParams.get('aceito') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProfissional,
       idCategoriaContrato,
-      aceito,
-      dataPost
+      aceito
     };
   };
 
@@ -84,8 +72,7 @@ export class ProfissionalCategoriaContrato extends React.Component<
       {
         idProfissional: '',
         idCategoriaContrato: '',
-        aceito: '',
-        dataPost: ''
+        aceito: ''
       },
       () => this.sortEntities()
     );
@@ -139,9 +126,6 @@ export class ProfissionalCategoriaContrato extends React.Component<
       'aceito=' +
       this.state.aceito +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -149,8 +133,8 @@ export class ProfissionalCategoriaContrato extends React.Component<
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, idCategoriaContrato, aceito, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProfissional, idCategoriaContrato, aceito, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProfissional, idCategoriaContrato, aceito, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, idCategoriaContrato, aceito, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -198,9 +182,6 @@ export class ProfissionalCategoriaContrato extends React.Component<
                             name="idProfissional"
                             id="profissional-categoria-contrato-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -216,10 +197,6 @@ export class ProfissionalCategoriaContrato extends React.Component<
                             name="idCategoriaContrato"
                             id="profissional-categoria-contrato-idCategoriaContrato"
                             value={this.state.idCategoriaContrato}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -229,24 +206,6 @@ export class ProfissionalCategoriaContrato extends React.Component<
                             <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
                           </Label>
                           <AvInput type="string" name="aceito" id="profissional-categoria-contrato-aceito" value={this.state.aceito} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-categoria-contrato-dataPost">
-                            <Translate contentKey="generadorApp.profissionalCategoriaContrato.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-categoria-contrato-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -290,10 +249,6 @@ export class ProfissionalCategoriaContrato extends React.Component<
                         <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalCategoriaContrato.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -313,10 +268,6 @@ export class ProfissionalCategoriaContrato extends React.Component<
                         <td>{profissionalCategoriaContrato.idCategoriaContrato}</td>
 
                         <td>{profissionalCategoriaContrato.aceito}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalCategoriaContrato.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

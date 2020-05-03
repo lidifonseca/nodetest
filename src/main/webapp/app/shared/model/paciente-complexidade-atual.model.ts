@@ -1,5 +1,3 @@
-import { Moment } from 'moment';
-
 export interface IPacienteComplexidadeAtual {
   id?: string;
   idPaciente?: number;
@@ -10,7 +8,6 @@ export interface IPacienteComplexidadeAtual {
   ventilacaoMecanica?: number;
   telemonitoramente?: number;
   idUsuario?: number;
-  dataPost?: Moment;
 }
 
 export const defaultValue: Readonly<IPacienteComplexidadeAtual> = {};

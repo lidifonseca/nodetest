@@ -68,9 +68,6 @@ export default class Empresa extends BaseEntity {
   @Column({ type: 'integer', name: 'tipo', nullable: false })
   tipo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => Cidade)
   idCidade: Cidade;
 

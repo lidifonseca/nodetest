@@ -21,9 +21,6 @@ export default class PadMatMed extends BaseEntity {
   @Column({ type: 'integer', name: 'id_usuario', nullable: false })
   idUsuario: number;
 
-  @Column({ type: 'date', name: 'data_post' })
-  dataPost: any;
-
   @Column({ type: 'integer', name: 'ativo', nullable: false })
   ativo: number;
 

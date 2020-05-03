@@ -107,7 +107,6 @@ const apiUrl = 'api/atendimento-atividades';
 // Actions
 export type ICrudGetAllActionAtendimentoAtividades<T> = (
   feito?: any,
-  dataPost?: any,
   idAtividade?: any,
   idAtendimento?: any,
   page?: number,
@@ -117,7 +116,6 @@ export type ICrudGetAllActionAtendimentoAtividades<T> = (
 
 export const getEntities: ICrudGetAllActionAtendimentoAtividades<IAtendimentoAtividades> = (
   feito,
-  dataPost,
   idAtividade,
   idAtendimento,
   page,
@@ -125,7 +123,6 @@ export const getEntities: ICrudGetAllActionAtendimentoAtividades<IAtendimentoAti
   sort
 ) => {
   const feitoRequest = feito ? `feito.contains=${feito}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idAtividadeRequest = idAtividade ? `idAtividade.equals=${idAtividade}&` : '';
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.equals=${idAtendimento}&` : '';
 
@@ -133,7 +130,7 @@ export const getEntities: ICrudGetAllActionAtendimentoAtividades<IAtendimentoAti
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOATIVIDADES_LIST,
     payload: axios.get<IAtendimentoAtividades>(
-      `${requestUrl}${feitoRequest}${dataPostRequest}${idAtividadeRequest}${idAtendimentoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${feitoRequest}${idAtividadeRequest}${idAtendimentoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

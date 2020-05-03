@@ -47,7 +47,6 @@ export interface IPadItemTempBaseState {
   dataFim: any;
   qtdSessoes: any;
   observacao: any;
-  dataPost: any;
   cidXPtaNovoId: any;
   categoriaId: any;
   numGhc: any;
@@ -75,7 +74,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
     const dataFim = url.searchParams.get('dataFim') || '';
     const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
     const observacao = url.searchParams.get('observacao') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const cidXPtaNovoId = url.searchParams.get('cidXPtaNovoId') || '';
     const categoriaId = url.searchParams.get('categoriaId') || '';
     const numGhc = url.searchParams.get('numGhc') || '';
@@ -89,7 +87,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
       dataFim,
       qtdSessoes,
       observacao,
-      dataPost,
       cidXPtaNovoId,
       categoriaId,
       numGhc
@@ -111,7 +108,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
         dataFim: '',
         qtdSessoes: '',
         observacao: '',
-        dataPost: '',
         cidXPtaNovoId: '',
         categoriaId: '',
         numGhc: ''
@@ -183,9 +179,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
       'observacao=' +
       this.state.observacao +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'cidXPtaNovoId=' +
       this.state.cidXPtaNovoId +
       '&' +
@@ -211,7 +204,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
       dataFim,
       qtdSessoes,
       observacao,
-      dataPost,
       cidXPtaNovoId,
       categoriaId,
       numGhc,
@@ -229,7 +221,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
       dataFim,
       qtdSessoes,
       observacao,
-      dataPost,
       cidXPtaNovoId,
       categoriaId,
       numGhc,
@@ -277,15 +268,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                             <Translate contentKey="generadorApp.padItemTemp.sessionId">Session Id</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="sessionId"
-                            id="pad-item-temp-sessionId"
-                            value={this.state.sessionId}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="sessionId" id="pad-item-temp-sessionId" value={this.state.sessionId} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -352,30 +335,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                             <Translate contentKey="generadorApp.padItemTemp.observacao">Observacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="pad-item-temp-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-item-temp-dataPost">
-                            <Translate contentKey="generadorApp.padItemTemp.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-temp-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                          />
+                          <AvInput type="text" name="observacao" id="pad-item-temp-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -400,15 +360,7 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                             <Translate contentKey="generadorApp.padItemTemp.numGhc">Num Ghc</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numGhc"
-                            id="pad-item-temp-numGhc"
-                            value={this.state.numGhc}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numGhc" id="pad-item-temp-numGhc" value={this.state.numGhc} />
                         </Row>
                       </Col>
                     </div>
@@ -470,10 +422,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                         <Translate contentKey="generadorApp.padItemTemp.observacao">Observacao</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padItemTemp.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('cidXPtaNovoId')}>
                         <Translate contentKey="generadorApp.padItemTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -519,10 +467,6 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                         <td>{padItemTemp.qtdSessoes}</td>
 
                         <td>{padItemTemp.observacao}</td>
-
-                        <td>
-                          <TextFormat type="date" value={padItemTemp.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{padItemTemp.cidXPtaNovoId}</td>
 

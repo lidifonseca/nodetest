@@ -1,5 +1,3 @@
-import { Moment } from 'moment';
-
 export interface IProntuarioMotivoManifestacao {
   id?: string;
   idProntuario?: number;
@@ -10,7 +8,6 @@ export interface IProntuarioMotivoManifestacao {
   idManifestacaoFilho?: number;
   sugestao?: any;
   idUsuario?: number;
-  dataPost?: Moment;
   informacaoAdicional?: any;
 }
 

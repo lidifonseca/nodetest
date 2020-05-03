@@ -109,7 +109,6 @@ export type ICrudGetAllActionFranquiaStatusAtual<T> = (
   statusAtual?: any,
   obs?: any,
   ativo?: any,
-  dataPost?: any,
   idFranquia?: any,
   page?: number,
   size?: number,
@@ -120,7 +119,6 @@ export const getEntities: ICrudGetAllActionFranquiaStatusAtual<IFranquiaStatusAt
   statusAtual,
   obs,
   ativo,
-  dataPost,
   idFranquia,
   page,
   size,
@@ -129,14 +127,13 @@ export const getEntities: ICrudGetAllActionFranquiaStatusAtual<IFranquiaStatusAt
   const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idFranquiaRequest = idFranquia ? `idFranquia.equals=${idFranquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIASTATUSATUAL_LIST,
     payload: axios.get<IFranquiaStatusAtual>(
-      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}${dataPostRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

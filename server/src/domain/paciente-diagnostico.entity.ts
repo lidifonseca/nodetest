@@ -18,9 +18,6 @@ export default class PacienteDiagnostico extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @Column({ type: 'boolean', name: 'cid_primario' })
   cidPrimario: boolean;
 

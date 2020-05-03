@@ -108,7 +108,6 @@ const apiUrl = 'api/unidade-easy-area-atuacaos';
 export type ICrudGetAllActionUnidadeEasyAreaAtuacao<T> = (
   cepInicial?: any,
   cepFinal?: any,
-  dataPost?: any,
   idUnidade?: any,
   page?: number,
   size?: number,
@@ -118,7 +117,6 @@ export type ICrudGetAllActionUnidadeEasyAreaAtuacao<T> = (
 export const getEntities: ICrudGetAllActionUnidadeEasyAreaAtuacao<IUnidadeEasyAreaAtuacao> = (
   cepInicial,
   cepFinal,
-  dataPost,
   idUnidade,
   page,
   size,
@@ -126,14 +124,13 @@ export const getEntities: ICrudGetAllActionUnidadeEasyAreaAtuacao<IUnidadeEasyAr
 ) => {
   const cepInicialRequest = cepInicial ? `cepInicial.contains=${cepInicial}&` : '';
   const cepFinalRequest = cepFinal ? `cepFinal.contains=${cepFinal}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUnidadeRequest = idUnidade ? `idUnidade.equals=${idUnidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO_LIST,
     payload: axios.get<IUnidadeEasyAreaAtuacao>(
-      `${requestUrl}${cepInicialRequest}${cepFinalRequest}${dataPostRequest}${idUnidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepInicialRequest}${cepFinalRequest}${idUnidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

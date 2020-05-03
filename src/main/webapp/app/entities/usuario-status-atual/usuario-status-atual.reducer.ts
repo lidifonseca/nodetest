@@ -110,7 +110,6 @@ export type ICrudGetAllActionUsuarioStatusAtual<T> = (
   statusAtual?: any,
   obs?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -121,7 +120,6 @@ export const getEntities: ICrudGetAllActionUsuarioStatusAtual<IUsuarioStatusAtua
   statusAtual,
   obs,
   ativo,
-  dataPost,
   page,
   size,
   sort
@@ -130,13 +128,12 @@ export const getEntities: ICrudGetAllActionUsuarioStatusAtual<IUsuarioStatusAtua
   const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_USUARIOSTATUSATUAL_LIST,
     payload: axios.get<IUsuarioStatusAtual>(
-      `${requestUrl}${idUsuarioRequest}${statusAtualRequest}${obsRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUsuarioRequest}${statusAtualRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

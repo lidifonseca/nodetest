@@ -19,7 +19,7 @@ import Pad from './pad.entity';
 import Questionarios from './questionarios.entity';
 
 /**
- * A Paciente.
+ * @toStringFields nome@@\n@listTableLayout nome cep bairro rg registro@@\n@listFilterLayout nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@formLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@\n@viewLayout cidade<top;6> nome<top;6> email<top;6> cpf<top;6> rg<top;6> registro<top;6>@@
  */
 @Entity('paciente')
 export default class Paciente extends BaseEntity {
@@ -158,8 +158,8 @@ export default class Paciente extends BaseEntity {
   @Column({ name: 'longitude_familiar', length: 60 })
   longitudeFamiliar: string;
 
-  @Column({ name: 'observacao', length: 255 })
-  observacao: string;
+  @Column({ type: 'blob', name: 'observacao' })
+  observacao: any;
 
   @Column({ type: 'integer', name: 'aph', nullable: false })
   aph: number;
@@ -200,11 +200,8 @@ export default class Paciente extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
-  @Column({ name: 'detalhes', length: 255 })
-  detalhes: string;
+  @Column({ type: 'blob', name: 'detalhes' })
+  detalhes: any;
 
   @Column({ type: 'integer', name: 'tipohospital' })
   tipohospital: number;

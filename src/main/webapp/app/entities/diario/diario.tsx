@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -46,7 +37,6 @@ export interface IDiarioProps extends StateProps, DispatchProps, RouteComponentP
 export interface IDiarioBaseState {
   historico: any;
   gerarPdf: any;
-  dataPost: any;
   idUsuario: any;
   idPaciente: any;
 }
@@ -67,7 +57,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const historico = url.searchParams.get('historico') || '';
     const gerarPdf = url.searchParams.get('gerarPdf') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idUsuario = url.searchParams.get('idUsuario') || '';
     const idPaciente = url.searchParams.get('idPaciente') || '';
@@ -75,7 +64,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
     return {
       historico,
       gerarPdf,
-      dataPost,
       idUsuario,
       idPaciente
     };
@@ -93,7 +81,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
       {
         historico: '',
         gerarPdf: '',
-        dataPost: '',
         idUsuario: '',
         idPaciente: ''
       },
@@ -146,9 +133,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
       'gerarPdf=' +
       this.state.gerarPdf +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
@@ -162,8 +146,8 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { historico, gerarPdf, dataPost, idUsuario, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(historico, gerarPdf, dataPost, idUsuario, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { historico, gerarPdf, idUsuario, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(historico, gerarPdf, idUsuario, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -204,15 +188,7 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                             <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="historico"
-                            id="diario-historico"
-                            value={this.state.historico}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="historico" id="diario-historico" value={this.state.historico} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -221,24 +197,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                             <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
                           </Label>
                           <AvInput type="string" name="gerarPdf" id="diario-gerarPdf" value={this.state.gerarPdf} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="diario-dataPost">
-                            <Translate contentKey="generadorApp.diario.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="diario-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -316,10 +274,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                         <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.diario.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.diario.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -345,10 +299,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                         <td>{diario.historico}</td>
 
                         <td>{diario.gerarPdf}</td>
-
-                        <td>
-                          <TextFormat type="date" value={diario.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>{diario.idUsuario ? <Link to={`usuario/${diario.idUsuario.id}`}>{diario.idUsuario.id}</Link> : ''}</td>
                         <td>{diario.idPaciente ? <Link to={`paciente/${diario.idPaciente.id}`}>{diario.idPaciente.id}</Link> : ''}</td>
 

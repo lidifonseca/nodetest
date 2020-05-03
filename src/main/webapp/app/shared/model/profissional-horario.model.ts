@@ -6,7 +6,6 @@ export interface IProfissionalHorario {
   idProfissional?: number;
   horario?: Moment;
   confirm?: number;
-  dataPost?: Moment;
 }
 
 export const defaultValue: Readonly<IProfissionalHorario> = {};

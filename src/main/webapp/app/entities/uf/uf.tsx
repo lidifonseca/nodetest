@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IUfProps extends StateProps, DispatchProps, RouteComponentProps
 export interface IUfBaseState {
   siglaUf: any;
   descrUf: any;
-  dataPost: any;
   cidade: any;
 }
 export interface IUfState extends IUfBaseState, IPaginationBaseState {}
@@ -61,14 +51,12 @@ export class Uf extends React.Component<IUfProps, IUfState> {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const siglaUf = url.searchParams.get('siglaUf') || '';
     const descrUf = url.searchParams.get('descrUf') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const cidade = url.searchParams.get('cidade') || '';
 
     return {
       siglaUf,
       descrUf,
-      dataPost,
       cidade
     };
   };
@@ -82,7 +70,6 @@ export class Uf extends React.Component<IUfProps, IUfState> {
       {
         siglaUf: '',
         descrUf: '',
-        dataPost: '',
         cidade: ''
       },
       () => this.sortEntities()
@@ -134,9 +121,6 @@ export class Uf extends React.Component<IUfProps, IUfState> {
       'descrUf=' +
       this.state.descrUf +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'cidade=' +
       this.state.cidade +
       '&' +
@@ -147,8 +131,8 @@ export class Uf extends React.Component<IUfProps, IUfState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { siglaUf, descrUf, dataPost, cidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(siglaUf, descrUf, dataPost, cidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { siglaUf, descrUf, cidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(siglaUf, descrUf, cidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -189,15 +173,7 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                             <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="siglaUf"
-                            id="uf-siglaUf"
-                            value={this.state.siglaUf}
-                            validate={{
-                              maxLength: { value: 4, errorMessage: translate('entity.validation.maxlength', { max: 4 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="siglaUf" id="uf-siglaUf" value={this.state.siglaUf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -206,33 +182,7 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                             <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="descrUf"
-                            id="uf-descrUf"
-                            value={this.state.descrUf}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="uf-dataPost">
-                            <Translate contentKey="generadorApp.uf.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="uf-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="descrUf" id="uf-descrUf" value={this.state.descrUf} />
                         </Row>
                       </Col>
 
@@ -274,10 +224,6 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                         <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.uf.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -295,10 +241,6 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                         <td>{uf.siglaUf}</td>
 
                         <td>{uf.descrUf}</td>
-
-                        <td>
-                          <TextFormat type="date" value={uf.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

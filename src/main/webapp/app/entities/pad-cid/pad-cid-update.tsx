@@ -52,8 +52,6 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { padCidEntity } = this.props;
       const entity = {
@@ -175,31 +173,6 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
                             </Col>
                             <Col md="9">
                               <AvField id="pad-cid-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="pad-cid-dataPost">
-                                <Translate contentKey="generadorApp.padCid.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="pad-cid-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.padCidEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

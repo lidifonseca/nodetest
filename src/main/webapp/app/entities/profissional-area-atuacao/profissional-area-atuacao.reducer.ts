@@ -110,7 +110,6 @@ export type ICrudGetAllActionProfissionalAreaAtuacao<T> = (
   cepArea?: any,
   cepFim?: any,
   ativo?: any,
-  dataPost?: any,
   cepIni?: any,
   page?: number,
   size?: number,
@@ -122,7 +121,6 @@ export const getEntities: ICrudGetAllActionProfissionalAreaAtuacao<IProfissional
   cepArea,
   cepFim,
   ativo,
-  dataPost,
   cepIni,
   page,
   size,
@@ -132,14 +130,13 @@ export const getEntities: ICrudGetAllActionProfissionalAreaAtuacao<IProfissional
   const cepAreaRequest = cepArea ? `cepArea.contains=${cepArea}&` : '';
   const cepFimRequest = cepFim ? `cepFim.contains=${cepFim}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const cepIniRequest = cepIni ? `cepIni.contains=${cepIni}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO_LIST,
     payload: axios.get<IProfissionalAreaAtuacao>(
-      `${requestUrl}${idProfissionalRequest}${cepAreaRequest}${cepFimRequest}${ativoRequest}${dataPostRequest}${cepIniRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${cepAreaRequest}${cepFimRequest}${ativoRequest}${cepIniRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

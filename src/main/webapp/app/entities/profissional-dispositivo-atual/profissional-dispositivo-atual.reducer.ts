@@ -127,7 +127,6 @@ export type ICrudGetAllActionProfissionalDispositivoAtual<T> = (
   mascaraDeVentilacao?: any,
   entubacaoOrotraqueal?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -155,7 +154,6 @@ export const getEntities: ICrudGetAllActionProfissionalDispositivoAtual<IProfiss
   mascaraDeVentilacao,
   entubacaoOrotraqueal,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -183,13 +181,12 @@ export const getEntities: ICrudGetAllActionProfissionalDispositivoAtual<IProfiss
   const mascaraDeVentilacaoRequest = mascaraDeVentilacao ? `mascaraDeVentilacao.contains=${mascaraDeVentilacao}&` : '';
   const entubacaoOrotraquealRequest = entubacaoOrotraqueal ? `entubacaoOrotraqueal.contains=${entubacaoOrotraqueal}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST,
     payload: axios.get<IProfissionalDispositivoAtual>(
-      `${requestUrl}${idProfissionalRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

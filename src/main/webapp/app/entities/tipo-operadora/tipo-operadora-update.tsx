@@ -171,21 +171,6 @@ export class TipoOperadoraUpdate extends React.Component<ITipoOperadoraUpdatePro
                           </Row>
                         </AvGroup>
                       </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="tipo-operadora-dataPost">
-                                <Translate contentKey="generadorApp.tipoOperadora.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="tipo-operadora-dataPost" type="date" className="form-control" name="dataPost" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                     </Row>
                   )}
                 </Col>

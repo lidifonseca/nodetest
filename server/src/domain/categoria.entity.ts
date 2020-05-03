@@ -27,9 +27,6 @@ export default class Categoria extends BaseEntity {
   @Column({ type: 'integer', name: 'publicar' })
   publicar: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @Column({ type: 'integer', name: 'ordem' })
   ordem: number;
 

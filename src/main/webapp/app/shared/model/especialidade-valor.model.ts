@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
 
 export interface IEspecialidadeValor {
@@ -6,7 +5,6 @@ export interface IEspecialidadeValor {
   idFranquia?: string;
   valor?: number;
   ativo?: number;
-  dataPost?: Moment;
   idEspecialidade?: string | any;
 }
 

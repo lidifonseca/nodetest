@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IGrupoRiscoProps extends StateProps, DispatchProps, RouteCompon
 export interface IGrupoRiscoBaseState {
   grupoRisco: any;
   styleLabel: any;
-  dataPost: any;
 }
 export interface IGrupoRiscoState extends IGrupoRiscoBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const grupoRisco = url.searchParams.get('grupoRisco') || '';
     const styleLabel = url.searchParams.get('styleLabel') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       grupoRisco,
-      styleLabel,
-      dataPost
+      styleLabel
     };
   };
 
@@ -77,8 +65,7 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
     this.setState(
       {
         grupoRisco: '',
-        styleLabel: '',
-        dataPost: ''
+        styleLabel: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { grupoRisco, styleLabel, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(grupoRisco, styleLabel, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { grupoRisco, styleLabel, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(grupoRisco, styleLabel, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -181,15 +165,7 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
                             <Translate contentKey="generadorApp.grupoRisco.grupoRisco">Grupo Risco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="grupoRisco"
-                            id="grupo-risco-grupoRisco"
-                            value={this.state.grupoRisco}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="grupoRisco" id="grupo-risco-grupoRisco" value={this.state.grupoRisco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -198,33 +174,7 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
                             <Translate contentKey="generadorApp.grupoRisco.styleLabel">Style Label</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="styleLabel"
-                            id="grupo-risco-styleLabel"
-                            value={this.state.styleLabel}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="grupo-risco-dataPost">
-                            <Translate contentKey="generadorApp.grupoRisco.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="grupo-risco-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="styleLabel" id="grupo-risco-styleLabel" value={this.state.styleLabel} />
                         </Row>
                       </Col>
                     </div>
@@ -262,10 +212,6 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
                         <Translate contentKey="generadorApp.grupoRisco.styleLabel">Style Label</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.grupoRisco.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -283,10 +229,6 @@ export class GrupoRisco extends React.Component<IGrupoRiscoProps, IGrupoRiscoSta
                         <td>{grupoRisco.grupoRisco}</td>
 
                         <td>{grupoRisco.styleLabel}</td>
-
-                        <td>
-                          <TextFormat type="date" value={grupoRisco.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

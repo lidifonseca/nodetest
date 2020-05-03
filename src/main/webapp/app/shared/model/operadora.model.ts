@@ -1,7 +1,7 @@
-import { Moment } from 'moment';
 import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operadora.model';
 import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
+import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 
 export interface IOperadora {
   id?: string;
@@ -11,7 +11,6 @@ export interface IOperadora {
   ie?: string;
   site?: string;
   ativo?: number;
-  dataPost?: Moment;
   idUnidade?: number;
   endereco?: string;
   contatoCentralAtendimento?: string;
@@ -22,10 +21,10 @@ export interface IOperadora {
   nomeContatoFinanceiro?: string;
   contatoFinanceiro?: string;
   emailFinanceiro?: string;
-  idTipoOperadora?: number;
   atendimentos?: IAtendimento[];
   especialidadeOperadoras?: IEspecialidadeOperadora[];
   pacienteOperadoras?: IPacienteOperadora[];
+  idTipoOperadora?: string | any;
 }
 
 export const defaultValue: Readonly<IOperadora> = {};

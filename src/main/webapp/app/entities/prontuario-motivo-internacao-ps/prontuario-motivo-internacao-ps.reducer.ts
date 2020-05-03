@@ -110,7 +110,6 @@ export type ICrudGetAllActionProntuarioMotivoInternacaoPs<T> = (
   idPaciente?: any,
   idMotivo?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -121,7 +120,6 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoInternacaoPs<IProntua
   idPaciente,
   idMotivo,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -130,13 +128,12 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoInternacaoPs<IProntua
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const idMotivoRequest = idMotivo ? `idMotivo.contains=${idMotivo}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST,
     payload: axios.get<IProntuarioMotivoInternacaoPs>(
-      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

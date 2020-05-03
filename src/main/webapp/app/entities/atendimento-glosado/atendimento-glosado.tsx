@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -42,7 +33,6 @@ export interface IAtendimentoGlosadoBaseState {
   idAtendimento: any;
   glosado: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IAtendimentoGlosadoState extends IAtendimentoGlosadoBaseState, IPaginationBaseState {}
 
@@ -62,13 +52,11 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
     const glosado = url.searchParams.get('glosado') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idAtendimento,
       glosado,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -81,8 +69,7 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
       {
         idAtendimento: '',
         glosado: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -136,9 +123,6 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -146,8 +130,8 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, glosado, idUsuario, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, glosado, idUsuario, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, glosado, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, glosado, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -192,10 +176,6 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                             name="idAtendimento"
                             id="atendimento-glosado-idAtendimento"
                             value={this.state.idAtendimento}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -205,15 +185,7 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                             <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="glosado"
-                            id="atendimento-glosado-glosado"
-                            value={this.state.glosado}
-                            validate={{
-                              maxLength: { value: 1, errorMessage: translate('entity.validation.maxlength', { max: 1 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="glosado" id="atendimento-glosado-glosado" value={this.state.glosado} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -222,14 +194,6 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                             <Translate contentKey="generadorApp.atendimentoGlosado.idUsuario">Id Usuario</Translate>
                           </Label>
                           <AvInput type="string" name="idUsuario" id="atendimento-glosado-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="atendimento-glosado-dataPost">
-                            <Translate contentKey="generadorApp.atendimentoGlosado.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="atendimento-glosado-dataPost" value={this.state.dataPost} />
                         </Row>
                       </Col>
                     </div>
@@ -271,10 +235,6 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                         <Translate contentKey="generadorApp.atendimentoGlosado.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.atendimentoGlosado.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -294,10 +254,6 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                         <td>{atendimentoGlosado.glosado}</td>
 
                         <td>{atendimentoGlosado.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={atendimentoGlosado.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

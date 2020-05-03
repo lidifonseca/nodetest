@@ -15,6 +15,7 @@ export const ACTION_TYPES = {
   CREATE_PACIENTE: 'paciente/CREATE_PACIENTE',
   UPDATE_PACIENTE: 'paciente/UPDATE_PACIENTE',
   DELETE_PACIENTE: 'paciente/DELETE_PACIENTE',
+  SET_BLOB: 'paciente/SET_BLOB',
   RESET: 'paciente/RESET'
 };
 
@@ -91,6 +92,17 @@ export default (state: PacienteState = initialState, action): PacienteState => {
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -165,7 +177,6 @@ export type ICrudGetAllActionPaciente<T> = (
   comResponsavel?: any,
   cadastroCompleto?: any,
   ativo?: any,
-  dataPost?: any,
   detalhes?: any,
   tipohospital?: any,
   liminar?: any,
@@ -250,7 +261,6 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   comResponsavel,
   cadastroCompleto,
   ativo,
-  dataPost,
   detalhes,
   tipohospital,
   liminar,
@@ -333,7 +343,6 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   const comResponsavelRequest = comResponsavel ? `comResponsavel.contains=${comResponsavel}&` : '';
   const cadastroCompletoRequest = cadastroCompleto ? `cadastroCompleto.contains=${cadastroCompleto}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const detalhesRequest = detalhes ? `detalhes.contains=${detalhes}&` : '';
   const tipohospitalRequest = tipohospital ? `tipohospital.contains=${tipohospital}&` : '';
   const liminarRequest = liminar ? `liminar.contains=${liminar}&` : '';
@@ -358,7 +367,7 @@ export const getEntities: ICrudGetAllActionPaciente<IPaciente> = (
   return {
     type: ACTION_TYPES.FETCH_PACIENTE_LIST,
     payload: axios.get<IPaciente>(
-      `${requestUrl}${idUnidadeRequest}${idFranquiaRequest}${idCidadeRequest}${idCidadeFamiliarRequest}${idGrauParentescoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefoneRequest}${telefone2Request}${celularRequest}${celular1Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${responsavelFamiliarRequest}${emailFamiliarRequest}${cpfFamiliarRequest}${rgFamiliarRequest}${nascimentoFamiliarRequest}${sexoFamiliarRequest}${telefoneFamiliarRequest}${telefone2FamiliarRequest}${celularFamiliarRequest}${celular2FamiliarRequest}${cepFamiliarRequest}${enderecoFamiliarRequest}${numeroFamiliarRequest}${complementoFamiliarRequest}${bairroFamiliarRequest}${cidadeFamiliarRequest}${ufFamiliarRequest}${latitudeFamiliarRequest}${longitudeFamiliarRequest}${observacaoRequest}${aphRequest}${nivelComplexidadeRequest}${passagemPsRequest}${obsPsRequest}${passagemInternacaoRequest}${obsInternacaoRequest}${custoTotalRequest}${observacaoFamiliarRequest}${mesmoEnderecoRequest}${acessoFamiliarRequest}${comResponsavelRequest}${cadastroCompletoRequest}${ativoRequest}${dataPostRequest}${detalhesRequest}${tipohospitalRequest}${liminarRequest}${expoTokenRequest}${profissionalPrefRequest}${senhaChatRequest}${atendimentoRequest}${atendimentoAssinaturasRequest}${diarioRequest}${pacienteDadosCartaoRequest}${pacienteDiagnosticoRequest}${pacienteDiarioRequest}${pacienteEnqueteAppRequest}${pacienteOperadoraRequest}${pacientePedidoRequest}${pacientePushRequest}${pacienteStatusAtualRequest}${padRequest}${questionariosRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeRequest}${idFranquiaRequest}${idCidadeRequest}${idCidadeFamiliarRequest}${idGrauParentescoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefoneRequest}${telefone2Request}${celularRequest}${celular1Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${responsavelFamiliarRequest}${emailFamiliarRequest}${cpfFamiliarRequest}${rgFamiliarRequest}${nascimentoFamiliarRequest}${sexoFamiliarRequest}${telefoneFamiliarRequest}${telefone2FamiliarRequest}${celularFamiliarRequest}${celular2FamiliarRequest}${cepFamiliarRequest}${enderecoFamiliarRequest}${numeroFamiliarRequest}${complementoFamiliarRequest}${bairroFamiliarRequest}${cidadeFamiliarRequest}${ufFamiliarRequest}${latitudeFamiliarRequest}${longitudeFamiliarRequest}${observacaoRequest}${aphRequest}${nivelComplexidadeRequest}${passagemPsRequest}${obsPsRequest}${passagemInternacaoRequest}${obsInternacaoRequest}${custoTotalRequest}${observacaoFamiliarRequest}${mesmoEnderecoRequest}${acessoFamiliarRequest}${comResponsavelRequest}${cadastroCompletoRequest}${ativoRequest}${detalhesRequest}${tipohospitalRequest}${liminarRequest}${expoTokenRequest}${profissionalPrefRequest}${senhaChatRequest}${atendimentoRequest}${atendimentoAssinaturasRequest}${diarioRequest}${pacienteDadosCartaoRequest}${pacienteDiagnosticoRequest}${pacienteDiarioRequest}${pacienteEnqueteAppRequest}${pacienteOperadoraRequest}${pacientePedidoRequest}${pacientePushRequest}${pacienteStatusAtualRequest}${padRequest}${questionariosRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -401,6 +410,15 @@ export const deleteEntity: ICrudDeleteAction<IPaciente> = id => async dispatch =
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

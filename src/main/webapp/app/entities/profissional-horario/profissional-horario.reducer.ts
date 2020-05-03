@@ -110,7 +110,6 @@ export type ICrudGetAllActionProfissionalHorario<T> = (
   idProfissional?: any,
   horario?: any,
   confirm?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -121,7 +120,6 @@ export const getEntities: ICrudGetAllActionProfissionalHorario<IProfissionalHora
   idProfissional,
   horario,
   confirm,
-  dataPost,
   page,
   size,
   sort
@@ -130,13 +128,12 @@ export const getEntities: ICrudGetAllActionProfissionalHorario<IProfissionalHora
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const horarioRequest = horario ? `horario.contains=${horario}&` : '';
   const confirmRequest = confirm ? `confirm.contains=${confirm}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALHORARIO_LIST,
     payload: axios.get<IProfissionalHorario>(
-      `${requestUrl}${idAtendimentoRequest}${idProfissionalRequest}${horarioRequest}${confirmRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idAtendimentoRequest}${idProfissionalRequest}${horarioRequest}${confirmRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

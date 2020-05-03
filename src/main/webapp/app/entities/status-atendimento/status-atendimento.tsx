@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IStatusAtendimentoBaseState {
   styleLabel: any;
   ordenacao: any;
   ativo: any;
-  dataPost: any;
   atendimento: any;
 }
 export interface IStatusAtendimentoState extends IStatusAtendimentoBaseState, IPaginationBaseState {}
@@ -65,7 +55,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
     const styleLabel = url.searchParams.get('styleLabel') || '';
     const ordenacao = url.searchParams.get('ordenacao') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const atendimento = url.searchParams.get('atendimento') || '';
 
@@ -74,7 +63,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
       styleLabel,
       ordenacao,
       ativo,
-      dataPost,
       atendimento
     };
   };
@@ -90,7 +78,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
         styleLabel: '',
         ordenacao: '',
         ativo: '',
-        dataPost: '',
         atendimento: ''
       },
       () => this.sortEntities()
@@ -148,9 +135,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'atendimento=' +
       this.state.atendimento +
       '&' +
@@ -161,18 +145,8 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtendimento, styleLabel, ordenacao, ativo, dataPost, atendimento, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      statusAtendimento,
-      styleLabel,
-      ordenacao,
-      ativo,
-      dataPost,
-      atendimento,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { statusAtendimento, styleLabel, ordenacao, ativo, atendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtendimento, styleLabel, ordenacao, ativo, atendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -218,9 +192,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                             name="statusAtendimento"
                             id="status-atendimento-statusAtendimento"
                             value={this.state.statusAtendimento}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -230,15 +201,7 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                             <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="styleLabel"
-                            id="status-atendimento-styleLabel"
-                            value={this.state.styleLabel}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="styleLabel" id="status-atendimento-styleLabel" value={this.state.styleLabel} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -255,24 +218,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                             <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="status-atendimento-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="status-atendimento-dataPost">
-                            <Translate contentKey="generadorApp.statusAtendimento.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="status-atendimento-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -322,10 +267,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                         <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.statusAtendimento.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -347,10 +288,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                         <td>{statusAtendimento.ordenacao}</td>
 
                         <td>{statusAtendimento.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={statusAtendimento.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

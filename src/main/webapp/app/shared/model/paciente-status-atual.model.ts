@@ -5,9 +5,8 @@ import { IStatusAtual } from 'app/shared/model/status-atual.model';
 export interface IPacienteStatusAtual {
   id?: string;
   dataStatus?: Moment;
-  observacao?: string;
+  observacao?: any;
   ativo?: number;
-  dataPost?: Moment;
   idUsuario?: string;
   idPaciente?: string | any;
   idStatusAtual?: string | any;

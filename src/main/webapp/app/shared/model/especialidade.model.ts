@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operadora.model';
 import { IEspecialidadeUnidade } from 'app/shared/model/especialidade-unidade.model';
@@ -13,11 +12,10 @@ export interface IEspecialidade {
   id?: string;
   icon?: string;
   especialidade?: string;
-  descricao?: string;
+  descricao?: any;
   duracao?: number;
   importante?: string;
   ativo?: number;
-  dataPost?: Moment;
   idUnidade?: number;
   atendimentos?: IAtendimento[];
   especialidadeOperadoras?: IEspecialidadeOperadora[];

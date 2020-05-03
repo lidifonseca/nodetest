@@ -22,8 +22,7 @@
       "timestampAtendimento": "Timestamp Atendimento",
       "nomePaciente": "Nome Paciente",
       "nomeProfissioinal": "Nome Profissioinal",
-      "timestampConfirmacao": "Timestamp Confirmacao",
-      "dataPost": "Data Post"
+      "timestampConfirmacao": "Timestamp Confirmacao"
     }
   }
 }

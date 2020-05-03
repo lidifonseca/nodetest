@@ -19,11 +19,8 @@
         },
         {
             "fieldName": "descricao",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "255"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         },
         {
             "fieldName": "duracao",
@@ -40,13 +37,6 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
         },
         {
             "fieldName": "idUnidade",
@@ -70,7 +60,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "especialidadeUnidade",
             "otherEntityRelationshipName": "idEspecialidade",
-            "relationshipValidateRules": "required",
             "relationshipName": "especialidadeUnidade"
         },
         {

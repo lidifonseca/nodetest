@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IProfissionalPushBaseState {
   idFranquia: any;
   mensagem: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IProfissionalPushState extends IProfissionalPushBaseState, IPaginationBaseState {}
 
@@ -64,14 +54,12 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
     const idFranquia = url.searchParams.get('idFranquia') || '';
     const mensagem = url.searchParams.get('mensagem') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProfissional,
       idFranquia,
       mensagem,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -85,8 +73,7 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
         idProfissional: '',
         idFranquia: '',
         mensagem: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +130,6 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +137,8 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, idFranquia, mensagem, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProfissional, idFranquia, mensagem, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProfissional, idFranquia, mensagem, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, idFranquia, mensagem, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -218,15 +202,7 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                             <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="mensagem"
-                            id="profissional-push-mensagem"
-                            value={this.state.mensagem}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="mensagem" id="profissional-push-mensagem" value={this.state.mensagem} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -235,24 +211,6 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                             <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="profissional-push-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-push-dataPost">
-                            <Translate contentKey="generadorApp.profissionalPush.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-push-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -298,10 +256,6 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                         <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalPush.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -323,10 +277,6 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                         <td>{profissionalPush.mensagem}</td>
 
                         <td>{profissionalPush.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalPush.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

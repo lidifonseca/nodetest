@@ -16,10 +16,6 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "1"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "LocalDate"
         }
     ],
     "relationships": [],

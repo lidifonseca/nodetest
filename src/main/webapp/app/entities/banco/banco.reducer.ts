@@ -108,21 +108,19 @@ const apiUrl = 'api/bancos';
 export type ICrudGetAllActionBanco<T> = (
   codBanco?: any,
   banco?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionBanco<IBanco> = (codBanco, banco, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionBanco<IBanco> = (codBanco, banco, page, size, sort) => {
   const codBancoRequest = codBanco ? `codBanco.contains=${codBanco}&` : '';
   const bancoRequest = banco ? `banco.contains=${banco}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_BANCO_LIST,
-    payload: axios.get<IBanco>(`${requestUrl}${codBancoRequest}${bancoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IBanco>(`${requestUrl}${codBancoRequest}${bancoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IBanco> = id => {

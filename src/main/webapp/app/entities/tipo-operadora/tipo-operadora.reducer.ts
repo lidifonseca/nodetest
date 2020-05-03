@@ -108,21 +108,19 @@ const apiUrl = 'api/tipo-operadoras';
 export type ICrudGetAllActionTipoOperadora<T> = (
   tipo?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoOperadora<ITipoOperadora> = (tipo, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoOperadora<ITipoOperadora> = (tipo, ativo, page, size, sort) => {
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOOPERADORA_LIST,
-    payload: axios.get<ITipoOperadora>(`${requestUrl}${tipoRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoOperadora>(`${requestUrl}${tipoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITipoOperadora> = id => {

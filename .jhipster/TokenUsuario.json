@@ -19,10 +19,6 @@
         {
             "fieldName": "dataValida",
             "fieldType": "Instant"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant"
         }
     ],
     "relationships": [],

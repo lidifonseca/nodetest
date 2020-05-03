@@ -41,8 +41,6 @@ export class PeriodoUpdate extends React.Component<IPeriodoUpdateProps, IPeriodo
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { periodoEntity } = this.props;
       const entity = {
@@ -162,31 +160,6 @@ export class PeriodoUpdate extends React.Component<IPeriodoUpdateProps, IPeriodo
                             </Col>
                             <Col md="9">
                               <AvField id="periodo-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="periodo-dataPost">
-                                <Translate contentKey="generadorApp.periodo.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="periodo-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.periodoEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>

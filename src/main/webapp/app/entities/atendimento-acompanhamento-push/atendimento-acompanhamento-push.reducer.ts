@@ -113,7 +113,6 @@ export type ICrudGetAllActionAtendimentoAcompanhamentoPush<T> = (
   nomePaciente?: any,
   nomeProfissioinal?: any,
   timestampConfirmacao?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -127,7 +126,6 @@ export const getEntities: ICrudGetAllActionAtendimentoAcompanhamentoPush<IAtendi
   nomePaciente,
   nomeProfissioinal,
   timestampConfirmacao,
-  dataPost,
   page,
   size,
   sort
@@ -139,13 +137,12 @@ export const getEntities: ICrudGetAllActionAtendimentoAcompanhamentoPush<IAtendi
   const nomePacienteRequest = nomePaciente ? `nomePaciente.contains=${nomePaciente}&` : '';
   const nomeProfissioinalRequest = nomeProfissioinal ? `nomeProfissioinal.contains=${nomeProfissioinal}&` : '';
   const timestampConfirmacaoRequest = timestampConfirmacao ? `timestampConfirmacao.contains=${timestampConfirmacao}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST,
     payload: axios.get<IAtendimentoAcompanhamentoPush>(
-      `${requestUrl}${atendimentoIdRequest}${pacienteIdRequest}${profissionalIdRequest}${timestampAtendimentoRequest}${nomePacienteRequest}${nomeProfissioinalRequest}${timestampConfirmacaoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${atendimentoIdRequest}${pacienteIdRequest}${profissionalIdRequest}${timestampAtendimentoRequest}${nomePacienteRequest}${nomeProfissioinalRequest}${timestampConfirmacaoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

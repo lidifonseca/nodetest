@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -46,7 +37,6 @@ export interface IPacienteDiagnosticoProps extends StateProps, DispatchProps, Ro
 export interface IPacienteDiagnosticoBaseState {
   observacao: any;
   ativo: any;
-  dataPost: any;
   cidPrimario: any;
   complexidade: any;
   cidComAlta: any;
@@ -70,7 +60,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const observacao = url.searchParams.get('observacao') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const cidPrimario = url.searchParams.get('cidPrimario') || '';
     const complexidade = url.searchParams.get('complexidade') || '';
     const cidComAlta = url.searchParams.get('cidComAlta') || '';
@@ -81,7 +70,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
     return {
       observacao,
       ativo,
-      dataPost,
       cidPrimario,
       complexidade,
       cidComAlta,
@@ -102,7 +90,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
       {
         observacao: '',
         ativo: '',
-        dataPost: '',
         cidPrimario: '',
         complexidade: '',
         cidComAlta: '',
@@ -158,9 +145,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'cidPrimario=' +
       this.state.cidPrimario +
       '&' +
@@ -186,7 +170,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
     const {
       observacao,
       ativo,
-      dataPost,
       cidPrimario,
       complexidade,
       cidComAlta,
@@ -200,7 +183,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
     this.props.getEntities(
       observacao,
       ativo,
-      dataPost,
       cidPrimario,
       complexidade,
       cidComAlta,
@@ -250,15 +232,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                             <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="paciente-diagnostico-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="observacao" id="paciente-diagnostico-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -267,24 +241,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                             <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="paciente-diagnostico-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-diagnostico-dataPost">
-                            <Translate contentKey="generadorApp.pacienteDiagnostico.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-diagnostico-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -301,15 +257,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                             <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complexidade"
-                            id="paciente-diagnostico-complexidade"
-                            value={this.state.complexidade}
-                            validate={{
-                              maxLength: { value: 80, errorMessage: translate('entity.validation.maxlength', { max: 80 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complexidade" id="paciente-diagnostico-complexidade" value={this.state.complexidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -395,10 +343,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                         <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('cidPrimario')}>
                         <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -436,10 +380,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                         <td>{pacienteDiagnostico.observacao}</td>
 
                         <td>{pacienteDiagnostico.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteDiagnostico.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{pacienteDiagnostico.cidPrimario ? 'true' : 'false'}</td>
 

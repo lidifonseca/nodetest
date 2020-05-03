@@ -55,7 +55,6 @@ export interface IPacientePedidoBaseState {
   valor: any;
   desconto: any;
   tipoValor: any;
-  dataPost: any;
   idUnidade: any;
   idPaciente: any;
   idCartao: any;
@@ -83,7 +82,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
     const valor = url.searchParams.get('valor') || '';
     const desconto = url.searchParams.get('desconto') || '';
     const tipoValor = url.searchParams.get('tipoValor') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idUnidade = url.searchParams.get('idUnidade') || '';
     const idPaciente = url.searchParams.get('idPaciente') || '';
@@ -98,7 +96,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       valor,
       desconto,
       tipoValor,
-      dataPost,
       idUnidade,
       idPaciente,
       idCartao,
@@ -125,7 +122,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
         valor: '',
         desconto: '',
         tipoValor: '',
-        dataPost: '',
         idUnidade: '',
         idPaciente: '',
         idCartao: '',
@@ -195,9 +191,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       'tipoValor=' +
       this.state.tipoValor +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUnidade=' +
       this.state.idUnidade +
       '&' +
@@ -225,7 +218,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       valor,
       desconto,
       tipoValor,
-      dataPost,
       idUnidade,
       idPaciente,
       idCartao,
@@ -243,7 +235,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
       valor,
       desconto,
       tipoValor,
-      dataPost,
       idUnidade,
       idPaciente,
       idCartao,
@@ -347,24 +338,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                             <Translate contentKey="generadorApp.pacientePedido.tipoValor">Tipo Valor</Translate>
                           </Label>
                           <AvInput type="string" name="tipoValor" id="paciente-pedido-tipoValor" value={this.state.tipoValor} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-pedido-dataPost">
-                            <Translate contentKey="generadorApp.pacientePedido.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-pedido-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -502,10 +475,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                         <Translate contentKey="generadorApp.pacientePedido.tipoValor">Tipo Valor</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacientePedido.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.pacientePedido.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -553,10 +522,6 @@ export class PacientePedido extends React.Component<IPacientePedidoProps, IPacie
                         <td>{pacientePedido.desconto}</td>
 
                         <td>{pacientePedido.tipoValor}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacientePedido.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {pacientePedido.idUnidade ? (
                             <Link to={`unidade-easy/${pacientePedido.idUnidade.id}`}>{pacientePedido.idUnidade.id}</Link>

@@ -109,7 +109,6 @@ export type ICrudGetAllActionAtendimentoStatusFinanceiro<T> = (
   idAtendimento?: any,
   idStatusFinanceiro?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +118,6 @@ export const getEntities: ICrudGetAllActionAtendimentoStatusFinanceiro<IAtendime
   idAtendimento,
   idStatusFinanceiro,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -127,13 +125,12 @@ export const getEntities: ICrudGetAllActionAtendimentoStatusFinanceiro<IAtendime
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const idStatusFinanceiroRequest = idStatusFinanceiro ? `idStatusFinanceiro.contains=${idStatusFinanceiro}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.equals=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOSTATUSFINANCEIRO_LIST,
     payload: axios.get<IAtendimentoStatusFinanceiro>(
-      `${requestUrl}${idAtendimentoRequest}${idStatusFinanceiroRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idAtendimentoRequest}${idStatusFinanceiroRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

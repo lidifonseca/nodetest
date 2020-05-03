@@ -109,7 +109,6 @@ export type ICrudGetAllActionPacienteMotivoInternacao<T> = (
   idPaciente?: any,
   idMotivoInternacao?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +118,6 @@ export const getEntities: ICrudGetAllActionPacienteMotivoInternacao<IPacienteMot
   idPaciente,
   idMotivoInternacao,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -127,13 +125,12 @@ export const getEntities: ICrudGetAllActionPacienteMotivoInternacao<IPacienteMot
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const idMotivoInternacaoRequest = idMotivoInternacao ? `idMotivoInternacao.contains=${idMotivoInternacao}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO_LIST,
     payload: axios.get<IPacienteMotivoInternacao>(
-      `${requestUrl}${idPacienteRequest}${idMotivoInternacaoRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idMotivoInternacaoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

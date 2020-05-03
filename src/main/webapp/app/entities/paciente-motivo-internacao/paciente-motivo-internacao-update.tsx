@@ -220,28 +220,6 @@ export class PacienteMotivoInternacaoUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="paciente-motivo-internacao-dataPost">
-                                <Translate contentKey="generadorApp.pacienteMotivoInternacao.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-motivo-internacao-dataPost"
-                                type="text"
-                                name="dataPost"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
                     </Row>
                   )}
                 </Col>

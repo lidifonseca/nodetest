@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -64,7 +55,6 @@ export interface IPacienteDispositivoAtualBaseState {
   jejunostomia: any;
   colostomia: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IPacienteDispositivoAtualState extends IPacienteDispositivoAtualBaseState, IPaginationBaseState {}
 
@@ -106,7 +96,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
     const jejunostomia = url.searchParams.get('jejunostomia') || '';
     const colostomia = url.searchParams.get('colostomia') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPaciente,
@@ -133,8 +122,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
       ileostomia,
       jejunostomia,
       colostomia,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -169,8 +157,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
         ileostomia: '',
         jejunostomia: '',
         colostomia: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -290,9 +277,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -326,7 +310,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
       jejunostomia,
       colostomia,
       idUsuario,
-      dataPost,
       activePage,
       itemsPerPage,
       sort,
@@ -358,7 +341,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
       jejunostomia,
       colostomia,
       idUsuario,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -409,10 +391,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="idPaciente"
                             id="paciente-dispositivo-atual-idPaciente"
                             value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -428,10 +406,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="idPacienteDispositivo"
                             id="paciente-dispositivo-atual-idPacienteDispositivo"
                             value={this.state.idPacienteDispositivo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -445,10 +419,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="tqtTraqueostomia"
                             id="paciente-dispositivo-atual-tqtTraqueostomia"
                             value={this.state.tqtTraqueostomia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -462,10 +432,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="gttGastrostomia"
                             id="paciente-dispositivo-atual-gttGastrostomia"
                             value={this.state.gttGastrostomia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -481,10 +447,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="sneSondaNasoenteral"
                             id="paciente-dispositivo-atual-sneSondaNasoenteral"
                             value={this.state.sneSondaNasoenteral}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -500,10 +462,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="svdSondaVesicalDeDemora"
                             id="paciente-dispositivo-atual-svdSondaVesicalDeDemora"
                             value={this.state.svdSondaVesicalDeDemora}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -519,10 +477,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="svaSondaVesicalDeAlivio"
                             id="paciente-dispositivo-atual-svaSondaVesicalDeAlivio"
                             value={this.state.svaSondaVesicalDeAlivio}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -531,16 +485,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                           <Label id="portACathLabel" for="paciente-dispositivo-atual-portACath">
                             <Translate contentKey="generadorApp.pacienteDispositivoAtual.portACath">Port A Cath</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="portACath"
-                            id="paciente-dispositivo-atual-portACath"
-                            value={this.state.portACath}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="portACath" id="paciente-dispositivo-atual-portACath" value={this.state.portACath} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -555,10 +500,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="piccAcessoVenosoCentral"
                             id="paciente-dispositivo-atual-piccAcessoVenosoCentral"
                             value={this.state.piccAcessoVenosoCentral}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -572,10 +513,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="ventiladores"
                             id="paciente-dispositivo-atual-ventiladores"
                             value={this.state.ventiladores}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -591,10 +528,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="uppUlceraPorPressao"
                             id="paciente-dispositivo-atual-uppUlceraPorPressao"
                             value={this.state.uppUlceraPorPressao}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -610,10 +543,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="avpAcessoVenosoPeriferico"
                             id="paciente-dispositivo-atual-avpAcessoVenosoPeriferico"
                             value={this.state.avpAcessoVenosoPeriferico}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -622,16 +551,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                           <Label id="uripenLabel" for="paciente-dispositivo-atual-uripen">
                             <Translate contentKey="generadorApp.pacienteDispositivoAtual.uripen">Uripen</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="uripen"
-                            id="paciente-dispositivo-atual-uripen"
-                            value={this.state.uripen}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="uripen" id="paciente-dispositivo-atual-uripen" value={this.state.uripen} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -644,10 +564,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="fraldaGeriatrica"
                             id="paciente-dispositivo-atual-fraldaGeriatrica"
                             value={this.state.fraldaGeriatrica}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -663,10 +579,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="sngSondaNasogastrica"
                             id="paciente-dispositivo-atual-sngSondaNasogastrica"
                             value={this.state.sngSondaNasogastrica}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -675,16 +587,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                           <Label id="bipapLabel" for="paciente-dispositivo-atual-bipap">
                             <Translate contentKey="generadorApp.pacienteDispositivoAtual.bipap">Bipap</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="bipap"
-                            id="paciente-dispositivo-atual-bipap"
-                            value={this.state.bipap}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="bipap" id="paciente-dispositivo-atual-bipap" value={this.state.bipap} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -692,16 +595,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                           <Label id="cpapLabel" for="paciente-dispositivo-atual-cpap">
                             <Translate contentKey="generadorApp.pacienteDispositivoAtual.cpap">Cpap</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="cpap"
-                            id="paciente-dispositivo-atual-cpap"
-                            value={this.state.cpap}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="cpap" id="paciente-dispositivo-atual-cpap" value={this.state.cpap} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -714,10 +608,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="cistostomia"
                             id="paciente-dispositivo-atual-cistostomia"
                             value={this.state.cistostomia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -733,10 +623,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="cateterNasalDeOxigenio"
                             id="paciente-dispositivo-atual-cateterNasalDeOxigenio"
                             value={this.state.cateterNasalDeOxigenio}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -752,10 +638,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="mascaraDeVentilacao"
                             id="paciente-dispositivo-atual-mascaraDeVentilacao"
                             value={this.state.mascaraDeVentilacao}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -771,10 +653,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="entubacaoOrotraqueal"
                             id="paciente-dispositivo-atual-entubacaoOrotraqueal"
                             value={this.state.entubacaoOrotraqueal}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -788,10 +666,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="ileostomia"
                             id="paciente-dispositivo-atual-ileostomia"
                             value={this.state.ileostomia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -805,10 +679,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="jejunostomia"
                             id="paciente-dispositivo-atual-jejunostomia"
                             value={this.state.jejunostomia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -822,10 +692,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                             name="colostomia"
                             id="paciente-dispositivo-atual-colostomia"
                             value={this.state.colostomia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -834,34 +700,7 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                           <Label id="idUsuarioLabel" for="paciente-dispositivo-atual-idUsuario">
                             <Translate contentKey="generadorApp.pacienteDispositivoAtual.idUsuario">Id Usuario</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="paciente-dispositivo-atual-idUsuario"
-                            value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-dispositivo-atual-dataPost">
-                            <Translate contentKey="generadorApp.pacienteDispositivoAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-dispositivo-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="string" name="idUsuario" id="paciente-dispositivo-atual-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
                     </div>
@@ -1005,10 +844,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                         <Translate contentKey="generadorApp.pacienteDispositivoAtual.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteDispositivoAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -1072,10 +907,6 @@ export class PacienteDispositivoAtual extends React.Component<IPacienteDispositi
                         <td>{pacienteDispositivoAtual.colostomia}</td>
 
                         <td>{pacienteDispositivoAtual.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteDispositivoAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

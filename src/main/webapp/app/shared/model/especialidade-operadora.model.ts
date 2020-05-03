@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { IOperadora } from 'app/shared/model/operadora.model';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
 
@@ -12,7 +11,6 @@ export interface IEspecialidadeOperadora {
   descontoCusto?: number;
   descontoVenda?: number;
   ativo?: number;
-  dataPost?: Moment;
   idOperadora?: string | any;
   idEspecialidade?: string | any;
 }

@@ -109,7 +109,6 @@ export type ICrudGetAllActionProfissionalArquivo<T> = (
   idProfissional?: any,
   arquivo?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +118,6 @@ export const getEntities: ICrudGetAllActionProfissionalArquivo<IProfissionalArqu
   idProfissional,
   arquivo,
   ativo,
-  dataPost,
   page,
   size,
   sort
@@ -127,13 +125,12 @@ export const getEntities: ICrudGetAllActionProfissionalArquivo<IProfissionalArqu
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const arquivoRequest = arquivo ? `arquivo.contains=${arquivo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALARQUIVO_LIST,
     payload: axios.get<IProfissionalArquivo>(
-      `${requestUrl}${idProfissionalRequest}${arquivoRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${arquivoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

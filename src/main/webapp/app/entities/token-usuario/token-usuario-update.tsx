@@ -42,7 +42,6 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
 
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataValida = convertDateTimeToServer(values.dataValida);
-    values.dataPost = convertDateTimeToServer(values.dataPost);
 
     if (errors.length === 0) {
       const { tokenUsuarioEntity } = this.props;
@@ -193,28 +192,6 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
                                 name="dataValida"
                                 placeholder={'YYYY-MM-DD HH:mm'}
                                 value={isNew ? null : convertDateTimeFromServer(this.props.tokenUsuarioEntity.dataValida)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="token-usuario-dataPost">
-                                <Translate contentKey="generadorApp.tokenUsuario.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="token-usuario-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.tokenUsuarioEntity.dataPost)}
                               />
                             </Col>
                           </Row>

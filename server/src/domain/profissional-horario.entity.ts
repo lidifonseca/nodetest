@@ -21,8 +21,5 @@ export default class ProfissionalHorario extends BaseEntity {
   @Column({ type: 'integer', name: 'confirm' })
   confirm: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

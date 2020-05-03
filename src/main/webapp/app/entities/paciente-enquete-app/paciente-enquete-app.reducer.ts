@@ -107,24 +107,20 @@ const apiUrl = 'api/paciente-enquete-apps';
 // Actions
 export type ICrudGetAllActionPacienteEnqueteApp<T> = (
   votacao?: any,
-  dataPost?: any,
   idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, dataPost, idPaciente, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, idPaciente, page, size, sort) => {
   const votacaoRequest = votacao ? `votacao.contains=${votacao}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST,
-    payload: axios.get<IPacienteEnqueteApp>(
-      `${requestUrl}${votacaoRequest}${dataPostRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPacienteEnqueteApp> = id => {

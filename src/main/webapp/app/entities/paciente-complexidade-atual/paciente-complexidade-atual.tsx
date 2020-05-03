@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -47,7 +38,6 @@ export interface IPacienteComplexidadeAtualBaseState {
   ventilacaoMecanica: any;
   telemonitoramente: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IPacienteComplexidadeAtualState extends IPacienteComplexidadeAtualBaseState, IPaginationBaseState {}
 
@@ -72,7 +62,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
     const ventilacaoMecanica = url.searchParams.get('ventilacaoMecanica') || '';
     const telemonitoramente = url.searchParams.get('telemonitoramente') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPaciente,
@@ -82,8 +71,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
       alta,
       ventilacaoMecanica,
       telemonitoramente,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -101,8 +89,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
         alta: '',
         ventilacaoMecanica: '',
         telemonitoramente: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -171,9 +158,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -190,7 +174,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
       ventilacaoMecanica,
       telemonitoramente,
       idUsuario,
-      dataPost,
       activePage,
       itemsPerPage,
       sort,
@@ -205,7 +188,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
       ventilacaoMecanica,
       telemonitoramente,
       idUsuario,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -334,21 +316,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                           <AvInput type="string" name="idUsuario" id="paciente-complexidade-atual-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-complexidade-atual-dataPost">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-complexidade-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                          />
-                        </Row>
-                      </Col>
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -410,10 +377,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                         <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -443,10 +406,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                         <td>{pacienteComplexidadeAtual.telemonitoramente}</td>
 
                         <td>{pacienteComplexidadeAtual.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteComplexidadeAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

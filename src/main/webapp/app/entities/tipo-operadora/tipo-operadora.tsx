@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface ITipoOperadoraProps extends StateProps, DispatchProps, RouteCom
 export interface ITipoOperadoraBaseState {
   tipo: any;
   ativo: any;
-  dataPost: any;
 }
 export interface ITipoOperadoraState extends ITipoOperadoraBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const tipo = url.searchParams.get('tipo') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       tipo,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -77,8 +65,7 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
     this.setState(
       {
         tipo: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipo, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tipo, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipo, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tipo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -181,15 +165,7 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                             <Translate contentKey="generadorApp.tipoOperadora.tipo">Tipo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tipo"
-                            id="tipo-operadora-tipo"
-                            value={this.state.tipo}
-                            validate={{
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tipo" id="tipo-operadora-tipo" value={this.state.tipo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -198,23 +174,7 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                             <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ativo"
-                            id="tipo-operadora-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              maxLength: { value: 1, errorMessage: translate('entity.validation.maxlength', { max: 1 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="tipo-operadora-dataPost">
-                            <Translate contentKey="generadorApp.tipoOperadora.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="tipo-operadora-dataPost" value={this.state.dataPost} />
+                          <AvInput type="text" name="ativo" id="tipo-operadora-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
                     </div>
@@ -252,10 +212,6 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                         <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tipoOperadora.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -273,10 +229,6 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                         <td>{tipoOperadora.tipo}</td>
 
                         <td>{tipoOperadora.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={tipoOperadora.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

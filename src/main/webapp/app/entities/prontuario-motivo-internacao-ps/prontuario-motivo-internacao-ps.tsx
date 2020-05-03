@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IProntuarioMotivoInternacaoPsBaseState {
   idPaciente: any;
   idMotivo: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IProntuarioMotivoInternacaoPsState extends IProntuarioMotivoInternacaoPsBaseState, IPaginationBaseState {}
 
@@ -64,14 +54,12 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const idMotivo = url.searchParams.get('idMotivo') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProntuario,
       idPaciente,
       idMotivo,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -85,8 +73,7 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
         idProntuario: '',
         idPaciente: '',
         idMotivo: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +130,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +137,8 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProntuario, idPaciente, idMotivo, idUsuario, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProntuario, idPaciente, idMotivo, idUsuario, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProntuario, idPaciente, idMotivo, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProntuario, idPaciente, idMotivo, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -201,10 +185,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                             name="idProntuario"
                             id="prontuario-motivo-internacao-ps-idProntuario"
                             value={this.state.idProntuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -218,10 +198,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                             name="idPaciente"
                             id="prontuario-motivo-internacao-ps-idPaciente"
                             value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -235,10 +211,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                             name="idMotivo"
                             id="prontuario-motivo-internacao-ps-idMotivo"
                             value={this.state.idMotivo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -252,25 +224,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                             name="idUsuario"
                             id="prontuario-motivo-internacao-ps-idUsuario"
                             value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="prontuario-motivo-internacao-ps-dataPost">
-                            <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="prontuario-motivo-internacao-ps-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
                           />
                         </Row>
                       </Col>
@@ -317,10 +270,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                         <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -342,10 +291,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                         <td>{prontuarioMotivoInternacaoPs.idMotivo}</td>
 
                         <td>{prontuarioMotivoInternacaoPs.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={prontuarioMotivoInternacaoPs.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

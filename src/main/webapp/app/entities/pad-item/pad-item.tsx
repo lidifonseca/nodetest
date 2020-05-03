@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -55,7 +56,6 @@ export interface IPadItemBaseState {
   observacao: any;
   sub: any;
   ativo: any;
-  dataPost: any;
   dataPadItemIncompleto: any;
   dataPadItemCompleto: any;
   numGhc: any;
@@ -96,7 +96,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
     const observacao = url.searchParams.get('observacao') || '';
     const sub = url.searchParams.get('sub') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const dataPadItemIncompleto = url.searchParams.get('dataPadItemIncompleto') || '';
     const dataPadItemCompleto = url.searchParams.get('dataPadItemCompleto') || '';
     const numGhc = url.searchParams.get('numGhc') || '';
@@ -124,7 +123,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       observacao,
       sub,
       ativo,
-      dataPost,
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
@@ -164,7 +162,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
         observacao: '',
         sub: '',
         ativo: '',
-        dataPost: '',
         dataPadItemIncompleto: '',
         dataPadItemCompleto: '',
         numGhc: '',
@@ -247,9 +244,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'dataPadItemIncompleto=' +
       this.state.dataPadItemIncompleto +
       '&' +
@@ -316,7 +310,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       observacao,
       sub,
       ativo,
-      dataPost,
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
@@ -347,7 +340,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       observacao,
       sub,
       ativo,
-      dataPost,
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
@@ -441,16 +433,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                           <Label id="observacaoLabel" for="pad-item-observacao">
                             <Translate contentKey="generadorApp.padItem.observacao">Observacao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="pad-item-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput id="pad-item-observacao" type="textarea" name="observacao" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -467,24 +450,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                             <Translate contentKey="generadorApp.padItem.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="pad-item-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-item-dataPost">
-                            <Translate contentKey="generadorApp.padItem.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -523,15 +488,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                             <Translate contentKey="generadorApp.padItem.numGhc">Num Ghc</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numGhc"
-                            id="pad-item-numGhc"
-                            value={this.state.numGhc}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numGhc" id="pad-item-numGhc" value={this.state.numGhc} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -721,10 +678,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                         <Translate contentKey="generadorApp.padItem.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padItem.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('dataPadItemIncompleto')}>
                         <Translate contentKey="generadorApp.padItem.dataPadItemIncompleto">Data Pad Item Incompleto</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -796,10 +749,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                         <td>{padItem.sub}</td>
 
                         <td>{padItem.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={padItem.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>
                           <TextFormat type="date" value={padItem.dataPadItemIncompleto} format={APP_DATE_FORMAT} />

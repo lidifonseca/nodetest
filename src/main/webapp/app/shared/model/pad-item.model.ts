@@ -17,10 +17,9 @@ export interface IPadItem {
   dataInicio?: Moment;
   dataFim?: Moment;
   qtdSessoes?: number;
-  observacao?: string;
+  observacao?: any;
   sub?: number;
   ativo?: number;
-  dataPost?: Moment;
   dataPadItemIncompleto?: Moment;
   dataPadItemCompleto?: Moment;
   numGhc?: string;

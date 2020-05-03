@@ -28,9 +28,6 @@ export default class Cid extends BaseEntity {
   @Column({ name: 'apelido', length: 30 })
   apelido: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => CidXPtaNovo,
     other => other.cidId

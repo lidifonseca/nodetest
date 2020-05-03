@@ -41,7 +41,6 @@ export interface IAtendimento {
   valor?: number;
   ordemAtendimento?: number;
   ativo?: number;
-  dataPost?: Moment;
   dataForaHora?: Moment;
   idUsuarioCancelamento?: number;
   dataCancelamento?: Moment;

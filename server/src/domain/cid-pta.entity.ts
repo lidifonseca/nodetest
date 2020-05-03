@@ -21,8 +21,5 @@ export default class CidPta extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo', nullable: false })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

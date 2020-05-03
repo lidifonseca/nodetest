@@ -110,24 +110,22 @@ export type ICrudGetAllActionApiName<T> = (
   apiReceiver?: any,
   apiObs?: any,
   ativo?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionApiName<IApiName> = (apiName, apiReceiver, apiObs, ativo, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionApiName<IApiName> = (apiName, apiReceiver, apiObs, ativo, page, size, sort) => {
   const apiNameRequest = apiName ? `apiName.contains=${apiName}&` : '';
   const apiReceiverRequest = apiReceiver ? `apiReceiver.contains=${apiReceiver}&` : '';
   const apiObsRequest = apiObs ? `apiObs.contains=${apiObs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_APINAME_LIST,
     payload: axios.get<IApiName>(
-      `${requestUrl}${apiNameRequest}${apiReceiverRequest}${apiObsRequest}${ativoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${apiNameRequest}${apiReceiverRequest}${apiObsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

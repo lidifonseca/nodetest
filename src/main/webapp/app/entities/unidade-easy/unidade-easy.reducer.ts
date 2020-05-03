@@ -127,7 +127,6 @@ export type ICrudGetAllActionUnidadeEasy<T> = (
   tisscbo?: any,
   tisscoduf?: any,
   ativo?: any,
-  dataPost?: any,
   categoriaUnidade?: any,
   especialidadeUnidade?: any,
   pacientePedido?: any,
@@ -159,7 +158,6 @@ export const getEntities: ICrudGetAllActionUnidadeEasy<IUnidadeEasy> = (
   tisscbo,
   tisscoduf,
   ativo,
-  dataPost,
   categoriaUnidade,
   especialidadeUnidade,
   pacientePedido,
@@ -189,7 +187,6 @@ export const getEntities: ICrudGetAllActionUnidadeEasy<IUnidadeEasy> = (
   const tisscboRequest = tisscbo ? `tisscbo.contains=${tisscbo}&` : '';
   const tisscodufRequest = tisscoduf ? `tisscoduf.contains=${tisscoduf}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const categoriaUnidadeRequest = categoriaUnidade ? `categoriaUnidade.equals=${categoriaUnidade}&` : '';
   const especialidadeUnidadeRequest = especialidadeUnidade ? `especialidadeUnidade.equals=${especialidadeUnidade}&` : '';
   const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
@@ -199,7 +196,7 @@ export const getEntities: ICrudGetAllActionUnidadeEasy<IUnidadeEasy> = (
   return {
     type: ACTION_TYPES.FETCH_UNIDADEEASY_LIST,
     payload: axios.get<IUnidadeEasy>(
-      `${requestUrl}${razaoSocialRequest}${nomeFantasiaRequest}${cnpjRequest}${ieRequest}${telefone1Request}${telefone2Request}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${cepRequest}${regansRequest}${regcnesRequest}${tissresponsavelRequest}${tissconselhoRequest}${tissinscricaoRequest}${tisscboRequest}${tisscodufRequest}${ativoRequest}${dataPostRequest}${categoriaUnidadeRequest}${especialidadeUnidadeRequest}${pacientePedidoRequest}${unidadeEasyAreaAtuacaoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${razaoSocialRequest}${nomeFantasiaRequest}${cnpjRequest}${ieRequest}${telefone1Request}${telefone2Request}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${cepRequest}${regansRequest}${regcnesRequest}${tissresponsavelRequest}${tissconselhoRequest}${tissinscricaoRequest}${tisscboRequest}${tisscodufRequest}${ativoRequest}${categoriaUnidadeRequest}${especialidadeUnidadeRequest}${pacientePedidoRequest}${unidadeEasyAreaAtuacaoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

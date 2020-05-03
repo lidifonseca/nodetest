@@ -114,7 +114,6 @@ export type ICrudGetAllActionPadItemTemp<T> = (
   dataFim?: any,
   qtdSessoes?: any,
   observacao?: any,
-  dataPost?: any,
   cidXPtaNovoId?: any,
   categoriaId?: any,
   numGhc?: any,
@@ -132,7 +131,6 @@ export const getEntities: ICrudGetAllActionPadItemTemp<IPadItemTemp> = (
   dataFim,
   qtdSessoes,
   observacao,
-  dataPost,
   cidXPtaNovoId,
   categoriaId,
   numGhc,
@@ -148,7 +146,6 @@ export const getEntities: ICrudGetAllActionPadItemTemp<IPadItemTemp> = (
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
   const qtdSessoesRequest = qtdSessoes ? `qtdSessoes.contains=${qtdSessoes}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const cidXPtaNovoIdRequest = cidXPtaNovoId ? `cidXPtaNovoId.contains=${cidXPtaNovoId}&` : '';
   const categoriaIdRequest = categoriaId ? `categoriaId.contains=${categoriaId}&` : '';
   const numGhcRequest = numGhc ? `numGhc.contains=${numGhc}&` : '';
@@ -157,7 +154,7 @@ export const getEntities: ICrudGetAllActionPadItemTemp<IPadItemTemp> = (
   return {
     type: ACTION_TYPES.FETCH_PADITEMTEMP_LIST,
     payload: axios.get<IPadItemTemp>(
-      `${requestUrl}${sessionIdRequest}${idEspecialidadeRequest}${idPeriodicidadeRequest}${idPeriodoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${dataPostRequest}${cidXPtaNovoIdRequest}${categoriaIdRequest}${numGhcRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${sessionIdRequest}${idEspecialidadeRequest}${idPeriodicidadeRequest}${idPeriodoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${cidXPtaNovoIdRequest}${categoriaIdRequest}${numGhcRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

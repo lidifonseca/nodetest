@@ -112,7 +112,6 @@ export type ICrudGetAllActionOperadora<T> = (
   ie?: any,
   site?: any,
   ativo?: any,
-  dataPost?: any,
   idUnidade?: any,
   endereco?: any,
   contatoCentralAtendimento?: any,
@@ -123,10 +122,10 @@ export type ICrudGetAllActionOperadora<T> = (
   nomeContatoFinanceiro?: any,
   contatoFinanceiro?: any,
   emailFinanceiro?: any,
-  idTipoOperadora?: any,
   atendimento?: any,
   especialidadeOperadora?: any,
   pacienteOperadora?: any,
+  idTipoOperadora?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -139,7 +138,6 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   ie,
   site,
   ativo,
-  dataPost,
   idUnidade,
   endereco,
   contatoCentralAtendimento,
@@ -150,10 +148,10 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   nomeContatoFinanceiro,
   contatoFinanceiro,
   emailFinanceiro,
-  idTipoOperadora,
   atendimento,
   especialidadeOperadora,
   pacienteOperadora,
+  idTipoOperadora,
   page,
   size,
   sort
@@ -164,7 +162,6 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   const ieRequest = ie ? `ie.contains=${ie}&` : '';
   const siteRequest = site ? `site.contains=${site}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const enderecoRequest = endereco ? `endereco.contains=${endereco}&` : '';
   const contatoCentralAtendimentoRequest = contatoCentralAtendimento
@@ -177,16 +174,16 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   const nomeContatoFinanceiroRequest = nomeContatoFinanceiro ? `nomeContatoFinanceiro.contains=${nomeContatoFinanceiro}&` : '';
   const contatoFinanceiroRequest = contatoFinanceiro ? `contatoFinanceiro.contains=${contatoFinanceiro}&` : '';
   const emailFinanceiroRequest = emailFinanceiro ? `emailFinanceiro.contains=${emailFinanceiro}&` : '';
-  const idTipoOperadoraRequest = idTipoOperadora ? `idTipoOperadora.contains=${idTipoOperadora}&` : '';
   const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
   const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
   const pacienteOperadoraRequest = pacienteOperadora ? `pacienteOperadora.equals=${pacienteOperadora}&` : '';
+  const idTipoOperadoraRequest = idTipoOperadora ? `idTipoOperadora.equals=${idTipoOperadora}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_OPERADORA_LIST,
     payload: axios.get<IOperadora>(
-      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${dataPostRequest}${idUnidadeRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${idTipoOperadoraRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${pacienteOperadoraRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${idUnidadeRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${pacienteOperadoraRequest}${idTipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -200,7 +197,8 @@ export const getEntity: ICrudGetAction<IOperadora> = id => {
 
 export const createEntity: ICrudPutAction<IOperadora> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    idTipoOperadora: entity.idTipoOperadora === 'null' ? null : entity.idTipoOperadora
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_OPERADORA,
@@ -211,7 +209,7 @@ export const createEntity: ICrudPutAction<IOperadora> = entity => async dispatch
 };
 
 export const updateEntity: ICrudPutAction<IOperadora> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, idTipoOperadora: entity.idTipoOperadora === 'null' ? null : entity.idTipoOperadora };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_OPERADORA,
     payload: axios.put(apiUrl, cleanEntity(entity))

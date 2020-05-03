@@ -16,9 +16,6 @@ export default class AtendimentoAssinaturas extends BaseEntity {
   @Column({ name: 'arquivo_assinatura', length: 150 })
   arquivoAssinatura: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => Atendimento)
   idAtendimento: Atendimento;
 

@@ -108,7 +108,6 @@ const apiUrl = 'api/pad-item-atividades';
 export type ICrudGetAllActionPadItemAtividade<T> = (
   dataInicio?: any,
   dataFim?: any,
-  dataPost?: any,
   idAtividade?: any,
   idPadItem?: any,
   page?: number,
@@ -119,7 +118,6 @@ export type ICrudGetAllActionPadItemAtividade<T> = (
 export const getEntities: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (
   dataInicio,
   dataFim,
-  dataPost,
   idAtividade,
   idPadItem,
   page,
@@ -128,7 +126,6 @@ export const getEntities: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> =
 ) => {
   const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idAtividadeRequest = idAtividade ? `idAtividade.equals=${idAtividade}&` : '';
   const idPadItemRequest = idPadItem ? `idPadItem.equals=${idPadItem}&` : '';
 
@@ -136,7 +133,7 @@ export const getEntities: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> =
   return {
     type: ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST,
     payload: axios.get<IPadItemAtividade>(
-      `${requestUrl}${dataInicioRequest}${dataFimRequest}${dataPostRequest}${idAtividadeRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataInicioRequest}${dataFimRequest}${idAtividadeRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

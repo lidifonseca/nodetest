@@ -89,23 +89,6 @@ export class PadItemAtividadeDetail extends React.Component<IPadItemAtividadeDet
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.padItemAtividade.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={padItemAtividadeEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.padItemAtividade.idAtividade">Id Atividade</Translate>
                         </dt>
                       </Col>

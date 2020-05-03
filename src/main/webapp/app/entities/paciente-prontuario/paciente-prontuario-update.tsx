@@ -4,11 +4,11 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './paciente-prontuario.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './paciente-prontuario.reducer';
 import { IPacienteProntuario } from 'app/shared/model/paciente-prontuario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -40,9 +40,16 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataConsulta = convertDateTimeToServer(values.dataConsulta);
-    values.dataPost = convertDateTimeToServer(values.dataPost);
 
     if (errors.length === 0) {
       const { pacienteProntuarioEntity } = this.props;
@@ -66,6 +73,8 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
   render() {
     const { pacienteProntuarioEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { oQue, resultado } = pacienteProntuarioEntity;
 
     return (
       <div>
@@ -188,14 +197,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="paciente-prontuario-oQue"
-                                type="text"
-                                name="oQue"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -210,14 +212,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="paciente-prontuario-resultado"
-                                type="text"
-                                name="resultado"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -435,28 +430,6 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                         <AvGroup>
                           <Row>
                             <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="paciente-prontuario-dataPost">
-                                <Translate contentKey="generadorApp.pacienteProntuario.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="paciente-prontuario-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.pacienteProntuarioEntity.dataPost)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
                               <Label className="mt-2" id="dataManifestacaoLabel" for="paciente-prontuario-dataManifestacao">
                                 <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
                               </Label>
@@ -494,6 +467,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

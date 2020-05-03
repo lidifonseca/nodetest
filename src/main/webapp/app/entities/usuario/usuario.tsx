@@ -141,7 +141,6 @@ export interface IUsuarioBaseState {
   envioPedido: any;
   alertaAtendimento: any;
   ativo: any;
-  dataPost: any;
   envioGlosado: any;
   emergencia: any;
   token: any;
@@ -286,7 +285,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
     const envioPedido = url.searchParams.get('envioPedido') || '';
     const alertaAtendimento = url.searchParams.get('alertaAtendimento') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const envioGlosado = url.searchParams.get('envioGlosado') || '';
     const emergencia = url.searchParams.get('emergencia') || '';
     const token = url.searchParams.get('token') || '';
@@ -418,7 +416,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       envioPedido,
       alertaAtendimento,
       ativo,
-      dataPost,
       envioGlosado,
       emergencia,
       token,
@@ -559,7 +556,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
         envioPedido: '',
         alertaAtendimento: '',
         ativo: '',
-        dataPost: '',
         envioGlosado: '',
         emergencia: '',
         token: '',
@@ -930,9 +926,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'envioGlosado=' +
       this.state.envioGlosado +
       '&' +
@@ -1127,7 +1120,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       envioPedido,
       alertaAtendimento,
       ativo,
-      dataPost,
       envioGlosado,
       emergencia,
       token,
@@ -1262,7 +1254,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       envioPedido,
       alertaAtendimento,
       ativo,
-      dataPost,
       envioGlosado,
       emergencia,
       token,
@@ -1336,15 +1327,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.idUnidade">Id Unidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUnidade"
-                            id="usuario-idUnidade"
-                            value={this.state.idUnidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUnidade" id="usuario-idUnidade" value={this.state.idUnidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1353,15 +1336,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.idOperadora">Id Operadora</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idOperadora"
-                            id="usuario-idOperadora"
-                            value={this.state.idOperadora}
-                            validate={{
-                              maxLength: { value: 1000, errorMessage: translate('entity.validation.maxlength', { max: 1000 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="idOperadora" id="usuario-idOperadora" value={this.state.idOperadora} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1370,15 +1345,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.senha">Senha</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="senha"
-                            id="usuario-senha"
-                            value={this.state.senha}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="senha" id="usuario-senha" value={this.state.senha} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1387,15 +1354,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.nome">Nome</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="usuario-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nome" id="usuario-nome" value={this.state.nome} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1404,15 +1363,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.email">Email</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="email"
-                            id="usuario-email"
-                            value={this.state.email}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="email" id="usuario-email" value={this.state.email} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1421,15 +1372,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.telefone">Telefone</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone"
-                            id="usuario-telefone"
-                            value={this.state.telefone}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone" id="usuario-telefone" value={this.state.telefone} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1438,15 +1381,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.celular">Celular</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular"
-                            id="usuario-celular"
-                            value={this.state.celular}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular" id="usuario-celular" value={this.state.celular} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1455,15 +1390,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.cpf">Cpf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cpf"
-                            id="usuario-cpf"
-                            value={this.state.cpf}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cpf" id="usuario-cpf" value={this.state.cpf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1472,15 +1399,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.rg">Rg</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="rg"
-                            id="usuario-rg"
-                            value={this.state.rg}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="rg" id="usuario-rg" value={this.state.rg} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -2337,24 +2256,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                       </Col>
                       <Col md="3">
                         <Row>
-                          <Label id="dataPostLabel" for="usuario-dataPost">
-                            <Translate contentKey="generadorApp.usuario.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="usuario-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
                           <Label id="envioGlosadoLabel" for="usuario-envioGlosado">
                             <Translate contentKey="generadorApp.usuario.envioGlosado">Envio Glosado</Translate>
                           </Label>
@@ -2390,16 +2291,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                           <Label id="ouvirLigacaoLabel" for="usuario-ouvirLigacao">
                             <Translate contentKey="generadorApp.usuario.ouvirLigacao">Ouvir Ligacao</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="ouvirLigacao"
-                            id="usuario-ouvirLigacao"
-                            value={this.state.ouvirLigacao}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="ouvirLigacao" id="usuario-ouvirLigacao" value={this.state.ouvirLigacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -2560,15 +2452,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.idAreaAtuacao">Id Area Atuacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idAreaAtuacao"
-                            id="usuario-idAreaAtuacao"
-                            value={this.state.idAreaAtuacao}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="idAreaAtuacao" id="usuario-idAreaAtuacao" value={this.state.idAreaAtuacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -2621,15 +2505,7 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                             <Translate contentKey="generadorApp.usuario.senhaChat">Senha Chat</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="senhaChat"
-                            id="usuario-senhaChat"
-                            value={this.state.senhaChat}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="senhaChat" id="usuario-senhaChat" value={this.state.senhaChat} />
                         </Row>
                       </Col>
 
@@ -3083,10 +2959,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         <Translate contentKey="generadorApp.usuario.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.usuario.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('envioGlosado')}>
                         <Translate contentKey="generadorApp.usuario.envioGlosado">Envio Glosado</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -3412,10 +3284,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         <td>{usuario.alertaAtendimento}</td>
 
                         <td>{usuario.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={usuario.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{usuario.envioGlosado}</td>
 

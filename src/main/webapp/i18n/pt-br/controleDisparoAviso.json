@@ -18,8 +18,7 @@
       },
       "idAtendimento": "Id Atendimento",
       "qtdDisparo": "Qtd Disparo",
-      "avisopush": "Avisopush",
-      "dataPost": "Data Post"
+      "avisopush": "Avisopush"
     }
   }
 }

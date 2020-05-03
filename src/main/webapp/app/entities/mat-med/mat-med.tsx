@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IMatMedBaseState {
   idTipoMatMed: any;
   valor: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IMatMedState extends IMatMedBaseState, IPaginationBaseState {}
 
@@ -64,14 +54,12 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
     const idTipoMatMed = url.searchParams.get('idTipoMatMed') || '';
     const valor = url.searchParams.get('valor') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       nome,
       idTipoMatMed,
       valor,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -85,8 +73,7 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
         nome: '',
         idTipoMatMed: '',
         valor: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +130,6 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +137,8 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { nome, idTipoMatMed, valor, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(nome, idTipoMatMed, valor, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { nome, idTipoMatMed, valor, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(nome, idTipoMatMed, valor, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -195,15 +179,7 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                             <Translate contentKey="generadorApp.matMed.nome">Nome</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="mat-med-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 80, errorMessage: translate('entity.validation.maxlength', { max: 80 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nome" id="mat-med-nome" value={this.state.nome} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -232,14 +208,6 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                             <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="mat-med-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="mat-med-dataPost">
-                            <Translate contentKey="generadorApp.matMed.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="mat-med-dataPost" value={this.state.dataPost} />
                         </Row>
                       </Col>
                     </div>
@@ -285,10 +253,6 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                         <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.matMed.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -310,10 +274,6 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                         <td>{matMed.valor}</td>
 
                         <td>{matMed.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={matMed.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

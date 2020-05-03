@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction, openFile, byteSize } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -61,7 +61,18 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{categoriaContratoEntity.contrato}</dd>
+                        <dd>
+                          {categoriaContratoEntity.contrato ? (
+                            <div>
+                              <a onClick={openFile(categoriaContratoEntity.contratoContentType, categoriaContratoEntity.contrato)}>
+                                <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
+                              </a>
+                              <span>
+                                {categoriaContratoEntity.contratoContentType}, {byteSize(categoriaContratoEntity.contrato)}
+                              </span>
+                            </div>
+                          ) : null}
+                        </dd>
                       </Col>
                     </Row>
                   </Col>
@@ -77,23 +88,6 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                       </Col>
                       <Col md="9">
                         <dd>{categoriaContratoEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.categoriaContrato.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={categoriaContratoEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
                       </Col>
                     </Row>
                   </Col>

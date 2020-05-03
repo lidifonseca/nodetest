@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IPadPtaBaseState {
   idDescPta: any;
   idCid: any;
   idUsuario: any;
-  dataPost: any;
   idCidXPtaNovo: any;
 }
 export interface IPadPtaState extends IPadPtaBaseState, IPaginationBaseState {}
@@ -65,7 +55,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
     const idDescPta = url.searchParams.get('idDescPta') || '';
     const idCid = url.searchParams.get('idCid') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
     const idCidXPtaNovo = url.searchParams.get('idCidXPtaNovo') || '';
 
     return {
@@ -73,7 +62,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
       idDescPta,
       idCid,
       idUsuario,
-      dataPost,
       idCidXPtaNovo
     };
   };
@@ -89,7 +77,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
         idDescPta: '',
         idCid: '',
         idUsuario: '',
-        dataPost: '',
         idCidXPtaNovo: ''
       },
       () => this.sortEntities()
@@ -147,9 +134,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idCidXPtaNovo=' +
       this.state.idCidXPtaNovo +
       '&' +
@@ -160,8 +144,8 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPad, idDescPta, idCid, idUsuario, dataPost, idCidXPtaNovo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPad, idDescPta, idCid, idUsuario, dataPost, idCidXPtaNovo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPad, idDescPta, idCid, idUsuario, idCidXPtaNovo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPad, idDescPta, idCid, idUsuario, idCidXPtaNovo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -202,15 +186,7 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                             <Translate contentKey="generadorApp.padPta.idPad">Id Pad</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idPad"
-                            id="pad-pta-idPad"
-                            value={this.state.idPad}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idPad" id="pad-pta-idPad" value={this.state.idPad} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -228,15 +204,7 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                             <Translate contentKey="generadorApp.padPta.idCid">Id Cid</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idCid"
-                            id="pad-pta-idCid"
-                            value={this.state.idCid}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idCid" id="pad-pta-idCid" value={this.state.idCid} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -245,33 +213,7 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                             <Translate contentKey="generadorApp.padPta.idUsuario">Id Usuario</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUsuario"
-                            id="pad-pta-idUsuario"
-                            value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="pad-pta-dataPost">
-                            <Translate contentKey="generadorApp.padPta.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-pta-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUsuario" id="pad-pta-idUsuario" value={this.state.idUsuario} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -279,16 +221,7 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                           <Label id="idCidXPtaNovoLabel" for="pad-pta-idCidXPtaNovo">
                             <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idCidXPtaNovo"
-                            id="pad-pta-idCidXPtaNovo"
-                            value={this.state.idCidXPtaNovo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idCidXPtaNovo" id="pad-pta-idCidXPtaNovo" value={this.state.idCidXPtaNovo} />
                         </Row>
                       </Col>
                     </div>
@@ -334,10 +267,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                         <Translate contentKey="generadorApp.padPta.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.padPta.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th className="hand" onClick={this.sort('idCidXPtaNovo')}>
                         <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -363,10 +292,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                         <td>{padPta.idCid}</td>
 
                         <td>{padPta.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={padPta.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td>{padPta.idCidXPtaNovo}</td>
 

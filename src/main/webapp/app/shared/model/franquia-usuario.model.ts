@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { ILogUserFranquia } from 'app/shared/model/log-user-franquia.model';
 import { IFranquia } from 'app/shared/model/franquia.model';
 
@@ -41,7 +40,6 @@ export interface IFranquiaUsuario {
   envioIntercorrencia?: number;
   envioCancelamento?: number;
   ativo?: number;
-  dataPost?: Moment;
   logUserFranquias?: ILogUserFranquia[];
   idFranquia?: string | any;
 }

@@ -15,8 +15,5 @@ export default class StatusFinanceiro extends BaseEntity {
   @Column({ name: 'ativo', length: 2 })
   ativo: string;
 
-  @Column({ name: 'data_post', length: 45 })
-  dataPost: string;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

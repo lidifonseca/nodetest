@@ -111,7 +111,6 @@ export type ICrudGetAllActionPacienteDadosCartao<T> = (
   validade?: any,
   codAtivacao?: any,
   ativo?: any,
-  dataPost?: any,
   pacientePedido?: any,
   idPaciente?: any,
   page?: number,
@@ -125,7 +124,6 @@ export const getEntities: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCar
   validade,
   codAtivacao,
   ativo,
-  dataPost,
   pacientePedido,
   idPaciente,
   page,
@@ -137,7 +135,6 @@ export const getEntities: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCar
   const validadeRequest = validade ? `validade.equals=${validade}&` : '';
   const codAtivacaoRequest = codAtivacao ? `codAtivacao.contains=${codAtivacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
@@ -145,7 +142,7 @@ export const getEntities: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCar
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST,
     payload: axios.get<IPacienteDadosCartao>(
-      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}${dataPostRequest}${pacientePedidoRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}${pacientePedidoRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

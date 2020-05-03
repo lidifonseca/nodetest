@@ -1543,23 +1543,6 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.usuario.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={usuarioEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="envioGlosado">
                             <Translate contentKey="generadorApp.usuario.envioGlosado">Envio Glosado</Translate>
                           </span>

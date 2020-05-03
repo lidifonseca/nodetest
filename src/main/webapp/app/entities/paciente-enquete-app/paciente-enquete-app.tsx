@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IPacienteEnqueteAppProps extends StateProps, DispatchProps, Rou
 
 export interface IPacienteEnqueteAppBaseState {
   votacao: any;
-  dataPost: any;
   idPaciente: any;
 }
 export interface IPacienteEnqueteAppState extends IPacienteEnqueteAppBaseState, IPaginationBaseState {}
@@ -62,13 +52,11 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
   getPacienteEnqueteAppState = (location): IPacienteEnqueteAppBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const votacao = url.searchParams.get('votacao') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idPaciente = url.searchParams.get('idPaciente') || '';
 
     return {
       votacao,
-      dataPost,
       idPaciente
     };
   };
@@ -83,7 +71,6 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
     this.setState(
       {
         votacao: '',
-        dataPost: '',
         idPaciente: ''
       },
       () => this.sortEntities()
@@ -132,9 +119,6 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
       'votacao=' +
       this.state.votacao +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idPaciente=' +
       this.state.idPaciente +
       '&' +
@@ -145,8 +129,8 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { votacao, dataPost, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(votacao, dataPost, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { votacao, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(votacao, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -187,24 +171,6 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                             <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
                           </Label>
                           <AvInput type="string" name="votacao" id="paciente-enquete-app-votacao" value={this.state.votacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-enquete-app-dataPost">
-                            <Translate contentKey="generadorApp.pacienteEnqueteApp.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-enquete-app-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -258,10 +224,6 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                         <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteEnqueteApp.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.pacienteEnqueteApp.idPaciente">Id Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -281,10 +243,6 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                         </td>
 
                         <td>{pacienteEnqueteApp.votacao}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteEnqueteApp.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {pacienteEnqueteApp.idPaciente ? (
                             <Link to={`paciente/${pacienteEnqueteApp.idPaciente.id}`}>{pacienteEnqueteApp.idPaciente.id}</Link>

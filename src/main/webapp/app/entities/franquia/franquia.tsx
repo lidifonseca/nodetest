@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -57,7 +48,6 @@ export interface IFranquiaBaseState {
   uf: any;
   observacao: any;
   ativo: any;
-  dataPost: any;
   franquiaAreaAtuacao: any;
   franquiaStatusAtual: any;
   franquiaUsuario: any;
@@ -95,7 +85,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
     const uf = url.searchParams.get('uf') || '';
     const observacao = url.searchParams.get('observacao') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const franquiaAreaAtuacao = url.searchParams.get('franquiaAreaAtuacao') || '';
     const franquiaStatusAtual = url.searchParams.get('franquiaStatusAtual') || '';
@@ -120,7 +109,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
       uf,
       observacao,
       ativo,
-      dataPost,
       franquiaAreaAtuacao,
       franquiaStatusAtual,
       franquiaUsuario
@@ -152,7 +140,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
         uf: '',
         observacao: '',
         ativo: '',
-        dataPost: '',
         franquiaAreaAtuacao: '',
         franquiaStatusAtual: '',
         franquiaUsuario: ''
@@ -254,9 +241,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'franquiaAreaAtuacao=' +
       this.state.franquiaAreaAtuacao +
       '&' +
@@ -292,7 +276,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
       uf,
       observacao,
       ativo,
-      dataPost,
       franquiaAreaAtuacao,
       franquiaStatusAtual,
       franquiaUsuario,
@@ -320,7 +303,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
       uf,
       observacao,
       ativo,
-      dataPost,
       franquiaAreaAtuacao,
       franquiaStatusAtual,
       franquiaUsuario,
@@ -377,15 +359,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.nomeFantasia">Nome Fantasia</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nomeFantasia"
-                            id="franquia-nomeFantasia"
-                            value={this.state.nomeFantasia}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nomeFantasia" id="franquia-nomeFantasia" value={this.state.nomeFantasia} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -394,15 +368,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.razaoSocial">Razao Social</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="razaoSocial"
-                            id="franquia-razaoSocial"
-                            value={this.state.razaoSocial}
-                            validate={{
-                              maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="razaoSocial" id="franquia-razaoSocial" value={this.state.razaoSocial} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -411,15 +377,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.cnpj">Cnpj</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cnpj"
-                            id="franquia-cnpj"
-                            value={this.state.cnpj}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cnpj" id="franquia-cnpj" value={this.state.cnpj} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -428,15 +386,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.ie">Ie</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ie"
-                            id="franquia-ie"
-                            value={this.state.ie}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="ie" id="franquia-ie" value={this.state.ie} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -445,15 +395,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.site">Site</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="site"
-                            id="franquia-site"
-                            value={this.state.site}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="site" id="franquia-site" value={this.state.site} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -462,15 +404,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.telefone1">Telefone 1</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone1"
-                            id="franquia-telefone1"
-                            value={this.state.telefone1}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone1" id="franquia-telefone1" value={this.state.telefone1} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -479,15 +413,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.telefone2">Telefone 2</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone2"
-                            id="franquia-telefone2"
-                            value={this.state.telefone2}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone2" id="franquia-telefone2" value={this.state.telefone2} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -496,15 +422,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.celular">Celular</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular"
-                            id="franquia-celular"
-                            value={this.state.celular}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular" id="franquia-celular" value={this.state.celular} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -513,15 +431,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.cep">Cep</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="franquia-cep"
-                            value={this.state.cep}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cep" id="franquia-cep" value={this.state.cep} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -530,15 +440,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.endereco">Endereco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="endereco"
-                            id="franquia-endereco"
-                            value={this.state.endereco}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="endereco" id="franquia-endereco" value={this.state.endereco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -547,15 +449,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.numero">Numero</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numero"
-                            id="franquia-numero"
-                            value={this.state.numero}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numero" id="franquia-numero" value={this.state.numero} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -564,15 +458,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.complemento">Complemento</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complemento"
-                            id="franquia-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complemento" id="franquia-complemento" value={this.state.complemento} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -581,15 +467,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.bairro">Bairro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bairro"
-                            id="franquia-bairro"
-                            value={this.state.bairro}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bairro" id="franquia-bairro" value={this.state.bairro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -598,15 +476,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.cidade">Cidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cidade"
-                            id="franquia-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cidade" id="franquia-cidade" value={this.state.cidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -615,15 +485,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.uf">Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="uf"
-                            id="franquia-uf"
-                            value={this.state.uf}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="uf" id="franquia-uf" value={this.state.uf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -632,15 +494,7 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.observacao">Observacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="franquia-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="observacao" id="franquia-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -649,24 +503,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                             <Translate contentKey="generadorApp.franquia.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="franquia-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="franquia-dataPost">
-                            <Translate contentKey="generadorApp.franquia.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="franquia-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -780,10 +616,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                         <Translate contentKey="generadorApp.franquia.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.franquia.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -833,10 +665,6 @@ export class Franquia extends React.Component<IFranquiaProps, IFranquiaState> {
                         <td>{franquia.observacao}</td>
 
                         <td>{franquia.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={franquia.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

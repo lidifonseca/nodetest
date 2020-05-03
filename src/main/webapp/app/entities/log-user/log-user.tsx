@@ -17,10 +17,10 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -46,7 +46,6 @@ export interface ILogUserProps extends StateProps, DispatchProps, RouteComponent
 export interface ILogUserBaseState {
   idUsuario: any;
   descricao: any;
-  dataPost: any;
   idAcao: any;
   idTela: any;
 }
@@ -67,7 +66,6 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const idUsuario = url.searchParams.get('idUsuario') || '';
     const descricao = url.searchParams.get('descricao') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idAcao = url.searchParams.get('idAcao') || '';
     const idTela = url.searchParams.get('idTela') || '';
@@ -75,7 +73,6 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
     return {
       idUsuario,
       descricao,
-      dataPost,
       idAcao,
       idTela
     };
@@ -93,7 +90,6 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
       {
         idUsuario: '',
         descricao: '',
-        dataPost: '',
         idAcao: '',
         idTela: ''
       },
@@ -146,9 +142,6 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
       'descricao=' +
       this.state.descricao +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idAcao=' +
       this.state.idAcao +
       '&' +
@@ -162,8 +155,8 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, descricao, dataPost, idAcao, idTela, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idUsuario, descricao, dataPost, idAcao, idTela, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idUsuario, descricao, idAcao, idTela, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idUsuario, descricao, idAcao, idTela, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -212,34 +205,7 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                           <Label id="descricaoLabel" for="log-user-descricao">
                             <Translate contentKey="generadorApp.logUser.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="descricao"
-                            id="log-user-descricao"
-                            value={this.state.descricao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="log-user-dataPost">
-                            <Translate contentKey="generadorApp.logUser.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="log-user-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput id="log-user-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
 
@@ -317,10 +283,6 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                         <Translate contentKey="generadorApp.logUser.descricao">Descricao</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.logUser.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.logUser.idAcao">Id Acao</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -346,10 +308,6 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                         <td>{logUser.idUsuario}</td>
 
                         <td>{logUser.descricao}</td>
-
-                        <td>
-                          <TextFormat type="date" value={logUser.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>{logUser.idAcao ? <Link to={`acao/${logUser.idAcao.id}`}>{logUser.idAcao.id}</Link> : ''}</td>
                         <td>{logUser.idTela ? <Link to={`tela/${logUser.idTela.id}`}>{logUser.idTela.id}</Link> : ''}</td>
 

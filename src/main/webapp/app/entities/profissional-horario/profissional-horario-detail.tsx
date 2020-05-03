@@ -112,23 +112,6 @@ export class ProfissionalHorarioDetail extends React.Component<IProfissionalHora
                       </Col>
                     </Row>
                   </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.profissionalHorario.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={profissionalHorarioEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
                 </Row>
                 <Button tag={Link} to="/profissional-horario" replace color="info">
                   <FontAwesomeIcon icon="arrow-left" />{' '}

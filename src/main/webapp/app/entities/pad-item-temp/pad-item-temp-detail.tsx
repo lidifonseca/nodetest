@@ -178,23 +178,6 @@ export class PadItemTempDetail extends React.Component<IPadItemTempDetailProps> 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.padItemTemp.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={padItemTempEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="cidXPtaNovoId">
                             <Translate contentKey="generadorApp.padItemTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
                           </span>

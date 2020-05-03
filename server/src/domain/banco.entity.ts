@@ -15,8 +15,5 @@ export default class Banco extends BaseEntity {
   @Column({ name: 'banco', length: 100 })
   banco: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

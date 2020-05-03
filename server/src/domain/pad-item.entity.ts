@@ -33,17 +33,14 @@ export default class PadItem extends BaseEntity {
   @Column({ type: 'integer', name: 'qtd_sessoes' })
   qtdSessoes: number;
 
-  @Column({ name: 'observacao', length: 255 })
-  observacao: string;
+  @Column({ type: 'blob', name: 'observacao' })
+  observacao: any;
 
   @Column({ type: 'integer', name: 'sub' })
   sub: number;
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
 
   @Column({ type: 'timestamp', name: 'data_pad_item_incompleto' })
   dataPadItemIncompleto: any;

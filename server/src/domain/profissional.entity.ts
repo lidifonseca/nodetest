@@ -105,17 +105,14 @@ export default class Profissional extends BaseEntity {
   @Column({ name: 'origem_cadastro', length: 100 })
   origemCadastro: string;
 
-  @Column({ name: 'obs', length: 255 })
-  obs: string;
+  @Column({ type: 'blob', name: 'obs' })
+  obs: any;
 
   @Column({ name: 'chave_privada', length: 255 })
   chavePrivada: string;
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
 
   @Column({ name: 'senha_original', length: 100 })
   senhaOriginal: string;

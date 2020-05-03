@@ -229,15 +229,7 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                             <Translate contentKey="generadorApp.perguntasQuestionario.pergunta">Pergunta</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="pergunta"
-                            id="perguntas-questionario-pergunta"
-                            value={this.state.pergunta}
-                            validate={{
-                              maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="pergunta" id="perguntas-questionario-pergunta" value={this.state.pergunta} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -251,9 +243,6 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                             name="tipoResposta"
                             id="perguntas-questionario-tipoResposta"
                             value={this.state.tipoResposta}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -271,15 +260,7 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                             <Translate contentKey="generadorApp.perguntasQuestionario.tipoCampo">Tipo Campo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tipoCampo"
-                            id="perguntas-questionario-tipoCampo"
-                            value={this.state.tipoCampo}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tipoCampo" id="perguntas-questionario-tipoCampo" value={this.state.tipoCampo} />
                         </Row>
                       </Col>
 

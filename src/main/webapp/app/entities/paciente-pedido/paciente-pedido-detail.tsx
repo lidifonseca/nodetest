@@ -164,23 +164,6 @@ export class PacientePedidoDetail extends React.Component<IPacientePedidoDetailP
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="dataPost">
-                            <Translate contentKey="generadorApp.pacientePedido.dataPost">Data Post</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          <TextFormat value={pacientePedidoEntity.dataPost} type="date" format={APP_DATE_FORMAT} />
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.pacientePedido.idUnidade">Id Unidade</Translate>
                         </dt>
                       </Col>

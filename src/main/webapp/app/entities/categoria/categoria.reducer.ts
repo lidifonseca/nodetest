@@ -110,7 +110,6 @@ export type ICrudGetAllActionCategoria<T> = (
   styleCategoria?: any,
   icon?: any,
   publicar?: any,
-  dataPost?: any,
   ordem?: any,
   publicarSite?: any,
   categoriaAtividade?: any,
@@ -128,7 +127,6 @@ export const getEntities: ICrudGetAllActionCategoria<ICategoria> = (
   styleCategoria,
   icon,
   publicar,
-  dataPost,
   ordem,
   publicarSite,
   categoriaAtividade,
@@ -144,7 +142,6 @@ export const getEntities: ICrudGetAllActionCategoria<ICategoria> = (
   const styleCategoriaRequest = styleCategoria ? `styleCategoria.contains=${styleCategoria}&` : '';
   const iconRequest = icon ? `icon.contains=${icon}&` : '';
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const ordemRequest = ordem ? `ordem.contains=${ordem}&` : '';
   const publicarSiteRequest = publicarSite ? `publicarSite.contains=${publicarSite}&` : '';
   const categoriaAtividadeRequest = categoriaAtividade ? `categoriaAtividade.equals=${categoriaAtividade}&` : '';
@@ -157,7 +154,7 @@ export const getEntities: ICrudGetAllActionCategoria<ICategoria> = (
   return {
     type: ACTION_TYPES.FETCH_CATEGORIA_LIST,
     payload: axios.get<ICategoria>(
-      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${dataPostRequest}${ordemRequest}${publicarSiteRequest}${categoriaAtividadeRequest}${categoriaContratoRequest}${categoriaUnidadeRequest}${cidXPtaNovoPadItemIndiRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${categoriaAtividadeRequest}${categoriaContratoRequest}${categoriaUnidadeRequest}${cidXPtaNovoPadItemIndiRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

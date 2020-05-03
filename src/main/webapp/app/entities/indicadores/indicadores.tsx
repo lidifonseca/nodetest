@@ -166,15 +166,7 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
                             <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="titulo"
-                            id="indicadores-titulo"
-                            value={this.state.titulo}
-                            validate={{
-                              maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="titulo" id="indicadores-titulo" value={this.state.titulo} />
                         </Row>
                       </Col>
 

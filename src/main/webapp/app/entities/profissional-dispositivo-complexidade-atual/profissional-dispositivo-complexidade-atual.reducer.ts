@@ -119,7 +119,6 @@ export type ICrudGetAllActionProfissionalDispositivoComplexidadeAtual<T> = (
   idProfissional?: any,
   idProfissionalDispositivoComplexidade?: any,
   idUsuario?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -129,7 +128,6 @@ export const getEntities: ICrudGetAllActionProfissionalDispositivoComplexidadeAt
   idProfissional,
   idProfissionalDispositivoComplexidade,
   idUsuario,
-  dataPost,
   page,
   size,
   sort
@@ -139,13 +137,12 @@ export const getEntities: ICrudGetAllActionProfissionalDispositivoComplexidadeAt
     ? `idProfissionalDispositivoComplexidade.contains=${idProfissionalDispositivoComplexidade}&`
     : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST,
     payload: axios.get<IProfissionalDispositivoComplexidadeAtual>(
-      `${requestUrl}${idProfissionalRequest}${idProfissionalDispositivoComplexidadeRequest}${idUsuarioRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idProfissionalDispositivoComplexidadeRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

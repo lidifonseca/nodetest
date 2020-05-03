@@ -244,15 +244,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
                             <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="etapaAtual"
-                            id="questionarios-etapaAtual"
-                            value={this.state.etapaAtual}
-                            validate={{
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="etapaAtual" id="questionarios-etapaAtual" value={this.state.etapaAtual} />
                         </Row>
                       </Col>
                       <Col md="3">

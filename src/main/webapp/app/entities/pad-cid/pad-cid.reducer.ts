@@ -108,7 +108,6 @@ const apiUrl = 'api/pad-cids';
 export type ICrudGetAllActionPadCid<T> = (
   observacao?: any,
   ativo?: any,
-  dataPost?: any,
   idPad?: any,
   idCid?: any,
   page?: number,
@@ -116,10 +115,9 @@ export type ICrudGetAllActionPadCid<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, dataPost, idPad, idCid, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, idPad, idCid, page, size, sort) => {
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPadRequest = idPad ? `idPad.equals=${idPad}&` : '';
   const idCidRequest = idCid ? `idCid.equals=${idCid}&` : '';
 
@@ -127,7 +125,7 @@ export const getEntities: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo,
   return {
     type: ACTION_TYPES.FETCH_PADCID_LIST,
     payload: axios.get<IPadCid>(
-      `${requestUrl}${observacaoRequest}${ativoRequest}${dataPostRequest}${idPadRequest}${idCidRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${observacaoRequest}${ativoRequest}${idPadRequest}${idCidRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

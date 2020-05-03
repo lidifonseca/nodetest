@@ -107,20 +107,18 @@ const apiUrl = 'api/tempo-experiencias';
 // Actions
 export type ICrudGetAllActionTempoExperiencia<T> = (
   tempoExperiencia?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTempoExperiencia<ITempoExperiencia> = (tempoExperiencia, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTempoExperiencia<ITempoExperiencia> = (tempoExperiencia, page, size, sort) => {
   const tempoExperienciaRequest = tempoExperiencia ? `tempoExperiencia.contains=${tempoExperiencia}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TEMPOEXPERIENCIA_LIST,
-    payload: axios.get<ITempoExperiencia>(`${requestUrl}${tempoExperienciaRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITempoExperiencia>(`${requestUrl}${tempoExperienciaRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITempoExperiencia> = id => {

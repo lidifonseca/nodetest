@@ -112,7 +112,6 @@ export type ICrudGetAllActionUsuarioPanico<T> = (
   observacao?: any,
   resolvido?: any,
   idUserResolvido?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -125,7 +124,6 @@ export const getEntities: ICrudGetAllActionUsuarioPanico<IUsuarioPanico> = (
   observacao,
   resolvido,
   idUserResolvido,
-  dataPost,
   page,
   size,
   sort
@@ -136,13 +134,12 @@ export const getEntities: ICrudGetAllActionUsuarioPanico<IUsuarioPanico> = (
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const resolvidoRequest = resolvido ? `resolvido.contains=${resolvido}&` : '';
   const idUserResolvidoRequest = idUserResolvido ? `idUserResolvido.contains=${idUserResolvido}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_USUARIOPANICO_LIST,
     payload: axios.get<IUsuarioPanico>(
-      `${requestUrl}${idPacienteRequest}${idUsuarioRequest}${idProfissionalRequest}${observacaoRequest}${resolvidoRequest}${idUserResolvidoRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idUsuarioRequest}${idProfissionalRequest}${observacaoRequest}${resolvidoRequest}${idUserResolvidoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

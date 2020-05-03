@@ -15,9 +15,6 @@ export default class AtendimentoAceite extends BaseEntity {
   @Column({ name: 'msg_push', length: 255 })
   msgPush: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => Profissional)
   idProfissional: Profissional;
 

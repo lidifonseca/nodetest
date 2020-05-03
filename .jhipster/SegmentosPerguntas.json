@@ -15,7 +15,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "perguntasQuestionario",
             "otherEntityRelationshipName": "segmentosPerguntasId",
-            "relationshipValidateRules": "required",
             "relationshipName": "perguntasQuestionario"
         }
     ],

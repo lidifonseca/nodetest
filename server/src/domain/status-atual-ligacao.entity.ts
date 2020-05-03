@@ -15,8 +15,5 @@ export default class StatusAtualLigacao extends BaseEntity {
   @Column({ name: 'style_label', length: 40 })
   styleLabel: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

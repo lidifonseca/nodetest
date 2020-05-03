@@ -107,30 +107,21 @@ const apiUrl = 'api/tipo-especialidades';
 // Actions
 export type ICrudGetAllActionTipoEspecialidade<T> = (
   tipoEspecialidade?: any,
-  dataPost?: any,
   especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (
-  tipoEspecialidade,
-  dataPost,
-  especialidade,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (tipoEspecialidade, especialidade, page, size, sort) => {
   const tipoEspecialidadeRequest = tipoEspecialidade ? `tipoEspecialidade.contains=${tipoEspecialidade}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST,
     payload: axios.get<ITipoEspecialidade>(
-      `${requestUrl}${tipoEspecialidadeRequest}${dataPostRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${tipoEspecialidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

@@ -108,23 +108,19 @@ const apiUrl = 'api/grupo-riscos';
 export type ICrudGetAllActionGrupoRisco<T> = (
   grupoRisco?: any,
   styleLabel?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionGrupoRisco<IGrupoRisco> = (grupoRisco, styleLabel, dataPost, page, size, sort) => {
+export const getEntities: ICrudGetAllActionGrupoRisco<IGrupoRisco> = (grupoRisco, styleLabel, page, size, sort) => {
   const grupoRiscoRequest = grupoRisco ? `grupoRisco.contains=${grupoRisco}&` : '';
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_GRUPORISCO_LIST,
-    payload: axios.get<IGrupoRisco>(
-      `${requestUrl}${grupoRiscoRequest}${styleLabelRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IGrupoRisco>(`${requestUrl}${grupoRiscoRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IGrupoRisco> = id => {

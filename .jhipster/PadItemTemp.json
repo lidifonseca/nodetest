@@ -42,10 +42,6 @@
             "fieldValidateRulesMaxlength": "255"
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant"
-        },
-        {
             "fieldName": "cidXPtaNovoId",
             "fieldType": "Integer"
         },

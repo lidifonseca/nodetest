@@ -33,10 +33,9 @@ export interface IProfissionalNew {
   conta?: string;
   tipoConta?: string;
   origemCadastro?: string;
-  obs?: string;
+  obs?: any;
   chavePrivada?: string;
   ativo?: number;
-  dataPost?: Moment;
 }
 
 export const defaultValue: Readonly<IProfissionalNew> = {};

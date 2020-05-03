@@ -110,33 +110,22 @@ export type ICrudGetAllActionGeoPanico<T> = (
   idPaciente?: any,
   latitude?: any,
   longitude?: any,
-  dataPost?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionGeoPanico<IGeoPanico> = (
-  idPanico,
-  idPaciente,
-  latitude,
-  longitude,
-  dataPost,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionGeoPanico<IGeoPanico> = (idPanico, idPaciente, latitude, longitude, page, size, sort) => {
   const idPanicoRequest = idPanico ? `idPanico.contains=${idPanico}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const latitudeRequest = latitude ? `latitude.contains=${latitude}&` : '';
   const longitudeRequest = longitude ? `longitude.contains=${longitude}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_GEOPANICO_LIST,
     payload: axios.get<IGeoPanico>(
-      `${requestUrl}${idPanicoRequest}${idPacienteRequest}${latitudeRequest}${longitudeRequest}${dataPostRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPanicoRequest}${idPacienteRequest}${latitudeRequest}${longitudeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

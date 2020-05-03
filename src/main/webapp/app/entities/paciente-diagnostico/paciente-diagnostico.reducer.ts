@@ -108,7 +108,6 @@ const apiUrl = 'api/paciente-diagnosticos';
 export type ICrudGetAllActionPacienteDiagnostico<T> = (
   observacao?: any,
   ativo?: any,
-  dataPost?: any,
   cidPrimario?: any,
   complexidade?: any,
   cidComAlta?: any,
@@ -122,7 +121,6 @@ export type ICrudGetAllActionPacienteDiagnostico<T> = (
 export const getEntities: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnostico> = (
   observacao,
   ativo,
-  dataPost,
   cidPrimario,
   complexidade,
   cidComAlta,
@@ -134,7 +132,6 @@ export const getEntities: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnost
 ) => {
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const cidPrimarioRequest = cidPrimario ? `cidPrimario.contains=${cidPrimario}&` : '';
   const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
   const cidComAltaRequest = cidComAlta ? `cidComAlta.contains=${cidComAlta}&` : '';
@@ -145,7 +142,7 @@ export const getEntities: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnost
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST,
     payload: axios.get<IPacienteDiagnostico>(
-      `${requestUrl}${observacaoRequest}${ativoRequest}${dataPostRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}${idPacienteRequest}${idCidRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}${idPacienteRequest}${idCidRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

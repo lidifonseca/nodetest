@@ -8,10 +8,6 @@
         {
             "fieldName": "tipoReport",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "dataPost",
-            "fieldType": "Instant"
         }
     ],
     "relationships": [],

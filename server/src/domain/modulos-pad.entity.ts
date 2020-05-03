@@ -15,8 +15,5 @@ export default class ModulosPad extends BaseEntity {
   @Column({ name: 'ativo', length: 1 })
   ativo: string;
 
-  @Column({ type: 'date', name: 'data_post' })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -3,8 +3,7 @@ import { IPadItem } from 'app/shared/model/pad-item.model';
 
 export interface IPadItemResultado {
   id?: string;
-  resultado?: string;
-  dataPost?: Moment;
+  resultado?: any;
   dataFim?: Moment;
   resultadoAnalisado?: boolean;
   usuarioId?: number;

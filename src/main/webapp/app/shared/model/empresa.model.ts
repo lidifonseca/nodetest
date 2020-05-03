@@ -22,7 +22,6 @@ export interface IEmpresa {
   cidade?: string;
   uf?: string;
   tipo?: number;
-  dataPost?: Moment;
   idCidade?: string | any;
 }
 

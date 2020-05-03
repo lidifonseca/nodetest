@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -43,7 +34,6 @@ export interface IGeoPanicoBaseState {
   idPaciente: any;
   latitude: any;
   longitude: any;
-  dataPost: any;
 }
 export interface IGeoPanicoState extends IGeoPanicoBaseState, IPaginationBaseState {}
 
@@ -64,14 +54,12 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const latitude = url.searchParams.get('latitude') || '';
     const longitude = url.searchParams.get('longitude') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPanico,
       idPaciente,
       latitude,
-      longitude,
-      dataPost
+      longitude
     };
   };
 
@@ -85,8 +73,7 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
         idPanico: '',
         idPaciente: '',
         latitude: '',
-        longitude: '',
-        dataPost: ''
+        longitude: ''
       },
       () => this.sortEntities()
     );
@@ -143,9 +130,6 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
       'longitude=' +
       this.state.longitude +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -153,8 +137,8 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPanico, idPaciente, latitude, longitude, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPanico, idPaciente, latitude, longitude, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPanico, idPaciente, latitude, longitude, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPanico, idPaciente, latitude, longitude, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -194,16 +178,7 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
                           <Label id="idPanicoLabel" for="geo-panico-idPanico">
                             <Translate contentKey="generadorApp.geoPanico.idPanico">Id Panico</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idPanico"
-                            id="geo-panico-idPanico"
-                            value={this.state.idPanico}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idPanico" id="geo-panico-idPanico" value={this.state.idPanico} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -211,16 +186,7 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
                           <Label id="idPacienteLabel" for="geo-panico-idPaciente">
                             <Translate contentKey="generadorApp.geoPanico.idPaciente">Id Paciente</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="geo-panico-idPaciente"
-                            value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idPaciente" id="geo-panico-idPaciente" value={this.state.idPaciente} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -229,15 +195,7 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
                             <Translate contentKey="generadorApp.geoPanico.latitude">Latitude</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="latitude"
-                            id="geo-panico-latitude"
-                            value={this.state.latitude}
-                            validate={{
-                              maxLength: { value: 300, errorMessage: translate('entity.validation.maxlength', { max: 300 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="latitude" id="geo-panico-latitude" value={this.state.latitude} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -246,33 +204,7 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
                             <Translate contentKey="generadorApp.geoPanico.longitude">Longitude</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="longitude"
-                            id="geo-panico-longitude"
-                            value={this.state.longitude}
-                            validate={{
-                              maxLength: { value: 300, errorMessage: translate('entity.validation.maxlength', { max: 300 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="geo-panico-dataPost">
-                            <Translate contentKey="generadorApp.geoPanico.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="geo-panico-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="longitude" id="geo-panico-longitude" value={this.state.longitude} />
                         </Row>
                       </Col>
                     </div>
@@ -318,10 +250,6 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
                         <Translate contentKey="generadorApp.geoPanico.longitude">Longitude</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.geoPanico.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -343,10 +271,6 @@ export class GeoPanico extends React.Component<IGeoPanicoProps, IGeoPanicoState>
                         <td>{geoPanico.latitude}</td>
 
                         <td>{geoPanico.longitude}</td>
-
-                        <td>
-                          <TextFormat type="date" value={geoPanico.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

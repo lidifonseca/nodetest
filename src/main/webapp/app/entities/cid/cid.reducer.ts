@@ -111,7 +111,6 @@ export type ICrudGetAllActionCid<T> = (
   gr?: any,
   temp?: any,
   apelido?: any,
-  dataPost?: any,
   cidXPtaNovo?: any,
   pacienteDiagnostico?: any,
   padCid?: any,
@@ -126,7 +125,6 @@ export const getEntities: ICrudGetAllActionCid<ICid> = (
   gr,
   temp,
   apelido,
-  dataPost,
   cidXPtaNovo,
   pacienteDiagnostico,
   padCid,
@@ -139,7 +137,6 @@ export const getEntities: ICrudGetAllActionCid<ICid> = (
   const grRequest = gr ? `gr.contains=${gr}&` : '';
   const tempRequest = temp ? `temp.contains=${temp}&` : '';
   const apelidoRequest = apelido ? `apelido.contains=${apelido}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.equals=${cidXPtaNovo}&` : '';
   const pacienteDiagnosticoRequest = pacienteDiagnostico ? `pacienteDiagnostico.equals=${pacienteDiagnostico}&` : '';
   const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
@@ -148,7 +145,7 @@ export const getEntities: ICrudGetAllActionCid<ICid> = (
   return {
     type: ACTION_TYPES.FETCH_CID_LIST,
     payload: axios.get<ICid>(
-      `${requestUrl}${codigoRequest}${diagnosticoRequest}${grRequest}${tempRequest}${apelidoRequest}${dataPostRequest}${cidXPtaNovoRequest}${pacienteDiagnosticoRequest}${padCidRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${codigoRequest}${diagnosticoRequest}${grRequest}${tempRequest}${apelidoRequest}${cidXPtaNovoRequest}${pacienteDiagnosticoRequest}${padCidRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

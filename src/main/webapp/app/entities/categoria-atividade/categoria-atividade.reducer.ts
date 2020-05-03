@@ -107,7 +107,6 @@ const apiUrl = 'api/categoria-atividades';
 // Actions
 export type ICrudGetAllActionCategoriaAtividade<T> = (
   atividade?: any,
-  dataPost?: any,
   idUnidade?: any,
   atendimentoAtividades?: any,
   padItemAtividade?: any,
@@ -119,7 +118,6 @@ export type ICrudGetAllActionCategoriaAtividade<T> = (
 
 export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (
   atividade,
-  dataPost,
   idUnidade,
   atendimentoAtividades,
   padItemAtividade,
@@ -129,7 +127,6 @@ export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividad
   sort
 ) => {
   const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUnidadeRequest = idUnidade ? `idUnidade.contains=${idUnidade}&` : '';
   const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
   const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
@@ -139,7 +136,7 @@ export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividad
   return {
     type: ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST,
     payload: axios.get<ICategoriaAtividade>(
-      `${requestUrl}${atividadeRequest}${dataPostRequest}${idUnidadeRequest}${atendimentoAtividadesRequest}${padItemAtividadeRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${atividadeRequest}${idUnidadeRequest}${atendimentoAtividadesRequest}${padItemAtividadeRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

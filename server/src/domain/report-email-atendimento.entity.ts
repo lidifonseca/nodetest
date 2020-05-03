@@ -13,8 +13,5 @@ export default class ReportEmailAtendimento extends BaseEntity {
   @Column({ type: 'integer', name: 'tipo_report' })
   tipoReport: number;
 
-  @Column({ type: 'timestamp', name: 'data_post' })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

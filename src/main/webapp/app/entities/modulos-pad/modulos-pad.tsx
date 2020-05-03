@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IModulosPadProps extends StateProps, DispatchProps, RouteCompon
 export interface IModulosPadBaseState {
   nomeModulo: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IModulosPadState extends IModulosPadBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const nomeModulo = url.searchParams.get('nomeModulo') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       nomeModulo,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -77,8 +65,7 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
     this.setState(
       {
         nomeModulo: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { nomeModulo, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(nomeModulo, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { nomeModulo, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(nomeModulo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -181,15 +165,7 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                             <Translate contentKey="generadorApp.modulosPad.nomeModulo">Nome Modulo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nomeModulo"
-                            id="modulos-pad-nomeModulo"
-                            value={this.state.nomeModulo}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nomeModulo" id="modulos-pad-nomeModulo" value={this.state.nomeModulo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -198,23 +174,7 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                             <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ativo"
-                            id="modulos-pad-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              maxLength: { value: 1, errorMessage: translate('entity.validation.maxlength', { max: 1 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="modulos-pad-dataPost">
-                            <Translate contentKey="generadorApp.modulosPad.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPost" id="modulos-pad-dataPost" value={this.state.dataPost} />
+                          <AvInput type="text" name="ativo" id="modulos-pad-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
                     </div>
@@ -252,10 +212,6 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                         <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.modulosPad.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -273,10 +229,6 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                         <td>{modulosPad.nomeModulo}</td>
 
                         <td>{modulosPad.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={modulosPad.dataPost} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

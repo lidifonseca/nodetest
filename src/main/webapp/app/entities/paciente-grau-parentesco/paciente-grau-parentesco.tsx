@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IPacienteGrauParentescoProps extends StateProps, DispatchProps,
 export interface IPacienteGrauParentescoBaseState {
   grauParentesco: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IPacienteGrauParentescoState extends IPacienteGrauParentescoBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const grauParentesco = url.searchParams.get('grauParentesco') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       grauParentesco,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -77,8 +65,7 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
     this.setState(
       {
         grauParentesco: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { grauParentesco, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(grauParentesco, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { grauParentesco, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(grauParentesco, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -188,9 +172,6 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
                             name="grauParentesco"
                             id="paciente-grau-parentesco-grauParentesco"
                             value={this.state.grauParentesco}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -200,24 +181,6 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
                             <Translate contentKey="generadorApp.pacienteGrauParentesco.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="paciente-grau-parentesco-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-grau-parentesco-dataPost">
-                            <Translate contentKey="generadorApp.pacienteGrauParentesco.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-grau-parentesco-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
                     </div>
@@ -255,10 +218,6 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
                         <Translate contentKey="generadorApp.pacienteGrauParentesco.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteGrauParentesco.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -276,10 +235,6 @@ export class PacienteGrauParentesco extends React.Component<IPacienteGrauParente
                         <td>{pacienteGrauParentesco.grauParentesco}</td>
 
                         <td>{pacienteGrauParentesco.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteGrauParentesco.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

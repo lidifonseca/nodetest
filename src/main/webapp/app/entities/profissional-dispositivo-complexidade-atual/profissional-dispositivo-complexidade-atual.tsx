@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -42,7 +33,6 @@ export interface IProfissionalDispositivoComplexidadeAtualBaseState {
   idProfissional: any;
   idProfissionalDispositivoComplexidade: any;
   idUsuario: any;
-  dataPost: any;
 }
 export interface IProfissionalDispositivoComplexidadeAtualState
   extends IProfissionalDispositivoComplexidadeAtualBaseState,
@@ -67,13 +57,11 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
     const idProfissional = url.searchParams.get('idProfissional') || '';
     const idProfissionalDispositivoComplexidade = url.searchParams.get('idProfissionalDispositivoComplexidade') || '';
     const idUsuario = url.searchParams.get('idUsuario') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idProfissional,
       idProfissionalDispositivoComplexidade,
-      idUsuario,
-      dataPost
+      idUsuario
     };
   };
 
@@ -86,8 +74,7 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
       {
         idProfissional: '',
         idProfissionalDispositivoComplexidade: '',
-        idUsuario: '',
-        dataPost: ''
+        idUsuario: ''
       },
       () => this.sortEntities()
     );
@@ -141,9 +128,6 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -151,21 +135,11 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      idProfissional,
-      idProfissionalDispositivoComplexidade,
-      idUsuario,
-      dataPost,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { idProfissional, idProfissionalDispositivoComplexidade, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       idProfissional,
       idProfissionalDispositivoComplexidade,
       idUsuario,
-      dataPost,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -218,10 +192,6 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                             name="idProfissional"
                             id="profissional-dispositivo-complexidade-atual-idProfissional"
                             value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -240,10 +210,6 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                             name="idProfissionalDispositivoComplexidade"
                             id="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
                             value={this.state.idProfissionalDispositivoComplexidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -257,28 +223,6 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                             name="idUsuario"
                             id="profissional-dispositivo-complexidade-atual-idUsuario"
                             value={this.state.idUsuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="profissional-dispositivo-complexidade-atual-dataPost">
-                            <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-dispositivo-complexidade-atual-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -329,10 +273,6 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                         <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idUsuario">Id Usuario</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -352,10 +292,6 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                         <td>{profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade}</td>
 
                         <td>{profissionalDispositivoComplexidadeAtual.idUsuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={profissionalDispositivoComplexidadeAtual.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

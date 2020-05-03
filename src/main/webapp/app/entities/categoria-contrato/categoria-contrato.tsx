@@ -17,10 +17,11 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  openFile,
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
-  TextFormat,
   getSortState,
   IPaginationBaseState,
   JhiPagination,
@@ -44,7 +45,6 @@ export interface ICategoriaContratoProps extends StateProps, DispatchProps, Rout
 export interface ICategoriaContratoBaseState {
   contrato: any;
   ativo: any;
-  dataPost: any;
   idCategoria: any;
 }
 export interface ICategoriaContratoState extends ICategoriaContratoBaseState, IPaginationBaseState {}
@@ -64,14 +64,12 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const contrato = url.searchParams.get('contrato') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idCategoria = url.searchParams.get('idCategoria') || '';
 
     return {
       contrato,
       ativo,
-      dataPost,
       idCategoria
     };
   };
@@ -87,7 +85,6 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
       {
         contrato: '',
         ativo: '',
-        dataPost: '',
         idCategoria: ''
       },
       () => this.sortEntities()
@@ -139,9 +136,6 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idCategoria=' +
       this.state.idCategoria +
       '&' +
@@ -152,8 +146,8 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { contrato, ativo, dataPost, idCategoria, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(contrato, ativo, dataPost, idCategoria, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { contrato, ativo, idCategoria, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(contrato, ativo, idCategoria, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -190,19 +184,34 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                     <div className="row mt-1 ml-3 mr-3">
                       <Col md="3">
                         <Row>
-                          <Label id="contratoLabel" for="categoria-contrato-contrato">
-                            <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="contrato"
-                            id="categoria-contrato-contrato"
-                            value={this.state.contrato}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <div>
+                            <Label id="contratoLabel" for="contrato">
+                              <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
+                            </Label>
+                            <br />
+                            {contrato ? (
+                              <div>
+                                <a onClick={openFile(contratoContentType, contrato)}>
+                                  <Translate contentKey="entity.action.open">Open</Translate>
+                                </a>
+                                <br />
+                                <Row>
+                                  <Col md="11">
+                                    <span>
+                                      {contratoContentType}, {byteSize(contrato)}
+                                    </span>
+                                  </Col>
+                                  <Col md="1">
+                                    <Button color="danger" onClick={this.clearBlob('contrato')}>
+                                      <FontAwesomeIcon icon="times-circle" />
+                                    </Button>
+                                  </Col>
+                                </Row>
+                              </div>
+                            ) : null}
+                            <input id="file_contrato" type="file" onChange={this.onBlobChange(false, 'contrato')} />
+                            <AvInput type="hidden" name="contrato" value={contrato} />
+                          </div>
                         </Row>
                       </Col>
                       <Col md="3">
@@ -211,24 +220,6 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                             <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="categoria-contrato-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="categoria-contrato-dataPost">
-                            <Translate contentKey="generadorApp.categoriaContrato.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="categoria-contrato-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -286,10 +277,6 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                         <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.categoriaContrato.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.categoriaContrato.idCategoria">Id Categoria</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -308,13 +295,21 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                           </Button>
                         </td>
 
-                        <td>{categoriaContrato.contrato}</td>
+                        <td>
+                          {categoriaContrato.contrato ? (
+                            <div>
+                              <a onClick={openFile(categoriaContrato.contratoContentType, categoriaContrato.contrato)}>
+                                <Translate contentKey="entity.action.open">Open</Translate>
+                                &nbsp;
+                              </a>
+                              <span>
+                                {categoriaContrato.contratoContentType}, {byteSize(categoriaContrato.contrato)}
+                              </span>
+                            </div>
+                          ) : null}
+                        </td>
 
                         <td>{categoriaContrato.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={categoriaContrato.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {categoriaContrato.idCategoria ? (
                             <Link to={`categoria/${categoriaContrato.idCategoria.id}`}>{categoriaContrato.idCategoria.id}</Link>

@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -237,16 +246,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                             <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="titulo"
-                            id="pad-item-indicadores-titulo"
-                            value={this.state.titulo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="titulo" id="pad-item-indicadores-titulo" value={this.state.titulo} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -254,16 +254,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                           <Label id="descricaoLabel" for="pad-item-indicadores-descricao">
                             <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="descricao"
-                            id="pad-item-indicadores-descricao"
-                            value={this.state.descricao}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
                       <Col md="3">

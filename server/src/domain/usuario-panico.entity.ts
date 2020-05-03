@@ -27,8 +27,5 @@ export default class UsuarioPanico extends BaseEntity {
   @Column({ type: 'integer', name: 'id_user_resolvido' })
   idUserResolvido: number;
 
-  @Column({ type: 'timestamp', name: 'data_post' })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

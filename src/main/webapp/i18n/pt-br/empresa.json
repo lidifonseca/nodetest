@@ -35,7 +35,6 @@
       "cidade": "Cidade",
       "uf": "Uf",
       "tipo": "Tipo",
-      "dataPost": "Data Post",
       "idCidade": "Id Cidade"
     }
   }

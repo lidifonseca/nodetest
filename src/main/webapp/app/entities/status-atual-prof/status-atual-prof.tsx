@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IStatusAtualProfProps extends StateProps, DispatchProps, RouteC
 export interface IStatusAtualProfBaseState {
   statusAtualProf: any;
   styleLabel: any;
-  dataPost: any;
   profissionalStatusAtual: any;
 }
 export interface IStatusAtualProfState extends IStatusAtualProfBaseState, IPaginationBaseState {}
@@ -61,14 +51,12 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const statusAtualProf = url.searchParams.get('statusAtualProf') || '';
     const styleLabel = url.searchParams.get('styleLabel') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const profissionalStatusAtual = url.searchParams.get('profissionalStatusAtual') || '';
 
     return {
       statusAtualProf,
       styleLabel,
-      dataPost,
       profissionalStatusAtual
     };
   };
@@ -82,7 +70,6 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
       {
         statusAtualProf: '',
         styleLabel: '',
-        dataPost: '',
         profissionalStatusAtual: ''
       },
       () => this.sortEntities()
@@ -134,9 +121,6 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'profissionalStatusAtual=' +
       this.state.profissionalStatusAtual +
       '&' +
@@ -147,16 +131,8 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtualProf, styleLabel, dataPost, profissionalStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      statusAtualProf,
-      styleLabel,
-      dataPost,
-      profissionalStatusAtual,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { statusAtualProf, styleLabel, profissionalStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtualProf, styleLabel, profissionalStatusAtual, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -202,9 +178,6 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                             name="statusAtualProf"
                             id="status-atual-prof-statusAtualProf"
                             value={this.state.statusAtualProf}
-                            validate={{
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -214,33 +187,7 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                             <Translate contentKey="generadorApp.statusAtualProf.styleLabel">Style Label</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="styleLabel"
-                            id="status-atual-prof-styleLabel"
-                            value={this.state.styleLabel}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="status-atual-prof-dataPost">
-                            <Translate contentKey="generadorApp.statusAtualProf.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="status-atual-prof-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="styleLabel" id="status-atual-prof-styleLabel" value={this.state.styleLabel} />
                         </Row>
                       </Col>
 
@@ -282,10 +229,6 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                         <Translate contentKey="generadorApp.statusAtualProf.styleLabel">Style Label</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.statusAtualProf.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -303,10 +246,6 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                         <td>{statusAtualProf.statusAtualProf}</td>
 
                         <td>{statusAtualProf.styleLabel}</td>
-
-                        <td>
-                          <TextFormat type="date" value={statusAtualProf.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

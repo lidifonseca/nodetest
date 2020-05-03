@@ -104,7 +104,6 @@ export interface IUsuario {
   envioPedido?: number;
   alertaAtendimento?: number;
   ativo?: number;
-  dataPost?: Moment;
   envioGlosado?: number;
   emergencia?: number;
   token?: number;

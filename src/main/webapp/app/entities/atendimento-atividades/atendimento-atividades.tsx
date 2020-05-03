@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -45,7 +36,6 @@ export interface IAtendimentoAtividadesProps extends StateProps, DispatchProps, 
 
 export interface IAtendimentoAtividadesBaseState {
   feito: any;
-  dataPost: any;
   idAtividade: any;
   idAtendimento: any;
 }
@@ -65,14 +55,12 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
   getAtendimentoAtividadesState = (location): IAtendimentoAtividadesBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const feito = url.searchParams.get('feito') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idAtividade = url.searchParams.get('idAtividade') || '';
     const idAtendimento = url.searchParams.get('idAtendimento') || '';
 
     return {
       feito,
-      dataPost,
       idAtividade,
       idAtendimento
     };
@@ -89,7 +77,6 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
     this.setState(
       {
         feito: '',
-        dataPost: '',
         idAtividade: '',
         idAtendimento: ''
       },
@@ -139,9 +126,6 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
       'feito=' +
       this.state.feito +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idAtividade=' +
       this.state.idAtividade +
       '&' +
@@ -155,8 +139,8 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { feito, dataPost, idAtividade, idAtendimento, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(feito, dataPost, idAtividade, idAtendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { feito, idAtividade, idAtendimento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(feito, idAtividade, idAtendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -197,24 +181,6 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
                             <Translate contentKey="generadorApp.atendimentoAtividades.feito">Feito</Translate>
                           </Label>
                           <AvInput type="string" name="feito" id="atendimento-atividades-feito" value={this.state.feito} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="atendimento-atividades-dataPost">
-                            <Translate contentKey="generadorApp.atendimentoAtividades.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-atividades-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -293,10 +259,6 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
                         <Translate contentKey="generadorApp.atendimentoAtividades.feito">Feito</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.atendimentoAtividades.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.atendimentoAtividades.idAtividade">Id Atividade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -320,10 +282,6 @@ export class AtendimentoAtividades extends React.Component<IAtendimentoAtividade
                         </td>
 
                         <td>{atendimentoAtividades.feito}</td>
-
-                        <td>
-                          <TextFormat type="date" value={atendimentoAtividades.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {atendimentoAtividades.idAtividade ? (
                             <Link to={`categoria-atividade/${atendimentoAtividades.idAtividade.id}`}>

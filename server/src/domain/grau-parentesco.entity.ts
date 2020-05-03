@@ -12,8 +12,5 @@ export default class GrauParentesco extends BaseEntity {
   @Column({ name: 'grau_parentesco', length: 60 })
   grauParentesco: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

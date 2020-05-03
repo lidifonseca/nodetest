@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface IPacienteServicoProps extends StateProps, DispatchProps, RouteC
 export interface IPacienteServicoBaseState {
   idPaciente: any;
   servico: any;
-  dataPost: any;
 }
 export interface IPacienteServicoState extends IPacienteServicoBaseState, IPaginationBaseState {}
 
@@ -60,12 +50,10 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const idPaciente = url.searchParams.get('idPaciente') || '';
     const servico = url.searchParams.get('servico') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       idPaciente,
-      servico,
-      dataPost
+      servico
     };
   };
 
@@ -77,8 +65,7 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
     this.setState(
       {
         idPaciente: '',
-        servico: '',
-        dataPost: ''
+        servico: ''
       },
       () => this.sortEntities()
     );
@@ -129,9 +116,6 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
       'servico=' +
       this.state.servico +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -139,8 +123,8 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPaciente, servico, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPaciente, servico, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPaciente, servico, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPaciente, servico, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -180,16 +164,7 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                           <Label id="idPacienteLabel" for="paciente-servico-idPaciente">
                             <Translate contentKey="generadorApp.pacienteServico.idPaciente">Id Paciente</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="paciente-servico-idPaciente"
-                            value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="idPaciente" id="paciente-servico-idPaciente" value={this.state.idPaciente} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -197,34 +172,7 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                           <Label id="servicoLabel" for="paciente-servico-servico">
                             <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="servico"
-                            id="paciente-servico-servico"
-                            value={this.state.servico}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="paciente-servico-dataPost">
-                            <Translate contentKey="generadorApp.pacienteServico.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-servico-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="string" name="servico" id="paciente-servico-servico" value={this.state.servico} />
                         </Row>
                       </Col>
                     </div>
@@ -262,10 +210,6 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                         <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.pacienteServico.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -283,10 +227,6 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                         <td>{pacienteServico.idPaciente}</td>
 
                         <td>{pacienteServico.servico}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteServico.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

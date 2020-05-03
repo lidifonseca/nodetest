@@ -32,7 +32,6 @@ export interface IStatusFinanceiroProps extends StateProps, DispatchProps, Route
 export interface IStatusFinanceiroBaseState {
   nome: any;
   ativo: any;
-  dataPost: any;
 }
 export interface IStatusFinanceiroState extends IStatusFinanceiroBaseState, IPaginationBaseState {}
 
@@ -51,12 +50,10 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const nome = url.searchParams.get('nome') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     return {
       nome,
-      ativo,
-      dataPost
+      ativo
     };
   };
 
@@ -68,8 +65,7 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
     this.setState(
       {
         nome: '',
-        ativo: '',
-        dataPost: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -120,9 +116,6 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       ''
     );
   };
@@ -130,8 +123,8 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { nome, ativo, dataPost, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(nome, ativo, dataPost, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { nome, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(nome, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -172,15 +165,7 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
                             <Translate contentKey="generadorApp.statusFinanceiro.nome">Nome</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="status-financeiro-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nome" id="status-financeiro-nome" value={this.state.nome} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -189,32 +174,7 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
                             <Translate contentKey="generadorApp.statusFinanceiro.ativo">Ativo</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ativo"
-                            id="status-financeiro-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              maxLength: { value: 2, errorMessage: translate('entity.validation.maxlength', { max: 2 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="status-financeiro-dataPost">
-                            <Translate contentKey="generadorApp.statusFinanceiro.dataPost">Data Post</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="dataPost"
-                            id="status-financeiro-dataPost"
-                            value={this.state.dataPost}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="ativo" id="status-financeiro-ativo" value={this.state.ativo} />
                         </Row>
                       </Col>
                     </div>
@@ -252,10 +212,6 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
                         <Translate contentKey="generadorApp.statusFinanceiro.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.statusFinanceiro.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -273,8 +229,6 @@ export class StatusFinanceiro extends React.Component<IStatusFinanceiroProps, IS
                         <td>{statusFinanceiro.nome}</td>
 
                         <td>{statusFinanceiro.ativo}</td>
-
-                        <td>{statusFinanceiro.dataPost}</td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

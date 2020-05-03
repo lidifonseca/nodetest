@@ -44,8 +44,6 @@ export class PacienteCaracteristicaAtualUpdate extends React.Component<
   }
 
   saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
-
     if (errors.length === 0) {
       const { pacienteCaracteristicaAtualEntity } = this.props;
       const entity = {
@@ -221,28 +219,6 @@ export class PacienteCaracteristicaAtualUpdate extends React.Component<
                                   required: { value: true, errorMessage: translate('entity.validation.required') },
                                   number: { value: true, errorMessage: translate('entity.validation.number') }
                                 }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="paciente-caracteristica-atual-dataPost">
-                                <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="paciente-caracteristica-atual-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.pacienteCaracteristicaAtualEntity.dataPost)}
                               />
                             </Col>
                           </Row>

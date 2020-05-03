@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -40,7 +31,6 @@ export interface ITipoUnidadeProps extends StateProps, DispatchProps, RouteCompo
 
 export interface ITipoUnidadeBaseState {
   tipoUnidade: any;
-  dataPost: any;
   especialidade: any;
 }
 export interface ITipoUnidadeState extends ITipoUnidadeBaseState, IPaginationBaseState {}
@@ -59,13 +49,11 @@ export class TipoUnidade extends React.Component<ITipoUnidadeProps, ITipoUnidade
   getTipoUnidadeState = (location): ITipoUnidadeBaseState => {
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const tipoUnidade = url.searchParams.get('tipoUnidade') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const especialidade = url.searchParams.get('especialidade') || '';
 
     return {
       tipoUnidade,
-      dataPost,
       especialidade
     };
   };
@@ -78,7 +66,6 @@ export class TipoUnidade extends React.Component<ITipoUnidadeProps, ITipoUnidade
     this.setState(
       {
         tipoUnidade: '',
-        dataPost: '',
         especialidade: ''
       },
       () => this.sortEntities()
@@ -127,9 +114,6 @@ export class TipoUnidade extends React.Component<ITipoUnidadeProps, ITipoUnidade
       'tipoUnidade=' +
       this.state.tipoUnidade +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'especialidade=' +
       this.state.especialidade +
       '&' +
@@ -140,8 +124,8 @@ export class TipoUnidade extends React.Component<ITipoUnidadeProps, ITipoUnidade
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipoUnidade, dataPost, especialidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tipoUnidade, dataPost, especialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipoUnidade, especialidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tipoUnidade, especialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -182,33 +166,7 @@ export class TipoUnidade extends React.Component<ITipoUnidadeProps, ITipoUnidade
                             <Translate contentKey="generadorApp.tipoUnidade.tipoUnidade">Tipo Unidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tipoUnidade"
-                            id="tipo-unidade-tipoUnidade"
-                            value={this.state.tipoUnidade}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="tipo-unidade-dataPost">
-                            <Translate contentKey="generadorApp.tipoUnidade.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="tipo-unidade-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="tipoUnidade" id="tipo-unidade-tipoUnidade" value={this.state.tipoUnidade} />
                         </Row>
                       </Col>
 
@@ -246,10 +204,6 @@ export class TipoUnidade extends React.Component<ITipoUnidadeProps, ITipoUnidade
                         <Translate contentKey="generadorApp.tipoUnidade.tipoUnidade">Tipo Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tipoUnidade.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -265,10 +219,6 @@ export class TipoUnidade extends React.Component<ITipoUnidadeProps, ITipoUnidade
                         </td>
 
                         <td>{tipoUnidade.tipoUnidade}</td>
-
-                        <td>
-                          <TextFormat type="date" value={tipoUnidade.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

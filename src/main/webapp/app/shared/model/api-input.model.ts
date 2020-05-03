@@ -1,5 +1,3 @@
-import { Moment } from 'moment';
-
 export interface IApiInput {
   id?: string;
   idApiName?: number;
@@ -7,7 +5,6 @@ export interface IApiInput {
   apiType?: string;
   obs?: string;
   ativo?: number;
-  dataPost?: Moment;
 }
 
 export const defaultValue: Readonly<IApiInput> = {};

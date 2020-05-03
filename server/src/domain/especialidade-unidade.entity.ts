@@ -27,9 +27,6 @@ export default class EspecialidadeUnidade extends BaseEntity {
   @Column({ name: 'comentario_preco', length: 255 })
   comentarioPreco: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @ManyToOne(type => UnidadeEasy)
   idUnidade: UnidadeEasy;
 

@@ -107,31 +107,20 @@ const apiUrl = 'api/pad-item-sorteio-feitos';
 // Actions
 export type ICrudGetAllActionPadItemSorteioFeito<T> = (
   sorteioFeito?: any,
-  dataPost?: any,
   idPadItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadItemSorteioFeito<IPadItemSorteioFeito> = (
-  sorteioFeito,
-  dataPost,
-  idPadItem,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionPadItemSorteioFeito<IPadItemSorteioFeito> = (sorteioFeito, idPadItem, page, size, sort) => {
   const sorteioFeitoRequest = sorteioFeito ? `sorteioFeito.contains=${sorteioFeito}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPadItemRequest = idPadItem ? `idPadItem.equals=${idPadItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMSORTEIOFEITO_LIST,
-    payload: axios.get<IPadItemSorteioFeito>(
-      `${requestUrl}${sorteioFeitoRequest}${dataPostRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPadItemSorteioFeito>(`${requestUrl}${sorteioFeitoRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPadItemSorteioFeito> = id => {

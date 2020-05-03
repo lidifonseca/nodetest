@@ -433,13 +433,6 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "envioGlosado",
             "fieldType": "Integer"
         },

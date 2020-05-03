@@ -41,13 +41,6 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "dataPost",
-            "fieldType": "Instant",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idUsuario",
             "fieldType": "Integer"
         },
@@ -77,7 +70,6 @@
             "relationshipType": "one-to-many",
             "otherEntityName": "padCid",
             "otherEntityRelationshipName": "idPad",
-            "relationshipValidateRules": "required",
             "relationshipName": "padCid"
         },
         {

@@ -18,8 +18,7 @@
       },
       "idPaciente": "Id Paciente",
       "token": "Token",
-      "dataValida": "Data Valida",
-      "dataPost": "Data Post"
+      "dataValida": "Data Valida"
     }
   }
 }

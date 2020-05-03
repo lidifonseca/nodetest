@@ -13,7 +13,6 @@ export interface IPad {
   dataFim?: Moment;
   dataConferido?: Moment;
   ativo?: number;
-  dataPost?: Moment;
   idUsuario?: number;
   statusPad?: number;
   novoModelo?: boolean;

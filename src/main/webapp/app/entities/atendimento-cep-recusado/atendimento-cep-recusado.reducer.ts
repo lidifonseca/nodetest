@@ -107,31 +107,20 @@ const apiUrl = 'api/atendimento-cep-recusados';
 // Actions
 export type ICrudGetAllActionAtendimentoCepRecusado<T> = (
   cep?: any,
-  dataPost?: any,
   idPadItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoCepRecusado<IAtendimentoCepRecusado> = (
-  cep,
-  dataPost,
-  idPadItem,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionAtendimentoCepRecusado<IAtendimentoCepRecusado> = (cep, idPadItem, page, size, sort) => {
   const cepRequest = cep ? `cep.contains=${cep}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idPadItemRequest = idPadItem ? `idPadItem.equals=${idPadItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOCEPRECUSADO_LIST,
-    payload: axios.get<IAtendimentoCepRecusado>(
-      `${requestUrl}${cepRequest}${dataPostRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IAtendimentoCepRecusado>(`${requestUrl}${cepRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoCepRecusado> = id => {

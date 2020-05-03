@@ -19,8 +19,7 @@
       "idProntuario": "Id Prontuario",
       "idPaciente": "Id Paciente",
       "idMotivo": "Id Motivo",
-      "idUsuario": "Id Usuario",
-      "dataPost": "Data Post"
+      "idUsuario": "Id Usuario"
     }
   }
 }

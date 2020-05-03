@@ -17,9 +17,6 @@ export default class Uf extends BaseEntity {
   @Column({ name: 'descr_uf', length: 255 })
   descrUf: string;
 
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
-
   @OneToMany(
     type => Cidade,
     other => other.idUf

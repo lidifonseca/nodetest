@@ -108,7 +108,6 @@ const apiUrl = 'api/diarios';
 export type ICrudGetAllActionDiario<T> = (
   historico?: any,
   gerarPdf?: any,
-  dataPost?: any,
   idUsuario?: any,
   idPaciente?: any,
   page?: number,
@@ -116,10 +115,9 @@ export type ICrudGetAllActionDiario<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionDiario<IDiario> = (historico, gerarPdf, dataPost, idUsuario, idPaciente, page, size, sort) => {
+export const getEntities: ICrudGetAllActionDiario<IDiario> = (historico, gerarPdf, idUsuario, idPaciente, page, size, sort) => {
   const historicoRequest = historico ? `historico.contains=${historico}&` : '';
   const gerarPdfRequest = gerarPdf ? `gerarPdf.contains=${gerarPdf}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
@@ -127,7 +125,7 @@ export const getEntities: ICrudGetAllActionDiario<IDiario> = (historico, gerarPd
   return {
     type: ACTION_TYPES.FETCH_DIARIO_LIST,
     payload: axios.get<IDiario>(
-      `${requestUrl}${historicoRequest}${gerarPdfRequest}${dataPostRequest}${idUsuarioRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${historicoRequest}${gerarPdfRequest}${idUsuarioRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

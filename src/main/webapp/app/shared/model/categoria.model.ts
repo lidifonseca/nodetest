@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
 import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
 import { ICategoriaUnidade } from 'app/shared/model/categoria-unidade.model';
@@ -11,7 +10,6 @@ export interface ICategoria {
   styleCategoria?: string;
   icon?: string;
   publicar?: number;
-  dataPost?: Moment;
   ordem?: number;
   publicarSite?: number;
   categoriaAtividades?: ICategoriaAtividade[];

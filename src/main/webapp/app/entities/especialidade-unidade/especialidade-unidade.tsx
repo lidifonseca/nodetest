@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -49,7 +40,6 @@ export interface IEspecialidadeUnidadeBaseState {
   valorPagar: any;
   publicar: any;
   comentarioPreco: any;
-  dataPost: any;
   idUnidade: any;
   idEspecialidade: any;
 }
@@ -73,7 +63,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
     const valorPagar = url.searchParams.get('valorPagar') || '';
     const publicar = url.searchParams.get('publicar') || '';
     const comentarioPreco = url.searchParams.get('comentarioPreco') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const idUnidade = url.searchParams.get('idUnidade') || '';
     const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
@@ -84,7 +73,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       valorPagar,
       publicar,
       comentarioPreco,
-      dataPost,
       idUnidade,
       idEspecialidade
     };
@@ -105,7 +93,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
         valorPagar: '',
         publicar: '',
         comentarioPreco: '',
-        dataPost: '',
         idUnidade: '',
         idEspecialidade: ''
       },
@@ -167,9 +154,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       'comentarioPreco=' +
       this.state.comentarioPreco +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'idUnidade=' +
       this.state.idUnidade +
       '&' +
@@ -189,7 +173,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       valorPagar,
       publicar,
       comentarioPreco,
-      dataPost,
       idUnidade,
       idEspecialidade,
       activePage,
@@ -203,7 +186,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       valorPagar,
       publicar,
       comentarioPreco,
-      dataPost,
       idUnidade,
       idEspecialidade,
       activePage - 1,
@@ -297,27 +279,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                             name="comentarioPreco"
                             id="especialidade-unidade-comentarioPreco"
                             value={this.state.comentarioPreco}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="especialidade-unidade-dataPost">
-                            <Translate contentKey="generadorApp.especialidadeUnidade.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="especialidade-unidade-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -413,10 +374,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                         <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
                       <th>
                         <Translate contentKey="generadorApp.especialidadeUnidade.idUnidade">Id Unidade</Translate>
                         <FontAwesomeIcon icon="sort" />
@@ -448,10 +405,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                         <td>{especialidadeUnidade.publicar}</td>
 
                         <td>{especialidadeUnidade.comentarioPreco}</td>
-
-                        <td>
-                          <TextFormat type="date" value={especialidadeUnidade.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
                         <td>
                           {especialidadeUnidade.idUnidade ? (
                             <Link to={`unidade-easy/${especialidadeUnidade.idUnidade.id}`}>{especialidadeUnidade.idUnidade.id}</Link>

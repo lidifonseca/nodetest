@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  TextFormat,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -41,7 +32,6 @@ export interface ITipoUsuarioProps extends StateProps, DispatchProps, RouteCompo
 export interface ITipoUsuarioBaseState {
   tipoUsuario: any;
   ativo: any;
-  dataPost: any;
   usuario: any;
 }
 export interface ITipoUsuarioState extends ITipoUsuarioBaseState, IPaginationBaseState {}
@@ -61,14 +51,12 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
     const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
     const tipoUsuario = url.searchParams.get('tipoUsuario') || '';
     const ativo = url.searchParams.get('ativo') || '';
-    const dataPost = url.searchParams.get('dataPost') || '';
 
     const usuario = url.searchParams.get('usuario') || '';
 
     return {
       tipoUsuario,
       ativo,
-      dataPost,
       usuario
     };
   };
@@ -82,7 +70,6 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
       {
         tipoUsuario: '',
         ativo: '',
-        dataPost: '',
         usuario: ''
       },
       () => this.sortEntities()
@@ -134,9 +121,6 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
       'ativo=' +
       this.state.ativo +
       '&' +
-      'dataPost=' +
-      this.state.dataPost +
-      '&' +
       'usuario=' +
       this.state.usuario +
       '&' +
@@ -147,8 +131,8 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipoUsuario, ativo, dataPost, usuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tipoUsuario, ativo, dataPost, usuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipoUsuario, ativo, usuario, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tipoUsuario, ativo, usuario, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -189,15 +173,7 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                             <Translate contentKey="generadorApp.tipoUsuario.tipoUsuario">Tipo Usuario</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="tipoUsuario"
-                            id="tipo-usuario-tipoUsuario"
-                            value={this.state.tipoUsuario}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="tipoUsuario" id="tipo-usuario-tipoUsuario" value={this.state.tipoUsuario} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -206,24 +182,6 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                             <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
                           </Label>
                           <AvInput type="string" name="ativo" id="tipo-usuario-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPostLabel" for="tipo-usuario-dataPost">
-                            <Translate contentKey="generadorApp.tipoUsuario.dataPost">Data Post</Translate>
-                          </Label>
-                          <AvInput
-                            id="tipo-usuario-dataPost"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataPost"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
                         </Row>
                       </Col>
 
@@ -265,10 +223,6 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                         <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataPost')}>
-                        <Translate contentKey="generadorApp.tipoUsuario.dataPost">Data Post</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
 
                       <th />
                     </tr>
@@ -286,10 +240,6 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                         <td>{tipoUsuario.tipoUsuario}</td>
 
                         <td>{tipoUsuario.ativo}</td>
-
-                        <td>
-                          <TextFormat type="date" value={tipoUsuario.dataPost} format={APP_DATE_FORMAT} />
-                        </td>
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">

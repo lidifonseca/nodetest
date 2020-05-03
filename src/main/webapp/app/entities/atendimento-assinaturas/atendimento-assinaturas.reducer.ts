@@ -107,7 +107,6 @@ const apiUrl = 'api/atendimento-assinaturas';
 // Actions
 export type ICrudGetAllActionAtendimentoAssinaturas<T> = (
   arquivoAssinatura?: any,
-  dataPost?: any,
   idAtendimento?: any,
   idProfissional?: any,
   idPaciente?: any,
@@ -118,7 +117,6 @@ export type ICrudGetAllActionAtendimentoAssinaturas<T> = (
 
 export const getEntities: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAssinaturas> = (
   arquivoAssinatura,
-  dataPost,
   idAtendimento,
   idProfissional,
   idPaciente,
@@ -127,7 +125,6 @@ export const getEntities: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAs
   sort
 ) => {
   const arquivoAssinaturaRequest = arquivoAssinatura ? `arquivoAssinatura.contains=${arquivoAssinatura}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.equals=${idAtendimento}&` : '';
   const idProfissionalRequest = idProfissional ? `idProfissional.equals=${idProfissional}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
@@ -136,7 +133,7 @@ export const getEntities: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAs
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST,
     payload: axios.get<IAtendimentoAssinaturas>(
-      `${requestUrl}${arquivoAssinaturaRequest}${dataPostRequest}${idAtendimentoRequest}${idProfissionalRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${arquivoAssinaturaRequest}${idAtendimentoRequest}${idProfissionalRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

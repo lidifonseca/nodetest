@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
 import { IPacienteDiagnostico } from 'app/shared/model/paciente-diagnostico.model';
 import { IPadCid } from 'app/shared/model/pad-cid.model';
@@ -10,7 +9,6 @@ export interface ICid {
   gr?: string;
   temp?: string;
   apelido?: string;
-  dataPost?: Moment;
   cidXPtaNovos?: ICidXPtaNovo[];
   pacienteDiagnosticos?: IPacienteDiagnostico[];
   padCids?: IPadCid[];

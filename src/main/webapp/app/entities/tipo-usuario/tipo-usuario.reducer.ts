@@ -108,24 +108,22 @@ const apiUrl = 'api/tipo-usuarios';
 export type ICrudGetAllActionTipoUsuario<T> = (
   tipoUsuario?: any,
   ativo?: any,
-  dataPost?: any,
   usuario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoUsuario<ITipoUsuario> = (tipoUsuario, ativo, dataPost, usuario, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoUsuario<ITipoUsuario> = (tipoUsuario, ativo, usuario, page, size, sort) => {
   const tipoUsuarioRequest = tipoUsuario ? `tipoUsuario.contains=${tipoUsuario}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const usuarioRequest = usuario ? `usuario.equals=${usuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOUSUARIO_LIST,
     payload: axios.get<ITipoUsuario>(
-      `${requestUrl}${tipoUsuarioRequest}${ativoRequest}${dataPostRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${tipoUsuarioRequest}${ativoRequest}${usuarioRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

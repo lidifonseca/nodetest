@@ -1,5 +1,3 @@
-import { Moment } from 'moment';
-
 export interface IUsuarioPanico {
   id?: string;
   idPaciente?: number;
@@ -8,7 +6,6 @@ export interface IUsuarioPanico {
   observacao?: string;
   resolvido?: number;
   idUserResolvido?: number;
-  dataPost?: Moment;
 }
 
 export const defaultValue: Readonly<IUsuarioPanico> = {};

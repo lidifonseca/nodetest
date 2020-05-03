@@ -15,14 +15,11 @@ export default class ProfissionalStatusAtualNew extends BaseEntity {
   @Column({ type: 'integer', name: 'id_status_atual_prof' })
   idStatusAtualProf: number;
 
-  @Column({ name: 'obs', length: 255 })
-  obs: string;
+  @Column({ type: 'blob', name: 'obs' })
+  obs: any;
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
-
-  @Column({ type: 'timestamp', name: 'data_post', nullable: false })
-  dataPost: any;
 
   @Column({ name: 'id_usuario', nullable: false })
   idUsuario: string;

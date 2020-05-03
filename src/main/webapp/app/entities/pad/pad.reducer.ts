@@ -114,7 +114,6 @@ export type ICrudGetAllActionPad<T> = (
   dataFim?: any,
   dataConferido?: any,
   ativo?: any,
-  dataPost?: any,
   idUsuario?: any,
   statusPad?: any,
   novoModelo?: any,
@@ -137,7 +136,6 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   dataFim,
   dataConferido,
   ativo,
-  dataPost,
   idUsuario,
   statusPad,
   novoModelo,
@@ -158,7 +156,6 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
   const dataConferidoRequest = dataConferido ? `dataConferido.equals=${dataConferido}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const dataPostRequest = dataPost ? `dataPost.contains=${dataPost}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const statusPadRequest = statusPad ? `statusPad.contains=${statusPad}&` : '';
   const novoModeloRequest = novoModelo ? `novoModelo.contains=${novoModelo}&` : '';
@@ -172,7 +169,7 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idUnidadeRequest}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${dataPostRequest}${idUsuarioRequest}${statusPadRequest}${novoModeloRequest}${imagePathRequest}${scoreRequest}${padCidRequest}${padItemRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeRequest}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${idUsuarioRequest}${statusPadRequest}${novoModeloRequest}${imagePathRequest}${scoreRequest}${padCidRequest}${padItemRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };

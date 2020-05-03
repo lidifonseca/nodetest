@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -12,7 +12,7 @@ import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IStatusAtual } from 'app/shared/model/status-atual.model';
 import { getEntities as getStatusAtuals } from 'app/entities/status-atual/status-atual.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './paciente-status-atual.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './paciente-status-atual.reducer';
 import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -51,9 +51,15 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
     this.props.getStatusAtuals();
   }
 
-  saveEntity = (event: any, errors: any, values: any) => {
-    values.dataPost = convertDateTimeToServer(values.dataPost);
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
 
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
+  saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteStatusAtualEntity } = this.props;
       const entity = {
@@ -76,6 +82,8 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
   render() {
     const { pacienteStatusAtualEntity, pacientes, statusAtuals, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { observacao } = pacienteStatusAtualEntity;
 
     return (
       <div>
@@ -176,14 +184,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                               </Label>
                             </Col>
                             <Col md="9">
-                              <AvField
-                                id="paciente-status-atual-observacao"
-                                type="text"
-                                name="observacao"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
+                              <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -199,31 +200,6 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </Col>
                             <Col md="9">
                               <AvField id="paciente-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPostLabel" for="paciente-status-atual-dataPost">
-                                <Translate contentKey="generadorApp.pacienteStatusAtual.dataPost">Data Post</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="paciente-status-atual-dataPost"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPost"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.pacienteStatusAtualEntity.dataPost)}
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
                             </Col>
                           </Row>
                         </AvGroup>
@@ -327,6 +303,7 @@ const mapDispatchToProps = {
   getStatusAtuals,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };
