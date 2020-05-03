@@ -201,15 +201,7 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                             <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="descrCidade"
-                            id="cidade-descrCidade"
-                            value={this.state.descrCidade}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="descrCidade" id="cidade-descrCidade" value={this.state.descrCidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -224,9 +216,6 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                             name="dataPost"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>

@@ -881,15 +881,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.idUnidade">Id Unidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idUnidade"
-                            id="paciente-idUnidade"
-                            value={this.state.idUnidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
+                          <AvInput type="text" name="idUnidade" id="paciente-idUnidade" value={this.state.idUnidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -929,10 +921,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             name="idGrauParentesco"
                             id="paciente-idGrauParentesco"
                             value={this.state.idGrauParentesco}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -942,15 +930,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.senha">Senha</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="senha"
-                            id="paciente-senha"
-                            value={this.state.senha}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="senha" id="paciente-senha" value={this.state.senha} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -959,15 +939,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="paciente-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="nome" id="paciente-nome" value={this.state.nome} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -976,15 +948,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.email">Email</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="email"
-                            id="paciente-email"
-                            value={this.state.email}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="email" id="paciente-email" value={this.state.email} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -993,15 +957,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.cpf">Cpf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cpf"
-                            id="paciente-cpf"
-                            value={this.state.cpf}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cpf" id="paciente-cpf" value={this.state.cpf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1010,15 +966,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.rg">Rg</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="rg"
-                            id="paciente-rg"
-                            value={this.state.rg}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="rg" id="paciente-rg" value={this.state.rg} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1027,15 +975,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.registro">Registro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="registro"
-                            id="paciente-registro"
-                            value={this.state.registro}
-                            validate={{
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="registro" id="paciente-registro" value={this.state.registro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1060,15 +1000,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.telefone">Telefone</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone"
-                            id="paciente-telefone"
-                            value={this.state.telefone}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone" id="paciente-telefone" value={this.state.telefone} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1077,15 +1009,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.telefone2">Telefone 2</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefone2"
-                            id="paciente-telefone2"
-                            value={this.state.telefone2}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefone2" id="paciente-telefone2" value={this.state.telefone2} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1094,15 +1018,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.celular">Celular</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular"
-                            id="paciente-celular"
-                            value={this.state.celular}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular" id="paciente-celular" value={this.state.celular} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1111,15 +1027,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.celular1">Celular 1</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular1"
-                            id="paciente-celular1"
-                            value={this.state.celular1}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular1" id="paciente-celular1" value={this.state.celular1} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1128,15 +1036,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.cep">Cep</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="paciente-cep"
-                            value={this.state.cep}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cep" id="paciente-cep" value={this.state.cep} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1145,15 +1045,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.endereco">Endereco</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="endereco"
-                            id="paciente-endereco"
-                            value={this.state.endereco}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="endereco" id="paciente-endereco" value={this.state.endereco} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1162,15 +1054,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.numero">Numero</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numero"
-                            id="paciente-numero"
-                            value={this.state.numero}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numero" id="paciente-numero" value={this.state.numero} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1179,15 +1063,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.complemento">Complemento</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="complemento"
-                            id="paciente-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="complemento" id="paciente-complemento" value={this.state.complemento} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1196,15 +1072,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.bairro">Bairro</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bairro"
-                            id="paciente-bairro"
-                            value={this.state.bairro}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bairro" id="paciente-bairro" value={this.state.bairro} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1213,15 +1081,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cidade"
-                            id="paciente-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cidade" id="paciente-cidade" value={this.state.cidade} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1230,15 +1090,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.uf">Uf</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="uf"
-                            id="paciente-uf"
-                            value={this.state.uf}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="uf" id="paciente-uf" value={this.state.uf} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1247,15 +1099,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.latitude">Latitude</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="latitude"
-                            id="paciente-latitude"
-                            value={this.state.latitude}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="latitude" id="paciente-latitude" value={this.state.latitude} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1264,15 +1108,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.longitude">Longitude</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="longitude"
-                            id="paciente-longitude"
-                            value={this.state.longitude}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="longitude" id="paciente-longitude" value={this.state.longitude} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1286,9 +1122,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             name="responsavelFamiliar"
                             id="paciente-responsavelFamiliar"
                             value={this.state.responsavelFamiliar}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1298,15 +1131,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.emailFamiliar">Email Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="emailFamiliar"
-                            id="paciente-emailFamiliar"
-                            value={this.state.emailFamiliar}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="emailFamiliar" id="paciente-emailFamiliar" value={this.state.emailFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1315,15 +1140,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.cpfFamiliar">Cpf Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cpfFamiliar"
-                            id="paciente-cpfFamiliar"
-                            value={this.state.cpfFamiliar}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cpfFamiliar" id="paciente-cpfFamiliar" value={this.state.cpfFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1332,15 +1149,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.rgFamiliar">Rg Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="rgFamiliar"
-                            id="paciente-rgFamiliar"
-                            value={this.state.rgFamiliar}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="rgFamiliar" id="paciente-rgFamiliar" value={this.state.rgFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1370,15 +1179,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.telefoneFamiliar">Telefone Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="telefoneFamiliar"
-                            id="paciente-telefoneFamiliar"
-                            value={this.state.telefoneFamiliar}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="telefoneFamiliar" id="paciente-telefoneFamiliar" value={this.state.telefoneFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1392,9 +1193,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             name="telefone2Familiar"
                             id="paciente-telefone2Familiar"
                             value={this.state.telefone2Familiar}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1404,15 +1202,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.celularFamiliar">Celular Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celularFamiliar"
-                            id="paciente-celularFamiliar"
-                            value={this.state.celularFamiliar}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celularFamiliar" id="paciente-celularFamiliar" value={this.state.celularFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1421,15 +1211,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.celular2Familiar">Celular 2 Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="celular2Familiar"
-                            id="paciente-celular2Familiar"
-                            value={this.state.celular2Familiar}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="celular2Familiar" id="paciente-celular2Familiar" value={this.state.celular2Familiar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1438,15 +1220,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.cepFamiliar">Cep Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cepFamiliar"
-                            id="paciente-cepFamiliar"
-                            value={this.state.cepFamiliar}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cepFamiliar" id="paciente-cepFamiliar" value={this.state.cepFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1455,15 +1229,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.enderecoFamiliar">Endereco Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="enderecoFamiliar"
-                            id="paciente-enderecoFamiliar"
-                            value={this.state.enderecoFamiliar}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="enderecoFamiliar" id="paciente-enderecoFamiliar" value={this.state.enderecoFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1472,15 +1238,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.numeroFamiliar">Numero Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="numeroFamiliar"
-                            id="paciente-numeroFamiliar"
-                            value={this.state.numeroFamiliar}
-                            validate={{
-                              maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="numeroFamiliar" id="paciente-numeroFamiliar" value={this.state.numeroFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1494,9 +1252,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             name="complementoFamiliar"
                             id="paciente-complementoFamiliar"
                             value={this.state.complementoFamiliar}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1506,15 +1261,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.bairroFamiliar">Bairro Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="bairroFamiliar"
-                            id="paciente-bairroFamiliar"
-                            value={this.state.bairroFamiliar}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="bairroFamiliar" id="paciente-bairroFamiliar" value={this.state.bairroFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1523,15 +1270,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.cidadeFamiliar">Cidade Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="cidadeFamiliar"
-                            id="paciente-cidadeFamiliar"
-                            value={this.state.cidadeFamiliar}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="cidadeFamiliar" id="paciente-cidadeFamiliar" value={this.state.cidadeFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1540,15 +1279,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.ufFamiliar">Uf Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="ufFamiliar"
-                            id="paciente-ufFamiliar"
-                            value={this.state.ufFamiliar}
-                            validate={{
-                              maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="ufFamiliar" id="paciente-ufFamiliar" value={this.state.ufFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1557,15 +1288,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.latitudeFamiliar">Latitude Familiar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="latitudeFamiliar"
-                            id="paciente-latitudeFamiliar"
-                            value={this.state.latitudeFamiliar}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="latitudeFamiliar" id="paciente-latitudeFamiliar" value={this.state.latitudeFamiliar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1579,9 +1302,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             name="longitudeFamiliar"
                             id="paciente-longitudeFamiliar"
                             value={this.state.longitudeFamiliar}
-                            validate={{
-                              maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1591,15 +1311,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.observacao">Observacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="paciente-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="observacao" id="paciente-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1607,16 +1319,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                           <Label id="aphLabel" for="paciente-aph">
                             <Translate contentKey="generadorApp.paciente.aph">Aph</Translate>
                           </Label>
-                          <AvInput
-                            type="string"
-                            name="aph"
-                            id="paciente-aph"
-                            value={this.state.aph}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
+                          <AvInput type="string" name="aph" id="paciente-aph" value={this.state.aph} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1646,15 +1349,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.obsPs">Obs Ps</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="obsPs"
-                            id="paciente-obsPs"
-                            value={this.state.obsPs}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="obsPs" id="paciente-obsPs" value={this.state.obsPs} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1676,15 +1371,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.obsInternacao">Obs Internacao</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="obsInternacao"
-                            id="paciente-obsInternacao"
-                            value={this.state.obsInternacao}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="obsInternacao" id="paciente-obsInternacao" value={this.state.obsInternacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1706,9 +1393,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             name="observacaoFamiliar"
                             id="paciente-observacaoFamiliar"
                             value={this.state.observacaoFamiliar}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1769,9 +1453,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             name="dataPost"
                             placeholder={'YYYY-MM-DD HH:mm'}
                             value={this.state.dataPost ? convertDateTimeFromServer(this.state.dataPost) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
                           />
                         </Row>
                       </Col>
@@ -1781,15 +1462,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.detalhes">Detalhes</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="detalhes"
-                            id="paciente-detalhes"
-                            value={this.state.detalhes}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="detalhes" id="paciente-detalhes" value={this.state.detalhes} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1806,15 +1479,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.liminar">Liminar</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="liminar"
-                            id="paciente-liminar"
-                            value={this.state.liminar}
-                            validate={{
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="liminar" id="paciente-liminar" value={this.state.liminar} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1823,15 +1488,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.expoToken">Expo Token</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="expoToken"
-                            id="paciente-expoToken"
-                            value={this.state.expoToken}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="expoToken" id="paciente-expoToken" value={this.state.expoToken} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1853,15 +1510,7 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                             <Translate contentKey="generadorApp.paciente.senhaChat">Senha Chat</Translate>
                           </Label>
 
-                          <AvInput
-                            type="text"
-                            name="senhaChat"
-                            id="paciente-senhaChat"
-                            value={this.state.senhaChat}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
+                          <AvInput type="text" name="senhaChat" id="paciente-senhaChat" value={this.state.senhaChat} />
                         </Row>
                       </Col>
 

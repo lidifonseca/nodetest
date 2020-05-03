@@ -7,7 +7,12 @@ import { NavLink as Link } from 'react-router-dom';
 import { NavDropdown } from './menu-components';
 
 export const EntitiesMenu = props => (
-  <NavDropdown icon="" name="Estados" id="entity-menu" style={{     position: 'absolute', width: 320, height: 500, overflowX: "hidden", overflowY: "auto" }}>
+  <NavDropdown
+    icon=""
+    name="Estados"
+    id="entity-menu"
+    style={{ position: 'absolute', width: 320, height: 500, overflowX: 'hidden', overflowY: 'auto' }}
+  >
     <MenuItem icon="asterisk" to="/paciente">
       <Translate contentKey="global.menu.entities.paciente" />
     </MenuItem>

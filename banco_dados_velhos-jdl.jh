@@ -263,7 +263,7 @@ entity CategoriaAtividade {
 }
 
 entity CategoriaContrato {
-	contrato String maxlength(255),
+	contrato TextBlob,
 	ativo Integer,
 	dataPost Instant required
 }
@@ -563,12 +563,12 @@ entity LogPacAcesso {
 
 entity LogUser {
 	idUsuario String,
-	descricao String maxlength(255),
+	descricao TextBlob,
 	dataPost Instant required
 }
 
 entity LogUserFranquia {
-	descricao String maxlength(255),
+	descricao TextBlob,
 	dataPost Instant required
 }
 
@@ -619,7 +619,7 @@ entity NotificacaoConfig {
 	titulo String required maxlength(50),
 	/** Este campo é usado como uma chave para identificar qual a notificação à ser tratada. Pode ser o nome da função que controla o envio de push/email para o paciente e/ou profissionais. */
 	referencia String required maxlength(50),
-	descricao String maxlength(255),
+	descricao TextBlob,
 	/** 0 = Inativo / 1 = Ativo */
 	ativo Boolean required,
 	/** Caso valor=1 o app obriga o usário escolher envios por push e/ou email. */
@@ -1059,7 +1059,7 @@ entity PadItemHistDataIncComp {
 entity PadItemIndicadores {
 	idUnidadeMedida Integer,
 	titulo String required maxlength(45),
-	descricao String maxlength(100),
+	descricao TextBlob,
 	meta Integer,
 	maximoSt Integer,
 	minimoSt Integer

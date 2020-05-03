@@ -69,7 +69,6 @@
           className="form-control"
           name="<%= relationshipFieldName %>.id"
           value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
-          required
         >
           {
             <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -81,7 +80,6 @@
             ) : null
           }
         </AvInput>
-        <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
         <%_ } _%>
         <%_ } else { _%>
           <%_ if (!relationshipRequired) { _%>
@@ -108,7 +106,6 @@
               type="select"
               className="form-control"
               name="<%= relationshipFieldName %>Id"
-              required
             >
               {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -120,7 +117,6 @@
                 ) : null
               }
             </AvInput>
-            <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
           <%_ } _%>
         <%_ } _%>
         </div>
@@ -225,7 +221,6 @@ _%>
             name="<%= fieldName %>"
             placeholder={"YYYY-MM-DD HH:mm"}
             value={this.state.<%= fieldName %> ? convertDateTimeFromServer(this.state.<%= fieldName %>) : null }
-            <%- include react_validators %>
           />
           <%_ } else if (fieldType === 'LocalDate') { _%>
           <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -233,7 +228,7 @@ _%>
               <%= fieldNameHumanized %>
             </Translate>
           </Label>
-          <AvInput type="date" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}  <%- include react_validators %> />
+          <AvInput type="date" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}   />
           <%_
           } else if (field.fieldIsEnum) {
             const values = field.fieldValues.replace(/\s/g, '').split(',');
@@ -270,7 +265,7 @@ _%>
               <%= fieldNameHumanized %>
             </Translate>
           </Label>
-          <AvInput type="string" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}  <%- include react_validators %> />
+          <AvInput type="string" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}   />
           <%_
           } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -309,7 +304,7 @@ _%>
             </div>
           ) : null}
           <input id="file_<%= fieldName %>" type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
-          <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %>/>
+          <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} />
           </div>
 
           <%_ } else { _%>
@@ -318,7 +313,7 @@ _%>
               <%= fieldNameHumanized %>
             </Translate>
           </Label>
-          <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
+          <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" />
           <%_ } _%>
           <%_ } else { _%>
           <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -327,7 +322,7 @@ _%>
           </Translate>
           </Label>
 
-          <AvInput type="text" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}  <%- include react_validators %> />
+          <AvInput type="text" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}   />
           <%_ } _%>
           <%_ if (field.clean_javadoc) { _%>
           <UncontrolledTooltip target="<%= fieldName %>Label">
