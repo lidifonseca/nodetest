@@ -590,6 +590,10 @@ function analizeJavadoc(generator) {
     generator.formTabs = [];
     generator.viewTabs = [];
     generator.toStringFields = [];
+    generator.listButtons = [];
+    generator.listButtonsInDropdown = false;
+    generator.viewButtons = [];
+    generator.viewButtonsInDropdown = false;
     generator.listTableLayout = [];
     generator.listFilterLayout = [];
     generator.formLayout = [];
@@ -637,9 +641,31 @@ function analizeJavadoc(generator) {
                         }
                     }
                 }
+                if((["listButtons","viewButtons"]).indexOf(parameter[0]) !== -1) {
+                    
+                    for (const key in parameter) {
+                        if (key > 0) {
+                            const ele = parameter[key];
+                            let button = {
+                                name: ele.trim().substring(0,ele.indexOf("{")),
+                                attributes: {}
+                            };
+                            console.info(parameter[0] + " " + button.name);
+                            if(button.name){
+                                let attributes = ele.trim().substring(ele.indexOf("{")+1,ele.length-1).split(",");
+                                for (const i in attributes) {
+                                    button['attributes'][attributes[i].split(":")[0]] = attributes[i].split(":")[1];
+                                    if(attributes[i].split(":")[0] === "inDropdown" && attributes[i].split(":")[1] === "true" ){
+                                        generator[parameter[0]+'InDropdown'] = true;
+                                    }
+                                }
+                                generator[parameter[0]].push(button);
+                            }
+                        }
+                    }
+                }
                 if((["listTableLayout","listFilterLayout", "formLayout", "viewLayout", "toStringFields"]).indexOf(parameter[0]) !== -1) {
                     for (const key in parameter) {
-                        
                         if (key > 0) {
                             const element = parameter[key];
                             const value = element.trim().split("}")[0].split("{");
@@ -741,7 +767,7 @@ function analizeJavadoc(generator) {
 
     // console.info(generator.toStringFields)
     // console.info(generator.listFilterLayout)
-    console.info(generator.formLayout)
+      console.info(generator.viewButtons)
     // console.info(generator.viewLayout)
 
     return generator;

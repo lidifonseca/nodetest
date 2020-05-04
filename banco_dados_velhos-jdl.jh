@@ -647,7 +647,7 @@ entity Operadora {
 	@toStringFields nome@@ 
 	@listTableLayout nome cep bairro rg registro@@ 
 	@listFilterLayout 
-		nome{Label:top,Size:6> 
+		nome{Label:top,Size:6}
 		email{Label:top,Size:6} 
 		cpf{Label:top,Size:6} 
 		rg{Label:top,Size:6} 
@@ -655,6 +655,16 @@ entity Operadora {
 	@@ 
 	@formTab DadosDoPaciente<unidade,email,nome,cpf,rg,cep,nascimento,sexo,endereco,telefone,celular,bairro,numero,complemento,cidade,uf,profissionalPref,tipohospital,liminar,detalhes,observacao>@@ 
 	@formTab DadosDoFamiliar<cepFamiliar,enderecoFamiliar,numeroFamiliar,complementoFamiliar,cidadeFamiliar,bairroFamiliar,ufFamiliar,latitudeFamiliar,longitudeFamiliar,acessoFamiliar,emailFamiliar,cpfFamiliar,rgFamiliar,nascimentoFamiliar,sexoFamiliar,telefoneFamiliar,celularFamiliar,observacaoFamiliar>@@ 
+	@listButtons 
+		view{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}`,color:info,size:sm,icon:eye,text:View} 
+		edit{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Edit} 
+	  delete{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:trash,text:Delete} 
+	@@	
+	@viewButtons 
+		view{tag:Link,to:`/paciente/${pacienteEntity.id}`,color:info,size:sm,icon:eye,text:View} 
+		edit{tag:Link,to:`/paciente/${pacienteEntity.id}/edit`,color:primary,size:sm,icon:pencil-alt,text:Edit} 
+	  delete{tag:Link,to:`/paciente/${pacienteEntity.id}/delete`,color:danger,size:sm,icon:trash,text:Delete} 
+	@@
 	@formLayout
 		unidade{Label:top,Size:6}
 		email{Label:top,Size:6}

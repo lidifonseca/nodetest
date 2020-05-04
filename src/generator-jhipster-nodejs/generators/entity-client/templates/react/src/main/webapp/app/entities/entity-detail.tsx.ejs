@@ -176,7 +176,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './<%= entityFileName %>.reducer';
+import { getEntity, I<%= entityReactName %>BaseState, get<%= entityReactName %>State } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
@@ -186,17 +186,21 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
   import classnames from 'classnames';
 <%_ } _%>
   
+export interface I<%= entityReactName %>State {
+  fieldsBase: I<%= entityReactName %>BaseState;
+}
 
 export interface I<%= entityReactName %>DetailProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {
   <%_ if (viewTabs.length > 0) { _%>activeTab: number;<%_ } _%>
 }
 
-export class <%= entityReactName %>Detail extends React.Component<I<%= entityReactName %>DetailProps> {
+export class <%= entityReactName %>Detail extends React.Component<I<%= entityReactName %>DetailProps, I<%= entityReactName %>State> {
 
   constructor(props: Readonly<I<%= entityReactName %>DetailProps>) {
     super(props);
     this.state = {
       ...this.state,
+      fieldsBase: get<%= entityReactName %>State(this.props.location),
       <%_ if (viewTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
     };
   }
@@ -229,6 +233,13 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
           <PanelHeader>
             <h2 id="page-heading">
               <span className="page-header ml-3"><%= entityClassPluralHumanized %></span>
+              <%_ console.info(viewButtons) _%>
+              <%_ for (idx in viewButtons) { _%>
+                <%_ const attrib = viewButtons[idx].attributes; _%>
+                  <Button className="float-right jh-create-entity" tag={<%=attrib['tag'] %>} to={<%=attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>">
+                    <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.<%=viewButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
+                  </Button>
+              <%_ } _%>
             </h2>
           </PanelHeader>
           <PanelBody>

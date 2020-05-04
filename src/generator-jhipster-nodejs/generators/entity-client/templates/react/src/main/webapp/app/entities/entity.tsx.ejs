@@ -445,7 +445,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table, Label, UncontrolledTooltip, UncontrolledCollapse, CardHeader, CardBody, UncontrolledAlert } from 'reactstrap';
+import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table, Label, UncontrolledTooltip, UncontrolledCollapse, CardHeader, CardBody,
+<%_  if (listButtonsInDropdown === true) { _%> Dropdown, DropdownToggle,  DropdownMenu,  DropdownItem, <%_ } _%> UncontrolledAlert } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
   <%_ if (blobFields.length > 0) { _%>
@@ -468,6 +469,7 @@ import {Panel, PanelHeader, PanelBody, PanelFooter} from 'app/shared/layout/pane
 
 import { IRootState } from 'app/shared/reducers';
 import {
+  get<%= entityReactName %>State, I<%= entityReactName %>BaseState,
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities,
   <%_ } _%>
@@ -540,24 +542,21 @@ import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlur
 
 export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{url: string}> {}
 
-export interface I<%= entityReactName %>BaseState {
-  <%_ for (idx in fields) { _%>
-    <%= fields[idx].fieldName %> : any;
-  <%_ } _%>
-  <%_ relationships.forEach(rel => { _%>
-    <%= rel.relationshipName %> : any;
-  <%_ }) _%>
-}
+
 <% if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
 export interface I<%= entityReactName %>State extends I<%= entityReactName %>BaseState, IPaginationBaseState {
   search: string;
+  <%_  if (listButtonsInDropdown === true) { _%> dropdownButtons: {}; <%_ } _%>
 }
 <%_ } else if (searchEngine === 'elasticsearch') { _%>
 export interface I<%= entityReactName %>State extends I<%= entityReactName %>BaseState {
   search: string;
+  <%_  if (listButtonsInDropdown === true) { _%> dropdownButtons: {}; <%_ } _%>
 }
 <%_ } else if (pagination !== 'no') { _%>
-export interface I<%= entityReactName %>State extends I<%= entityReactName %>BaseState, IPaginationBaseState {};
+export interface I<%= entityReactName %>State extends I<%= entityReactName %>BaseState, IPaginationBaseState {
+  <%_  if (listButtonsInDropdown === true) { _%> dropdownButtons: {}; <%_ } _%>
+};
 <%_ } _%>
 
 export class <%= entityReactName %> extends React.Component<I<%= entityReactName %>Props<% if (searchEngine === 'elasticsearch' || pagination !== 'no') { %>, I<%= entityReactName %>State<% } %>> {
@@ -567,39 +566,26 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     super(props);
     <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
       this.state = {
+        <%_  if (listButtonsInDropdown === true) { _%> dropdownButtons: {}, <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         search: '',
         <%_ } _%>
         <%_ if (pagination !== 'no') { _%>
         ...getSortState(this.props.location, ITEMS_PER_PAGE),
-        ...this.get<%= entityReactName %>State(this.props.location)
+        ...get<%= entityReactName %>State(this.props.location)
         <%_ } _%>
       };
       <%_ } _%>
   }
 
 
-
-  get<%= entityReactName %>State = (location): I<%= entityReactName %>BaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    <%_ for (idx in fields) { _%>
-      const <%= fields[idx].fieldName %> = url.searchParams.get('<%= fields[idx].fieldName %>') || '';
-    <%_ } _%>
-
-    <%_ relationships.forEach(rel => { _%>
-      const <%= rel.relationshipName %> = url.searchParams.get('<%= rel.relationshipName %>') || '';
-    <%_ }) _%>
-
-    return {
-      <%_ for (idx in fields) { _%>
-        <%= fields[idx].fieldName %>,
-      <%_ } _%>
-      <%_ relationships.forEach(rel => { _%>
-        <%= rel.relationshipName %>,
-      <%_ }) _%>
-    };
-  };
-
+  <%_  if (listButtonsInDropdown === true) { _%>
+    toggle = (btn) => {
+      const dropdownButtons = this.state.dropdownButtons;
+      dropdownButtons[btn] = !dropdownButtons[btn];
+      this.setState({dropdownButtons})
+    }
+  <%_ } _%>
 
 
   componentDidMount() {
@@ -919,18 +905,44 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                          
                           <td className="text-right">
                             <div className="btn-group flex-btn-group-container">
-                              <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
-                                <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
-                              </Button>
-                              <%_ if (!readOnly) { _%>
-                              <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
-                                <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
-                              </Button>
-                              <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
-                                <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
-                              </Button>
+                            <%_ if (listButtons.lenght == 0) { _%>
+                                <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
+                                  <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
+                                </Button>
+                                <%_ if (!readOnly) { _%>
+                                  <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
+                                    <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                                  </Button>
+                                  <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
+                                    <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
+                                  </Button>
+                                <%_ } _%>
+                              <%_ } else { _%>
+                                <%_ for (idx in listButtons) { _%>
+                                  <%_ const attrib = listButtons[idx].attributes; _%>
+                                  <%_  if (attrib.inDropdown !== 'true') { _%>
+                                    <Button tag={<%=attrib['tag'] %>} to={<%=attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>">
+                                      <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.<%=listButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
+                                    </Button>
+                                  <%_ } _%>
+                                <%_ } _%>
                               <%_ } _%>
                             </div>
+                            <%_  if (listButtonsInDropdown === true) { _%>
+                              <Dropdown isOpen={this.state.dropdownButtons[i]} toggle={()=>this.toggle(i)}>
+                                <DropdownToggle caret />
+                                <DropdownMenu right>
+                                  <%_ for (idx in listButtons) { _%>
+                                    <%_ const attrib = listButtons[idx].attributes; _%>
+                                    <%_  if (attrib.inDropdown === 'true') { _%>
+                                      <DropdownItem tag={<%=attrib['tag'] %>} to={<%=attrib['to'] %>} color="<%=attrib['color'] %>" size="<%=attrib['size'] %>" >
+                                        <FontAwesomeIcon icon="<%=attrib['icon'] %>" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.<%=listButtons[idx].name %>"><%=attrib['text'] %></Translate></span>
+                                      </DropdownItem>
+                                    <%_ } _%>
+                                  <%_ } _%>
+                                </DropdownMenu>
+                              </Dropdown>
+                            <%_ } _%>
                           </td>
                           </tr>
                         ))

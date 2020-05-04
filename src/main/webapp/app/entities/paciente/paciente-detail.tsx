@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, byteSize, TextFormat } from 'react-jhipster'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente.reducer';
+import { getEntity, IPacienteBaseState, getPacienteState } from './paciente.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteState {
+  fieldsBase: IPacienteBaseState;
+}
+
 export interface IPacienteDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteDetail extends React.Component<IPacienteDetailProps> {
+export class PacienteDetail extends React.Component<IPacienteDetailProps, IPacienteState> {
   constructor(props: Readonly<IPacienteDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteState(this.props.location)
     };
   }
 
@@ -41,6 +46,36 @@ export class PacienteDetail extends React.Component<IPacienteDetailProps> {
           <PanelHeader>
             <h2 id="page-heading">
               <span className="page-header ml-3">Pacientes</span>
+              <Button className="float-right jh-create-entity" tag={Link} to={`/paciente/${pacienteEntity.id}`} color="info" size="sm">
+                <FontAwesomeIcon icon="eye" />{' '}
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.view">View</Translate>
+                </span>
+              </Button>
+              <Button
+                className="float-right jh-create-entity"
+                tag={Link}
+                to={`/paciente/${pacienteEntity.id}/edit`}
+                color="primary"
+                size="sm"
+              >
+                <FontAwesomeIcon icon="pencil-alt" />{' '}
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.edit">Edit</Translate>
+                </span>
+              </Button>
+              <Button
+                className="float-right jh-create-entity"
+                tag={Link}
+                to={`/paciente/${pacienteEntity.id}/delete`}
+                color="danger"
+                size="sm"
+              >
+                <FontAwesomeIcon icon="trash" />{' '}
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.delete">Delete</Translate>
+                </span>
+              </Button>
             </h2>
           </PanelHeader>
           <PanelBody>

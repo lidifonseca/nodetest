@@ -31,6 +31,85 @@ const initialState = {
 
 export type PacienteState = Readonly<typeof initialState>;
 
+export interface IPacienteBaseState {
+  senha: any;
+  nome: any;
+  email: any;
+  cpf: any;
+  rg: any;
+  registro: any;
+  nascimento: any;
+  sexo: any;
+  telefone: any;
+  telefone2: any;
+  celular: any;
+  celular1: any;
+  cep: any;
+  endereco: any;
+  numero: any;
+  complemento: any;
+  bairro: any;
+  uf: any;
+  latitude: any;
+  longitude: any;
+  responsavelFamiliar: any;
+  emailFamiliar: any;
+  cpfFamiliar: any;
+  rgFamiliar: any;
+  nascimentoFamiliar: any;
+  sexoFamiliar: any;
+  telefoneFamiliar: any;
+  telefone2Familiar: any;
+  celularFamiliar: any;
+  celular2Familiar: any;
+  cepFamiliar: any;
+  enderecoFamiliar: any;
+  numeroFamiliar: any;
+  complementoFamiliar: any;
+  bairroFamiliar: any;
+  ufFamiliar: any;
+  latitudeFamiliar: any;
+  longitudeFamiliar: any;
+  observacao: any;
+  aph: any;
+  nivelComplexidade: any;
+  passagemPs: any;
+  obsPs: any;
+  passagemInternacao: any;
+  obsInternacao: any;
+  custoTotal: any;
+  observacaoFamiliar: any;
+  mesmoEndereco: any;
+  acessoFamiliar: any;
+  comResponsavel: any;
+  cadastroCompleto: any;
+  ativo: any;
+  detalhes: any;
+  liminar: any;
+  expoToken: any;
+  senhaChat: any;
+  atendimento: any;
+  atendimentoAssinaturas: any;
+  diario: any;
+  pacienteDadosCartao: any;
+  pacienteDiagnostico: any;
+  pacienteDiario: any;
+  pacienteEnqueteApp: any;
+  pacienteOperadora: any;
+  pacientePedido: any;
+  pacientePush: any;
+  pacienteStatusAtual: any;
+  pad: any;
+  questionarios: any;
+  unidade: any;
+  franquia: any;
+  cidade: any;
+  cidadeFamiliar: any;
+  grauParentesco: any;
+  profissionalPref: any;
+  tipohospital: any;
+}
+
 // Reducer
 
 export default (state: PacienteState = initialState, action): PacienteState => {
@@ -433,3 +512,163 @@ export const setBlob = (name, data, contentType?) => ({
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteState = (location): IPacienteBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const senha = url.searchParams.get('senha') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const email = url.searchParams.get('email') || '';
+  const cpf = url.searchParams.get('cpf') || '';
+  const rg = url.searchParams.get('rg') || '';
+  const registro = url.searchParams.get('registro') || '';
+  const nascimento = url.searchParams.get('nascimento') || '';
+  const sexo = url.searchParams.get('sexo') || '';
+  const telefone = url.searchParams.get('telefone') || '';
+  const telefone2 = url.searchParams.get('telefone2') || '';
+  const celular = url.searchParams.get('celular') || '';
+  const celular1 = url.searchParams.get('celular1') || '';
+  const cep = url.searchParams.get('cep') || '';
+  const endereco = url.searchParams.get('endereco') || '';
+  const numero = url.searchParams.get('numero') || '';
+  const complemento = url.searchParams.get('complemento') || '';
+  const bairro = url.searchParams.get('bairro') || '';
+  const uf = url.searchParams.get('uf') || '';
+  const latitude = url.searchParams.get('latitude') || '';
+  const longitude = url.searchParams.get('longitude') || '';
+  const responsavelFamiliar = url.searchParams.get('responsavelFamiliar') || '';
+  const emailFamiliar = url.searchParams.get('emailFamiliar') || '';
+  const cpfFamiliar = url.searchParams.get('cpfFamiliar') || '';
+  const rgFamiliar = url.searchParams.get('rgFamiliar') || '';
+  const nascimentoFamiliar = url.searchParams.get('nascimentoFamiliar') || '';
+  const sexoFamiliar = url.searchParams.get('sexoFamiliar') || '';
+  const telefoneFamiliar = url.searchParams.get('telefoneFamiliar') || '';
+  const telefone2Familiar = url.searchParams.get('telefone2Familiar') || '';
+  const celularFamiliar = url.searchParams.get('celularFamiliar') || '';
+  const celular2Familiar = url.searchParams.get('celular2Familiar') || '';
+  const cepFamiliar = url.searchParams.get('cepFamiliar') || '';
+  const enderecoFamiliar = url.searchParams.get('enderecoFamiliar') || '';
+  const numeroFamiliar = url.searchParams.get('numeroFamiliar') || '';
+  const complementoFamiliar = url.searchParams.get('complementoFamiliar') || '';
+  const bairroFamiliar = url.searchParams.get('bairroFamiliar') || '';
+  const ufFamiliar = url.searchParams.get('ufFamiliar') || '';
+  const latitudeFamiliar = url.searchParams.get('latitudeFamiliar') || '';
+  const longitudeFamiliar = url.searchParams.get('longitudeFamiliar') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+  const aph = url.searchParams.get('aph') || '';
+  const nivelComplexidade = url.searchParams.get('nivelComplexidade') || '';
+  const passagemPs = url.searchParams.get('passagemPs') || '';
+  const obsPs = url.searchParams.get('obsPs') || '';
+  const passagemInternacao = url.searchParams.get('passagemInternacao') || '';
+  const obsInternacao = url.searchParams.get('obsInternacao') || '';
+  const custoTotal = url.searchParams.get('custoTotal') || '';
+  const observacaoFamiliar = url.searchParams.get('observacaoFamiliar') || '';
+  const mesmoEndereco = url.searchParams.get('mesmoEndereco') || '';
+  const acessoFamiliar = url.searchParams.get('acessoFamiliar') || '';
+  const comResponsavel = url.searchParams.get('comResponsavel') || '';
+  const cadastroCompleto = url.searchParams.get('cadastroCompleto') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const detalhes = url.searchParams.get('detalhes') || '';
+  const liminar = url.searchParams.get('liminar') || '';
+  const expoToken = url.searchParams.get('expoToken') || '';
+  const senhaChat = url.searchParams.get('senhaChat') || '';
+
+  const atendimento = url.searchParams.get('atendimento') || '';
+  const atendimentoAssinaturas = url.searchParams.get('atendimentoAssinaturas') || '';
+  const diario = url.searchParams.get('diario') || '';
+  const pacienteDadosCartao = url.searchParams.get('pacienteDadosCartao') || '';
+  const pacienteDiagnostico = url.searchParams.get('pacienteDiagnostico') || '';
+  const pacienteDiario = url.searchParams.get('pacienteDiario') || '';
+  const pacienteEnqueteApp = url.searchParams.get('pacienteEnqueteApp') || '';
+  const pacienteOperadora = url.searchParams.get('pacienteOperadora') || '';
+  const pacientePedido = url.searchParams.get('pacientePedido') || '';
+  const pacientePush = url.searchParams.get('pacientePush') || '';
+  const pacienteStatusAtual = url.searchParams.get('pacienteStatusAtual') || '';
+  const pad = url.searchParams.get('pad') || '';
+  const questionarios = url.searchParams.get('questionarios') || '';
+  const unidade = url.searchParams.get('unidade') || '';
+  const franquia = url.searchParams.get('franquia') || '';
+  const cidade = url.searchParams.get('cidade') || '';
+  const cidadeFamiliar = url.searchParams.get('cidadeFamiliar') || '';
+  const grauParentesco = url.searchParams.get('grauParentesco') || '';
+  const profissionalPref = url.searchParams.get('profissionalPref') || '';
+  const tipohospital = url.searchParams.get('tipohospital') || '';
+
+  return {
+    senha,
+    nome,
+    email,
+    cpf,
+    rg,
+    registro,
+    nascimento,
+    sexo,
+    telefone,
+    telefone2,
+    celular,
+    celular1,
+    cep,
+    endereco,
+    numero,
+    complemento,
+    bairro,
+    uf,
+    latitude,
+    longitude,
+    responsavelFamiliar,
+    emailFamiliar,
+    cpfFamiliar,
+    rgFamiliar,
+    nascimentoFamiliar,
+    sexoFamiliar,
+    telefoneFamiliar,
+    telefone2Familiar,
+    celularFamiliar,
+    celular2Familiar,
+    cepFamiliar,
+    enderecoFamiliar,
+    numeroFamiliar,
+    complementoFamiliar,
+    bairroFamiliar,
+    ufFamiliar,
+    latitudeFamiliar,
+    longitudeFamiliar,
+    observacao,
+    aph,
+    nivelComplexidade,
+    passagemPs,
+    obsPs,
+    passagemInternacao,
+    obsInternacao,
+    custoTotal,
+    observacaoFamiliar,
+    mesmoEndereco,
+    acessoFamiliar,
+    comResponsavel,
+    cadastroCompleto,
+    ativo,
+    detalhes,
+    liminar,
+    expoToken,
+    senhaChat,
+    atendimento,
+    atendimentoAssinaturas,
+    diario,
+    pacienteDadosCartao,
+    pacienteDiagnostico,
+    pacienteDiario,
+    pacienteEnqueteApp,
+    pacienteOperadora,
+    pacientePedido,
+    pacientePush,
+    pacienteStatusAtual,
+    pad,
+    questionarios,
+    unidade,
+    franquia,
+    cidade,
+    cidadeFamiliar,
+    grauParentesco,
+    profissionalPref,
+    tipohospital
+  };
+};

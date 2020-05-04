@@ -23,7 +23,7 @@ import { IProfissional } from 'app/shared/model/profissional.model';
 import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
 import { IPacienteHospital } from 'app/shared/model/paciente-hospital.model';
 import { getEntities as getPacienteHospitals } from 'app/entities/paciente-hospital/paciente-hospital.reducer';
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './paciente.reducer';
+import { getEntity, getPacienteState, IPacienteBaseState, updateEntity, createEntity, setBlob, reset } from './paciente.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -31,6 +31,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPacienteUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface IPacienteUpdateState {
+  fieldsBase: IPacienteBaseState;
   activeTab: number;
   isNew: boolean;
   unidadeId: string;
@@ -46,6 +47,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
   constructor(props: Readonly<IPacienteUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getPacienteState(this.props.location),
       activeTab: 0,
       unidadeId: '0',
       franquiaId: '0',
@@ -248,376 +250,464 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                           ) : null}
 
                           <Row>
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" for="paciente-unidade">
-                                      <Translate contentKey="generadorApp.paciente.unidade">Unidade</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvInput id="paciente-unidade" type="select" className="form-control" name="unidade">
-                                      <option value="null" key="0">
-                                        {translate('generadorApp.paciente.unidade.empty')}
-                                      </option>
-                                      {unidadeEasies
-                                        ? unidadeEasies.map(otherEntity => (
-                                            <option value={otherEntity.id} key={otherEntity.id}>
-                                              {otherEntity.razaoSocial}
-                                            </option>
-                                          ))
-                                        : null}
-                                    </AvInput>
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.unidade ? (
+                              <Col md="6">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" for="paciente-unidade">
+                                        <Translate contentKey="generadorApp.paciente.unidade">Unidade</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvInput id="paciente-unidade" type="select" className="form-control" name="unidade">
+                                        <option value="null" key="0">
+                                          {translate('generadorApp.paciente.unidade.empty')}
+                                        </option>
+                                        {unidadeEasies
+                                          ? unidadeEasies.map(otherEntity => (
+                                              <option value={otherEntity.id} key={otherEntity.id}>
+                                                {otherEntity.razaoSocial}
+                                              </option>
+                                            ))
+                                          : null}
+                                      </AvInput>
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="unidade" value={this.state.fieldsBase.unidade} />
+                            )}
 
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="emailLabel" for="paciente-email">
-                                      <Translate contentKey="generadorApp.paciente.email">Email</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-email" type="text" name="email" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.email ? (
+                              <Col md="email">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="emailLabel" for="paciente-email">
+                                        <Translate contentKey="generadorApp.paciente.email">Email</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-email" type="text" name="email" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="email" value={this.state.fieldsBase.email} />
+                            )}
 
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="nomeLabel" for="paciente-nome">
-                                      <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-nome" type="text" name="nome" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.nome ? (
+                              <Col md="nome">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="nomeLabel" for="paciente-nome">
+                                        <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-nome" type="text" name="nome" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="nome" value={this.state.fieldsBase.nome} />
+                            )}
 
-                            <Col md="3">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="cpfLabel" for="paciente-cpf">
-                                      <Translate contentKey="generadorApp.paciente.cpf">Cpf</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-cpf" type="text" name="cpf" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.cpf ? (
+                              <Col md="cpf">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="cpfLabel" for="paciente-cpf">
+                                        <Translate contentKey="generadorApp.paciente.cpf">Cpf</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-cpf" type="text" name="cpf" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="cpf" value={this.state.fieldsBase.cpf} />
+                            )}
 
-                            <Col md="3">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="rgLabel" for="paciente-rg">
-                                      <Translate contentKey="generadorApp.paciente.rg">Rg</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-rg" type="text" name="rg" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.rg ? (
+                              <Col md="rg">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="rgLabel" for="paciente-rg">
+                                        <Translate contentKey="generadorApp.paciente.rg">Rg</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-rg" type="text" name="rg" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="rg" value={this.state.fieldsBase.rg} />
+                            )}
 
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="cepLabel" for="paciente-cep">
-                                      <Translate contentKey="generadorApp.paciente.cep">Cep</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-cep" type="text" name="cep" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.cep ? (
+                              <Col md="cep">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="cepLabel" for="paciente-cep">
+                                        <Translate contentKey="generadorApp.paciente.cep">Cep</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-cep" type="text" name="cep" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="cep" value={this.state.fieldsBase.cep} />
+                            )}
 
-                            <Col md="3">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="nascimentoLabel" for="paciente-nascimento">
-                                      <Translate contentKey="generadorApp.paciente.nascimento">Nascimento</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-nascimento" type="date" className="form-control" name="nascimento" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.nascimento ? (
+                              <Col md="nascimento">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="nascimentoLabel" for="paciente-nascimento">
+                                        <Translate contentKey="generadorApp.paciente.nascimento">Nascimento</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-nascimento" type="date" className="form-control" name="nascimento" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="nascimento" value={this.state.fieldsBase.nascimento} />
+                            )}
 
-                            <Col md="3">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="sexoLabel" for="paciente-sexo">
-                                      <Translate contentKey="generadorApp.paciente.sexo">Sexo</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-sexo" type="string" className="form-control" name="sexo" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.sexo ? (
+                              <Col md="sexo">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="sexoLabel" for="paciente-sexo">
+                                        <Translate contentKey="generadorApp.paciente.sexo">Sexo</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-sexo" type="string" className="form-control" name="sexo" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="sexo" value={this.state.fieldsBase.sexo} />
+                            )}
 
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="enderecoLabel" for="paciente-endereco">
-                                      <Translate contentKey="generadorApp.paciente.endereco">Endereco</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-endereco" type="text" name="endereco" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.endereco ? (
+                              <Col md="endereco">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="enderecoLabel" for="paciente-endereco">
+                                        <Translate contentKey="generadorApp.paciente.endereco">Endereco</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-endereco" type="text" name="endereco" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="endereco" value={this.state.fieldsBase.endereco} />
+                            )}
 
-                            <Col md="3">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="telefoneLabel" for="paciente-telefone">
-                                      <Translate contentKey="generadorApp.paciente.telefone">Telefone</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-telefone" type="text" name="telefone" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.telefone ? (
+                              <Col md="telefone">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="telefoneLabel" for="paciente-telefone">
+                                        <Translate contentKey="generadorApp.paciente.telefone">Telefone</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-telefone" type="text" name="telefone" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="telefone" value={this.state.fieldsBase.telefone} />
+                            )}
 
-                            <Col md="3">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="celularLabel" for="paciente-celular">
-                                      <Translate contentKey="generadorApp.paciente.celular">Celular</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-celular" type="text" name="celular" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.celular ? (
+                              <Col md="celular">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="celularLabel" for="paciente-celular">
+                                        <Translate contentKey="generadorApp.paciente.celular">Celular</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-celular" type="text" name="celular" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="celular" value={this.state.fieldsBase.celular} />
+                            )}
 
-                            <Col md="4">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="bairroLabel" for="paciente-bairro">
-                                      <Translate contentKey="generadorApp.paciente.bairro">Bairro</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-bairro" type="text" name="bairro" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.bairro ? (
+                              <Col md="bairro">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="bairroLabel" for="paciente-bairro">
+                                        <Translate contentKey="generadorApp.paciente.bairro">Bairro</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-bairro" type="text" name="bairro" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="bairro" value={this.state.fieldsBase.bairro} />
+                            )}
 
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="numeroLabel" for="paciente-numero">
-                                      <Translate contentKey="generadorApp.paciente.numero">Numero</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-numero" type="text" name="numero" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.numero ? (
+                              <Col md="numero">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="numeroLabel" for="paciente-numero">
+                                        <Translate contentKey="generadorApp.paciente.numero">Numero</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-numero" type="text" name="numero" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="numero" value={this.state.fieldsBase.numero} />
+                            )}
 
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="complementoLabel" for="paciente-complemento">
-                                      <Translate contentKey="generadorApp.paciente.complemento">Complemento</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-complemento" type="text" name="complemento" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
-                            <Col md="8">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" for="paciente-cidade">
-                                      <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvInput id="paciente-cidade" type="select" className="form-control" name="cidade">
-                                      <option value="null" key="0">
-                                        {translate('generadorApp.paciente.cidade.empty')}
-                                      </option>
-                                      {cidades
-                                        ? cidades.map(otherEntity => (
-                                            <option value={otherEntity.id} key={otherEntity.id}>
-                                              {otherEntity.descrCidade}
-                                            </option>
-                                          ))
-                                        : null}
-                                    </AvInput>
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.complemento ? (
+                              <Col md="complemento">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="complementoLabel" for="paciente-complemento">
+                                        <Translate contentKey="generadorApp.paciente.complemento">Complemento</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-complemento" type="text" name="complemento" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="complemento" value={this.state.fieldsBase.complemento} />
+                            )}
+                            {!this.state.fieldsBase.cidade ? (
+                              <Col md="8">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" for="paciente-cidade">
+                                        <Translate contentKey="generadorApp.paciente.cidade">Cidade</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvInput id="paciente-cidade" type="select" className="form-control" name="cidade">
+                                        <option value="null" key="0">
+                                          {translate('generadorApp.paciente.cidade.empty')}
+                                        </option>
+                                        {cidades
+                                          ? cidades.map(otherEntity => (
+                                              <option value={otherEntity.id} key={otherEntity.id}>
+                                                {otherEntity.descrCidade}
+                                              </option>
+                                            ))
+                                          : null}
+                                      </AvInput>
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="cidade" value={this.state.fieldsBase.cidade} />
+                            )}
 
-                            <Col md="4">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="ufLabel" for="paciente-uf">
-                                      <Translate contentKey="generadorApp.paciente.uf">Uf</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-uf" type="text" name="uf" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" for="paciente-profissionalPref">
-                                      <Translate contentKey="generadorApp.paciente.profissionalPref">Profissional Pref</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvInput id="paciente-profissionalPref" type="select" className="form-control" name="profissionalPref">
-                                      <option value="null" key="0">
-                                        {translate('generadorApp.paciente.profissionalPref.empty')}
-                                      </option>
-                                      {profissionals
-                                        ? profissionals.map(otherEntity => (
-                                            <option value={otherEntity.id} key={otherEntity.id}>
-                                              {otherEntity.nome}
-                                            </option>
-                                          ))
-                                        : null}
-                                    </AvInput>
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.uf ? (
+                              <Col md="uf">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="ufLabel" for="paciente-uf">
+                                        <Translate contentKey="generadorApp.paciente.uf">Uf</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-uf" type="text" name="uf" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="uf" value={this.state.fieldsBase.uf} />
+                            )}
+                            {!this.state.fieldsBase.profissionalPref ? (
+                              <Col md="6">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" for="paciente-profissionalPref">
+                                        <Translate contentKey="generadorApp.paciente.profissionalPref">Profissional Pref</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvInput
+                                        id="paciente-profissionalPref"
+                                        type="select"
+                                        className="form-control"
+                                        name="profissionalPref"
+                                      >
+                                        <option value="null" key="0">
+                                          {translate('generadorApp.paciente.profissionalPref.empty')}
+                                        </option>
+                                        {profissionals
+                                          ? profissionals.map(otherEntity => (
+                                              <option value={otherEntity.id} key={otherEntity.id}>
+                                                {otherEntity.nome}
+                                              </option>
+                                            ))
+                                          : null}
+                                      </AvInput>
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="profissionalPref" value={this.state.fieldsBase.profissionalPref} />
+                            )}
+                            {!this.state.fieldsBase.tipohospital ? (
+                              <Col md="6">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" for="paciente-tipohospital">
+                                        <Translate contentKey="generadorApp.paciente.tipohospital">Tipohospital</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvInput id="paciente-tipohospital" type="select" className="form-control" name="tipohospital">
+                                        <option value="null" key="0">
+                                          {translate('generadorApp.paciente.tipohospital.empty')}
+                                        </option>
+                                        {pacienteHospitals
+                                          ? pacienteHospitals.map(otherEntity => (
+                                              <option value={otherEntity.id} key={otherEntity.id}>
+                                                {otherEntity.servico}
+                                              </option>
+                                            ))
+                                          : null}
+                                      </AvInput>
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="tipohospital" value={this.state.fieldsBase.tipohospital} />
+                            )}
 
-                            <Col md="6">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" for="paciente-tipohospital">
-                                      <Translate contentKey="generadorApp.paciente.tipohospital">Tipohospital</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvInput id="paciente-tipohospital" type="select" className="form-control" name="tipohospital">
-                                      <option value="null" key="0">
-                                        {translate('generadorApp.paciente.tipohospital.empty')}
-                                      </option>
-                                      {pacienteHospitals
-                                        ? pacienteHospitals.map(otherEntity => (
-                                            <option value={otherEntity.id} key={otherEntity.id}>
-                                              {otherEntity.servico}
-                                            </option>
-                                          ))
-                                        : null}
-                                    </AvInput>
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.liminar ? (
+                              <Col md="liminar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="liminarLabel" for="paciente-liminar">
+                                        <Translate contentKey="generadorApp.paciente.liminar">Liminar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-liminar" type="text" name="liminar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="liminar" value={this.state.fieldsBase.liminar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="liminarLabel" for="paciente-liminar">
-                                      <Translate contentKey="generadorApp.paciente.liminar">Liminar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-liminar" type="text" name="liminar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.detalhes ? (
+                              <Col md="detalhes">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="detalhesLabel" for="paciente-detalhes">
+                                        <Translate contentKey="generadorApp.paciente.detalhes">Detalhes</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvInput
+                                        id="paciente-detalhes"
+                                        type="textarea"
+                                        name="detalhes"
+                                        validate={{
+                                          maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
+                                        }}
+                                      />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="detalhes" value={this.state.fieldsBase.detalhes} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="detalhesLabel" for="paciente-detalhes">
-                                      <Translate contentKey="generadorApp.paciente.detalhes">Detalhes</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvInput
-                                      id="paciente-detalhes"
-                                      type="textarea"
-                                      name="detalhes"
-                                      validate={{
-                                        maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                      }}
-                                    />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
-
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="observacaoLabel" for="paciente-observacao">
-                                      <Translate contentKey="generadorApp.paciente.observacao">Observacao</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvInput
-                                      id="paciente-observacao"
-                                      type="textarea"
-                                      name="observacao"
-                                      validate={{
-                                        maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                      }}
-                                    />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.observacao ? (
+                              <Col md="observacao">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="observacaoLabel" for="paciente-observacao">
+                                        <Translate contentKey="generadorApp.paciente.observacao">Observacao</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvInput
+                                        id="paciente-observacao"
+                                        type="textarea"
+                                        name="observacao"
+                                        validate={{
+                                          maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
+                                        }}
+                                      />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="observacao" value={this.state.fieldsBase.observacao} />
+                            )}
                           </Row>
 
                           {isNew ? (
@@ -646,293 +736,365 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                           ) : null}
 
                           <Row>
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="cepFamiliarLabel" for="paciente-cepFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.cepFamiliar">Cep Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-cepFamiliar" type="text" name="cepFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.cepFamiliar ? (
+                              <Col md="cepFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="cepFamiliarLabel" for="paciente-cepFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.cepFamiliar">Cep Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-cepFamiliar" type="text" name="cepFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="cepFamiliar" value={this.state.fieldsBase.cepFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="enderecoFamiliarLabel" for="paciente-enderecoFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.enderecoFamiliar">Endereco Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-enderecoFamiliar" type="text" name="enderecoFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.enderecoFamiliar ? (
+                              <Col md="enderecoFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="enderecoFamiliarLabel" for="paciente-enderecoFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.enderecoFamiliar">Endereco Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-enderecoFamiliar" type="text" name="enderecoFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="enderecoFamiliar" value={this.state.fieldsBase.enderecoFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="numeroFamiliarLabel" for="paciente-numeroFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.numeroFamiliar">Numero Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-numeroFamiliar" type="text" name="numeroFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.numeroFamiliar ? (
+                              <Col md="numeroFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="numeroFamiliarLabel" for="paciente-numeroFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.numeroFamiliar">Numero Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-numeroFamiliar" type="text" name="numeroFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="numeroFamiliar" value={this.state.fieldsBase.numeroFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="complementoFamiliarLabel" for="paciente-complementoFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.complementoFamiliar">Complemento Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-complementoFamiliar" type="text" name="complementoFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" for="paciente-cidadeFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.cidadeFamiliar">Cidade Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvInput id="paciente-cidadeFamiliar" type="select" className="form-control" name="cidadeFamiliar">
-                                      <option value="null" key="0">
-                                        {translate('generadorApp.paciente.cidadeFamiliar.empty')}
-                                      </option>
-                                      {cidades
-                                        ? cidades.map(otherEntity => (
-                                            <option value={otherEntity.id} key={otherEntity.id}>
-                                              {otherEntity.descrCidade}
-                                            </option>
-                                          ))
-                                        : null}
-                                    </AvInput>
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.complementoFamiliar ? (
+                              <Col md="complementoFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="complementoFamiliarLabel" for="paciente-complementoFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.complementoFamiliar">Complemento Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-complementoFamiliar" type="text" name="complementoFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="complementoFamiliar" value={this.state.fieldsBase.complementoFamiliar} />
+                            )}
+                            {!this.state.fieldsBase.cidadeFamiliar ? (
+                              <Col md="12">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" for="paciente-cidadeFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.cidadeFamiliar">Cidade Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvInput id="paciente-cidadeFamiliar" type="select" className="form-control" name="cidadeFamiliar">
+                                        <option value="null" key="0">
+                                          {translate('generadorApp.paciente.cidadeFamiliar.empty')}
+                                        </option>
+                                        {cidades
+                                          ? cidades.map(otherEntity => (
+                                              <option value={otherEntity.id} key={otherEntity.id}>
+                                                {otherEntity.descrCidade}
+                                              </option>
+                                            ))
+                                          : null}
+                                      </AvInput>
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="cidadeFamiliar" value={this.state.fieldsBase.cidadeFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="bairroFamiliarLabel" for="paciente-bairroFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.bairroFamiliar">Bairro Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-bairroFamiliar" type="text" name="bairroFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.bairroFamiliar ? (
+                              <Col md="bairroFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="bairroFamiliarLabel" for="paciente-bairroFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.bairroFamiliar">Bairro Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-bairroFamiliar" type="text" name="bairroFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="bairroFamiliar" value={this.state.fieldsBase.bairroFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="ufFamiliarLabel" for="paciente-ufFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.ufFamiliar">Uf Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-ufFamiliar" type="text" name="ufFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.ufFamiliar ? (
+                              <Col md="ufFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="ufFamiliarLabel" for="paciente-ufFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.ufFamiliar">Uf Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-ufFamiliar" type="text" name="ufFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="ufFamiliar" value={this.state.fieldsBase.ufFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="latitudeFamiliarLabel" for="paciente-latitudeFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.latitudeFamiliar">Latitude Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-latitudeFamiliar" type="text" name="latitudeFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.latitudeFamiliar ? (
+                              <Col md="latitudeFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="latitudeFamiliarLabel" for="paciente-latitudeFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.latitudeFamiliar">Latitude Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-latitudeFamiliar" type="text" name="latitudeFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="latitudeFamiliar" value={this.state.fieldsBase.latitudeFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="longitudeFamiliarLabel" for="paciente-longitudeFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.longitudeFamiliar">Longitude Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-longitudeFamiliar" type="text" name="longitudeFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.longitudeFamiliar ? (
+                              <Col md="longitudeFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="longitudeFamiliarLabel" for="paciente-longitudeFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.longitudeFamiliar">Longitude Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-longitudeFamiliar" type="text" name="longitudeFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="longitudeFamiliar" value={this.state.fieldsBase.longitudeFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="acessoFamiliarLabel" for="paciente-acessoFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.acessoFamiliar">Acesso Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-acessoFamiliar" type="string" className="form-control" name="acessoFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.acessoFamiliar ? (
+                              <Col md="acessoFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="acessoFamiliarLabel" for="paciente-acessoFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.acessoFamiliar">Acesso Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-acessoFamiliar" type="string" className="form-control" name="acessoFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="acessoFamiliar" value={this.state.fieldsBase.acessoFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="emailFamiliarLabel" for="paciente-emailFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.emailFamiliar">Email Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-emailFamiliar" type="text" name="emailFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.emailFamiliar ? (
+                              <Col md="emailFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="emailFamiliarLabel" for="paciente-emailFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.emailFamiliar">Email Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-emailFamiliar" type="text" name="emailFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="emailFamiliar" value={this.state.fieldsBase.emailFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="cpfFamiliarLabel" for="paciente-cpfFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.cpfFamiliar">Cpf Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-cpfFamiliar" type="text" name="cpfFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.cpfFamiliar ? (
+                              <Col md="cpfFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="cpfFamiliarLabel" for="paciente-cpfFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.cpfFamiliar">Cpf Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-cpfFamiliar" type="text" name="cpfFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="cpfFamiliar" value={this.state.fieldsBase.cpfFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="rgFamiliarLabel" for="paciente-rgFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.rgFamiliar">Rg Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-rgFamiliar" type="text" name="rgFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.rgFamiliar ? (
+                              <Col md="rgFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="rgFamiliarLabel" for="paciente-rgFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.rgFamiliar">Rg Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-rgFamiliar" type="text" name="rgFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="rgFamiliar" value={this.state.fieldsBase.rgFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="nascimentoFamiliarLabel" for="paciente-nascimentoFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.nascimentoFamiliar">Nascimento Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField
-                                      id="paciente-nascimentoFamiliar"
-                                      type="date"
-                                      className="form-control"
-                                      name="nascimentoFamiliar"
-                                      validate={{
-                                        maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                      }}
-                                    />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.nascimentoFamiliar ? (
+                              <Col md="nascimentoFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="nascimentoFamiliarLabel" for="paciente-nascimentoFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.nascimentoFamiliar">Nascimento Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField
+                                        id="paciente-nascimentoFamiliar"
+                                        type="date"
+                                        className="form-control"
+                                        name="nascimentoFamiliar"
+                                        validate={{
+                                          maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
+                                        }}
+                                      />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="nascimentoFamiliar" value={this.state.fieldsBase.nascimentoFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="sexoFamiliarLabel" for="paciente-sexoFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.sexoFamiliar">Sexo Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-sexoFamiliar" type="string" className="form-control" name="sexoFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.sexoFamiliar ? (
+                              <Col md="sexoFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="sexoFamiliarLabel" for="paciente-sexoFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.sexoFamiliar">Sexo Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-sexoFamiliar" type="string" className="form-control" name="sexoFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="sexoFamiliar" value={this.state.fieldsBase.sexoFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="telefoneFamiliarLabel" for="paciente-telefoneFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.telefoneFamiliar">Telefone Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-telefoneFamiliar" type="text" name="telefoneFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.telefoneFamiliar ? (
+                              <Col md="telefoneFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="telefoneFamiliarLabel" for="paciente-telefoneFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.telefoneFamiliar">Telefone Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-telefoneFamiliar" type="text" name="telefoneFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="telefoneFamiliar" value={this.state.fieldsBase.telefoneFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="celularFamiliarLabel" for="paciente-celularFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.celularFamiliar">Celular Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-celularFamiliar" type="text" name="celularFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.celularFamiliar ? (
+                              <Col md="celularFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="celularFamiliarLabel" for="paciente-celularFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.celularFamiliar">Celular Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-celularFamiliar" type="text" name="celularFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="celularFamiliar" value={this.state.fieldsBase.celularFamiliar} />
+                            )}
 
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="12">
-                                    <Label className="mt-2" id="observacaoFamiliarLabel" for="paciente-observacaoFamiliar">
-                                      <Translate contentKey="generadorApp.paciente.observacaoFamiliar">Observacao Familiar</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="12">
-                                    <AvField id="paciente-observacaoFamiliar" type="text" name="observacaoFamiliar" />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
+                            {!this.state.fieldsBase.observacaoFamiliar ? (
+                              <Col md="observacaoFamiliar">
+                                <AvGroup>
+                                  <Row>
+                                    <Col md="12">
+                                      <Label className="mt-2" id="observacaoFamiliarLabel" for="paciente-observacaoFamiliar">
+                                        <Translate contentKey="generadorApp.paciente.observacaoFamiliar">Observacao Familiar</Translate>
+                                      </Label>
+                                    </Col>
+                                    <Col md="12">
+                                      <AvField id="paciente-observacaoFamiliar" type="text" name="observacaoFamiliar" />
+                                    </Col>
+                                  </Row>
+                                </AvGroup>
+                              </Col>
+                            ) : (
+                              <AvInput type="hidden" name="observacaoFamiliar" value={this.state.fieldsBase.observacaoFamiliar} />
+                            )}
                           </Row>
 
                           {isNew ? (
@@ -976,335 +1138,420 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                             </Row>
                           ) : null}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="comResponsavelLabel" for="paciente-comResponsavel">
-                                    <Translate contentKey="generadorApp.paciente.comResponsavel">Com Responsavel</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-comResponsavel" type="string" className="form-control" name="comResponsavel" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" for="paciente-grauParentesco">
-                                    <Translate contentKey="generadorApp.paciente.grauParentesco">Grau Parentesco</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvInput id="paciente-grauParentesco" type="select" className="form-control" name="grauParentesco">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.paciente.grauParentesco.empty')}
-                                    </option>
-                                    {grauParentescos
-                                      ? grauParentescos.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.grauParentesco}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.comResponsavel ? (
+                            <Col md="comResponsavel">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="comResponsavelLabel" for="paciente-comResponsavel">
+                                      <Translate contentKey="generadorApp.paciente.comResponsavel">Com Responsavel</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-comResponsavel" type="string" className="form-control" name="comResponsavel" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="comResponsavel" value={this.state.fieldsBase.comResponsavel} />
+                          )}
+                          {!this.state.fieldsBase.grauParentesco ? (
+                            <Col md="12">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" for="paciente-grauParentesco">
+                                      <Translate contentKey="generadorApp.paciente.grauParentesco">Grau Parentesco</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvInput id="paciente-grauParentesco" type="select" className="form-control" name="grauParentesco">
+                                      <option value="null" key="0">
+                                        {translate('generadorApp.paciente.grauParentesco.empty')}
+                                      </option>
+                                      {grauParentescos
+                                        ? grauParentescos.map(otherEntity => (
+                                            <option value={otherEntity.id} key={otherEntity.id}>
+                                              {otherEntity.grauParentesco}
+                                            </option>
+                                          ))
+                                        : null}
+                                    </AvInput>
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="grauParentesco" value={this.state.fieldsBase.grauParentesco} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="responsavelFamiliarLabel" for="paciente-responsavelFamiliar">
-                                    <Translate contentKey="generadorApp.paciente.responsavelFamiliar">Responsavel Familiar</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-responsavelFamiliar" type="text" name="responsavelFamiliar" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" for="paciente-franquia">
-                                    <Translate contentKey="generadorApp.paciente.franquia">Franquia</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvInput id="paciente-franquia" type="select" className="form-control" name="franquia">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.paciente.franquia.empty')}
-                                    </option>
-                                    {franquias
-                                      ? franquias.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.nomeFantasia}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.responsavelFamiliar ? (
+                            <Col md="responsavelFamiliar">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="responsavelFamiliarLabel" for="paciente-responsavelFamiliar">
+                                      <Translate contentKey="generadorApp.paciente.responsavelFamiliar">Responsavel Familiar</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-responsavelFamiliar" type="text" name="responsavelFamiliar" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="responsavelFamiliar" value={this.state.fieldsBase.responsavelFamiliar} />
+                          )}
+                          {!this.state.fieldsBase.franquia ? (
+                            <Col md="12">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" for="paciente-franquia">
+                                      <Translate contentKey="generadorApp.paciente.franquia">Franquia</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvInput id="paciente-franquia" type="select" className="form-control" name="franquia">
+                                      <option value="null" key="0">
+                                        {translate('generadorApp.paciente.franquia.empty')}
+                                      </option>
+                                      {franquias
+                                        ? franquias.map(otherEntity => (
+                                            <option value={otherEntity.id} key={otherEntity.id}>
+                                              {otherEntity.nomeFantasia}
+                                            </option>
+                                          ))
+                                        : null}
+                                    </AvInput>
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="franquia" value={this.state.fieldsBase.franquia} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="senhaLabel" for="paciente-senha">
-                                    <Translate contentKey="generadorApp.paciente.senha">Senha</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-senha" type="text" name="senha" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.senha ? (
+                            <Col md="senha">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="senhaLabel" for="paciente-senha">
+                                      <Translate contentKey="generadorApp.paciente.senha">Senha</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-senha" type="text" name="senha" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="senha" value={this.state.fieldsBase.senha} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="registroLabel" for="paciente-registro">
-                                    <Translate contentKey="generadorApp.paciente.registro">Registro</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-registro" type="text" name="registro" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.registro ? (
+                            <Col md="registro">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="registroLabel" for="paciente-registro">
+                                      <Translate contentKey="generadorApp.paciente.registro">Registro</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-registro" type="text" name="registro" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="registro" value={this.state.fieldsBase.registro} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="latitudeLabel" for="paciente-latitude">
-                                    <Translate contentKey="generadorApp.paciente.latitude">Latitude</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-latitude" type="text" name="latitude" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.latitude ? (
+                            <Col md="latitude">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="latitudeLabel" for="paciente-latitude">
+                                      <Translate contentKey="generadorApp.paciente.latitude">Latitude</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-latitude" type="text" name="latitude" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="latitude" value={this.state.fieldsBase.latitude} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="longitudeLabel" for="paciente-longitude">
-                                    <Translate contentKey="generadorApp.paciente.longitude">Longitude</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-longitude" type="text" name="longitude" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.longitude ? (
+                            <Col md="longitude">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="longitudeLabel" for="paciente-longitude">
+                                      <Translate contentKey="generadorApp.paciente.longitude">Longitude</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-longitude" type="text" name="longitude" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="longitude" value={this.state.fieldsBase.longitude} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="aphLabel" for="paciente-aph">
-                                    <Translate contentKey="generadorApp.paciente.aph">Aph</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-aph" type="string" className="form-control" name="aph" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.aph ? (
+                            <Col md="aph">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="aphLabel" for="paciente-aph">
+                                      <Translate contentKey="generadorApp.paciente.aph">Aph</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-aph" type="string" className="form-control" name="aph" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="aph" value={this.state.fieldsBase.aph} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="nivelComplexidadeLabel" for="paciente-nivelComplexidade">
-                                    <Translate contentKey="generadorApp.paciente.nivelComplexidade">Nivel Complexidade</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField
-                                    id="paciente-nivelComplexidade"
-                                    type="string"
-                                    className="form-control"
-                                    name="nivelComplexidade"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.nivelComplexidade ? (
+                            <Col md="nivelComplexidade">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="nivelComplexidadeLabel" for="paciente-nivelComplexidade">
+                                      <Translate contentKey="generadorApp.paciente.nivelComplexidade">Nivel Complexidade</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField
+                                      id="paciente-nivelComplexidade"
+                                      type="string"
+                                      className="form-control"
+                                      name="nivelComplexidade"
+                                    />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="nivelComplexidade" value={this.state.fieldsBase.nivelComplexidade} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="passagemPsLabel" for="paciente-passagemPs">
-                                    <Translate contentKey="generadorApp.paciente.passagemPs">Passagem Ps</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-passagemPs" type="string" className="form-control" name="passagemPs" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.passagemPs ? (
+                            <Col md="passagemPs">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="passagemPsLabel" for="paciente-passagemPs">
+                                      <Translate contentKey="generadorApp.paciente.passagemPs">Passagem Ps</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-passagemPs" type="string" className="form-control" name="passagemPs" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="passagemPs" value={this.state.fieldsBase.passagemPs} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="obsPsLabel" for="paciente-obsPs">
-                                    <Translate contentKey="generadorApp.paciente.obsPs">Obs Ps</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-obsPs" type="text" name="obsPs" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.obsPs ? (
+                            <Col md="obsPs">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="obsPsLabel" for="paciente-obsPs">
+                                      <Translate contentKey="generadorApp.paciente.obsPs">Obs Ps</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-obsPs" type="text" name="obsPs" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="obsPs" value={this.state.fieldsBase.obsPs} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="passagemInternacaoLabel" for="paciente-passagemInternacao">
-                                    <Translate contentKey="generadorApp.paciente.passagemInternacao">Passagem Internacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField
-                                    id="paciente-passagemInternacao"
-                                    type="string"
-                                    className="form-control"
-                                    name="passagemInternacao"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.passagemInternacao ? (
+                            <Col md="passagemInternacao">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="passagemInternacaoLabel" for="paciente-passagemInternacao">
+                                      <Translate contentKey="generadorApp.paciente.passagemInternacao">Passagem Internacao</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField
+                                      id="paciente-passagemInternacao"
+                                      type="string"
+                                      className="form-control"
+                                      name="passagemInternacao"
+                                    />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="passagemInternacao" value={this.state.fieldsBase.passagemInternacao} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="obsInternacaoLabel" for="paciente-obsInternacao">
-                                    <Translate contentKey="generadorApp.paciente.obsInternacao">Obs Internacao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-obsInternacao" type="text" name="obsInternacao" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.obsInternacao ? (
+                            <Col md="obsInternacao">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="obsInternacaoLabel" for="paciente-obsInternacao">
+                                      <Translate contentKey="generadorApp.paciente.obsInternacao">Obs Internacao</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-obsInternacao" type="text" name="obsInternacao" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="obsInternacao" value={this.state.fieldsBase.obsInternacao} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="custoTotalLabel" for="paciente-custoTotal">
-                                    <Translate contentKey="generadorApp.paciente.custoTotal">Custo Total</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-custoTotal" type="string" className="form-control" name="custoTotal" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.custoTotal ? (
+                            <Col md="custoTotal">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="custoTotalLabel" for="paciente-custoTotal">
+                                      <Translate contentKey="generadorApp.paciente.custoTotal">Custo Total</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-custoTotal" type="string" className="form-control" name="custoTotal" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="custoTotal" value={this.state.fieldsBase.custoTotal} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="mesmoEnderecoLabel" for="paciente-mesmoEndereco">
-                                    <Translate contentKey="generadorApp.paciente.mesmoEndereco">Mesmo Endereco</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-mesmoEndereco" type="string" className="form-control" name="mesmoEndereco" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.mesmoEndereco ? (
+                            <Col md="mesmoEndereco">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="mesmoEnderecoLabel" for="paciente-mesmoEndereco">
+                                      <Translate contentKey="generadorApp.paciente.mesmoEndereco">Mesmo Endereco</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-mesmoEndereco" type="string" className="form-control" name="mesmoEndereco" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="mesmoEndereco" value={this.state.fieldsBase.mesmoEndereco} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="cadastroCompletoLabel" for="paciente-cadastroCompleto">
-                                    <Translate contentKey="generadorApp.paciente.cadastroCompleto">Cadastro Completo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-cadastroCompleto" type="string" className="form-control" name="cadastroCompleto" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.cadastroCompleto ? (
+                            <Col md="cadastroCompleto">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="cadastroCompletoLabel" for="paciente-cadastroCompleto">
+                                      <Translate contentKey="generadorApp.paciente.cadastroCompleto">Cadastro Completo</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField
+                                      id="paciente-cadastroCompleto"
+                                      type="string"
+                                      className="form-control"
+                                      name="cadastroCompleto"
+                                    />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="cadastroCompleto" value={this.state.fieldsBase.cadastroCompleto} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="ativoLabel" for="paciente-ativo">
-                                    <Translate contentKey="generadorApp.paciente.ativo">Ativo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-ativo" type="string" className="form-control" name="ativo" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.ativo ? (
+                            <Col md="ativo">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="ativoLabel" for="paciente-ativo">
+                                      <Translate contentKey="generadorApp.paciente.ativo">Ativo</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-ativo" type="string" className="form-control" name="ativo" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="expoTokenLabel" for="paciente-expoToken">
-                                    <Translate contentKey="generadorApp.paciente.expoToken">Expo Token</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-expoToken" type="text" name="expoToken" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.expoToken ? (
+                            <Col md="expoToken">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="expoTokenLabel" for="paciente-expoToken">
+                                      <Translate contentKey="generadorApp.paciente.expoToken">Expo Token</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-expoToken" type="text" name="expoToken" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="expoToken" value={this.state.fieldsBase.expoToken} />
+                          )}
 
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="12">
-                                  <Label className="mt-2" id="senhaChatLabel" for="paciente-senhaChat">
-                                    <Translate contentKey="generadorApp.paciente.senhaChat">Senha Chat</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="12">
-                                  <AvField id="paciente-senhaChat" type="text" name="senhaChat" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
+                          {!this.state.fieldsBase.senhaChat ? (
+                            <Col md="senhaChat">
+                              <AvGroup>
+                                <Row>
+                                  <Col md="12">
+                                    <Label className="mt-2" id="senhaChatLabel" for="paciente-senhaChat">
+                                      <Translate contentKey="generadorApp.paciente.senhaChat">Senha Chat</Translate>
+                                    </Label>
+                                  </Col>
+                                  <Col md="12">
+                                    <AvField id="paciente-senhaChat" type="text" name="senhaChat" />
+                                  </Col>
+                                </Row>
+                              </AvGroup>
+                            </Col>
+                          ) : (
+                            <AvInput type="hidden" name="senhaChat" value={this.state.fieldsBase.senhaChat} />
+                          )}
 
                           {isNew ? (
                             <Button

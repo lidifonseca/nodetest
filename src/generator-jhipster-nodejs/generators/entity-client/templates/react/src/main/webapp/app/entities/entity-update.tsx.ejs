@@ -31,147 +31,142 @@
 <%_ const otherEntityField = rel.otherEntityField; _%>
 <%_ const relationshipRequired = rel.relationshipRequired; _%>
 <%_ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
-<%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
-  <Col md="<%= formLayoutSize %>">
-    <AvGroup>
-      <Row>
-        <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-          <Label className="mt-2" for="<%= entityFileName %>-<%= relationshipName %>">
-            <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
-          </Label>
-        </Col>
-        <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-          <%_ if (dto === 'no') { _%>
-            <%_ if (!relationshipRequired) { _%>
-              <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                  name="<%= relationshipFieldName %>">
-                  <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
-                  {
-                  <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                  <option value={otherEntity.id} key={otherEntity.id}>
-                    {otherEntity.<%=otherEntityField%>}
-                  </option>
-                  ) : null
-                  }
-              </AvInput>
+{ !this.state.fieldsBase.<%= relationshipFieldName %> ?
+    <Col md="<%= formLayoutSize %>">
+      <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
+        <AvGroup>
+          <Row>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+              <Label className="mt-2" for="<%= entityFileName %>-<%= relationshipName %>">
+                <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+              </Label>
+            </Col>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+              <%_ if (dto === 'no') { _%>
+                <%_ if (!relationshipRequired) { _%>
+                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
+                      name="<%= relationshipFieldName %>">
+                      <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
+                      {
+                      <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.<%=otherEntityField%>}
+                      </option>
+                      ) : null
+                      }
+                  </AvInput>
+                <%_ } else { _%>
+                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
+                    name="<%= relationshipFieldName %>" value={isNew ? <%= otherEntityNamePlural %>[0] &&
+                    <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id} required>
+                    {
+                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.<%=otherEntityField%>}
+                    </option>
+                    ) : null
+                    }
+                  </AvInput>
+                  <AvFeedback>
+                    <Translate contentKey="entity.validation.required">This field is required.</Translate>
+                  </AvFeedback>
+                <%_ } _%>
+              <%_ } else { _%>
+                <%_ if (!relationshipRequired) { _%>
+                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
+                    name="<%= relationshipFieldName %>">
+                    <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
+                    {
+                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.<%=otherEntityField%>}
+                    </option>
+                    ) : null
+                    }
+                  </AvInput>
+                <%_ } else { _%>
+                  <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
+                    name="<%= relationshipFieldName %>" required>
+                    {
+                    <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+                    <option value={otherEntity.id} key={otherEntity.id}>
+                      {otherEntity.<%=otherEntityField%>}
+                    </option>
+                    ) : null
+                    }
+                  </AvInput>
+                  <AvFeedback>
+                    <Translate contentKey="entity.validation.required">This field is required.</Translate>
+                  </AvFeedback>
+                <%_ } _%>
+              <%_ } _%>
+            </Col>
+          </Row>
+        </AvGroup>
+      <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
+        <AvGroup>
+          <Row>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+            <Label className="mt-2" for="<%= entityFileName %>-<%= relationshipName %>">
+              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+            </Label>
+            </Col>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+            <%_ if (dto === 'no') { _%>
+            <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
+              name="<%= relationshipFieldName %>">
+              <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
+              {
+              <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+              <option value={otherEntity.id} key={otherEntity.id}>
+                {otherEntity.<%=otherEntityField%>}
+              </option>
+              ) : null
+              }
+            </AvInput>
             <%_ } else { _%>
-              <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>" value={isNew ? <%= otherEntityNamePlural %>[0] &&
-                <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id} required>
-                {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                <option value={otherEntity.id} key={otherEntity.id}>
-                  {otherEntity.<%=otherEntityField%>}
-                </option>
-                ) : null
-                }
-              </AvInput>
-              <AvFeedback>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </AvFeedback>
+            <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
+              name="<%= relationshipFieldName %>">
+              <option value="" key="0" />
+              {
+              <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
+              <option value={otherEntity.id} key={otherEntity.id}>
+                {otherEntity.<%=otherEntityField%>}
+              </option>
+              ) : null
+              }
+            </AvInput>
             <%_ } _%>
-          <%_ } else { _%>
-            <%_ if (!relationshipRequired) { _%>
-              <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>">
-                <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
-                {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                <option value={otherEntity.id} key={otherEntity.id}>
-                  {otherEntity.<%=otherEntityField%>}
-                </option>
-                ) : null
-                }
-              </AvInput>
-            <%_ } else { _%>
-              <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-                name="<%= relationshipFieldName %>" required>
-                {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-                <option value={otherEntity.id} key={otherEntity.id}>
-                  {otherEntity.<%=otherEntityField%>}
-                </option>
-                ) : null
-                }
-              </AvInput>
-              <AvFeedback>
-                <Translate contentKey="entity.validation.required">This field is required.</Translate>
-              </AvFeedback>
-            <%_ } _%>
-          <%_ } _%>
-        </Col>
-      </Row>
-    </AvGroup>
-  </Col>
-
-<%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
-  <Col md="<%= formLayoutSize %>">
-  <AvGroup>
-    <Row>
-      <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-      <Label className="mt-2" for="<%= entityFileName %>-<%= relationshipName %>">
-        <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
-      </Label>
-      </Col>
-      <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-      <%_ if (dto === 'no') { _%>
-      <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-        name="<%= relationshipFieldName %>">
-        <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
-        {
-        <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-        <option value={otherEntity.id} key={otherEntity.id}>
-          {otherEntity.<%=otherEntityField%>}
-        </option>
-        ) : null
-        }
-      </AvInput>
-      <%_ } else { _%>
-      <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" className="form-control"
-        name="<%= relationshipFieldName %>">
-        <option value="" key="0" />
-        {
-        <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
-        <option value={otherEntity.id} key={otherEntity.id}>
-          {otherEntity.<%=otherEntityField%>}
-        </option>
-        ) : null
-        }
-      </AvInput>
-      <%_ } _%>
-    </Col> <br />
-  </AvGroup>
-  </Col>
-
-<%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
-  <Col md="<%= formLayoutSize %>">
-    <AvGroup>
-      <Row>
-        <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
-        <Label className="mt-2" for="<%= entityFileName %>-<%= relationshipName %>">
-          <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
-        </Label>
-        </Col>
-        <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
-        <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" multiple className="form-control"
-          name="<%= relationshipFieldNamePlural %>" value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>
-          && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e=> e.id)}
-          >
-          <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
-          {
-          (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
-          <option value={otherEntity.id} key={otherEntity.id}>
-            {otherEntity.<%=otherEntityField%>}
-          </option>
-          ) : null
-          }
-        </AvInput>
-        </Col>
-      </Row>
-    </AvGroup> 
-  </Col>
-
-<%_ } _%>
+          </Col> <br />
+        </AvGroup>
+      <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
+        <AvGroup>
+          <Row>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 3  %>">
+            <Label className="mt-2" for="<%= entityFileName %>-<%= relationshipName %>">
+              <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
+            </Label>
+            </Col>
+            <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
+            <AvInput id="<%= entityFileName %>-<%= relationshipName %>" type="select" multiple className="form-control"
+              name="<%= relationshipFieldNamePlural %>" value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>
+              && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e=> e.id)}
+              >
+              <option value="null" key="0">{translate("<%= translationKey %>.empty")}</option>
+              {
+              (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
+              <option value={otherEntity.id} key={otherEntity.id}>
+                {otherEntity.<%=otherEntityField%>}
+              </option>
+              ) : null
+              }
+            </AvInput>
+            </Col>
+          </Row>
+        </AvGroup> 
+      <%_ } _%> 
+    </Col> : 
+  <AvInput type="hidden" name="<%= relationshipFieldName %>" value={this.state.fieldsBase.<%= relationshipFieldName %>} /> }
 <%_ } _%>
 
 <%_ function printFields(field){ _%>
@@ -181,8 +176,8 @@
 <% const fieldType =  field.fieldType; _%>
 <% const fieldName =  field.fieldName; _%>
 <% const fieldNameHumanized =  field.fieldNameHumanized; _%>
-
-  <Col md="<%= formLayoutSize %>">
+{ !this.state.fieldsBase.<%= fieldName %> ?
+  <Col md="<%= fieldName %>">
     <AvGroup>
       <Row>
         <%_ if (fieldType === 'Boolean') { _%>
@@ -345,8 +340,9 @@
       </UncontrolledTooltip>
     <%_ } _%>
   </Row>
-  </AvGroup>
-</Col>
+    </AvGroup>
+  </Col> : 
+  <AvInput type="hidden" name="<%= fieldName %>" value={this.state.fieldsBase.<%= fieldName %>} /> }
 <%_ } _%>
 
 <%_
@@ -447,6 +443,8 @@ import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlur
 }); _%>
 import {
 getEntity,
+get<%= entityReactName %>State,
+I<%= entityReactName %>BaseState, 
 updateEntity,
 createEntity,
 <%_ if (fieldsContainBlob) { _%>
@@ -464,6 +462,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
   {}
 
   export interface I<%= entityReactName %>UpdateState {
+  fieldsBase: I<%= entityReactName %>BaseState;
   <%_ if (formTabs.length > 0) { _%>activeTab: number;<%_ } _%>
   isNew: boolean;
   <%_ manyToManyOwners.forEach(val => { _%>
@@ -480,6 +479,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
     constructor(props: Readonly<I<%= entityReactName %>UpdateProps>) {
       super(props);
       this.state = {
+      fieldsBase: get<%= entityReactName %>State(this.props.location),
       <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
       <%_ manyToManyOwners.forEach(val => { _%>
       ids<%= val.relationshipName %>: [],
@@ -717,7 +717,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                                 } 
                               } _%>
                         <%_ } else { _%>
-                              <%_ for (idx in fields) { 
+                              <%_ for (idx in fields) {
                                     if(formTabs[iTabs] === fields[idx]['formTab']) { 
                                       printFields(fields[idx]);
                                     } 

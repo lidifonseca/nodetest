@@ -118,6 +118,15 @@ const initialState = {
 
 export type <%= entityReactName %>State =  Readonly<typeof initialState>;
 
+export interface I<%= entityReactName %>BaseState {
+  <%_ for (idx in fields) { _%>
+    <%= fields[idx].fieldName %> : any;
+  <%_ } _%>
+  <%_ relationships.forEach(rel => { _%>
+    <%= rel.relationshipName %> : any;
+  <%_ }) _%>
+}
+
 // Reducer
 
 export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
@@ -366,3 +375,25 @@ export const setBlob = (name, data, contentType?) => ({
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+
+
+export const get<%= entityReactName %>State = (location): I<%= entityReactName %>BaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  <%_ for (idx in fields) { _%>
+    const <%= fields[idx].fieldName %> = url.searchParams.get('<%= fields[idx].fieldName %>') || '';
+  <%_ } _%>
+
+  <%_ relationships.forEach(rel => { _%>
+    const <%= rel.relationshipName %> = url.searchParams.get('<%= rel.relationshipName %>') || '';
+  <%_ }) _%>
+
+  return {
+    <%_ for (idx in fields) { _%>
+      <%= fields[idx].fieldName %>,
+    <%_ } _%>
+    <%_ relationships.forEach(rel => { _%>
+      <%= rel.relationshipName %>,
+    <%_ }) _%>
+  };
+};
