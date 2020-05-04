@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "alertasIndicadores": {
+      "home": {
+        "title": "Alertas Indicadores",
+        "createLabel": "Criar novo Alertas Indicadores",
+        "createOrEditLabel": "Criar ou editar Alertas Indicadores",
+        "notFound": "Nenhum Alertas Indicadores encontrado"
+      },
+      "created": "Um novo Alertas Indicadores foi criado com o identificador {{ param }}",
+      "updated": "Um Alertas Indicadores foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Alertas Indicadores foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Alertas Indicadores {{ id }}?"
+      },
+      "detail": {
+        "title": "Alertas Indicadores"
+      },
+      "pontuacao": "Pontuacao",
+      "alteracaoEsperada": "Alteracao Esperada",
+      "observacoes": "Observacoes",
+      "usuarioId": "Usuario Id",
+      "padItemIndicadoresId": "Pad Item Indicadores Id"
+    }
+  }
+}

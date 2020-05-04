@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "atendimentoCepRecusado": {
+      "home": {
+        "title": "Atendimento Cep Recusados",
+        "createLabel": "Criar novo Atendimento Cep Recusado",
+        "createOrEditLabel": "Criar ou editar Atendimento Cep Recusado",
+        "notFound": "Nenhum Atendimento Cep Recusado encontrado"
+      },
+      "created": "Um novo Atendimento Cep Recusado foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Cep Recusado foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Cep Recusado foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Cep Recusado {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Cep Recusado"
+      },
+      "cep": "Cep",
+      "idPadItem": "Id Pad Item"
+    }
+  }
+}

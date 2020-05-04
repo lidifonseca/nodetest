@@ -1,0 +1,38 @@
+{
+  "generadorApp": {
+    "pacienteProntuario": {
+      "home": {
+        "title": "Paciente Prontuarios",
+        "createLabel": "Criar novo Paciente Prontuario",
+        "createOrEditLabel": "Criar ou editar Paciente Prontuario",
+        "notFound": "Nenhum Paciente Prontuario encontrado"
+      },
+      "created": "Um novo Paciente Prontuario foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Prontuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Prontuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Prontuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Prontuario"
+      },
+      "idPaciente": "Id Paciente",
+      "idTipoProntuario": "Id Tipo Prontuario",
+      "oQue": "O Que",
+      "resultado": "Resultado",
+      "ativo": "Ativo",
+      "idUsuario": "Id Usuario",
+      "idEspecialidade": "Id Especialidade",
+      "dataConsulta": "Data Consulta",
+      "idExame": "Id Exame",
+      "idTipoExame": "Id Tipo Exame",
+      "dataExame": "Data Exame",
+      "dataInternacao": "Data Internacao",
+      "dataAlta": "Data Alta",
+      "dataPs": "Data Ps",
+      "dataOcorrencia": "Data Ocorrencia",
+      "idOcorrenciaProntuario": "Id Ocorrencia Prontuario",
+      "dataManifestacao": "Data Manifestacao"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "tipoPreferenciaAtendimento": {
+      "home": {
+        "title": "Tipo Preferencia Atendimentos",
+        "createLabel": "Criar novo Tipo Preferencia Atendimento",
+        "createOrEditLabel": "Criar ou editar Tipo Preferencia Atendimento",
+        "notFound": "Nenhum Tipo Preferencia Atendimento encontrado"
+      },
+      "created": "Um novo Tipo Preferencia Atendimento foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Preferencia Atendimento foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Preferencia Atendimento foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Preferencia Atendimento {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Preferencia Atendimento"
+      },
+      "nome": "Nome",
+      "ativo": "Ativo"
+    }
+  }
+}

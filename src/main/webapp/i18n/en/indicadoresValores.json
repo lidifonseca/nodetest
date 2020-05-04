@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "indicadoresValores": {
+      "home": {
+        "title": "Indicadores Valores",
+        "createLabel": "Criar novo Indicadores Valores",
+        "createOrEditLabel": "Criar ou editar Indicadores Valores",
+        "notFound": "Nenhum Indicadores Valores encontrado"
+      },
+      "created": "Um novo Indicadores Valores foi criado com o identificador {{ param }}",
+      "updated": "Um Indicadores Valores foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Indicadores Valores foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Indicadores Valores {{ id }}?"
+      },
+      "detail": {
+        "title": "Indicadores Valores"
+      },
+      "sexo": "Sexo",
+      "vlMinimo": "Vl Minimo",
+      "vlMaximo": "Vl Maximo",
+      "unidadeMedida": "Unidade Medida",
+      "idadeMinima": "Idade Minima",
+      "idadeMaxima": "Idade Maxima",
+      "indicadoresId": "Indicadores Id"
+    }
+  }
+}

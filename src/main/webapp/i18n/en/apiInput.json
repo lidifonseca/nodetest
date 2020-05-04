@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "apiInput": {
+      "home": {
+        "title": "Api Inputs",
+        "createLabel": "Criar novo Api Input",
+        "createOrEditLabel": "Criar ou editar Api Input",
+        "notFound": "Nenhum Api Input encontrado"
+      },
+      "created": "Um novo Api Input foi criado com o identificador {{ param }}",
+      "updated": "Um Api Input foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Api Input foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Api Input {{ id }}?"
+      },
+      "detail": {
+        "title": "Api Input"
+      },
+      "idApiName": "Id Api Name",
+      "apiInput": "Api Input",
+      "apiType": "Api Type",
+      "obs": "Obs",
+      "ativo": "Ativo"
+    }
+  }
+}

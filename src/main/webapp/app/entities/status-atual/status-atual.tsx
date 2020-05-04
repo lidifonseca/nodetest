@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './status-atual.reducer';
+import { getStatusAtualState, IStatusAtualBaseState, getEntities } from './status-atual.reducer';
 import { IStatusAtual } from 'app/shared/model/status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IStatusAtualBaseState {
-  statusAtual: any;
-  styleLabel: any;
-  pacienteStatusAtual: any;
-}
 export interface IStatusAtualState extends IStatusAtualBaseState, IPaginationBaseState {}
 
 export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtualState> {
@@ -43,23 +38,9 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getStatusAtualState(this.props.location)
+      ...getStatusAtualState(this.props.location)
     };
   }
-
-  getStatusAtualState = (location): IStatusAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const statusAtual = url.searchParams.get('statusAtual') || '';
-    const styleLabel = url.searchParams.get('styleLabel') || '';
-
-    const pacienteStatusAtual = url.searchParams.get('pacienteStatusAtual') || '';
-
-    return {
-      statusAtual,
-      styleLabel,
-      pacienteStatusAtual
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -69,8 +50,7 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
     this.setState(
       {
         statusAtual: '',
-        styleLabel: '',
-        pacienteStatusAtual: ''
+        styleLabel: ''
       },
       () => this.sortEntities()
     );
@@ -121,9 +101,6 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
-      'pacienteStatusAtual=' +
-      this.state.pacienteStatusAtual +
-      '&' +
       ''
     );
   };
@@ -131,8 +108,8 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtual, styleLabel, pacienteStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtual, styleLabel, pacienteStatusAtual, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtual, styleLabel, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtual, styleLabel, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -184,10 +161,6 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
 
                           <AvInput type="text" name="styleLabel" id="status-atual-styleLabel" value={this.state.styleLabel} />
                         </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
                       </Col>
                     </div>
 
@@ -243,26 +216,7 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
                         <td>{statusAtual.styleLabel}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${statusAtual.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${statusAtual.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${statusAtual.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

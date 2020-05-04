@@ -1,0 +1,31 @@
+{
+  "generadorApp": {
+    "especialidadeOperadora": {
+      "home": {
+        "title": "Especialidade Operadoras",
+        "createLabel": "Criar novo Especialidade Operadora",
+        "createOrEditLabel": "Criar ou editar Especialidade Operadora",
+        "notFound": "Nenhum Especialidade Operadora encontrado"
+      },
+      "created": "Um novo Especialidade Operadora foi criado com o identificador {{ param }}",
+      "updated": "Um Especialidade Operadora foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Especialidade Operadora foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Especialidade Operadora {{ id }}?"
+      },
+      "detail": {
+        "title": "Especialidade Operadora"
+      },
+      "codTuss": "Cod Tuss",
+      "codDespesa": "Cod Despesa",
+      "codTabela": "Cod Tabela",
+      "valorCusto": "Valor Custo",
+      "valorVenda": "Valor Venda",
+      "descontoCusto": "Desconto Custo",
+      "descontoVenda": "Desconto Venda",
+      "ativo": "Ativo",
+      "idOperadora": "Id Operadora",
+      "idEspecialidade": "Id Especialidade"
+    }
+  }
+}

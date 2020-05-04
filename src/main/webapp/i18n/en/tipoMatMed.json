@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "tipoMatMed": {
+      "home": {
+        "title": "Tipo Mat Meds",
+        "createLabel": "Criar novo Tipo Mat Med",
+        "createOrEditLabel": "Criar ou editar Tipo Mat Med",
+        "notFound": "Nenhum Tipo Mat Med encontrado"
+      },
+      "created": "Um novo Tipo Mat Med foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Mat Med foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Mat Med foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Mat Med {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Mat Med"
+      },
+      "tipo": "Tipo",
+      "ativo": "Ativo"
+    }
+  }
+}

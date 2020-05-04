@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "profissionalStatusAtual": {
+      "home": {
+        "title": "Profissional Status Atuals",
+        "createLabel": "Criar novo Profissional Status Atual",
+        "createOrEditLabel": "Criar ou editar Profissional Status Atual",
+        "notFound": "Nenhum Profissional Status Atual encontrado"
+      },
+      "created": "Um novo Profissional Status Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Status Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Status Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Status Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Status Atual"
+      },
+      "idProfissional": "Id Profissional",
+      "obs": "Obs",
+      "ativo": "Ativo",
+      "idUsuario": "Id Usuario",
+      "idStatusAtualProf": "Id Status Atual Prof"
+    }
+  }
+}

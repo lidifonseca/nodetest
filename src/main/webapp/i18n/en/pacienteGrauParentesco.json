@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "pacienteGrauParentesco": {
+      "home": {
+        "title": "Paciente Grau Parentescos",
+        "createLabel": "Criar novo Paciente Grau Parentesco",
+        "createOrEditLabel": "Criar ou editar Paciente Grau Parentesco",
+        "notFound": "Nenhum Paciente Grau Parentesco encontrado"
+      },
+      "created": "Um novo Paciente Grau Parentesco foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Grau Parentesco foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Grau Parentesco foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Grau Parentesco {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Grau Parentesco"
+      },
+      "grauParentesco": "Grau Parentesco",
+      "ativo": "Ativo"
+    }
+  }
+}

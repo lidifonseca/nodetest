@@ -1,0 +1,29 @@
+{
+  "generadorApp": {
+    "notificacaoConfigUsuario": {
+      "home": {
+        "title": "Notificacao Config Usuarios",
+        "createLabel": "Criar novo Notificacao Config Usuario",
+        "createOrEditLabel": "Criar ou editar Notificacao Config Usuario",
+        "notFound": "Nenhum Notificacao Config Usuario encontrado"
+      },
+      "created": "Um novo Notificacao Config Usuario foi criado com o identificador {{ param }}",
+      "updated": "Um Notificacao Config Usuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Notificacao Config Usuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Notificacao Config Usuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Notificacao Config Usuario"
+      },
+      "notificacaoConfigId": "Notificacao Config Id",
+      "profissionalId": "Profissional Id",
+      "pacienteId": "Paciente Id",
+      "atualizadoEm": "Atualizado Em",
+      "atualizadoPor": "Atualizado Por",
+      "enviarPush": "Enviar Push",
+      "enviarEmail": "Enviar Email",
+      "observacao": "Observacao"
+    }
+  }
+}

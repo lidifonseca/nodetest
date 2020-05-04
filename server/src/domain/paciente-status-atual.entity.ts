@@ -25,10 +25,10 @@ export default class PacienteStatusAtual extends BaseEntity {
   idUsuario: string;
 
   @ManyToOne(type => Paciente)
-  idPaciente: Paciente;
+  paciente: Paciente;
 
   @ManyToOne(type => StatusAtual)
-  idStatusAtual: StatusAtual;
+  status: StatusAtual;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

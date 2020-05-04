@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "pacienteStatusAtual": {
+      "home": {
+        "title": "Paciente Status Atuals",
+        "createLabel": "Create a new Paciente Status Atual",
+        "createOrEditLabel": "Create or edit a Paciente Status Atual",
+        "notFound": "No Paciente Status Atuals found"
+      },
+      "created": "A new Paciente Status Atual is created with identifier {{ param }}",
+      "updated": "A Paciente Status Atual is updated with identifier {{ param }}",
+      "deleted": "A Paciente Status Atual is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Paciente Status Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Status Atual"
+      },
+      "dataStatus": "Data Status",
+      "observacao": "Observacao",
+      "ativo": "Ativo",
+      "idUsuario": "Id Usuario",
+      "paciente": "Paciente",
+      "status": "Status"
+    }
+  }
+}

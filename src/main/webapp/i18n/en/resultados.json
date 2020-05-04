@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "resultados": {
+      "home": {
+        "title": "Resultados",
+        "createLabel": "Criar novo Resultados",
+        "createOrEditLabel": "Criar ou editar Resultados",
+        "notFound": "Nenhum Resultados encontrado"
+      },
+      "created": "Um novo Resultados foi criado com o identificador {{ param }}",
+      "updated": "Um Resultados foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Resultados foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Resultados {{ id }}?"
+      },
+      "detail": {
+        "title": "Resultados"
+      },
+      "objetivo": "Objetivo",
+      "valor": "Valor",
+      "prazo": "Prazo",
+      "complemento": "Complemento",
+      "dataCadastro": "Data Cadastro",
+      "dataVencimentoPrazo": "Data Vencimento Prazo",
+      "alertasResultadosEsperados": "Alertas Resultados Esperados"
+    }
+  }
+}

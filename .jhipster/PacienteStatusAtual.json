@@ -27,15 +27,15 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "paciente",
             "otherEntityRelationshipName": "pacienteStatusAtual",
-            "relationshipName": "idPaciente",
-            "otherEntityField": "id"
+            "relationshipName": "paciente",
+            "otherEntityField": "nome"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "statusAtual",
             "otherEntityRelationshipName": "pacienteStatusAtual",
-            "relationshipName": "idStatusAtual",
-            "otherEntityField": "id"
+            "relationshipName": "status",
+            "otherEntityField": "statusAtual"
         }
     ],
     "changelogDate": "20200503001400",

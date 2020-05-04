@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "atendimentoAcompanhamentoPush": {
+      "home": {
+        "title": "Atendimento Acompanhamento Pushes",
+        "createLabel": "Criar novo Atendimento Acompanhamento Push",
+        "createOrEditLabel": "Criar ou editar Atendimento Acompanhamento Push",
+        "notFound": "Nenhum Atendimento Acompanhamento Push encontrado"
+      },
+      "created": "Um novo Atendimento Acompanhamento Push foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Acompanhamento Push foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Acompanhamento Push foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Acompanhamento Push {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Acompanhamento Push"
+      },
+      "atendimentoId": "Atendimento Id",
+      "pacienteId": "Paciente Id",
+      "profissionalId": "Profissional Id",
+      "timestampAtendimento": "Timestamp Atendimento",
+      "nomePaciente": "Nome Paciente",
+      "nomeProfissioinal": "Nome Profissioinal",
+      "timestampConfirmacao": "Timestamp Confirmacao"
+    }
+  }
+}

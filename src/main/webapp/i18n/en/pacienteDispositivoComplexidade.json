@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "pacienteDispositivoComplexidade": {
+      "home": {
+        "title": "Paciente Dispositivo Complexidades",
+        "createLabel": "Criar novo Paciente Dispositivo Complexidade",
+        "createOrEditLabel": "Criar ou editar Paciente Dispositivo Complexidade",
+        "notFound": "Nenhum Paciente Dispositivo Complexidade encontrado"
+      },
+      "created": "Um novo Paciente Dispositivo Complexidade foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Dispositivo Complexidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Dispositivo Complexidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Dispositivo Complexidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Dispositivo Complexidade"
+      },
+      "caracteristica": "Caracteristica",
+      "ativo": "Ativo",
+      "tipo": "Tipo"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "termosUso": {
+      "home": {
+        "title": "Termos Usos",
+        "createLabel": "Criar novo Termos Uso",
+        "createOrEditLabel": "Criar ou editar Termos Uso",
+        "notFound": "Nenhum Termos Uso encontrado"
+      },
+      "created": "Um novo Termos Uso foi criado com o identificador {{ param }}",
+      "updated": "Um Termos Uso foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Termos Uso foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Termos Uso {{ id }}?"
+      },
+      "detail": {
+        "title": "Termos Uso"
+      },
+      "termosUso": "Termos Uso",
+      "tipo": "Tipo"
+    }
+  }
+}

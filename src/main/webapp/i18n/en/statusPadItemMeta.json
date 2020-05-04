@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "statusPadItemMeta": {
+      "home": {
+        "title": "Status Pad Item Metas",
+        "createLabel": "Criar novo Status Pad Item Meta",
+        "createOrEditLabel": "Criar ou editar Status Pad Item Meta",
+        "notFound": "Nenhum Status Pad Item Meta encontrado"
+      },
+      "created": "Um novo Status Pad Item Meta foi criado com o identificador {{ param }}",
+      "updated": "Um Status Pad Item Meta foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Status Pad Item Meta foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Status Pad Item Meta {{ id }}?"
+      },
+      "detail": {
+        "title": "Status Pad Item Meta"
+      },
+      "statusItemMeta": "Status Item Meta",
+      "styleLabel": "Style Label",
+      "ordenacao": "Ordenacao",
+      "ativo": "Ativo"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "generadorApp": {
+    "franquia": {
+      "home": {
+        "title": "Franquias",
+        "createLabel": "Criar novo Franquia",
+        "createOrEditLabel": "Criar ou editar Franquia",
+        "notFound": "Nenhum Franquia encontrado"
+      },
+      "created": "Um novo Franquia foi criado com o identificador {{ param }}",
+      "updated": "Um Franquia foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Franquia foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Franquia {{ id }}?"
+      },
+      "detail": {
+        "title": "Franquia"
+      },
+      "idCidade": "Id Cidade",
+      "nomeFantasia": "Nome Fantasia",
+      "razaoSocial": "Razao Social",
+      "cnpj": "Cnpj",
+      "ie": "Ie",
+      "site": "Site",
+      "telefone1": "Telefone 1",
+      "telefone2": "Telefone 2",
+      "celular": "Celular",
+      "cep": "Cep",
+      "endereco": "Endereco",
+      "numero": "Numero",
+      "complemento": "Complemento",
+      "bairro": "Bairro",
+      "cidade": "Cidade",
+      "uf": "Uf",
+      "observacao": "Observacao",
+      "ativo": "Ativo",
+      "franquiaAreaAtuacao": "Franquia Area Atuacao",
+      "franquiaStatusAtual": "Franquia Status Atual",
+      "franquiaUsuario": "Franquia Usuario"
+    }
+  }
+}

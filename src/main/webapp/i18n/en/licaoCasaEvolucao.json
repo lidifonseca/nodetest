@@ -1,0 +1,29 @@
+{
+  "generadorApp": {
+    "licaoCasaEvolucao": {
+      "home": {
+        "title": "Licao Casa Evolucaos",
+        "createLabel": "Criar novo Licao Casa Evolucao",
+        "createOrEditLabel": "Criar ou editar Licao Casa Evolucao",
+        "notFound": "Nenhum Licao Casa Evolucao encontrado"
+      },
+      "created": "Um novo Licao Casa Evolucao foi criado com o identificador {{ param }}",
+      "updated": "Um Licao Casa Evolucao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Licao Casa Evolucao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Licao Casa Evolucao {{ id }}?"
+      },
+      "detail": {
+        "title": "Licao Casa Evolucao"
+      },
+      "licaoCasaId": "Licao Casa Id",
+      "atualizadoEm": "Atualizado Em",
+      "realizada": "Realizada",
+      "realizadaEm": "Realizada Em",
+      "observacoes": "Observacoes",
+      "instrucoes": "Instrucoes",
+      "dataAgenda": "Data Agenda",
+      "qtdLembrete": "Qtd Lembrete"
+    }
+  }
+}

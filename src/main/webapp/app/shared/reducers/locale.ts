@@ -7,7 +7,7 @@ export const ACTION_TYPES = {
 };
 
 const initialState = {
-  currentLocale: undefined
+  currentLocale: 'pt-BR'
 };
 
 export type LocaleState = Readonly<typeof initialState>;

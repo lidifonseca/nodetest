@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './status-atual.reducer';
+import { getEntity, IStatusAtualBaseState, getStatusAtualState } from './status-atual.reducer';
 import { IStatusAtual } from 'app/shared/model/status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IStatusAtualState {
+  fieldsBase: IStatusAtualBaseState;
+}
+
 export interface IStatusAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class StatusAtualDetail extends React.Component<IStatusAtualDetailProps> {
+export class StatusAtualDetail extends React.Component<IStatusAtualDetailProps, IStatusAtualState> {
   constructor(props: Readonly<IStatusAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getStatusAtualState(this.props.location)
     };
   }
 

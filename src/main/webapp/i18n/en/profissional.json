@@ -1,0 +1,62 @@
+{
+  "generadorApp": {
+    "profissional": {
+      "home": {
+        "title": "Profissionals",
+        "createLabel": "Criar novo Profissional",
+        "createOrEditLabel": "Criar ou editar Profissional",
+        "notFound": "Nenhum Profissional encontrado"
+      },
+      "created": "Um novo Profissional foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional"
+      },
+      "idCidade": "Id Cidade",
+      "idTempoExperiencia": "Id Tempo Experiencia",
+      "idBanco": "Id Banco",
+      "senha": "Senha",
+      "nome": "Nome",
+      "email": "Email",
+      "cpf": "Cpf",
+      "rg": "Rg",
+      "nomeEmpresa": "Nome Empresa",
+      "cnpj": "Cnpj",
+      "registro": "Registro",
+      "nascimento": "Nascimento",
+      "sexo": "Sexo",
+      "telefone1": "Telefone 1",
+      "telefone2": "Telefone 2",
+      "celular1": "Celular 1",
+      "celular2": "Celular 2",
+      "cep": "Cep",
+      "endereco": "Endereco",
+      "numero": "Numero",
+      "complemento": "Complemento",
+      "bairro": "Bairro",
+      "cidade": "Cidade",
+      "uf": "Uf",
+      "atendeCrianca": "Atende Crianca",
+      "atendeIdoso": "Atende Idoso",
+      "ag": "Ag",
+      "conta": "Conta",
+      "tipoConta": "Tipo Conta",
+      "origemCadastro": "Origem Cadastro",
+      "obs": "Obs",
+      "chavePrivada": "Chave Privada",
+      "ativo": "Ativo",
+      "senhaOriginal": "Senha Original",
+      "dataSenha": "Data Senha",
+      "expoToken": "Expo Token",
+      "preferenciaAtendimento": "Preferencia Atendimento",
+      "senhaChat": "Senha Chat",
+      "atendimentoAceite": "Atendimento Aceite",
+      "atendimentoAssinaturas": "Atendimento Assinaturas",
+      "unidade": "Unidade"
+    }
+  }
+}

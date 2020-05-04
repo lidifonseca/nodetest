@@ -1,0 +1,22 @@
+{
+  "generadorApp": {
+    "protocolos": {
+      "home": {
+        "title": "Protocolos",
+        "createLabel": "Criar novo Protocolos",
+        "createOrEditLabel": "Criar ou editar Protocolos",
+        "notFound": "Nenhum Protocolos encontrado"
+      },
+      "created": "Um novo Protocolos foi criado com o identificador {{ param }}",
+      "updated": "Um Protocolos foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Protocolos foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Protocolos {{ id }}?"
+      },
+      "detail": {
+        "title": "Protocolos"
+      },
+      "protocolo": "Protocolo"
+    }
+  }
+}

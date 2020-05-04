@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "categoriaAtividade": {
+      "home": {
+        "title": "Categoria Atividades",
+        "createLabel": "Criar novo Categoria Atividade",
+        "createOrEditLabel": "Criar ou editar Categoria Atividade",
+        "notFound": "Nenhum Categoria Atividade encontrado"
+      },
+      "created": "Um novo Categoria Atividade foi criado com o identificador {{ param }}",
+      "updated": "Um Categoria Atividade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Categoria Atividade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Categoria Atividade {{ id }}?"
+      },
+      "detail": {
+        "title": "Categoria Atividade"
+      },
+      "atividade": "Atividade",
+      "atendimentoAtividades": "Atendimento Atividades",
+      "padItemAtividade": "Pad Item Atividade",
+      "unidade": "Unidade",
+      "idCategoria": "Id Categoria"
+    }
+  }
+}

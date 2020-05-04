@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "profissionalDispositivoComplexidadeAtual": {
+      "home": {
+        "title": "Profissional Dispositivo Complexidade Atuals",
+        "createLabel": "Criar novo Profissional Dispositivo Complexidade Atual",
+        "createOrEditLabel": "Criar ou editar Profissional Dispositivo Complexidade Atual",
+        "notFound": "Nenhum Profissional Dispositivo Complexidade Atual encontrado"
+      },
+      "created": "Um novo Profissional Dispositivo Complexidade Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Dispositivo Complexidade Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Dispositivo Complexidade Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Dispositivo Complexidade Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Dispositivo Complexidade Atual"
+      },
+      "idProfissional": "Id Profissional",
+      "idProfissionalDispositivoComplexidade": "Id Profissional Dispositivo Complexidade",
+      "idUsuario": "Id Usuario"
+    }
+  }
+}

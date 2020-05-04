@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "diario": {
+      "home": {
+        "title": "Diarios",
+        "createLabel": "Criar novo Diario",
+        "createOrEditLabel": "Criar ou editar Diario",
+        "notFound": "Nenhum Diario encontrado"
+      },
+      "created": "Um novo Diario foi criado com o identificador {{ param }}",
+      "updated": "Um Diario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Diario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Diario {{ id }}?"
+      },
+      "detail": {
+        "title": "Diario"
+      },
+      "historico": "Historico",
+      "gerarPdf": "Gerar Pdf",
+      "idUsuario": "Id Usuario",
+      "idPaciente": "Id Paciente"
+    }
+  }
+}

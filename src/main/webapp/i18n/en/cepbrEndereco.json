@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "cepbrEndereco": {
+      "home": {
+        "title": "Cepbr Enderecos",
+        "createLabel": "Criar novo Cepbr Endereco",
+        "createOrEditLabel": "Criar ou editar Cepbr Endereco",
+        "notFound": "Nenhum Cepbr Endereco encontrado"
+      },
+      "created": "Um novo Cepbr Endereco foi criado com o identificador {{ param }}",
+      "updated": "Um Cepbr Endereco foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cepbr Endereco foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cepbr Endereco {{ id }}?"
+      },
+      "detail": {
+        "title": "Cepbr Endereco"
+      },
+      "cep": "Cep",
+      "logradouro": "Logradouro",
+      "tipoLogradouro": "Tipo Logradouro",
+      "complemento": "Complemento",
+      "local": "Local",
+      "idCidade": "Id Cidade",
+      "idBairro": "Id Bairro"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "logUser": {
+      "home": {
+        "title": "Log Users",
+        "createLabel": "Criar novo Log User",
+        "createOrEditLabel": "Criar ou editar Log User",
+        "notFound": "Nenhum Log User encontrado"
+      },
+      "created": "Um novo Log User foi criado com o identificador {{ param }}",
+      "updated": "Um Log User foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Log User foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Log User {{ id }}?"
+      },
+      "detail": {
+        "title": "Log User"
+      },
+      "idUsuario": "Id Usuario",
+      "descricao": "Descricao",
+      "idAcao": "Id Acao",
+      "idTela": "Id Tela"
+    }
+  }
+}

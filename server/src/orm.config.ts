@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === 'test') {
     name: 'default',
     type: 'mysql',
     database: 'nodetest',
-    url: 'mysql://root:root@localhost:3306/nodetest_novo',
+    url: 'mysql://root:root@192.168.0.111:3306/nodetest_novo',
     logging: false,
     synchronize: commonConf.SYNCRONIZE,
     entities: commonConf.ENTITIES,

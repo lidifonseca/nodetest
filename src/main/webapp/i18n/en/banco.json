@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "banco": {
+      "home": {
+        "title": "Bancos",
+        "createLabel": "Criar novo Banco",
+        "createOrEditLabel": "Criar ou editar Banco",
+        "notFound": "Nenhum Banco encontrado"
+      },
+      "created": "Um novo Banco foi criado com o identificador {{ param }}",
+      "updated": "Um Banco foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Banco foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Banco {{ id }}?"
+      },
+      "detail": {
+        "title": "Banco"
+      },
+      "codBanco": "Cod Banco",
+      "banco": "Banco"
+    }
+  }
+}

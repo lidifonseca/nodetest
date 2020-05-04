@@ -1,0 +1,37 @@
+{
+  "generadorApp": {
+    "especialidade": {
+      "home": {
+        "title": "Especialidades",
+        "createLabel": "Criar novo Especialidade",
+        "createOrEditLabel": "Criar ou editar Especialidade",
+        "notFound": "Nenhum Especialidade encontrado"
+      },
+      "created": "Um novo Especialidade foi criado com o identificador {{ param }}",
+      "updated": "Um Especialidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Especialidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Especialidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Especialidade"
+      },
+      "icon": "Icon",
+      "especialidade": "Especialidade",
+      "descricao": "Descricao",
+      "duracao": "Duracao",
+      "importante": "Importante",
+      "ativo": "Ativo",
+      "atendimento": "Atendimento",
+      "especialidadeOperadora": "Especialidade Operadora",
+      "especialidadeUnidade": "Especialidade Unidade",
+      "especialidadeValor": "Especialidade Valor",
+      "pacientePedido": "Paciente Pedido",
+      "padItem": "Pad Item",
+      "unidade": "Unidade",
+      "idCategoria": "Id Categoria",
+      "idTipoEspecialidade": "Id Tipo Especialidade",
+      "idTipoUnidade": "Id Tipo Unidade"
+    }
+  }
+}

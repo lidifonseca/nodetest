@@ -1,0 +1,41 @@
+{
+  "generadorApp": {
+    "empresa": {
+      "home": {
+        "title": "Empresas",
+        "createLabel": "Criar novo Empresa",
+        "createOrEditLabel": "Criar ou editar Empresa",
+        "notFound": "Nenhum Empresa encontrado"
+      },
+      "created": "Um novo Empresa foi criado com o identificador {{ param }}",
+      "updated": "Um Empresa foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Empresa foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Empresa {{ id }}?"
+      },
+      "detail": {
+        "title": "Empresa"
+      },
+      "empresa": "Empresa",
+      "nome": "Nome",
+      "email": "Email",
+      "cpf": "Cpf",
+      "rg": "Rg",
+      "nascimento": "Nascimento",
+      "sexo": "Sexo",
+      "telefone1": "Telefone 1",
+      "telefone2": "Telefone 2",
+      "celular1": "Celular 1",
+      "celular2": "Celular 2",
+      "cep": "Cep",
+      "endereco": "Endereco",
+      "numero": "Numero",
+      "complemento": "Complemento",
+      "bairro": "Bairro",
+      "cidade": "Cidade",
+      "uf": "Uf",
+      "tipo": "Tipo",
+      "idCidade": "Id Cidade"
+    }
+  }
+}

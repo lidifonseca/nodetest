@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "imagemProntuario": {
+      "home": {
+        "title": "Imagem Prontuarios",
+        "createLabel": "Criar novo Imagem Prontuario",
+        "createOrEditLabel": "Criar ou editar Imagem Prontuario",
+        "notFound": "Nenhum Imagem Prontuario encontrado"
+      },
+      "created": "Um novo Imagem Prontuario foi criado com o identificador {{ param }}",
+      "updated": "Um Imagem Prontuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Imagem Prontuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Imagem Prontuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Imagem Prontuario"
+      },
+      "idProntuario": "Id Prontuario",
+      "imagem": "Imagem",
+      "ativo": "Ativo",
+      "diretorio": "Diretorio"
+    }
+  }
+}

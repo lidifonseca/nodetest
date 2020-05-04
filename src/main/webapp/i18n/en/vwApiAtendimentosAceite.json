@@ -1,0 +1,42 @@
+{
+  "generadorApp": {
+    "vwApiAtendimentosAceite": {
+      "home": {
+        "title": "Vw Api Atendimentos Aceites",
+        "createLabel": "Criar novo Vw Api Atendimentos Aceite",
+        "createOrEditLabel": "Criar ou editar Vw Api Atendimentos Aceite",
+        "notFound": "Nenhum Vw Api Atendimentos Aceite encontrado"
+      },
+      "created": "Um novo Vw Api Atendimentos Aceite foi criado com o identificador {{ param }}",
+      "updated": "Um Vw Api Atendimentos Aceite foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Vw Api Atendimentos Aceite foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Vw Api Atendimentos Aceite {{ id }}?"
+      },
+      "detail": {
+        "title": "Vw Api Atendimentos Aceite"
+      },
+      "idPadItem": "Id Pad Item",
+      "idPaciente": "Id Paciente",
+      "idPeriodo": "Id Periodo",
+      "idPeriodicidade": "Id Periodicidade",
+      "idProfissional": "Id Profissional",
+      "aceito": "Aceito",
+      "bairro": "Bairro",
+      "cep": "Cep",
+      "cidade": "Cidade",
+      "complemento": "Complemento",
+      "endereco": "Endereco",
+      "especialidade": "Especialidade",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "numero": "Numero",
+      "paciente": "Paciente",
+      "periodo": "Periodo",
+      "periodicidade": "Periodicidade",
+      "qtdSessoes": "Qtd Sessoes",
+      "uf": "Uf",
+      "valor": "Valor"
+    }
+  }
+}

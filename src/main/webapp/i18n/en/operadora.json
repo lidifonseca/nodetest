@@ -1,0 +1,41 @@
+{
+  "generadorApp": {
+    "operadora": {
+      "home": {
+        "title": "Operadoras",
+        "createLabel": "Criar novo Operadora",
+        "createOrEditLabel": "Criar ou editar Operadora",
+        "notFound": "Nenhum Operadora encontrado"
+      },
+      "created": "Um novo Operadora foi criado com o identificador {{ param }}",
+      "updated": "Um Operadora foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Operadora foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Operadora {{ id }}?"
+      },
+      "detail": {
+        "title": "Operadora"
+      },
+      "nomeFantasia": "Nome Fantasia",
+      "razaoSocial": "Razao Social",
+      "cnpj": "Cnpj",
+      "ie": "Ie",
+      "site": "Site",
+      "ativo": "Ativo",
+      "endereco": "Endereco",
+      "contatoCentralAtendimento": "Contato Central Atendimento",
+      "emailCentralAtendimento": "Email Central Atendimento",
+      "nomeContatoComercial": "Nome Contato Comercial",
+      "contatoComercial": "Contato Comercial",
+      "emailComercial": "Email Comercial",
+      "nomeContatoFinanceiro": "Nome Contato Financeiro",
+      "contatoFinanceiro": "Contato Financeiro",
+      "emailFinanceiro": "Email Financeiro",
+      "atendimento": "Atendimento",
+      "especialidadeOperadora": "Especialidade Operadora",
+      "pacienteOperadora": "Paciente Operadora",
+      "unidade": "Unidade",
+      "tipoOperadora": "Tipo Operadora"
+    }
+  }
+}

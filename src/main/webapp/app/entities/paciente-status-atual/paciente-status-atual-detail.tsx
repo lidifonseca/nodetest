@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, byteSize, TextFormat } from 'react-jhipster'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-status-atual.reducer';
+import { getEntity, IPacienteStatusAtualBaseState, getPacienteStatusAtualState } from './paciente-status-atual.reducer';
 import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteStatusAtualState {
+  fieldsBase: IPacienteStatusAtualBaseState;
+}
+
 export interface IPacienteStatusAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteStatusAtualDetail extends React.Component<IPacienteStatusAtualDetailProps> {
+export class PacienteStatusAtualDetail extends React.Component<IPacienteStatusAtualDetailProps, IPacienteStatusAtualState> {
   constructor(props: Readonly<IPacienteStatusAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteStatusAtualState(this.props.location)
     };
   }
 
@@ -117,11 +122,11 @@ export class PacienteStatusAtualDetail extends React.Component<IPacienteStatusAt
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.pacienteStatusAtual.idPaciente">Id Paciente</Translate>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteStatusAtualEntity.idPaciente ? pacienteStatusAtualEntity.idPaciente.id : ''}</dd>
+                        <dd>{pacienteStatusAtualEntity.paciente ? pacienteStatusAtualEntity.paciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>
@@ -130,11 +135,11 @@ export class PacienteStatusAtualDetail extends React.Component<IPacienteStatusAt
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.pacienteStatusAtual.idStatusAtual">Id Status Atual</Translate>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteStatusAtualEntity.idStatusAtual ? pacienteStatusAtualEntity.idStatusAtual.id : ''}</dd>
+                        <dd>{pacienteStatusAtualEntity.status ? pacienteStatusAtualEntity.status.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

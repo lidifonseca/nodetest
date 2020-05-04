@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "tipoEspecialidade": {
+      "home": {
+        "title": "Tipo Especialidades",
+        "createLabel": "Criar novo Tipo Especialidade",
+        "createOrEditLabel": "Criar ou editar Tipo Especialidade",
+        "notFound": "Nenhum Tipo Especialidade encontrado"
+      },
+      "created": "Um novo Tipo Especialidade foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Especialidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Especialidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Especialidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Especialidade"
+      },
+      "tipoEspecialidade": "Tipo Especialidade",
+      "especialidade": "Especialidade"
+    }
+  }
+}

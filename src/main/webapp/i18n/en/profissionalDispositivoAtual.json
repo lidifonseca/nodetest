@@ -1,0 +1,42 @@
+{
+  "generadorApp": {
+    "profissionalDispositivoAtual": {
+      "home": {
+        "title": "Profissional Dispositivo Atuals",
+        "createLabel": "Criar novo Profissional Dispositivo Atual",
+        "createOrEditLabel": "Criar ou editar Profissional Dispositivo Atual",
+        "notFound": "Nenhum Profissional Dispositivo Atual encontrado"
+      },
+      "created": "Um novo Profissional Dispositivo Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Dispositivo Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Dispositivo Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Dispositivo Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Dispositivo Atual"
+      },
+      "idProfissional": "Id Profissional",
+      "tqtTraqueostomia": "Tqt Traqueostomia",
+      "gttGastrostomia": "Gtt Gastrostomia",
+      "sneSondaNasoenteral": "Sne Sonda Nasoenteral",
+      "svdSondaVesicalDeDemora": "Svd Sonda Vesical De Demora",
+      "svaSondaVesicalDeAlivio": "Sva Sonda Vesical De Alivio",
+      "portACath": "Port A Cath",
+      "piccAcessoVenosoCentral": "Picc Acesso Venoso Central",
+      "ventiladores": "Ventiladores",
+      "uppUlceraPorPressao": "Upp Ulcera Por Pressao",
+      "avpAcessoVenosoPeriferico": "Avp Acesso Venoso Periferico",
+      "uripen": "Uripen",
+      "fraldaGeriatrica": "Fralda Geriatrica",
+      "sngSondaNasogastrica": "Sng Sonda Nasogastrica",
+      "bipap": "Bipap",
+      "cpap": "Cpap",
+      "cistostomia": "Cistostomia",
+      "cateterNasalDeOxigenio": "Cateter Nasal De Oxigenio",
+      "mascaraDeVentilacao": "Mascara De Ventilacao",
+      "entubacaoOrotraqueal": "Entubacao Orotraqueal",
+      "idUsuario": "Id Usuario"
+    }
+  }
+}

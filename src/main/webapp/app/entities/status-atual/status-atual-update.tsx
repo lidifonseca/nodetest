@@ -8,7 +8,7 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './status-atual.reducer';
+import { getEntity, getStatusAtualState, IStatusAtualBaseState, updateEntity, createEntity, reset } from './status-atual.reducer';
 import { IStatusAtual } from 'app/shared/model/status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -16,6 +16,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface IStatusAtualUpdateState {
+  fieldsBase: IStatusAtualBaseState;
   isNew: boolean;
 }
 
@@ -23,6 +24,7 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
   constructor(props: Readonly<IStatusAtualUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getStatusAtualState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -111,7 +113,7 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,51 +129,46 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.statusAtual ? (
+                          <Col md="statusAtual">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusAtualLabel" for="status-atual-statusAtual">
+                                    <Translate contentKey="generadorApp.statusAtual.statusAtual">Status Atual</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atual-statusAtual" type="text" name="statusAtual" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtual" value={this.state.fieldsBase.statusAtual} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="statusAtualLabel" for="status-atual-statusAtual">
-                                <Translate contentKey="generadorApp.statusAtual.statusAtual">Status Atual</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="status-atual-statusAtual"
-                                type="text"
-                                name="statusAtual"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="styleLabelLabel" for="status-atual-styleLabel">
-                                <Translate contentKey="generadorApp.statusAtual.styleLabel">Style Label</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="status-atual-styleLabel"
-                                type="text"
-                                name="styleLabel"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.styleLabel ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="status-atual-styleLabel">
+                                    <Translate contentKey="generadorApp.statusAtual.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atual-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase.styleLabel} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

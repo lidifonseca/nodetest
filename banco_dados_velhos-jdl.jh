@@ -659,6 +659,19 @@ entity Operadora {
 		view{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}`,color:info,size:sm,icon:eye,text:View} 
 		edit{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Edit} 
 	  delete{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:trash,text:Delete} 
+	  RelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatoriodeInformacoes}
+	  IndicadoresClinicos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:IndicadoresClinicos}
+	  Monitoramento{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:Monitoramento}
+	  VisualizarProntuario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:search,text:VisualizarProntuario}
+	  Status{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:pencil,text:Status}
+	  Arquivos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:upload,text:Arquivos}
+	  Diagnostico{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:stethoscope,text:Diagnostico}
+	  Operadora{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:medkit,text:Operadora}
+	  ResetSenha{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:refresh,text:ResetSenha}
+	  ProntuarioEletronico{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:stethoscope,text:ProntuarioEletronico}
+	  Token{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:key,text:Token}
+	  Questionario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:question,text:Questionario}
+	  TratamentoIndicado{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:fa-list-ol,text:TratamentoIndicado}
 	@@	
 	@viewButtons 
 		view{tag:Link,to:`/paciente/${pacienteEntity.id}`,color:info,size:sm,icon:eye,text:View} 
@@ -1836,7 +1849,6 @@ relationship ManyToOne {
 	 CategoriaAtividade{unidade(razaoSocial)} to UnidadeEasy
 	 Especialidade{unidade(razaoSocial)} to UnidadeEasy
 
-
 	 Paciente{unidade(razaoSocial)} to UnidadeEasy
 	 Paciente{franquia(nomeFantasia)} to Franquia
 	 Paciente{cidade(descrCidade)} to Cidade
@@ -1844,6 +1856,10 @@ relationship ManyToOne {
 	 Paciente{grauParentesco(grauParentesco)} to GrauParentesco
 	 Paciente{profissionalPref(nome)} to Profissional
 	 Paciente{tipohospital(servico)} to PacienteHospital
+
+
+	 PacienteStatusAtual{paciente(nome)} to Paciente
+	 PacienteStatusAtual{status(statusAtual)} to StatusAtual
 
 	 Pad{unidade(razaoSocial)} to UnidadeEasy
 	 Profissional{unidade(razaoSocial)} to UnidadeEasy
@@ -1930,8 +1946,6 @@ relationship OneToMany {
 	 PacienteDadosCartao{pacientePedido} to PacientePedido{idCartao}
 	 Especialidade{pacientePedido} to PacientePedido{idEspecialidade}
 	 Paciente{pacientePush} to PacientePush{idPaciente}
-	 Paciente{pacienteStatusAtual} to PacienteStatusAtual{idPaciente}
-	 StatusAtual{pacienteStatusAtual} to PacienteStatusAtual{idStatusAtual}
 	 Paciente{pad} to Pad{idPaciente}
 	 Pad{padCid} to PadCid{idPad}
 	 Cid{padCid} to PadCid{idCid}

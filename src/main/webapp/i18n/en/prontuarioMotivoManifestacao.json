@@ -1,0 +1,30 @@
+{
+  "generadorApp": {
+    "prontuarioMotivoManifestacao": {
+      "home": {
+        "title": "Prontuario Motivo Manifestacaos",
+        "createLabel": "Criar novo Prontuario Motivo Manifestacao",
+        "createOrEditLabel": "Criar ou editar Prontuario Motivo Manifestacao",
+        "notFound": "Nenhum Prontuario Motivo Manifestacao encontrado"
+      },
+      "created": "Um novo Prontuario Motivo Manifestacao foi criado com o identificador {{ param }}",
+      "updated": "Um Prontuario Motivo Manifestacao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Prontuario Motivo Manifestacao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Prontuario Motivo Manifestacao {{ id }}?"
+      },
+      "detail": {
+        "title": "Prontuario Motivo Manifestacao"
+      },
+      "idProntuario": "Id Prontuario",
+      "idPaciente": "Id Paciente",
+      "idMotivo": "Id Motivo",
+      "idMotivoFilho": "Id Motivo Filho",
+      "idManifestacao": "Id Manifestacao",
+      "idManifestacaoFilho": "Id Manifestacao Filho",
+      "sugestao": "Sugestao",
+      "idUsuario": "Id Usuario",
+      "informacaoAdicional": "Informacao Adicional"
+    }
+  }
+}

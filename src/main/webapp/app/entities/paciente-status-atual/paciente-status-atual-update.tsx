@@ -12,7 +12,15 @@ import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IStatusAtual } from 'app/shared/model/status-atual.model';
 import { getEntities as getStatusAtuals } from 'app/entities/status-atual/status-atual.reducer';
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './paciente-status-atual.reducer';
+import {
+  getEntity,
+  getPacienteStatusAtualState,
+  IPacienteStatusAtualBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './paciente-status-atual.reducer';
 import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -20,17 +28,19 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPacienteStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface IPacienteStatusAtualUpdateState {
+  fieldsBase: IPacienteStatusAtualBaseState;
   isNew: boolean;
-  idPacienteId: string;
-  idStatusAtualId: string;
+  pacienteId: string;
+  statusId: string;
 }
 
 export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAtualUpdateProps, IPacienteStatusAtualUpdateState> {
   constructor(props: Readonly<IPacienteStatusAtualUpdateProps>) {
     super(props);
     this.state = {
-      idPacienteId: '0',
-      idStatusAtualId: '0',
+      fieldsBase: getPacienteStatusAtualState(this.props.location),
+      pacienteId: '0',
+      statusId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -101,8 +111,8 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
               ? {}
               : {
                   ...pacienteStatusAtualEntity,
-                  idPaciente: pacienteStatusAtualEntity.idPaciente ? pacienteStatusAtualEntity.idPaciente.id : null,
-                  idStatusAtual: pacienteStatusAtualEntity.idStatusAtual ? pacienteStatusAtualEntity.idStatusAtual.id : null
+                  paciente: pacienteStatusAtualEntity.paciente ? pacienteStatusAtualEntity.paciente.id : null,
+                  status: pacienteStatusAtualEntity.status ? pacienteStatusAtualEntity.status.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -143,7 +153,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -159,125 +169,142 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.dataStatus ? (
+                          <Col md="dataStatus">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataStatusLabel" for="paciente-status-atual-dataStatus">
+                                    <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-status-atual-dataStatus" type="date" className="form-control" name="dataStatus" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataStatus" value={this.state.fieldsBase.dataStatus} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataStatusLabel" for="paciente-status-atual-dataStatus">
-                                <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-status-atual-dataStatus" type="date" className="form-control" name="dataStatus" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.observacao ? (
+                          <Col md="observacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacaoLabel" for="paciente-status-atual-observacao">
+                                    <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase.observacao} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="observacaoLabel" for="paciente-status-atual-observacao">
-                                <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.ativo ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-status-atual-ativo">
+                                    <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-status-atual-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="paciente-status-atual-ativo">
-                                <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="paciente-status-atual-idUsuario">
-                                <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-status-atual-idUsuario"
-                                type="text"
-                                name="idUsuario"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-status-atual-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteStatusAtual.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-status-atual-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacienteStatusAtual.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-status-atual-idStatusAtual">
-                                <Translate contentKey="generadorApp.pacienteStatusAtual.idStatusAtual">Id Status Atual</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-status-atual-idStatusAtual" type="select" className="form-control" name="idStatusAtual">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacienteStatusAtual.idStatusAtual.empty')}
-                                </option>
-                                {statusAtuals
-                                  ? statusAtuals.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.idUsuario ? (
+                          <Col md="idUsuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idUsuarioLabel" for="paciente-status-atual-idUsuario">
+                                    <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-status-atual-idUsuario" type="text" name="idUsuario" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
+                        )}
+                        {!this.state.fieldsBase.paciente ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-status-atual-paciente">
+                                    <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="paciente-status-atual-paciente" type="select" className="form-control" name="paciente">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.pacienteStatusAtual.paciente.empty')}
+                                    </option>
+                                    {pacientes
+                                      ? pacientes.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.nome}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase.paciente} />
+                        )}
+                        {!this.state.fieldsBase.status ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-status-atual-status">
+                                    <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="paciente-status-atual-status" type="select" className="form-control" name="status">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.pacienteStatusAtual.status.empty')}
+                                    </option>
+                                    {statusAtuals
+                                      ? statusAtuals.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.statusAtual}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="status" value={this.state.fieldsBase.status} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

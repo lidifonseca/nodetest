@@ -1,0 +1,22 @@
+{
+  "generadorApp": {
+    "tempoExperiencia": {
+      "home": {
+        "title": "Tempo Experiencias",
+        "createLabel": "Criar novo Tempo Experiencia",
+        "createOrEditLabel": "Criar ou editar Tempo Experiencia",
+        "notFound": "Nenhum Tempo Experiencia encontrado"
+      },
+      "created": "Um novo Tempo Experiencia foi criado com o identificador {{ param }}",
+      "updated": "Um Tempo Experiencia foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tempo Experiencia foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tempo Experiencia {{ id }}?"
+      },
+      "detail": {
+        "title": "Tempo Experiencia"
+      },
+      "tempoExperiencia": "Tempo Experiencia"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "tipoUsuario": {
+      "home": {
+        "title": "Tipo Usuarios",
+        "createLabel": "Criar novo Tipo Usuario",
+        "createOrEditLabel": "Criar ou editar Tipo Usuario",
+        "notFound": "Nenhum Tipo Usuario encontrado"
+      },
+      "created": "Um novo Tipo Usuario foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Usuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Usuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Usuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Usuario"
+      },
+      "tipoUsuario": "Tipo Usuario",
+      "ativo": "Ativo",
+      "usuario": "Usuario"
+    }
+  }
+}

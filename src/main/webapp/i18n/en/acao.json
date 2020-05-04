@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "acao": {
+      "home": {
+        "title": "Acaos",
+        "createLabel": "Criar novo Acao",
+        "createOrEditLabel": "Criar ou editar Acao",
+        "notFound": "Nenhum Acao encontrado"
+      },
+      "created": "Um novo Acao foi criado com o identificador {{ param }}",
+      "updated": "Um Acao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Acao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Acao {{ id }}?"
+      },
+      "detail": {
+        "title": "Acao"
+      },
+      "acao": "Acao",
+      "logUser": "Log User",
+      "logUserFranquia": "Log User Franquia",
+      "usuarioAcao": "Usuario Acao"
+    }
+  }
+}

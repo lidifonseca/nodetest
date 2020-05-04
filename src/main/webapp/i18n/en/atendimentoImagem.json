@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "atendimentoImagem": {
+      "home": {
+        "title": "Atendimento Imagems",
+        "createLabel": "Criar novo Atendimento Imagem",
+        "createOrEditLabel": "Criar ou editar Atendimento Imagem",
+        "notFound": "Nenhum Atendimento Imagem encontrado"
+      },
+      "created": "Um novo Atendimento Imagem foi criado com o identificador {{ param }}",
+      "updated": "Um Atendimento Imagem foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Atendimento Imagem foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Atendimento Imagem {{ id }}?"
+      },
+      "detail": {
+        "title": "Atendimento Imagem"
+      },
+      "atendimentoId": "Atendimento Id",
+      "imagem": "Imagem",
+      "criadoEm": "Criado Em"
+    }
+  }
+}

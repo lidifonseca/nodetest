@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "cepbrCidade": {
+      "home": {
+        "title": "Cepbr Cidades",
+        "createLabel": "Criar novo Cepbr Cidade",
+        "createOrEditLabel": "Criar ou editar Cepbr Cidade",
+        "notFound": "Nenhum Cepbr Cidade encontrado"
+      },
+      "created": "Um novo Cepbr Cidade foi criado com o identificador {{ param }}",
+      "updated": "Um Cepbr Cidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cepbr Cidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cepbr Cidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Cepbr Cidade"
+      },
+      "idCidade": "Id Cidade",
+      "cidade": "Cidade",
+      "codIbge": "Cod Ibge",
+      "area": "Area",
+      "cepbrBairro": "Cepbr Bairro",
+      "cepbrEndereco": "Cepbr Endereco",
+      "uf": "Uf"
+    }
+  }
+}

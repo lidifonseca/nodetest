@@ -1,0 +1,31 @@
+{
+  "generadorApp": {
+    "cidXPtaNovoPadItemIndi": {
+      "home": {
+        "title": "Cid X Pta Novo Pad Item Indis",
+        "createLabel": "Criar novo Cid X Pta Novo Pad Item Indi",
+        "createOrEditLabel": "Criar ou editar Cid X Pta Novo Pad Item Indi",
+        "notFound": "Nenhum Cid X Pta Novo Pad Item Indi encontrado"
+      },
+      "created": "Um novo Cid X Pta Novo Pad Item Indi foi criado com o identificador {{ param }}",
+      "updated": "Um Cid X Pta Novo Pad Item Indi foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cid X Pta Novo Pad Item Indi foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cid X Pta Novo Pad Item Indi {{ id }}?"
+      },
+      "detail": {
+        "title": "Cid X Pta Novo Pad Item Indi"
+      },
+      "meta": "Meta",
+      "maximo": "Maximo",
+      "minimo": "Minimo",
+      "unidadeMedidaExtra": "Unidade Medida Extra",
+      "unidadeMedidaId": "Unidade Medida Id",
+      "score": "Score",
+      "alertasIndicadores": "Alertas Indicadores",
+      "padItemIndicadoresId": "Pad Item Indicadores Id",
+      "categoriasId": "Categorias Id",
+      "cidXPtaNovoId": "Cid X Pta Novo Id"
+    }
+  }
+}

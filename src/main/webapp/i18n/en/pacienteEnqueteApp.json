@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "pacienteEnqueteApp": {
+      "home": {
+        "title": "Paciente Enquete Apps",
+        "createLabel": "Criar novo Paciente Enquete App",
+        "createOrEditLabel": "Criar ou editar Paciente Enquete App",
+        "notFound": "Nenhum Paciente Enquete App encontrado"
+      },
+      "created": "Um novo Paciente Enquete App foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Enquete App foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Enquete App foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Enquete App {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Enquete App"
+      },
+      "votacao": "Votacao",
+      "idPaciente": "Id Paciente"
+    }
+  }
+}

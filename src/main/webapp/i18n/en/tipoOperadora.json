@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "tipoOperadora": {
+      "home": {
+        "title": "Tipo Operadoras",
+        "createLabel": "Criar novo Tipo Operadora",
+        "createOrEditLabel": "Criar ou editar Tipo Operadora",
+        "notFound": "Nenhum Tipo Operadora encontrado"
+      },
+      "created": "Um novo Tipo Operadora foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Operadora foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Operadora foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Operadora {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Operadora"
+      },
+      "tipo": "Tipo",
+      "ativo": "Ativo"
+    }
+  }
+}

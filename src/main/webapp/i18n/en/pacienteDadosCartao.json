@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "pacienteDadosCartao": {
+      "home": {
+        "title": "Paciente Dados Cartaos",
+        "createLabel": "Criar novo Paciente Dados Cartao",
+        "createOrEditLabel": "Criar ou editar Paciente Dados Cartao",
+        "notFound": "Nenhum Paciente Dados Cartao encontrado"
+      },
+      "created": "Um novo Paciente Dados Cartao foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Dados Cartao foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Dados Cartao foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Dados Cartao {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Dados Cartao"
+      },
+      "bandeira": "Bandeira",
+      "numeroCartao": "Numero Cartao",
+      "validade": "Validade",
+      "codAtivacao": "Cod Ativacao",
+      "ativo": "Ativo",
+      "pacientePedido": "Paciente Pedido",
+      "idPaciente": "Id Paciente"
+    }
+  }
+}

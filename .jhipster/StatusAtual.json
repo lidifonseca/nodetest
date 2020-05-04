@@ -18,14 +18,7 @@
             "fieldValidateRulesMaxlength": "40"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "pacienteStatusAtual",
-            "otherEntityRelationshipName": "idStatusAtual",
-            "relationshipName": "pacienteStatusAtual"
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20200503010400",
     "entityTableName": "status_atual",
     "dto": "mapstruct",

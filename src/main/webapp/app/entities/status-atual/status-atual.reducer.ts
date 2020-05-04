@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IStatusAtual, defaultValue } from 'app/shared/model/status-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_STATUSATUAL_LIST_EXPORT: 'statusAtual/FETCH_STATUSATUAL_LIST_EXPORT',
   FETCH_STATUSATUAL_LIST: 'statusAtual/FETCH_STATUSATUAL_LIST',
   FETCH_STATUSATUAL: 'statusAtual/FETCH_STATUSATUAL',
   CREATE_STATUSATUAL: 'statusAtual/CREATE_STATUSATUAL',
@@ -30,10 +31,16 @@ const initialState = {
 
 export type StatusAtualState = Readonly<typeof initialState>;
 
+export interface IStatusAtualBaseState {
+  statusAtual: any;
+  styleLabel: any;
+}
+
 // Reducer
 
 export default (state: StatusAtualState = initialState, action): StatusAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_STATUSATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATUAL):
       return {
@@ -51,6 +58,7 @@ export default (state: StatusAtualState = initialState, action): StatusAtualStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_STATUSATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATUAL):
     case FAILURE(ACTION_TYPES.CREATE_STATUSATUAL):
@@ -108,23 +116,19 @@ const apiUrl = 'api/status-atuals';
 export type ICrudGetAllActionStatusAtual<T> = (
   statusAtual?: any,
   styleLabel?: any,
-  pacienteStatusAtual?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionStatusAtual<IStatusAtual> = (statusAtual, styleLabel, pacienteStatusAtual, page, size, sort) => {
+export const getEntities: ICrudGetAllActionStatusAtual<IStatusAtual> = (statusAtual, styleLabel, page, size, sort) => {
   const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
-  const pacienteStatusAtualRequest = pacienteStatusAtual ? `pacienteStatusAtual.equals=${pacienteStatusAtual}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_STATUSATUAL_LIST,
-    payload: axios.get<IStatusAtual>(
-      `${requestUrl}${statusAtualRequest}${styleLabelRequest}${pacienteStatusAtualRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IStatusAtual>(`${requestUrl}${statusAtualRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IStatusAtual> = id => {
@@ -132,6 +136,17 @@ export const getEntity: ICrudGetAction<IStatusAtual> = id => {
   return {
     type: ACTION_TYPES.FETCH_STATUSATUAL,
     payload: axios.get<IStatusAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionStatusAtual<IStatusAtual> = (statusAtual, styleLabel, page, size, sort) => {
+  const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_STATUSATUAL_LIST,
+    payload: axios.get<IStatusAtual>(`${requestUrl}${statusAtualRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -170,3 +185,14 @@ export const deleteEntity: ICrudDeleteAction<IStatusAtual> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getStatusAtualState = (location): IStatusAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const statusAtual = url.searchParams.get('statusAtual') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+
+  return {
+    statusAtual,
+    styleLabel
+  };
+};

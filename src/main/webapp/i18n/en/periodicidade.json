@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "periodicidade": {
+      "home": {
+        "title": "Periodicidades",
+        "createLabel": "Criar novo Periodicidade",
+        "createOrEditLabel": "Criar ou editar Periodicidade",
+        "notFound": "Nenhum Periodicidade encontrado"
+      },
+      "created": "Um novo Periodicidade foi criado com o identificador {{ param }}",
+      "updated": "Um Periodicidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Periodicidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Periodicidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Periodicidade"
+      },
+      "periodicidade": "Periodicidade",
+      "ativo": "Ativo",
+      "padItem": "Pad Item"
+    }
+  }
+}

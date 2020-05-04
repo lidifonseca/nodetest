@@ -32,7 +32,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-status-atual.reducer';
+import { getPacienteStatusAtualState, IPacienteStatusAtualBaseState, getEntities } from './paciente-status-atual.reducer';
 import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -44,14 +44,6 @@ import { getEntities as getStatusAtuals } from 'app/entities/status-atual/status
 
 export interface IPacienteStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteStatusAtualBaseState {
-  dataStatus: any;
-  observacao: any;
-  ativo: any;
-  idUsuario: any;
-  idPaciente: any;
-  idStatusAtual: any;
-}
 export interface IPacienteStatusAtualState extends IPacienteStatusAtualBaseState, IPaginationBaseState {}
 
 export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualProps, IPacienteStatusAtualState> {
@@ -61,29 +53,9 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteStatusAtualState(this.props.location)
+      ...getPacienteStatusAtualState(this.props.location)
     };
   }
-
-  getPacienteStatusAtualState = (location): IPacienteStatusAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const dataStatus = url.searchParams.get('dataStatus') || '';
-    const observacao = url.searchParams.get('observacao') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idStatusAtual = url.searchParams.get('idStatusAtual') || '';
-
-    return {
-      dataStatus,
-      observacao,
-      ativo,
-      idUsuario,
-      idPaciente,
-      idStatusAtual
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -99,8 +71,8 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
         observacao: '',
         ativo: '',
         idUsuario: '',
-        idPaciente: '',
-        idStatusAtual: ''
+        paciente: '',
+        status: ''
       },
       () => this.sortEntities()
     );
@@ -157,11 +129,11 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
       'idUsuario=' +
       this.state.idUsuario +
       '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
+      'paciente=' +
+      this.state.paciente +
       '&' +
-      'idStatusAtual=' +
-      this.state.idStatusAtual +
+      'status=' +
+      this.state.status +
       '&' +
       ''
     );
@@ -170,18 +142,8 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataStatus, observacao, ativo, idUsuario, idPaciente, idStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      dataStatus,
-      observacao,
-      ativo,
-      idUsuario,
-      idPaciente,
-      idStatusAtual,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { dataStatus, observacao, ativo, idUsuario, paciente, status, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(dataStatus, observacao, ativo, idUsuario, paciente, status, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -253,15 +215,15 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                       <Col md="3">
                         <Row>
                           <div>
-                            <Label for="paciente-status-atual-idPaciente">
-                              <Translate contentKey="generadorApp.pacienteStatusAtual.idPaciente">Id Paciente</Translate>
+                            <Label for="paciente-status-atual-paciente">
+                              <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
                             </Label>
-                            <AvInput id="paciente-status-atual-idPaciente" type="select" className="form-control" name="idPacienteId">
+                            <AvInput id="paciente-status-atual-paciente" type="select" className="form-control" name="pacienteId">
                               <option value="" key="0" />
                               {pacientes
                                 ? pacientes.map(otherEntity => (
                                     <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
+                                      {otherEntity.nome}
                                     </option>
                                   ))
                                 : null}
@@ -273,15 +235,15 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                       <Col md="3">
                         <Row>
                           <div>
-                            <Label for="paciente-status-atual-idStatusAtual">
-                              <Translate contentKey="generadorApp.pacienteStatusAtual.idStatusAtual">Id Status Atual</Translate>
+                            <Label for="paciente-status-atual-status">
+                              <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
                             </Label>
-                            <AvInput id="paciente-status-atual-idStatusAtual" type="select" className="form-control" name="idStatusAtualId">
+                            <AvInput id="paciente-status-atual-status" type="select" className="form-control" name="statusId">
                               <option value="" key="0" />
                               {statusAtuals
                                 ? statusAtuals.map(otherEntity => (
                                     <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
+                                      {otherEntity.statusAtual}
                                     </option>
                                   ))
                                 : null}
@@ -333,11 +295,11 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.idPaciente">Id Paciente</Translate>
+                        <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
                       <th>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.idStatusAtual">Id Status Atual</Translate>
+                        <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
 
@@ -364,41 +326,22 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
 
                         <td>{pacienteStatusAtual.idUsuario}</td>
                         <td>
-                          {pacienteStatusAtual.idPaciente ? (
-                            <Link to={`paciente/${pacienteStatusAtual.idPaciente.id}`}>{pacienteStatusAtual.idPaciente.id}</Link>
+                          {pacienteStatusAtual.paciente ? (
+                            <Link to={`paciente/${pacienteStatusAtual.paciente.id}`}>{pacienteStatusAtual.paciente.id}</Link>
                           ) : (
                             ''
                           )}
                         </td>
                         <td>
-                          {pacienteStatusAtual.idStatusAtual ? (
-                            <Link to={`status-atual/${pacienteStatusAtual.idStatusAtual.id}`}>{pacienteStatusAtual.idStatusAtual.id}</Link>
+                          {pacienteStatusAtual.status ? (
+                            <Link to={`status-atual/${pacienteStatusAtual.status.id}`}>{pacienteStatusAtual.status.id}</Link>
                           ) : (
                             ''
                           )}
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteStatusAtual.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteStatusAtual.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteStatusAtual.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

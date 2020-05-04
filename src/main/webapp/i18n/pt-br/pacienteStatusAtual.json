@@ -20,8 +20,8 @@
       "observacao": "Observacao",
       "ativo": "Ativo",
       "idUsuario": "Id Usuario",
-      "idPaciente": "Id Paciente",
-      "idStatusAtual": "Id Status Atual"
+      "paciente": "Paciente",
+      "status": "Status"
     }
   }
 }

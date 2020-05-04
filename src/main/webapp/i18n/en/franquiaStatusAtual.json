@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "franquiaStatusAtual": {
+      "home": {
+        "title": "Franquia Status Atuals",
+        "createLabel": "Criar novo Franquia Status Atual",
+        "createOrEditLabel": "Criar ou editar Franquia Status Atual",
+        "notFound": "Nenhum Franquia Status Atual encontrado"
+      },
+      "created": "Um novo Franquia Status Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Franquia Status Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Franquia Status Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Franquia Status Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Franquia Status Atual"
+      },
+      "statusAtual": "Status Atual",
+      "obs": "Obs",
+      "ativo": "Ativo",
+      "idFranquia": "Id Franquia"
+    }
+  }
+}

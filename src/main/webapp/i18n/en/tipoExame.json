@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "tipoExame": {
+      "home": {
+        "title": "Tipo Exames",
+        "createLabel": "Criar novo Tipo Exame",
+        "createOrEditLabel": "Criar ou editar Tipo Exame",
+        "notFound": "Nenhum Tipo Exame encontrado"
+      },
+      "created": "Um novo Tipo Exame foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Exame foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Exame foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Exame {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Exame"
+      },
+      "exame": "Exame",
+      "idPai": "Id Pai",
+      "ativo": "Ativo"
+    }
+  }
+}

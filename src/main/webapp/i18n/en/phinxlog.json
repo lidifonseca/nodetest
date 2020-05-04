@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "phinxlog": {
+      "home": {
+        "title": "Phinxlogs",
+        "createLabel": "Criar novo Phinxlog",
+        "createOrEditLabel": "Criar ou editar Phinxlog",
+        "notFound": "Nenhum Phinxlog encontrado"
+      },
+      "created": "Um novo Phinxlog foi criado com o identificador {{ param }}",
+      "updated": "Um Phinxlog foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Phinxlog foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Phinxlog {{ id }}?"
+      },
+      "detail": {
+        "title": "Phinxlog"
+      },
+      "version": "Version",
+      "migrationName": "Migration Name",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "breakpoint": "Breakpoint"
+    }
+  }
+}

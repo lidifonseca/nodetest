@@ -1,0 +1,42 @@
+{
+  "generadorApp": {
+    "unidadeEasy": {
+      "home": {
+        "title": "Unidade Easies",
+        "createLabel": "Criar novo Unidade Easy",
+        "createOrEditLabel": "Criar ou editar Unidade Easy",
+        "notFound": "Nenhum Unidade Easy encontrado"
+      },
+      "created": "Um novo Unidade Easy foi criado com o identificador {{ param }}",
+      "updated": "Um Unidade Easy foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Unidade Easy foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Unidade Easy {{ id }}?"
+      },
+      "detail": {
+        "title": "Unidade Easy"
+      },
+      "razaoSocial": "Razao Social",
+      "nomeFantasia": "Nome Fantasia",
+      "cnpj": "Cnpj",
+      "ie": "Ie",
+      "telefone1": "Telefone 1",
+      "telefone2": "Telefone 2",
+      "endereco": "Endereco",
+      "numero": "Numero",
+      "complemento": "Complemento",
+      "bairro": "Bairro",
+      "cidade": "Cidade",
+      "uf": "Uf",
+      "cep": "Cep",
+      "regans": "Regans",
+      "regcnes": "Regcnes",
+      "tissresponsavel": "Tissresponsavel",
+      "tissconselho": "Tissconselho",
+      "tissinscricao": "Tissinscricao",
+      "tisscbo": "Tisscbo",
+      "tisscoduf": "Tisscoduf",
+      "ativo": "Ativo"
+    }
+  }
+}

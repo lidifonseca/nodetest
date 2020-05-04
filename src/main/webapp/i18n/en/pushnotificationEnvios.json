@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "pushnotificationEnvios": {
+      "home": {
+        "title": "Pushnotification Envios",
+        "createLabel": "Criar novo Pushnotification Envios",
+        "createOrEditLabel": "Criar ou editar Pushnotification Envios",
+        "notFound": "Nenhum Pushnotification Envios encontrado"
+      },
+      "created": "Um novo Pushnotification Envios foi criado com o identificador {{ param }}",
+      "updated": "Um Pushnotification Envios foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pushnotification Envios foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pushnotification Envios {{ id }}?"
+      },
+      "detail": {
+        "title": "Pushnotification Envios"
+      },
+      "referencia": "Referencia",
+      "ultimoEnvio": "Ultimo Envio"
+    }
+  }
+}

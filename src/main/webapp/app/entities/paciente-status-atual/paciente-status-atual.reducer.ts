@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteStatusAtual, defaultValue } from 'app/shared/model/paciente-status-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTESTATUSATUAL_LIST_EXPORT: 'pacienteStatusAtual/FETCH_PACIENTESTATUSATUAL_LIST_EXPORT',
   FETCH_PACIENTESTATUSATUAL_LIST: 'pacienteStatusAtual/FETCH_PACIENTESTATUSATUAL_LIST',
   FETCH_PACIENTESTATUSATUAL: 'pacienteStatusAtual/FETCH_PACIENTESTATUSATUAL',
   CREATE_PACIENTESTATUSATUAL: 'pacienteStatusAtual/CREATE_PACIENTESTATUSATUAL',
@@ -31,10 +32,20 @@ const initialState = {
 
 export type PacienteStatusAtualState = Readonly<typeof initialState>;
 
+export interface IPacienteStatusAtualBaseState {
+  dataStatus: any;
+  observacao: any;
+  ativo: any;
+  idUsuario: any;
+  paciente: any;
+  status: any;
+}
+
 // Reducer
 
 export default (state: PacienteStatusAtualState = initialState, action): PacienteStatusAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTESTATUSATUAL):
       return {
@@ -52,6 +63,7 @@ export default (state: PacienteStatusAtualState = initialState, action): Pacient
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTESTATUSATUAL):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTESTATUSATUAL):
@@ -122,8 +134,8 @@ export type ICrudGetAllActionPacienteStatusAtual<T> = (
   observacao?: any,
   ativo?: any,
   idUsuario?: any,
-  idPaciente?: any,
-  idStatusAtual?: any,
+  paciente?: any,
+  status?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -134,8 +146,8 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   observacao,
   ativo,
   idUsuario,
-  idPaciente,
-  idStatusAtual,
+  paciente,
+  status,
   page,
   size,
   sort
@@ -144,14 +156,14 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
   const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
-  const idStatusAtualRequest = idStatusAtual ? `idStatusAtual.equals=${idStatusAtual}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const statusRequest = status ? `status.equals=${status}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST,
     payload: axios.get<IPacienteStatusAtual>(
-      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${idUsuarioRequest}${idPacienteRequest}${idStatusAtualRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${idUsuarioRequest}${pacienteRequest}${statusRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -163,11 +175,38 @@ export const getEntity: ICrudGetAction<IPacienteStatusAtual> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAtual> = (
+  dataStatus,
+  observacao,
+  ativo,
+  idUsuario,
+  paciente,
+  status,
+  page,
+  size,
+  sort
+) => {
+  const dataStatusRequest = dataStatus ? `dataStatus.equals=${dataStatus}&` : '';
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+  const statusRequest = status ? `status.equals=${status}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST,
+    payload: axios.get<IPacienteStatusAtual>(
+      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${idUsuarioRequest}${pacienteRequest}${statusRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteStatusAtual> = entity => async dispatch => {
   entity = {
     ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idStatusAtual: entity.idStatusAtual === 'null' ? null : entity.idStatusAtual
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    status: entity.status === 'null' ? null : entity.status
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTESTATUSATUAL,
@@ -180,8 +219,8 @@ export const createEntity: ICrudPutAction<IPacienteStatusAtual> = entity => asyn
 export const updateEntity: ICrudPutAction<IPacienteStatusAtual> = entity => async dispatch => {
   entity = {
     ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idStatusAtual: entity.idStatusAtual === 'null' ? null : entity.idStatusAtual
+    paciente: entity.paciente === 'null' ? null : entity.paciente,
+    status: entity.status === 'null' ? null : entity.status
   };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTESTATUSATUAL,
@@ -213,3 +252,23 @@ export const setBlob = (name, data, contentType?) => ({
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteStatusAtualState = (location): IPacienteStatusAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const dataStatus = url.searchParams.get('dataStatus') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const idUsuario = url.searchParams.get('idUsuario') || '';
+
+  const paciente = url.searchParams.get('paciente') || '';
+  const status = url.searchParams.get('status') || '';
+
+  return {
+    dataStatus,
+    observacao,
+    ativo,
+    idUsuario,
+    paciente,
+    status
+  };
+};

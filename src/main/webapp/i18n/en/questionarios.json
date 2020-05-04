@@ -1,0 +1,27 @@
+{
+  "generadorApp": {
+    "questionarios": {
+      "home": {
+        "title": "Questionarios",
+        "createLabel": "Criar novo Questionarios",
+        "createOrEditLabel": "Criar ou editar Questionarios",
+        "notFound": "Nenhum Questionarios encontrado"
+      },
+      "created": "Um novo Questionarios foi criado com o identificador {{ param }}",
+      "updated": "Um Questionarios foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Questionarios foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Questionarios {{ id }}?"
+      },
+      "detail": {
+        "title": "Questionarios"
+      },
+      "dataCadastro": "Data Cadastro",
+      "etapaAtual": "Etapa Atual",
+      "finalizado": "Finalizado",
+      "ultimaPerguntaRespondida": "Ultima Pergunta Respondida",
+      "respostasQuestionarios": "Respostas Questionarios",
+      "pacienteId": "Paciente Id"
+    }
+  }
+}

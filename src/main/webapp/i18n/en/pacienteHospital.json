@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "pacienteHospital": {
+      "home": {
+        "title": "Paciente Hospitals",
+        "createLabel": "Criar novo Paciente Hospital",
+        "createOrEditLabel": "Criar ou editar Paciente Hospital",
+        "notFound": "Nenhum Paciente Hospital encontrado"
+      },
+      "created": "Um novo Paciente Hospital foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Hospital foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Hospital foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Hospital {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Hospital"
+      },
+      "servico": "Servico",
+      "styleLabel": "Style Label"
+    }
+  }
+}

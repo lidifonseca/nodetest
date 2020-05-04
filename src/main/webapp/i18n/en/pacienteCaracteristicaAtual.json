@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "pacienteCaracteristicaAtual": {
+      "home": {
+        "title": "Paciente Caracteristica Atuals",
+        "createLabel": "Criar novo Paciente Caracteristica Atual",
+        "createOrEditLabel": "Criar ou editar Paciente Caracteristica Atual",
+        "notFound": "Nenhum Paciente Caracteristica Atual encontrado"
+      },
+      "created": "Um novo Paciente Caracteristica Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Paciente Caracteristica Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Paciente Caracteristica Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Paciente Caracteristica Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Paciente Caracteristica Atual"
+      },
+      "idPaciente": "Id Paciente",
+      "idPacienteCaracteristica": "Id Paciente Caracteristica",
+      "idUsuario": "Id Usuario"
+    }
+  }
+}

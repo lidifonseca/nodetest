@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "padItemSorteioFeito": {
+      "home": {
+        "title": "Pad Item Sorteio Feitos",
+        "createLabel": "Criar novo Pad Item Sorteio Feito",
+        "createOrEditLabel": "Criar ou editar Pad Item Sorteio Feito",
+        "notFound": "Nenhum Pad Item Sorteio Feito encontrado"
+      },
+      "created": "Um novo Pad Item Sorteio Feito foi criado com o identificador {{ param }}",
+      "updated": "Um Pad Item Sorteio Feito foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad Item Sorteio Feito foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad Item Sorteio Feito {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad Item Sorteio Feito"
+      },
+      "sorteioFeito": "Sorteio Feito",
+      "idPadItem": "Id Pad Item"
+    }
+  }
+}

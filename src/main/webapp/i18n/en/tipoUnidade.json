@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "tipoUnidade": {
+      "home": {
+        "title": "Tipo Unidades",
+        "createLabel": "Criar novo Tipo Unidade",
+        "createOrEditLabel": "Criar ou editar Tipo Unidade",
+        "notFound": "Nenhum Tipo Unidade encontrado"
+      },
+      "created": "Um novo Tipo Unidade foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Unidade foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Unidade foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Unidade {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Unidade"
+      },
+      "tipoUnidade": "Tipo Unidade",
+      "especialidade": "Especialidade"
+    }
+  }
+}

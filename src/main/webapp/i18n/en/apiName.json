@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "apiName": {
+      "home": {
+        "title": "Api Names",
+        "createLabel": "Criar novo Api Name",
+        "createOrEditLabel": "Criar ou editar Api Name",
+        "notFound": "Nenhum Api Name encontrado"
+      },
+      "created": "Um novo Api Name foi criado com o identificador {{ param }}",
+      "updated": "Um Api Name foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Api Name foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Api Name {{ id }}?"
+      },
+      "detail": {
+        "title": "Api Name"
+      },
+      "apiName": "Api Name",
+      "apiReceiver": "Api Receiver",
+      "apiObs": "Api Obs",
+      "ativo": "Ativo"
+    }
+  }
+}

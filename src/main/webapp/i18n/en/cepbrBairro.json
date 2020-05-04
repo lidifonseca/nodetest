@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "cepbrBairro": {
+      "home": {
+        "title": "Cepbr Bairros",
+        "createLabel": "Criar novo Cepbr Bairro",
+        "createOrEditLabel": "Criar ou editar Cepbr Bairro",
+        "notFound": "Nenhum Cepbr Bairro encontrado"
+      },
+      "created": "Um novo Cepbr Bairro foi criado com o identificador {{ param }}",
+      "updated": "Um Cepbr Bairro foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Cepbr Bairro foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Cepbr Bairro {{ id }}?"
+      },
+      "detail": {
+        "title": "Cepbr Bairro"
+      },
+      "idBairro": "Id Bairro",
+      "bairro": "Bairro",
+      "cepbrEndereco": "Cepbr Endereco",
+      "idCidade": "Id Cidade"
+    }
+  }
+}

@@ -158,7 +158,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         pacienteOperadora: '',
         pacientePedido: '',
         pacientePush: '',
-        pacienteStatusAtual: '',
         pad: '',
         questionarios: '',
         unidade: '',
@@ -410,9 +409,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'pacientePush=' +
       this.state.pacientePush +
       '&' +
-      'pacienteStatusAtual=' +
-      this.state.pacienteStatusAtual +
-      '&' +
       'pad=' +
       this.state.pad +
       '&' +
@@ -514,7 +510,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacienteOperadora,
       pacientePedido,
       pacientePush,
-      pacienteStatusAtual,
       pad,
       questionarios,
       unidade,
@@ -596,7 +591,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacienteOperadora,
       pacientePedido,
       pacientePush,
-      pacienteStatusAtual,
       pad,
       questionarios,
       unidade,
@@ -791,6 +785,84 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                                 <FontAwesomeIcon icon="trash" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.delete">Delete</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="file-text-o" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.RelatoriodeInformacoes">RelatoriodeInformacoes</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="list" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.IndicadoresClinicos">IndicadoresClinicos</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="list" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.Monitoramento">Monitoramento</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="search" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.VisualizarProntuario">VisualizarProntuario</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="pencil" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.Status">Status</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="upload" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.Arquivos">Arquivos</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="stethoscope" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.Diagnostico">Diagnostico</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="medkit" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.Operadora">Operadora</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="refresh" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.ResetSenha">ResetSenha</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="stethoscope" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.ProntuarioEletronico">ProntuarioEletronico</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="key" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.Token">Token</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="question" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.Questionario">Questionario</Translate>
+                                </span>
+                              </DropdownItem>
+                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                                <FontAwesomeIcon icon="fa-list-ol" />{' '}
+                                <span className="d-none d-md-inline">
+                                  <Translate contentKey="entity.action.TratamentoIndicado">TratamentoIndicado</Translate>
                                 </span>
                               </DropdownItem>
                             </DropdownMenu>

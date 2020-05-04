@@ -1,0 +1,37 @@
+{
+  "generadorApp": {
+    "pad": {
+      "home": {
+        "title": "Pads",
+        "createLabel": "Criar novo Pad",
+        "createOrEditLabel": "Criar ou editar Pad",
+        "notFound": "Nenhum Pad encontrado"
+      },
+      "created": "Um novo Pad foi criado com o identificador {{ param }}",
+      "updated": "Um Pad foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Pad foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Pad {{ id }}?"
+      },
+      "detail": {
+        "title": "Pad"
+      },
+      "idOperadora": "Id Operadora",
+      "idFranquia": "Id Franquia",
+      "nroPad": "Nro Pad",
+      "dataInicio": "Data Inicio",
+      "dataFim": "Data Fim",
+      "dataConferido": "Data Conferido",
+      "ativo": "Ativo",
+      "idUsuario": "Id Usuario",
+      "statusPad": "Status Pad",
+      "novoModelo": "Novo Modelo",
+      "imagePath": "Image Path",
+      "score": "Score",
+      "padCid": "Pad Cid",
+      "padItem": "Pad Item",
+      "unidade": "Unidade",
+      "idPaciente": "Id Paciente"
+    }
+  }
+}

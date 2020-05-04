@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "descPta": {
+      "home": {
+        "title": "Desc Ptas",
+        "createLabel": "Criar novo Desc Pta",
+        "createOrEditLabel": "Criar ou editar Desc Pta",
+        "notFound": "Nenhum Desc Pta encontrado"
+      },
+      "created": "Um novo Desc Pta foi criado com o identificador {{ param }}",
+      "updated": "Um Desc Pta foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Desc Pta foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Desc Pta {{ id }}?"
+      },
+      "detail": {
+        "title": "Desc Pta"
+      },
+      "nome": "Nome",
+      "resultadoEsperado": "Resultado Esperado",
+      "ativo": "Ativo"
+    }
+  }
+}

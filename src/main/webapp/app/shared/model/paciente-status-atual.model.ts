@@ -8,8 +8,10 @@ export interface IPacienteStatusAtual {
   observacao?: any;
   ativo?: number;
   idUsuario?: string;
-  idPaciente?: string | any;
-  idStatusAtual?: string | any;
+  pacienteNome?: string;
+  paciente?: string | any;
+  statusStatusAtual?: string;
+  status?: string | any;
 }
 
 export const defaultValue: Readonly<IPacienteStatusAtual> = {};

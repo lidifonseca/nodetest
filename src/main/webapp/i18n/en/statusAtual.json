@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "statusAtual": {
+      "home": {
+        "title": "Status Atuals",
+        "createLabel": "Create a new Status Atual",
+        "createOrEditLabel": "Create or edit a Status Atual",
+        "notFound": "No Status Atuals found"
+      },
+      "created": "A new Status Atual is created with identifier {{ param }}",
+      "updated": "A Status Atual is updated with identifier {{ param }}",
+      "deleted": "A Status Atual is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Status Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Status Atual"
+      },
+      "statusAtual": "Status Atual",
+      "styleLabel": "Style Label"
+    }
+  }
+}

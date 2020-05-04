@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "profissionalArquivo": {
+      "home": {
+        "title": "Profissional Arquivos",
+        "createLabel": "Criar novo Profissional Arquivo",
+        "createOrEditLabel": "Criar ou editar Profissional Arquivo",
+        "notFound": "Nenhum Profissional Arquivo encontrado"
+      },
+      "created": "Um novo Profissional Arquivo foi criado com o identificador {{ param }}",
+      "updated": "Um Profissional Arquivo foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Profissional Arquivo foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Profissional Arquivo {{ id }}?"
+      },
+      "detail": {
+        "title": "Profissional Arquivo"
+      },
+      "idProfissional": "Id Profissional",
+      "arquivo": "Arquivo",
+      "ativo": "Ativo"
+    }
+  }
+}

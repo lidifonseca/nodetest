@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "ocorrenciaProntuario": {
+      "home": {
+        "title": "Ocorrencia Prontuarios",
+        "createLabel": "Criar novo Ocorrencia Prontuario",
+        "createOrEditLabel": "Criar ou editar Ocorrencia Prontuario",
+        "notFound": "Nenhum Ocorrencia Prontuario encontrado"
+      },
+      "created": "Um novo Ocorrencia Prontuario foi criado com o identificador {{ param }}",
+      "updated": "Um Ocorrencia Prontuario foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Ocorrencia Prontuario foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Ocorrencia Prontuario {{ id }}?"
+      },
+      "detail": {
+        "title": "Ocorrencia Prontuario"
+      },
+      "nome": "Nome",
+      "ativo": "Ativo"
+    }
+  }
+}

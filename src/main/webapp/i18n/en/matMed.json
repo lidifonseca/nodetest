@@ -1,0 +1,28 @@
+{
+  "generadorApp": {
+    "matMed": {
+      "home": {
+        "title": "Mat Meds",
+        "createLabel": "Criar novo Mat Med",
+        "createOrEditLabel": "Criar ou editar Mat Med",
+        "notFound": "Nenhum Mat Med encontrado"
+      },
+      "created": "Um novo Mat Med foi criado com o identificador {{ param }}",
+      "updated": "Um Mat Med foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Mat Med foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Mat Med {{ id }}?"
+      },
+      "detail": {
+        "title": "Mat Med"
+      },
+      "nome": "Nome",
+      "idTipoMatMed": "Id Tipo Mat Med",
+      "valor": "Valor",
+      "ativo": "Ativo",
+      "help": {
+        "idTipoMatMed": "Tipo 1 - Medicamento, Tipo 2 - Materiais, Tipo 3 - Equipamento"
+      }
+    }
+  }
+}

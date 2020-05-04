@@ -1,0 +1,23 @@
+{
+  "generadorApp": {
+    "reportEmailAtendimento": {
+      "home": {
+        "title": "Report Email Atendimentos",
+        "createLabel": "Criar novo Report Email Atendimento",
+        "createOrEditLabel": "Criar ou editar Report Email Atendimento",
+        "notFound": "Nenhum Report Email Atendimento encontrado"
+      },
+      "created": "Um novo Report Email Atendimento foi criado com o identificador {{ param }}",
+      "updated": "Um Report Email Atendimento foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Report Email Atendimento foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Report Email Atendimento {{ id }}?"
+      },
+      "detail": {
+        "title": "Report Email Atendimento"
+      },
+      "idAtendimento": "Id Atendimento",
+      "tipoReport": "Tipo Report"
+    }
+  }
+}

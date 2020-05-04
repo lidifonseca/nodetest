@@ -186,6 +186,11 @@ const reactFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.tsx`
                 },
                 {
+                    file: 'entities/relatorio/entity.csv.tsx',
+                    method: 'processJsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/relatorio/${generator.entityFileName}.csv.tsx`
+                },
+                {
                     file: 'entities/entity.reducer.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`
                 },

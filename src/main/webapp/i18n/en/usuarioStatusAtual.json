@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "usuarioStatusAtual": {
+      "home": {
+        "title": "Usuario Status Atuals",
+        "createLabel": "Criar novo Usuario Status Atual",
+        "createOrEditLabel": "Criar ou editar Usuario Status Atual",
+        "notFound": "Nenhum Usuario Status Atual encontrado"
+      },
+      "created": "Um novo Usuario Status Atual foi criado com o identificador {{ param }}",
+      "updated": "Um Usuario Status Atual foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Usuario Status Atual foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Usuario Status Atual {{ id }}?"
+      },
+      "detail": {
+        "title": "Usuario Status Atual"
+      },
+      "idUsuario": "Id Usuario",
+      "statusAtual": "Status Atual",
+      "obs": "Obs",
+      "ativo": "Ativo"
+    }
+  }
+}

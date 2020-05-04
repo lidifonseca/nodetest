@@ -1,0 +1,26 @@
+{
+  "generadorApp": {
+    "motivoPs": {
+      "home": {
+        "title": "Motivo Ps",
+        "createLabel": "Criar novo Motivo Ps",
+        "createOrEditLabel": "Criar ou editar Motivo Ps",
+        "notFound": "Nenhum Motivo Ps encontrado"
+      },
+      "created": "Um novo Motivo Ps foi criado com o identificador {{ param }}",
+      "updated": "Um Motivo Ps foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Motivo Ps foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Motivo Ps {{ id }}?"
+      },
+      "detail": {
+        "title": "Motivo Ps"
+      },
+      "nome": "Nome",
+      "idPai": "Id Pai",
+      "ativo": "Ativo",
+      "classe": "Classe",
+      "name": "Name"
+    }
+  }
+}

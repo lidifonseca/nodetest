@@ -1,0 +1,25 @@
+{
+  "generadorApp": {
+    "geoPanico": {
+      "home": {
+        "title": "Geo Panicos",
+        "createLabel": "Criar novo Geo Panico",
+        "createOrEditLabel": "Criar ou editar Geo Panico",
+        "notFound": "Nenhum Geo Panico encontrado"
+      },
+      "created": "Um novo Geo Panico foi criado com o identificador {{ param }}",
+      "updated": "Um Geo Panico foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Geo Panico foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Geo Panico {{ id }}?"
+      },
+      "detail": {
+        "title": "Geo Panico"
+      },
+      "idPanico": "Id Panico",
+      "idPaciente": "Id Paciente",
+      "latitude": "Latitude",
+      "longitude": "Longitude"
+    }
+  }
+}

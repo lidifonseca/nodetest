@@ -1,0 +1,24 @@
+{
+  "generadorApp": {
+    "categoriaContrato": {
+      "home": {
+        "title": "Categoria Contratoes",
+        "createLabel": "Criar novo Categoria Contrato",
+        "createOrEditLabel": "Criar ou editar Categoria Contrato",
+        "notFound": "Nenhum Categoria Contrato encontrado"
+      },
+      "created": "Um novo Categoria Contrato foi criado com o identificador {{ param }}",
+      "updated": "Um Categoria Contrato foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Categoria Contrato foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Categoria Contrato {{ id }}?"
+      },
+      "detail": {
+        "title": "Categoria Contrato"
+      },
+      "contrato": "Contrato",
+      "ativo": "Ativo",
+      "idCategoria": "Id Categoria"
+    }
+  }
+}

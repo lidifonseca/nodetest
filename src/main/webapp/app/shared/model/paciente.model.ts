@@ -9,7 +9,6 @@ import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model
 import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { IPacientePedido } from 'app/shared/model/paciente-pedido.model';
 import { IPacientePush } from 'app/shared/model/paciente-push.model';
-import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
 import { IPad } from 'app/shared/model/pad.model';
 import { IQuestionarios } from 'app/shared/model/questionarios.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
@@ -87,7 +86,6 @@ export interface IPaciente {
   pacienteOperadoras?: IPacienteOperadora[];
   pacientePedidos?: IPacientePedido[];
   pacientePushes?: IPacientePush[];
-  pacienteStatusAtuals?: IPacienteStatusAtual[];
   pads?: IPad[];
   questionarios?: IQuestionarios[];
   unidadeRazaoSocial?: string;
