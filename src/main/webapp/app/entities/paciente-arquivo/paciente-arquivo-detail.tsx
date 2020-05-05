@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, openFile, byteSize } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-arquivo.reducer';
+import { getEntity, IPacienteArquivoBaseState, getPacienteArquivoState } from './paciente-arquivo.reducer';
 import { IPacienteArquivo } from 'app/shared/model/paciente-arquivo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteArquivoState {
+  fieldsBase: IPacienteArquivoBaseState;
+}
+
 export interface IPacienteArquivoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetailProps> {
+export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetailProps, IPacienteArquivoState> {
   constructor(props: Readonly<IPacienteArquivoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteArquivoState(this.props.location)
     };
   }
 
@@ -55,28 +60,27 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idPaciente">
-                            <Translate contentKey="generadorApp.pacienteArquivo.idPaciente">Id Paciente</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteArquivoEntity.idPaciente}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="arquivo">
                             <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
                           </span>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{pacienteArquivoEntity.arquivo}</dd>
+                        <dd>
+                          {pacienteArquivoEntity.arquivo ? (
+                            <div>
+                              <a onClick={openFile(pacienteArquivoEntity.arquivoContentType, pacienteArquivoEntity.arquivo)}>
+                                <img
+                                  src={`data:${pacienteArquivoEntity.arquivoContentType};base64,${pacienteArquivoEntity.arquivo}`}
+                                  style={{ maxHeight: '30px' }}
+                                />
+                              </a>
+                              <span>
+                                {pacienteArquivoEntity.arquivoContentType}, {byteSize(pacienteArquivoEntity.arquivo)}
+                              </span>
+                            </div>
+                          ) : null}
+                        </dd>
                       </Col>
                     </Row>
                   </Col>
@@ -92,6 +96,19 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                       </Col>
                       <Col md="9">
                         <dd>{pacienteArquivoEntity.ativo}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>{pacienteArquivoEntity.paciente ? pacienteArquivoEntity.paciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

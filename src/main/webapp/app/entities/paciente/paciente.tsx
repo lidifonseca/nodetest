@@ -159,7 +159,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         pacientePedido: '',
         pacientePush: '',
         pad: '',
-        questionarios: '',
         unidade: '',
         franquia: '',
         cidade: '',
@@ -199,7 +198,9 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -412,9 +413,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'pad=' +
       this.state.pad +
       '&' +
-      'questionarios=' +
-      this.state.questionarios +
-      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -511,7 +509,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacientePedido,
       pacientePush,
       pad,
-      questionarios,
       unidade,
       franquia,
       cidade,
@@ -592,7 +589,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacientePedido,
       pacientePush,
       pad,
-      questionarios,
       unidade,
       franquia,
       cidade,
@@ -635,7 +631,11 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.paciente.home.createLabel">Create a new Paciente</Translate>
@@ -648,51 +648,65 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="6">
-                        <Row>
-                          <Label id="nomeLabel" for="paciente-nome">
-                            <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="6">
+                          <Row>
+                            <Label id="nomeLabel" for="paciente-nome">
+                              <Translate contentKey="generadorApp.paciente.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="nome" id="paciente-nome" value={this.state.nome} />
-                        </Row>
-                      </Col>
-                      <Col md="6">
-                        <Row>
-                          <Label id="emailLabel" for="paciente-email">
-                            <Translate contentKey="generadorApp.paciente.email">Email</Translate>
-                          </Label>
+                            <AvInput type="text" name="nome" id="paciente-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="email" id="paciente-email" value={this.state.email} />
-                        </Row>
-                      </Col>
-                      <Col md="6">
-                        <Row>
-                          <Label id="cpfLabel" for="paciente-cpf">
-                            <Translate contentKey="generadorApp.paciente.cpf">Cpf</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'email' ? (
+                        <Col md="6">
+                          <Row>
+                            <Label id="emailLabel" for="paciente-email">
+                              <Translate contentKey="generadorApp.paciente.email">Email</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="cpf" id="paciente-cpf" value={this.state.cpf} />
-                        </Row>
-                      </Col>
-                      <Col md="6">
-                        <Row>
-                          <Label id="rgLabel" for="paciente-rg">
-                            <Translate contentKey="generadorApp.paciente.rg">Rg</Translate>
-                          </Label>
+                            <AvInput type="text" name="email" id="paciente-email" value={this.state.email} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="rg" id="paciente-rg" value={this.state.rg} />
-                        </Row>
-                      </Col>
-                      <Col md="6">
-                        <Row>
-                          <Label id="registroLabel" for="paciente-registro">
-                            <Translate contentKey="generadorApp.paciente.registro">Registro</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'cpf' ? (
+                        <Col md="6">
+                          <Row>
+                            <Label id="cpfLabel" for="paciente-cpf">
+                              <Translate contentKey="generadorApp.paciente.cpf">Cpf</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="registro" id="paciente-registro" value={this.state.registro} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="cpf" id="paciente-cpf" value={this.state.cpf} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'rg' ? (
+                        <Col md="6">
+                          <Row>
+                            <Label id="rgLabel" for="paciente-rg">
+                              <Translate contentKey="generadorApp.paciente.rg">Rg</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="rg" id="paciente-rg" value={this.state.rg} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'registro' ? (
+                        <Col md="6">
+                          <Row>
+                            <Label id="registroLabel" for="paciente-registro">
+                              <Translate contentKey="generadorApp.paciente.registro">Registro</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="registro" id="paciente-registro" value={this.state.registro} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -754,15 +768,15 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                           </Button>
                         </td>
 
-                        <td>{paciente.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{paciente.nome}</td> : null}
 
-                        <td>{paciente.cep}</td>
+                        {this.state.baseFilters !== 'cep' ? <td>{paciente.cep}</td> : null}
 
-                        <td>{paciente.bairro}</td>
+                        {this.state.baseFilters !== 'bairro' ? <td>{paciente.bairro}</td> : null}
 
-                        <td>{paciente.rg}</td>
+                        {this.state.baseFilters !== 'rg' ? <td>{paciente.rg}</td> : null}
 
-                        <td>{paciente.registro}</td>
+                        {this.state.baseFilters !== 'registro' ? <td>{paciente.registro}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container"></div>
@@ -811,55 +825,100 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
                                   <Translate contentKey="entity.action.VisualizarProntuario">VisualizarProntuario</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/paciente-status-atual?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="pencil" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.Status">Status</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/paciente-arquivo?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="upload" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.Arquivos">Arquivos</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/paciente-diagnostico?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="stethoscope" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.Diagnostico">Diagnostico</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/paciente-operadora?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="medkit" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.Operadora">Operadora</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/reset-senha?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="refresh" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.ResetSenha">ResetSenha</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/paciente-prontuario?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="stethoscope" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.ProntuarioEletronico">ProntuarioEletronico</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/paciente-?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="key" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.Token">Token</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/questionarios?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="question" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.Questionario">Questionario</Translate>
                                 </span>
                               </DropdownItem>
-                              <DropdownItem tag={Link} to={`${match.url}/${paciente.id}/delete`} color="info" size="sm">
+                              <DropdownItem
+                                tag={Link}
+                                to={`/paciente-?baseFilters=paciente&paciente=${paciente.id}`}
+                                color="info"
+                                size="sm"
+                              >
                                 <FontAwesomeIcon icon="fa-list-ol" />{' '}
                                 <span className="d-none d-md-inline">
                                   <Translate contentKey="entity.action.TratamentoIndicado">TratamentoIndicado</Translate>

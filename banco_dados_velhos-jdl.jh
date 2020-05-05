@@ -663,15 +663,15 @@ entity Operadora {
 	  IndicadoresClinicos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:IndicadoresClinicos}
 	  Monitoramento{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:Monitoramento}
 	  VisualizarProntuario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:search,text:VisualizarProntuario}
-	  Status{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:pencil,text:Status}
-	  Arquivos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:upload,text:Arquivos}
-	  Diagnostico{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:stethoscope,text:Diagnostico}
-	  Operadora{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:medkit,text:Operadora}
-	  ResetSenha{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:refresh,text:ResetSenha}
-	  ProntuarioEletronico{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:stethoscope,text:ProntuarioEletronico}
-	  Token{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:key,text:Token}
-	  Questionario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:question,text:Questionario}
-	  TratamentoIndicado{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:fa-list-ol,text:TratamentoIndicado}
+	  Status{inDropdown:true,tag:Link,to:`/paciente-status-atual?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:pencil,text:Status}
+	  Arquivos{inDropdown:true,tag:Link,to:`/paciente-arquivo?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:upload,text:Arquivos}
+	  Diagnostico{inDropdown:true,tag:Link,to:`/paciente-diagnostico?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:Diagnostico}
+	  Operadora{inDropdown:true,tag:Link,to:`/paciente-operadora?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:medkit,text:Operadora}
+	  ResetSenha{inDropdown:true,tag:Link,to:`/reset-senha?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:refresh,text:ResetSenha}
+	  ProntuarioEletronico{inDropdown:true,tag:Link,to:`/paciente-prontuario?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:ProntuarioEletronico}
+	  Token{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:key,text:Token}
+	  Questionario{inDropdown:true,tag:Link,to:`/questionarios?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:question,text:Questionario}
+	  TratamentoIndicado{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:fa-list-ol,text:TratamentoIndicado}
 	@@	
 	@viewButtons 
 		view{tag:Link,to:`/paciente/${pacienteEntity.id}`,color:info,size:sm,icon:eye,text:View} 
@@ -814,8 +814,7 @@ entity Paciente {
 }
 
 entity PacienteArquivo {
-	idPaciente String,
-	arquivo String maxlength(100),
+	arquivo ImageBlob,
 	ativo Integer
 }
 
@@ -1861,6 +1860,10 @@ relationship ManyToOne {
 	 PacienteStatusAtual{paciente(nome)} to Paciente
 	 PacienteStatusAtual{status(statusAtual)} to StatusAtual
 
+
+	 Questionarios{paciente(nome)} to Paciente
+	 PacienteArquivo{paciente(nome)} to Paciente
+
 	 Pad{unidade(razaoSocial)} to UnidadeEasy
 	 Profissional{unidade(razaoSocial)} to UnidadeEasy
 	 ProfissionalNew{unidade(razaoSocial)} to UnidadeEasy
@@ -1963,7 +1966,6 @@ relationship OneToMany {
 //	 Resultados{protocolos} to Protocolos{resultadosId}
 //	 Resultados{protocolos required} to Protocolos{cidXPtaNovoId}
 //	 Resultados{protocolos} to Protocolos{categoriasId}
-	 Paciente{questionarios} to Questionarios{pacienteId}
 	 PerguntasQuestionario{respostas} to Respostas{perguntasQuestionarioId}
 	 Questionarios{respostasQuestionarios} to RespostasQuestionarios{questionariosId}
 //	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{respostasId}

@@ -10,7 +10,6 @@ import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { IPacientePedido } from 'app/shared/model/paciente-pedido.model';
 import { IPacientePush } from 'app/shared/model/paciente-push.model';
 import { IPad } from 'app/shared/model/pad.model';
-import { IQuestionarios } from 'app/shared/model/questionarios.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { IFranquia } from 'app/shared/model/franquia.model';
 import { ICidade } from 'app/shared/model/cidade.model';
@@ -87,7 +86,6 @@ export interface IPaciente {
   pacientePedidos?: IPacientePedido[];
   pacientePushes?: IPacientePush[];
   pads?: IPad[];
-  questionarios?: IQuestionarios[];
   unidadeRazaoSocial?: string;
   unidade?: string | any;
   franquiaNomeFantasia?: string;

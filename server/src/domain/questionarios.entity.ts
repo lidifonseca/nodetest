@@ -31,7 +31,7 @@ export default class Questionarios extends BaseEntity {
   respostasQuestionarios: RespostasQuestionarios[];
 
   @ManyToOne(type => Paciente)
-  pacienteId: Paciente;
+  paciente: Paciente;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

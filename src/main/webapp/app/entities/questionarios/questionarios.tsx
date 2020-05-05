@@ -31,7 +31,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './questionarios.reducer';
+import { getQuestionariosState, IQuestionariosBaseState, getEntities } from './questionarios.reducer';
 import { IQuestionarios } from 'app/shared/model/questionarios.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -41,14 +41,6 @@ import { getEntities as getPacientes } from 'app/entities/paciente/paciente.redu
 
 export interface IQuestionariosProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IQuestionariosBaseState {
-  dataCadastro: any;
-  etapaAtual: any;
-  finalizado: any;
-  ultimaPerguntaRespondida: any;
-  respostasQuestionarios: any;
-  pacienteId: any;
-}
 export interface IQuestionariosState extends IQuestionariosBaseState, IPaginationBaseState {}
 
 export class Questionarios extends React.Component<IQuestionariosProps, IQuestionariosState> {
@@ -58,29 +50,9 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getQuestionariosState(this.props.location)
+      ...getQuestionariosState(this.props.location)
     };
   }
-
-  getQuestionariosState = (location): IQuestionariosBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const dataCadastro = url.searchParams.get('dataCadastro') || '';
-    const etapaAtual = url.searchParams.get('etapaAtual') || '';
-    const finalizado = url.searchParams.get('finalizado') || '';
-    const ultimaPerguntaRespondida = url.searchParams.get('ultimaPerguntaRespondida') || '';
-
-    const respostasQuestionarios = url.searchParams.get('respostasQuestionarios') || '';
-    const pacienteId = url.searchParams.get('pacienteId') || '';
-
-    return {
-      dataCadastro,
-      etapaAtual,
-      finalizado,
-      ultimaPerguntaRespondida,
-      respostasQuestionarios,
-      pacienteId
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -96,7 +68,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
         finalizado: '',
         ultimaPerguntaRespondida: '',
         respostasQuestionarios: '',
-        pacienteId: ''
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -129,7 +101,9 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -156,8 +130,8 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
       'respostasQuestionarios=' +
       this.state.respostasQuestionarios +
       '&' +
-      'pacienteId=' +
-      this.state.pacienteId +
+      'paciente=' +
+      this.state.paciente +
       '&' +
       ''
     );
@@ -172,7 +146,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
       finalizado,
       ultimaPerguntaRespondida,
       respostasQuestionarios,
-      pacienteId,
+      paciente,
       activePage,
       itemsPerPage,
       sort,
@@ -184,7 +158,7 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
       finalizado,
       ultimaPerguntaRespondida,
       respostasQuestionarios,
-      pacienteId,
+      paciente,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -210,7 +184,11 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.questionarios.home.createLabel">Create a new Questionarios</Translate>
@@ -223,77 +201,92 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataCadastroLabel" for="questionarios-dataCadastro">
-                            <Translate contentKey="generadorApp.questionarios.dataCadastro">Data Cadastro</Translate>
-                          </Label>
-                          <AvInput
-                            id="questionarios-dataCadastro"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataCadastro"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataCadastro ? convertDateTimeFromServer(this.state.dataCadastro) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="etapaAtualLabel" for="questionarios-etapaAtual">
-                            <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="etapaAtual" id="questionarios-etapaAtual" value={this.state.etapaAtual} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="finalizadoLabel" check>
-                            <AvInput id="questionarios-finalizado" type="checkbox" className="form-control" name="finalizado" />
-                            <Translate contentKey="generadorApp.questionarios.finalizado">Finalizado</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ultimaPerguntaRespondidaLabel" for="questionarios-ultimaPerguntaRespondida">
-                            <Translate contentKey="generadorApp.questionarios.ultimaPerguntaRespondida">
-                              Ultima Pergunta Respondida
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ultimaPerguntaRespondida"
-                            id="questionarios-ultimaPerguntaRespondida"
-                            value={this.state.ultimaPerguntaRespondida}
-                          />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="questionarios-pacienteId">
-                              <Translate contentKey="generadorApp.questionarios.pacienteId">Paciente Id</Translate>
+                      {this.state.baseFilters !== 'dataCadastro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataCadastroLabel" for="questionarios-dataCadastro">
+                              <Translate contentKey="generadorApp.questionarios.dataCadastro">Data Cadastro</Translate>
                             </Label>
-                            <AvInput id="questionarios-pacienteId" type="select" className="form-control" name="pacienteIdId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput
+                              id="questionarios-dataCadastro"
+                              type="datetime-local"
+                              className="form-control"
+                              name="dataCadastro"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.dataCadastro ? convertDateTimeFromServer(this.state.dataCadastro) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'etapaAtual' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="etapaAtualLabel" for="questionarios-etapaAtual">
+                              <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="etapaAtual" id="questionarios-etapaAtual" value={this.state.etapaAtual} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'finalizado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="finalizadoLabel" check>
+                              <AvInput id="questionarios-finalizado" type="checkbox" className="form-control" name="finalizado" />
+                              <Translate contentKey="generadorApp.questionarios.finalizado">Finalizado</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ultimaPerguntaRespondida' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ultimaPerguntaRespondidaLabel" for="questionarios-ultimaPerguntaRespondida">
+                              <Translate contentKey="generadorApp.questionarios.ultimaPerguntaRespondida">
+                                Ultima Pergunta Respondida
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="ultimaPerguntaRespondida"
+                              id="questionarios-ultimaPerguntaRespondida"
+                              value={this.state.ultimaPerguntaRespondida}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'respostasQuestionarios' ? (
+                        <Col md="3">
+                          <Row></Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="questionarios-paciente">
+                                <Translate contentKey="generadorApp.questionarios.paciente">Paciente</Translate>
+                              </Label>
+                              <AvInput id="questionarios-paciente" type="select" className="form-control" name="pacienteId">
+                                <option value="" key="0" />
+                                {pacientes
+                                  ? pacientes.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.nome}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -321,26 +314,37 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataCadastro')}>
-                        <Translate contentKey="generadorApp.questionarios.dataCadastro">Data Cadastro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('etapaAtual')}>
-                        <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('finalizado')}>
-                        <Translate contentKey="generadorApp.questionarios.finalizado">Finalizado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ultimaPerguntaRespondida')}>
-                        <Translate contentKey="generadorApp.questionarios.ultimaPerguntaRespondida">Ultima Pergunta Respondida</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.questionarios.pacienteId">Paciente Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'dataCadastro' ? (
+                        <th className="hand" onClick={this.sort('dataCadastro')}>
+                          <Translate contentKey="generadorApp.questionarios.dataCadastro">Data Cadastro</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'etapaAtual' ? (
+                        <th className="hand" onClick={this.sort('etapaAtual')}>
+                          <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'finalizado' ? (
+                        <th className="hand" onClick={this.sort('finalizado')}>
+                          <Translate contentKey="generadorApp.questionarios.finalizado">Finalizado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ultimaPerguntaRespondida' ? (
+                        <th className="hand" onClick={this.sort('ultimaPerguntaRespondida')}>
+                          <Translate contentKey="generadorApp.questionarios.ultimaPerguntaRespondida">Ultima Pergunta Respondida</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.questionarios.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -355,38 +359,53 @@ export class Questionarios extends React.Component<IQuestionariosProps, IQuestio
                           </Button>
                         </td>
 
-                        <td>
-                          <TextFormat type="date" value={questionarios.dataCadastro} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataCadastro' ? (
+                          <td>
+                            <TextFormat type="date" value={questionarios.dataCadastro} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{questionarios.etapaAtual}</td>
+                        {this.state.baseFilters !== 'etapaAtual' ? <td>{questionarios.etapaAtual}</td> : null}
 
-                        <td>{questionarios.finalizado ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'finalizado' ? <td>{questionarios.finalizado ? 'true' : 'false'}</td> : null}
 
-                        <td>{questionarios.ultimaPerguntaRespondida}</td>
-                        <td>
-                          {questionarios.pacienteId ? (
-                            <Link to={`paciente/${questionarios.pacienteId.id}`}>{questionarios.pacienteId.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ultimaPerguntaRespondida' ? <td>{questionarios.ultimaPerguntaRespondida}</td> : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {questionarios.paciente ? (
+                              <Link to={`paciente/${questionarios.paciente.id}`}>{questionarios.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${questionarios.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${questionarios.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${questionarios.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${questionarios.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${questionarios.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${questionarios.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

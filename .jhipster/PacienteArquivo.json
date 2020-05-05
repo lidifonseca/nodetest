@@ -2,23 +2,24 @@
     "name": "PacienteArquivo",
     "fields": [
         {
-            "fieldName": "idPaciente",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "arquivo",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "100"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
         },
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paciente",
+            "otherEntityRelationshipName": "pacienteArquivo",
+            "relationshipName": "paciente",
+            "otherEntityField": "nome"
+        }
+    ],
     "changelogDate": "20200502235500",
     "entityTableName": "paciente_arquivo",
     "dto": "mapstruct",

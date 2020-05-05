@@ -23,25 +23,21 @@ import { IProfissional } from 'app/shared/model/profissional.model';
 import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
 import { IPacienteHospital } from 'app/shared/model/paciente-hospital.model';
 import { getEntities as getPacienteHospitals } from 'app/entities/paciente-hospital/paciente-hospital.reducer';
-import { getEntity, getPacienteState, IPacienteBaseState, updateEntity, createEntity, setBlob, reset } from './paciente.reducer';
+import {
+  IPacienteUpdateState,
+  getEntity,
+  getPacienteState,
+  IPacienteBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './paciente.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IPacienteUpdateState {
-  fieldsBase: IPacienteBaseState;
-  activeTab: number;
-  isNew: boolean;
-  unidadeId: string;
-  franquiaId: string;
-  cidadeId: string;
-  cidadeFamiliarId: string;
-  grauParentescoId: string;
-  profissionalPrefId: string;
-  tipohospitalId: string;
-}
 
 export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacienteUpdateState> {
   constructor(props: Readonly<IPacienteUpdateProps>) {
@@ -94,7 +90,92 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['senha'] ? '&senha=' + fieldsBase['senha'] : '') +
+      (fieldsBase['nome'] ? '&nome=' + fieldsBase['nome'] : '') +
+      (fieldsBase['email'] ? '&email=' + fieldsBase['email'] : '') +
+      (fieldsBase['cpf'] ? '&cpf=' + fieldsBase['cpf'] : '') +
+      (fieldsBase['rg'] ? '&rg=' + fieldsBase['rg'] : '') +
+      (fieldsBase['registro'] ? '&registro=' + fieldsBase['registro'] : '') +
+      (fieldsBase['nascimento'] ? '&nascimento=' + fieldsBase['nascimento'] : '') +
+      (fieldsBase['sexo'] ? '&sexo=' + fieldsBase['sexo'] : '') +
+      (fieldsBase['telefone'] ? '&telefone=' + fieldsBase['telefone'] : '') +
+      (fieldsBase['telefone2'] ? '&telefone2=' + fieldsBase['telefone2'] : '') +
+      (fieldsBase['celular'] ? '&celular=' + fieldsBase['celular'] : '') +
+      (fieldsBase['celular1'] ? '&celular1=' + fieldsBase['celular1'] : '') +
+      (fieldsBase['cep'] ? '&cep=' + fieldsBase['cep'] : '') +
+      (fieldsBase['endereco'] ? '&endereco=' + fieldsBase['endereco'] : '') +
+      (fieldsBase['numero'] ? '&numero=' + fieldsBase['numero'] : '') +
+      (fieldsBase['complemento'] ? '&complemento=' + fieldsBase['complemento'] : '') +
+      (fieldsBase['bairro'] ? '&bairro=' + fieldsBase['bairro'] : '') +
+      (fieldsBase['uf'] ? '&uf=' + fieldsBase['uf'] : '') +
+      (fieldsBase['latitude'] ? '&latitude=' + fieldsBase['latitude'] : '') +
+      (fieldsBase['longitude'] ? '&longitude=' + fieldsBase['longitude'] : '') +
+      (fieldsBase['responsavelFamiliar'] ? '&responsavelFamiliar=' + fieldsBase['responsavelFamiliar'] : '') +
+      (fieldsBase['emailFamiliar'] ? '&emailFamiliar=' + fieldsBase['emailFamiliar'] : '') +
+      (fieldsBase['cpfFamiliar'] ? '&cpfFamiliar=' + fieldsBase['cpfFamiliar'] : '') +
+      (fieldsBase['rgFamiliar'] ? '&rgFamiliar=' + fieldsBase['rgFamiliar'] : '') +
+      (fieldsBase['nascimentoFamiliar'] ? '&nascimentoFamiliar=' + fieldsBase['nascimentoFamiliar'] : '') +
+      (fieldsBase['sexoFamiliar'] ? '&sexoFamiliar=' + fieldsBase['sexoFamiliar'] : '') +
+      (fieldsBase['telefoneFamiliar'] ? '&telefoneFamiliar=' + fieldsBase['telefoneFamiliar'] : '') +
+      (fieldsBase['telefone2Familiar'] ? '&telefone2Familiar=' + fieldsBase['telefone2Familiar'] : '') +
+      (fieldsBase['celularFamiliar'] ? '&celularFamiliar=' + fieldsBase['celularFamiliar'] : '') +
+      (fieldsBase['celular2Familiar'] ? '&celular2Familiar=' + fieldsBase['celular2Familiar'] : '') +
+      (fieldsBase['cepFamiliar'] ? '&cepFamiliar=' + fieldsBase['cepFamiliar'] : '') +
+      (fieldsBase['enderecoFamiliar'] ? '&enderecoFamiliar=' + fieldsBase['enderecoFamiliar'] : '') +
+      (fieldsBase['numeroFamiliar'] ? '&numeroFamiliar=' + fieldsBase['numeroFamiliar'] : '') +
+      (fieldsBase['complementoFamiliar'] ? '&complementoFamiliar=' + fieldsBase['complementoFamiliar'] : '') +
+      (fieldsBase['bairroFamiliar'] ? '&bairroFamiliar=' + fieldsBase['bairroFamiliar'] : '') +
+      (fieldsBase['ufFamiliar'] ? '&ufFamiliar=' + fieldsBase['ufFamiliar'] : '') +
+      (fieldsBase['latitudeFamiliar'] ? '&latitudeFamiliar=' + fieldsBase['latitudeFamiliar'] : '') +
+      (fieldsBase['longitudeFamiliar'] ? '&longitudeFamiliar=' + fieldsBase['longitudeFamiliar'] : '') +
+      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
+      (fieldsBase['aph'] ? '&aph=' + fieldsBase['aph'] : '') +
+      (fieldsBase['nivelComplexidade'] ? '&nivelComplexidade=' + fieldsBase['nivelComplexidade'] : '') +
+      (fieldsBase['passagemPs'] ? '&passagemPs=' + fieldsBase['passagemPs'] : '') +
+      (fieldsBase['obsPs'] ? '&obsPs=' + fieldsBase['obsPs'] : '') +
+      (fieldsBase['passagemInternacao'] ? '&passagemInternacao=' + fieldsBase['passagemInternacao'] : '') +
+      (fieldsBase['obsInternacao'] ? '&obsInternacao=' + fieldsBase['obsInternacao'] : '') +
+      (fieldsBase['custoTotal'] ? '&custoTotal=' + fieldsBase['custoTotal'] : '') +
+      (fieldsBase['observacaoFamiliar'] ? '&observacaoFamiliar=' + fieldsBase['observacaoFamiliar'] : '') +
+      (fieldsBase['mesmoEndereco'] ? '&mesmoEndereco=' + fieldsBase['mesmoEndereco'] : '') +
+      (fieldsBase['acessoFamiliar'] ? '&acessoFamiliar=' + fieldsBase['acessoFamiliar'] : '') +
+      (fieldsBase['comResponsavel'] ? '&comResponsavel=' + fieldsBase['comResponsavel'] : '') +
+      (fieldsBase['cadastroCompleto'] ? '&cadastroCompleto=' + fieldsBase['cadastroCompleto'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['detalhes'] ? '&detalhes=' + fieldsBase['detalhes'] : '') +
+      (fieldsBase['liminar'] ? '&liminar=' + fieldsBase['liminar'] : '') +
+      (fieldsBase['expoToken'] ? '&expoToken=' + fieldsBase['expoToken'] : '') +
+      (fieldsBase['senhaChat'] ? '&senhaChat=' + fieldsBase['senhaChat'] : '') +
+      (fieldsBase['atendimento'] ? '&atendimento=' + fieldsBase['atendimento'] : '') +
+      (fieldsBase['atendimentoAssinaturas'] ? '&atendimentoAssinaturas=' + fieldsBase['atendimentoAssinaturas'] : '') +
+      (fieldsBase['diario'] ? '&diario=' + fieldsBase['diario'] : '') +
+      (fieldsBase['pacienteDadosCartao'] ? '&pacienteDadosCartao=' + fieldsBase['pacienteDadosCartao'] : '') +
+      (fieldsBase['pacienteDiagnostico'] ? '&pacienteDiagnostico=' + fieldsBase['pacienteDiagnostico'] : '') +
+      (fieldsBase['pacienteDiario'] ? '&pacienteDiario=' + fieldsBase['pacienteDiario'] : '') +
+      (fieldsBase['pacienteEnqueteApp'] ? '&pacienteEnqueteApp=' + fieldsBase['pacienteEnqueteApp'] : '') +
+      (fieldsBase['pacienteOperadora'] ? '&pacienteOperadora=' + fieldsBase['pacienteOperadora'] : '') +
+      (fieldsBase['pacientePedido'] ? '&pacientePedido=' + fieldsBase['pacientePedido'] : '') +
+      (fieldsBase['pacientePush'] ? '&pacientePush=' + fieldsBase['pacientePush'] : '') +
+      (fieldsBase['pad'] ? '&pad=' + fieldsBase['pad'] : '') +
+      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
+      (fieldsBase['franquia'] ? '&franquia=' + fieldsBase['franquia'] : '') +
+      (fieldsBase['cidade'] ? '&cidade=' + fieldsBase['cidade'] : '') +
+      (fieldsBase['cidadeFamiliar'] ? '&cidadeFamiliar=' + fieldsBase['cidadeFamiliar'] : '') +
+      (fieldsBase['grauParentesco'] ? '&grauParentesco=' + fieldsBase['grauParentesco'] : '') +
+      (fieldsBase['profissionalPref'] ? '&profissionalPref=' + fieldsBase['profissionalPref'] : '') +
+      (fieldsBase['tipohospital'] ? '&tipohospital=' + fieldsBase['tipohospital'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteEntity } = this.props;
@@ -112,7 +193,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente');
+    this.props.history.push('/paciente?' + this.getFiltersURL());
   };
 
   render() {
@@ -130,7 +211,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
     const { isNew } = this.state;
 
     const { observacao, detalhes } = pacienteEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -171,7 +252,14 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/paciente" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -250,7 +338,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                           ) : null}
 
                           <Row>
-                            {!this.state.fieldsBase.unidade ? (
+                            {baseFilters !== 'unidade' ? (
                               <Col md="6">
                                 <AvGroup>
                                   <Row>
@@ -277,10 +365,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="unidade" value={this.state.fieldsBase.unidade} />
+                              <AvInput type="hidden" name="unidade" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.email ? (
+                            {baseFilters !== 'email' ? (
                               <Col md="email">
                                 <AvGroup>
                                   <Row>
@@ -296,10 +384,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="email" value={this.state.fieldsBase.email} />
+                              <AvInput type="hidden" name="email" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.nome ? (
+                            {baseFilters !== 'nome' ? (
                               <Col md="nome">
                                 <AvGroup>
                                   <Row>
@@ -315,10 +403,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="nome" value={this.state.fieldsBase.nome} />
+                              <AvInput type="hidden" name="nome" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.cpf ? (
+                            {baseFilters !== 'cpf' ? (
                               <Col md="cpf">
                                 <AvGroup>
                                   <Row>
@@ -334,10 +422,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="cpf" value={this.state.fieldsBase.cpf} />
+                              <AvInput type="hidden" name="cpf" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.rg ? (
+                            {baseFilters !== 'rg' ? (
                               <Col md="rg">
                                 <AvGroup>
                                   <Row>
@@ -353,10 +441,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="rg" value={this.state.fieldsBase.rg} />
+                              <AvInput type="hidden" name="rg" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.cep ? (
+                            {baseFilters !== 'cep' ? (
                               <Col md="cep">
                                 <AvGroup>
                                   <Row>
@@ -372,10 +460,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="cep" value={this.state.fieldsBase.cep} />
+                              <AvInput type="hidden" name="cep" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.nascimento ? (
+                            {baseFilters !== 'nascimento' ? (
                               <Col md="nascimento">
                                 <AvGroup>
                                   <Row>
@@ -391,10 +479,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="nascimento" value={this.state.fieldsBase.nascimento} />
+                              <AvInput type="hidden" name="nascimento" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.sexo ? (
+                            {baseFilters !== 'sexo' ? (
                               <Col md="sexo">
                                 <AvGroup>
                                   <Row>
@@ -410,10 +498,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="sexo" value={this.state.fieldsBase.sexo} />
+                              <AvInput type="hidden" name="sexo" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.endereco ? (
+                            {baseFilters !== 'endereco' ? (
                               <Col md="endereco">
                                 <AvGroup>
                                   <Row>
@@ -429,10 +517,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="endereco" value={this.state.fieldsBase.endereco} />
+                              <AvInput type="hidden" name="endereco" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.telefone ? (
+                            {baseFilters !== 'telefone' ? (
                               <Col md="telefone">
                                 <AvGroup>
                                   <Row>
@@ -448,10 +536,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="telefone" value={this.state.fieldsBase.telefone} />
+                              <AvInput type="hidden" name="telefone" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.celular ? (
+                            {baseFilters !== 'celular' ? (
                               <Col md="celular">
                                 <AvGroup>
                                   <Row>
@@ -467,10 +555,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="celular" value={this.state.fieldsBase.celular} />
+                              <AvInput type="hidden" name="celular" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.bairro ? (
+                            {baseFilters !== 'bairro' ? (
                               <Col md="bairro">
                                 <AvGroup>
                                   <Row>
@@ -486,10 +574,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="bairro" value={this.state.fieldsBase.bairro} />
+                              <AvInput type="hidden" name="bairro" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.numero ? (
+                            {baseFilters !== 'numero' ? (
                               <Col md="numero">
                                 <AvGroup>
                                   <Row>
@@ -505,10 +593,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="numero" value={this.state.fieldsBase.numero} />
+                              <AvInput type="hidden" name="numero" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.complemento ? (
+                            {baseFilters !== 'complemento' ? (
                               <Col md="complemento">
                                 <AvGroup>
                                   <Row>
@@ -524,9 +612,9 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="complemento" value={this.state.fieldsBase.complemento} />
+                              <AvInput type="hidden" name="complemento" value={this.state[baseFilters]} />
                             )}
-                            {!this.state.fieldsBase.cidade ? (
+                            {baseFilters !== 'cidade' ? (
                               <Col md="8">
                                 <AvGroup>
                                   <Row>
@@ -553,10 +641,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="cidade" value={this.state.fieldsBase.cidade} />
+                              <AvInput type="hidden" name="cidade" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.uf ? (
+                            {baseFilters !== 'uf' ? (
                               <Col md="uf">
                                 <AvGroup>
                                   <Row>
@@ -572,9 +660,9 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="uf" value={this.state.fieldsBase.uf} />
+                              <AvInput type="hidden" name="uf" value={this.state[baseFilters]} />
                             )}
-                            {!this.state.fieldsBase.profissionalPref ? (
+                            {baseFilters !== 'profissionalPref' ? (
                               <Col md="6">
                                 <AvGroup>
                                   <Row>
@@ -606,9 +694,9 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="profissionalPref" value={this.state.fieldsBase.profissionalPref} />
+                              <AvInput type="hidden" name="profissionalPref" value={this.state[baseFilters]} />
                             )}
-                            {!this.state.fieldsBase.tipohospital ? (
+                            {baseFilters !== 'tipohospital' ? (
                               <Col md="6">
                                 <AvGroup>
                                   <Row>
@@ -635,10 +723,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="tipohospital" value={this.state.fieldsBase.tipohospital} />
+                              <AvInput type="hidden" name="tipohospital" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.liminar ? (
+                            {baseFilters !== 'liminar' ? (
                               <Col md="liminar">
                                 <AvGroup>
                                   <Row>
@@ -654,10 +742,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="liminar" value={this.state.fieldsBase.liminar} />
+                              <AvInput type="hidden" name="liminar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.detalhes ? (
+                            {baseFilters !== 'detalhes' ? (
                               <Col md="detalhes">
                                 <AvGroup>
                                   <Row>
@@ -680,10 +768,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="detalhes" value={this.state.fieldsBase.detalhes} />
+                              <AvInput type="hidden" name="detalhes" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.observacao ? (
+                            {baseFilters !== 'observacao' ? (
                               <Col md="observacao">
                                 <AvGroup>
                                   <Row>
@@ -706,7 +794,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="observacao" value={this.state.fieldsBase.observacao} />
+                              <AvInput type="hidden" name="observacao" value={this.state[baseFilters]} />
                             )}
                           </Row>
 
@@ -736,7 +824,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                           ) : null}
 
                           <Row>
-                            {!this.state.fieldsBase.cepFamiliar ? (
+                            {baseFilters !== 'cepFamiliar' ? (
                               <Col md="cepFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -752,10 +840,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="cepFamiliar" value={this.state.fieldsBase.cepFamiliar} />
+                              <AvInput type="hidden" name="cepFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.enderecoFamiliar ? (
+                            {baseFilters !== 'enderecoFamiliar' ? (
                               <Col md="enderecoFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -771,10 +859,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="enderecoFamiliar" value={this.state.fieldsBase.enderecoFamiliar} />
+                              <AvInput type="hidden" name="enderecoFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.numeroFamiliar ? (
+                            {baseFilters !== 'numeroFamiliar' ? (
                               <Col md="numeroFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -790,10 +878,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="numeroFamiliar" value={this.state.fieldsBase.numeroFamiliar} />
+                              <AvInput type="hidden" name="numeroFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.complementoFamiliar ? (
+                            {baseFilters !== 'complementoFamiliar' ? (
                               <Col md="complementoFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -809,9 +897,9 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="complementoFamiliar" value={this.state.fieldsBase.complementoFamiliar} />
+                              <AvInput type="hidden" name="complementoFamiliar" value={this.state[baseFilters]} />
                             )}
-                            {!this.state.fieldsBase.cidadeFamiliar ? (
+                            {baseFilters !== 'cidadeFamiliar' ? (
                               <Col md="12">
                                 <AvGroup>
                                   <Row>
@@ -838,10 +926,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="cidadeFamiliar" value={this.state.fieldsBase.cidadeFamiliar} />
+                              <AvInput type="hidden" name="cidadeFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.bairroFamiliar ? (
+                            {baseFilters !== 'bairroFamiliar' ? (
                               <Col md="bairroFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -857,10 +945,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="bairroFamiliar" value={this.state.fieldsBase.bairroFamiliar} />
+                              <AvInput type="hidden" name="bairroFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.ufFamiliar ? (
+                            {baseFilters !== 'ufFamiliar' ? (
                               <Col md="ufFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -876,10 +964,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="ufFamiliar" value={this.state.fieldsBase.ufFamiliar} />
+                              <AvInput type="hidden" name="ufFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.latitudeFamiliar ? (
+                            {baseFilters !== 'latitudeFamiliar' ? (
                               <Col md="latitudeFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -895,10 +983,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="latitudeFamiliar" value={this.state.fieldsBase.latitudeFamiliar} />
+                              <AvInput type="hidden" name="latitudeFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.longitudeFamiliar ? (
+                            {baseFilters !== 'longitudeFamiliar' ? (
                               <Col md="longitudeFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -914,10 +1002,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="longitudeFamiliar" value={this.state.fieldsBase.longitudeFamiliar} />
+                              <AvInput type="hidden" name="longitudeFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.acessoFamiliar ? (
+                            {baseFilters !== 'acessoFamiliar' ? (
                               <Col md="acessoFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -933,10 +1021,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="acessoFamiliar" value={this.state.fieldsBase.acessoFamiliar} />
+                              <AvInput type="hidden" name="acessoFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.emailFamiliar ? (
+                            {baseFilters !== 'emailFamiliar' ? (
                               <Col md="emailFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -952,10 +1040,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="emailFamiliar" value={this.state.fieldsBase.emailFamiliar} />
+                              <AvInput type="hidden" name="emailFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.cpfFamiliar ? (
+                            {baseFilters !== 'cpfFamiliar' ? (
                               <Col md="cpfFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -971,10 +1059,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="cpfFamiliar" value={this.state.fieldsBase.cpfFamiliar} />
+                              <AvInput type="hidden" name="cpfFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.rgFamiliar ? (
+                            {baseFilters !== 'rgFamiliar' ? (
                               <Col md="rgFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -990,10 +1078,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="rgFamiliar" value={this.state.fieldsBase.rgFamiliar} />
+                              <AvInput type="hidden" name="rgFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.nascimentoFamiliar ? (
+                            {baseFilters !== 'nascimentoFamiliar' ? (
                               <Col md="nascimentoFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -1017,10 +1105,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="nascimentoFamiliar" value={this.state.fieldsBase.nascimentoFamiliar} />
+                              <AvInput type="hidden" name="nascimentoFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.sexoFamiliar ? (
+                            {baseFilters !== 'sexoFamiliar' ? (
                               <Col md="sexoFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -1036,10 +1124,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="sexoFamiliar" value={this.state.fieldsBase.sexoFamiliar} />
+                              <AvInput type="hidden" name="sexoFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.telefoneFamiliar ? (
+                            {baseFilters !== 'telefoneFamiliar' ? (
                               <Col md="telefoneFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -1055,10 +1143,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="telefoneFamiliar" value={this.state.fieldsBase.telefoneFamiliar} />
+                              <AvInput type="hidden" name="telefoneFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.celularFamiliar ? (
+                            {baseFilters !== 'celularFamiliar' ? (
                               <Col md="celularFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -1074,10 +1162,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="celularFamiliar" value={this.state.fieldsBase.celularFamiliar} />
+                              <AvInput type="hidden" name="celularFamiliar" value={this.state[baseFilters]} />
                             )}
 
-                            {!this.state.fieldsBase.observacaoFamiliar ? (
+                            {baseFilters !== 'observacaoFamiliar' ? (
                               <Col md="observacaoFamiliar">
                                 <AvGroup>
                                   <Row>
@@ -1093,7 +1181,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                 </AvGroup>
                               </Col>
                             ) : (
-                              <AvInput type="hidden" name="observacaoFamiliar" value={this.state.fieldsBase.observacaoFamiliar} />
+                              <AvInput type="hidden" name="observacaoFamiliar" value={this.state[baseFilters]} />
                             )}
                           </Row>
 
@@ -1138,7 +1226,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                             </Row>
                           ) : null}
 
-                          {!this.state.fieldsBase.comResponsavel ? (
+                          {baseFilters !== 'comResponsavel' ? (
                             <Col md="comResponsavel">
                               <AvGroup>
                                 <Row>
@@ -1154,9 +1242,9 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="comResponsavel" value={this.state.fieldsBase.comResponsavel} />
+                            <AvInput type="hidden" name="comResponsavel" value={this.state[baseFilters]} />
                           )}
-                          {!this.state.fieldsBase.grauParentesco ? (
+                          {baseFilters !== 'grauParentesco' ? (
                             <Col md="12">
                               <AvGroup>
                                 <Row>
@@ -1183,10 +1271,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="grauParentesco" value={this.state.fieldsBase.grauParentesco} />
+                            <AvInput type="hidden" name="grauParentesco" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.responsavelFamiliar ? (
+                          {baseFilters !== 'responsavelFamiliar' ? (
                             <Col md="responsavelFamiliar">
                               <AvGroup>
                                 <Row>
@@ -1202,9 +1290,9 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="responsavelFamiliar" value={this.state.fieldsBase.responsavelFamiliar} />
+                            <AvInput type="hidden" name="responsavelFamiliar" value={this.state[baseFilters]} />
                           )}
-                          {!this.state.fieldsBase.franquia ? (
+                          {baseFilters !== 'franquia' ? (
                             <Col md="12">
                               <AvGroup>
                                 <Row>
@@ -1231,10 +1319,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="franquia" value={this.state.fieldsBase.franquia} />
+                            <AvInput type="hidden" name="franquia" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.senha ? (
+                          {baseFilters !== 'senha' ? (
                             <Col md="senha">
                               <AvGroup>
                                 <Row>
@@ -1250,10 +1338,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="senha" value={this.state.fieldsBase.senha} />
+                            <AvInput type="hidden" name="senha" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.registro ? (
+                          {baseFilters !== 'registro' ? (
                             <Col md="registro">
                               <AvGroup>
                                 <Row>
@@ -1269,10 +1357,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="registro" value={this.state.fieldsBase.registro} />
+                            <AvInput type="hidden" name="registro" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.latitude ? (
+                          {baseFilters !== 'latitude' ? (
                             <Col md="latitude">
                               <AvGroup>
                                 <Row>
@@ -1288,10 +1376,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="latitude" value={this.state.fieldsBase.latitude} />
+                            <AvInput type="hidden" name="latitude" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.longitude ? (
+                          {baseFilters !== 'longitude' ? (
                             <Col md="longitude">
                               <AvGroup>
                                 <Row>
@@ -1307,10 +1395,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="longitude" value={this.state.fieldsBase.longitude} />
+                            <AvInput type="hidden" name="longitude" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.aph ? (
+                          {baseFilters !== 'aph' ? (
                             <Col md="aph">
                               <AvGroup>
                                 <Row>
@@ -1326,10 +1414,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="aph" value={this.state.fieldsBase.aph} />
+                            <AvInput type="hidden" name="aph" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.nivelComplexidade ? (
+                          {baseFilters !== 'nivelComplexidade' ? (
                             <Col md="nivelComplexidade">
                               <AvGroup>
                                 <Row>
@@ -1350,10 +1438,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="nivelComplexidade" value={this.state.fieldsBase.nivelComplexidade} />
+                            <AvInput type="hidden" name="nivelComplexidade" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.passagemPs ? (
+                          {baseFilters !== 'passagemPs' ? (
                             <Col md="passagemPs">
                               <AvGroup>
                                 <Row>
@@ -1369,10 +1457,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="passagemPs" value={this.state.fieldsBase.passagemPs} />
+                            <AvInput type="hidden" name="passagemPs" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.obsPs ? (
+                          {baseFilters !== 'obsPs' ? (
                             <Col md="obsPs">
                               <AvGroup>
                                 <Row>
@@ -1388,10 +1476,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="obsPs" value={this.state.fieldsBase.obsPs} />
+                            <AvInput type="hidden" name="obsPs" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.passagemInternacao ? (
+                          {baseFilters !== 'passagemInternacao' ? (
                             <Col md="passagemInternacao">
                               <AvGroup>
                                 <Row>
@@ -1412,10 +1500,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="passagemInternacao" value={this.state.fieldsBase.passagemInternacao} />
+                            <AvInput type="hidden" name="passagemInternacao" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.obsInternacao ? (
+                          {baseFilters !== 'obsInternacao' ? (
                             <Col md="obsInternacao">
                               <AvGroup>
                                 <Row>
@@ -1431,10 +1519,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="obsInternacao" value={this.state.fieldsBase.obsInternacao} />
+                            <AvInput type="hidden" name="obsInternacao" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.custoTotal ? (
+                          {baseFilters !== 'custoTotal' ? (
                             <Col md="custoTotal">
                               <AvGroup>
                                 <Row>
@@ -1450,10 +1538,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="custoTotal" value={this.state.fieldsBase.custoTotal} />
+                            <AvInput type="hidden" name="custoTotal" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.mesmoEndereco ? (
+                          {baseFilters !== 'mesmoEndereco' ? (
                             <Col md="mesmoEndereco">
                               <AvGroup>
                                 <Row>
@@ -1469,10 +1557,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="mesmoEndereco" value={this.state.fieldsBase.mesmoEndereco} />
+                            <AvInput type="hidden" name="mesmoEndereco" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.cadastroCompleto ? (
+                          {baseFilters !== 'cadastroCompleto' ? (
                             <Col md="cadastroCompleto">
                               <AvGroup>
                                 <Row>
@@ -1493,10 +1581,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="cadastroCompleto" value={this.state.fieldsBase.cadastroCompleto} />
+                            <AvInput type="hidden" name="cadastroCompleto" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.ativo ? (
+                          {baseFilters !== 'ativo' ? (
                             <Col md="ativo">
                               <AvGroup>
                                 <Row>
@@ -1512,10 +1600,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                            <AvInput type="hidden" name="ativo" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.expoToken ? (
+                          {baseFilters !== 'expoToken' ? (
                             <Col md="expoToken">
                               <AvGroup>
                                 <Row>
@@ -1531,10 +1619,10 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="expoToken" value={this.state.fieldsBase.expoToken} />
+                            <AvInput type="hidden" name="expoToken" value={this.state[baseFilters]} />
                           )}
 
-                          {!this.state.fieldsBase.senhaChat ? (
+                          {baseFilters !== 'senhaChat' ? (
                             <Col md="senhaChat">
                               <AvGroup>
                                 <Row>
@@ -1550,7 +1638,7 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                               </AvGroup>
                             </Col>
                           ) : (
-                            <AvInput type="hidden" name="senhaChat" value={this.state.fieldsBase.senhaChat} />
+                            <AvInput type="hidden" name="senhaChat" value={this.state[baseFilters]} />
                           )}
 
                           {isNew ? (

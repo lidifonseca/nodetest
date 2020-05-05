@@ -9,7 +9,8 @@ export interface IQuestionarios {
   finalizado?: boolean;
   ultimaPerguntaRespondida?: number;
   respostasQuestionarios?: IRespostasQuestionarios[];
-  pacienteId?: string | any;
+  pacienteNome?: string;
+  paciente?: string | any;
 }
 
 export const defaultValue: Readonly<IQuestionarios> = {

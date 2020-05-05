@@ -120,6 +120,7 @@ const initialState = {
 export type <%= entityReactName %>State =  Readonly<typeof initialState>;
 
 export interface I<%= entityReactName %>BaseState {
+  baseFilters: any;
   <%_ for (idx in fields) { _%>
     <%= fields[idx].fieldName %> : any;
   <%_ } _%>
@@ -127,6 +128,19 @@ export interface I<%= entityReactName %>BaseState {
     <%= rel.relationshipName %> : any;
   <%_ }) _%>
 }
+
+
+export interface I<%= entityReactName %>UpdateState {
+  fieldsBase: I<%= entityReactName %>BaseState;
+  <%_ if (formTabs.length > 0) { _%>activeTab: number;<%_ } _%>
+  isNew: boolean;
+  <%_ manyToManyOwners.forEach(val => { _%>
+  ids<%= val.relationshipName %>: any[];
+  <%_ }) _%>
+  <%_ relFieldNames.forEach(val => { _%>
+  <%= val.relationshipFieldName %>Id: string;
+  <%_ }) _%>
+  }
 
 // Reducer
 
@@ -203,6 +217,11 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
     }
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
+    <%_ for (idx in fields) {  _%>
+      <%_ if (['byte[]', 'ByteBuffer'].includes(fields[idx].fieldType) && fields[idx].fieldTypeBlobContent === 'text') { _%>
+        action.payload.data.<%= fields[idx].fieldName %> = action.payload.data.<%= fields[idx].fieldName %> ? Buffer.from(action.payload.data.<%= fields[idx].fieldName %>).toString() : action.payload.data.<%= fields[idx].fieldName %>;
+      <%_ } _%>
+    <%_ } _%>
       return {
         ...state,
         loading: false,
@@ -415,6 +434,7 @@ export const reset = () => ({
 
 export const get<%= entityReactName %>State = (location): I<%= entityReactName %>BaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   <%_ for (idx in fields) { _%>
     const <%= fields[idx].fieldName %> = url.searchParams.get('<%= fields[idx].fieldName %>') || '';
   <%_ } _%>
@@ -424,6 +444,7 @@ export const get<%= entityReactName %>State = (location): I<%= entityReactName %
   <%_ }) _%>
 
   return {
+    baseFilters,
     <%_ for (idx in fields) { _%>
       <%= fields[idx].fieldName %>,
     <%_ } _%>

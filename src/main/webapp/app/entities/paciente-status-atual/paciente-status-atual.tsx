@@ -105,7 +105,9 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -165,7 +167,11 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteStatusAtual.home.createLabel">Create a new Paciente Status Atual</Translate>
@@ -178,79 +184,94 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataStatusLabel" for="paciente-status-atual-dataStatus">
-                            <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataStatus" id="paciente-status-atual-dataStatus" value={this.state.dataStatus} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacaoLabel" for="paciente-status-atual-observacao">
-                            <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
-                          </Label>
-                          <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-status-atual-ativo">
-                            <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-status-atual-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="paciente-status-atual-idUsuario">
-                            <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUsuario" id="paciente-status-atual-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-status-atual-paciente">
-                              <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
+                      {this.state.baseFilters !== 'dataStatus' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataStatusLabel" for="paciente-status-atual-dataStatus">
+                              <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
                             </Label>
-                            <AvInput id="paciente-status-atual-paciente" type="select" className="form-control" name="pacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.nome}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="date" name="dataStatus" id="paciente-status-atual-dataStatus" value={this.state.dataStatus} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-status-atual-status">
-                              <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacaoLabel" for="paciente-status-atual-observacao">
+                              <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
                             </Label>
-                            <AvInput id="paciente-status-atual-status" type="select" className="form-control" name="statusId">
-                              <option value="" key="0" />
-                              {statusAtuals
-                                ? statusAtuals.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.statusAtual}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-status-atual-ativo">
+                              <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="paciente-status-atual-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idUsuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idUsuarioLabel" for="paciente-status-atual-idUsuario">
+                              <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="idUsuario" id="paciente-status-atual-idUsuario" value={this.state.idUsuario} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="paciente-status-atual-paciente">
+                                <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
+                              </Label>
+                              <AvInput id="paciente-status-atual-paciente" type="select" className="form-control" name="pacienteId">
+                                <option value="" key="0" />
+                                {pacientes
+                                  ? pacientes.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.nome}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'status' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="paciente-status-atual-status">
+                                <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
+                              </Label>
+                              <AvInput id="paciente-status-atual-status" type="select" className="form-control" name="statusId">
+                                <option value="" key="0" />
+                                {statusAtuals
+                                  ? statusAtuals.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.statusAtual}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -278,30 +299,44 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataStatus')}>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('observacao')}>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'dataStatus' ? (
+                        <th className="hand" onClick={this.sort('dataStatus')}>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.dataStatus">Data Status</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <th className="hand" onClick={this.sort('observacao')}>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idUsuario' ? (
+                        <th className="hand" onClick={this.sort('idUsuario')}>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'status' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteStatusAtual.status">Status</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -316,32 +351,71 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                           </Button>
                         </td>
 
-                        <td>
-                          <TextFormat type="date" value={pacienteStatusAtual.dataStatus} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataStatus' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteStatusAtual.dataStatus} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{pacienteStatusAtual.observacao}</td>
+                        {this.state.baseFilters !== 'observacao' ? (
+                          <td>{pacienteStatusAtual.observacao ? Buffer.from(pacienteStatusAtual.observacao).toString() : null}</td>
+                        ) : null}
 
-                        <td>{pacienteStatusAtual.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteStatusAtual.ativo}</td> : null}
 
-                        <td>{pacienteStatusAtual.idUsuario}</td>
-                        <td>
-                          {pacienteStatusAtual.paciente ? (
-                            <Link to={`paciente/${pacienteStatusAtual.paciente.id}`}>{pacienteStatusAtual.paciente.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {pacienteStatusAtual.status ? (
-                            <Link to={`status-atual/${pacienteStatusAtual.status.id}`}>{pacienteStatusAtual.status.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'idUsuario' ? <td>{pacienteStatusAtual.idUsuario}</td> : null}
+
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacienteStatusAtual.paciente ? (
+                              <Link to={`paciente/${pacienteStatusAtual.paciente.id}`}>{pacienteStatusAtual.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
+
+                        {this.state.baseFilters !== 'status' ? (
+                          <td>
+                            {pacienteStatusAtual.status ? (
+                              <Link to={`status-atual/${pacienteStatusAtual.status.id}`}>{pacienteStatusAtual.status.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${pacienteStatusAtual.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteStatusAtual.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteStatusAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

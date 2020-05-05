@@ -10,11 +10,13 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteArquivo, defaultValue } from 'app/shared/model/paciente-arquivo.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEARQUIVO_LIST_EXPORT: 'pacienteArquivo/FETCH_PACIENTEARQUIVO_LIST_EXPORT',
   FETCH_PACIENTEARQUIVO_LIST: 'pacienteArquivo/FETCH_PACIENTEARQUIVO_LIST',
   FETCH_PACIENTEARQUIVO: 'pacienteArquivo/FETCH_PACIENTEARQUIVO',
   CREATE_PACIENTEARQUIVO: 'pacienteArquivo/CREATE_PACIENTEARQUIVO',
   UPDATE_PACIENTEARQUIVO: 'pacienteArquivo/UPDATE_PACIENTEARQUIVO',
   DELETE_PACIENTEARQUIVO: 'pacienteArquivo/DELETE_PACIENTEARQUIVO',
+  SET_BLOB: 'pacienteArquivo/SET_BLOB',
   RESET: 'pacienteArquivo/RESET'
 };
 
@@ -30,10 +32,24 @@ const initialState = {
 
 export type PacienteArquivoState = Readonly<typeof initialState>;
 
+export interface IPacienteArquivoBaseState {
+  baseFilters: any;
+  arquivo: any;
+  ativo: any;
+  paciente: any;
+}
+
+export interface IPacienteArquivoUpdateState {
+  fieldsBase: IPacienteArquivoBaseState;
+  isNew: boolean;
+  pacienteId: string;
+}
+
 // Reducer
 
 export default (state: PacienteArquivoState = initialState, action): PacienteArquivoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEARQUIVO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEARQUIVO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEARQUIVO):
       return {
@@ -51,6 +67,7 @@ export default (state: PacienteArquivoState = initialState, action): PacienteArq
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEARQUIVO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEARQUIVO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEARQUIVO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEARQUIVO):
@@ -91,6 +108,17 @@ export default (state: PacienteArquivoState = initialState, action): PacienteArq
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -106,24 +134,24 @@ const apiUrl = 'api/paciente-arquivos';
 
 // Actions
 export type ICrudGetAllActionPacienteArquivo<T> = (
-  idPaciente?: any,
   arquivo?: any,
   ativo?: any,
+  paciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteArquivo<IPacienteArquivo> = (idPaciente, arquivo, ativo, page, size, sort) => {
-  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+export const getEntities: ICrudGetAllActionPacienteArquivo<IPacienteArquivo> = (arquivo, ativo, paciente, page, size, sort) => {
   const arquivoRequest = arquivo ? `arquivo.contains=${arquivo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEARQUIVO_LIST,
     payload: axios.get<IPacienteArquivo>(
-      `${requestUrl}${idPacienteRequest}${arquivoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${arquivoRequest}${ativoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -135,9 +163,24 @@ export const getEntity: ICrudGetAction<IPacienteArquivo> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteArquivo<IPacienteArquivo> = (arquivo, ativo, paciente, page, size, sort) => {
+  const arquivoRequest = arquivo ? `arquivo.contains=${arquivo}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEARQUIVO_LIST,
+    payload: axios.get<IPacienteArquivo>(
+      `${requestUrl}${arquivoRequest}${ativoRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteArquivo> = entity => async dispatch => {
   entity = {
-    ...entity
+    ...entity,
+    paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEARQUIVO,
@@ -148,7 +191,7 @@ export const createEntity: ICrudPutAction<IPacienteArquivo> = entity => async di
 };
 
 export const updateEntity: ICrudPutAction<IPacienteArquivo> = entity => async dispatch => {
-  entity = { ...entity };
+  entity = { ...entity, paciente: entity.paciente === 'null' ? null : entity.paciente };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEARQUIVO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -167,6 +210,31 @@ export const deleteEntity: ICrudDeleteAction<IPacienteArquivo> = id => async dis
   return result;
 };
 
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
+
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteArquivoState = (location): IPacienteArquivoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const arquivo = url.searchParams.get('arquivo') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  const paciente = url.searchParams.get('paciente') || '';
+
+  return {
+    baseFilters,
+    arquivo,
+    ativo,
+    paciente
+  };
+};

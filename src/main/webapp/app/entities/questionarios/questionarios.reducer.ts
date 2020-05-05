@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IQuestionarios, defaultValue } from 'app/shared/model/questionarios.model';
 
 export const ACTION_TYPES = {
+  FETCH_QUESTIONARIOS_LIST_EXPORT: 'questionarios/FETCH_QUESTIONARIOS_LIST_EXPORT',
   FETCH_QUESTIONARIOS_LIST: 'questionarios/FETCH_QUESTIONARIOS_LIST',
   FETCH_QUESTIONARIOS: 'questionarios/FETCH_QUESTIONARIOS',
   CREATE_QUESTIONARIOS: 'questionarios/CREATE_QUESTIONARIOS',
@@ -30,10 +31,27 @@ const initialState = {
 
 export type QuestionariosState = Readonly<typeof initialState>;
 
+export interface IQuestionariosBaseState {
+  baseFilters: any;
+  dataCadastro: any;
+  etapaAtual: any;
+  finalizado: any;
+  ultimaPerguntaRespondida: any;
+  respostasQuestionarios: any;
+  paciente: any;
+}
+
+export interface IQuestionariosUpdateState {
+  fieldsBase: IQuestionariosBaseState;
+  isNew: boolean;
+  pacienteId: string;
+}
+
 // Reducer
 
 export default (state: QuestionariosState = initialState, action): QuestionariosState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_QUESTIONARIOS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_QUESTIONARIOS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_QUESTIONARIOS):
       return {
@@ -51,6 +69,7 @@ export default (state: QuestionariosState = initialState, action): Questionarios
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_QUESTIONARIOS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_QUESTIONARIOS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_QUESTIONARIOS):
     case FAILURE(ACTION_TYPES.CREATE_QUESTIONARIOS):
@@ -111,7 +130,7 @@ export type ICrudGetAllActionQuestionarios<T> = (
   finalizado?: any,
   ultimaPerguntaRespondida?: any,
   respostasQuestionarios?: any,
-  pacienteId?: any,
+  paciente?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -123,7 +142,7 @@ export const getEntities: ICrudGetAllActionQuestionarios<IQuestionarios> = (
   finalizado,
   ultimaPerguntaRespondida,
   respostasQuestionarios,
-  pacienteId,
+  paciente,
   page,
   size,
   sort
@@ -133,13 +152,13 @@ export const getEntities: ICrudGetAllActionQuestionarios<IQuestionarios> = (
   const finalizadoRequest = finalizado ? `finalizado.contains=${finalizado}&` : '';
   const ultimaPerguntaRespondidaRequest = ultimaPerguntaRespondida ? `ultimaPerguntaRespondida.contains=${ultimaPerguntaRespondida}&` : '';
   const respostasQuestionariosRequest = respostasQuestionarios ? `respostasQuestionarios.equals=${respostasQuestionarios}&` : '';
-  const pacienteIdRequest = pacienteId ? `pacienteId.equals=${pacienteId}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_QUESTIONARIOS_LIST,
     payload: axios.get<IQuestionarios>(
-      `${requestUrl}${dataCadastroRequest}${etapaAtualRequest}${finalizadoRequest}${ultimaPerguntaRespondidaRequest}${respostasQuestionariosRequest}${pacienteIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataCadastroRequest}${etapaAtualRequest}${finalizadoRequest}${ultimaPerguntaRespondidaRequest}${respostasQuestionariosRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,10 +170,37 @@ export const getEntity: ICrudGetAction<IQuestionarios> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionQuestionarios<IQuestionarios> = (
+  dataCadastro,
+  etapaAtual,
+  finalizado,
+  ultimaPerguntaRespondida,
+  respostasQuestionarios,
+  paciente,
+  page,
+  size,
+  sort
+) => {
+  const dataCadastroRequest = dataCadastro ? `dataCadastro.contains=${dataCadastro}&` : '';
+  const etapaAtualRequest = etapaAtual ? `etapaAtual.contains=${etapaAtual}&` : '';
+  const finalizadoRequest = finalizado ? `finalizado.contains=${finalizado}&` : '';
+  const ultimaPerguntaRespondidaRequest = ultimaPerguntaRespondida ? `ultimaPerguntaRespondida.contains=${ultimaPerguntaRespondida}&` : '';
+  const respostasQuestionariosRequest = respostasQuestionarios ? `respostasQuestionarios.equals=${respostasQuestionarios}&` : '';
+  const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_QUESTIONARIOS_LIST,
+    payload: axios.get<IQuestionarios>(
+      `${requestUrl}${dataCadastroRequest}${etapaAtualRequest}${finalizadoRequest}${ultimaPerguntaRespondidaRequest}${respostasQuestionariosRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IQuestionarios> = entity => async dispatch => {
   entity = {
     ...entity,
-    pacienteId: entity.pacienteId === 'null' ? null : entity.pacienteId
+    paciente: entity.paciente === 'null' ? null : entity.paciente
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_QUESTIONARIOS,
@@ -165,7 +211,7 @@ export const createEntity: ICrudPutAction<IQuestionarios> = entity => async disp
 };
 
 export const updateEntity: ICrudPutAction<IQuestionarios> = entity => async dispatch => {
-  entity = { ...entity, pacienteId: entity.pacienteId === 'null' ? null : entity.pacienteId };
+  entity = { ...entity, paciente: entity.paciente === 'null' ? null : entity.paciente };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_QUESTIONARIOS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -187,3 +233,25 @@ export const deleteEntity: ICrudDeleteAction<IQuestionarios> = id => async dispa
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getQuestionariosState = (location): IQuestionariosBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const dataCadastro = url.searchParams.get('dataCadastro') || '';
+  const etapaAtual = url.searchParams.get('etapaAtual') || '';
+  const finalizado = url.searchParams.get('finalizado') || '';
+  const ultimaPerguntaRespondida = url.searchParams.get('ultimaPerguntaRespondida') || '';
+
+  const respostasQuestionarios = url.searchParams.get('respostasQuestionarios') || '';
+  const paciente = url.searchParams.get('paciente') || '';
+
+  return {
+    baseFilters,
+    dataCadastro,
+    etapaAtual,
+    finalizado,
+    ultimaPerguntaRespondida,
+    respostasQuestionarios,
+    paciente
+  };
+};

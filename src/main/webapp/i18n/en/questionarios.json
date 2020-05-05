@@ -3,15 +3,15 @@
     "questionarios": {
       "home": {
         "title": "Questionarios",
-        "createLabel": "Criar novo Questionarios",
-        "createOrEditLabel": "Criar ou editar Questionarios",
-        "notFound": "Nenhum Questionarios encontrado"
+        "createLabel": "Create a new Questionarios",
+        "createOrEditLabel": "Create or edit a Questionarios",
+        "notFound": "No Questionarios found"
       },
-      "created": "Um novo Questionarios foi criado com o identificador {{ param }}",
-      "updated": "Um Questionarios foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Questionarios foi excluído com o identificador {{ param }}",
+      "created": "A new Questionarios is created with identifier {{ param }}",
+      "updated": "A Questionarios is updated with identifier {{ param }}",
+      "deleted": "A Questionarios is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Questionarios {{ id }}?"
+        "question": "Are you sure you want to delete Questionarios {{ id }}?"
       },
       "detail": {
         "title": "Questionarios"
@@ -21,7 +21,7 @@
       "finalizado": "Finalizado",
       "ultimaPerguntaRespondida": "Ultima Pergunta Respondida",
       "respostasQuestionarios": "Respostas Questionarios",
-      "pacienteId": "Paciente Id"
+      "paciente": "Paciente"
     }
   }
 }

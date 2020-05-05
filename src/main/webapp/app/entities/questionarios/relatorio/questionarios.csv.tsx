@@ -24,7 +24,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -39,31 +38,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getPacienteStatusAtualState, IPacienteStatusAtualBaseState, getEntitiesExport } from '../paciente-status-atual.reducer';
-import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
+import { getQuestionariosState, IQuestionariosBaseState, getEntitiesExport } from '../questionarios.reducer';
+import { IQuestionarios } from 'app/shared/model/questionarios.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { IStatusAtual } from 'app/shared/model/status-atual.model';
-import { getEntities as getStatusAtuals } from 'app/entities/status-atual/status-atual.reducer';
 
-export interface IPacienteStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
+export interface IQuestionariosProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteStatusAtualState extends IPacienteStatusAtualBaseState, IPaginationBaseState {
+export interface IQuestionariosState extends IQuestionariosBaseState, IPaginationBaseState {
   exportData: [] | null;
 }
 
-export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualProps, IPacienteStatusAtualState> {
+export class Questionarios extends React.Component<IQuestionariosProps, IQuestionariosState> {
   private myFormRef: any;
 
-  constructor(props: IPacienteStatusAtualProps) {
+  constructor(props: IQuestionariosProps) {
     super(props);
     this.state = {
       exportData: null,
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...getPacienteStatusAtualState(this.props.location)
+      ...getQuestionariosState(this.props.location)
     };
   }
 
@@ -71,18 +68,17 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
     this.getEntities();
 
     this.props.getPacientes();
-    this.props.getStatusAtuals();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        dataStatus: '',
-        observacao: '',
-        ativo: '',
-        idUsuario: '',
-        paciente: '',
-        status: ''
+        dataCadastro: '',
+        etapaAtual: '',
+        finalizado: '',
+        ultimaPerguntaRespondida: '',
+        respostasQuestionarios: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -127,23 +123,23 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
       ',' +
       this.state.order +
       '&' +
-      'dataStatus=' +
-      this.state.dataStatus +
+      'dataCadastro=' +
+      this.state.dataCadastro +
       '&' +
-      'observacao=' +
-      this.state.observacao +
+      'etapaAtual=' +
+      this.state.etapaAtual +
       '&' +
-      'ativo=' +
-      this.state.ativo +
+      'finalizado=' +
+      this.state.finalizado +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
+      'ultimaPerguntaRespondida=' +
+      this.state.ultimaPerguntaRespondida +
+      '&' +
+      'respostasQuestionarios=' +
+      this.state.respostasQuestionarios +
       '&' +
       'paciente=' +
       this.state.paciente +
-      '&' +
-      'status=' +
-      this.state.status +
       '&' +
       ''
     );
@@ -152,14 +148,25 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataStatus, observacao, ativo, idUsuario, paciente, status, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(
-      dataStatus,
-      observacao,
-      ativo,
-      idUsuario,
+    const {
+      dataCadastro,
+      etapaAtual,
+      finalizado,
+      ultimaPerguntaRespondida,
+      respostasQuestionarios,
       paciente,
-      status,
+      activePage,
+      itemsPerPage,
+      sort,
+      order
+    } = this.state;
+    this.props.getEntitiesExport(
+      dataCadastro,
+      etapaAtual,
+      finalizado,
+      ultimaPerguntaRespondida,
+      respostasQuestionarios,
+      paciente,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -211,20 +218,18 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
   }
 }
 
-const mapStateToProps = ({ pacienteStatusAtual, ...storeState }: IRootState) => ({
+const mapStateToProps = ({ questionarios, ...storeState }: IRootState) => ({
   pacientes: storeState.paciente.entities,
-  statusAtuals: storeState.statusAtual.entities,
-  pacienteStatusAtualList: pacienteStatusAtual.entities,
-  totalItems: pacienteStatusAtual.totalItems
+  questionariosList: questionarios.entities,
+  totalItems: questionarios.totalItems
 });
 
 const mapDispatchToProps = {
   getPacientes,
-  getStatusAtuals,
   getEntitiesExport
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(PacienteStatusAtual);
+export default connect(mapStateToProps, mapDispatchToProps)(Questionarios);

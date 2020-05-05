@@ -394,14 +394,14 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   };
   <%_ } _%>
 
-
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    })
-  };
+  confirmExport() {}
+//  async confirmExport() {
+//    /* eslint-disable require-await */
+//    const result = await this.getEntities();
+//    this.setState({
+//      exportData: result['value']['data']
+//    })
+//  };
 
   handleClose = event => {
     event.stopPropagation();

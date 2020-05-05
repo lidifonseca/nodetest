@@ -31,7 +31,7 @@
 <%_ const otherEntityField = rel.otherEntityField; _%>
 <%_ const relationshipRequired = rel.relationshipRequired; _%>
 <%_ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
-{ !this.state.fieldsBase.<%= relationshipFieldName %> ?
+{ baseFilters !== '<%= relationshipFieldName %>' ?
     <Col md="<%= formLayoutSize %>">
       <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
         <AvGroup>
@@ -166,7 +166,7 @@
         </AvGroup> 
       <%_ } _%> 
     </Col> : 
-  <AvInput type="hidden" name="<%= relationshipFieldName %>" value={this.state.fieldsBase.<%= relationshipFieldName %>} /> }
+  <AvInput type="hidden" name="<%= relationshipFieldName %>" value={this.state[baseFilters]} /> }
 <%_ } _%>
 
 <%_ function printFields(field){ _%>
@@ -176,7 +176,7 @@
 <% const fieldType =  field.fieldType; _%>
 <% const fieldName =  field.fieldName; _%>
 <% const fieldNameHumanized =  field.fieldNameHumanized; _%>
-{ !this.state.fieldsBase.<%= fieldName %> ?
+{ baseFilters !== '<%= fieldName %>' ?
   <Col md="<%= fieldName %>">
     <AvGroup>
       <Row>
@@ -342,7 +342,7 @@
   </Row>
     </AvGroup>
   </Col> : 
-  <AvInput type="hidden" name="<%= fieldName %>" value={this.state.fieldsBase.<%= fieldName %>} /> }
+  <AvInput type="hidden" name="<%= fieldName %>" value={this.state[baseFilters]} /> }
 <%_ } _%>
 
 <%_
@@ -442,6 +442,7 @@ import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlur
   }
 }); _%>
 import {
+I<%= entityReactName %>UpdateState,
 getEntity,
 get<%= entityReactName %>State,
 I<%= entityReactName %>BaseState, 
@@ -461,17 +462,6 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>
   {}
 
-  export interface I<%= entityReactName %>UpdateState {
-  fieldsBase: I<%= entityReactName %>BaseState;
-  <%_ if (formTabs.length > 0) { _%>activeTab: number;<%_ } _%>
-  isNew: boolean;
-  <%_ manyToManyOwners.forEach(val => { _%>
-  ids<%= val.relationshipName %>: any[];
-  <%_ }) _%>
-  <%_ relFieldNames.forEach(val => { _%>
-  <%= val.relationshipFieldName %>Id: string;
-  <%_ }) _%>
-  }
 
   export class <%= entityReactName %>Update extends React.Component<I<%= entityReactName %>UpdateProps,
     I<%= entityReactName %>UpdateState> {
@@ -532,7 +522,22 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       this.props.setBlob(name, undefined, undefined);
       };
       <%_ } _%>
-
+      getFiltersURL = (offset = null) => {
+          const fieldsBase = this.state.fieldsBase ;
+          return '_back=1' +
+          (fieldsBase['baseFilters']  ? '&baseFilters=' + fieldsBase['baseFilters']  : '') + 
+          (fieldsBase['activePage']   ? '&page='        + fieldsBase['activePage']   : '') +
+          (fieldsBase['itemsPerPage'] ? '&size='         + fieldsBase['itemsPerPage'] : '')  +
+          (fieldsBase['sort']         ? '&sort='         + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '')  +
+          (offset !== null         ? ('&offset=' + offset) : '') +
+            <%_ for (idx in fields) { _%>
+              (fieldsBase['<%= fields[idx].fieldName %>'] ? ('&<%= fields[idx].fieldName %>=' + fieldsBase['<%= fields[idx].fieldName %>'])  : '') +
+            <%_ } _%>
+            <%_ relationships.forEach(rel => { _%>
+              (fieldsBase['<%= rel.relationshipName %>'] ? ('&<%= rel.relationshipName %>=' + fieldsBase['<%= rel.relationshipName %>'])  : '') +
+            <%_ }) _%>
+          ''
+        }
       saveEntity = (event: any, errors: any, values: any) => {
       <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
@@ -562,7 +567,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       }
 
       handleClose = () => {
-      this.props.history.push('/<%= entityFileName %>');
+      this.props.history.push("/<%= entityFileName %>?"+this.getFiltersURL());
       }
 
       render() {
@@ -588,7 +593,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       ,
       <%_ } _%>
       <%_ } _%>
-
+      const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
       return (
 
       <div>
@@ -621,7 +626,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
                   <FontAwesomeIcon icon="save" />&nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/<%= entityFileName %>" replace color="info"
+                <Button tag={Link} id="cancel-save" to={"/<%= entityFileName %>?"+this.getFiltersURL()} replace color="info"
                   className="float-right jh-create-entity">
                   <FontAwesomeIcon icon="arrow-left" />&nbsp;
                   <span className="d-none d-md-inline">

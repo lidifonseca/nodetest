@@ -33,12 +33,20 @@ const initialState = {
 export type PacienteStatusAtualState = Readonly<typeof initialState>;
 
 export interface IPacienteStatusAtualBaseState {
+  baseFilters: any;
   dataStatus: any;
   observacao: any;
   ativo: any;
   idUsuario: any;
   paciente: any;
   status: any;
+}
+
+export interface IPacienteStatusAtualUpdateState {
+  fieldsBase: IPacienteStatusAtualBaseState;
+  isNew: boolean;
+  pacienteId: string;
+  statusId: string;
 }
 
 // Reducer
@@ -84,6 +92,9 @@ export default (state: PacienteStatusAtualState = initialState, action): Pacient
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PACIENTESTATUSATUAL):
+      action.payload.data.observacao = action.payload.data.observacao
+        ? Buffer.from(action.payload.data.observacao).toString()
+        : action.payload.data.observacao;
       return {
         ...state,
         loading: false,
@@ -255,6 +266,7 @@ export const reset = () => ({
 
 export const getPacienteStatusAtualState = (location): IPacienteStatusAtualBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const dataStatus = url.searchParams.get('dataStatus') || '';
   const observacao = url.searchParams.get('observacao') || '';
   const ativo = url.searchParams.get('ativo') || '';
@@ -264,6 +276,7 @@ export const getPacienteStatusAtualState = (location): IPacienteStatusAtualBaseS
   const status = url.searchParams.get('status') || '';
 
   return {
+    baseFilters,
     dataStatus,
     observacao,
     ativo,

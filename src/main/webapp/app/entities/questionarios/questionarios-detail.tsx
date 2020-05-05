@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './questionarios.reducer';
+import { getEntity, IQuestionariosBaseState, getQuestionariosState } from './questionarios.reducer';
 import { IQuestionarios } from 'app/shared/model/questionarios.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IQuestionariosState {
+  fieldsBase: IQuestionariosBaseState;
+}
+
 export interface IQuestionariosDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class QuestionariosDetail extends React.Component<IQuestionariosDetailProps> {
+export class QuestionariosDetail extends React.Component<IQuestionariosDetailProps, IQuestionariosState> {
   constructor(props: Readonly<IQuestionariosDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getQuestionariosState(this.props.location)
     };
   }
 
@@ -118,11 +123,11 @@ export class QuestionariosDetail extends React.Component<IQuestionariosDetailPro
                     <Row>
                       <Col md="3">
                         <dt>
-                          <Translate contentKey="generadorApp.questionarios.pacienteId">Paciente Id</Translate>
+                          <Translate contentKey="generadorApp.questionarios.paciente">Paciente</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>{questionariosEntity.pacienteId ? questionariosEntity.pacienteId.id : ''}</dd>
+                        <dd>{questionariosEntity.paciente ? questionariosEntity.paciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

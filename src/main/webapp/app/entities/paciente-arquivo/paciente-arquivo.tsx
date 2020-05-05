@@ -16,24 +16,32 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  openFile,
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-arquivo.reducer';
+import { getPacienteArquivoState, IPacienteArquivoBaseState, getEntities } from './paciente-arquivo.reducer';
 import { IPacienteArquivo } from 'app/shared/model/paciente-arquivo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+
 export interface IPacienteArquivoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteArquivoBaseState {
-  idPaciente: any;
-  arquivo: any;
-  ativo: any;
-}
 export interface IPacienteArquivoState extends IPacienteArquivoBaseState, IPaginationBaseState {}
 
 export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPacienteArquivoState> {
@@ -43,33 +51,22 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteArquivoState(this.props.location)
+      ...getPacienteArquivoState(this.props.location)
     };
   }
 
-  getPacienteArquivoState = (location): IPacienteArquivoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const arquivo = url.searchParams.get('arquivo') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      idPaciente,
-      arquivo,
-      ativo
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
+
+    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idPaciente: '',
         arquivo: '',
-        ativo: ''
+        ativo: '',
+        paciente: ''
       },
       () => this.sortEntities()
     );
@@ -102,7 +99,9 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -114,14 +113,14 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
       ',' +
       this.state.order +
       '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
       'arquivo=' +
       this.state.arquivo +
       '&' +
       'ativo=' +
       this.state.ativo +
+      '&' +
+      'paciente=' +
+      this.state.paciente +
       '&' +
       ''
     );
@@ -130,12 +129,12 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPaciente, arquivo, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPaciente, arquivo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { arquivo, ativo, paciente, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(arquivo, ativo, paciente, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacienteArquivoList, match, totalItems } = this.props;
+    const { pacientes, pacienteArquivoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -153,7 +152,11 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteArquivo.home.createLabel">Create a new Paciente Arquivo</Translate>
@@ -166,32 +169,44 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="paciente-arquivo-idPaciente">
-                            <Translate contentKey="generadorApp.pacienteArquivo.idPaciente">Id Paciente</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'arquivo' ? (
+                        <Col md="3">
+                          <Row></Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="idPaciente" id="paciente-arquivo-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="arquivoLabel" for="paciente-arquivo-arquivo">
-                            <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-arquivo-ativo">
+                              <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="paciente-arquivo-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="arquivo" id="paciente-arquivo-arquivo" value={this.state.arquivo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-arquivo-ativo">
-                            <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-arquivo-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="paciente-arquivo-paciente">
+                                <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
+                              </Label>
+                              <AvInput id="paciente-arquivo-paciente" type="select" className="form-control" name="pacienteId">
+                                <option value="" key="0" />
+                                {pacientes
+                                  ? pacientes.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.nome}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -219,18 +234,25 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.pacienteArquivo.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('arquivo')}>
-                        <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'arquivo' ? (
+                        <th className="hand" onClick={this.sort('arquivo')}>
+                          <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -245,27 +267,62 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                           </Button>
                         </td>
 
-                        <td>{pacienteArquivo.idPaciente}</td>
+                        {this.state.baseFilters !== 'arquivo' ? (
+                          <td>
+                            {pacienteArquivo.arquivo ? (
+                              <div>
+                                <a onClick={openFile(pacienteArquivo.arquivoContentType, pacienteArquivo.arquivo)}>
+                                  <img
+                                    src={`data:${pacienteArquivo.arquivoContentType};base64,${pacienteArquivo.arquivo}`}
+                                    style={{ maxHeight: '30px' }}
+                                  />
+                                  &nbsp;
+                                </a>
+                                <span>
+                                  {pacienteArquivo.arquivoContentType}, {byteSize(pacienteArquivo.arquivo)}
+                                </span>
+                              </div>
+                            ) : null}
+                          </td>
+                        ) : null}
 
-                        <td>{pacienteArquivo.arquivo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteArquivo.ativo}</td> : null}
 
-                        <td>{pacienteArquivo.ativo}</td>
+                        {this.state.baseFilters !== 'paciente' ? (
+                          <td>
+                            {pacienteArquivo.paciente ? (
+                              <Link to={`paciente/${pacienteArquivo.paciente.id}`}>{pacienteArquivo.paciente.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteArquivo.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pacienteArquivo.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteArquivo.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteArquivo.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteArquivo.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteArquivo.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -307,11 +364,13 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
 }
 
 const mapStateToProps = ({ pacienteArquivo, ...storeState }: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacienteArquivoList: pacienteArquivo.entities,
   totalItems: pacienteArquivo.totalItems
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntities
 };
 

@@ -160,7 +160,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         pacientePedido: '',
         pacientePush: '',
         pad: '',
-        questionarios: '',
         unidade: '',
         franquia: '',
         cidade: '',
@@ -413,9 +412,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'pad=' +
       this.state.pad +
       '&' +
-      'questionarios=' +
-      this.state.questionarios +
-      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -512,7 +508,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacientePedido,
       pacientePush,
       pad,
-      questionarios,
       unidade,
       franquia,
       cidade,
@@ -593,7 +588,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       pacientePedido,
       pacientePush,
       pad,
-      questionarios,
       unidade,
       franquia,
       cidade,
@@ -607,13 +601,14 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
     );
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();

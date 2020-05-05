@@ -3,22 +3,22 @@
     "pacienteArquivo": {
       "home": {
         "title": "Paciente Arquivos",
-        "createLabel": "Criar novo Paciente Arquivo",
-        "createOrEditLabel": "Criar ou editar Paciente Arquivo",
-        "notFound": "Nenhum Paciente Arquivo encontrado"
+        "createLabel": "Create a new Paciente Arquivo",
+        "createOrEditLabel": "Create or edit a Paciente Arquivo",
+        "notFound": "No Paciente Arquivos found"
       },
-      "created": "Um novo Paciente Arquivo foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Arquivo foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Arquivo foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Arquivo is created with identifier {{ param }}",
+      "updated": "A Paciente Arquivo is updated with identifier {{ param }}",
+      "deleted": "A Paciente Arquivo is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Arquivo {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Arquivo {{ id }}?"
       },
       "detail": {
         "title": "Paciente Arquivo"
       },
-      "idPaciente": "Id Paciente",
       "arquivo": "Arquivo",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "paciente": "Paciente"
     }
   }
 }

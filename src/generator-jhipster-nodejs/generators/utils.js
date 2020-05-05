@@ -650,7 +650,6 @@ function analizeJavadoc(generator) {
                                 name: ele.trim().substring(0,ele.indexOf("{")),
                                 attributes: {}
                             };
-                            console.info(parameter[0] + " " + button.name);
                             if(button.name){
                                 let attributes = ele.trim().substring(ele.indexOf("{")+1,ele.length-1).split(",");
                                 for (const i in attributes) {
@@ -767,7 +766,7 @@ function analizeJavadoc(generator) {
 
     // console.info(generator.toStringFields)
     // console.info(generator.listFilterLayout)
-      console.info(generator.viewButtons)
+    //   console.info(generator.viewButtons)
     // console.info(generator.viewLayout)
 
     return generator;

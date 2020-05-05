@@ -13,6 +13,7 @@ import { getEntities as getPacientes } from 'app/entities/paciente/paciente.redu
 import { IStatusAtual } from 'app/shared/model/status-atual.model';
 import { getEntities as getStatusAtuals } from 'app/entities/status-atual/status-atual.reducer';
 import {
+  IPacienteStatusAtualUpdateState,
   getEntity,
   getPacienteStatusAtualState,
   IPacienteStatusAtualBaseState,
@@ -26,13 +27,6 @@ import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/u
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IPacienteStatusAtualUpdateState {
-  fieldsBase: IPacienteStatusAtualBaseState;
-  isNew: boolean;
-  pacienteId: string;
-  statusId: string;
-}
 
 export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAtualUpdateProps, IPacienteStatusAtualUpdateState> {
   constructor(props: Readonly<IPacienteStatusAtualUpdateProps>) {
@@ -68,7 +62,24 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['dataStatus'] ? '&dataStatus=' + fieldsBase['dataStatus'] : '') +
+      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['idUsuario'] ? '&idUsuario=' + fieldsBase['idUsuario'] : '') +
+      (fieldsBase['paciente'] ? '&paciente=' + fieldsBase['paciente'] : '') +
+      (fieldsBase['status'] ? '&status=' + fieldsBase['status'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteStatusAtualEntity } = this.props;
@@ -86,7 +97,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-status-atual');
+    this.props.history.push('/paciente-status-atual?' + this.getFiltersURL());
   };
 
   render() {
@@ -94,7 +105,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
     const { isNew } = this.state;
 
     const { observacao } = pacienteStatusAtualEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -134,7 +145,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-status-atual"
+                  to={'/paciente-status-atual?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -170,7 +181,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.dataStatus ? (
+                        {baseFilters !== 'dataStatus' ? (
                           <Col md="dataStatus">
                             <AvGroup>
                               <Row>
@@ -186,10 +197,10 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataStatus" value={this.state.fieldsBase.dataStatus} />
+                          <AvInput type="hidden" name="dataStatus" value={this.state[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.observacao ? (
+                        {baseFilters !== 'observacao' ? (
                           <Col md="observacao">
                             <AvGroup>
                               <Row>
@@ -205,10 +216,10 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase.observacao} />
+                          <AvInput type="hidden" name="observacao" value={this.state[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -224,10 +235,10 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                          <AvInput type="hidden" name="ativo" value={this.state[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idUsuario ? (
+                        {baseFilters !== 'idUsuario' ? (
                           <Col md="idUsuario">
                             <AvGroup>
                               <Row>
@@ -243,9 +254,9 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
+                          <AvInput type="hidden" name="idUsuario" value={this.state[baseFilters]} />
                         )}
-                        {!this.state.fieldsBase.paciente ? (
+                        {baseFilters !== 'paciente' ? (
                           <Col md="12">
                             <AvGroup>
                               <Row>
@@ -272,9 +283,9 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase.paciente} />
+                          <AvInput type="hidden" name="paciente" value={this.state[baseFilters]} />
                         )}
-                        {!this.state.fieldsBase.status ? (
+                        {baseFilters !== 'status' ? (
                           <Col md="12">
                             <AvGroup>
                               <Row>
@@ -301,7 +312,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="status" value={this.state.fieldsBase.status} />
+                          <AvInput type="hidden" name="status" value={this.state[baseFilters]} />
                         )}
                       </Row>
                     </div>

@@ -16,9 +16,9 @@
       "detail": {
         "title": "Paciente Arquivo"
       },
-      "idPaciente": "Id Paciente",
       "arquivo": "Arquivo",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "paciente": "Paciente"
     }
   }
 }

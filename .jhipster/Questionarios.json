@@ -33,8 +33,8 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "paciente",
             "otherEntityRelationshipName": "questionarios",
-            "relationshipName": "pacienteId",
-            "otherEntityField": "id"
+            "relationshipName": "paciente",
+            "otherEntityField": "nome"
         }
     ],
     "changelogDate": "20200503005600",

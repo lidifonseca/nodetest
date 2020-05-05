@@ -4,25 +4,34 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './paciente-arquivo.reducer';
+import { IPaciente } from 'app/shared/model/paciente.model';
+import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
+import {
+  IPacienteArquivoUpdateState,
+  getEntity,
+  getPacienteArquivoState,
+  IPacienteArquivoBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './paciente-arquivo.reducer';
 import { IPacienteArquivo } from 'app/shared/model/paciente-arquivo.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteArquivoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteArquivoUpdateState {
-  isNew: boolean;
-}
-
 export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdateProps, IPacienteArquivoUpdateState> {
   constructor(props: Readonly<IPacienteArquivoUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getPacienteArquivoState(this.props.location),
+      pacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -38,8 +47,32 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+
+    this.props.getPacientes();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['arquivo'] ? '&arquivo=' + fieldsBase['arquivo'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['paciente'] ? '&paciente=' + fieldsBase['paciente'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteArquivoEntity } = this.props;
@@ -57,13 +90,15 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-arquivo');
+    this.props.history.push('/paciente-arquivo?' + this.getFiltersURL());
   };
 
   render() {
-    const { pacienteArquivoEntity, loading, updating } = this.props;
+    const { pacienteArquivoEntity, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const { arquivo, arquivoContentType } = pacienteArquivoEntity;
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -79,7 +114,8 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
             isNew
               ? {}
               : {
-                  ...pacienteArquivoEntity
+                  ...pacienteArquivoEntity,
+                  paciente: pacienteArquivoEntity.paciente ? pacienteArquivoEntity.paciente.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -96,7 +132,14 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/paciente-arquivo" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente-arquivo?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +154,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,59 +170,108 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'arquivo' ? (
+                          <Col md="arquivo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <AvGroup>
+                                    <Row>
+                                      <Col md="3">
+                                        <Label className="mt-2" id="arquivoLabel" for="arquivo">
+                                          <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
+                                        </Label>
+                                      </Col>
+                                      <Col md="9">
+                                        <br />
+                                        {arquivo ? (
+                                          <div>
+                                            <a onClick={openFile(arquivoContentType, arquivo)}>
+                                              <img src={`data:${arquivoContentType};base64,${arquivo}`} style={{ maxHeight: '100px' }} />
+                                            </a>
+                                            <br />
+                                            <Row>
+                                              <Col md="11">
+                                                <span>
+                                                  {arquivoContentType}, {byteSize(arquivo)}
+                                                </span>
+                                              </Col>
+                                              <Col md="1">
+                                                <Button color="danger" onClick={this.clearBlob('arquivo')}>
+                                                  <FontAwesomeIcon icon="times-circle" />
+                                                </Button>
+                                              </Col>
+                                            </Row>
+                                          </div>
+                                        ) : null}
+                                        <input
+                                          id="file_arquivo"
+                                          type="file"
+                                          onChange={this.onBlobChange(true, 'arquivo')}
+                                          accept="image/*"
+                                        />
+                                        <AvInput type="hidden" name="arquivo" value={arquivo} />
+                                      </Col>
+                                    </Row>
+                                  </AvGroup>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="arquivo" value={this.state[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="paciente-arquivo-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteArquivo.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-arquivo-idPaciente" type="text" name="idPaciente" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="arquivoLabel" for="paciente-arquivo-arquivo">
-                                <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-arquivo-arquivo"
-                                type="text"
-                                name="arquivo"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="paciente-arquivo-ativo">
-                                <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-arquivo-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-arquivo-ativo">
+                                    <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-arquivo-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-arquivo-paciente">
+                                    <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="paciente-arquivo-paciente" type="select" className="form-control" name="paciente">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.pacienteArquivo.paciente.empty')}
+                                    </option>
+                                    {pacientes
+                                      ? pacientes.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.nome}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -192,6 +284,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
+  pacientes: storeState.paciente.entities,
   pacienteArquivoEntity: storeState.pacienteArquivo.entity,
   loading: storeState.pacienteArquivo.loading,
   updating: storeState.pacienteArquivo.updating,
@@ -199,8 +292,10 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPacientes,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };
