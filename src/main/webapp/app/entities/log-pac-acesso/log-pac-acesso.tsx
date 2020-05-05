@@ -16,35 +16,19 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './log-pac-acesso.reducer';
+import { getLogPacAcessoState, ILogPacAcessoBaseState, getEntities } from './log-pac-acesso.reducer';
 import { ILogPacAcesso } from 'app/shared/model/log-pac-acesso.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ILogPacAcessoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ILogPacAcessoBaseState {
-  idPaciente: any;
-  profissional: any;
-  token: any;
-  ipLocal: any;
-  inforAcesso: any;
-}
 export interface ILogPacAcessoState extends ILogPacAcessoBaseState, IPaginationBaseState {}
 
 export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAcessoState> {
@@ -54,26 +38,9 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getLogPacAcessoState(this.props.location)
+      ...getLogPacAcessoState(this.props.location)
     };
   }
-
-  getLogPacAcessoState = (location): ILogPacAcessoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const profissional = url.searchParams.get('profissional') || '';
-    const token = url.searchParams.get('token') || '';
-    const ipLocal = url.searchParams.get('ipLocal') || '';
-    const inforAcesso = url.searchParams.get('inforAcesso') || '';
-
-    return {
-      idPaciente,
-      profissional,
-      token,
-      ipLocal,
-      inforAcesso
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -229,7 +196,8 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                           <Label id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
                             <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
                           </Label>
-                          <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
+
+                          <AvInput type="text" name="inforAcesso" id="log-pac-acesso-inforAcesso" value={this.state.inforAcesso} />
                         </Row>
                       </Col>
                     </div>
@@ -304,26 +272,7 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                         <td>{logPacAcesso.inforAcesso}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${logPacAcesso.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${logPacAcesso.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${logPacAcesso.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

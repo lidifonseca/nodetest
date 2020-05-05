@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadItemIndicadores, defaultValue } from 'app/shared/model/pad-item-indicadores.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADITEMINDICADORES_LIST_EXPORT: 'padItemIndicadores/FETCH_PADITEMINDICADORES_LIST_EXPORT',
   FETCH_PADITEMINDICADORES_LIST: 'padItemIndicadores/FETCH_PADITEMINDICADORES_LIST',
   FETCH_PADITEMINDICADORES: 'padItemIndicadores/FETCH_PADITEMINDICADORES',
   CREATE_PADITEMINDICADORES: 'padItemIndicadores/CREATE_PADITEMINDICADORES',
   UPDATE_PADITEMINDICADORES: 'padItemIndicadores/UPDATE_PADITEMINDICADORES',
   DELETE_PADITEMINDICADORES: 'padItemIndicadores/DELETE_PADITEMINDICADORES',
-  SET_BLOB: 'padItemIndicadores/SET_BLOB',
   RESET: 'padItemIndicadores/RESET'
 };
 
@@ -31,10 +31,21 @@ const initialState = {
 
 export type PadItemIndicadoresState = Readonly<typeof initialState>;
 
+export interface IPadItemIndicadoresBaseState {
+  idUnidadeMedida: any;
+  titulo: any;
+  descricao: any;
+  meta: any;
+  maximoSt: any;
+  minimoSt: any;
+  cidXPtaNovoPadItemIndi: any;
+}
+
 // Reducer
 
 export default (state: PadItemIndicadoresState = initialState, action): PadItemIndicadoresState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMINDICADORES):
       return {
@@ -52,6 +63,7 @@ export default (state: PadItemIndicadoresState = initialState, action): PadItemI
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMINDICADORES):
     case FAILURE(ACTION_TYPES.CREATE_PADITEMINDICADORES):
@@ -92,17 +104,6 @@ export default (state: PadItemIndicadoresState = initialState, action): PadItemI
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -166,6 +167,35 @@ export const getEntity: ICrudGetAction<IPadItemIndicadores> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPadItemIndicadores<IPadItemIndicadores> = (
+  idUnidadeMedida,
+  titulo,
+  descricao,
+  meta,
+  maximoSt,
+  minimoSt,
+  cidXPtaNovoPadItemIndi,
+  page,
+  size,
+  sort
+) => {
+  const idUnidadeMedidaRequest = idUnidadeMedida ? `idUnidadeMedida.contains=${idUnidadeMedida}&` : '';
+  const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+  const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const metaRequest = meta ? `meta.contains=${meta}&` : '';
+  const maximoStRequest = maximoSt ? `maximoSt.contains=${maximoSt}&` : '';
+  const minimoStRequest = minimoSt ? `minimoSt.contains=${minimoSt}&` : '';
+  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST,
+    payload: axios.get<IPadItemIndicadores>(
+      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}${cidXPtaNovoPadItemIndiRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPadItemIndicadores> = entity => async dispatch => {
   entity = {
     ...entity
@@ -198,15 +228,28 @@ export const deleteEntity: ICrudDeleteAction<IPadItemIndicadores> = id => async 
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadItemIndicadoresState = (location): IPadItemIndicadoresBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idUnidadeMedida = url.searchParams.get('idUnidadeMedida') || '';
+  const titulo = url.searchParams.get('titulo') || '';
+  const descricao = url.searchParams.get('descricao') || '';
+  const meta = url.searchParams.get('meta') || '';
+  const maximoSt = url.searchParams.get('maximoSt') || '';
+  const minimoSt = url.searchParams.get('minimoSt') || '';
+
+  const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
+
+  return {
+    idUnidadeMedida,
+    titulo,
+    descricao,
+    meta,
+    maximoSt,
+    minimoSt,
+    cidXPtaNovoPadItemIndi
+  };
+};

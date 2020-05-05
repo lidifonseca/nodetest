@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, UncontrolledTooltip, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './notificacao-config.reducer';
+import { getEntity, INotificacaoConfigBaseState, getNotificacaoConfigState } from './notificacao-config.reducer';
 import { INotificacaoConfig } from 'app/shared/model/notificacao-config.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface INotificacaoConfigState {
+  fieldsBase: INotificacaoConfigBaseState;
+}
+
 export interface INotificacaoConfigDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class NotificacaoConfigDetail extends React.Component<INotificacaoConfigDetailProps> {
+export class NotificacaoConfigDetail extends React.Component<INotificacaoConfigDetailProps, INotificacaoConfigState> {
   constructor(props: Readonly<INotificacaoConfigDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getNotificacaoConfigState(this.props.location)
     };
   }
 

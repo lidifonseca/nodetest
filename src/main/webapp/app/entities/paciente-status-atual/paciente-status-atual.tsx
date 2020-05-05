@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -191,7 +190,8 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                           <Label id="observacaoLabel" for="paciente-status-atual-observacao">
                             <Translate contentKey="generadorApp.pacienteStatusAtual.observacao">Observacao</Translate>
                           </Label>
-                          <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
+
+                          <AvInput type="text" name="observacao" id="paciente-status-atual-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">

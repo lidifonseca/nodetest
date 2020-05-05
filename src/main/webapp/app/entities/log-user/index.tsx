@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import LogUser from './log-user';
 import LogUserDetail from './log-user-detail';
+import LogUserRelatorioCSV from './relatorio/log-user.csv';
 import LogUserUpdate from './log-user-update';
 import LogUserDeleteDialog from './log-user-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={LogUserRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={LogUserUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={LogUserUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={LogUserDetail} />

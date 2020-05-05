@@ -2,6 +2,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
+import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
+
 import Paciente from './paciente.entity';
 import Usuario from './usuario.entity';
 
@@ -13,8 +15,8 @@ export default class PacienteDiario extends BaseEntity {
   @Column({ type: 'integer', name: 'id_operadora' })
   idOperadora: number;
 
-  @Column({ type: 'blob', name: 'historico' })
-  historico: any;
+  @Column({ name: 'historico', length: 65535 })
+  historico: string;
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;

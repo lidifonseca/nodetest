@@ -35,7 +35,7 @@ export interface IProfissional {
   conta?: string;
   tipoConta?: string;
   origemCadastro?: string;
-  obs?: any;
+  obs?: string;
   chavePrivada?: string;
   ativo?: number;
   senhaOriginal?: string;

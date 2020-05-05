@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -32,7 +31,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-item.reducer';
+import { getPadItemState, IPadItemBaseState, getEntities } from './pad-item.reducer';
 import { IPadItem } from 'app/shared/model/pad-item.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -48,32 +47,6 @@ import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer
 
 export interface IPadItemProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadItemBaseState {
-  idPedido: any;
-  dataInicio: any;
-  dataFim: any;
-  qtdSessoes: any;
-  observacao: any;
-  sub: any;
-  ativo: any;
-  dataPadItemIncompleto: any;
-  dataPadItemCompleto: any;
-  numGhc: any;
-  cidXPtaNovo: any;
-  categoriaId: any;
-  score: any;
-  atendimento: any;
-  atendimentoCepRecusado: any;
-  atendimentoSorteioFeito: any;
-  padItemAtividade: any;
-  padItemCepRecusado: any;
-  padItemResultado: any;
-  padItemSorteioFeito: any;
-  idPad: any;
-  idEspecialidade: any;
-  idPeriodicidade: any;
-  idPeriodo: any;
-}
 export interface IPadItemState extends IPadItemBaseState, IPaginationBaseState {}
 
 export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
@@ -83,65 +56,9 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadItemState(this.props.location)
+      ...getPadItemState(this.props.location)
     };
   }
-
-  getPadItemState = (location): IPadItemBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPedido = url.searchParams.get('idPedido') || '';
-    const dataInicio = url.searchParams.get('dataInicio') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-    const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
-    const observacao = url.searchParams.get('observacao') || '';
-    const sub = url.searchParams.get('sub') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const dataPadItemIncompleto = url.searchParams.get('dataPadItemIncompleto') || '';
-    const dataPadItemCompleto = url.searchParams.get('dataPadItemCompleto') || '';
-    const numGhc = url.searchParams.get('numGhc') || '';
-    const cidXPtaNovo = url.searchParams.get('cidXPtaNovo') || '';
-    const categoriaId = url.searchParams.get('categoriaId') || '';
-    const score = url.searchParams.get('score') || '';
-
-    const atendimento = url.searchParams.get('atendimento') || '';
-    const atendimentoCepRecusado = url.searchParams.get('atendimentoCepRecusado') || '';
-    const atendimentoSorteioFeito = url.searchParams.get('atendimentoSorteioFeito') || '';
-    const padItemAtividade = url.searchParams.get('padItemAtividade') || '';
-    const padItemCepRecusado = url.searchParams.get('padItemCepRecusado') || '';
-    const padItemResultado = url.searchParams.get('padItemResultado') || '';
-    const padItemSorteioFeito = url.searchParams.get('padItemSorteioFeito') || '';
-    const idPad = url.searchParams.get('idPad') || '';
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-    const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
-    const idPeriodo = url.searchParams.get('idPeriodo') || '';
-
-    return {
-      idPedido,
-      dataInicio,
-      dataFim,
-      qtdSessoes,
-      observacao,
-      sub,
-      ativo,
-      dataPadItemIncompleto,
-      dataPadItemCompleto,
-      numGhc,
-      cidXPtaNovo,
-      categoriaId,
-      score,
-      atendimento,
-      atendimentoCepRecusado,
-      atendimentoSorteioFeito,
-      padItemAtividade,
-      padItemCepRecusado,
-      padItemResultado,
-      padItemSorteioFeito,
-      idPad,
-      idEspecialidade,
-      idPeriodicidade,
-      idPeriodo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -433,7 +350,8 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                           <Label id="observacaoLabel" for="pad-item-observacao">
                             <Translate contentKey="generadorApp.padItem.observacao">Observacao</Translate>
                           </Label>
-                          <AvInput id="pad-item-observacao" type="textarea" name="observacao" />
+
+                          <AvInput type="text" name="observacao" id="pad-item-observacao" value={this.state.observacao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -783,26 +701,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                         <td>{padItem.idPeriodo ? <Link to={`periodo/${padItem.idPeriodo.id}`}>{padItem.idPeriodo.id}</Link> : ''}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padItem.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${padItem.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${padItem.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

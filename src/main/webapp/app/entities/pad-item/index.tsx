@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import PadItem from './pad-item';
 import PadItemDetail from './pad-item-detail';
+import PadItemRelatorioCSV from './relatorio/pad-item.csv';
 import PadItemUpdate from './pad-item-update';
 import PadItemDeleteDialog from './pad-item-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={PadItemRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={PadItemUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={PadItemUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={PadItemDetail} />

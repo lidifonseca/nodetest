@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import Profissional from './profissional';
 import ProfissionalDetail from './profissional-detail';
+import ProfissionalRelatorioCSV from './relatorio/profissional.csv';
 import ProfissionalUpdate from './profissional-update';
 import ProfissionalDeleteDialog from './profissional-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={ProfissionalRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={ProfissionalUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={ProfissionalUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={ProfissionalDetail} />

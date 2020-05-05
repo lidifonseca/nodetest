@@ -3,21 +3,33 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './prontuario-motivo-manifestacao.reducer';
+import {
+  getEntity,
+  IProntuarioMotivoManifestacaoBaseState,
+  getProntuarioMotivoManifestacaoState
+} from './prontuario-motivo-manifestacao.reducer';
 import { IProntuarioMotivoManifestacao } from 'app/shared/model/prontuario-motivo-manifestacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProntuarioMotivoManifestacaoState {
+  fieldsBase: IProntuarioMotivoManifestacaoBaseState;
+}
+
 export interface IProntuarioMotivoManifestacaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProntuarioMotivoManifestacaoDetail extends React.Component<IProntuarioMotivoManifestacaoDetailProps> {
+export class ProntuarioMotivoManifestacaoDetail extends React.Component<
+  IProntuarioMotivoManifestacaoDetailProps,
+  IProntuarioMotivoManifestacaoState
+> {
   constructor(props: Readonly<IProntuarioMotivoManifestacaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProntuarioMotivoManifestacaoState(this.props.location)
     };
   }
 

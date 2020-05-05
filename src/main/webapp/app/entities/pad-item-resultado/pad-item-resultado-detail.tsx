@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-resultado.reducer';
+import { getEntity, IPadItemResultadoBaseState, getPadItemResultadoState } from './pad-item-resultado.reducer';
 import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemResultadoState {
+  fieldsBase: IPadItemResultadoBaseState;
+}
+
 export interface IPadItemResultadoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemResultadoDetail extends React.Component<IPadItemResultadoDetailProps> {
+export class PadItemResultadoDetail extends React.Component<IPadItemResultadoDetailProps, IPadItemResultadoState> {
   constructor(props: Readonly<IPadItemResultadoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemResultadoState(this.props.location)
     };
   }
 

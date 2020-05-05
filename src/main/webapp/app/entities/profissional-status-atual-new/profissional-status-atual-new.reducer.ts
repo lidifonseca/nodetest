@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalStatusAtualNew, defaultValue } from 'app/shared/model/profissional-status-atual-new.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALSTATUSATUALNEW_LIST_EXPORT: 'profissionalStatusAtualNew/FETCH_PROFISSIONALSTATUSATUALNEW_LIST_EXPORT',
   FETCH_PROFISSIONALSTATUSATUALNEW_LIST: 'profissionalStatusAtualNew/FETCH_PROFISSIONALSTATUSATUALNEW_LIST',
   FETCH_PROFISSIONALSTATUSATUALNEW: 'profissionalStatusAtualNew/FETCH_PROFISSIONALSTATUSATUALNEW',
   CREATE_PROFISSIONALSTATUSATUALNEW: 'profissionalStatusAtualNew/CREATE_PROFISSIONALSTATUSATUALNEW',
   UPDATE_PROFISSIONALSTATUSATUALNEW: 'profissionalStatusAtualNew/UPDATE_PROFISSIONALSTATUSATUALNEW',
   DELETE_PROFISSIONALSTATUSATUALNEW: 'profissionalStatusAtualNew/DELETE_PROFISSIONALSTATUSATUALNEW',
-  SET_BLOB: 'profissionalStatusAtualNew/SET_BLOB',
   RESET: 'profissionalStatusAtualNew/RESET'
 };
 
@@ -31,10 +31,19 @@ const initialState = {
 
 export type ProfissionalStatusAtualNewState = Readonly<typeof initialState>;
 
+export interface IProfissionalStatusAtualNewBaseState {
+  idProfissional: any;
+  idStatusAtualProf: any;
+  obs: any;
+  ativo: any;
+  idUsuario: any;
+}
+
 // Reducer
 
 export default (state: ProfissionalStatusAtualNewState = initialState, action): ProfissionalStatusAtualNewState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW):
       return {
@@ -52,6 +61,7 @@ export default (state: ProfissionalStatusAtualNewState = initialState, action): 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALSTATUSATUALNEW):
@@ -92,17 +102,6 @@ export default (state: ProfissionalStatusAtualNewState = initialState, action): 
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -160,6 +159,31 @@ export const getEntity: ICrudGetAction<IProfissionalStatusAtualNew> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalStatusAtualNew<IProfissionalStatusAtualNew> = (
+  idProfissional,
+  idStatusAtualProf,
+  obs,
+  ativo,
+  idUsuario,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const idStatusAtualProfRequest = idStatusAtualProf ? `idStatusAtualProf.contains=${idStatusAtualProf}&` : '';
+  const obsRequest = obs ? `obs.contains=${obs}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST,
+    payload: axios.get<IProfissionalStatusAtualNew>(
+      `${requestUrl}${idProfissionalRequest}${idStatusAtualProfRequest}${obsRequest}${ativoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalStatusAtualNew> = entity => async dispatch => {
   entity = {
     ...entity
@@ -192,15 +216,23 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalStatusAtualNew> = id =
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalStatusAtualNewState = (location): IProfissionalStatusAtualNewBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const idStatusAtualProf = url.searchParams.get('idStatusAtualProf') || '';
+  const obs = url.searchParams.get('obs') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const idUsuario = url.searchParams.get('idUsuario') || '';
+
+  return {
+    idProfissional,
+    idStatusAtualProf,
+    obs,
+    ativo,
+    idUsuario
+  };
+};

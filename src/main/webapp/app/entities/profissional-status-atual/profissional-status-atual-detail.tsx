@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-status-atual.reducer';
+import { getEntity, IProfissionalStatusAtualBaseState, getProfissionalStatusAtualState } from './profissional-status-atual.reducer';
 import { IProfissionalStatusAtual } from 'app/shared/model/profissional-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalStatusAtualState {
+  fieldsBase: IProfissionalStatusAtualBaseState;
+}
+
 export interface IProfissionalStatusAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalStatusAtualDetail extends React.Component<IProfissionalStatusAtualDetailProps> {
+export class ProfissionalStatusAtualDetail extends React.Component<IProfissionalStatusAtualDetailProps, IProfissionalStatusAtualState> {
   constructor(props: Readonly<IProfissionalStatusAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalStatusAtualState(this.props.location)
     };
   }
 

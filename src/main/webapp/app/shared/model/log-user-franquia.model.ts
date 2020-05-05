@@ -4,7 +4,7 @@ import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
 
 export interface ILogUserFranquia {
   id?: string;
-  descricao?: any;
+  descricao?: string;
   idAcao?: string | any;
   idTela?: string | any;
   idUsuario?: string | any;

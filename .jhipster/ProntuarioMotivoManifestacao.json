@@ -33,8 +33,11 @@
         },
         {
             "fieldName": "sugestao",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
         },
         {
             "fieldName": "idUsuario",
@@ -42,8 +45,11 @@
         },
         {
             "fieldName": "informacaoAdicional",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
         }
     ],
     "relationships": [],

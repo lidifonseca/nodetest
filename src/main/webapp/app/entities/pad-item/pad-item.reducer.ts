@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadItem, defaultValue } from 'app/shared/model/pad-item.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADITEM_LIST_EXPORT: 'padItem/FETCH_PADITEM_LIST_EXPORT',
   FETCH_PADITEM_LIST: 'padItem/FETCH_PADITEM_LIST',
   FETCH_PADITEM: 'padItem/FETCH_PADITEM',
   CREATE_PADITEM: 'padItem/CREATE_PADITEM',
   UPDATE_PADITEM: 'padItem/UPDATE_PADITEM',
   DELETE_PADITEM: 'padItem/DELETE_PADITEM',
-  SET_BLOB: 'padItem/SET_BLOB',
   RESET: 'padItem/RESET'
 };
 
@@ -31,10 +31,38 @@ const initialState = {
 
 export type PadItemState = Readonly<typeof initialState>;
 
+export interface IPadItemBaseState {
+  idPedido: any;
+  dataInicio: any;
+  dataFim: any;
+  qtdSessoes: any;
+  observacao: any;
+  sub: any;
+  ativo: any;
+  dataPadItemIncompleto: any;
+  dataPadItemCompleto: any;
+  numGhc: any;
+  cidXPtaNovo: any;
+  categoriaId: any;
+  score: any;
+  atendimento: any;
+  atendimentoCepRecusado: any;
+  atendimentoSorteioFeito: any;
+  padItemAtividade: any;
+  padItemCepRecusado: any;
+  padItemResultado: any;
+  padItemSorteioFeito: any;
+  idPad: any;
+  idEspecialidade: any;
+  idPeriodicidade: any;
+  idPeriodo: any;
+}
+
 // Reducer
 
 export default (state: PadItemState = initialState, action): PadItemState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADITEM_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADITEM_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADITEM):
       return {
@@ -52,6 +80,7 @@ export default (state: PadItemState = initialState, action): PadItemState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADITEM_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADITEM_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADITEM):
     case FAILURE(ACTION_TYPES.CREATE_PADITEM):
@@ -92,17 +121,6 @@ export default (state: PadItemState = initialState, action): PadItemState => {
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -217,6 +235,69 @@ export const getEntity: ICrudGetAction<IPadItem> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPadItem<IPadItem> = (
+  idPedido,
+  dataInicio,
+  dataFim,
+  qtdSessoes,
+  observacao,
+  sub,
+  ativo,
+  dataPadItemIncompleto,
+  dataPadItemCompleto,
+  numGhc,
+  cidXPtaNovo,
+  categoriaId,
+  score,
+  atendimento,
+  atendimentoCepRecusado,
+  atendimentoSorteioFeito,
+  padItemAtividade,
+  padItemCepRecusado,
+  padItemResultado,
+  padItemSorteioFeito,
+  idPad,
+  idEspecialidade,
+  idPeriodicidade,
+  idPeriodo,
+  page,
+  size,
+  sort
+) => {
+  const idPedidoRequest = idPedido ? `idPedido.contains=${idPedido}&` : '';
+  const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
+  const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
+  const qtdSessoesRequest = qtdSessoes ? `qtdSessoes.contains=${qtdSessoes}&` : '';
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+  const subRequest = sub ? `sub.contains=${sub}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const dataPadItemIncompletoRequest = dataPadItemIncompleto ? `dataPadItemIncompleto.contains=${dataPadItemIncompleto}&` : '';
+  const dataPadItemCompletoRequest = dataPadItemCompleto ? `dataPadItemCompleto.contains=${dataPadItemCompleto}&` : '';
+  const numGhcRequest = numGhc ? `numGhc.contains=${numGhc}&` : '';
+  const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.contains=${cidXPtaNovo}&` : '';
+  const categoriaIdRequest = categoriaId ? `categoriaId.contains=${categoriaId}&` : '';
+  const scoreRequest = score ? `score.contains=${score}&` : '';
+  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
+  const atendimentoCepRecusadoRequest = atendimentoCepRecusado ? `atendimentoCepRecusado.equals=${atendimentoCepRecusado}&` : '';
+  const atendimentoSorteioFeitoRequest = atendimentoSorteioFeito ? `atendimentoSorteioFeito.equals=${atendimentoSorteioFeito}&` : '';
+  const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
+  const padItemCepRecusadoRequest = padItemCepRecusado ? `padItemCepRecusado.equals=${padItemCepRecusado}&` : '';
+  const padItemResultadoRequest = padItemResultado ? `padItemResultado.equals=${padItemResultado}&` : '';
+  const padItemSorteioFeitoRequest = padItemSorteioFeito ? `padItemSorteioFeito.equals=${padItemSorteioFeito}&` : '';
+  const idPadRequest = idPad ? `idPad.equals=${idPad}&` : '';
+  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
+  const idPeriodicidadeRequest = idPeriodicidade ? `idPeriodicidade.equals=${idPeriodicidade}&` : '';
+  const idPeriodoRequest = idPeriodo ? `idPeriodo.equals=${idPeriodo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADITEM_LIST,
+    payload: axios.get<IPadItem>(
+      `${requestUrl}${idPedidoRequest}${dataInicioRequest}${dataFimRequest}${qtdSessoesRequest}${observacaoRequest}${subRequest}${ativoRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}${numGhcRequest}${cidXPtaNovoRequest}${categoriaIdRequest}${scoreRequest}${atendimentoRequest}${atendimentoCepRecusadoRequest}${atendimentoSorteioFeitoRequest}${padItemAtividadeRequest}${padItemCepRecusadoRequest}${padItemResultadoRequest}${padItemSorteioFeitoRequest}${idPadRequest}${idEspecialidadeRequest}${idPeriodicidadeRequest}${idPeriodoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPadItem> = entity => async dispatch => {
   entity = {
     ...entity,
@@ -259,15 +340,62 @@ export const deleteEntity: ICrudDeleteAction<IPadItem> = id => async dispatch =>
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadItemState = (location): IPadItemBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idPedido = url.searchParams.get('idPedido') || '';
+  const dataInicio = url.searchParams.get('dataInicio') || '';
+  const dataFim = url.searchParams.get('dataFim') || '';
+  const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+  const sub = url.searchParams.get('sub') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const dataPadItemIncompleto = url.searchParams.get('dataPadItemIncompleto') || '';
+  const dataPadItemCompleto = url.searchParams.get('dataPadItemCompleto') || '';
+  const numGhc = url.searchParams.get('numGhc') || '';
+  const cidXPtaNovo = url.searchParams.get('cidXPtaNovo') || '';
+  const categoriaId = url.searchParams.get('categoriaId') || '';
+  const score = url.searchParams.get('score') || '';
+
+  const atendimento = url.searchParams.get('atendimento') || '';
+  const atendimentoCepRecusado = url.searchParams.get('atendimentoCepRecusado') || '';
+  const atendimentoSorteioFeito = url.searchParams.get('atendimentoSorteioFeito') || '';
+  const padItemAtividade = url.searchParams.get('padItemAtividade') || '';
+  const padItemCepRecusado = url.searchParams.get('padItemCepRecusado') || '';
+  const padItemResultado = url.searchParams.get('padItemResultado') || '';
+  const padItemSorteioFeito = url.searchParams.get('padItemSorteioFeito') || '';
+  const idPad = url.searchParams.get('idPad') || '';
+  const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
+  const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
+  const idPeriodo = url.searchParams.get('idPeriodo') || '';
+
+  return {
+    idPedido,
+    dataInicio,
+    dataFim,
+    qtdSessoes,
+    observacao,
+    sub,
+    ativo,
+    dataPadItemIncompleto,
+    dataPadItemCompleto,
+    numGhc,
+    cidXPtaNovo,
+    categoriaId,
+    score,
+    atendimento,
+    atendimentoCepRecusado,
+    atendimentoSorteioFeito,
+    padItemAtividade,
+    padItemCepRecusado,
+    padItemResultado,
+    padItemSorteioFeito,
+    idPad,
+    idEspecialidade,
+    idPeriodicidade,
+    idPeriodo
+  };
+};

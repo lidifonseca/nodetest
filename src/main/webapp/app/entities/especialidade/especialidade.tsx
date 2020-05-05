@@ -16,22 +16,13 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './especialidade.reducer';
+import { getEspecialidadeState, IEspecialidadeBaseState, getEntities } from './especialidade.reducer';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -47,24 +38,6 @@ import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-u
 
 export interface IEspecialidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IEspecialidadeBaseState {
-  icon: any;
-  especialidade: any;
-  descricao: any;
-  duracao: any;
-  importante: any;
-  ativo: any;
-  atendimento: any;
-  especialidadeOperadora: any;
-  especialidadeUnidade: any;
-  especialidadeValor: any;
-  pacientePedido: any;
-  padItem: any;
-  unidade: any;
-  idCategoria: any;
-  idTipoEspecialidade: any;
-  idTipoUnidade: any;
-}
 export interface IEspecialidadeState extends IEspecialidadeBaseState, IPaginationBaseState {}
 
 export class Especialidade extends React.Component<IEspecialidadeProps, IEspecialidadeState> {
@@ -74,49 +47,9 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getEspecialidadeState(this.props.location)
+      ...getEspecialidadeState(this.props.location)
     };
   }
-
-  getEspecialidadeState = (location): IEspecialidadeBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const icon = url.searchParams.get('icon') || '';
-    const especialidade = url.searchParams.get('especialidade') || '';
-    const descricao = url.searchParams.get('descricao') || '';
-    const duracao = url.searchParams.get('duracao') || '';
-    const importante = url.searchParams.get('importante') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const atendimento = url.searchParams.get('atendimento') || '';
-    const especialidadeOperadora = url.searchParams.get('especialidadeOperadora') || '';
-    const especialidadeUnidade = url.searchParams.get('especialidadeUnidade') || '';
-    const especialidadeValor = url.searchParams.get('especialidadeValor') || '';
-    const pacientePedido = url.searchParams.get('pacientePedido') || '';
-    const padItem = url.searchParams.get('padItem') || '';
-    const unidade = url.searchParams.get('unidade') || '';
-    const idCategoria = url.searchParams.get('idCategoria') || '';
-    const idTipoEspecialidade = url.searchParams.get('idTipoEspecialidade') || '';
-    const idTipoUnidade = url.searchParams.get('idTipoUnidade') || '';
-
-    return {
-      icon,
-      especialidade,
-      descricao,
-      duracao,
-      importante,
-      ativo,
-      atendimento,
-      especialidadeOperadora,
-      especialidadeUnidade,
-      especialidadeValor,
-      pacientePedido,
-      padItem,
-      unidade,
-      idCategoria,
-      idTipoEspecialidade,
-      idTipoUnidade
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -345,7 +278,8 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                           <Label id="descricaoLabel" for="especialidade-descricao">
                             <Translate contentKey="generadorApp.especialidade.descricao">Descricao</Translate>
                           </Label>
-                          <AvInput id="especialidade-descricao" type="textarea" name="descricao" />
+
+                          <AvInput type="text" name="descricao" id="especialidade-descricao" value={this.state.descricao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -606,26 +540,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${especialidade.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidade.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidade.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

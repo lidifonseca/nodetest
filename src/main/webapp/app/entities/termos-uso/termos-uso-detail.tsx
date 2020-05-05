@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './termos-uso.reducer';
+import { getEntity, ITermosUsoBaseState, getTermosUsoState } from './termos-uso.reducer';
 import { ITermosUso } from 'app/shared/model/termos-uso.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITermosUsoState {
+  fieldsBase: ITermosUsoBaseState;
+}
+
 export interface ITermosUsoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TermosUsoDetail extends React.Component<ITermosUsoDetailProps> {
+export class TermosUsoDetail extends React.Component<ITermosUsoDetailProps, ITermosUsoState> {
   constructor(props: Readonly<ITermosUsoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTermosUsoState(this.props.location)
     };
   }
 

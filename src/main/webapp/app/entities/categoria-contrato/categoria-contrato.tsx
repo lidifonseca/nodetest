@@ -16,23 +16,13 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  openFile,
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './categoria-contrato.reducer';
+import { getCategoriaContratoState, ICategoriaContratoBaseState, getEntities } from './categoria-contrato.reducer';
 import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -42,11 +32,6 @@ import { getEntities as getCategorias } from 'app/entities/categoria/categoria.r
 
 export interface ICategoriaContratoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICategoriaContratoBaseState {
-  contrato: any;
-  ativo: any;
-  idCategoria: any;
-}
 export interface ICategoriaContratoState extends ICategoriaContratoBaseState, IPaginationBaseState {}
 
 export class CategoriaContrato extends React.Component<ICategoriaContratoProps, ICategoriaContratoState> {
@@ -56,23 +41,9 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCategoriaContratoState(this.props.location)
+      ...getCategoriaContratoState(this.props.location)
     };
   }
-
-  getCategoriaContratoState = (location): ICategoriaContratoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const contrato = url.searchParams.get('contrato') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idCategoria = url.searchParams.get('idCategoria') || '';
-
-    return {
-      contrato,
-      ativo,
-      idCategoria
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -184,34 +155,11 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                     <div className="row mt-1 ml-3 mr-3">
                       <Col md="3">
                         <Row>
-                          <div>
-                            <Label id="contratoLabel" for="contrato">
-                              <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                            </Label>
-                            <br />
-                            {contrato ? (
-                              <div>
-                                <a onClick={openFile(contratoContentType, contrato)}>
-                                  <Translate contentKey="entity.action.open">Open</Translate>
-                                </a>
-                                <br />
-                                <Row>
-                                  <Col md="11">
-                                    <span>
-                                      {contratoContentType}, {byteSize(contrato)}
-                                    </span>
-                                  </Col>
-                                  <Col md="1">
-                                    <Button color="danger" onClick={this.clearBlob('contrato')}>
-                                      <FontAwesomeIcon icon="times-circle" />
-                                    </Button>
-                                  </Col>
-                                </Row>
-                              </div>
-                            ) : null}
-                            <input id="file_contrato" type="file" onChange={this.onBlobChange(false, 'contrato')} />
-                            <AvInput type="hidden" name="contrato" value={contrato} />
-                          </div>
+                          <Label id="contratoLabel" for="categoria-contrato-contrato">
+                            <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
+                          </Label>
+
+                          <AvInput type="text" name="contrato" id="categoria-contrato-contrato" value={this.state.contrato} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -295,19 +243,7 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                           </Button>
                         </td>
 
-                        <td>
-                          {categoriaContrato.contrato ? (
-                            <div>
-                              <a onClick={openFile(categoriaContrato.contratoContentType, categoriaContrato.contrato)}>
-                                <Translate contentKey="entity.action.open">Open</Translate>
-                                &nbsp;
-                              </a>
-                              <span>
-                                {categoriaContrato.contratoContentType}, {byteSize(categoriaContrato.contrato)}
-                              </span>
-                            </div>
-                          ) : null}
-                        </td>
+                        <td>{categoriaContrato.contrato}</td>
 
                         <td>{categoriaContrato.ativo}</td>
                         <td>
@@ -319,26 +255,7 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${categoriaContrato.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${categoriaContrato.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${categoriaContrato.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -32,23 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './notificacao-config.reducer';
+import { getNotificacaoConfigState, INotificacaoConfigBaseState, getEntities } from './notificacao-config.reducer';
 import { INotificacaoConfig } from 'app/shared/model/notificacao-config.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface INotificacaoConfigProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface INotificacaoConfigBaseState {
-  criadoEm: any;
-  titulo: any;
-  referencia: any;
-  descricao: any;
-  ativo: any;
-  envioObrigatorio: any;
-  serveProfissional: any;
-  servePaciente: any;
-}
 export interface INotificacaoConfigState extends INotificacaoConfigBaseState, IPaginationBaseState {}
 
 export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, INotificacaoConfigState> {
@@ -58,32 +47,9 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getNotificacaoConfigState(this.props.location)
+      ...getNotificacaoConfigState(this.props.location)
     };
   }
-
-  getNotificacaoConfigState = (location): INotificacaoConfigBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const criadoEm = url.searchParams.get('criadoEm') || '';
-    const titulo = url.searchParams.get('titulo') || '';
-    const referencia = url.searchParams.get('referencia') || '';
-    const descricao = url.searchParams.get('descricao') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const envioObrigatorio = url.searchParams.get('envioObrigatorio') || '';
-    const serveProfissional = url.searchParams.get('serveProfissional') || '';
-    const servePaciente = url.searchParams.get('servePaciente') || '';
-
-    return {
-      criadoEm,
-      titulo,
-      referencia,
-      descricao,
-      ativo,
-      envioObrigatorio,
-      serveProfissional,
-      servePaciente
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -277,7 +243,8 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                           <Label id="descricaoLabel" for="notificacao-config-descricao">
                             <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
                           </Label>
-                          <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
+
+                          <AvInput type="text" name="descricao" id="notificacao-config-descricao" value={this.state.descricao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -420,26 +387,7 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                         <td>{notificacaoConfig.servePaciente ? 'true' : 'false'}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${notificacaoConfig.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${notificacaoConfig.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${notificacaoConfig.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

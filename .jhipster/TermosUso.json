@@ -3,8 +3,11 @@
     "fields": [
         {
             "fieldName": "termosUso",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
         },
         {
             "fieldName": "tipo",

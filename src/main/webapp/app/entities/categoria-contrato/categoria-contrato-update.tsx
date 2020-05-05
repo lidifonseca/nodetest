@@ -4,13 +4,20 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { ICategoria } from 'app/shared/model/categoria.model';
 import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './categoria-contrato.reducer';
+import {
+  getEntity,
+  getCategoriaContratoState,
+  ICategoriaContratoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './categoria-contrato.reducer';
 import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -18,6 +25,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ICategoriaContratoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface ICategoriaContratoUpdateState {
+  fieldsBase: ICategoriaContratoBaseState;
   isNew: boolean;
   idCategoriaId: string;
 }
@@ -26,6 +34,7 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
   constructor(props: Readonly<ICategoriaContratoUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getCategoriaContratoState(this.props.location),
       idCategoriaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -45,14 +54,6 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
 
     this.props.getCategorias();
   }
-
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
-  };
-
-  clearBlob = name => () => {
-    this.props.setBlob(name, undefined, undefined);
-  };
 
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
@@ -77,8 +78,6 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
   render() {
     const { categoriaContratoEntity, categorias, loading, updating } = this.props;
     const { isNew } = this.state;
-
-    const { contrato, contratoContentType } = categoriaContratoEntity;
 
     return (
       <div>
@@ -130,7 +129,7 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,90 +145,75 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.contrato ? (
+                          <Col md="contrato">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="contratoLabel" for="categoria-contrato-contrato">
+                                    <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="categoria-contrato-contrato" type="text" name="contrato" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="contrato" value={this.state.fieldsBase.contrato} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <AvGroup>
-                                <Row>
-                                  <Col md="3">
-                                    <Label className="mt-2" id="contratoLabel" for="contrato">
-                                      <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                                    </Label>
-                                  </Col>
-                                  <Col md="9">
-                                    <br />
-                                    {contrato ? (
-                                      <div>
-                                        <a onClick={openFile(contratoContentType, contrato)}>
-                                          <Translate contentKey="entity.action.open">Open</Translate>
-                                        </a>
-                                        <br />
-                                        <Row>
-                                          <Col md="11">
-                                            <span>
-                                              {contratoContentType}, {byteSize(contrato)}
-                                            </span>
-                                          </Col>
-                                          <Col md="1">
-                                            <Button color="danger" onClick={this.clearBlob('contrato')}>
-                                              <FontAwesomeIcon icon="times-circle" />
-                                            </Button>
-                                          </Col>
-                                        </Row>
-                                      </div>
-                                    ) : null}
-                                    <input id="file_contrato" type="file" onChange={this.onBlobChange(false, 'contrato')} />
-                                    <AvInput type="hidden" name="contrato" value={contrato} />
-                                  </Col>
-                                </Row>
-                              </AvGroup>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="categoria-contrato-ativo">
-                                <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="categoria-contrato-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="categoria-contrato-idCategoria">
-                                <Translate contentKey="generadorApp.categoriaContrato.idCategoria">Id Categoria</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="categoria-contrato-idCategoria" type="select" className="form-control" name="idCategoria">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.categoriaContrato.idCategoria.empty')}
-                                </option>
-                                {categorias
-                                  ? categorias.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.ativo ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="categoria-contrato-ativo">
+                                    <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="categoria-contrato-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                        )}
+                        {!this.state.fieldsBase.idCategoria ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="categoria-contrato-idCategoria">
+                                    <Translate contentKey="generadorApp.categoriaContrato.idCategoria">Id Categoria</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="categoria-contrato-idCategoria" type="select" className="form-control" name="idCategoria">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.categoriaContrato.idCategoria.empty')}
+                                    </option>
+                                    {categorias
+                                      ? categorias.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.id}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCategoria" value={this.state.fieldsBase.idCategoria} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -253,7 +237,6 @@ const mapDispatchToProps = {
   getCategorias,
   getEntity,
   updateEntity,
-  setBlob,
   createEntity,
   reset
 };

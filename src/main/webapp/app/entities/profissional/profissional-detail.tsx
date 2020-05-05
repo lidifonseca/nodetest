@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional.reducer';
+import { getEntity, IProfissionalBaseState, getProfissionalState } from './profissional.reducer';
 import { IProfissional } from 'app/shared/model/profissional.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalState {
+  fieldsBase: IProfissionalBaseState;
+}
+
 export interface IProfissionalDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalDetail extends React.Component<IProfissionalDetailProps> {
+export class ProfissionalDetail extends React.Component<IProfissionalDetailProps, IProfissionalState> {
   constructor(props: Readonly<IProfissionalDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalState(this.props.location)
     };
   }
 

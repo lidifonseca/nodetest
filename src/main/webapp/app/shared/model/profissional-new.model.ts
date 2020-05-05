@@ -33,7 +33,7 @@ export interface IProfissionalNew {
   conta?: string;
   tipoConta?: string;
   origemCadastro?: string;
-  obs?: any;
+  obs?: string;
   chavePrivada?: string;
   ativo?: number;
   unidadeRazaoSocial?: string;

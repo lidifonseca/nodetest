@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './especialidade.reducer';
+import { getEntity, IEspecialidadeBaseState, getEspecialidadeState } from './especialidade.reducer';
 import { IEspecialidade } from 'app/shared/model/especialidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IEspecialidadeState {
+  fieldsBase: IEspecialidadeBaseState;
+}
+
 export interface IEspecialidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class EspecialidadeDetail extends React.Component<IEspecialidadeDetailProps> {
+export class EspecialidadeDetail extends React.Component<IEspecialidadeDetailProps, IEspecialidadeState> {
   constructor(props: Readonly<IEspecialidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getEspecialidadeState(this.props.location)
     };
   }
 

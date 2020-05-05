@@ -3,15 +3,15 @@
     "usuarioAcao": {
       "home": {
         "title": "Usuario Acaos",
-        "createLabel": "Criar novo Usuario Acao",
-        "createOrEditLabel": "Criar ou editar Usuario Acao",
-        "notFound": "Nenhum Usuario Acao encontrado"
+        "createLabel": "Create a new Usuario Acao",
+        "createOrEditLabel": "Create or edit a Usuario Acao",
+        "notFound": "No Usuario Acaos found"
       },
-      "created": "Um novo Usuario Acao foi criado com o identificador {{ param }}",
-      "updated": "Um Usuario Acao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Usuario Acao foi excluído com o identificador {{ param }}",
+      "created": "A new Usuario Acao is created with identifier {{ param }}",
+      "updated": "A Usuario Acao is updated with identifier {{ param }}",
+      "deleted": "A Usuario Acao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Usuario Acao {{ id }}?"
+        "question": "Are you sure you want to delete Usuario Acao {{ id }}?"
       },
       "detail": {
         "title": "Usuario Acao"

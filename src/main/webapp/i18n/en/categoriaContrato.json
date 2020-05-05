@@ -3,15 +3,15 @@
     "categoriaContrato": {
       "home": {
         "title": "Categoria Contratoes",
-        "createLabel": "Criar novo Categoria Contrato",
-        "createOrEditLabel": "Criar ou editar Categoria Contrato",
-        "notFound": "Nenhum Categoria Contrato encontrado"
+        "createLabel": "Create a new Categoria Contrato",
+        "createOrEditLabel": "Create or edit a Categoria Contrato",
+        "notFound": "No Categoria Contratoes found"
       },
-      "created": "Um novo Categoria Contrato foi criado com o identificador {{ param }}",
-      "updated": "Um Categoria Contrato foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Categoria Contrato foi excluído com o identificador {{ param }}",
+      "created": "A new Categoria Contrato is created with identifier {{ param }}",
+      "updated": "A Categoria Contrato is updated with identifier {{ param }}",
+      "deleted": "A Categoria Contrato is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Categoria Contrato {{ id }}?"
+        "question": "Are you sure you want to delete Categoria Contrato {{ id }}?"
       },
       "detail": {
         "title": "Categoria Contrato"

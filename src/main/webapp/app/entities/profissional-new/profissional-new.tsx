@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -32,7 +31,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-new.reducer';
+import { getProfissionalNewState, IProfissionalNewBaseState, getEntities } from './profissional-new.reducer';
 import { IProfissionalNew } from 'app/shared/model/profissional-new.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -42,42 +41,6 @@ import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unida
 
 export interface IProfissionalNewProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalNewBaseState {
-  idCidade: any;
-  idTempoExperiencia: any;
-  idBanco: any;
-  senha: any;
-  nome: any;
-  email: any;
-  cpf: any;
-  rg: any;
-  nomeEmpresa: any;
-  cnpj: any;
-  registro: any;
-  nascimento: any;
-  sexo: any;
-  telefone1: any;
-  telefone2: any;
-  celular1: any;
-  celular2: any;
-  cep: any;
-  endereco: any;
-  numero: any;
-  complemento: any;
-  bairro: any;
-  cidade: any;
-  uf: any;
-  atendeCrianca: any;
-  atendeIdoso: any;
-  ag: any;
-  conta: any;
-  tipoConta: any;
-  origemCadastro: any;
-  obs: any;
-  chavePrivada: any;
-  ativo: any;
-  unidade: any;
-}
 export interface IProfissionalNewState extends IProfissionalNewBaseState, IPaginationBaseState {}
 
 export class ProfissionalNew extends React.Component<IProfissionalNewProps, IProfissionalNewState> {
@@ -87,85 +50,9 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalNewState(this.props.location)
+      ...getProfissionalNewState(this.props.location)
     };
   }
-
-  getProfissionalNewState = (location): IProfissionalNewBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idCidade = url.searchParams.get('idCidade') || '';
-    const idTempoExperiencia = url.searchParams.get('idTempoExperiencia') || '';
-    const idBanco = url.searchParams.get('idBanco') || '';
-    const senha = url.searchParams.get('senha') || '';
-    const nome = url.searchParams.get('nome') || '';
-    const email = url.searchParams.get('email') || '';
-    const cpf = url.searchParams.get('cpf') || '';
-    const rg = url.searchParams.get('rg') || '';
-    const nomeEmpresa = url.searchParams.get('nomeEmpresa') || '';
-    const cnpj = url.searchParams.get('cnpj') || '';
-    const registro = url.searchParams.get('registro') || '';
-    const nascimento = url.searchParams.get('nascimento') || '';
-    const sexo = url.searchParams.get('sexo') || '';
-    const telefone1 = url.searchParams.get('telefone1') || '';
-    const telefone2 = url.searchParams.get('telefone2') || '';
-    const celular1 = url.searchParams.get('celular1') || '';
-    const celular2 = url.searchParams.get('celular2') || '';
-    const cep = url.searchParams.get('cep') || '';
-    const endereco = url.searchParams.get('endereco') || '';
-    const numero = url.searchParams.get('numero') || '';
-    const complemento = url.searchParams.get('complemento') || '';
-    const bairro = url.searchParams.get('bairro') || '';
-    const cidade = url.searchParams.get('cidade') || '';
-    const uf = url.searchParams.get('uf') || '';
-    const atendeCrianca = url.searchParams.get('atendeCrianca') || '';
-    const atendeIdoso = url.searchParams.get('atendeIdoso') || '';
-    const ag = url.searchParams.get('ag') || '';
-    const conta = url.searchParams.get('conta') || '';
-    const tipoConta = url.searchParams.get('tipoConta') || '';
-    const origemCadastro = url.searchParams.get('origemCadastro') || '';
-    const obs = url.searchParams.get('obs') || '';
-    const chavePrivada = url.searchParams.get('chavePrivada') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const unidade = url.searchParams.get('unidade') || '';
-
-    return {
-      idCidade,
-      idTempoExperiencia,
-      idBanco,
-      senha,
-      nome,
-      email,
-      cpf,
-      rg,
-      nomeEmpresa,
-      cnpj,
-      registro,
-      nascimento,
-      sexo,
-      telefone1,
-      telefone2,
-      celular1,
-      celular2,
-      cep,
-      endereco,
-      numero,
-      complemento,
-      bairro,
-      cidade,
-      uf,
-      atendeCrianca,
-      atendeIdoso,
-      ag,
-      conta,
-      tipoConta,
-      origemCadastro,
-      obs,
-      chavePrivada,
-      ativo,
-      unidade
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -760,7 +647,8 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                           <Label id="obsLabel" for="profissional-new-obs">
                             <Translate contentKey="generadorApp.profissionalNew.obs">Obs</Translate>
                           </Label>
-                          <AvInput id="profissional-new-obs" type="textarea" name="obs" />
+
+                          <AvInput type="text" name="obs" id="profissional-new-obs" value={this.state.obs} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -1053,26 +941,7 @@ export class ProfissionalNew extends React.Component<IProfissionalNewProps, IPro
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalNew.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalNew.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalNew.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

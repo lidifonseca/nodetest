@@ -34,8 +34,11 @@
         },
         {
             "fieldName": "inforAcesso",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
         }
     ],
     "relationships": [],

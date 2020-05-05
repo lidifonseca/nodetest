@@ -2,7 +2,7 @@ export interface IProfissionalStatusAtualNew {
   id?: string;
   idProfissional?: string;
   idStatusAtualProf?: number;
-  obs?: any;
+  obs?: string;
   ativo?: number;
   idUsuario?: string;
 }

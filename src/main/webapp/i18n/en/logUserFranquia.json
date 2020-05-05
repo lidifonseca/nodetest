@@ -3,15 +3,15 @@
     "logUserFranquia": {
       "home": {
         "title": "Log User Franquias",
-        "createLabel": "Criar novo Log User Franquia",
-        "createOrEditLabel": "Criar ou editar Log User Franquia",
-        "notFound": "Nenhum Log User Franquia encontrado"
+        "createLabel": "Create a new Log User Franquia",
+        "createOrEditLabel": "Create or edit a Log User Franquia",
+        "notFound": "No Log User Franquias found"
       },
-      "created": "Um novo Log User Franquia foi criado com o identificador {{ param }}",
-      "updated": "Um Log User Franquia foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Log User Franquia foi excluído com o identificador {{ param }}",
+      "created": "A new Log User Franquia is created with identifier {{ param }}",
+      "updated": "A Log User Franquia is updated with identifier {{ param }}",
+      "deleted": "A Log User Franquia is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Log User Franquia {{ id }}?"
+        "question": "Are you sure you want to delete Log User Franquia {{ id }}?"
       },
       "detail": {
         "title": "Log User Franquia"

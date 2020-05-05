@@ -3,15 +3,15 @@
     "padItem": {
       "home": {
         "title": "Pad Items",
-        "createLabel": "Criar novo Pad Item",
-        "createOrEditLabel": "Criar ou editar Pad Item",
-        "notFound": "Nenhum Pad Item encontrado"
+        "createLabel": "Create a new Pad Item",
+        "createOrEditLabel": "Create or edit a Pad Item",
+        "notFound": "No Pad Items found"
       },
-      "created": "Um novo Pad Item foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item is created with identifier {{ param }}",
+      "updated": "A Pad Item is updated with identifier {{ param }}",
+      "deleted": "A Pad Item is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item {{ id }}?"
       },
       "detail": {
         "title": "Pad Item"

@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadItemResultado, defaultValue } from 'app/shared/model/pad-item-resultado.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADITEMRESULTADO_LIST_EXPORT: 'padItemResultado/FETCH_PADITEMRESULTADO_LIST_EXPORT',
   FETCH_PADITEMRESULTADO_LIST: 'padItemResultado/FETCH_PADITEMRESULTADO_LIST',
   FETCH_PADITEMRESULTADO: 'padItemResultado/FETCH_PADITEMRESULTADO',
   CREATE_PADITEMRESULTADO: 'padItemResultado/CREATE_PADITEMRESULTADO',
   UPDATE_PADITEMRESULTADO: 'padItemResultado/UPDATE_PADITEMRESULTADO',
   DELETE_PADITEMRESULTADO: 'padItemResultado/DELETE_PADITEMRESULTADO',
-  SET_BLOB: 'padItemResultado/SET_BLOB',
   RESET: 'padItemResultado/RESET'
 };
 
@@ -31,10 +31,19 @@ const initialState = {
 
 export type PadItemResultadoState = Readonly<typeof initialState>;
 
+export interface IPadItemResultadoBaseState {
+  resultado: any;
+  dataFim: any;
+  resultadoAnalisado: any;
+  usuarioId: any;
+  idPadItem: any;
+}
+
 // Reducer
 
 export default (state: PadItemResultadoState = initialState, action): PadItemResultadoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMRESULTADO):
       return {
@@ -52,6 +61,7 @@ export default (state: PadItemResultadoState = initialState, action): PadItemRes
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMRESULTADO):
     case FAILURE(ACTION_TYPES.CREATE_PADITEMRESULTADO):
@@ -92,17 +102,6 @@ export default (state: PadItemResultadoState = initialState, action): PadItemRes
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -160,6 +159,31 @@ export const getEntity: ICrudGetAction<IPadItemResultado> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPadItemResultado<IPadItemResultado> = (
+  resultado,
+  dataFim,
+  resultadoAnalisado,
+  usuarioId,
+  idPadItem,
+  page,
+  size,
+  sort
+) => {
+  const resultadoRequest = resultado ? `resultado.contains=${resultado}&` : '';
+  const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
+  const resultadoAnalisadoRequest = resultadoAnalisado ? `resultadoAnalisado.contains=${resultadoAnalisado}&` : '';
+  const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
+  const idPadItemRequest = idPadItem ? `idPadItem.equals=${idPadItem}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADITEMRESULTADO_LIST,
+    payload: axios.get<IPadItemResultado>(
+      `${requestUrl}${resultadoRequest}${dataFimRequest}${resultadoAnalisadoRequest}${usuarioIdRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPadItemResultado> = entity => async dispatch => {
   entity = {
     ...entity,
@@ -193,15 +217,24 @@ export const deleteEntity: ICrudDeleteAction<IPadItemResultado> = id => async di
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadItemResultadoState = (location): IPadItemResultadoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const resultado = url.searchParams.get('resultado') || '';
+  const dataFim = url.searchParams.get('dataFim') || '';
+  const resultadoAnalisado = url.searchParams.get('resultadoAnalisado') || '';
+  const usuarioId = url.searchParams.get('usuarioId') || '';
+
+  const idPadItem = url.searchParams.get('idPadItem') || '';
+
+  return {
+    resultado,
+    dataFim,
+    resultadoAnalisado,
+    usuarioId,
+    idPadItem
+  };
+};

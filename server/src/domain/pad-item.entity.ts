@@ -33,8 +33,8 @@ export default class PadItem extends BaseEntity {
   @Column({ type: 'integer', name: 'qtd_sessoes' })
   qtdSessoes: number;
 
-  @Column({ type: 'blob', name: 'observacao' })
-  observacao: any;
+  @Column({ name: 'observacao', length: 65535 })
+  observacao: string;
 
   @Column({ type: 'integer', name: 'sub' })
   sub: number;

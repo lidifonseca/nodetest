@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteDiario, defaultValue } from 'app/shared/model/paciente-diario.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEDIARIO_LIST_EXPORT: 'pacienteDiario/FETCH_PACIENTEDIARIO_LIST_EXPORT',
   FETCH_PACIENTEDIARIO_LIST: 'pacienteDiario/FETCH_PACIENTEDIARIO_LIST',
   FETCH_PACIENTEDIARIO: 'pacienteDiario/FETCH_PACIENTEDIARIO',
   CREATE_PACIENTEDIARIO: 'pacienteDiario/CREATE_PACIENTEDIARIO',
   UPDATE_PACIENTEDIARIO: 'pacienteDiario/UPDATE_PACIENTEDIARIO',
   DELETE_PACIENTEDIARIO: 'pacienteDiario/DELETE_PACIENTEDIARIO',
-  SET_BLOB: 'pacienteDiario/SET_BLOB',
   RESET: 'pacienteDiario/RESET'
 };
 
@@ -31,10 +31,19 @@ const initialState = {
 
 export type PacienteDiarioState = Readonly<typeof initialState>;
 
+export interface IPacienteDiarioBaseState {
+  idOperadora: any;
+  historico: any;
+  ativo: any;
+  idPaciente: any;
+  idUsuario: any;
+}
+
 // Reducer
 
 export default (state: PacienteDiarioState = initialState, action): PacienteDiarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIARIO):
       return {
@@ -52,6 +61,7 @@ export default (state: PacienteDiarioState = initialState, action): PacienteDiar
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIARIO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEDIARIO):
@@ -92,17 +102,6 @@ export default (state: PacienteDiarioState = initialState, action): PacienteDiar
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -160,6 +159,31 @@ export const getEntity: ICrudGetAction<IPacienteDiario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
+  idOperadora,
+  historico,
+  ativo,
+  idPaciente,
+  idUsuario,
+  page,
+  size,
+  sort
+) => {
+  const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
+  const historicoRequest = historico ? `historico.contains=${historico}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
+  const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST,
+    payload: axios.get<IPacienteDiario>(
+      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}${idPacienteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteDiario> = entity => async dispatch => {
   entity = {
     ...entity,
@@ -198,15 +222,24 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDiario> = id => async disp
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteDiarioState = (location): IPacienteDiarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idOperadora = url.searchParams.get('idOperadora') || '';
+  const historico = url.searchParams.get('historico') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idUsuario = url.searchParams.get('idUsuario') || '';
+
+  return {
+    idOperadora,
+    historico,
+    ativo,
+    idPaciente,
+    idUsuario
+  };
+};

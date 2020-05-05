@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ILogPacAcesso, defaultValue } from 'app/shared/model/log-pac-acesso.model';
 
 export const ACTION_TYPES = {
+  FETCH_LOGPACACESSO_LIST_EXPORT: 'logPacAcesso/FETCH_LOGPACACESSO_LIST_EXPORT',
   FETCH_LOGPACACESSO_LIST: 'logPacAcesso/FETCH_LOGPACACESSO_LIST',
   FETCH_LOGPACACESSO: 'logPacAcesso/FETCH_LOGPACACESSO',
   CREATE_LOGPACACESSO: 'logPacAcesso/CREATE_LOGPACACESSO',
   UPDATE_LOGPACACESSO: 'logPacAcesso/UPDATE_LOGPACACESSO',
   DELETE_LOGPACACESSO: 'logPacAcesso/DELETE_LOGPACACESSO',
-  SET_BLOB: 'logPacAcesso/SET_BLOB',
   RESET: 'logPacAcesso/RESET'
 };
 
@@ -31,10 +31,19 @@ const initialState = {
 
 export type LogPacAcessoState = Readonly<typeof initialState>;
 
+export interface ILogPacAcessoBaseState {
+  idPaciente: any;
+  profissional: any;
+  token: any;
+  ipLocal: any;
+  inforAcesso: any;
+}
+
 // Reducer
 
 export default (state: LogPacAcessoState = initialState, action): LogPacAcessoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_LOGPACACESSO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_LOGPACACESSO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_LOGPACACESSO):
       return {
@@ -52,6 +61,7 @@ export default (state: LogPacAcessoState = initialState, action): LogPacAcessoSt
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_LOGPACACESSO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_LOGPACACESSO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_LOGPACACESSO):
     case FAILURE(ACTION_TYPES.CREATE_LOGPACACESSO):
@@ -92,17 +102,6 @@ export default (state: LogPacAcessoState = initialState, action): LogPacAcessoSt
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -160,6 +159,31 @@ export const getEntity: ICrudGetAction<ILogPacAcesso> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionLogPacAcesso<ILogPacAcesso> = (
+  idPaciente,
+  profissional,
+  token,
+  ipLocal,
+  inforAcesso,
+  page,
+  size,
+  sort
+) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const profissionalRequest = profissional ? `profissional.contains=${profissional}&` : '';
+  const tokenRequest = token ? `token.contains=${token}&` : '';
+  const ipLocalRequest = ipLocal ? `ipLocal.contains=${ipLocal}&` : '';
+  const inforAcessoRequest = inforAcesso ? `inforAcesso.contains=${inforAcesso}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_LOGPACACESSO_LIST,
+    payload: axios.get<ILogPacAcesso>(
+      `${requestUrl}${idPacienteRequest}${profissionalRequest}${tokenRequest}${ipLocalRequest}${inforAcessoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ILogPacAcesso> = entity => async dispatch => {
   entity = {
     ...entity
@@ -192,15 +216,23 @@ export const deleteEntity: ICrudDeleteAction<ILogPacAcesso> = id => async dispat
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getLogPacAcessoState = (location): ILogPacAcessoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const profissional = url.searchParams.get('profissional') || '';
+  const token = url.searchParams.get('token') || '';
+  const ipLocal = url.searchParams.get('ipLocal') || '';
+  const inforAcesso = url.searchParams.get('inforAcesso') || '';
+
+  return {
+    idPaciente,
+    profissional,
+    token,
+    ipLocal,
+    inforAcesso
+  };
+};

@@ -4,13 +4,20 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
 import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-prof/status-atual-prof.reducer';
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './profissional-status-atual.reducer';
+import {
+  getEntity,
+  getProfissionalStatusAtualState,
+  IProfissionalStatusAtualBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './profissional-status-atual.reducer';
 import { IProfissionalStatusAtual } from 'app/shared/model/profissional-status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -18,6 +25,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IProfissionalStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface IProfissionalStatusAtualUpdateState {
+  fieldsBase: IProfissionalStatusAtualBaseState;
   isNew: boolean;
   idStatusAtualProfId: string;
 }
@@ -29,6 +37,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
   constructor(props: Readonly<IProfissionalStatusAtualUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getProfissionalStatusAtualState(this.props.location),
       idStatusAtualProfId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -48,14 +57,6 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
 
     this.props.getStatusAtualProfs();
   }
-
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
-  };
-
-  clearBlob = name => () => {
-    this.props.setBlob(name, undefined, undefined);
-  };
 
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
@@ -80,8 +81,6 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
   render() {
     const { profissionalStatusAtualEntity, statusAtualProfs, loading, updating } = this.props;
     const { isNew } = this.state;
-
-    const { obs } = profissionalStatusAtualEntity;
 
     return (
       <div>
@@ -142,7 +141,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -165,106 +164,120 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.idProfissional ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-status-atual-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase.idProfissional} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
-                                <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-status-atual-idProfissional" type="text" name="idProfissional" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.obs ? (
+                          <Col md="obs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="obsLabel" for="profissional-status-atual-obs">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-status-atual-obs" type="text" name="obs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase.obs} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="obsLabel" for="profissional-status-atual-obs">
-                                <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.ativo ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="profissional-status-atual-ativo">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-status-atual-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="profissional-status-atual-ativo">
-                                <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="profissional-status-atual-idUsuario">
-                                <Translate contentKey="generadorApp.profissionalStatusAtual.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-status-atual-idUsuario"
-                                type="text"
-                                name="idUsuario"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="profissional-status-atual-idStatusAtualProf">
-                                <Translate contentKey="generadorApp.profissionalStatusAtual.idStatusAtualProf">
-                                  Id Status Atual Prof
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="profissional-status-atual-idStatusAtualProf"
-                                type="select"
-                                className="form-control"
-                                name="idStatusAtualProf"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.profissionalStatusAtual.idStatusAtualProf.empty')}
-                                </option>
-                                {statusAtualProfs
-                                  ? statusAtualProfs.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.idUsuario ? (
+                          <Col md="idUsuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idUsuarioLabel" for="profissional-status-atual-idUsuario">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.idUsuario">Id Usuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-status-atual-idUsuario" type="text" name="idUsuario" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
+                        )}
+                        {!this.state.fieldsBase.idStatusAtualProf ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="profissional-status-atual-idStatusAtualProf">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.idStatusAtualProf">
+                                      Id Status Atual Prof
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="profissional-status-atual-idStatusAtualProf"
+                                    type="select"
+                                    className="form-control"
+                                    name="idStatusAtualProf"
+                                  >
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.profissionalStatusAtual.idStatusAtualProf.empty')}
+                                    </option>
+                                    {statusAtualProfs
+                                      ? statusAtualProfs.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.id}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idStatusAtualProf" value={this.state.fieldsBase.idStatusAtualProf} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -288,7 +301,6 @@ const mapDispatchToProps = {
   getStatusAtualProfs,
   getEntity,
   updateEntity,
-  setBlob,
   createEntity,
   reset
 };

@@ -58,7 +58,7 @@ export interface IPaciente {
   ufFamiliar?: string;
   latitudeFamiliar?: string;
   longitudeFamiliar?: string;
-  observacao?: any;
+  observacao?: string;
   aph?: number;
   nivelComplexidade?: number;
   passagemPs?: number;
@@ -72,7 +72,7 @@ export interface IPaciente {
   comResponsavel?: number;
   cadastroCompleto?: number;
   ativo?: number;
-  detalhes?: any;
+  detalhes?: string;
   liminar?: string;
   expoToken?: string;
   senhaChat?: string;

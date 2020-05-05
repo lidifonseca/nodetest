@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import UsuarioAcao from './usuario-acao';
 import UsuarioAcaoDetail from './usuario-acao-detail';
+import UsuarioAcaoRelatorioCSV from './relatorio/usuario-acao.csv';
 import UsuarioAcaoUpdate from './usuario-acao-update';
 import UsuarioAcaoDeleteDialog from './usuario-acao-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={UsuarioAcaoRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={UsuarioAcaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={UsuarioAcaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={UsuarioAcaoDetail} />

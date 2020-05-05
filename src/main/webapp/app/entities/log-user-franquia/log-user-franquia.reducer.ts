@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ILogUserFranquia, defaultValue } from 'app/shared/model/log-user-franquia.model';
 
 export const ACTION_TYPES = {
+  FETCH_LOGUSERFRANQUIA_LIST_EXPORT: 'logUserFranquia/FETCH_LOGUSERFRANQUIA_LIST_EXPORT',
   FETCH_LOGUSERFRANQUIA_LIST: 'logUserFranquia/FETCH_LOGUSERFRANQUIA_LIST',
   FETCH_LOGUSERFRANQUIA: 'logUserFranquia/FETCH_LOGUSERFRANQUIA',
   CREATE_LOGUSERFRANQUIA: 'logUserFranquia/CREATE_LOGUSERFRANQUIA',
   UPDATE_LOGUSERFRANQUIA: 'logUserFranquia/UPDATE_LOGUSERFRANQUIA',
   DELETE_LOGUSERFRANQUIA: 'logUserFranquia/DELETE_LOGUSERFRANQUIA',
-  SET_BLOB: 'logUserFranquia/SET_BLOB',
   RESET: 'logUserFranquia/RESET'
 };
 
@@ -31,10 +31,18 @@ const initialState = {
 
 export type LogUserFranquiaState = Readonly<typeof initialState>;
 
+export interface ILogUserFranquiaBaseState {
+  descricao: any;
+  idAcao: any;
+  idTela: any;
+  idUsuario: any;
+}
+
 // Reducer
 
 export default (state: LogUserFranquiaState = initialState, action): LogUserFranquiaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_LOGUSERFRANQUIA):
       return {
@@ -52,6 +60,7 @@ export default (state: LogUserFranquiaState = initialState, action): LogUserFran
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_LOGUSERFRANQUIA):
     case FAILURE(ACTION_TYPES.CREATE_LOGUSERFRANQUIA):
@@ -92,17 +101,6 @@ export default (state: LogUserFranquiaState = initialState, action): LogUserFran
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -149,6 +147,29 @@ export const getEntity: ICrudGetAction<ILogUserFranquia> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (
+  descricao,
+  idAcao,
+  idTela,
+  idUsuario,
+  page,
+  size,
+  sort
+) => {
+  const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
+  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
+  const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST,
+    payload: axios.get<ILogUserFranquia>(
+      `${requestUrl}${descricaoRequest}${idAcaoRequest}${idTelaRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ILogUserFranquia> = entity => async dispatch => {
   entity = {
     ...entity,
@@ -189,15 +210,22 @@ export const deleteEntity: ICrudDeleteAction<ILogUserFranquia> = id => async dis
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getLogUserFranquiaState = (location): ILogUserFranquiaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const descricao = url.searchParams.get('descricao') || '';
+
+  const idAcao = url.searchParams.get('idAcao') || '';
+  const idTela = url.searchParams.get('idTela') || '';
+  const idUsuario = url.searchParams.get('idUsuario') || '';
+
+  return {
+    descricao,
+    idAcao,
+    idTela,
+    idUsuario
+  };
+};

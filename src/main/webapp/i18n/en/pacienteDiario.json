@@ -3,15 +3,15 @@
     "pacienteDiario": {
       "home": {
         "title": "Paciente Diarios",
-        "createLabel": "Criar novo Paciente Diario",
-        "createOrEditLabel": "Criar ou editar Paciente Diario",
-        "notFound": "Nenhum Paciente Diario encontrado"
+        "createLabel": "Create a new Paciente Diario",
+        "createOrEditLabel": "Create or edit a Paciente Diario",
+        "notFound": "No Paciente Diarios found"
       },
-      "created": "Um novo Paciente Diario foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Diario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Diario foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Diario is created with identifier {{ param }}",
+      "updated": "A Paciente Diario is updated with identifier {{ param }}",
+      "deleted": "A Paciente Diario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Diario {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Diario {{ id }}?"
       },
       "detail": {
         "title": "Paciente Diario"

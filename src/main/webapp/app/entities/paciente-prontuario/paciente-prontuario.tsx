@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -32,32 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-prontuario.reducer';
+import { getPacienteProntuarioState, IPacienteProntuarioBaseState, getEntities } from './paciente-prontuario.reducer';
 import { IPacienteProntuario } from 'app/shared/model/paciente-prontuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPacienteProntuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteProntuarioBaseState {
-  idPaciente: any;
-  idTipoProntuario: any;
-  oQue: any;
-  resultado: any;
-  ativo: any;
-  idUsuario: any;
-  idEspecialidade: any;
-  dataConsulta: any;
-  idExame: any;
-  idTipoExame: any;
-  dataExame: any;
-  dataInternacao: any;
-  dataAlta: any;
-  dataPs: any;
-  dataOcorrencia: any;
-  idOcorrenciaProntuario: any;
-  dataManifestacao: any;
-}
 export interface IPacienteProntuarioState extends IPacienteProntuarioBaseState, IPaginationBaseState {}
 
 export class PacienteProntuario extends React.Component<IPacienteProntuarioProps, IPacienteProntuarioState> {
@@ -67,50 +47,9 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteProntuarioState(this.props.location)
+      ...getPacienteProntuarioState(this.props.location)
     };
   }
-
-  getPacienteProntuarioState = (location): IPacienteProntuarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idTipoProntuario = url.searchParams.get('idTipoProntuario') || '';
-    const oQue = url.searchParams.get('oQue') || '';
-    const resultado = url.searchParams.get('resultado') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-    const dataConsulta = url.searchParams.get('dataConsulta') || '';
-    const idExame = url.searchParams.get('idExame') || '';
-    const idTipoExame = url.searchParams.get('idTipoExame') || '';
-    const dataExame = url.searchParams.get('dataExame') || '';
-    const dataInternacao = url.searchParams.get('dataInternacao') || '';
-    const dataAlta = url.searchParams.get('dataAlta') || '';
-    const dataPs = url.searchParams.get('dataPs') || '';
-    const dataOcorrencia = url.searchParams.get('dataOcorrencia') || '';
-    const idOcorrenciaProntuario = url.searchParams.get('idOcorrenciaProntuario') || '';
-    const dataManifestacao = url.searchParams.get('dataManifestacao') || '';
-
-    return {
-      idPaciente,
-      idTipoProntuario,
-      oQue,
-      resultado,
-      ativo,
-      idUsuario,
-      idEspecialidade,
-      dataConsulta,
-      idExame,
-      idTipoExame,
-      dataExame,
-      dataInternacao,
-      dataAlta,
-      dataPs,
-      dataOcorrencia,
-      idOcorrenciaProntuario,
-      dataManifestacao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -344,7 +283,8 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <Label id="oQueLabel" for="paciente-prontuario-oQue">
                             <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
                           </Label>
-                          <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
+
+                          <AvInput type="text" name="oQue" id="paciente-prontuario-oQue" value={this.state.oQue} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -352,7 +292,8 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <Label id="resultadoLabel" for="paciente-prontuario-resultado">
                             <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
                           </Label>
-                          <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
+
+                          <AvInput type="text" name="resultado" id="paciente-prontuario-resultado" value={this.state.resultado} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -652,26 +593,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteProntuario.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteProntuario.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteProntuario.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

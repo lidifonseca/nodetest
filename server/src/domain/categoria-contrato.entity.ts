@@ -2,6 +2,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
+import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
+
 import Categoria from './categoria.entity';
 
 /**
@@ -9,11 +11,9 @@ import Categoria from './categoria.entity';
  */
 @Entity('categoria_contrato')
 export default class CategoriaContrato extends BaseEntity {
-  @Column({ type: 'blob', name: 'contrato' })
-  contrato: any;
+  @Column({ name: 'contrato', length: 65535 })
+  contrato: string;
 
-  @Column({ name: 'contrato_content_type' })
-  contratoContentType: string;
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 

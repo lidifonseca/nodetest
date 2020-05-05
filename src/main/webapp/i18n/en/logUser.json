@@ -3,15 +3,15 @@
     "logUser": {
       "home": {
         "title": "Log Users",
-        "createLabel": "Criar novo Log User",
-        "createOrEditLabel": "Criar ou editar Log User",
-        "notFound": "Nenhum Log User encontrado"
+        "createLabel": "Create a new Log User",
+        "createOrEditLabel": "Create or edit a Log User",
+        "notFound": "No Log Users found"
       },
-      "created": "Um novo Log User foi criado com o identificador {{ param }}",
-      "updated": "Um Log User foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Log User foi excluído com o identificador {{ param }}",
+      "created": "A new Log User is created with identifier {{ param }}",
+      "updated": "A Log User is updated with identifier {{ param }}",
+      "deleted": "A Log User is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Log User {{ id }}?"
+        "question": "Are you sure you want to delete Log User {{ id }}?"
       },
       "detail": {
         "title": "Log User"

@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -32,7 +31,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-item-resultado.reducer';
+import { getPadItemResultadoState, IPadItemResultadoBaseState, getEntities } from './pad-item-resultado.reducer';
 import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -42,13 +41,6 @@ import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reduc
 
 export interface IPadItemResultadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadItemResultadoBaseState {
-  resultado: any;
-  dataFim: any;
-  resultadoAnalisado: any;
-  usuarioId: any;
-  idPadItem: any;
-}
 export interface IPadItemResultadoState extends IPadItemResultadoBaseState, IPaginationBaseState {}
 
 export class PadItemResultado extends React.Component<IPadItemResultadoProps, IPadItemResultadoState> {
@@ -58,27 +50,9 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadItemResultadoState(this.props.location)
+      ...getPadItemResultadoState(this.props.location)
     };
   }
-
-  getPadItemResultadoState = (location): IPadItemResultadoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const resultado = url.searchParams.get('resultado') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-    const resultadoAnalisado = url.searchParams.get('resultadoAnalisado') || '';
-    const usuarioId = url.searchParams.get('usuarioId') || '';
-
-    const idPadItem = url.searchParams.get('idPadItem') || '';
-
-    return {
-      resultado,
-      dataFim,
-      resultadoAnalisado,
-      usuarioId,
-      idPadItem
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -201,7 +175,8 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                           <Label id="resultadoLabel" for="pad-item-resultado-resultado">
                             <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
                           </Label>
-                          <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
+
+                          <AvInput type="text" name="resultado" id="pad-item-resultado-resultado" value={this.state.resultado} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -332,26 +307,7 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padItemResultado.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemResultado.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemResultado.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

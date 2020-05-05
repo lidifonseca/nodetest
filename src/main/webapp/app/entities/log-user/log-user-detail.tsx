@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './log-user.reducer';
+import { getEntity, ILogUserBaseState, getLogUserState } from './log-user.reducer';
 import { ILogUser } from 'app/shared/model/log-user.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ILogUserState {
+  fieldsBase: ILogUserBaseState;
+}
+
 export interface ILogUserDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class LogUserDetail extends React.Component<ILogUserDetailProps> {
+export class LogUserDetail extends React.Component<ILogUserDetailProps, ILogUserState> {
   constructor(props: Readonly<ILogUserDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getLogUserState(this.props.location)
     };
   }
 

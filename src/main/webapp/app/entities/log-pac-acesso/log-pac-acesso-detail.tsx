@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './log-pac-acesso.reducer';
+import { getEntity, ILogPacAcessoBaseState, getLogPacAcessoState } from './log-pac-acesso.reducer';
 import { ILogPacAcesso } from 'app/shared/model/log-pac-acesso.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ILogPacAcessoState {
+  fieldsBase: ILogPacAcessoBaseState;
+}
+
 export interface ILogPacAcessoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class LogPacAcessoDetail extends React.Component<ILogPacAcessoDetailProps> {
+export class LogPacAcessoDetail extends React.Component<ILogPacAcessoDetailProps, ILogPacAcessoState> {
   constructor(props: Readonly<ILogPacAcessoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getLogPacAcessoState(this.props.location)
     };
   }
 

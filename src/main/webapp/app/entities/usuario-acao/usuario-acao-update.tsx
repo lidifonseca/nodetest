@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -12,7 +12,7 @@ import { ITela } from 'app/shared/model/tela.model';
 import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
 import { IAcao } from 'app/shared/model/acao.model';
 import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './usuario-acao.reducer';
+import { getEntity, getUsuarioAcaoState, IUsuarioAcaoBaseState, updateEntity, createEntity, reset } from './usuario-acao.reducer';
 import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -20,6 +20,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IUsuarioAcaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface IUsuarioAcaoUpdateState {
+  fieldsBase: IUsuarioAcaoBaseState;
   isNew: boolean;
   idTelaId: string;
   idAcaoId: string;
@@ -29,6 +30,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
   constructor(props: Readonly<IUsuarioAcaoUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getUsuarioAcaoState(this.props.location),
       idTelaId: '0',
       idAcaoId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -50,14 +52,6 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
     this.props.getTelas();
     this.props.getAcaos();
   }
-
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
-  };
-
-  clearBlob = name => () => {
-    this.props.setBlob(name, undefined, undefined);
-  };
 
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
@@ -82,8 +76,6 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
   render() {
     const { usuarioAcaoEntity, telas, acaos, loading, updating } = this.props;
     const { isNew } = this.state;
-
-    const { descricao } = usuarioAcaoEntity;
 
     return (
       <div>
@@ -134,7 +126,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -150,103 +142,123 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.idUsuario ? (
+                          <Col md="idUsuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idUsuarioLabel" for="usuario-acao-idUsuario">
+                                    <Translate contentKey="generadorApp.usuarioAcao.idUsuario">Id Usuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-acao-idUsuario" type="text" name="idUsuario" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="usuario-acao-idUsuario">
-                                <Translate contentKey="generadorApp.usuarioAcao.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="usuario-acao-idUsuario" type="text" name="idUsuario" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.idAtendimento ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="usuario-acao-idAtendimento">
+                                    <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-acao-idAtendimento" type="string" className="form-control" name="idAtendimento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase.idAtendimento} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idAtendimentoLabel" for="usuario-acao-idAtendimento">
-                                <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="usuario-acao-idAtendimento" type="string" className="form-control" name="idAtendimento" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="descricaoLabel" for="usuario-acao-descricao">
-                                <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="usuario-acao-idTela">
-                                <Translate contentKey="generadorApp.usuarioAcao.idTela">Id Tela</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="usuario-acao-idTela" type="select" className="form-control" name="idTela">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.usuarioAcao.idTela.empty')}
-                                </option>
-                                {telas
-                                  ? telas.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="usuario-acao-idAcao">
-                                <Translate contentKey="generadorApp.usuarioAcao.idAcao">Id Acao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="usuario-acao-idAcao" type="select" className="form-control" name="idAcao">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.usuarioAcao.idAcao.empty')}
-                                </option>
-                                {acaos
-                                  ? acaos.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.descricao ? (
+                          <Col md="descricao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descricaoLabel" for="usuario-acao-descricao">
+                                    <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-acao-descricao" type="text" name="descricao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase.descricao} />
+                        )}
+                        {!this.state.fieldsBase.idTela ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="usuario-acao-idTela">
+                                    <Translate contentKey="generadorApp.usuarioAcao.idTela">Id Tela</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="usuario-acao-idTela" type="select" className="form-control" name="idTela">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.usuarioAcao.idTela.empty')}
+                                    </option>
+                                    {telas
+                                      ? telas.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.id}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idTela" value={this.state.fieldsBase.idTela} />
+                        )}
+                        {!this.state.fieldsBase.idAcao ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="usuario-acao-idAcao">
+                                    <Translate contentKey="generadorApp.usuarioAcao.idAcao">Id Acao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="usuario-acao-idAcao" type="select" className="form-control" name="idAcao">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.usuarioAcao.idAcao.empty')}
+                                    </option>
+                                    {acaos
+                                      ? acaos.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.id}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAcao" value={this.state.fieldsBase.idAcao} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -272,7 +284,6 @@ const mapDispatchToProps = {
   getAcaos,
   getEntity,
   updateEntity,
-  setBlob,
   createEntity,
   reset
 };

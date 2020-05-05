@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IUsuarioAcao, defaultValue } from 'app/shared/model/usuario-acao.model';
 
 export const ACTION_TYPES = {
+  FETCH_USUARIOACAO_LIST_EXPORT: 'usuarioAcao/FETCH_USUARIOACAO_LIST_EXPORT',
   FETCH_USUARIOACAO_LIST: 'usuarioAcao/FETCH_USUARIOACAO_LIST',
   FETCH_USUARIOACAO: 'usuarioAcao/FETCH_USUARIOACAO',
   CREATE_USUARIOACAO: 'usuarioAcao/CREATE_USUARIOACAO',
   UPDATE_USUARIOACAO: 'usuarioAcao/UPDATE_USUARIOACAO',
   DELETE_USUARIOACAO: 'usuarioAcao/DELETE_USUARIOACAO',
-  SET_BLOB: 'usuarioAcao/SET_BLOB',
   RESET: 'usuarioAcao/RESET'
 };
 
@@ -31,10 +31,19 @@ const initialState = {
 
 export type UsuarioAcaoState = Readonly<typeof initialState>;
 
+export interface IUsuarioAcaoBaseState {
+  idUsuario: any;
+  idAtendimento: any;
+  descricao: any;
+  idTela: any;
+  idAcao: any;
+}
+
 // Reducer
 
 export default (state: UsuarioAcaoState = initialState, action): UsuarioAcaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_USUARIOACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_USUARIOACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_USUARIOACAO):
       return {
@@ -52,6 +61,7 @@ export default (state: UsuarioAcaoState = initialState, action): UsuarioAcaoStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_USUARIOACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_USUARIOACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_USUARIOACAO):
     case FAILURE(ACTION_TYPES.CREATE_USUARIOACAO):
@@ -92,17 +102,6 @@ export default (state: UsuarioAcaoState = initialState, action): UsuarioAcaoStat
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -160,6 +159,31 @@ export const getEntity: ICrudGetAction<IUsuarioAcao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (
+  idUsuario,
+  idAtendimento,
+  descricao,
+  idTela,
+  idAcao,
+  page,
+  size,
+  sort
+) => {
+  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+  const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
+  const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
+  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_USUARIOACAO_LIST,
+    payload: axios.get<IUsuarioAcao>(
+      `${requestUrl}${idUsuarioRequest}${idAtendimentoRequest}${descricaoRequest}${idTelaRequest}${idAcaoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IUsuarioAcao> = entity => async dispatch => {
   entity = {
     ...entity,
@@ -194,15 +218,24 @@ export const deleteEntity: ICrudDeleteAction<IUsuarioAcao> = id => async dispatc
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getUsuarioAcaoState = (location): IUsuarioAcaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idUsuario = url.searchParams.get('idUsuario') || '';
+  const idAtendimento = url.searchParams.get('idAtendimento') || '';
+  const descricao = url.searchParams.get('descricao') || '';
+
+  const idTela = url.searchParams.get('idTela') || '';
+  const idAcao = url.searchParams.get('idAcao') || '';
+
+  return {
+    idUsuario,
+    idAtendimento,
+    descricao,
+    idTela,
+    idAcao
+  };
+};

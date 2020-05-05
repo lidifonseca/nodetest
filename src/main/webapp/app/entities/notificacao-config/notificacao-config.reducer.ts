@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { INotificacaoConfig, defaultValue } from 'app/shared/model/notificacao-config.model';
 
 export const ACTION_TYPES = {
+  FETCH_NOTIFICACAOCONFIG_LIST_EXPORT: 'notificacaoConfig/FETCH_NOTIFICACAOCONFIG_LIST_EXPORT',
   FETCH_NOTIFICACAOCONFIG_LIST: 'notificacaoConfig/FETCH_NOTIFICACAOCONFIG_LIST',
   FETCH_NOTIFICACAOCONFIG: 'notificacaoConfig/FETCH_NOTIFICACAOCONFIG',
   CREATE_NOTIFICACAOCONFIG: 'notificacaoConfig/CREATE_NOTIFICACAOCONFIG',
   UPDATE_NOTIFICACAOCONFIG: 'notificacaoConfig/UPDATE_NOTIFICACAOCONFIG',
   DELETE_NOTIFICACAOCONFIG: 'notificacaoConfig/DELETE_NOTIFICACAOCONFIG',
-  SET_BLOB: 'notificacaoConfig/SET_BLOB',
   RESET: 'notificacaoConfig/RESET'
 };
 
@@ -31,10 +31,22 @@ const initialState = {
 
 export type NotificacaoConfigState = Readonly<typeof initialState>;
 
+export interface INotificacaoConfigBaseState {
+  criadoEm: any;
+  titulo: any;
+  referencia: any;
+  descricao: any;
+  ativo: any;
+  envioObrigatorio: any;
+  serveProfissional: any;
+  servePaciente: any;
+}
+
 // Reducer
 
 export default (state: NotificacaoConfigState = initialState, action): NotificacaoConfigState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_NOTIFICACAOCONFIG_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_NOTIFICACAOCONFIG_LIST):
     case REQUEST(ACTION_TYPES.FETCH_NOTIFICACAOCONFIG):
       return {
@@ -52,6 +64,7 @@ export default (state: NotificacaoConfigState = initialState, action): Notificac
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_NOTIFICACAOCONFIG_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_NOTIFICACAOCONFIG_LIST):
     case FAILURE(ACTION_TYPES.FETCH_NOTIFICACAOCONFIG):
     case FAILURE(ACTION_TYPES.CREATE_NOTIFICACAOCONFIG):
@@ -92,17 +105,6 @@ export default (state: NotificacaoConfigState = initialState, action): Notificac
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -169,6 +171,37 @@ export const getEntity: ICrudGetAction<INotificacaoConfig> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionNotificacaoConfig<INotificacaoConfig> = (
+  criadoEm,
+  titulo,
+  referencia,
+  descricao,
+  ativo,
+  envioObrigatorio,
+  serveProfissional,
+  servePaciente,
+  page,
+  size,
+  sort
+) => {
+  const criadoEmRequest = criadoEm ? `criadoEm.contains=${criadoEm}&` : '';
+  const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+  const referenciaRequest = referencia ? `referencia.contains=${referencia}&` : '';
+  const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const envioObrigatorioRequest = envioObrigatorio ? `envioObrigatorio.contains=${envioObrigatorio}&` : '';
+  const serveProfissionalRequest = serveProfissional ? `serveProfissional.contains=${serveProfissional}&` : '';
+  const servePacienteRequest = servePaciente ? `servePaciente.contains=${servePaciente}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_NOTIFICACAOCONFIG_LIST,
+    payload: axios.get<INotificacaoConfig>(
+      `${requestUrl}${criadoEmRequest}${tituloRequest}${referenciaRequest}${descricaoRequest}${ativoRequest}${envioObrigatorioRequest}${serveProfissionalRequest}${servePacienteRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<INotificacaoConfig> = entity => async dispatch => {
   entity = {
     ...entity
@@ -201,15 +234,29 @@ export const deleteEntity: ICrudDeleteAction<INotificacaoConfig> = id => async d
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getNotificacaoConfigState = (location): INotificacaoConfigBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const criadoEm = url.searchParams.get('criadoEm') || '';
+  const titulo = url.searchParams.get('titulo') || '';
+  const referencia = url.searchParams.get('referencia') || '';
+  const descricao = url.searchParams.get('descricao') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const envioObrigatorio = url.searchParams.get('envioObrigatorio') || '';
+  const serveProfissional = url.searchParams.get('serveProfissional') || '';
+  const servePaciente = url.searchParams.get('servePaciente') || '';
+
+  return {
+    criadoEm,
+    titulo,
+    referencia,
+    descricao,
+    ativo,
+    envioObrigatorio,
+    serveProfissional,
+    servePaciente
+  };
+};

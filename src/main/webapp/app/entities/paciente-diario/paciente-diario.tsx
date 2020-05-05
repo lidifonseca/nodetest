@@ -16,22 +16,13 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-diario.reducer';
+import { getPacienteDiarioState, IPacienteDiarioBaseState, getEntities } from './paciente-diario.reducer';
 import { IPacienteDiario } from 'app/shared/model/paciente-diario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -43,13 +34,6 @@ import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer
 
 export interface IPacienteDiarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteDiarioBaseState {
-  idOperadora: any;
-  historico: any;
-  ativo: any;
-  idPaciente: any;
-  idUsuario: any;
-}
 export interface IPacienteDiarioState extends IPacienteDiarioBaseState, IPaginationBaseState {}
 
 export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacienteDiarioState> {
@@ -59,27 +43,9 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteDiarioState(this.props.location)
+      ...getPacienteDiarioState(this.props.location)
     };
   }
-
-  getPacienteDiarioState = (location): IPacienteDiarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idOperadora = url.searchParams.get('idOperadora') || '';
-    const historico = url.searchParams.get('historico') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idOperadora,
-      historico,
-      ativo,
-      idPaciente,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -211,7 +177,8 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                           <Label id="historicoLabel" for="paciente-diario-historico">
                             <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
                           </Label>
-                          <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
+
+                          <AvInput type="text" name="historico" id="paciente-diario-historico" value={this.state.historico} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -344,26 +311,7 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteDiario.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDiario.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDiario.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

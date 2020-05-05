@@ -3,15 +3,15 @@
     "especialidade": {
       "home": {
         "title": "Especialidades",
-        "createLabel": "Criar novo Especialidade",
-        "createOrEditLabel": "Criar ou editar Especialidade",
-        "notFound": "Nenhum Especialidade encontrado"
+        "createLabel": "Create a new Especialidade",
+        "createOrEditLabel": "Create or edit a Especialidade",
+        "notFound": "No Especialidades found"
       },
-      "created": "Um novo Especialidade foi criado com o identificador {{ param }}",
-      "updated": "Um Especialidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Especialidade foi excluído com o identificador {{ param }}",
+      "created": "A new Especialidade is created with identifier {{ param }}",
+      "updated": "A Especialidade is updated with identifier {{ param }}",
+      "deleted": "A Especialidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Especialidade {{ id }}?"
+        "question": "Are you sure you want to delete Especialidade {{ id }}?"
       },
       "detail": {
         "title": "Especialidade"

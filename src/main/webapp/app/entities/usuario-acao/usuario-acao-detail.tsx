@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './usuario-acao.reducer';
+import { getEntity, IUsuarioAcaoBaseState, getUsuarioAcaoState } from './usuario-acao.reducer';
 import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUsuarioAcaoState {
+  fieldsBase: IUsuarioAcaoBaseState;
+}
+
 export interface IUsuarioAcaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UsuarioAcaoDetail extends React.Component<IUsuarioAcaoDetailProps> {
+export class UsuarioAcaoDetail extends React.Component<IUsuarioAcaoDetailProps, IUsuarioAcaoState> {
   constructor(props: Readonly<IUsuarioAcaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUsuarioAcaoState(this.props.location)
     };
   }
 

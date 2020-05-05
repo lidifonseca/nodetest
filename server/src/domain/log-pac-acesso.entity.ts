@@ -21,8 +21,8 @@ export default class LogPacAcesso extends BaseEntity {
   @Column({ name: 'ip_local', length: 25 })
   ipLocal: string;
 
-  @Column({ type: 'blob', name: 'infor_acesso' })
-  inforAcesso: any;
+  @Column({ name: 'infor_acesso', length: 65535 })
+  inforAcesso: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

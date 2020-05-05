@@ -21,8 +21,8 @@ export default class NotificacaoConfig extends BaseEntity {
   @Column({ name: 'referencia', length: 50, nullable: false })
   referencia: string;
 
-  @Column({ type: 'blob', name: 'descricao' })
-  descricao: any;
+  @Column({ name: 'descricao', length: 65535 })
+  descricao: string;
 
   /**
    * 0 = Inativo / 1 = Ativo

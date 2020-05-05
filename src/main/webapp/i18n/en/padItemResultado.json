@@ -3,15 +3,15 @@
     "padItemResultado": {
       "home": {
         "title": "Pad Item Resultados",
-        "createLabel": "Criar novo Pad Item Resultado",
-        "createOrEditLabel": "Criar ou editar Pad Item Resultado",
-        "notFound": "Nenhum Pad Item Resultado encontrado"
+        "createLabel": "Create a new Pad Item Resultado",
+        "createOrEditLabel": "Create or edit a Pad Item Resultado",
+        "notFound": "No Pad Item Resultados found"
       },
-      "created": "Um novo Pad Item Resultado foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Resultado foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Resultado foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Resultado is created with identifier {{ param }}",
+      "updated": "A Pad Item Resultado is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Resultado is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Resultado {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Resultado {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Resultado"

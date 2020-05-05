@@ -3,15 +3,15 @@
     "pacienteProntuario": {
       "home": {
         "title": "Paciente Prontuarios",
-        "createLabel": "Criar novo Paciente Prontuario",
-        "createOrEditLabel": "Criar ou editar Paciente Prontuario",
-        "notFound": "Nenhum Paciente Prontuario encontrado"
+        "createLabel": "Create a new Paciente Prontuario",
+        "createOrEditLabel": "Create or edit a Paciente Prontuario",
+        "notFound": "No Paciente Prontuarios found"
       },
-      "created": "Um novo Paciente Prontuario foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Prontuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Prontuario foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Prontuario is created with identifier {{ param }}",
+      "updated": "A Paciente Prontuario is updated with identifier {{ param }}",
+      "deleted": "A Paciente Prontuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Prontuario {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Prontuario {{ id }}?"
       },
       "detail": {
         "title": "Paciente Prontuario"

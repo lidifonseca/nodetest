@@ -3,15 +3,15 @@
     "prontuarioMotivoManifestacao": {
       "home": {
         "title": "Prontuario Motivo Manifestacaos",
-        "createLabel": "Criar novo Prontuario Motivo Manifestacao",
-        "createOrEditLabel": "Criar ou editar Prontuario Motivo Manifestacao",
-        "notFound": "Nenhum Prontuario Motivo Manifestacao encontrado"
+        "createLabel": "Create a new Prontuario Motivo Manifestacao",
+        "createOrEditLabel": "Create or edit a Prontuario Motivo Manifestacao",
+        "notFound": "No Prontuario Motivo Manifestacaos found"
       },
-      "created": "Um novo Prontuario Motivo Manifestacao foi criado com o identificador {{ param }}",
-      "updated": "Um Prontuario Motivo Manifestacao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Prontuario Motivo Manifestacao foi excluído com o identificador {{ param }}",
+      "created": "A new Prontuario Motivo Manifestacao is created with identifier {{ param }}",
+      "updated": "A Prontuario Motivo Manifestacao is updated with identifier {{ param }}",
+      "deleted": "A Prontuario Motivo Manifestacao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Prontuario Motivo Manifestacao {{ id }}?"
+        "question": "Are you sure you want to delete Prontuario Motivo Manifestacao {{ id }}?"
       },
       "detail": {
         "title": "Prontuario Motivo Manifestacao"

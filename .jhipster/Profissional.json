@@ -215,8 +215,11 @@
         },
         {
             "fieldName": "obs",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
         },
         {
             "fieldName": "chavePrivada",

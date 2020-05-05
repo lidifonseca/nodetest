@@ -16,22 +16,13 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './log-user.reducer';
+import { getLogUserState, ILogUserBaseState, getEntities } from './log-user.reducer';
 import { ILogUser } from 'app/shared/model/log-user.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -43,12 +34,6 @@ import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
 
 export interface ILogUserProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ILogUserBaseState {
-  idUsuario: any;
-  descricao: any;
-  idAcao: any;
-  idTela: any;
-}
 export interface ILogUserState extends ILogUserBaseState, IPaginationBaseState {}
 
 export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
@@ -58,25 +43,9 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getLogUserState(this.props.location)
+      ...getLogUserState(this.props.location)
     };
   }
-
-  getLogUserState = (location): ILogUserBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const descricao = url.searchParams.get('descricao') || '';
-
-    const idAcao = url.searchParams.get('idAcao') || '';
-    const idTela = url.searchParams.get('idTela') || '';
-
-    return {
-      idUsuario,
-      descricao,
-      idAcao,
-      idTela
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -205,7 +174,8 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                           <Label id="descricaoLabel" for="log-user-descricao">
                             <Translate contentKey="generadorApp.logUser.descricao">Descricao</Translate>
                           </Label>
-                          <AvInput id="log-user-descricao" type="textarea" name="descricao" />
+
+                          <AvInput type="text" name="descricao" id="log-user-descricao" value={this.state.descricao} />
                         </Row>
                       </Col>
 
@@ -312,26 +282,7 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                         <td>{logUser.idTela ? <Link to={`tela/${logUser.idTela.id}`}>{logUser.idTela.id}</Link> : ''}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${logUser.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${logUser.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${logUser.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

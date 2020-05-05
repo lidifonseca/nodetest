@@ -3,15 +3,15 @@
     "termosUso": {
       "home": {
         "title": "Termos Usos",
-        "createLabel": "Criar novo Termos Uso",
-        "createOrEditLabel": "Criar ou editar Termos Uso",
-        "notFound": "Nenhum Termos Uso encontrado"
+        "createLabel": "Create a new Termos Uso",
+        "createOrEditLabel": "Create or edit a Termos Uso",
+        "notFound": "No Termos Usos found"
       },
-      "created": "Um novo Termos Uso foi criado com o identificador {{ param }}",
-      "updated": "Um Termos Uso foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Termos Uso foi excluído com o identificador {{ param }}",
+      "created": "A new Termos Uso is created with identifier {{ param }}",
+      "updated": "A Termos Uso is updated with identifier {{ param }}",
+      "deleted": "A Termos Uso is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Termos Uso {{ id }}?"
+        "question": "Are you sure you want to delete Termos Uso {{ id }}?"
       },
       "detail": {
         "title": "Termos Uso"

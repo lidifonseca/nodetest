@@ -4,6 +4,7 @@
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import { CSVDownload } from 'react-csv';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
@@ -23,7 +24,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,

@@ -4,11 +4,11 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './log-pac-acesso.reducer';
+import { getEntity, getLogPacAcessoState, ILogPacAcessoBaseState, updateEntity, createEntity, reset } from './log-pac-acesso.reducer';
 import { ILogPacAcesso } from 'app/shared/model/log-pac-acesso.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -16,6 +16,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ILogPacAcessoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface ILogPacAcessoUpdateState {
+  fieldsBase: ILogPacAcessoBaseState;
   isNew: boolean;
 }
 
@@ -23,6 +24,7 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
   constructor(props: Readonly<ILogPacAcessoUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getLogPacAcessoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -39,14 +41,6 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
       this.props.getEntity(this.props.match.params.id);
     }
   }
-
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
-  };
-
-  clearBlob = name => () => {
-    this.props.setBlob(name, undefined, undefined);
-  };
 
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
@@ -71,8 +65,6 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
   render() {
     const { logPacAcessoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
-
-    const { inforAcesso } = logPacAcessoEntity;
 
     return (
       <div>
@@ -121,7 +113,7 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -137,112 +129,103 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.idPaciente ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="log-pac-acesso-idPaciente">
+                                    <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-idPaciente" type="string" className="form-control" name="idPaciente" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase.idPaciente} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="log-pac-acesso-idPaciente">
-                                <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="log-pac-acesso-idPaciente"
-                                type="string"
-                                className="form-control"
-                                name="idPaciente"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.profissional ? (
+                          <Col md="profissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="profissionalLabel" for="log-pac-acesso-profissional">
+                                    <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-profissional" type="text" name="profissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="profissional" value={this.state.fieldsBase.profissional} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="profissionalLabel" for="log-pac-acesso-profissional">
-                                <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="log-pac-acesso-profissional"
-                                type="text"
-                                name="profissional"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.token ? (
+                          <Col md="token">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tokenLabel" for="log-pac-acesso-token">
+                                    <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-token" type="text" name="token" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="token" value={this.state.fieldsBase.token} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tokenLabel" for="log-pac-acesso-token">
-                                <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="log-pac-acesso-token"
-                                type="text"
-                                name="token"
-                                validate={{
-                                  maxLength: { value: 200, errorMessage: translate('entity.validation.maxlength', { max: 200 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.ipLocal ? (
+                          <Col md="ipLocal">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ipLocalLabel" for="log-pac-acesso-ipLocal">
+                                    <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-ipLocal" type="text" name="ipLocal" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ipLocal" value={this.state.fieldsBase.ipLocal} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ipLocalLabel" for="log-pac-acesso-ipLocal">
-                                <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="log-pac-acesso-ipLocal"
-                                type="text"
-                                name="ipLocal"
-                                validate={{
-                                  maxLength: { value: 25, errorMessage: translate('entity.validation.maxlength', { max: 25 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
-                                <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.inforAcesso ? (
+                          <Col md="inforAcesso">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
+                                    <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-inforAcesso" type="text" name="inforAcesso" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="inforAcesso" value={this.state.fieldsBase.inforAcesso} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -264,7 +247,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
-  setBlob,
   createEntity,
   reset
 };

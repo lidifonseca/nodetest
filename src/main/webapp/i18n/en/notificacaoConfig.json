@@ -3,15 +3,15 @@
     "notificacaoConfig": {
       "home": {
         "title": "Notificacao Configs",
-        "createLabel": "Criar novo Notificacao Config",
-        "createOrEditLabel": "Criar ou editar Notificacao Config",
-        "notFound": "Nenhum Notificacao Config encontrado"
+        "createLabel": "Create a new Notificacao Config",
+        "createOrEditLabel": "Create or edit a Notificacao Config",
+        "notFound": "No Notificacao Configs found"
       },
-      "created": "Um novo Notificacao Config foi criado com o identificador {{ param }}",
-      "updated": "Um Notificacao Config foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Notificacao Config foi excluído com o identificador {{ param }}",
+      "created": "A new Notificacao Config is created with identifier {{ param }}",
+      "updated": "A Notificacao Config is updated with identifier {{ param }}",
+      "deleted": "A Notificacao Config is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Notificacao Config {{ id }}?"
+        "question": "Are you sure you want to delete Notificacao Config {{ id }}?"
       },
       "detail": {
         "title": "Notificacao Config"

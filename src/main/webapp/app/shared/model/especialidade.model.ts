@@ -13,7 +13,7 @@ export interface IEspecialidade {
   id?: string;
   icon?: string;
   especialidade?: string;
-  descricao?: any;
+  descricao?: string;
   duracao?: number;
   importante?: string;
   ativo?: number;

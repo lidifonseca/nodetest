@@ -26,8 +26,8 @@ export default class Especialidade extends BaseEntity {
   @Column({ name: 'especialidade', length: 150 })
   especialidade: string;
 
-  @Column({ type: 'blob', name: 'descricao' })
-  descricao: any;
+  @Column({ name: 'descricao', length: 65535 })
+  descricao: string;
 
   @Column({ type: 'integer', name: 'duracao' })
   duracao: number;

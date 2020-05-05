@@ -2,25 +2,21 @@
 
 
 
-
-
-entity pad_item_meta                   DATA_LIMITE timestamp;
-entity pad_item_meta                   UNIDADE_MEDIDA_ID int(11);
-pad_item_resultado              USUARIO_ID int(11);
-pad_item_meta                   ATENDIMENTO_ID int(11);
-pad_item                        CATEGORIA_ID int(11);
-licao_casa                      HORA_INICIO timestamp;
-
-
-
-
 /* UNIDADES */
 
-INSERT INTO nodetest_novo.unidade_easy 
-(id, createdBy, createdDate, lastModifiedBy, lastModifiedDate, razao_social, nome_fantasia, cnpj, ie, telefone_1, telefone_2, endereco, numero, complemento, bairro, cidade, uf, cep, regans, regcnes, tissresponsavel, tissconselho, tissinscricao, tisscbo, tisscoduf, ativo)
+INSERT INTO nodetest_novo.status_atual 
+(id,createdBy,createdDate,lastModifiedBy,lastModifiedDate,status_atual,style_label)
 SELECT id, '1' as createdBy, data_post as createdDate, '1' as lastModifiedBy, data_post as lastModifiedDate,
-razao_social, nome_fantasia, cnpj, ie, telefone1 as telefone_1, telefone2 as telefone_2, endereco, numero, complemento, bairro, cidade, uf, cep, regans, regcnes, tissresponsavel, tissconselho, tissinscricao, tisscbo, tisscoduf, ativo
-FROM concierge_db.unidade_easy;
+status_atual,style_label
+FROM concierge_db.status_atual;
+
+
+INSERT INTO nodetest_novo.paciente_status_atual 
+(id,createdBy,createdDate,lastModifiedBy,lastModifiedDate,
+data_status,ativo,id_usuario,observacao,pacienteId,statusId)
+SELECT id, '1' as createdBy, data_post as createdDate, '1' as lastModifiedBy, data_post as lastModifiedDate,
+data_status,ativo,id_usuario,observacao,ID_PACIENTE,ID_STATUS_ATUAL
+FROM concierge_db.paciente_status_atual;
 
 
 

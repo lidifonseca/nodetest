@@ -4,7 +4,7 @@ export interface IPadItemIndicadores {
   id?: string;
   idUnidadeMedida?: number;
   titulo?: string;
-  descricao?: any;
+  descricao?: string;
   meta?: number;
   maximoSt?: number;
   minimoSt?: number;

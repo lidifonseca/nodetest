@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ILogUser, defaultValue } from 'app/shared/model/log-user.model';
 
 export const ACTION_TYPES = {
+  FETCH_LOGUSER_LIST_EXPORT: 'logUser/FETCH_LOGUSER_LIST_EXPORT',
   FETCH_LOGUSER_LIST: 'logUser/FETCH_LOGUSER_LIST',
   FETCH_LOGUSER: 'logUser/FETCH_LOGUSER',
   CREATE_LOGUSER: 'logUser/CREATE_LOGUSER',
   UPDATE_LOGUSER: 'logUser/UPDATE_LOGUSER',
   DELETE_LOGUSER: 'logUser/DELETE_LOGUSER',
-  SET_BLOB: 'logUser/SET_BLOB',
   RESET: 'logUser/RESET'
 };
 
@@ -31,10 +31,18 @@ const initialState = {
 
 export type LogUserState = Readonly<typeof initialState>;
 
+export interface ILogUserBaseState {
+  idUsuario: any;
+  descricao: any;
+  idAcao: any;
+  idTela: any;
+}
+
 // Reducer
 
 export default (state: LogUserState = initialState, action): LogUserState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_LOGUSER_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_LOGUSER_LIST):
     case REQUEST(ACTION_TYPES.FETCH_LOGUSER):
       return {
@@ -52,6 +60,7 @@ export default (state: LogUserState = initialState, action): LogUserState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_LOGUSER_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_LOGUSER_LIST):
     case FAILURE(ACTION_TYPES.FETCH_LOGUSER):
     case FAILURE(ACTION_TYPES.CREATE_LOGUSER):
@@ -92,17 +101,6 @@ export default (state: LogUserState = initialState, action): LogUserState => {
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -149,6 +147,21 @@ export const getEntity: ICrudGetAction<ILogUser> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionLogUser<ILogUser> = (idUsuario, descricao, idAcao, idTela, page, size, sort) => {
+  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+  const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
+  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
+  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_LOGUSER_LIST,
+    payload: axios.get<ILogUser>(
+      `${requestUrl}${idUsuarioRequest}${descricaoRequest}${idAcaoRequest}${idTelaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ILogUser> = entity => async dispatch => {
   entity = {
     ...entity,
@@ -183,15 +196,22 @@ export const deleteEntity: ICrudDeleteAction<ILogUser> = id => async dispatch =>
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getLogUserState = (location): ILogUserBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idUsuario = url.searchParams.get('idUsuario') || '';
+  const descricao = url.searchParams.get('descricao') || '';
+
+  const idAcao = url.searchParams.get('idAcao') || '';
+  const idTela = url.searchParams.get('idTela') || '';
+
+  return {
+    idUsuario,
+    descricao,
+    idAcao,
+    idTela
+  };
+};

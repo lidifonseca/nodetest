@@ -16,22 +16,13 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './usuario-acao.reducer';
+import { getUsuarioAcaoState, IUsuarioAcaoBaseState, getEntities } from './usuario-acao.reducer';
 import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -43,13 +34,6 @@ import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
 
 export interface IUsuarioAcaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IUsuarioAcaoBaseState {
-  idUsuario: any;
-  idAtendimento: any;
-  descricao: any;
-  idTela: any;
-  idAcao: any;
-}
 export interface IUsuarioAcaoState extends IUsuarioAcaoBaseState, IPaginationBaseState {}
 
 export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcaoState> {
@@ -59,27 +43,9 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getUsuarioAcaoState(this.props.location)
+      ...getUsuarioAcaoState(this.props.location)
     };
   }
-
-  getUsuarioAcaoState = (location): IUsuarioAcaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const idAtendimento = url.searchParams.get('idAtendimento') || '';
-    const descricao = url.searchParams.get('descricao') || '';
-
-    const idTela = url.searchParams.get('idTela') || '';
-    const idAcao = url.searchParams.get('idAcao') || '';
-
-    return {
-      idUsuario,
-      idAtendimento,
-      descricao,
-      idTela,
-      idAcao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -220,7 +186,8 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                           <Label id="descricaoLabel" for="usuario-acao-descricao">
                             <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
                           </Label>
-                          <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
+
+                          <AvInput type="text" name="descricao" id="usuario-acao-descricao" value={this.state.descricao} />
                         </Row>
                       </Col>
 
@@ -333,26 +300,7 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                         <td>{usuarioAcao.idAcao ? <Link to={`acao/${usuarioAcao.idAcao.id}`}>{usuarioAcao.idAcao.id}</Link> : ''}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${usuarioAcao.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${usuarioAcao.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${usuarioAcao.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

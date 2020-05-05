@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-prontuario.reducer';
+import { getEntity, IPacienteProntuarioBaseState, getPacienteProntuarioState } from './paciente-prontuario.reducer';
 import { IPacienteProntuario } from 'app/shared/model/paciente-prontuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteProntuarioState {
+  fieldsBase: IPacienteProntuarioBaseState;
+}
+
 export interface IPacienteProntuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteProntuarioDetail extends React.Component<IPacienteProntuarioDetailProps> {
+export class PacienteProntuarioDetail extends React.Component<IPacienteProntuarioDetailProps, IPacienteProntuarioState> {
   constructor(props: Readonly<IPacienteProntuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteProntuarioState(this.props.location)
     };
   }
 

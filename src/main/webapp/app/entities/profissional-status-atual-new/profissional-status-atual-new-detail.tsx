@@ -3,21 +3,33 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-status-atual-new.reducer';
+import {
+  getEntity,
+  IProfissionalStatusAtualNewBaseState,
+  getProfissionalStatusAtualNewState
+} from './profissional-status-atual-new.reducer';
 import { IProfissionalStatusAtualNew } from 'app/shared/model/profissional-status-atual-new.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalStatusAtualNewState {
+  fieldsBase: IProfissionalStatusAtualNewBaseState;
+}
+
 export interface IProfissionalStatusAtualNewDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalStatusAtualNewDetail extends React.Component<IProfissionalStatusAtualNewDetailProps> {
+export class ProfissionalStatusAtualNewDetail extends React.Component<
+  IProfissionalStatusAtualNewDetailProps,
+  IProfissionalStatusAtualNewState
+> {
   constructor(props: Readonly<IProfissionalStatusAtualNewDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalStatusAtualNewState(this.props.location)
     };
   }
 

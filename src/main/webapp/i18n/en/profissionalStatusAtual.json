@@ -3,15 +3,15 @@
     "profissionalStatusAtual": {
       "home": {
         "title": "Profissional Status Atuals",
-        "createLabel": "Criar novo Profissional Status Atual",
-        "createOrEditLabel": "Criar ou editar Profissional Status Atual",
-        "notFound": "Nenhum Profissional Status Atual encontrado"
+        "createLabel": "Create a new Profissional Status Atual",
+        "createOrEditLabel": "Create or edit a Profissional Status Atual",
+        "notFound": "No Profissional Status Atuals found"
       },
-      "created": "Um novo Profissional Status Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Status Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Status Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Status Atual is created with identifier {{ param }}",
+      "updated": "A Profissional Status Atual is updated with identifier {{ param }}",
+      "deleted": "A Profissional Status Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Status Atual {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Status Atual {{ id }}?"
       },
       "detail": {
         "title": "Profissional Status Atual"

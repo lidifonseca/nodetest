@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-indicadores.reducer';
+import { getEntity, IPadItemIndicadoresBaseState, getPadItemIndicadoresState } from './pad-item-indicadores.reducer';
 import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemIndicadoresState {
+  fieldsBase: IPadItemIndicadoresBaseState;
+}
+
 export interface IPadItemIndicadoresDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemIndicadoresDetail extends React.Component<IPadItemIndicadoresDetailProps> {
+export class PadItemIndicadoresDetail extends React.Component<IPadItemIndicadoresDetailProps, IPadItemIndicadoresState> {
   constructor(props: Readonly<IPadItemIndicadoresDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemIndicadoresState(this.props.location)
     };
   }
 

@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteProntuario, defaultValue } from 'app/shared/model/paciente-prontuario.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEPRONTUARIO_LIST_EXPORT: 'pacienteProntuario/FETCH_PACIENTEPRONTUARIO_LIST_EXPORT',
   FETCH_PACIENTEPRONTUARIO_LIST: 'pacienteProntuario/FETCH_PACIENTEPRONTUARIO_LIST',
   FETCH_PACIENTEPRONTUARIO: 'pacienteProntuario/FETCH_PACIENTEPRONTUARIO',
   CREATE_PACIENTEPRONTUARIO: 'pacienteProntuario/CREATE_PACIENTEPRONTUARIO',
   UPDATE_PACIENTEPRONTUARIO: 'pacienteProntuario/UPDATE_PACIENTEPRONTUARIO',
   DELETE_PACIENTEPRONTUARIO: 'pacienteProntuario/DELETE_PACIENTEPRONTUARIO',
-  SET_BLOB: 'pacienteProntuario/SET_BLOB',
   RESET: 'pacienteProntuario/RESET'
 };
 
@@ -31,10 +31,31 @@ const initialState = {
 
 export type PacienteProntuarioState = Readonly<typeof initialState>;
 
+export interface IPacienteProntuarioBaseState {
+  idPaciente: any;
+  idTipoProntuario: any;
+  oQue: any;
+  resultado: any;
+  ativo: any;
+  idUsuario: any;
+  idEspecialidade: any;
+  dataConsulta: any;
+  idExame: any;
+  idTipoExame: any;
+  dataExame: any;
+  dataInternacao: any;
+  dataAlta: any;
+  dataPs: any;
+  dataOcorrencia: any;
+  idOcorrenciaProntuario: any;
+  dataManifestacao: any;
+}
+
 // Reducer
 
 export default (state: PacienteProntuarioState = initialState, action): PacienteProntuarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEPRONTUARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEPRONTUARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEPRONTUARIO):
       return {
@@ -52,6 +73,7 @@ export default (state: PacienteProntuarioState = initialState, action): Paciente
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEPRONTUARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEPRONTUARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEPRONTUARIO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEPRONTUARIO):
@@ -92,17 +114,6 @@ export default (state: PacienteProntuarioState = initialState, action): Paciente
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -196,6 +207,55 @@ export const getEntity: ICrudGetAction<IPacienteProntuario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteProntuario<IPacienteProntuario> = (
+  idPaciente,
+  idTipoProntuario,
+  oQue,
+  resultado,
+  ativo,
+  idUsuario,
+  idEspecialidade,
+  dataConsulta,
+  idExame,
+  idTipoExame,
+  dataExame,
+  dataInternacao,
+  dataAlta,
+  dataPs,
+  dataOcorrencia,
+  idOcorrenciaProntuario,
+  dataManifestacao,
+  page,
+  size,
+  sort
+) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const idTipoProntuarioRequest = idTipoProntuario ? `idTipoProntuario.contains=${idTipoProntuario}&` : '';
+  const oQueRequest = oQue ? `oQue.contains=${oQue}&` : '';
+  const resultadoRequest = resultado ? `resultado.contains=${resultado}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.contains=${idEspecialidade}&` : '';
+  const dataConsultaRequest = dataConsulta ? `dataConsulta.contains=${dataConsulta}&` : '';
+  const idExameRequest = idExame ? `idExame.contains=${idExame}&` : '';
+  const idTipoExameRequest = idTipoExame ? `idTipoExame.contains=${idTipoExame}&` : '';
+  const dataExameRequest = dataExame ? `dataExame.equals=${dataExame}&` : '';
+  const dataInternacaoRequest = dataInternacao ? `dataInternacao.equals=${dataInternacao}&` : '';
+  const dataAltaRequest = dataAlta ? `dataAlta.equals=${dataAlta}&` : '';
+  const dataPsRequest = dataPs ? `dataPs.equals=${dataPs}&` : '';
+  const dataOcorrenciaRequest = dataOcorrencia ? `dataOcorrencia.equals=${dataOcorrencia}&` : '';
+  const idOcorrenciaProntuarioRequest = idOcorrenciaProntuario ? `idOcorrenciaProntuario.contains=${idOcorrenciaProntuario}&` : '';
+  const dataManifestacaoRequest = dataManifestacao ? `dataManifestacao.equals=${dataManifestacao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEPRONTUARIO_LIST,
+    payload: axios.get<IPacienteProntuario>(
+      `${requestUrl}${idPacienteRequest}${idTipoProntuarioRequest}${oQueRequest}${resultadoRequest}${ativoRequest}${idUsuarioRequest}${idEspecialidadeRequest}${dataConsultaRequest}${idExameRequest}${idTipoExameRequest}${dataExameRequest}${dataInternacaoRequest}${dataAltaRequest}${dataPsRequest}${dataOcorrenciaRequest}${idOcorrenciaProntuarioRequest}${dataManifestacaoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteProntuario> = entity => async dispatch => {
   entity = {
     ...entity
@@ -228,15 +288,47 @@ export const deleteEntity: ICrudDeleteAction<IPacienteProntuario> = id => async 
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteProntuarioState = (location): IPacienteProntuarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idTipoProntuario = url.searchParams.get('idTipoProntuario') || '';
+  const oQue = url.searchParams.get('oQue') || '';
+  const resultado = url.searchParams.get('resultado') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const idUsuario = url.searchParams.get('idUsuario') || '';
+  const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
+  const dataConsulta = url.searchParams.get('dataConsulta') || '';
+  const idExame = url.searchParams.get('idExame') || '';
+  const idTipoExame = url.searchParams.get('idTipoExame') || '';
+  const dataExame = url.searchParams.get('dataExame') || '';
+  const dataInternacao = url.searchParams.get('dataInternacao') || '';
+  const dataAlta = url.searchParams.get('dataAlta') || '';
+  const dataPs = url.searchParams.get('dataPs') || '';
+  const dataOcorrencia = url.searchParams.get('dataOcorrencia') || '';
+  const idOcorrenciaProntuario = url.searchParams.get('idOcorrenciaProntuario') || '';
+  const dataManifestacao = url.searchParams.get('dataManifestacao') || '';
+
+  return {
+    idPaciente,
+    idTipoProntuario,
+    oQue,
+    resultado,
+    ativo,
+    idUsuario,
+    idEspecialidade,
+    dataConsulta,
+    idExame,
+    idTipoExame,
+    dataExame,
+    dataInternacao,
+    dataAlta,
+    dataPs,
+    dataOcorrencia,
+    idOcorrenciaProntuario,
+    dataManifestacao
+  };
+};

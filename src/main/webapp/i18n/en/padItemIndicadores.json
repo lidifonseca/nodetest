@@ -3,15 +3,15 @@
     "padItemIndicadores": {
       "home": {
         "title": "Pad Item Indicadores",
-        "createLabel": "Criar novo Pad Item Indicadores",
-        "createOrEditLabel": "Criar ou editar Pad Item Indicadores",
-        "notFound": "Nenhum Pad Item Indicadores encontrado"
+        "createLabel": "Create a new Pad Item Indicadores",
+        "createOrEditLabel": "Create or edit a Pad Item Indicadores",
+        "notFound": "No Pad Item Indicadores found"
       },
-      "created": "Um novo Pad Item Indicadores foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Indicadores foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Indicadores foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Indicadores is created with identifier {{ param }}",
+      "updated": "A Pad Item Indicadores is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Indicadores is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Indicadores {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Indicadores {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Indicadores"

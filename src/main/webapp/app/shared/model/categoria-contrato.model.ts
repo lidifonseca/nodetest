@@ -2,8 +2,7 @@ import { ICategoria } from 'app/shared/model/categoria.model';
 
 export interface ICategoriaContrato {
   id?: string;
-  contratoContentType?: string;
-  contrato?: any;
+  contrato?: string;
   ativo?: number;
   idCategoria?: string | any;
 }

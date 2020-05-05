@@ -16,32 +16,19 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './termos-uso.reducer';
+import { getTermosUsoState, ITermosUsoBaseState, getEntities } from './termos-uso.reducer';
 import { ITermosUso } from 'app/shared/model/termos-uso.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ITermosUsoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ITermosUsoBaseState {
-  termosUso: any;
-  tipo: any;
-}
 export interface ITermosUsoState extends ITermosUsoBaseState, IPaginationBaseState {}
 
 export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState> {
@@ -51,20 +38,9 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getTermosUsoState(this.props.location)
+      ...getTermosUsoState(this.props.location)
     };
   }
-
-  getTermosUsoState = (location): ITermosUsoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const termosUso = url.searchParams.get('termosUso') || '';
-    const tipo = url.searchParams.get('tipo') || '';
-
-    return {
-      termosUso,
-      tipo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -173,7 +149,8 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                           <Label id="termosUsoLabel" for="termos-uso-termosUso">
                             <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
                           </Label>
-                          <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
+
+                          <AvInput type="text" name="termosUso" id="termos-uso-termosUso" value={this.state.termosUso} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -238,26 +215,7 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                         <td>{termosUso.tipo}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${termosUso.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${termosUso.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${termosUso.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

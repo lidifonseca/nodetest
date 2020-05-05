@@ -3,21 +3,26 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, openFile, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './categoria-contrato.reducer';
+import { getEntity, ICategoriaContratoBaseState, getCategoriaContratoState } from './categoria-contrato.reducer';
 import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICategoriaContratoState {
+  fieldsBase: ICategoriaContratoBaseState;
+}
+
 export interface ICategoriaContratoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CategoriaContratoDetail extends React.Component<ICategoriaContratoDetailProps> {
+export class CategoriaContratoDetail extends React.Component<ICategoriaContratoDetailProps, ICategoriaContratoState> {
   constructor(props: Readonly<ICategoriaContratoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCategoriaContratoState(this.props.location)
     };
   }
 
@@ -61,18 +66,7 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                         </dt>
                       </Col>
                       <Col md="9">
-                        <dd>
-                          {categoriaContratoEntity.contrato ? (
-                            <div>
-                              <a onClick={openFile(categoriaContratoEntity.contratoContentType, categoriaContratoEntity.contrato)}>
-                                <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
-                              </a>
-                              <span>
-                                {categoriaContratoEntity.contratoContentType}, {byteSize(categoriaContratoEntity.contrato)}
-                              </span>
-                            </div>
-                          ) : null}
-                        </dd>
+                        <dd>{categoriaContratoEntity.contrato}</dd>
                       </Col>
                     </Row>
                   </Col>

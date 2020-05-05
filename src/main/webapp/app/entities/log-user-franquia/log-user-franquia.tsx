@@ -16,22 +16,13 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './log-user-franquia.reducer';
+import { getLogUserFranquiaState, ILogUserFranquiaBaseState, getEntities } from './log-user-franquia.reducer';
 import { ILogUserFranquia } from 'app/shared/model/log-user-franquia.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -45,12 +36,6 @@ import { getEntities as getFranquiaUsuarios } from 'app/entities/franquia-usuari
 
 export interface ILogUserFranquiaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ILogUserFranquiaBaseState {
-  descricao: any;
-  idAcao: any;
-  idTela: any;
-  idUsuario: any;
-}
 export interface ILogUserFranquiaState extends ILogUserFranquiaBaseState, IPaginationBaseState {}
 
 export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILogUserFranquiaState> {
@@ -60,25 +45,9 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getLogUserFranquiaState(this.props.location)
+      ...getLogUserFranquiaState(this.props.location)
     };
   }
-
-  getLogUserFranquiaState = (location): ILogUserFranquiaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const descricao = url.searchParams.get('descricao') || '';
-
-    const idAcao = url.searchParams.get('idAcao') || '';
-    const idTela = url.searchParams.get('idTela') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      descricao,
-      idAcao,
-      idTela,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -199,7 +168,8 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
                           <Label id="descricaoLabel" for="log-user-franquia-descricao">
                             <Translate contentKey="generadorApp.logUserFranquia.descricao">Descricao</Translate>
                           </Label>
-                          <AvInput id="log-user-franquia-descricao" type="textarea" name="descricao" />
+
+                          <AvInput type="text" name="descricao" id="log-user-franquia-descricao" value={this.state.descricao} />
                         </Row>
                       </Col>
 
@@ -335,26 +305,7 @@ export class LogUserFranquia extends React.Component<ILogUserFranquiaProps, ILog
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${logUserFranquia.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${logUserFranquia.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${logUserFranquia.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

@@ -3,15 +3,15 @@
     "logPacAcesso": {
       "home": {
         "title": "Log Pac Acessos",
-        "createLabel": "Criar novo Log Pac Acesso",
-        "createOrEditLabel": "Criar ou editar Log Pac Acesso",
-        "notFound": "Nenhum Log Pac Acesso encontrado"
+        "createLabel": "Create a new Log Pac Acesso",
+        "createOrEditLabel": "Create or edit a Log Pac Acesso",
+        "notFound": "No Log Pac Acessos found"
       },
-      "created": "Um novo Log Pac Acesso foi criado com o identificador {{ param }}",
-      "updated": "Um Log Pac Acesso foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Log Pac Acesso foi excluído com o identificador {{ param }}",
+      "created": "A new Log Pac Acesso is created with identifier {{ param }}",
+      "updated": "A Log Pac Acesso is updated with identifier {{ param }}",
+      "deleted": "A Log Pac Acesso is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Log Pac Acesso {{ id }}?"
+        "question": "Are you sure you want to delete Log Pac Acesso {{ id }}?"
       },
       "detail": {
         "title": "Log Pac Acesso"

@@ -16,37 +16,19 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-item-indicadores.reducer';
+import { getPadItemIndicadoresState, IPadItemIndicadoresBaseState, getEntities } from './pad-item-indicadores.reducer';
 import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPadItemIndicadoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadItemIndicadoresBaseState {
-  idUnidadeMedida: any;
-  titulo: any;
-  descricao: any;
-  meta: any;
-  maximoSt: any;
-  minimoSt: any;
-  cidXPtaNovoPadItemIndi: any;
-}
 export interface IPadItemIndicadoresState extends IPadItemIndicadoresBaseState, IPaginationBaseState {}
 
 export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps, IPadItemIndicadoresState> {
@@ -56,31 +38,9 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadItemIndicadoresState(this.props.location)
+      ...getPadItemIndicadoresState(this.props.location)
     };
   }
-
-  getPadItemIndicadoresState = (location): IPadItemIndicadoresBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUnidadeMedida = url.searchParams.get('idUnidadeMedida') || '';
-    const titulo = url.searchParams.get('titulo') || '';
-    const descricao = url.searchParams.get('descricao') || '';
-    const meta = url.searchParams.get('meta') || '';
-    const maximoSt = url.searchParams.get('maximoSt') || '';
-    const minimoSt = url.searchParams.get('minimoSt') || '';
-
-    const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
-
-    return {
-      idUnidadeMedida,
-      titulo,
-      descricao,
-      meta,
-      maximoSt,
-      minimoSt,
-      cidXPtaNovoPadItemIndi
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -254,7 +214,8 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                           <Label id="descricaoLabel" for="pad-item-indicadores-descricao">
                             <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
                           </Label>
-                          <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
+
+                          <AvInput type="text" name="descricao" id="pad-item-indicadores-descricao" value={this.state.descricao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -363,26 +324,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                         <td>{padItemIndicadores.minimoSt}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padItemIndicadores.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemIndicadores.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemIndicadores.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

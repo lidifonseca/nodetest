@@ -10,12 +10,12 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITermosUso, defaultValue } from 'app/shared/model/termos-uso.model';
 
 export const ACTION_TYPES = {
+  FETCH_TERMOSUSO_LIST_EXPORT: 'termosUso/FETCH_TERMOSUSO_LIST_EXPORT',
   FETCH_TERMOSUSO_LIST: 'termosUso/FETCH_TERMOSUSO_LIST',
   FETCH_TERMOSUSO: 'termosUso/FETCH_TERMOSUSO',
   CREATE_TERMOSUSO: 'termosUso/CREATE_TERMOSUSO',
   UPDATE_TERMOSUSO: 'termosUso/UPDATE_TERMOSUSO',
   DELETE_TERMOSUSO: 'termosUso/DELETE_TERMOSUSO',
-  SET_BLOB: 'termosUso/SET_BLOB',
   RESET: 'termosUso/RESET'
 };
 
@@ -31,10 +31,16 @@ const initialState = {
 
 export type TermosUsoState = Readonly<typeof initialState>;
 
+export interface ITermosUsoBaseState {
+  termosUso: any;
+  tipo: any;
+}
+
 // Reducer
 
 export default (state: TermosUsoState = initialState, action): TermosUsoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TERMOSUSO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TERMOSUSO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TERMOSUSO):
       return {
@@ -52,6 +58,7 @@ export default (state: TermosUsoState = initialState, action): TermosUsoState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TERMOSUSO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TERMOSUSO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TERMOSUSO):
     case FAILURE(ACTION_TYPES.CREATE_TERMOSUSO):
@@ -92,17 +99,6 @@ export default (state: TermosUsoState = initialState, action): TermosUsoState =>
         updateSuccess: true,
         entity: {}
       };
-    case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
-      return {
-        ...state,
-        entity: {
-          ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
-        }
-      };
-    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -143,6 +139,17 @@ export const getEntity: ICrudGetAction<ITermosUso> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTermosUso<ITermosUso> = (termosUso, tipo, page, size, sort) => {
+  const termosUsoRequest = termosUso ? `termosUso.contains=${termosUso}&` : '';
+  const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TERMOSUSO_LIST,
+    payload: axios.get<ITermosUso>(`${requestUrl}${termosUsoRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ITermosUso> = entity => async dispatch => {
   entity = {
     ...entity
@@ -175,15 +182,17 @@ export const deleteEntity: ICrudDeleteAction<ITermosUso> = id => async dispatch 
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
-  type: ACTION_TYPES.SET_BLOB,
-  payload: {
-    name,
-    data,
-    contentType
-  }
-});
-
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTermosUsoState = (location): ITermosUsoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const termosUso = url.searchParams.get('termosUso') || '';
+  const tipo = url.searchParams.get('tipo') || '';
+
+  return {
+    termosUso,
+    tipo
+  };
+};

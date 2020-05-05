@@ -125,6 +125,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';
+import { CSVDownload } from 'react-csv';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table, Label, UncontrolledTooltip, UncontrolledCollapse, CardHeader, CardBody,
 <%_  if (listButtonsInDropdown === true) { _%> Dropdown, DropdownToggle,  DropdownMenu,  DropdownItem, <%_ } _%> Modal, ModalHeader, ModalBody, ModalFooter, UncontrolledAlert } from 'reactstrap';

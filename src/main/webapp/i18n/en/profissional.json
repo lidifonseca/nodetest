@@ -3,15 +3,15 @@
     "profissional": {
       "home": {
         "title": "Profissionals",
-        "createLabel": "Criar novo Profissional",
-        "createOrEditLabel": "Criar ou editar Profissional",
-        "notFound": "Nenhum Profissional encontrado"
+        "createLabel": "Create a new Profissional",
+        "createOrEditLabel": "Create or edit a Profissional",
+        "notFound": "No Profissionals found"
       },
-      "created": "Um novo Profissional foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional is created with identifier {{ param }}",
+      "updated": "A Profissional is updated with identifier {{ param }}",
+      "deleted": "A Profissional is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional {{ id }}?"
+        "question": "Are you sure you want to delete Profissional {{ id }}?"
       },
       "detail": {
         "title": "Profissional"

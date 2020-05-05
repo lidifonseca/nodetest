@@ -4,11 +4,11 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './termos-uso.reducer';
+import { getEntity, getTermosUsoState, ITermosUsoBaseState, updateEntity, createEntity, reset } from './termos-uso.reducer';
 import { ITermosUso } from 'app/shared/model/termos-uso.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -16,6 +16,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ITermosUsoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface ITermosUsoUpdateState {
+  fieldsBase: ITermosUsoBaseState;
   isNew: boolean;
 }
 
@@ -23,6 +24,7 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
   constructor(props: Readonly<ITermosUsoUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getTermosUsoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -39,14 +41,6 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
       this.props.getEntity(this.props.match.params.id);
     }
   }
-
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
-  };
-
-  clearBlob = name => () => {
-    this.props.setBlob(name, undefined, undefined);
-  };
 
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
@@ -71,8 +65,6 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
   render() {
     const { termosUsoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
-
-    const { termosUso } = termosUsoEntity;
 
     return (
       <div>
@@ -121,7 +113,7 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -137,37 +129,46 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.termosUso ? (
+                          <Col md="termosUso">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="termosUsoLabel" for="termos-uso-termosUso">
+                                    <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="termos-uso-termosUso" type="text" name="termosUso" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="termosUso" value={this.state.fieldsBase.termosUso} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="termosUsoLabel" for="termos-uso-termosUso">
-                                <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoLabel" for="termos-uso-tipo">
-                                <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="termos-uso-tipo" type="string" className="form-control" name="tipo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.tipo ? (
+                          <Col md="tipo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoLabel" for="termos-uso-tipo">
+                                    <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="termos-uso-tipo" type="string" className="form-control" name="tipo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase.tipo} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -189,7 +190,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
-  setBlob,
   createEntity,
   reset
 };

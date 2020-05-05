@@ -16,22 +16,13 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-status-atual.reducer';
+import { getProfissionalStatusAtualState, IProfissionalStatusAtualBaseState, getEntities } from './profissional-status-atual.reducer';
 import { IProfissionalStatusAtual } from 'app/shared/model/profissional-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -41,13 +32,6 @@ import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-pr
 
 export interface IProfissionalStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalStatusAtualBaseState {
-  idProfissional: any;
-  obs: any;
-  ativo: any;
-  idUsuario: any;
-  idStatusAtualProf: any;
-}
 export interface IProfissionalStatusAtualState extends IProfissionalStatusAtualBaseState, IPaginationBaseState {}
 
 export class ProfissionalStatusAtual extends React.Component<IProfissionalStatusAtualProps, IProfissionalStatusAtualState> {
@@ -57,27 +41,9 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalStatusAtualState(this.props.location)
+      ...getProfissionalStatusAtualState(this.props.location)
     };
   }
-
-  getProfissionalStatusAtualState = (location): IProfissionalStatusAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const obs = url.searchParams.get('obs') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    const idStatusAtualProf = url.searchParams.get('idStatusAtualProf') || '';
-
-    return {
-      idProfissional,
-      obs,
-      ativo,
-      idUsuario,
-      idStatusAtualProf
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -216,7 +182,8 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                           <Label id="obsLabel" for="profissional-status-atual-obs">
                             <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
                           </Label>
-                          <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
+
+                          <AvInput type="text" name="obs" id="profissional-status-atual-obs" value={this.state.obs} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -342,26 +309,7 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                         </td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalStatusAtual.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalStatusAtual.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalStatusAtual.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

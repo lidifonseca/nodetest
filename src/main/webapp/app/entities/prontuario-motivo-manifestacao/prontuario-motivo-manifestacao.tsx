@@ -16,39 +16,23 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './prontuario-motivo-manifestacao.reducer';
+import {
+  getProntuarioMotivoManifestacaoState,
+  IProntuarioMotivoManifestacaoBaseState,
+  getEntities
+} from './prontuario-motivo-manifestacao.reducer';
 import { IProntuarioMotivoManifestacao } from 'app/shared/model/prontuario-motivo-manifestacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProntuarioMotivoManifestacaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProntuarioMotivoManifestacaoBaseState {
-  idProntuario: any;
-  idPaciente: any;
-  idMotivo: any;
-  idMotivoFilho: any;
-  idManifestacao: any;
-  idManifestacaoFilho: any;
-  sugestao: any;
-  idUsuario: any;
-  informacaoAdicional: any;
-}
 export interface IProntuarioMotivoManifestacaoState extends IProntuarioMotivoManifestacaoBaseState, IPaginationBaseState {}
 
 export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMotivoManifestacaoProps, IProntuarioMotivoManifestacaoState> {
@@ -58,34 +42,9 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProntuarioMotivoManifestacaoState(this.props.location)
+      ...getProntuarioMotivoManifestacaoState(this.props.location)
     };
   }
-
-  getProntuarioMotivoManifestacaoState = (location): IProntuarioMotivoManifestacaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProntuario = url.searchParams.get('idProntuario') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idMotivo = url.searchParams.get('idMotivo') || '';
-    const idMotivoFilho = url.searchParams.get('idMotivoFilho') || '';
-    const idManifestacao = url.searchParams.get('idManifestacao') || '';
-    const idManifestacaoFilho = url.searchParams.get('idManifestacaoFilho') || '';
-    const sugestao = url.searchParams.get('sugestao') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const informacaoAdicional = url.searchParams.get('informacaoAdicional') || '';
-
-    return {
-      idProntuario,
-      idPaciente,
-      idMotivo,
-      idMotivoFilho,
-      idManifestacao,
-      idManifestacaoFilho,
-      sugestao,
-      idUsuario,
-      informacaoAdicional
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -326,7 +285,8 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                           <Label id="sugestaoLabel" for="prontuario-motivo-manifestacao-sugestao">
                             <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.sugestao">Sugestao</Translate>
                           </Label>
-                          <AvInput id="prontuario-motivo-manifestacao-sugestao" type="textarea" name="sugestao" />
+
+                          <AvInput type="text" name="sugestao" id="prontuario-motivo-manifestacao-sugestao" value={this.state.sugestao} />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -349,7 +309,13 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                               Informacao Adicional
                             </Translate>
                           </Label>
-                          <AvInput id="prontuario-motivo-manifestacao-informacaoAdicional" type="textarea" name="informacaoAdicional" />
+
+                          <AvInput
+                            type="text"
+                            name="informacaoAdicional"
+                            id="prontuario-motivo-manifestacao-informacaoAdicional"
+                            value={this.state.informacaoAdicional}
+                          />
                         </Row>
                       </Col>
                     </div>
@@ -452,26 +418,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                         <td>{prontuarioMotivoManifestacao.informacaoAdicional}</td>
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${prontuarioMotivoManifestacao.id}`} color="info" size="sm">
-                              <FontAwesomeIcon icon="eye" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.view">View</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioMotivoManifestacao.id}/edit`} color="primary" size="sm">
-                              <FontAwesomeIcon icon="pencil-alt" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.edit">Edit</Translate>
-                              </span>
-                            </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioMotivoManifestacao.id}/delete`} color="danger" size="sm">
-                              <FontAwesomeIcon icon="trash" />{' '}
-                              <span className="d-none d-md-inline">
-                                <Translate contentKey="entity.action.delete">Delete</Translate>
-                              </span>
-                            </Button>
-                          </div>
+                          <div className="btn-group flex-btn-group-container"></div>
                         </td>
                       </tr>
                     ))}

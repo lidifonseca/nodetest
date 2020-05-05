@@ -4,13 +4,20 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IPadItem } from 'app/shared/model/pad-item.model';
 import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-import { getEntity, updateEntity, createEntity, setBlob, reset } from './pad-item-resultado.reducer';
+import {
+  getEntity,
+  getPadItemResultadoState,
+  IPadItemResultadoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pad-item-resultado.reducer';
 import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -18,6 +25,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPadItemResultadoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export interface IPadItemResultadoUpdateState {
+  fieldsBase: IPadItemResultadoBaseState;
   isNew: boolean;
   idPadItemId: string;
 }
@@ -26,6 +34,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
   constructor(props: Readonly<IPadItemResultadoUpdateProps>) {
     super(props);
     this.state = {
+      fieldsBase: getPadItemResultadoState(this.props.location),
       idPadItemId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
@@ -45,14 +54,6 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
 
     this.props.getPadItems();
   }
-
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
-  };
-
-  clearBlob = name => () => {
-    this.props.setBlob(name, undefined, undefined);
-  };
 
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
@@ -77,8 +78,6 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
   render() {
     const { padItemResultadoEntity, padItems, loading, updating } = this.props;
     const { isNew } = this.state;
-
-    const { resultado } = padItemResultadoEntity;
 
     return (
       <div>
@@ -128,7 +127,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -144,95 +143,116 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {!this.state.fieldsBase.resultado ? (
+                          <Col md="resultado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="resultadoLabel" for="pad-item-resultado-resultado">
+                                    <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-resultado-resultado" type="text" name="resultado" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="resultado" value={this.state.fieldsBase.resultado} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="resultadoLabel" for="pad-item-resultado-resultado">
-                                <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.dataFim ? (
+                          <Col md="dataFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataFimLabel" for="pad-item-resultado-dataFim">
+                                    <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-resultado-dataFim" type="date" className="form-control" name="dataFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase.dataFim} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataFimLabel" for="pad-item-resultado-dataFim">
-                                <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-resultado-dataFim" type="date" className="form-control" name="dataFim" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {!this.state.fieldsBase.resultadoAnalisado ? (
+                          <Col md="resultadoAnalisado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="resultadoAnalisadoLabel" check>
+                                    <AvInput
+                                      id="pad-item-resultado-resultadoAnalisado"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="resultadoAnalisado"
+                                    />
+                                    <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="resultadoAnalisado" value={this.state.fieldsBase.resultadoAnalisado} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="resultadoAnalisadoLabel" check>
-                                <AvInput
-                                  id="pad-item-resultado-resultadoAnalisado"
-                                  type="checkbox"
-                                  className="form-control"
-                                  name="resultadoAnalisado"
-                                />
-                                <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="usuarioIdLabel" for="pad-item-resultado-usuarioId">
-                                <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-resultado-usuarioId" type="string" className="form-control" name="usuarioId" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="pad-item-resultado-idPadItem">
-                                <Translate contentKey="generadorApp.padItemResultado.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-item-resultado-idPadItem" type="select" className="form-control" name="idPadItem">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.padItemResultado.idPadItem.empty')}
-                                </option>
-                                {padItems
-                                  ? padItems.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {!this.state.fieldsBase.usuarioId ? (
+                          <Col md="usuarioId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="usuarioIdLabel" for="pad-item-resultado-usuarioId">
+                                    <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-resultado-usuarioId" type="string" className="form-control" name="usuarioId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase.usuarioId} />
+                        )}
+                        {!this.state.fieldsBase.idPadItem ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-item-resultado-idPadItem">
+                                    <Translate contentKey="generadorApp.padItemResultado.idPadItem">Id Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="pad-item-resultado-idPadItem" type="select" className="form-control" name="idPadItem">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.padItemResultado.idPadItem.empty')}
+                                    </option>
+                                    {padItems
+                                      ? padItems.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.id}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPadItem" value={this.state.fieldsBase.idPadItem} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -256,7 +276,6 @@ const mapDispatchToProps = {
   getPadItems,
   getEntity,
   updateEntity,
-  setBlob,
   createEntity,
   reset
 };
