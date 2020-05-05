@@ -26,7 +26,6 @@ async function bootstrap(): Promise<void> {
   );
 
   const staticClientPath = path.join(__dirname, '../dist/classes/static');
-  throw new Error('Ran out of coffee')
   
   if (fs.existsSync(staticClientPath)) {
     app.use(express.static(staticClientPath));
