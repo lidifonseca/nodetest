@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_USUARIOACAO: 'usuarioAcao/CREATE_USUARIOACAO',
   UPDATE_USUARIOACAO: 'usuarioAcao/UPDATE_USUARIOACAO',
   DELETE_USUARIOACAO: 'usuarioAcao/DELETE_USUARIOACAO',
+  SET_BLOB: 'usuarioAcao/SET_BLOB',
   RESET: 'usuarioAcao/RESET'
 };
 
@@ -102,6 +103,17 @@ export default (state: UsuarioAcaoState = initialState, action): UsuarioAcaoStat
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -217,6 +229,15 @@ export const deleteEntity: ICrudDeleteAction<IUsuarioAcao> = id => async dispatc
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

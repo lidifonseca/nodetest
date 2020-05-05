@@ -23,7 +23,17 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  openFile,
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';

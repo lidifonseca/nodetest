@@ -27,14 +27,14 @@ export default class ProntuarioMotivoManifestacao extends BaseEntity {
   @Column({ type: 'integer', name: 'id_manifestacao_filho' })
   idManifestacaoFilho: number;
 
-  @Column({ name: 'sugestao', length: 65535 })
-  sugestao: string;
+  @Column({ type: 'blob', name: 'sugestao' })
+  sugestao: any;
 
   @Column({ type: 'integer', name: 'id_usuario' })
   idUsuario: number;
 
-  @Column({ name: 'informacao_adicional', length: 65535 })
-  informacaoAdicional: string;
+  @Column({ type: 'blob', name: 'informacao_adicional' })
+  informacaoAdicional: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_PROFISSIONALSTATUSATUAL: 'profissionalStatusAtual/CREATE_PROFISSIONALSTATUSATUAL',
   UPDATE_PROFISSIONALSTATUSATUAL: 'profissionalStatusAtual/UPDATE_PROFISSIONALSTATUSATUAL',
   DELETE_PROFISSIONALSTATUSATUAL: 'profissionalStatusAtual/DELETE_PROFISSIONALSTATUSATUAL',
+  SET_BLOB: 'profissionalStatusAtual/SET_BLOB',
   RESET: 'profissionalStatusAtual/RESET'
 };
 
@@ -102,6 +103,17 @@ export default (state: ProfissionalStatusAtualState = initialState, action): Pro
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -216,6 +228,15 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalStatusAtual> = id => a
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

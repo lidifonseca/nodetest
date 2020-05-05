@@ -16,7 +16,17 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  openFile,
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -155,11 +165,34 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                     <div className="row mt-1 ml-3 mr-3">
                       <Col md="3">
                         <Row>
-                          <Label id="contratoLabel" for="categoria-contrato-contrato">
-                            <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="contrato" id="categoria-contrato-contrato" value={this.state.contrato} />
+                          <div>
+                            <Label id="contratoLabel" for="contrato">
+                              <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
+                            </Label>
+                            <br />
+                            {contrato ? (
+                              <div>
+                                <a onClick={openFile(contratoContentType, contrato)}>
+                                  <Translate contentKey="entity.action.open">Open</Translate>
+                                </a>
+                                <br />
+                                <Row>
+                                  <Col md="11">
+                                    <span>
+                                      {contratoContentType}, {byteSize(contrato)}
+                                    </span>
+                                  </Col>
+                                  <Col md="1">
+                                    <Button color="danger" onClick={this.clearBlob('contrato')}>
+                                      <FontAwesomeIcon icon="times-circle" />
+                                    </Button>
+                                  </Col>
+                                </Row>
+                              </div>
+                            ) : null}
+                            <input id="file_contrato" type="file" onChange={this.onBlobChange(false, 'contrato')} />
+                            <AvInput type="hidden" name="contrato" value={contrato} />
+                          </div>
                         </Row>
                       </Col>
                       <Col md="3">
@@ -243,7 +276,19 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                           </Button>
                         </td>
 
-                        <td>{categoriaContrato.contrato}</td>
+                        <td>
+                          {categoriaContrato.contrato ? (
+                            <div>
+                              <a onClick={openFile(categoriaContrato.contratoContentType, categoriaContrato.contrato)}>
+                                <Translate contentKey="entity.action.open">Open</Translate>
+                                &nbsp;
+                              </a>
+                              <span>
+                                {categoriaContrato.contratoContentType}, {byteSize(categoriaContrato.contrato)}
+                              </span>
+                            </div>
+                          ) : null}
+                        </td>
 
                         <td>{categoriaContrato.ativo}</td>
                         <td>

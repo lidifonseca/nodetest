@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -12,7 +12,15 @@ import { IPaciente } from 'app/shared/model/paciente.model';
 import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 import { IUsuario } from 'app/shared/model/usuario.model';
 import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
-import { getEntity, getPacienteDiarioState, IPacienteDiarioBaseState, updateEntity, createEntity, reset } from './paciente-diario.reducer';
+import {
+  getEntity,
+  getPacienteDiarioState,
+  IPacienteDiarioBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './paciente-diario.reducer';
 import { IPacienteDiario } from 'app/shared/model/paciente-diario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -53,6 +61,14 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
     this.props.getUsuarios();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteDiarioEntity } = this.props;
@@ -76,6 +92,8 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
   render() {
     const { pacienteDiarioEntity, pacientes, usuarios, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { historico } = pacienteDiarioEntity;
 
     return (
       <div>
@@ -172,7 +190,7 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="paciente-diario-historico" type="text" name="historico" />
+                                  <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -284,6 +302,7 @@ const mapDispatchToProps = {
   getUsuarios,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

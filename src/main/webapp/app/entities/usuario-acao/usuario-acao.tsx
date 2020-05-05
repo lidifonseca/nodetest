@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -186,8 +195,7 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                           <Label id="descricaoLabel" for="usuario-acao-descricao">
                             <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput type="text" name="descricao" id="usuario-acao-descricao" value={this.state.descricao} />
+                          <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
 

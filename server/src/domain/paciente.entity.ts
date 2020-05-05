@@ -142,8 +142,8 @@ export default class Paciente extends BaseEntity {
   @Column({ name: 'longitude_familiar', length: 60 })
   longitudeFamiliar: string;
 
-  @Column({ name: 'observacao', length: 65535 })
-  observacao: string;
+  @Column({ type: 'blob', name: 'observacao' })
+  observacao: any;
 
   @Column({ type: 'integer', name: 'aph', nullable: false })
   aph: number;
@@ -184,8 +184,8 @@ export default class Paciente extends BaseEntity {
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;
 
-  @Column({ name: 'detalhes', length: 65535 })
-  detalhes: string;
+  @Column({ type: 'blob', name: 'detalhes' })
+  detalhes: any;
 
   @Column({ name: 'liminar', length: 50 })
   liminar: string;

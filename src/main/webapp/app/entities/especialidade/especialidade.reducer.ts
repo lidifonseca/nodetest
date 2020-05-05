@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_ESPECIALIDADE: 'especialidade/CREATE_ESPECIALIDADE',
   UPDATE_ESPECIALIDADE: 'especialidade/UPDATE_ESPECIALIDADE',
   DELETE_ESPECIALIDADE: 'especialidade/DELETE_ESPECIALIDADE',
+  SET_BLOB: 'especialidade/SET_BLOB',
   RESET: 'especialidade/RESET'
 };
 
@@ -113,6 +114,17 @@ export default (state: EspecialidadeState = initialState, action): Especialidade
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -291,6 +303,15 @@ export const deleteEntity: ICrudDeleteAction<IEspecialidade> = id => async dispa
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

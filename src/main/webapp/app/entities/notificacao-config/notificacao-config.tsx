@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -243,8 +244,7 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                           <Label id="descricaoLabel" for="notificacao-config-descricao">
                             <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput type="text" name="descricao" id="notificacao-config-descricao" value={this.state.descricao} />
+                          <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
                       <Col md="3">

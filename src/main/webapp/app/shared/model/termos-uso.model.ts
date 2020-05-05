@@ -1,6 +1,6 @@
 export interface ITermosUso {
   id?: string;
-  termosUso?: string;
+  termosUso?: any;
   tipo?: number;
 }
 

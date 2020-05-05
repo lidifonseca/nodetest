@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_LOGUSERFRANQUIA: 'logUserFranquia/CREATE_LOGUSERFRANQUIA',
   UPDATE_LOGUSERFRANQUIA: 'logUserFranquia/UPDATE_LOGUSERFRANQUIA',
   DELETE_LOGUSERFRANQUIA: 'logUserFranquia/DELETE_LOGUSERFRANQUIA',
+  SET_BLOB: 'logUserFranquia/SET_BLOB',
   RESET: 'logUserFranquia/RESET'
 };
 
@@ -101,6 +102,17 @@ export default (state: LogUserFranquiaState = initialState, action): LogUserFran
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -209,6 +221,15 @@ export const deleteEntity: ICrudDeleteAction<ILogUserFranquia> = id => async dis
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

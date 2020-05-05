@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -285,8 +294,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                           <Label id="sugestaoLabel" for="prontuario-motivo-manifestacao-sugestao">
                             <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.sugestao">Sugestao</Translate>
                           </Label>
-
-                          <AvInput type="text" name="sugestao" id="prontuario-motivo-manifestacao-sugestao" value={this.state.sugestao} />
+                          <AvInput id="prontuario-motivo-manifestacao-sugestao" type="textarea" name="sugestao" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -309,13 +317,7 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
                               Informacao Adicional
                             </Translate>
                           </Label>
-
-                          <AvInput
-                            type="text"
-                            name="informacaoAdicional"
-                            id="prontuario-motivo-manifestacao-informacaoAdicional"
-                            value={this.state.informacaoAdicional}
-                          />
+                          <AvInput id="prontuario-motivo-manifestacao-informacaoAdicional" type="textarea" name="informacaoAdicional" />
                         </Row>
                       </Col>
                     </div>

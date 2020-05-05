@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -679,8 +680,7 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
                           <Label id="obsLabel" for="profissional-obs">
                             <Translate contentKey="generadorApp.profissional.obs">Obs</Translate>
                           </Label>
-
-                          <AvInput type="text" name="obs" id="profissional-obs" value={this.state.obs} />
+                          <AvInput id="profissional-obs" type="textarea" name="obs" />
                         </Row>
                       </Col>
                       <Col md="3">

@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -278,8 +287,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                           <Label id="descricaoLabel" for="especialidade-descricao">
                             <Translate contentKey="generadorApp.especialidade.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput type="text" name="descricao" id="especialidade-descricao" value={this.state.descricao} />
+                          <AvInput id="especialidade-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
                       <Col md="3">

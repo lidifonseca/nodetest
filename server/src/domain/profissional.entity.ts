@@ -103,8 +103,8 @@ export default class Profissional extends BaseEntity {
   @Column({ name: 'origem_cadastro', length: 100 })
   origemCadastro: string;
 
-  @Column({ name: 'obs', length: 65535 })
-  obs: string;
+  @Column({ type: 'blob', name: 'obs' })
+  obs: any;
 
   @Column({ name: 'chave_privada', length: 255 })
   chavePrivada: string;

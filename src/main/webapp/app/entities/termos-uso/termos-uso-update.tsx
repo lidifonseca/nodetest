@@ -4,11 +4,11 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, getTermosUsoState, ITermosUsoBaseState, updateEntity, createEntity, reset } from './termos-uso.reducer';
+import { getEntity, getTermosUsoState, ITermosUsoBaseState, updateEntity, createEntity, setBlob, reset } from './termos-uso.reducer';
 import { ITermosUso } from 'app/shared/model/termos-uso.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -42,6 +42,14 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { termosUsoEntity } = this.props;
@@ -65,6 +73,8 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
   render() {
     const { termosUsoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { termosUso } = termosUsoEntity;
 
     return (
       <div>
@@ -140,7 +150,7 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="termos-uso-termosUso" type="text" name="termosUso" />
+                                  <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -190,6 +200,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

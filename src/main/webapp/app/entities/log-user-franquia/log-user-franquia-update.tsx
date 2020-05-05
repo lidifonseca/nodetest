@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -20,6 +20,7 @@ import {
   ILogUserFranquiaBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './log-user-franquia.reducer';
 import { ILogUserFranquia } from 'app/shared/model/log-user-franquia.model';
@@ -65,6 +66,14 @@ export class LogUserFranquiaUpdate extends React.Component<ILogUserFranquiaUpdat
     this.props.getFranquiaUsuarios();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { logUserFranquiaEntity } = this.props;
@@ -88,6 +97,8 @@ export class LogUserFranquiaUpdate extends React.Component<ILogUserFranquiaUpdat
   render() {
     const { logUserFranquiaEntity, acaos, telas, franquiaUsuarios, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = logUserFranquiaEntity;
 
     return (
       <div>
@@ -166,7 +177,7 @@ export class LogUserFranquiaUpdate extends React.Component<ILogUserFranquiaUpdat
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="log-user-franquia-descricao" type="text" name="descricao" />
+                                  <AvInput id="log-user-franquia-descricao" type="textarea" name="descricao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -290,6 +301,7 @@ const mapDispatchToProps = {
   getFranquiaUsuarios,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

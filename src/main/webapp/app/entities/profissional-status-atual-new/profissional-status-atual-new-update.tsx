@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -14,6 +14,7 @@ import {
   IProfissionalStatusAtualNewBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './profissional-status-atual-new.reducer';
 import { IProfissionalStatusAtualNew } from 'app/shared/model/profissional-status-atual-new.model';
@@ -52,6 +53,14 @@ export class ProfissionalStatusAtualNewUpdate extends React.Component<
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalStatusAtualNewEntity } = this.props;
@@ -75,6 +84,8 @@ export class ProfissionalStatusAtualNewUpdate extends React.Component<
   render() {
     const { profissionalStatusAtualNewEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { obs } = profissionalStatusAtualNewEntity;
 
     return (
       <div>
@@ -213,7 +224,7 @@ export class ProfissionalStatusAtualNewUpdate extends React.Component<
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="profissional-status-atual-new-obs" type="text" name="obs" />
+                                  <AvInput id="profissional-status-atual-new-obs" type="textarea" name="obs" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -282,6 +293,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

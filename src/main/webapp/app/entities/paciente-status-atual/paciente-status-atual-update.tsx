@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -18,6 +18,7 @@ import {
   IPacienteStatusAtualBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './paciente-status-atual.reducer';
 import { IPacienteStatusAtual } from 'app/shared/model/paciente-status-atual.model';
@@ -60,6 +61,14 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
     this.props.getStatusAtuals();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteStatusAtualEntity } = this.props;
@@ -83,6 +92,8 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
   render() {
     const { pacienteStatusAtualEntity, pacientes, statusAtuals, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { observacao } = pacienteStatusAtualEntity;
 
     return (
       <div>
@@ -188,7 +199,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="paciente-status-atual-observacao" type="text" name="observacao" />
+                                  <AvInput id="paciente-status-atual-observacao" type="textarea" name="observacao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -319,6 +330,7 @@ const mapDispatchToProps = {
   getStatusAtuals,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

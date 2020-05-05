@@ -4,11 +4,19 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, getLogPacAcessoState, ILogPacAcessoBaseState, updateEntity, createEntity, reset } from './log-pac-acesso.reducer';
+import {
+  getEntity,
+  getLogPacAcessoState,
+  ILogPacAcessoBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './log-pac-acesso.reducer';
 import { ILogPacAcesso } from 'app/shared/model/log-pac-acesso.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -42,6 +50,14 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { logPacAcessoEntity } = this.props;
@@ -65,6 +81,8 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
   render() {
     const { logPacAcessoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { inforAcesso } = logPacAcessoEntity;
 
     return (
       <div>
@@ -216,7 +234,7 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="log-pac-acesso-inforAcesso" type="text" name="inforAcesso" />
+                                  <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -247,6 +265,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

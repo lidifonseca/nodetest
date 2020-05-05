@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -12,7 +12,7 @@ import { IAcao } from 'app/shared/model/acao.model';
 import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
 import { ITela } from 'app/shared/model/tela.model';
 import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
-import { getEntity, getLogUserState, ILogUserBaseState, updateEntity, createEntity, reset } from './log-user.reducer';
+import { getEntity, getLogUserState, ILogUserBaseState, updateEntity, createEntity, setBlob, reset } from './log-user.reducer';
 import { ILogUser } from 'app/shared/model/log-user.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -53,6 +53,14 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
     this.props.getTelas();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { logUserEntity } = this.props;
@@ -76,6 +84,8 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
   render() {
     const { logUserEntity, acaos, telas, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = logUserEntity;
 
     return (
       <div>
@@ -172,7 +182,7 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="log-user-descricao" type="text" name="descricao" />
+                                  <AvInput id="log-user-descricao" type="textarea" name="descricao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -265,6 +275,7 @@ const mapDispatchToProps = {
   getTelas,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

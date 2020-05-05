@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_PACIENTE: 'paciente/CREATE_PACIENTE',
   UPDATE_PACIENTE: 'paciente/UPDATE_PACIENTE',
   DELETE_PACIENTE: 'paciente/DELETE_PACIENTE',
+  SET_BLOB: 'paciente/SET_BLOB',
   RESET: 'paciente/RESET'
 };
 
@@ -172,6 +173,17 @@ export default (state: PacienteState = initialState, action): PacienteState => {
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -651,6 +663,15 @@ export const deleteEntity: ICrudDeleteAction<IPaciente> = id => async dispatch =
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -16,7 +16,7 @@ import { IPeriodicidade } from 'app/shared/model/periodicidade.model';
 import { getEntities as getPeriodicidades } from 'app/entities/periodicidade/periodicidade.reducer';
 import { IPeriodo } from 'app/shared/model/periodo.model';
 import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
-import { getEntity, getPadItemState, IPadItemBaseState, updateEntity, createEntity, reset } from './pad-item.reducer';
+import { getEntity, getPadItemState, IPadItemBaseState, updateEntity, createEntity, setBlob, reset } from './pad-item.reducer';
 import { IPadItem } from 'app/shared/model/pad-item.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -63,6 +63,14 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
     this.props.getPeriodos();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataPadItemIncompleto = convertDateTimeToServer(values.dataPadItemIncompleto);
     values.dataPadItemCompleto = convertDateTimeToServer(values.dataPadItemCompleto);
@@ -89,6 +97,8 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
   render() {
     const { padItemEntity, pads, especialidades, periodicidades, periodos, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { observacao } = padItemEntity;
 
     return (
       <div>
@@ -244,7 +254,7 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="pad-item-observacao" type="text" name="observacao" />
+                                  <AvInput id="pad-item-observacao" type="textarea" name="observacao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -600,6 +610,7 @@ const mapDispatchToProps = {
   getPeriodos,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

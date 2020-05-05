@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -149,8 +158,7 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                           <Label id="termosUsoLabel" for="termos-uso-termosUso">
                             <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
                           </Label>
-
-                          <AvInput type="text" name="termosUso" id="termos-uso-termosUso" value={this.state.termosUso} />
+                          <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
                         </Row>
                       </Col>
                       <Col md="3">

@@ -3,11 +3,8 @@
     "fields": [
         {
             "fieldName": "contrato",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "65535"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         },
         {
             "fieldName": "ativo",

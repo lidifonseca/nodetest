@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -350,8 +351,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                           <Label id="observacaoLabel" for="pad-item-observacao">
                             <Translate contentKey="generadorApp.padItem.observacao">Observacao</Translate>
                           </Label>
-
-                          <AvInput type="text" name="observacao" id="pad-item-observacao" value={this.state.observacao} />
+                          <AvInput id="pad-item-observacao" type="textarea" name="observacao" />
                         </Row>
                       </Col>
                       <Col md="3">

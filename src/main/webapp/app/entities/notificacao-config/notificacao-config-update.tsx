@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label, UncontrolledTooltip } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -14,6 +14,7 @@ import {
   INotificacaoConfigBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './notificacao-config.reducer';
 import { INotificacaoConfig } from 'app/shared/model/notificacao-config.model';
@@ -49,6 +50,14 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     values.criadoEm = convertDateTimeToServer(values.criadoEm);
 
@@ -74,6 +83,8 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
   render() {
     const { notificacaoConfigEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = notificacaoConfigEntity;
 
     return (
       <div>
@@ -221,7 +232,7 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="notificacao-config-descricao" type="text" name="descricao" />
+                                  <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -341,6 +352,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

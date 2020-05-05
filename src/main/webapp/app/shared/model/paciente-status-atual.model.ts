@@ -5,7 +5,7 @@ import { IStatusAtual } from 'app/shared/model/status-atual.model';
 export interface IPacienteStatusAtual {
   id?: string;
   dataStatus?: Moment;
-  observacao?: string;
+  observacao?: any;
   ativo?: number;
   idUsuario?: string;
   pacienteNome?: string;

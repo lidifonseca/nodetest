@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_PADITEMINDICADORES: 'padItemIndicadores/CREATE_PADITEMINDICADORES',
   UPDATE_PADITEMINDICADORES: 'padItemIndicadores/UPDATE_PADITEMINDICADORES',
   DELETE_PADITEMINDICADORES: 'padItemIndicadores/DELETE_PADITEMINDICADORES',
+  SET_BLOB: 'padItemIndicadores/SET_BLOB',
   RESET: 'padItemIndicadores/RESET'
 };
 
@@ -104,6 +105,17 @@ export default (state: PadItemIndicadoresState = initialState, action): PadItemI
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -227,6 +239,15 @@ export const deleteEntity: ICrudDeleteAction<IPadItemIndicadores> = id => async 
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

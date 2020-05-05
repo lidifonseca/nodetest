@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -14,6 +14,7 @@ import {
   IProntuarioMotivoManifestacaoBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './prontuario-motivo-manifestacao.reducer';
 import { IProntuarioMotivoManifestacao } from 'app/shared/model/prontuario-motivo-manifestacao.model';
@@ -52,6 +53,14 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { prontuarioMotivoManifestacaoEntity } = this.props;
@@ -75,6 +84,8 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
   render() {
     const { prontuarioMotivoManifestacaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { sugestao, informacaoAdicional } = prontuarioMotivoManifestacaoEntity;
 
     return (
       <div>
@@ -320,7 +331,7 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="prontuario-motivo-manifestacao-sugestao" type="text" name="sugestao" />
+                                  <AvInput id="prontuario-motivo-manifestacao-sugestao" type="textarea" name="sugestao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -369,7 +380,11 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="prontuario-motivo-manifestacao-informacaoAdicional" type="text" name="informacaoAdicional" />
+                                  <AvInput
+                                    id="prontuario-motivo-manifestacao-informacaoAdicional"
+                                    type="textarea"
+                                    name="informacaoAdicional"
+                                  />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -400,6 +415,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -283,8 +284,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <Label id="oQueLabel" for="paciente-prontuario-oQue">
                             <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
                           </Label>
-
-                          <AvInput type="text" name="oQue" id="paciente-prontuario-oQue" value={this.state.oQue} />
+                          <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
                         </Row>
                       </Col>
                       <Col md="3">
@@ -292,8 +292,7 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           <Label id="resultadoLabel" for="paciente-prontuario-resultado">
                             <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
                           </Label>
-
-                          <AvInput type="text" name="resultado" id="paciente-prontuario-resultado" value={this.state.resultado} />
+                          <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
                         </Row>
                       </Col>
                       <Col md="3">

@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
+  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -175,8 +176,7 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                           <Label id="resultadoLabel" for="pad-item-resultado-resultado">
                             <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
                           </Label>
-
-                          <AvInput type="text" name="resultado" id="pad-item-resultado-resultado" value={this.state.resultado} />
+                          <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
                         </Row>
                       </Col>
                       <Col md="3">

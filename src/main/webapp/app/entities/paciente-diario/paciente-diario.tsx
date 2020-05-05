@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -177,8 +186,7 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                           <Label id="historicoLabel" for="paciente-diario-historico">
                             <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
                           </Label>
-
-                          <AvInput type="text" name="historico" id="paciente-diario-historico" value={this.state.historico} />
+                          <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
                         </Row>
                       </Col>
                       <Col md="3">

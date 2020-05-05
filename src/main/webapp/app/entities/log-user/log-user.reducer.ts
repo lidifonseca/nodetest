@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_LOGUSER: 'logUser/CREATE_LOGUSER',
   UPDATE_LOGUSER: 'logUser/UPDATE_LOGUSER',
   DELETE_LOGUSER: 'logUser/DELETE_LOGUSER',
+  SET_BLOB: 'logUser/SET_BLOB',
   RESET: 'logUser/RESET'
 };
 
@@ -101,6 +102,17 @@ export default (state: LogUserState = initialState, action): LogUserState => {
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -195,6 +207,15 @@ export const deleteEntity: ICrudDeleteAction<ILogUser> = id => async dispatch =>
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

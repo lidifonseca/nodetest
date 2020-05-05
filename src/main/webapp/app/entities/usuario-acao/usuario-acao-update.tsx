@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -12,7 +12,7 @@ import { ITela } from 'app/shared/model/tela.model';
 import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
 import { IAcao } from 'app/shared/model/acao.model';
 import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-import { getEntity, getUsuarioAcaoState, IUsuarioAcaoBaseState, updateEntity, createEntity, reset } from './usuario-acao.reducer';
+import { getEntity, getUsuarioAcaoState, IUsuarioAcaoBaseState, updateEntity, createEntity, setBlob, reset } from './usuario-acao.reducer';
 import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -53,6 +53,14 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
     this.props.getAcaos();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { usuarioAcaoEntity } = this.props;
@@ -76,6 +84,8 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
   render() {
     const { usuarioAcaoEntity, telas, acaos, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = usuarioAcaoEntity;
 
     return (
       <div>
@@ -191,7 +201,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="usuario-acao-descricao" type="text" name="descricao" />
+                                  <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -284,6 +294,7 @@ const mapDispatchToProps = {
   getAcaos,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

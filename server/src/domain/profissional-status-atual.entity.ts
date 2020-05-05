@@ -14,8 +14,8 @@ export default class ProfissionalStatusAtual extends BaseEntity {
   @Column({ name: 'id_profissional' })
   idProfissional: string;
 
-  @Column({ name: 'obs', length: 65535 })
-  obs: string;
+  @Column({ type: 'blob', name: 'obs' })
+  obs: any;
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;

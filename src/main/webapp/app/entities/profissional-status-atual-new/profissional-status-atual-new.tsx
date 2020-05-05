@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -196,8 +205,7 @@ export class ProfissionalStatusAtualNew extends React.Component<IProfissionalSta
                           <Label id="obsLabel" for="profissional-status-atual-new-obs">
                             <Translate contentKey="generadorApp.profissionalStatusAtualNew.obs">Obs</Translate>
                           </Label>
-
-                          <AvInput type="text" name="obs" id="profissional-status-atual-new-obs" value={this.state.obs} />
+                          <AvInput id="profissional-status-atual-new-obs" type="textarea" name="obs" />
                         </Row>
                       </Col>
                       <Col md="3">

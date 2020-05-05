@@ -2,8 +2,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
-import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
-
 import Acao from './acao.entity';
 import Tela from './tela.entity';
 import FranquiaUsuario from './franquia-usuario.entity';
@@ -13,8 +11,8 @@ import FranquiaUsuario from './franquia-usuario.entity';
  */
 @Entity('log_user_franquia')
 export default class LogUserFranquia extends BaseEntity {
-  @Column({ name: 'descricao', length: 65535 })
-  descricao: string;
+  @Column({ type: 'blob', name: 'descricao' })
+  descricao: any;
 
   @ManyToOne(type => Acao)
   idAcao: Acao;

@@ -4,7 +4,7 @@ import { IUsuario } from 'app/shared/model/usuario.model';
 export interface IPacienteDiario {
   id?: string;
   idOperadora?: number;
-  historico?: string;
+  historico?: any;
   ativo?: number;
   idPaciente?: string | any;
   idUsuario?: string | any;

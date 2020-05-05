@@ -4,7 +4,7 @@ import { ITela } from 'app/shared/model/tela.model';
 export interface ILogUser {
   id?: string;
   idUsuario?: string;
-  descricao?: string;
+  descricao?: any;
   idAcao?: string | any;
   idTela?: string | any;
 }

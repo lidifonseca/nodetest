@@ -6,9 +6,9 @@ export interface IProntuarioMotivoManifestacao {
   idMotivoFilho?: number;
   idManifestacao?: number;
   idManifestacaoFilho?: number;
-  sugestao?: string;
+  sugestao?: any;
   idUsuario?: number;
-  informacaoAdicional?: string;
+  informacaoAdicional?: any;
 }
 
 export const defaultValue: Readonly<IProntuarioMotivoManifestacao> = {};

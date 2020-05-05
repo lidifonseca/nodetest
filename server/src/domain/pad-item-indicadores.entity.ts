@@ -17,8 +17,8 @@ export default class PadItemIndicadores extends BaseEntity {
   @Column({ name: 'titulo', length: 45, nullable: false })
   titulo: string;
 
-  @Column({ name: 'descricao', length: 65535 })
-  descricao: string;
+  @Column({ type: 'blob', name: 'descricao' })
+  descricao: any;
 
   @Column({ type: 'integer', name: 'meta' })
   meta: number;

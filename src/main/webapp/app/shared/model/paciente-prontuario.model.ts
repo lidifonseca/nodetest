@@ -4,8 +4,8 @@ export interface IPacienteProntuario {
   id?: string;
   idPaciente?: string;
   idTipoProntuario?: number;
-  oQue?: string;
-  resultado?: string;
+  oQue?: any;
+  resultado?: any;
   ativo?: number;
   idUsuario?: string;
   idEspecialidade?: number;

@@ -237,7 +237,7 @@ entity CategoriaAtividade {
 }
 
 entity CategoriaContrato {
-	contrato String maxlength(65535),
+	contrato Blob,
 	ativo Integer
 }
 
@@ -329,7 +329,7 @@ entity Empresa {
 entity Especialidade {
 	icon String maxlength(100),
 	especialidade String maxlength(150),
-	descricao String maxlength(65535),
+	descricao TextBlob,
 	duracao Integer,
 	importante String maxlength(255),
 	ativo Integer
@@ -512,16 +512,16 @@ entity LogPacAcesso {
 	profissional String maxlength(255),
 	token String maxlength(200),
 	ipLocal String maxlength(25),
-	inforAcesso String maxlength(65535)
+	inforAcesso TextBlob
 }
 
 entity LogUser {
 	idUsuario String,
-	descricao String maxlength(65535)
+	descricao TextBlob
 }
 
 entity LogUserFranquia {
-	descricao String maxlength(65535)
+	descricao TextBlob
 }
 
 entity MatMed {
@@ -569,7 +569,7 @@ entity NotificacaoConfig {
 	titulo String required maxlength(50),
 	/** Este campo é usado como uma chave para identificar qual a notificação à ser tratada. Pode ser o nome da função que controla o envio de push/email para o paciente e/ou profissionais. */
 	referencia String required maxlength(50),
-	descricao String maxlength(65535),
+	descricao TextBlob,
 	/** 0 = Inativo / 1 = Ativo */
 	ativo Boolean required,
 	/** Caso valor=1 o app obriga o usário escolher envios por push e/ou email. */
@@ -793,7 +793,7 @@ entity Paciente {
 	ufFamiliar String maxlength(5),
 	latitudeFamiliar String maxlength(60),
 	longitudeFamiliar String maxlength(60),
-	observacao String maxlength(65535),
+	observacao TextBlob,
 	aph Integer required,
 	nivelComplexidade Integer,
 	passagemPs Integer,
@@ -807,7 +807,7 @@ entity Paciente {
 	comResponsavel Integer,
 	cadastroCompleto Integer,
 	ativo Integer,
-	detalhes String maxlength(65535),
+	detalhes TextBlob,
 	liminar String maxlength(50),
 	expoToken String maxlength(255),
 	senhaChat String maxlength(45)
@@ -863,7 +863,7 @@ entity PacienteDiagnosticoTemp {
 
 entity PacienteDiario {
 	idOperadora Integer,
-	historico String maxlength(65535),
+	historico TextBlob,
 	ativo Integer
 }
 
@@ -1016,8 +1016,8 @@ entity PacientePedido {
 entity PacienteProntuario {
 	idPaciente String required,
 	idTipoProntuario Integer required,
-	oQue String maxlength(65535),
-	resultado String maxlength(65535),
+	oQue TextBlob,
+	resultado TextBlob,
 	ativo Integer required,
 	idUsuario String,
 	idEspecialidade Integer,
@@ -1046,7 +1046,7 @@ entity PacienteServico {
 
 entity PacienteStatusAtual {
 	dataStatus LocalDate,
-	observacao String maxlength(65535),
+	observacao TextBlob,
 	ativo Integer,
 	idUsuario String required
 }
@@ -1076,7 +1076,7 @@ entity PadItem {
 	dataInicio LocalDate,
 	dataFim LocalDate,
 	qtdSessoes Integer,
-	observacao String maxlength(65535),
+	observacao TextBlob,
 	sub Integer,
 	ativo Integer,
 	dataPadItemIncompleto Instant,
@@ -1114,7 +1114,7 @@ entity PadItemHistDataIncComp {
 entity PadItemIndicadores {
 	idUnidadeMedida Integer,
 	titulo String required maxlength(45),
-	descricao String maxlength(65535),
+	descricao TextBlob,
 	meta Integer,
 	maximoSt Integer,
 	minimoSt Integer
@@ -1147,7 +1147,7 @@ entity PadItemMeta {
 }
 
 entity PadItemResultado {
-	resultado String maxlength(65535),
+	resultado TextBlob,
 	dataFim LocalDate,
 	resultadoAnalisado Boolean,
 	usuarioId Integer
@@ -1243,7 +1243,7 @@ entity Profissional {
 	conta String maxlength(25),
 	tipoConta String maxlength(20),
 	origemCadastro String maxlength(100),
-	obs String maxlength(65535),
+	obs TextBlob,
 	chavePrivada String maxlength(255),
 	ativo Integer,
 	senhaOriginal String maxlength(100),
@@ -1380,7 +1380,7 @@ entity ProfissionalNew {
 	conta String maxlength(25),
 	tipoConta String maxlength(20),
 	origemCadastro String maxlength(100),
-	obs String maxlength(65535),
+	obs TextBlob,
 	chavePrivada String maxlength(255),
 	ativo Integer
 }
@@ -1394,7 +1394,7 @@ entity ProfissionalPush {
 
 entity ProfissionalStatusAtual {
 	idProfissional String,
-	obs String maxlength(65535),
+	obs TextBlob,
 	ativo Integer,
 	idUsuario String required
 }
@@ -1402,7 +1402,7 @@ entity ProfissionalStatusAtual {
 entity ProfissionalStatusAtualNew {
 	idProfissional String,
 	idStatusAtualProf Integer,
-	obs String maxlength(65535),
+	obs TextBlob,
 	ativo Integer,
 	idUsuario String required
 }
@@ -1421,9 +1421,9 @@ entity ProntuarioMotivoManifestacao {
 	idMotivoFilho Integer,
 	idManifestacao Integer,
 	idManifestacaoFilho Integer,
-	sugestao String maxlength(65535),
+	sugestao TextBlob,
 	idUsuario Integer,
-	informacaoAdicional String maxlength(65535)
+	informacaoAdicional TextBlob
 }
 
 entity ProntuarioTipoManifestacao {
@@ -1535,7 +1535,7 @@ entity TempoExperiencia {
 }
 
 entity TermosUso {
-	termosUso String maxlength(65535),
+	termosUso TextBlob,
 	tipo Integer
 }
 
@@ -1753,7 +1753,7 @@ entity Usuario {
 entity UsuarioAcao {
 	idUsuario String,
 	idAtendimento Integer,
-	descricao String maxlength(65535)
+	descricao TextBlob
 }
 
 entity UsuarioPainelGerencial {

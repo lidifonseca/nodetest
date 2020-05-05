@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -16,6 +16,7 @@ import {
   ICategoriaContratoBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './categoria-contrato.reducer';
 import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
@@ -55,6 +56,14 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
     this.props.getCategorias();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { categoriaContratoEntity } = this.props;
@@ -78,6 +87,8 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
   render() {
     const { categoriaContratoEntity, categorias, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { contrato, contratoContentType } = categoriaContratoEntity;
 
     return (
       <div>
@@ -150,13 +161,41 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
                           <Col md="contrato">
                             <AvGroup>
                               <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="contratoLabel" for="categoria-contrato-contrato">
-                                    <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="categoria-contrato-contrato" type="text" name="contrato" />
+                                <Col md="12">
+                                  <AvGroup>
+                                    <Row>
+                                      <Col md="3">
+                                        <Label className="mt-2" id="contratoLabel" for="contrato">
+                                          <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
+                                        </Label>
+                                      </Col>
+                                      <Col md="9">
+                                        <br />
+                                        {contrato ? (
+                                          <div>
+                                            <a onClick={openFile(contratoContentType, contrato)}>
+                                              <Translate contentKey="entity.action.open">Open</Translate>
+                                            </a>
+                                            <br />
+                                            <Row>
+                                              <Col md="11">
+                                                <span>
+                                                  {contratoContentType}, {byteSize(contrato)}
+                                                </span>
+                                              </Col>
+                                              <Col md="1">
+                                                <Button color="danger" onClick={this.clearBlob('contrato')}>
+                                                  <FontAwesomeIcon icon="times-circle" />
+                                                </Button>
+                                              </Col>
+                                            </Row>
+                                          </div>
+                                        ) : null}
+                                        <input id="file_contrato" type="file" onChange={this.onBlobChange(false, 'contrato')} />
+                                        <AvInput type="hidden" name="contrato" value={contrato} />
+                                      </Col>
+                                    </Row>
+                                  </AvGroup>
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -237,6 +276,7 @@ const mapDispatchToProps = {
   getCategorias,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

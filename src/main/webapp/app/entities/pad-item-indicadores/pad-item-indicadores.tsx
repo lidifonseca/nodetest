@@ -16,7 +16,16 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
+import {
+  byteSize,
+  Translate,
+  translate,
+  ICrudGetAllAction,
+  getSortState,
+  IPaginationBaseState,
+  JhiPagination,
+  JhiItemCount
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -214,8 +223,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                           <Label id="descricaoLabel" for="pad-item-indicadores-descricao">
                             <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
                           </Label>
-
-                          <AvInput type="text" name="descricao" id="pad-item-indicadores-descricao" value={this.state.descricao} />
+                          <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
                         </Row>
                       </Col>
                       <Col md="3">

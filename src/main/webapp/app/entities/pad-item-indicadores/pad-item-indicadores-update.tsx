@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -14,6 +14,7 @@ import {
   IPadItemIndicadoresBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './pad-item-indicadores.reducer';
 import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
@@ -49,6 +50,14 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padItemIndicadoresEntity } = this.props;
@@ -72,6 +81,8 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
   render() {
     const { padItemIndicadoresEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { descricao } = padItemIndicadoresEntity;
 
     return (
       <div>
@@ -199,7 +210,7 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="pad-item-indicadores-descricao" type="text" name="descricao" />
+                                  <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -292,6 +303,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

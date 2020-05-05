@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -23,7 +23,7 @@ import { IProfissional } from 'app/shared/model/profissional.model';
 import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
 import { IPacienteHospital } from 'app/shared/model/paciente-hospital.model';
 import { getEntities as getPacienteHospitals } from 'app/entities/paciente-hospital/paciente-hospital.reducer';
-import { getEntity, getPacienteState, IPacienteBaseState, updateEntity, createEntity, reset } from './paciente.reducer';
+import { getEntity, getPacienteState, IPacienteBaseState, updateEntity, createEntity, setBlob, reset } from './paciente.reducer';
 import { IPaciente } from 'app/shared/model/paciente.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -87,6 +87,14 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
     this.props.getPacienteHospitals();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteEntity } = this.props;
@@ -120,6 +128,8 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
       updating
     } = this.props;
     const { isNew } = this.state;
+
+    const { observacao, detalhes } = pacienteEntity;
 
     return (
       <div>
@@ -657,7 +667,14 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                       </Label>
                                     </Col>
                                     <Col md="12">
-                                      <AvField id="paciente-detalhes" type="text" name="detalhes" />
+                                      <AvInput
+                                        id="paciente-detalhes"
+                                        type="textarea"
+                                        name="detalhes"
+                                        validate={{
+                                          maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
+                                        }}
+                                      />
                                     </Col>
                                   </Row>
                                 </AvGroup>
@@ -676,7 +693,14 @@ export class PacienteUpdate extends React.Component<IPacienteUpdateProps, IPacie
                                       </Label>
                                     </Col>
                                     <Col md="12">
-                                      <AvField id="paciente-observacao" type="text" name="observacao" />
+                                      <AvInput
+                                        id="paciente-observacao"
+                                        type="textarea"
+                                        name="observacao"
+                                        validate={{
+                                          maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
+                                        }}
+                                      />
                                     </Col>
                                   </Row>
                                 </AvGroup>
@@ -1594,6 +1618,7 @@ const mapDispatchToProps = {
   getPacienteHospitals,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -16,6 +16,7 @@ import {
   IProfissionalNewBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './profissional-new.reducer';
 import { IProfissionalNew } from 'app/shared/model/profissional-new.model';
@@ -55,6 +56,14 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
     this.props.getUnidadeEasies();
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalNewEntity } = this.props;
@@ -78,6 +87,8 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
   render() {
     const { profissionalNewEntity, unidadeEasies, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { obs } = profissionalNewEntity;
 
     return (
       <div>
@@ -734,7 +745,7 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="profissional-new-obs" type="text" name="obs" />
+                                  <AvInput id="profissional-new-obs" type="textarea" name="obs" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -834,6 +845,7 @@ const mapDispatchToProps = {
   getUnidadeEasies,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

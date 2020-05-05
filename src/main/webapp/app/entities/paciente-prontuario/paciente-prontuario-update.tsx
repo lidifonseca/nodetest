@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -14,6 +14,7 @@ import {
   IPacienteProntuarioBaseState,
   updateEntity,
   createEntity,
+  setBlob,
   reset
 } from './paciente-prontuario.reducer';
 import { IPacienteProntuario } from 'app/shared/model/paciente-prontuario.model';
@@ -49,6 +50,14 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
     }
   }
 
+  onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  clearBlob = name => () => {
+    this.props.setBlob(name, undefined, undefined);
+  };
+
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataConsulta = convertDateTimeToServer(values.dataConsulta);
 
@@ -74,6 +83,8 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
   render() {
     const { pacienteProntuarioEntity, loading, updating } = this.props;
     const { isNew } = this.state;
+
+    const { oQue, resultado } = pacienteProntuarioEntity;
 
     return (
       <div>
@@ -194,7 +205,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="paciente-prontuario-oQue" type="text" name="oQue" />
+                                  <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -213,7 +224,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                                   </Label>
                                 </Col>
                                 <Col md="9">
-                                  <AvField id="paciente-prontuario-resultado" type="text" name="resultado" />
+                                  <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
                                 </Col>
                               </Row>
                             </AvGroup>
@@ -525,6 +536,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 const mapDispatchToProps = {
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset
 };

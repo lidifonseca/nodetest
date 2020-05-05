@@ -15,8 +15,8 @@ export default class PacienteStatusAtual extends BaseEntity {
   @Column({ type: 'date', name: 'data_status' })
   dataStatus: any;
 
-  @Column({ name: 'observacao', length: 65535 })
-  observacao: string;
+  @Column({ type: 'blob', name: 'observacao' })
+  observacao: any;
 
   @Column({ type: 'integer', name: 'ativo' })
   ativo: number;

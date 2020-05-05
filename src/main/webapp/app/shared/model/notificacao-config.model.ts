@@ -5,7 +5,7 @@ export interface INotificacaoConfig {
   criadoEm?: Moment;
   titulo?: string;
   referencia?: string;
-  descricao?: string;
+  descricao?: any;
   ativo?: boolean;
   envioObrigatorio?: boolean;
   serveProfissional?: boolean;

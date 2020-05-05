@@ -5,7 +5,7 @@ export interface IUsuarioAcao {
   id?: string;
   idUsuario?: string;
   idAtendimento?: number;
-  descricao?: string;
+  descricao?: any;
   idTela?: string | any;
   idAcao?: string | any;
 }

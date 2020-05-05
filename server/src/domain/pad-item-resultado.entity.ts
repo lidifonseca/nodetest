@@ -2,8 +2,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
-import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
-
 import PadItem from './pad-item.entity';
 
 /**
@@ -11,8 +9,8 @@ import PadItem from './pad-item.entity';
  */
 @Entity('pad_item_resultado')
 export default class PadItemResultado extends BaseEntity {
-  @Column({ name: 'resultado', length: 65535 })
-  resultado: string;
+  @Column({ type: 'blob', name: 'resultado' })
+  resultado: any;
 
   @Column({ type: 'date', name: 'data_fim' })
   dataFim: any;

@@ -4,7 +4,7 @@ export interface ILogPacAcesso {
   profissional?: string;
   token?: string;
   ipLocal?: string;
-  inforAcesso?: string;
+  inforAcesso?: any;
 }
 
 export const defaultValue: Readonly<ILogPacAcesso> = {};

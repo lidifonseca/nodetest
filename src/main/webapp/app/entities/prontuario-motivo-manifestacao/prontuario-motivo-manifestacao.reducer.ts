@@ -16,6 +16,7 @@ export const ACTION_TYPES = {
   CREATE_PRONTUARIOMOTIVOMANIFESTACAO: 'prontuarioMotivoManifestacao/CREATE_PRONTUARIOMOTIVOMANIFESTACAO',
   UPDATE_PRONTUARIOMOTIVOMANIFESTACAO: 'prontuarioMotivoManifestacao/UPDATE_PRONTUARIOMOTIVOMANIFESTACAO',
   DELETE_PRONTUARIOMOTIVOMANIFESTACAO: 'prontuarioMotivoManifestacao/DELETE_PRONTUARIOMOTIVOMANIFESTACAO',
+  SET_BLOB: 'prontuarioMotivoManifestacao/SET_BLOB',
   RESET: 'prontuarioMotivoManifestacao/RESET'
 };
 
@@ -106,6 +107,17 @@ export default (state: ProntuarioMotivoManifestacaoState = initialState, action)
         updateSuccess: true,
         entity: {}
       };
+    case ACTION_TYPES.SET_BLOB: {
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    }
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -239,6 +251,15 @@ export const deleteEntity: ICrudDeleteAction<IProntuarioMotivoManifestacao> = id
   dispatch(getEntities());
   return result;
 };
+
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
