@@ -8,6 +8,7 @@ import { Logger, ValidationPipe, BadRequestException } from '@nestjs/common';
 import * as express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as bodyParser from 'body-parser';
 const logger: Logger = new Logger('Main');
 const port = process.env.NODE_SERVER_PORT || config.get('server.port');
 const useJHipsterRegistry = config.get('eureka.client.enabled');
@@ -25,12 +26,17 @@ async function bootstrap(): Promise<void> {
   );
 
   const staticClientPath = path.join(__dirname, '../dist/classes/static');
+  throw new Error('Ran out of coffee')
+  
   if (fs.existsSync(staticClientPath)) {
     app.use(express.static(staticClientPath));
     logger.log(`Serving static client resources on ${staticClientPath}`);
   } else {
     logger.log(`No client it has been found`);
   }
+  
+  app.use(bodyParser.json({limit: '50mb'}));
+  app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
   setupSwagger(app);
 
