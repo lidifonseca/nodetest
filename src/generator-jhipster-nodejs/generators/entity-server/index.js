@@ -11,6 +11,10 @@ const fieldTypes = {
     Double: 'number',
     BigDecimal: 'number',
     String: 'string',
+    AnyBlob: 'string',
+    ImageBlob: 'string',
+    Blob: 'string',
+    'byte[]': 'string',
     UUID: 'string'
 };
 
@@ -24,11 +28,11 @@ const dbTypes = {
     LocalDate: 'date',
     Instant: 'timestamp',
     ZonedDateTime: 'datetime',
-    AnyBlob: 'blob',
-    ImageBlob: 'blob',
-    Blob: 'blob',
+    AnyBlob: 'string',
+    ImageBlob: 'string',
+    Blob: 'string',
     TextBlob: 'blob',
-    'byte[]': 'blob'
+    'byte[]': 'string'
 };
 
 module.exports = class extends EntityServerGenerator {

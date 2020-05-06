@@ -270,22 +270,19 @@ _%>
             </Translate>
           </Label>
           <AvInput type="string" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"  value={this.state.<%= fieldName %>}   />
-          <%_
-          } else if (['byte[]', 'ByteBuffer', 'Blob', 'TextBlob'].includes(fieldType)) {
-          const fieldBlobType = field.fieldTypeBlobContent;
-          if (fieldBlobType !== 'text') {
-            const isAnImage = fieldBlobType === 'image';
-            const capitalizedFirstLetter =  _.upperFirst(fieldName);
-
-          _%>
-          <%_ } else { _%>
-          <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
-            <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
-              <%= fieldNameHumanized %>
-            </Translate>
-          </Label>
-          <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" />
-          <%_ } _%>
+          <%_ } else if (['byte[]', 'ByteBuffer', 'Blob', 'TextBlob'].includes(fieldType)) { _%>
+            <%_ const fieldBlobType = field.fieldTypeBlobContent; _%>
+            <%_ if (fieldBlobType !== 'text') {  _%>
+                <%_ const isAnImage = fieldBlobType === 'image'; _%>
+                <%_ const capitalizedFirstLetter =  _.upperFirst(fieldName); _%>
+            <%_ } else { _%>
+                <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
+                  <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                    <%= fieldNameHumanized %>
+                  </Translate>
+                </Label>
+                <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" />
+            <%_ } _%>
           <%_ } else { _%>
           <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
           <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">

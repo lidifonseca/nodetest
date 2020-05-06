@@ -9,8 +9,8 @@ import Paciente from './paciente.entity';
  */
 @Entity('paciente_arquivo')
 export default class PacienteArquivo extends BaseEntity {
-  @Column({ type: 'blob', name: 'arquivo' })
-  arquivo: any;
+  @Column({ type: 'string', name: 'arquivo' })
+  arquivo: string;
 
   @Column({ name: 'arquivo_content_type' })
   arquivoContentType: string;
