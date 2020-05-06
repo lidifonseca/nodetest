@@ -72,7 +72,13 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                               <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivoEntity.arquivo}`}>
                                 <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                               </a>
-                              <span>{pacienteArquivoEntity.arquivoContentType}</span>
+                              <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivoEntity.arquivo}`}>
+                                {pacienteArquivoEntity.arquivoContentType.indexOf('image/') !== -1 ? (
+                                  <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
+                                ) : (
+                                  <Translate contentKey="entity.action.open">Open</Translate>
+                                )}
+                              </a>
                             </div>
                           ) : null}
                         </dd>

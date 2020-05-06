@@ -56,7 +56,6 @@
           <TextFormat value={<%= entityInstance %>Entity.<%=fieldName%>} type="date" format={APP_LOCAL_DATE_FORMAT} />
         <%_
             } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
-
               const fieldBlobType = field.fieldTypeBlobContent;
               if (fieldBlobType !== 'text') {
         _%>
@@ -69,7 +68,13 @@
                   <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
                 <%_ } _%>
                 </a>
-                <span>{<%= entityInstance %>Entity.<%=fieldName%>ContentType}</span>
+                <a rel="noopener noreferrer" target={"_blank"} href={`${<%= entityInstance %>Entity.<%= fieldName %>}`}>
+                  { (<%= entityInstance %>Entity.<%= fieldName %>ContentType.indexOf("image/") !== -1) ? 
+                    <img src={`${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                    :
+                    <Translate contentKey="entity.action.open">Open</Translate>
+                  } 
+                </a>
               </div>
             ) : null}
           <%_ } else { _%>

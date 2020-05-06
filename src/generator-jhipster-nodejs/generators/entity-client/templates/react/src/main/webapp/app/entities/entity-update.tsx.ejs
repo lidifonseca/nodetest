@@ -278,6 +278,14 @@
                     <br />
                     {(<%= fieldName %> || <%= fieldName %>Base64)  ? (
                     <div>
+                      <Row>
+                        <Col md="11">
+                        </Col>
+                        <Col md="1">
+                        <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}>
+                          <FontAwesomeIcon icon="times-circle" /></Button>
+                        </Col>
+                      </Row>
                       <a rel="noopener noreferrer" target={"_blank"} href={`${<%= fieldName %>}`}>
                         <%_ if (isAnImage) { _%>
                         <img src={`${<%= fieldName %>Base64  ? ('data:'+<%= fieldName %>ContentType+';base64,'+arquivoBase64) : <%= fieldName %>}`}
@@ -287,16 +295,6 @@
                         <%_ } _%>
                       </a>
                       <br />
-                      <Row>
-
-                        <Col md="11">
-                        <span>{<%= fieldName %>ContentType}</span>
-                        </Col>
-                        <Col md="1">
-                        <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}>
-                          <FontAwesomeIcon icon="times-circle" /></Button>
-                        </Col>
-                      </Row>
                     </div>
                     ) : null}
                     <input id="file_<%= fieldName %>" type="file" ref={this.<%= fields[idx].fieldName %>FileInput} onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>', this.<%= fields[idx].fieldName %>FileInput

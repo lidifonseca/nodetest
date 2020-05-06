@@ -193,6 +193,14 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                                         <br />
                                         {arquivo || arquivoBase64 ? (
                                           <div>
+                                            <Row>
+                                              <Col md="11"></Col>
+                                              <Col md="1">
+                                                <Button color="danger" onClick={this.clearBlob('arquivo')}>
+                                                  <FontAwesomeIcon icon="times-circle" />
+                                                </Button>
+                                              </Col>
+                                            </Row>
                                             <a rel="noopener noreferrer" target={'_blank'} href={`${arquivo}`}>
                                               <img
                                                 src={`${
@@ -202,16 +210,6 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                                               />
                                             </a>
                                             <br />
-                                            <Row>
-                                              <Col md="11">
-                                                <span>{arquivoContentType}</span>
-                                              </Col>
-                                              <Col md="1">
-                                                <Button color="danger" onClick={this.clearBlob('arquivo')}>
-                                                  <FontAwesomeIcon icon="times-circle" />
-                                                </Button>
-                                              </Col>
-                                            </Row>
                                           </div>
                                         ) : null}
                                         <input

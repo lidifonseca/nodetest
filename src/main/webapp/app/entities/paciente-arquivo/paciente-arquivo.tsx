@@ -271,10 +271,12 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                             {pacienteArquivo.arquivo ? (
                               <div>
                                 <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivo.arquivo}`}>
-                                  <img src={`${pacienteArquivo.arquivo}`} style={{ maxHeight: '30px' }} />
-                                  &nbsp;
+                                  {pacienteArquivo.arquivoContentType.indexOf('image/') !== -1 ? (
+                                    <img src={`${pacienteArquivo.arquivo}`} style={{ maxHeight: '30px' }} />
+                                  ) : (
+                                    <Translate contentKey="entity.action.open">Open</Translate>
+                                  )}
                                 </a>
-                                <span>{pacienteArquivo.arquivoContentType}</span>
                               </div>
                             ) : null}
                           </td>

@@ -332,14 +332,12 @@ _%>
           {<%= entityInstance %>.<%= fieldName %> ? (
             <div>
               <a rel="noopener noreferrer" target={"_blank"} href={`${<%= entityInstance %>.<%= fieldName %>}`}>
-                <%_ if (fieldBlobType === 'image') { _%>
+                { (<%= entityInstance %>.<%= fieldName %>ContentType.indexOf("image/") !== -1) ? 
                   <img src={`${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
-                <%_ } else { _%>
+                  :
                   <Translate contentKey="entity.action.open">Open</Translate>
-                <%_ } _%>
-                &nbsp;
+                } 
               </a>
-              <span>{<%= entityInstance %>.<%= fieldName %>ContentType}</span>
             </div>
           ) : null}
         <%_ } else { _%>
