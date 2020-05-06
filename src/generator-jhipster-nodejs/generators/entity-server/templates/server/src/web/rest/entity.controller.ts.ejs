@@ -84,10 +84,10 @@ export class <%= entityClass %>Controller {
           const <%= fields[idx].fieldName %>Base64 = req.body.<%= fields[idx].fieldName %>Base64;
           const <%= fields[idx].fieldName %>FileName = req.body.<%= fields[idx].fieldName %>FileName;
           const <%= fields[idx].fieldName %>BDName = "arquivos/<%= entityApiUrl %>/" + Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
+          <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = "/"+<%= fields[idx].fieldName %>BDName;
           await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
             if (err) console.log(err);
             else {
-              <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = "/"+<%= fields[idx].fieldName %>BDName;
               require("fs").writeFile(<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
                 console.log(err)  ;
               });
@@ -127,6 +127,7 @@ export class <%= entityClass %>Controller {
         const <%= fields[idx].fieldName %>Base64 = req.body.<%= fields[idx].fieldName %>Base64;
         const <%= fields[idx].fieldName %>FileName = req.body.<%= fields[idx].fieldName %>FileName;
         const <%= fields[idx].fieldName %>BDName = "arquivos/<%= entityApiUrl %>/" + Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
+        <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = "/"+<%= fields[idx].fieldName %>BDName;
         await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
           if (err) console.log(err);
           else {
@@ -138,7 +139,6 @@ export class <%= entityClass %>Controller {
                    console.log('file deleted successfully');
               });  
            });
-            <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = "/"+<%= fields[idx].fieldName %>BDName;
             require("fs").writeFile(<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
               console.log(err)  ;
             });

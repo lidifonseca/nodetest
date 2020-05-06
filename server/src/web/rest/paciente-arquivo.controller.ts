@@ -84,13 +84,10 @@ export class PacienteArquivoController {
         .substr(2) +
       '.' +
       re.exec(arquivoFileName)[1];
-      console.info(arquivoBDName);
+    pacienteArquivo.arquivo = '/' + arquivoBDName;
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
       if (err) console.log(err);
       else {
-        pacienteArquivo.arquivo = '/' + arquivoBDName;
-        console.info(arquivoBDName);
-        console.info(pacienteArquivo.arquivo);
         require('fs').writeFile(arquivoBDName, arquivoBase64, 'base64', function(err) {
           console.log(err);
         });
@@ -131,6 +128,7 @@ export class PacienteArquivoController {
         .substr(2) +
       '.' +
       re.exec(arquivoFileName)[1];
+    pacienteArquivo.arquivo = '/' + arquivoBDName;
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
       if (err) console.log(err);
       else {
@@ -142,7 +140,6 @@ export class PacienteArquivoController {
             console.log('file deleted successfully');
           });
         });
-        pacienteArquivo.arquivo = '/' + arquivoBDName;
         require('fs').writeFile(arquivoBDName, arquivoBase64, 'base64', function(err) {
           console.log(err);
         });
