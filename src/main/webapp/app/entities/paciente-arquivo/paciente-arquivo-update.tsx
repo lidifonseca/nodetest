@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, openFile, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -193,7 +193,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                                         <br />
                                         {arquivo || arquivoBase64 ? (
                                           <div>
-                                            <a target={'_blank'} href={`${arquivo}`}>
+                                            <a rel="noopener noreferrer" target={'_blank'} href={`${arquivo}`}>
                                               <img
                                                 src={`${
                                                   arquivoBase64 ? 'data:' + arquivoContentType + ';base64,' + arquivoBase64 : arquivo
@@ -204,9 +204,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                                             <br />
                                             <Row>
                                               <Col md="11">
-                                                <span>
-                                                  {arquivoContentType}, {byteSize(arquivo)}
-                                                </span>
+                                                <span>{arquivoContentType}</span>
                                               </Col>
                                               <Col md="1">
                                                 <Button color="danger" onClick={this.clearBlob('arquivo')}>

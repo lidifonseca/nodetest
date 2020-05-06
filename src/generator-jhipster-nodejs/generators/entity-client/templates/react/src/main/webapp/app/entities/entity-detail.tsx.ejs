@@ -62,14 +62,14 @@
         _%>
             {<%= entityInstance %>Entity.<%=fieldName%> ? (
               <div>
-                <a target={"_blank"} href={`${<%= entityInstance %>Entity.<%= fieldName %>}`}>
+                <a rel="noopener noreferrer" target={"_blank"} href={`${<%= entityInstance %>Entity.<%= fieldName %>}`}>
                 <%_ if (fieldBlobType === 'image') { _%>
                   <img src={`${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
                 <%_ } else { _%>
                   <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
                 <%_ } _%>
                 </a>
-                <span>{<%= entityInstance %>Entity.<%=fieldName%>ContentType}, {byteSize(<%= entityInstance %>Entity.<%=fieldName%>)}</span>
+                <span>{<%= entityInstance %>Entity.<%=fieldName%>ContentType}</span>
               </div>
             ) : null}
           <%_ } else { _%>
@@ -167,7 +167,6 @@ import {
     <%_ if (fieldsContainBlobOrImage) { _%>
   openFile,
     <%_ } _%>
-  byteSize,
   <%_ } _%>
   <%_ if (fieldsContainDate) { _%>
   TextFormat

@@ -94,7 +94,9 @@ export class PacienteArquivoController {
       }
     });
 
+    console.info(pacienteArquivo);
     const created = await this.pacienteArquivoService.save(pacienteArquivo);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteArquivo', created.id);
     return created;
   }
@@ -129,11 +131,10 @@ export class PacienteArquivoController {
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
       if (err) console.log(err);
       else {
-        fs.stat(arquivoOldName, function(err, stats) {
+        fs.stat(arquivoOldName.trim('/'), function(err, stats) {
           console.log(stats); //here we got all information of file in stats variable
           if (err) return console.log(err);
-
-          fs.unlink(arquivoOldName, function(err) {
+          fs.unlink(arquivoOldName.trim('/'), function(err) {
             if (err) return console.error(err);
             console.log('file deleted successfully');
           });

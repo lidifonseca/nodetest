@@ -18,7 +18,6 @@ import {
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
   openFile,
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -271,13 +270,11 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                           <td>
                             {pacienteArquivo.arquivo ? (
                               <div>
-                                <a target={'_blank'} href={`${pacienteArquivo.arquivo}`}>
+                                <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivo.arquivo}`}>
                                   <img src={`${pacienteArquivo.arquivo}`} style={{ maxHeight: '30px' }} />
                                   &nbsp;
                                 </a>
-                                <span>
-                                  {pacienteArquivo.arquivoContentType}, {byteSize(pacienteArquivo.arquivo)}
-                                </span>
+                                <span>{pacienteArquivo.arquivoContentType}</span>
                               </div>
                             ) : null}
                           </td>

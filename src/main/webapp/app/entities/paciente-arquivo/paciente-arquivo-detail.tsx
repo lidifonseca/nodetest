@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, openFile, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction, openFile } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -69,12 +69,10 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                         <dd>
                           {pacienteArquivoEntity.arquivo ? (
                             <div>
-                              <a target={'_blank'} href={`${pacienteArquivoEntity.arquivo}`}>
+                              <a rel="noopener noreferrer" target={'_blank'} href={`${pacienteArquivoEntity.arquivo}`}>
                                 <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                               </a>
-                              <span>
-                                {pacienteArquivoEntity.arquivoContentType}, {byteSize(pacienteArquivoEntity.arquivo)}
-                              </span>
+                              <span>{pacienteArquivoEntity.arquivoContentType}</span>
                             </div>
                           ) : null}
                         </dd>

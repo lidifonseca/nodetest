@@ -96,8 +96,9 @@ export class <%= entityClass %>Controller {
         <%_ } %>
       <%_ } %>
     <%_ } _%>
-
+    console.info(<%= asEntity(entityInstance) %>);
     const created = await this.<%= asEntity(entityInstance) %>Service.save(<%= asEntity(entityInstance) %>);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, '<%= entityClass %>', created.id);
     return created;
   }
@@ -129,11 +130,10 @@ export class <%= entityClass %>Controller {
         await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
           if (err) console.log(err);
           else {
-            fs.stat(<%= fields[idx].fieldName %>OldName, function (err, stats) {
+            fs.stat(<%= fields[idx].fieldName %>OldName.trim("/"), function (err, stats) {
               console.log(stats);//here we got all information of file in stats variable
               if (err) return console.log(err);
-           
-              fs.unlink(<%= fields[idx].fieldName %>OldName,function(err){
+              fs.unlink(<%= fields[idx].fieldName %>OldName.trim("/"),function(err){
                    if(err) return console.error(err);
                    console.log('file deleted successfully');
               });  

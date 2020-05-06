@@ -278,7 +278,7 @@
                     <br />
                     {(<%= fieldName %> || <%= fieldName %>Base64)  ? (
                     <div>
-                      <a target={"_blank"} href={`${<%= fieldName %>}`}>
+                      <a rel="noopener noreferrer" target={"_blank"} href={`${<%= fieldName %>}`}>
                         <%_ if (isAnImage) { _%>
                         <img src={`${<%= fieldName %>Base64  ? ('data:'+<%= fieldName %>ContentType+';base64,'+arquivoBase64) : <%= fieldName %>}`}
                           style={{ maxHeight: '100px' }} />
@@ -290,7 +290,7 @@
                       <Row>
 
                         <Col md="11">
-                        <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
+                        <span>{<%= fieldName %>ContentType}</span>
                         </Col>
                         <Col md="1">
                         <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}>
@@ -377,7 +377,6 @@ ICrudGetAllAction,
 <%_ if (fieldsContainBlob) { _%>
 setFileData,
 <% if (fieldsContainBlobOrImage) { %> openFile,<% } %>
-byteSize,
 <%_ } _%>
 ICrudPutAction
 } from 'react-jhipster';
