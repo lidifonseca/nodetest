@@ -130,10 +130,10 @@ export class <%= entityClass %>Controller {
         await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
           if (err) console.log(err);
           else {
-            fs.stat(<%= fields[idx].fieldName %>OldName.trim("/"), function (err, stats) {
+            fs.stat(<%= fields[idx].fieldName %>OldName.replace(/^\/+|\/+$/g, ''), function (err, stats) {
               console.log(stats);//here we got all information of file in stats variable
               if (err) return console.log(err);
-              fs.unlink(<%= fields[idx].fieldName %>OldName.trim("/"),function(err){
+              fs.unlink(<%= fields[idx].fieldName %>OldName.replace(/^\/+|\/+$/g, ''),function(err){
                    if(err) return console.error(err);
                    console.log('file deleted successfully');
               });  
