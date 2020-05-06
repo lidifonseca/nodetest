@@ -28,11 +28,7 @@ const dbTypes = {
     LocalDate: 'date',
     Instant: 'timestamp',
     ZonedDateTime: 'datetime',
-    AnyBlob: 'string',
-    ImageBlob: 'string',
-    Blob: 'string',
-    TextBlob: 'blob',
-    'byte[]': 'string'
+    TextBlob: 'blob'
 };
 
 module.exports = class extends EntityServerGenerator {
