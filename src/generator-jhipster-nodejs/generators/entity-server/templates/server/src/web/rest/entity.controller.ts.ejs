@@ -82,12 +82,12 @@ export class <%= entityClass %>Controller {
 
           const <%= fields[idx].fieldName %>Base64 =  <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %>;
           const <%= fields[idx].fieldName %>FileName = req.body.<%= fields[idx].fieldName %>FileName;
-          const <%= fields[idx].fieldName %>BDName = Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
-          <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = <%= fields[idx].fieldName %>BDName;
+          const <%= fields[idx].fieldName %>BDName = "arquivos/<%= entityApiUrl %>/" + Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
+          <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = "/"+<%= fields[idx].fieldName %>BDName;
           await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
             if (err) throw err;
             else {
-              require("fs").writeFile("arquivos/<%= entityApiUrl %>/"+<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
+              require("fs").writeFile(<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
                 console.log(err)  ;
               });
             }
@@ -123,12 +123,12 @@ export class <%= entityClass %>Controller {
 
           const <%= fields[idx].fieldName %>Base64 =  <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %>;
           const <%= fields[idx].fieldName %>FileName = req.body.<%= fields[idx].fieldName %>FileName;
-          const <%= fields[idx].fieldName %>BDName = Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
-          <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = <%= fields[idx].fieldName %>BDName;
+          const <%= fields[idx].fieldName %>BDName = "arquivos/<%= entityApiUrl %>/"+Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
+          <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = "/"+<%= fields[idx].fieldName %>BDName;
           await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
             if (err) throw err;
             else {
-              require("fs").writeFile("arquivos/<%= entityApiUrl %>/"+<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
+              require("fs").writeFile(<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
                 console.log(err)  ;
               });
             }

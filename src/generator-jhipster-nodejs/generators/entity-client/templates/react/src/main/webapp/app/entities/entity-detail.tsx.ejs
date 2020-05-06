@@ -64,7 +64,7 @@
               <div>
                 <a onClick={openFile(<%= entityInstance %>Entity.<%= fieldName %>ContentType, <%= entityInstance %>Entity.<%= fieldName %>)}>
                 <%_ if (fieldBlobType === 'image') { _%>
-                  <img src={`data:${<%= entityInstance %>Entity.<%= fieldName %>ContentType};base64,${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                  <img src={`${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
                 <%_ } else { _%>
                   <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
                 <%_ } _%>

@@ -33,6 +33,8 @@ async function bootstrap(): Promise<void> {
   } else {
     logger.log(`No client it has been found`);
   }
+
+  app.use('/arquivos', express.static('arquivos'));
   
   app.use(bodyParser.json({limit: '50mb'}));
   app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));

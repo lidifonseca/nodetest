@@ -74,6 +74,7 @@ export class PacienteArquivoController {
     const arquivoBase64 = pacienteArquivo.arquivo;
     const arquivoFileName = req.body.arquivoFileName;
     const arquivoBDName =
+      'arquivos/paciente-arquivos/' +
       Math.random()
         .toString(36)
         .substr(2) +
@@ -82,11 +83,11 @@ export class PacienteArquivoController {
         .substr(2) +
       '.' +
       re.exec(arquivoFileName)[1];
-    pacienteArquivo.arquivo = arquivoBDName;
+    pacienteArquivo.arquivo = '/' + arquivoBDName;
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
       if (err) throw err;
       else {
-        require('fs').writeFile('arquivos/paciente-arquivos/' + arquivoBDName, arquivoBase64, 'base64', function(err) {
+        require('fs').writeFile(arquivoBDName, arquivoBase64, 'base64', function(err) {
           console.log(err);
         });
       }
@@ -114,6 +115,7 @@ export class PacienteArquivoController {
     const arquivoBase64 = pacienteArquivo.arquivo;
     const arquivoFileName = req.body.arquivoFileName;
     const arquivoBDName =
+      'arquivos/paciente-arquivos/' +
       Math.random()
         .toString(36)
         .substr(2) +
@@ -122,11 +124,11 @@ export class PacienteArquivoController {
         .substr(2) +
       '.' +
       re.exec(arquivoFileName)[1];
-    pacienteArquivo.arquivo = arquivoBDName;
+    pacienteArquivo.arquivo = '/' + arquivoBDName;
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
       if (err) throw err;
       else {
-        require('fs').writeFile('arquivos/paciente-arquivos/' + arquivoBDName, arquivoBase64, 'base64', function(err) {
+        require('fs').writeFile(arquivoBDName, arquivoBase64, 'base64', function(err) {
           console.log(err);
         });
       }

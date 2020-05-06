@@ -194,7 +194,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                                         {arquivo ? (
                                           <div>
                                             <a onClick={openFile(arquivoContentType, arquivo)}>
-                                              <img src={`data:${arquivoContentType};base64,${arquivo}`} style={{ maxHeight: '100px' }} />
+                                              <img src={`${arquivo}`} style={{ maxHeight: '100px' }} />
                                             </a>
                                             <br />
                                             <Row>

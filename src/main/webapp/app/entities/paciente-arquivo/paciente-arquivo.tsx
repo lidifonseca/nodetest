@@ -272,10 +272,7 @@ export class PacienteArquivo extends React.Component<IPacienteArquivoProps, IPac
                             {pacienteArquivo.arquivo ? (
                               <div>
                                 <a onClick={openFile(pacienteArquivo.arquivoContentType, pacienteArquivo.arquivo)}>
-                                  <img
-                                    src={`data:${pacienteArquivo.arquivoContentType};base64,${pacienteArquivo.arquivo}`}
-                                    style={{ maxHeight: '30px' }}
-                                  />
+                                  <img src={`${pacienteArquivo.arquivo}`} style={{ maxHeight: '30px' }} />
                                   &nbsp;
                                 </a>
                                 <span>

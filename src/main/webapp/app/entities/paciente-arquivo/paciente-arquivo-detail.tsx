@@ -70,10 +70,7 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                           {pacienteArquivoEntity.arquivo ? (
                             <div>
                               <a onClick={openFile(pacienteArquivoEntity.arquivoContentType, pacienteArquivoEntity.arquivo)}>
-                                <img
-                                  src={`data:${pacienteArquivoEntity.arquivoContentType};base64,${pacienteArquivoEntity.arquivo}`}
-                                  style={{ maxHeight: '30px' }}
-                                />
+                                <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                               </a>
                               <span>
                                 {pacienteArquivoEntity.arquivoContentType}, {byteSize(pacienteArquivoEntity.arquivo)}
