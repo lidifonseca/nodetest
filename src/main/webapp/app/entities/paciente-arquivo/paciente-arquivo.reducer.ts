@@ -109,13 +109,14 @@ export default (state: PacienteArquivoState = initialState, action): PacienteArq
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
           [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -210,12 +211,13 @@ export const deleteEntity: ICrudDeleteAction<IPacienteArquivo> = id => async dis
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 

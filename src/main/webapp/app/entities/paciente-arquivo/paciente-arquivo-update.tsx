@@ -27,8 +27,13 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPacienteArquivoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdateProps, IPacienteArquivoUpdateState> {
+  arquivoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IPacienteArquivoUpdateProps>) {
     super(props);
+
+    this.arquivoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getPacienteArquivoState(this.props.location),
       pacienteId: '0',
@@ -51,8 +56,9 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
     this.props.getPacientes();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
@@ -208,7 +214,8 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                                         <input
                                           id="file_arquivo"
                                           type="file"
-                                          onChange={this.onBlobChange(true, 'arquivo')}
+                                          ref={this.arquivoFileInput}
+                                          onChange={this.onBlobChange(true, 'arquivo', this.arquivoFileInput)}
                                           accept="image/*"
                                         />
                                         <AvInput type="hidden" name="arquivo" value={arquivo} />
@@ -220,7 +227,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="arquivo" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="arquivo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
                         {baseFilters !== 'ativo' ? (
@@ -239,7 +246,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
                         {baseFilters !== 'paciente' ? (
                           <Col md="12">
@@ -268,7 +275,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="paciente" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

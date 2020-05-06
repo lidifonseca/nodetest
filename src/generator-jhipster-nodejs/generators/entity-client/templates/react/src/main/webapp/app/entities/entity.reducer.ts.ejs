@@ -245,13 +245,14 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       };
     <%_ if (fieldsContainBlob) { _%>
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
           [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -415,12 +416,13 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
 };
 
 <%_ if (fieldsContainBlob) { _%>
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType, 
+    fileName
   }
 });
 <%_ } _%>

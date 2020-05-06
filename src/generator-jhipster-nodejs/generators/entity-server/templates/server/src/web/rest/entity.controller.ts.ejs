@@ -70,6 +70,32 @@ export class <%= entityClass %>Controller {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() <%= asEntity(entityInstance) %>: <%= entityClass %>): Promise<<%= entityClass %>>  {
+    <%_ let byteIncludesPrintPost = false %>
+    <%_ for (idx in fields) { %>
+      <%_  if (['byte[]', 'ByteBuffer'].includes(fields[idx].fieldType)) {  %>
+        <%_ if (fields[idx].fieldTypeBlobContent !== 'text') { %>
+        <%_ if (!byteIncludesPrintPost) { %>
+          <%_ byteIncludesPrintPost = true %>
+          const fs = require('fs');
+          const re = /(?:\.([^.]+))?$/;
+        <%_ } %>
+
+          const <%= fields[idx].fieldName %>Base64 =  <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %>;
+          const <%= fields[idx].fieldName %>FileName = req.body.<%= fields[idx].fieldName %>FileName;
+          const <%= fields[idx].fieldName %>BDName = Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
+          <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = <%= fields[idx].fieldName %>BDName;
+          await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
+            if (err) throw err;
+            else {
+              require("fs").writeFile("arquivos/<%= entityApiUrl %>/"+<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
+                console.log(err)  ;
+              });
+            }
+          });
+        <%_ } %>
+      <%_ } %>
+    <%_ } _%>
+
     const created = await this.<%= asEntity(entityInstance) %>Service.save(<%= asEntity(entityInstance) %>);
     HeaderUtil.addEntityCreatedHeaders(req.res, '<%= entityClass %>', created.id);
     return created;
@@ -85,6 +111,33 @@ export class <%= entityClass %>Controller {
   })
   async put(@Req() req: Request, @Body() <%= asEntity(entityInstance) %>: <%= entityClass %>): Promise<<%= entityClass %>>  {
     HeaderUtil.addEntityCreatedHeaders(req.res, '<%= entityClass %>', <%= asEntity(entityInstance) %>.id);
+    <%_ let byteIncludesPrintPut = false %>
+    <%_ for (idx in fields) { %>
+      <%_  if (['byte[]', 'ByteBuffer'].includes(fields[idx].fieldType)) {  %>
+        <%_ if (fields[idx].fieldTypeBlobContent !== 'text') { %>
+        <%_ if (!byteIncludesPrintPut) { %>
+          <%_ byteIncludesPrintPut = true %>
+          const fs = require('fs');
+          const re = /(?:\.([^.]+))?$/;
+        <%_ } %>
+
+          const <%= fields[idx].fieldName %>Base64 =  <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %>;
+          const <%= fields[idx].fieldName %>FileName = req.body.<%= fields[idx].fieldName %>FileName;
+          const <%= fields[idx].fieldName %>BDName = Math.random().toString(36).substr(2)+Math.random().toString(36).substr(2)+"."+re.exec(<%= fields[idx].fieldName %>FileName)[1];
+          <%= asEntity(entityInstance) %>.<%= fields[idx].fieldName %> = <%= fields[idx].fieldName %>BDName;
+          await fs.mkdir('arquivos/<%= entityApiUrl %>/', { recursive: true }, (err) => {
+            if (err) throw err;
+            else {
+              require("fs").writeFile("arquivos/<%= entityApiUrl %>/"+<%= fields[idx].fieldName %>BDName, <%= fields[idx].fieldName %>Base64, 'base64', function(err) {
+                console.log(err)  ;
+              });
+            }
+          });
+        <%_ } %>
+      <%_ } %>
+    <%_ } _%>
+
+
     return await this.<%= asEntity(entityInstance) %>Service.update(<%= asEntity(entityInstance) %>);
   }
 

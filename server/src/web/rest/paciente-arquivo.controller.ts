@@ -68,6 +68,30 @@ export class PacienteArquivoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() pacienteArquivo: PacienteArquivo): Promise<PacienteArquivo> {
+    const fs = require('fs');
+    const re = /(?:\.([^.]+))?$/;
+
+    const arquivoBase64 = pacienteArquivo.arquivo;
+    const arquivoFileName = req.body.arquivoFileName;
+    const arquivoBDName =
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      '.' +
+      re.exec(arquivoFileName)[1];
+    pacienteArquivo.arquivo = arquivoBDName;
+    await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
+      if (err) throw err;
+      else {
+        require('fs').writeFile('arquivos/paciente-arquivos/' + arquivoBDName, arquivoBase64, 'base64', function(err) {
+          console.log(err);
+        });
+      }
+    });
+
     const created = await this.pacienteArquivoService.save(pacienteArquivo);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteArquivo', created.id);
     return created;
@@ -83,6 +107,31 @@ export class PacienteArquivoController {
   })
   async put(@Req() req: Request, @Body() pacienteArquivo: PacienteArquivo): Promise<PacienteArquivo> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteArquivo', pacienteArquivo.id);
+
+    const fs = require('fs');
+    const re = /(?:\.([^.]+))?$/;
+
+    const arquivoBase64 = pacienteArquivo.arquivo;
+    const arquivoFileName = req.body.arquivoFileName;
+    const arquivoBDName =
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      '.' +
+      re.exec(arquivoFileName)[1];
+    pacienteArquivo.arquivo = arquivoBDName;
+    await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
+      if (err) throw err;
+      else {
+        require('fs').writeFile('arquivos/paciente-arquivos/' + arquivoBDName, arquivoBase64, 'base64', function(err) {
+          console.log(err);
+        });
+      }
+    });
+
     return await this.pacienteArquivoService.update(pacienteArquivo);
   }
 

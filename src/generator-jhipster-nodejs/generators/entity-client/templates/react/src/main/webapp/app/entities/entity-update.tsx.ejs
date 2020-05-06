@@ -166,7 +166,7 @@
         </AvGroup> 
       <%_ } _%> 
     </Col> : 
-  <AvInput type="hidden" name="<%= relationshipFieldName %>" value={this.state[baseFilters]} /> }
+  <AvInput type="hidden" name="<%= relationshipFieldName %>" value={this.state.fieldsBase[baseFilters]} /> }
 <%_ } _%>
 
 <%_ function printFields(field){ _%>
@@ -299,9 +299,9 @@
                       </Row>
                     </div>
                     ) : null}
-                    <input id="file_<%= fieldName %>" type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>'
+                    <input id="file_<%= fieldName %>" type="file" ref={this.<%= fields[idx].fieldName %>FileInput} onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>', this.<%= fields[idx].fieldName %>FileInput
                       )} <% if (isAnImage) { %>accept="image/*" <% } %> />
-                    <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %> />
+                    <AvInput type="hidden"  name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %> />
                   </Col>
                 </Row>
               </AvGroup>  
@@ -342,7 +342,7 @@
   </Row>
     </AvGroup>
   </Col> : 
-  <AvInput type="hidden" name="<%= fieldName %>" value={this.state[baseFilters]} /> }
+  <AvInput type="hidden" name="<%= fieldName %>" value={this.state.fieldsBase[baseFilters]} /> }
 <%_ } _%>
 
 <%_
@@ -465,9 +465,18 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
 
   export class <%= entityReactName %>Update extends React.Component<I<%= entityReactName %>UpdateProps,
     I<%= entityReactName %>UpdateState> {
-
+    <%_ for (idx in fields) { %>
+      <%_  if (['byte[]', 'ByteBuffer'].includes(fields[idx].fieldType)) {  %>
+        <%= fields[idx].fieldName %>FileInput: React.RefObject<HTMLInputElement>;
+      <%_ } %>
+    <%_ } _%>
     constructor(props: Readonly<I<%= entityReactName %>UpdateProps>) {
       super(props);
+    <%_ for (idx in fields) { %>
+      <%_  if (['byte[]', 'ByteBuffer'].includes(fields[idx].fieldType)) {  %>
+        this.<%= fields[idx].fieldName %>FileInput = React.createRef();
+      <%_ } %>
+    <%_ } _%>
       this.state = {
       fieldsBase: get<%= entityReactName %>State(this.props.location),
       <%_ if (formTabs.length > 0) { _%>activeTab: 0,<%_ } _%>
@@ -514,8 +523,9 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       }
 
       <%_ if (fieldsContainBlob) {_%>
-      onBlobChange = (isAnImage, name) => event => {
-      setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+      onBlobChange = (isAnImage, name, fileInput) => event => {
+      const fileName = fileInput.current.files[0].name;
+      setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
       };
 
       clearBlob = name => () => {
