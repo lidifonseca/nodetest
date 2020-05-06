@@ -131,10 +131,10 @@ export class PacienteArquivoController {
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
       if (err) console.log(err);
       else {
-        fs.stat(arquivoOldName.trim('/'), function(err, stats) {
+        fs.stat(arquivoOldName.replace(/^\/+|\/+$/g, ''), function(err, stats) {
           console.log(stats); //here we got all information of file in stats variable
           if (err) return console.log(err);
-          fs.unlink(arquivoOldName.trim('/'), function(err) {
+          fs.unlink(arquivoOldName.replace(/^\/+|\/+$/g, ''), function(err) {
             if (err) return console.error(err);
             console.log('file deleted successfully');
           });
