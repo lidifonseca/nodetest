@@ -62,7 +62,7 @@
         _%>
             {<%= entityInstance %>Entity.<%=fieldName%> ? (
               <div>
-                <a onClick={openFile(<%= entityInstance %>Entity.<%= fieldName %>ContentType, <%= entityInstance %>Entity.<%= fieldName %>)}>
+                <a target={"_blank"} href={`${<%= entityInstance %>Entity.<%= fieldName %>}`}>
                 <%_ if (fieldBlobType === 'image') { _%>
                   <img src={`${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
                 <%_ } else { _%>

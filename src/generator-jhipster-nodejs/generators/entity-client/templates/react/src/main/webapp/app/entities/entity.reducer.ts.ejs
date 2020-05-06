@@ -250,7 +250,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
+          [name + 'Base64']: data,
           [name + 'ContentType']: contentType,
           [name + 'FileName']: fileName
         }

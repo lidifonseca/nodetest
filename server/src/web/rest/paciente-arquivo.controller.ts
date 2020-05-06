@@ -71,7 +71,8 @@ export class PacienteArquivoController {
     const fs = require('fs');
     const re = /(?:\.([^.]+))?$/;
 
-    const arquivoBase64 = pacienteArquivo.arquivo;
+    const arquivoOldName = pacienteArquivo.arquivo;
+    const arquivoBase64 = req.body.arquivoBase64;
     const arquivoFileName = req.body.arquivoFileName;
     const arquivoBDName =
       'arquivos/paciente-arquivos/' +
@@ -83,10 +84,10 @@ export class PacienteArquivoController {
         .substr(2) +
       '.' +
       re.exec(arquivoFileName)[1];
-    pacienteArquivo.arquivo = '/' + arquivoBDName;
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
-      if (err) throw err;
+      if (err) console.log(err);
       else {
+        pacienteArquivo.arquivo = '/' + arquivoBDName;
         require('fs').writeFile(arquivoBDName, arquivoBase64, 'base64', function(err) {
           console.log(err);
         });
@@ -112,7 +113,8 @@ export class PacienteArquivoController {
     const fs = require('fs');
     const re = /(?:\.([^.]+))?$/;
 
-    const arquivoBase64 = pacienteArquivo.arquivo;
+    const arquivoOldName = pacienteArquivo.arquivo;
+    const arquivoBase64 = req.body.arquivoBase64;
     const arquivoFileName = req.body.arquivoFileName;
     const arquivoBDName =
       'arquivos/paciente-arquivos/' +
@@ -124,10 +126,19 @@ export class PacienteArquivoController {
         .substr(2) +
       '.' +
       re.exec(arquivoFileName)[1];
-    pacienteArquivo.arquivo = '/' + arquivoBDName;
     await fs.mkdir('arquivos/paciente-arquivos/', { recursive: true }, err => {
-      if (err) throw err;
+      if (err) console.log(err);
       else {
+        fs.stat(arquivoOldName, function(err, stats) {
+          console.log(stats); //here we got all information of file in stats variable
+          if (err) return console.log(err);
+
+          fs.unlink(arquivoOldName, function(err) {
+            if (err) return console.error(err);
+            console.log('file deleted successfully');
+          });
+        });
+        pacienteArquivo.arquivo = '/' + arquivoBDName;
         require('fs').writeFile(arquivoBDName, arquivoBase64, 'base64', function(err) {
           console.log(err);
         });

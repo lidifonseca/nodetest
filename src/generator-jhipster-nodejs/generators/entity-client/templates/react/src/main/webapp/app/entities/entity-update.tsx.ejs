@@ -276,11 +276,11 @@
                   </Col>
                   <Col md="<%= formLayoutLabel == 'top' ? 12 : 9  %>">
                     <br />
-                    {<%= fieldName %> ? (
+                    {(<%= fieldName %> || <%= fieldName %>Base64)  ? (
                     <div>
-                      <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
+                      <a target={"_blank"} href={`${<%= fieldName %>}`}>
                         <%_ if (isAnImage) { _%>
-                        <img src={`${<%= fieldName %>}`}
+                        <img src={`${<%= fieldName %>Base64  ? ('data:'+<%= fieldName %>ContentType+';base64,'+arquivoBase64) : <%= fieldName %>}`}
                           style={{ maxHeight: '100px' }} />
                         <%_ } else { _%>
                         <Translate contentKey="entity.action.open">Open</Translate>
@@ -596,6 +596,7 @@ export interface I<%= entityReactName %>UpdateProps extends StateProps, Dispatch
       <%= b.fieldName %>
       <%_ if (b.fieldTypeBlobContent !== 'text') { _%>
       , <%= b.fieldName %>ContentType
+      , <%= b.fieldName %>Base64
       <%_ } _%>
       <%_ if (i+1 === blobFields.length) { _%>
       } = <%= entityInstance %>Entity;

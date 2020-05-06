@@ -1174,6 +1174,7 @@ module.exports = class extends Generator {
                 tsType = 'any';
                 if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
                     variablesWithTypes.push(`${fieldName}ContentType?: string`);
+                    variablesWithTypes.push(`${fieldName}Base64?: string`);
                 }
             }
             variablesWithTypes.push(`${fieldName}?: ${tsType}`);

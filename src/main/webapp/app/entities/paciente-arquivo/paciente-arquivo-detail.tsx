@@ -69,7 +69,7 @@ export class PacienteArquivoDetail extends React.Component<IPacienteArquivoDetai
                         <dd>
                           {pacienteArquivoEntity.arquivo ? (
                             <div>
-                              <a onClick={openFile(pacienteArquivoEntity.arquivoContentType, pacienteArquivoEntity.arquivo)}>
+                              <a target={'_blank'} href={`${pacienteArquivoEntity.arquivo}`}>
                                 <img src={`${pacienteArquivoEntity.arquivo}`} style={{ maxHeight: '30px' }} />
                               </a>
                               <span>

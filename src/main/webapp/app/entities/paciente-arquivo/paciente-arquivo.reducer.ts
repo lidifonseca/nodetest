@@ -114,7 +114,7 @@ export default (state: PacienteArquivoState = initialState, action): PacienteArq
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
+          [name + 'Base64']: data,
           [name + 'ContentType']: contentType,
           [name + 'FileName']: fileName
         }

@@ -103,7 +103,7 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
     const { pacienteArquivoEntity, pacientes, loading, updating } = this.props;
     const { isNew } = this.state;
 
-    const { arquivo, arquivoContentType } = pacienteArquivoEntity;
+    const { arquivo, arquivoContentType, arquivoBase64 } = pacienteArquivoEntity;
     const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
@@ -191,10 +191,15 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                                       </Col>
                                       <Col md="9">
                                         <br />
-                                        {arquivo ? (
+                                        {arquivo || arquivoBase64 ? (
                                           <div>
-                                            <a onClick={openFile(arquivoContentType, arquivo)}>
-                                              <img src={`${arquivo}`} style={{ maxHeight: '100px' }} />
+                                            <a target={'_blank'} href={`${arquivo}`}>
+                                              <img
+                                                src={`${
+                                                  arquivoBase64 ? 'data:' + arquivoContentType + ';base64,' + arquivoBase64 : arquivo
+                                                }`}
+                                                style={{ maxHeight: '100px' }}
+                                              />
                                             </a>
                                             <br />
                                             <Row>
