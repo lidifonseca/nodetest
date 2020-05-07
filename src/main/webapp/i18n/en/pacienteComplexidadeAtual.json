@@ -3,15 +3,15 @@
     "pacienteComplexidadeAtual": {
       "home": {
         "title": "Paciente Complexidade Atuals",
-        "createLabel": "Criar novo Paciente Complexidade Atual",
-        "createOrEditLabel": "Criar ou editar Paciente Complexidade Atual",
-        "notFound": "Nenhum Paciente Complexidade Atual encontrado"
+        "createLabel": "Create a new Paciente Complexidade Atual",
+        "createOrEditLabel": "Create or edit a Paciente Complexidade Atual",
+        "notFound": "No Paciente Complexidade Atuals found"
       },
-      "created": "Um novo Paciente Complexidade Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Complexidade Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Complexidade Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Complexidade Atual is created with identifier {{ param }}",
+      "updated": "A Paciente Complexidade Atual is updated with identifier {{ param }}",
+      "deleted": "A Paciente Complexidade Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Complexidade Atual {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Complexidade Atual {{ id }}?"
       },
       "detail": {
         "title": "Paciente Complexidade Atual"
@@ -22,8 +22,7 @@
       "media": "Media",
       "alta": "Alta",
       "ventilacaoMecanica": "Ventilacao Mecanica",
-      "telemonitoramente": "Telemonitoramente",
-      "idUsuario": "Id Usuario"
+      "telemonitoramente": "Telemonitoramente"
     }
   }
 }

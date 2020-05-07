@@ -7,18 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ApiName.
  */
-@Entity('api_name')
+@Entity('tb_api_name')
 export default class ApiName extends BaseEntity {
-  @Column({ name: 'api_name', length: 100 })
+  @Column({ name: 'API_NAME', length: 100 })
   apiName: string;
 
-  @Column({ name: 'api_receiver', length: 60 })
+  @Column({ name: 'API_RECEIVER', length: 60 })
   apiReceiver: string;
 
-  @Column({ name: 'api_obs', length: 255 })
+  @Column({ name: 'API_OBS', length: 255 })
   apiObs: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

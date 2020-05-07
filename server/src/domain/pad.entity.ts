@@ -4,69 +4,49 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import PadCid from './pad-cid.entity';
-import PadItem from './pad-item.entity';
 import UnidadeEasy from './unidade-easy.entity';
-import Paciente from './paciente.entity';
 
 /**
  * A Pad.
  */
-@Entity('pad')
+@Entity('tb_pad')
 export default class Pad extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_operadora' })
+  @Column({ type: 'integer', name: 'ID_OPERADORA' })
   idOperadora: number;
 
-  @Column({ name: 'id_franquia' })
+  @Column({ name: 'ID_FRANQUIA' })
   idFranquia: string;
 
-  @Column({ name: 'nro_pad', length: 30 })
+  @Column({ name: 'NRO_PAD', length: 30 })
   nroPad: string;
 
-  @Column({ type: 'date', name: 'data_inicio' })
+  @Column({ type: 'date', name: 'DATA_INICIO' })
   dataInicio: any;
 
-  @Column({ type: 'date', name: 'data_fim' })
+  @Column({ type: 'date', name: 'DATA_FIM' })
   dataFim: any;
 
-  @Column({ type: 'date', name: 'data_conferido' })
+  @Column({ type: 'date', name: 'DATA_CONFERIDO' })
   dataConferido: any;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @Column({ type: 'integer', name: 'id_usuario' })
-  idUsuario: number;
-
-  @Column({ type: 'integer', name: 'status_pad' })
+  @Column({ type: 'integer', name: 'STATUS_PAD' })
   statusPad: number;
 
-  @Column({ type: 'boolean', name: 'novo_modelo' })
+  @Column({ type: 'boolean', name: 'NOVO_MODELO' })
   novoModelo: boolean;
 
-  @Column({ name: 'image_path', length: 250 })
+  @Column({ name: 'IMAGE_PATH', length: 250 })
   imagePath: string;
 
-  @Column({ type: 'double', name: 'score' })
+  @Column({ type: 'double', name: 'SCORE' })
   score: number;
 
-  @OneToMany(
-    type => PadCid,
-    other => other.idPad
-  )
-  padCids: PadCid[];
-
-  @OneToMany(
-    type => PadItem,
-    other => other.idPad
-  )
-  padItems: PadItem[];
-
   @ManyToOne(type => UnidadeEasy)
+  @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
-
-  @ManyToOne(type => Paciente)
-  idPaciente: Paciente;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

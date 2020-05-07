@@ -7,7 +7,6 @@ export interface IProntuarioMotivoManifestacao {
   idManifestacao?: number;
   idManifestacaoFilho?: number;
   sugestao?: any;
-  idUsuario?: number;
   informacaoAdicional?: any;
 }
 

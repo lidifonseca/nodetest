@@ -31,21 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-diagnostico-temp.reducer';
+import { getPacienteDiagnosticoTempState, IPacienteDiagnosticoTempBaseState, getEntities } from './paciente-diagnostico-temp.reducer';
 import { IPacienteDiagnosticoTemp } from 'app/shared/model/paciente-diagnostico-temp.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPacienteDiagnosticoTempProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteDiagnosticoTempBaseState {
-  idCid: any;
-  cidPrimario: any;
-  complexidade: any;
-  createdAt: any;
-  sessionId: any;
-  observacao: any;
-}
 export interface IPacienteDiagnosticoTempState extends IPacienteDiagnosticoTempBaseState, IPaginationBaseState {}
 
 export class PacienteDiagnosticoTemp extends React.Component<IPacienteDiagnosticoTempProps, IPacienteDiagnosticoTempState> {
@@ -55,28 +47,9 @@ export class PacienteDiagnosticoTemp extends React.Component<IPacienteDiagnostic
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteDiagnosticoTempState(this.props.location)
+      ...getPacienteDiagnosticoTempState(this.props.location)
     };
   }
-
-  getPacienteDiagnosticoTempState = (location): IPacienteDiagnosticoTempBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idCid = url.searchParams.get('idCid') || '';
-    const cidPrimario = url.searchParams.get('cidPrimario') || '';
-    const complexidade = url.searchParams.get('complexidade') || '';
-    const createdAt = url.searchParams.get('createdAt') || '';
-    const sessionId = url.searchParams.get('sessionId') || '';
-    const observacao = url.searchParams.get('observacao') || '';
-
-    return {
-      idCid,
-      cidPrimario,
-      complexidade,
-      createdAt,
-      sessionId,
-      observacao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -123,7 +96,9 @@ export class PacienteDiagnosticoTemp extends React.Component<IPacienteDiagnostic
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -193,7 +168,11 @@ export class PacienteDiagnosticoTemp extends React.Component<IPacienteDiagnostic
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.home.createLabel">
@@ -208,86 +187,89 @@ export class PacienteDiagnosticoTemp extends React.Component<IPacienteDiagnostic
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idCidLabel" for="paciente-diagnostico-temp-idCid">
-                            <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.idCid">Id Cid</Translate>
-                          </Label>
-                          <AvInput type="string" name="idCid" id="paciente-diagnostico-temp-idCid" value={this.state.idCid} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidPrimarioLabel" check>
+                      {this.state.baseFilters !== 'idCid' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idCidLabel" for="paciente-diagnostico-temp-idCid">
+                              <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.idCid">Id Cid</Translate>
+                            </Label>
+                            <AvInput type="string" name="idCid" id="paciente-diagnostico-temp-idCid" value={this.state.idCid} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidPrimario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidPrimarioLabel" check>
+                              <AvInput
+                                id="paciente-diagnostico-temp-cidPrimario"
+                                type="checkbox"
+                                className="form-control"
+                                name="cidPrimario"
+                              />
+                              <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.cidPrimario">Cid Primario</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'complexidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="complexidadeLabel" for="paciente-diagnostico-temp-complexidade">
+                              <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.complexidade">Complexidade</Translate>
+                            </Label>
+
                             <AvInput
-                              id="paciente-diagnostico-temp-cidPrimario"
-                              type="checkbox"
-                              className="form-control"
-                              name="cidPrimario"
+                              type="text"
+                              name="complexidade"
+                              id="paciente-diagnostico-temp-complexidade"
+                              value={this.state.complexidade}
                             />
-                            <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.cidPrimario">Cid Primario</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="complexidadeLabel" for="paciente-diagnostico-temp-complexidade">
-                            <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.complexidade">Complexidade</Translate>
-                          </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="complexidade"
-                            id="paciente-diagnostico-temp-complexidade"
-                            value={this.state.complexidade}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="createdAtLabel" for="paciente-diagnostico-temp-createdAt">
-                            <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.createdAt">Created At</Translate>
-                          </Label>
-                          <AvInput type="date" name="createdAt" id="paciente-diagnostico-temp-createdAt" value={this.state.createdAt} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="sessionIdLabel" for="paciente-diagnostico-temp-sessionId">
-                            <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.sessionId">Session Id</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'createdAt' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="createdAtLabel" for="paciente-diagnostico-temp-createdAt">
+                              <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.createdAt">Created At</Translate>
+                            </Label>
+                            <AvInput type="date" name="createdAt" id="paciente-diagnostico-temp-createdAt" value={this.state.createdAt} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="sessionId"
-                            id="paciente-diagnostico-temp-sessionId"
-                            value={this.state.sessionId}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacaoLabel" for="paciente-diagnostico-temp-observacao">
-                            <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.observacao">Observacao</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'sessionId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="sessionIdLabel" for="paciente-diagnostico-temp-sessionId">
+                              <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.sessionId">Session Id</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="paciente-diagnostico-temp-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="sessionId" id="paciente-diagnostico-temp-sessionId" value={this.state.sessionId} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacaoLabel" for="paciente-diagnostico-temp-observacao">
+                              <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.observacao">Observacao</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="observacao"
+                              id="paciente-diagnostico-temp-observacao"
+                              value={this.state.observacao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -315,30 +297,42 @@ export class PacienteDiagnosticoTemp extends React.Component<IPacienteDiagnostic
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idCid')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.idCid">Id Cid</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidPrimario')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.cidPrimario">Cid Primario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('complexidade')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.complexidade">Complexidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('createdAt')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.createdAt">Created At</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('sessionId')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.sessionId">Session Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('observacao')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.observacao">Observacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idCid' ? (
+                        <th className="hand" onClick={this.sort('idCid')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.idCid">Id Cid</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidPrimario' ? (
+                        <th className="hand" onClick={this.sort('cidPrimario')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.cidPrimario">Cid Primario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'complexidade' ? (
+                        <th className="hand" onClick={this.sort('complexidade')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.complexidade">Complexidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'createdAt' ? (
+                        <th className="hand" onClick={this.sort('createdAt')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.createdAt">Created At</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'sessionId' ? (
+                        <th className="hand" onClick={this.sort('sessionId')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.sessionId">Session Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <th className="hand" onClick={this.sort('observacao')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.observacao">Observacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -353,35 +347,54 @@ export class PacienteDiagnosticoTemp extends React.Component<IPacienteDiagnostic
                           </Button>
                         </td>
 
-                        <td>{pacienteDiagnosticoTemp.idCid}</td>
+                        {this.state.baseFilters !== 'idCid' ? <td>{pacienteDiagnosticoTemp.idCid}</td> : null}
 
-                        <td>{pacienteDiagnosticoTemp.cidPrimario ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'cidPrimario' ? (
+                          <td>{pacienteDiagnosticoTemp.cidPrimario ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        <td>{pacienteDiagnosticoTemp.complexidade}</td>
+                        {this.state.baseFilters !== 'complexidade' ? <td>{pacienteDiagnosticoTemp.complexidade}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteDiagnosticoTemp.createdAt} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'createdAt' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteDiagnosticoTemp.createdAt} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{pacienteDiagnosticoTemp.sessionId}</td>
+                        {this.state.baseFilters !== 'sessionId' ? <td>{pacienteDiagnosticoTemp.sessionId}</td> : null}
 
-                        <td>{pacienteDiagnosticoTemp.observacao}</td>
+                        {this.state.baseFilters !== 'observacao' ? <td>{pacienteDiagnosticoTemp.observacao}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteDiagnosticoTemp.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDiagnosticoTemp.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDiagnosticoTemp.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDiagnosticoTemp.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDiagnosticoTemp.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDiagnosticoTemp.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -7,7 +7,6 @@ export interface IPacienteStatusAtual {
   dataStatus?: Moment;
   observacao?: any;
   ativo?: number;
-  idUsuario?: string;
   pacienteNome?: string;
   paciente?: string | any;
   statusStatusAtual?: string;

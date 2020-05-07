@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503011500",
+    "changelogDate": "20200507124800",
     "entityTableName": "tipo_operadora",
     "dto": "mapstruct",
     "pagination": "pagination",

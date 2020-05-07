@@ -68,7 +68,9 @@ export class TempoExperienciaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() tempoExperiencia: TempoExperiencia): Promise<TempoExperiencia> {
+    console.info(tempoExperiencia);
     const created = await this.tempoExperienciaService.save(tempoExperiencia);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TempoExperiencia', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class TempoExperienciaController {
   })
   async put(@Req() req: Request, @Body() tempoExperiencia: TempoExperiencia): Promise<TempoExperiencia> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TempoExperiencia', tempoExperiencia.id);
+
     return await this.tempoExperienciaService.update(tempoExperiencia);
   }
 

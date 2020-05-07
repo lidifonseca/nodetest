@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './segmentos-perguntas.reducer';
+import { getEntity, ISegmentosPerguntasBaseState, getSegmentosPerguntasState } from './segmentos-perguntas.reducer';
 import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ISegmentosPerguntasState {
+  fieldsBase: ISegmentosPerguntasBaseState;
+}
+
 export interface ISegmentosPerguntasDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class SegmentosPerguntasDetail extends React.Component<ISegmentosPerguntasDetailProps> {
+export class SegmentosPerguntasDetail extends React.Component<ISegmentosPerguntasDetailProps, ISegmentosPerguntasState> {
   constructor(props: Readonly<ISegmentosPerguntasDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getSegmentosPerguntasState(this.props.location)
     };
   }
 

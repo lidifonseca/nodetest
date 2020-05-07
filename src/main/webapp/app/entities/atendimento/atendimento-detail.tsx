@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento.reducer';
+import { getEntity, IAtendimentoBaseState, getAtendimentoState } from './atendimento.reducer';
 import { IAtendimento } from 'app/shared/model/atendimento.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoState {
+  fieldsBase: IAtendimentoBaseState;
+}
+
 export interface IAtendimentoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps> {
+export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, IAtendimentoState> {
   constructor(props: Readonly<IAtendimentoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoState(this.props.location)
     };
   }
 
@@ -594,97 +599,6 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps> 
                       </Col>
                       <Col md="9">
                         <dd>{atendimentoEntity.unidade ? atendimentoEntity.unidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimento.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idPaciente ? atendimentoEntity.idPaciente.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimento.idOperadora">Id Operadora</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idOperadora ? atendimentoEntity.idOperadora.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimento.idEspecialidade">Id Especialidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idEspecialidade ? atendimentoEntity.idEspecialidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimento.idPadItem">Id Pad Item</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idPadItem ? atendimentoEntity.idPadItem.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimento.idStatusAtendimento">Id Status Atendimento</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idStatusAtendimento ? atendimentoEntity.idStatusAtendimento.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimento.idPeriodo">Id Periodo</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idPeriodo ? atendimentoEntity.idPeriodo.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimento.idCidade">Id Cidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.idCidade ? atendimentoEntity.idCidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

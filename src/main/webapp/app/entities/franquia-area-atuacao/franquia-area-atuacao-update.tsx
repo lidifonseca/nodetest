@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IFranquia } from 'app/shared/model/franquia.model';
-import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './franquia-area-atuacao.reducer';
+import {
+  IFranquiaAreaAtuacaoUpdateState,
+  getEntity,
+  getFranquiaAreaAtuacaoState,
+  IFranquiaAreaAtuacaoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './franquia-area-atuacao.reducer';
 import { IFranquiaAreaAtuacao } from 'app/shared/model/franquia-area-atuacao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IFranquiaAreaAtuacaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IFranquiaAreaAtuacaoUpdateState {
-  isNew: boolean;
-  idFranquiaId: string;
-}
-
 export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtuacaoUpdateProps, IFranquiaAreaAtuacaoUpdateState> {
   constructor(props: Readonly<IFranquiaAreaAtuacaoUpdateProps>) {
     super(props);
+
     this.state = {
-      idFranquiaId: '0',
+      fieldsBase: getFranquiaAreaAtuacaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,23 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getFranquias();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['cepIni'] ? '&cepIni=' + fieldsBase['cepIni'] : '') +
+      (fieldsBase['cepFim'] ? '&cepFim=' + fieldsBase['cepFim'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { franquiaAreaAtuacaoEntity } = this.props;
@@ -63,13 +78,14 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
   };
 
   handleClose = () => {
-    this.props.history.push('/franquia-area-atuacao');
+    this.props.history.push('/franquia-area-atuacao?' + this.getFiltersURL());
   };
 
   render() {
-    const { franquiaAreaAtuacaoEntity, franquias, loading, updating } = this.props;
+    const { franquiaAreaAtuacaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +101,7 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
             isNew
               ? {}
               : {
-                  ...franquiaAreaAtuacaoEntity,
-                  idFranquia: franquiaAreaAtuacaoEntity.idFranquia ? franquiaAreaAtuacaoEntity.idFranquia.id : null
+                  ...franquiaAreaAtuacaoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -108,7 +123,7 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/franquia-area-atuacao"
+                  to={'/franquia-area-atuacao?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -127,7 +142,7 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,91 +158,65 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'cepIni' ? (
+                          <Col md="cepIni">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepIniLabel" for="franquia-area-atuacao-cepIni">
+                                    <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-area-atuacao-cepIni" type="text" name="cepIni" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepIni" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepIniLabel" for="franquia-area-atuacao-cepIni">
-                                <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-area-atuacao-cepIni"
-                                type="text"
-                                name="cepIni"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cepFim' ? (
+                          <Col md="cepFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepFimLabel" for="franquia-area-atuacao-cepFim">
+                                    <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-area-atuacao-cepFim" type="text" name="cepFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepFimLabel" for="franquia-area-atuacao-cepFim">
-                                <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-area-atuacao-cepFim"
-                                type="text"
-                                name="cepFim"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="franquia-area-atuacao-ativo">
-                                <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="franquia-area-atuacao-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="franquia-area-atuacao-idFranquia">
-                                <Translate contentKey="generadorApp.franquiaAreaAtuacao.idFranquia">Id Franquia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="franquia-area-atuacao-idFranquia" type="select" className="form-control" name="idFranquia">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.franquiaAreaAtuacao.idFranquia.empty')}
-                                </option>
-                                {franquias
-                                  ? franquias.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="franquia-area-atuacao-ativo">
+                                    <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-area-atuacao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -240,7 +229,6 @@ export class FranquiaAreaAtuacaoUpdate extends React.Component<IFranquiaAreaAtua
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  franquias: storeState.franquia.entities,
   franquiaAreaAtuacaoEntity: storeState.franquiaAreaAtuacao.entity,
   loading: storeState.franquiaAreaAtuacao.loading,
   updating: storeState.franquiaAreaAtuacao.updating,
@@ -248,7 +236,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getFranquias,
   getEntity,
   updateEntity,
   createEntity,

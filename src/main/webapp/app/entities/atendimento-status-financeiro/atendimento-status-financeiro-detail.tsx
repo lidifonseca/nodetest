@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento-status-financeiro.reducer';
+import {
+  getEntity,
+  IAtendimentoStatusFinanceiroBaseState,
+  getAtendimentoStatusFinanceiroState
+} from './atendimento-status-financeiro.reducer';
 import { IAtendimentoStatusFinanceiro } from 'app/shared/model/atendimento-status-financeiro.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoStatusFinanceiroState {
+  fieldsBase: IAtendimentoStatusFinanceiroBaseState;
+}
+
 export interface IAtendimentoStatusFinanceiroDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoStatusFinanceiroDetail extends React.Component<IAtendimentoStatusFinanceiroDetailProps> {
+export class AtendimentoStatusFinanceiroDetail extends React.Component<
+  IAtendimentoStatusFinanceiroDetailProps,
+  IAtendimentoStatusFinanceiroState
+> {
   constructor(props: Readonly<IAtendimentoStatusFinanceiroDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoStatusFinanceiroState(this.props.location)
     };
   }
 
@@ -79,21 +91,6 @@ export class AtendimentoStatusFinanceiroDetail extends React.Component<IAtendime
                       </Col>
                       <Col md="9">
                         <dd>{atendimentoStatusFinanceiroEntity.idStatusFinanceiro}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoStatusFinanceiroEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './periodo.reducer';
+import { getPeriodoState, IPeriodoBaseState, getEntities } from './periodo.reducer';
 import { IPeriodo } from 'app/shared/model/periodo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPeriodoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPeriodoBaseState {
-  periodo: any;
-  ativo: any;
-  atendimento: any;
-  padItem: any;
-}
 export interface IPeriodoState extends IPeriodoBaseState, IPaginationBaseState {}
 
 export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
@@ -44,25 +38,9 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPeriodoState(this.props.location)
+      ...getPeriodoState(this.props.location)
     };
   }
-
-  getPeriodoState = (location): IPeriodoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const periodo = url.searchParams.get('periodo') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const atendimento = url.searchParams.get('atendimento') || '';
-    const padItem = url.searchParams.get('padItem') || '';
-
-    return {
-      periodo,
-      ativo,
-      atendimento,
-      padItem
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -72,9 +50,7 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
     this.setState(
       {
         periodo: '',
-        ativo: '',
-        atendimento: '',
-        padItem: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -107,7 +83,9 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -125,12 +103,6 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
-      'padItem=' +
-      this.state.padItem +
-      '&' +
       ''
     );
   };
@@ -138,8 +110,8 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { periodo, ativo, atendimento, padItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(periodo, ativo, atendimento, padItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { periodo, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(periodo, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -161,7 +133,11 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.periodo.home.createLabel">Create a new Periodo</Translate>
@@ -174,31 +150,28 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="periodoLabel" for="periodo-periodo">
-                            <Translate contentKey="generadorApp.periodo.periodo">Periodo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="periodoLabel" for="periodo-periodo">
+                              <Translate contentKey="generadorApp.periodo.periodo">Periodo</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="periodo" id="periodo-periodo" value={this.state.periodo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="periodo-ativo">
-                            <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="periodo-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="periodo" id="periodo-periodo" value={this.state.periodo} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="periodo-ativo">
+                              <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="periodo-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -226,14 +199,18 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('periodo')}>
-                        <Translate contentKey="generadorApp.periodo.periodo">Periodo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <th className="hand" onClick={this.sort('periodo')}>
+                          <Translate contentKey="generadorApp.periodo.periodo">Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -248,25 +225,25 @@ export class Periodo extends React.Component<IPeriodoProps, IPeriodoState> {
                           </Button>
                         </td>
 
-                        <td>{periodo.periodo}</td>
+                        {this.state.baseFilters !== 'periodo' ? <td>{periodo.periodo}</td> : null}
 
-                        <td>{periodo.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{periodo.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${periodo.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${periodo.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${periodo.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${periodo.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${periodo.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${periodo.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

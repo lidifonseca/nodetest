@@ -68,7 +68,9 @@ export class MigracaoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() migracao: Migracao): Promise<Migracao> {
+    console.info(migracao);
     const created = await this.migracaoService.save(migracao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Migracao', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class MigracaoController {
   })
   async put(@Req() req: Request, @Body() migracao: Migracao): Promise<Migracao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Migracao', migracao.id);
+
     return await this.migracaoService.update(migracao);
   }
 

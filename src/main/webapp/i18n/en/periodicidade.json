@@ -3,22 +3,21 @@
     "periodicidade": {
       "home": {
         "title": "Periodicidades",
-        "createLabel": "Criar novo Periodicidade",
-        "createOrEditLabel": "Criar ou editar Periodicidade",
-        "notFound": "Nenhum Periodicidade encontrado"
+        "createLabel": "Create a new Periodicidade",
+        "createOrEditLabel": "Create or edit a Periodicidade",
+        "notFound": "No Periodicidades found"
       },
-      "created": "Um novo Periodicidade foi criado com o identificador {{ param }}",
-      "updated": "Um Periodicidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Periodicidade foi excluído com o identificador {{ param }}",
+      "created": "A new Periodicidade is created with identifier {{ param }}",
+      "updated": "A Periodicidade is updated with identifier {{ param }}",
+      "deleted": "A Periodicidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Periodicidade {{ id }}?"
+        "question": "Are you sure you want to delete Periodicidade {{ id }}?"
       },
       "detail": {
         "title": "Periodicidade"
       },
       "periodicidade": "Periodicidade",
-      "ativo": "Ativo",
-      "padItem": "Pad Item"
+      "ativo": "Ativo"
     }
   }
 }

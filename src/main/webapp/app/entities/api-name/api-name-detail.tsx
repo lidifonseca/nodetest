@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './api-name.reducer';
+import { getEntity, IApiNameBaseState, getApiNameState } from './api-name.reducer';
 import { IApiName } from 'app/shared/model/api-name.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IApiNameState {
+  fieldsBase: IApiNameBaseState;
+}
+
 export interface IApiNameDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ApiNameDetail extends React.Component<IApiNameDetailProps> {
+export class ApiNameDetail extends React.Component<IApiNameDetailProps, IApiNameState> {
   constructor(props: Readonly<IApiNameDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getApiNameState(this.props.location)
     };
   }
 

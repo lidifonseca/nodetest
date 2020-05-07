@@ -47,6 +47,7 @@
         },
         {
             "fieldName": "telefone1",
+            "javadoc": "@dbName TELEFONE1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -55,6 +56,7 @@
         },
         {
             "fieldName": "telefone2",
+            "javadoc": "@dbName TELEFONE2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -138,27 +140,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "franquiaAreaAtuacao",
-            "otherEntityRelationshipName": "idFranquia",
-            "relationshipName": "franquiaAreaAtuacao"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "franquiaStatusAtual",
-            "otherEntityRelationshipName": "idFranquia",
-            "relationshipName": "franquiaStatusAtual"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "franquiaUsuario",
-            "otherEntityRelationshipName": "idFranquia",
-            "relationshipName": "franquiaUsuario"
-        }
-    ],
-    "changelogDate": "20200502232900",
+    "relationships": [],
+    "changelogDate": "20200507110200",
     "entityTableName": "franquia",
     "dto": "mapstruct",
     "pagination": "pagination",

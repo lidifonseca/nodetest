@@ -4,35 +4,36 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ITela } from 'app/shared/model/tela.model';
-import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
-import { IAcao } from 'app/shared/model/acao.model';
-import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-import { getEntity, getUsuarioAcaoState, IUsuarioAcaoBaseState, updateEntity, createEntity, setBlob, reset } from './usuario-acao.reducer';
+import {
+  IUsuarioAcaoUpdateState,
+  getEntity,
+  getUsuarioAcaoState,
+  IUsuarioAcaoBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './usuario-acao.reducer';
 import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IUsuarioAcaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IUsuarioAcaoUpdateState {
-  fieldsBase: IUsuarioAcaoBaseState;
-  isNew: boolean;
-  idTelaId: string;
-  idAcaoId: string;
-}
-
 export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, IUsuarioAcaoUpdateState> {
+  descricaoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IUsuarioAcaoUpdateProps>) {
     super(props);
+
+    this.descricaoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getUsuarioAcaoState(this.props.location),
-      idTelaId: '0',
-      idAcaoId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -48,19 +49,30 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getTelas();
-    this.props.getAcaos();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idAtendimento'] ? '&idAtendimento=' + fieldsBase['idAtendimento'] : '') +
+      (fieldsBase['descricao'] ? '&descricao=' + fieldsBase['descricao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { usuarioAcaoEntity } = this.props;
@@ -78,15 +90,15 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/usuario-acao');
+    this.props.history.push('/usuario-acao?' + this.getFiltersURL());
   };
 
   render() {
-    const { usuarioAcaoEntity, telas, acaos, loading, updating } = this.props;
+    const { usuarioAcaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = usuarioAcaoEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -102,9 +114,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
             isNew
               ? {}
               : {
-                  ...usuarioAcaoEntity,
-                  idTela: usuarioAcaoEntity.idTela ? usuarioAcaoEntity.idTela.id : null,
-                  idAcao: usuarioAcaoEntity.idAcao ? usuarioAcaoEntity.idAcao.id : null
+                  ...usuarioAcaoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -121,7 +131,14 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/usuario-acao" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/usuario-acao?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -153,26 +170,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idUsuario ? (
-                          <Col md="idUsuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idUsuarioLabel" for="usuario-acao-idUsuario">
-                                    <Translate contentKey="generadorApp.usuarioAcao.idUsuario">Id Usuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="usuario-acao-idUsuario" type="text" name="idUsuario" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
-                        )}
-
-                        {!this.state.fieldsBase.idAtendimento ? (
+                        {baseFilters !== 'idAtendimento' ? (
                           <Col md="idAtendimento">
                             <AvGroup>
                               <Row>
@@ -188,10 +186,10 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase.idAtendimento} />
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.descricao ? (
+                        {baseFilters !== 'descricao' ? (
                           <Col md="descricao">
                             <AvGroup>
                               <Row>
@@ -207,65 +205,7 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase.descricao} />
-                        )}
-                        {!this.state.fieldsBase.idTela ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="usuario-acao-idTela">
-                                    <Translate contentKey="generadorApp.usuarioAcao.idTela">Id Tela</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="usuario-acao-idTela" type="select" className="form-control" name="idTela">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.usuarioAcao.idTela.empty')}
-                                    </option>
-                                    {telas
-                                      ? telas.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idTela" value={this.state.fieldsBase.idTela} />
-                        )}
-                        {!this.state.fieldsBase.idAcao ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="usuario-acao-idAcao">
-                                    <Translate contentKey="generadorApp.usuarioAcao.idAcao">Id Acao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="usuario-acao-idAcao" type="select" className="form-control" name="idAcao">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.usuarioAcao.idAcao.empty')}
-                                    </option>
-                                    {acaos
-                                      ? acaos.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idAcao" value={this.state.fieldsBase.idAcao} />
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>
@@ -281,8 +221,6 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  telas: storeState.tela.entities,
-  acaos: storeState.acao.entities,
   usuarioAcaoEntity: storeState.usuarioAcao.entity,
   loading: storeState.usuarioAcao.loading,
   updating: storeState.usuarioAcao.updating,
@@ -290,8 +228,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getTelas,
-  getAcaos,
   getEntity,
   updateEntity,
   setBlob,

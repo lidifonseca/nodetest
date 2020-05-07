@@ -8,19 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './atendimento-sorteio-feito.reducer';
+import {
+  IAtendimentoSorteioFeitoUpdateState,
+  getEntity,
+  getAtendimentoSorteioFeitoState,
+  IAtendimentoSorteioFeitoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './atendimento-sorteio-feito.reducer';
 import { IAtendimentoSorteioFeito } from 'app/shared/model/atendimento-sorteio-feito.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAtendimentoSorteioFeitoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IAtendimentoSorteioFeitoUpdateState {
-  isNew: boolean;
-  idPadItemId: string;
-}
 
 export class AtendimentoSorteioFeitoUpdate extends React.Component<
   IAtendimentoSorteioFeitoUpdateProps,
@@ -28,8 +29,9 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
 > {
   constructor(props: Readonly<IAtendimentoSorteioFeitoUpdateProps>) {
     super(props);
+
     this.state = {
-      idPadItemId: '0',
+      fieldsBase: getAtendimentoSorteioFeitoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -45,10 +47,21 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPadItems();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['sorteioFeito'] ? '&sorteioFeito=' + fieldsBase['sorteioFeito'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { atendimentoSorteioFeitoEntity } = this.props;
@@ -66,13 +79,14 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/atendimento-sorteio-feito');
+    this.props.history.push('/atendimento-sorteio-feito?' + this.getFiltersURL());
   };
 
   render() {
-    const { atendimentoSorteioFeitoEntity, padItems, loading, updating } = this.props;
+    const { atendimentoSorteioFeitoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -88,8 +102,7 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
             isNew
               ? {}
               : {
-                  ...atendimentoSorteioFeitoEntity,
-                  idPadItem: atendimentoSorteioFeitoEntity.idPadItem ? atendimentoSorteioFeitoEntity.idPadItem.id : null
+                  ...atendimentoSorteioFeitoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -111,7 +124,7 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/atendimento-sorteio-feito"
+                  to={'/atendimento-sorteio-feito?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -130,7 +143,7 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -153,56 +166,32 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="sorteioFeitoLabel" for="atendimento-sorteio-feito-sorteioFeito">
-                                <Translate contentKey="generadorApp.atendimentoSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-sorteio-feito-sorteioFeito"
-                                type="string"
-                                className="form-control"
-                                name="sorteioFeito"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-sorteio-feito-idPadItem">
-                                <Translate contentKey="generadorApp.atendimentoSorteioFeito.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="atendimento-sorteio-feito-idPadItem" type="select" className="form-control" name="idPadItem">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoSorteioFeito.idPadItem.empty')}
-                                </option>
-                                {padItems
-                                  ? padItems.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'sorteioFeito' ? (
+                          <Col md="sorteioFeito">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sorteioFeitoLabel" for="atendimento-sorteio-feito-sorteioFeito">
+                                    <Translate contentKey="generadorApp.atendimentoSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="atendimento-sorteio-feito-sorteioFeito"
+                                    type="string"
+                                    className="form-control"
+                                    name="sorteioFeito"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sorteioFeito" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -215,7 +204,6 @@ export class AtendimentoSorteioFeitoUpdate extends React.Component<
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  padItems: storeState.padItem.entities,
   atendimentoSorteioFeitoEntity: storeState.atendimentoSorteioFeito.entity,
   loading: storeState.atendimentoSorteioFeito.loading,
   updating: storeState.atendimentoSorteioFeito.updating,
@@ -223,7 +211,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntity,
   updateEntity,
   createEntity,

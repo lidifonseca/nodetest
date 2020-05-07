@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPeriodo, defaultValue } from 'app/shared/model/periodo.model';
 
 export const ACTION_TYPES = {
+  FETCH_PERIODO_LIST_EXPORT: 'periodo/FETCH_PERIODO_LIST_EXPORT',
   FETCH_PERIODO_LIST: 'periodo/FETCH_PERIODO_LIST',
   FETCH_PERIODO: 'periodo/FETCH_PERIODO',
   CREATE_PERIODO: 'periodo/CREATE_PERIODO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PeriodoState = Readonly<typeof initialState>;
 
+export interface IPeriodoBaseState {
+  baseFilters: any;
+  periodo: any;
+  ativo: any;
+}
+
+export interface IPeriodoUpdateState {
+  fieldsBase: IPeriodoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PeriodoState = initialState, action): PeriodoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PERIODO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PERIODO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PERIODO):
       return {
@@ -51,6 +64,7 @@ export default (state: PeriodoState = initialState, action): PeriodoState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PERIODO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PERIODO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PERIODO):
     case FAILURE(ACTION_TYPES.CREATE_PERIODO):
@@ -108,25 +122,19 @@ const apiUrl = 'api/periodos';
 export type ICrudGetAllActionPeriodo<T> = (
   periodo?: any,
   ativo?: any,
-  atendimento?: any,
-  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, atendimento, padItem, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, page, size, sort) => {
   const periodoRequest = periodo ? `periodo.contains=${periodo}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
-  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERIODO_LIST,
-    payload: axios.get<IPeriodo>(
-      `${requestUrl}${periodoRequest}${ativoRequest}${atendimentoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPeriodo>(`${requestUrl}${periodoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPeriodo> = id => {
@@ -134,6 +142,17 @@ export const getEntity: ICrudGetAction<IPeriodo> = id => {
   return {
     type: ACTION_TYPES.FETCH_PERIODO,
     payload: axios.get<IPeriodo>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPeriodo<IPeriodo> = (periodo, ativo, page, size, sort) => {
+  const periodoRequest = periodo ? `periodo.contains=${periodo}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PERIODO_LIST,
+    payload: axios.get<IPeriodo>(`${requestUrl}${periodoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -172,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IPeriodo> = id => async dispatch =>
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPeriodoState = (location): IPeriodoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const periodo = url.searchParams.get('periodo') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    periodo,
+    ativo
+  };
+};

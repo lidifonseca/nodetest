@@ -3,15 +3,15 @@
     "cepbrEndereco": {
       "home": {
         "title": "Cepbr Enderecos",
-        "createLabel": "Criar novo Cepbr Endereco",
-        "createOrEditLabel": "Criar ou editar Cepbr Endereco",
-        "notFound": "Nenhum Cepbr Endereco encontrado"
+        "createLabel": "Create a new Cepbr Endereco",
+        "createOrEditLabel": "Create or edit a Cepbr Endereco",
+        "notFound": "No Cepbr Enderecos found"
       },
-      "created": "Um novo Cepbr Endereco foi criado com o identificador {{ param }}",
-      "updated": "Um Cepbr Endereco foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Cepbr Endereco foi excluído com o identificador {{ param }}",
+      "created": "A new Cepbr Endereco is created with identifier {{ param }}",
+      "updated": "A Cepbr Endereco is updated with identifier {{ param }}",
+      "deleted": "A Cepbr Endereco is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Cepbr Endereco {{ id }}?"
+        "question": "Are you sure you want to delete Cepbr Endereco {{ id }}?"
       },
       "detail": {
         "title": "Cepbr Endereco"
@@ -20,9 +20,7 @@
       "logradouro": "Logradouro",
       "tipoLogradouro": "Tipo Logradouro",
       "complemento": "Complemento",
-      "local": "Local",
-      "idCidade": "Id Cidade",
-      "idBairro": "Id Bairro"
+      "local": "Local"
     }
   }
 }

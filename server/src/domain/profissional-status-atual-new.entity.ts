@@ -2,27 +2,22 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
-import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
-
 /**
  * A ProfissionalStatusAtualNew.
  */
-@Entity('profissional_status_atual_new')
+@Entity('tb_profissional_status_atual_new')
 export default class ProfissionalStatusAtualNew extends BaseEntity {
-  @Column({ name: 'id_profissional' })
+  @Column({ name: 'ID_PROFISSIONAL' })
   idProfissional: string;
 
-  @Column({ type: 'integer', name: 'id_status_atual_prof' })
+  @Column({ type: 'integer', name: 'ID_STATUS_ATUAL_PROF' })
   idStatusAtualProf: number;
 
-  @Column({ type: 'blob', name: 'obs' })
-  obs: any;
+  @Column({ name: 'OBS' })
+  obs: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
-
-  @Column({ name: 'id_usuario', nullable: false })
-  idUsuario: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

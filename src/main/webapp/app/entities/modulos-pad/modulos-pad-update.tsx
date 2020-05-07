@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './modulos-pad.reducer';
+import {
+  IModulosPadUpdateState,
+  getEntity,
+  getModulosPadState,
+  IModulosPadBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './modulos-pad.reducer';
 import { IModulosPad } from 'app/shared/model/modulos-pad.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IModulosPadUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IModulosPadUpdateState {
-  isNew: boolean;
-}
-
 export class ModulosPadUpdate extends React.Component<IModulosPadUpdateProps, IModulosPadUpdateState> {
   constructor(props: Readonly<IModulosPadUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getModulosPadState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class ModulosPadUpdate extends React.Component<IModulosPadUpdateProps, IM
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['nomeModulo'] ? '&nomeModulo=' + fieldsBase['nomeModulo'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { modulosPadEntity } = this.props;
@@ -57,13 +77,14 @@ export class ModulosPadUpdate extends React.Component<IModulosPadUpdateProps, IM
   };
 
   handleClose = () => {
-    this.props.history.push('/modulos-pad');
+    this.props.history.push('/modulos-pad?' + this.getFiltersURL());
   };
 
   render() {
     const { modulosPadEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +117,14 @@ export class ModulosPadUpdate extends React.Component<IModulosPadUpdateProps, IM
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/modulos-pad" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/modulos-pad?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +139,7 @@ export class ModulosPadUpdate extends React.Component<IModulosPadUpdateProps, IM
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,51 +155,46 @@ export class ModulosPadUpdate extends React.Component<IModulosPadUpdateProps, IM
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'nomeModulo' ? (
+                          <Col md="nomeModulo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeModuloLabel" for="modulos-pad-nomeModulo">
+                                    <Translate contentKey="generadorApp.modulosPad.nomeModulo">Nome Modulo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="modulos-pad-nomeModulo" type="text" name="nomeModulo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nomeModulo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nomeModuloLabel" for="modulos-pad-nomeModulo">
-                                <Translate contentKey="generadorApp.modulosPad.nomeModulo">Nome Modulo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="modulos-pad-nomeModulo"
-                                type="text"
-                                name="nomeModulo"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="modulos-pad-ativo">
-                                <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="modulos-pad-ativo"
-                                type="text"
-                                name="ativo"
-                                validate={{
-                                  maxLength: { value: 1, errorMessage: translate('entity.validation.maxlength', { max: 1 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="modulos-pad-ativo">
+                                    <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="modulos-pad-ativo" type="text" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

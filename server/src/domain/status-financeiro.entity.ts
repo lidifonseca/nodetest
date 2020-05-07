@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A StatusFinanceiro.
  */
-@Entity('status_financeiro')
+@Entity('tb_status_financeiro')
 export default class StatusFinanceiro extends BaseEntity {
-  @Column({ name: 'nome', length: 45 })
+  @Column({ name: 'NOME', length: 45 })
   nome: string;
 
-  @Column({ name: 'ativo', length: 2 })
+  @Column({ name: 'ATIVO', length: 2 })
   ativo: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

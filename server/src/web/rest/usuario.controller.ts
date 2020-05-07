@@ -68,7 +68,9 @@ export class UsuarioController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() usuario: Usuario): Promise<Usuario> {
+    console.info(usuario);
     const created = await this.usuarioService.save(usuario);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Usuario', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class UsuarioController {
   })
   async put(@Req() req: Request, @Body() usuario: Usuario): Promise<Usuario> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Usuario', usuario.id);
+
     return await this.usuarioService.update(usuario);
   }
 

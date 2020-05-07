@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './paciente-servico.reducer';
+import {
+  IPacienteServicoUpdateState,
+  getEntity,
+  getPacienteServicoState,
+  IPacienteServicoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-servico.reducer';
 import { IPacienteServico } from 'app/shared/model/paciente-servico.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteServicoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteServicoUpdateState {
-  isNew: boolean;
-}
-
 export class PacienteServicoUpdate extends React.Component<IPacienteServicoUpdateProps, IPacienteServicoUpdateState> {
   constructor(props: Readonly<IPacienteServicoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPacienteServicoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class PacienteServicoUpdate extends React.Component<IPacienteServicoUpdat
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['servico'] ? '&servico=' + fieldsBase['servico'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteServicoEntity } = this.props;
@@ -57,13 +77,14 @@ export class PacienteServicoUpdate extends React.Component<IPacienteServicoUpdat
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-servico');
+    this.props.history.push('/paciente-servico?' + this.getFiltersURL());
   };
 
   render() {
     const { pacienteServicoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +117,14 @@ export class PacienteServicoUpdate extends React.Component<IPacienteServicoUpdat
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/paciente-servico" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente-servico?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +139,7 @@ export class PacienteServicoUpdate extends React.Component<IPacienteServicoUpdat
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,55 +155,46 @@ export class PacienteServicoUpdate extends React.Component<IPacienteServicoUpdat
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="paciente-servico-idPaciente">
+                                    <Translate contentKey="generadorApp.pacienteServico.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-servico-idPaciente" type="string" className="form-control" name="idPaciente" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="paciente-servico-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteServico.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-servico-idPaciente"
-                                type="string"
-                                className="form-control"
-                                name="idPaciente"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="servicoLabel" for="paciente-servico-servico">
-                                <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-servico-servico"
-                                type="string"
-                                className="form-control"
-                                name="servico"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'servico' ? (
+                          <Col md="servico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="servicoLabel" for="paciente-servico-servico">
+                                    <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-servico-servico" type="string" className="form-control" name="servico" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

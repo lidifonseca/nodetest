@@ -22,21 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './usuario-panico.reducer';
+import { getUsuarioPanicoState, IUsuarioPanicoBaseState, getEntities } from './usuario-panico.reducer';
 import { IUsuarioPanico } from 'app/shared/model/usuario-panico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IUsuarioPanicoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IUsuarioPanicoBaseState {
-  idPaciente: any;
-  idUsuario: any;
-  idProfissional: any;
-  observacao: any;
-  resolvido: any;
-  idUserResolvido: any;
-}
 export interface IUsuarioPanicoState extends IUsuarioPanicoBaseState, IPaginationBaseState {}
 
 export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuarioPanicoState> {
@@ -46,28 +38,9 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getUsuarioPanicoState(this.props.location)
+      ...getUsuarioPanicoState(this.props.location)
     };
   }
-
-  getUsuarioPanicoState = (location): IUsuarioPanicoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const observacao = url.searchParams.get('observacao') || '';
-    const resolvido = url.searchParams.get('resolvido') || '';
-    const idUserResolvido = url.searchParams.get('idUserResolvido') || '';
-
-    return {
-      idPaciente,
-      idUsuario,
-      idProfissional,
-      observacao,
-      resolvido,
-      idUserResolvido
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -77,7 +50,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
     this.setState(
       {
         idPaciente: '',
-        idUsuario: '',
         idProfissional: '',
         observacao: '',
         resolvido: '',
@@ -114,7 +86,9 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -128,9 +102,6 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
       '&' +
       'idPaciente=' +
       this.state.idPaciente +
-      '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
       '&' +
       'idProfissional=' +
       this.state.idProfissional +
@@ -151,21 +122,9 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      idPaciente,
-      idUsuario,
-      idProfissional,
-      observacao,
-      resolvido,
-      idUserResolvido,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { idPaciente, idProfissional, observacao, resolvido, idUserResolvido, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       idPaciente,
-      idUsuario,
       idProfissional,
       observacao,
       resolvido,
@@ -195,7 +154,11 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.usuarioPanico.home.createLabel">Create a new Usuario Panico</Translate>
@@ -208,65 +171,71 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="usuario-panico-idPaciente">
-                            <Translate contentKey="generadorApp.usuarioPanico.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPaciente" id="usuario-panico-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="usuario-panico-idUsuario">
-                            <Translate contentKey="generadorApp.usuarioPanico.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="idUsuario" id="usuario-panico-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="usuario-panico-idProfissional">
-                            <Translate contentKey="generadorApp.usuarioPanico.idProfissional">Id Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idProfissional"
-                            id="usuario-panico-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacaoLabel" for="usuario-panico-observacao">
-                            <Translate contentKey="generadorApp.usuarioPanico.observacao">Observacao</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="usuario-panico-idPaciente">
+                              <Translate contentKey="generadorApp.usuarioPanico.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPaciente" id="usuario-panico-idPaciente" value={this.state.idPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="observacao" id="usuario-panico-observacao" value={this.state.observacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="resolvidoLabel" for="usuario-panico-resolvido">
-                            <Translate contentKey="generadorApp.usuarioPanico.resolvido">Resolvido</Translate>
-                          </Label>
-                          <AvInput type="string" name="resolvido" id="usuario-panico-resolvido" value={this.state.resolvido} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUserResolvidoLabel" for="usuario-panico-idUserResolvido">
-                            <Translate contentKey="generadorApp.usuarioPanico.idUserResolvido">Id User Resolvido</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idUserResolvido"
-                            id="usuario-panico-idUserResolvido"
-                            value={this.state.idUserResolvido}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="usuario-panico-idProfissional">
+                              <Translate contentKey="generadorApp.usuarioPanico.idProfissional">Id Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idProfissional"
+                              id="usuario-panico-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacaoLabel" for="usuario-panico-observacao">
+                              <Translate contentKey="generadorApp.usuarioPanico.observacao">Observacao</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="observacao" id="usuario-panico-observacao" value={this.state.observacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'resolvido' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="resolvidoLabel" for="usuario-panico-resolvido">
+                              <Translate contentKey="generadorApp.usuarioPanico.resolvido">Resolvido</Translate>
+                            </Label>
+                            <AvInput type="string" name="resolvido" id="usuario-panico-resolvido" value={this.state.resolvido} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idUserResolvido' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idUserResolvidoLabel" for="usuario-panico-idUserResolvido">
+                              <Translate contentKey="generadorApp.usuarioPanico.idUserResolvido">Id User Resolvido</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idUserResolvido"
+                              id="usuario-panico-idUserResolvido"
+                              value={this.state.idUserResolvido}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -294,30 +263,36 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.usuarioPanico.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.usuarioPanico.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.usuarioPanico.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('observacao')}>
-                        <Translate contentKey="generadorApp.usuarioPanico.observacao">Observacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('resolvido')}>
-                        <Translate contentKey="generadorApp.usuarioPanico.resolvido">Resolvido</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUserResolvido')}>
-                        <Translate contentKey="generadorApp.usuarioPanico.idUserResolvido">Id User Resolvido</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.usuarioPanico.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.usuarioPanico.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <th className="hand" onClick={this.sort('observacao')}>
+                          <Translate contentKey="generadorApp.usuarioPanico.observacao">Observacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'resolvido' ? (
+                        <th className="hand" onClick={this.sort('resolvido')}>
+                          <Translate contentKey="generadorApp.usuarioPanico.resolvido">Resolvido</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idUserResolvido' ? (
+                        <th className="hand" onClick={this.sort('idUserResolvido')}>
+                          <Translate contentKey="generadorApp.usuarioPanico.idUserResolvido">Id User Resolvido</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -332,33 +307,41 @@ export class UsuarioPanico extends React.Component<IUsuarioPanicoProps, IUsuario
                           </Button>
                         </td>
 
-                        <td>{usuarioPanico.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{usuarioPanico.idPaciente}</td> : null}
 
-                        <td>{usuarioPanico.idUsuario}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{usuarioPanico.idProfissional}</td> : null}
 
-                        <td>{usuarioPanico.idProfissional}</td>
+                        {this.state.baseFilters !== 'observacao' ? <td>{usuarioPanico.observacao}</td> : null}
 
-                        <td>{usuarioPanico.observacao}</td>
+                        {this.state.baseFilters !== 'resolvido' ? <td>{usuarioPanico.resolvido}</td> : null}
 
-                        <td>{usuarioPanico.resolvido}</td>
-
-                        <td>{usuarioPanico.idUserResolvido}</td>
+                        {this.state.baseFilters !== 'idUserResolvido' ? <td>{usuarioPanico.idUserResolvido}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${usuarioPanico.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${usuarioPanico.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${usuarioPanico.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${usuarioPanico.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${usuarioPanico.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${usuarioPanico.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

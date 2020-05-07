@@ -68,7 +68,35 @@ export class CategoriaContratoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() categoriaContrato: CategoriaContrato): Promise<CategoriaContrato> {
+    const fs = require('fs');
+    const re = /(?:\.([^.]+))?$/;
+
+    const contratoOldName = categoriaContrato.contrato;
+    const contratoBase64 = req.body.contratoBase64;
+    const contratoFileName = req.body.contratoFileName;
+    const contratoBDName =
+      'arquivos/categoria-contratoes/' +
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      '.' +
+      re.exec(contratoFileName)[1];
+    categoriaContrato.contrato = '/' + contratoBDName;
+    await fs.mkdir('arquivos/categoria-contratoes/', { recursive: true }, err => {
+      if (err) console.log(err);
+      else {
+        require('fs').writeFile(contratoBDName, contratoBase64, 'base64', function(err) {
+          console.log(err);
+        });
+      }
+    });
+
+    console.info(categoriaContrato);
     const created = await this.categoriaContratoService.save(categoriaContrato);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CategoriaContrato', created.id);
     return created;
   }
@@ -83,6 +111,41 @@ export class CategoriaContratoController {
   })
   async put(@Req() req: Request, @Body() categoriaContrato: CategoriaContrato): Promise<CategoriaContrato> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CategoriaContrato', categoriaContrato.id);
+
+    const fs = require('fs');
+    const re = /(?:\.([^.]+))?$/;
+
+    const contratoOldName = categoriaContrato.contrato;
+    const contratoBase64 = req.body.contratoBase64;
+    const contratoFileName = req.body.contratoFileName;
+    const contratoBDName =
+      'arquivos/categoria-contratoes/' +
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      Math.random()
+        .toString(36)
+        .substr(2) +
+      '.' +
+      re.exec(contratoFileName)[1];
+    categoriaContrato.contrato = '/' + contratoBDName;
+    await fs.mkdir('arquivos/categoria-contratoes/', { recursive: true }, err => {
+      if (err) console.log(err);
+      else {
+        fs.stat(contratoOldName.replace(/^\/+|\/+$/g, ''), function(err, stats) {
+          console.log(stats); //here we got all information of file in stats variable
+          if (err) return console.log(err);
+          fs.unlink(contratoOldName.replace(/^\/+|\/+$/g, ''), function(err) {
+            if (err) return console.error(err);
+            console.log('file deleted successfully');
+          });
+        });
+        require('fs').writeFile(contratoBDName, contratoBase64, 'base64', function(err) {
+          console.log(err);
+        });
+      }
+    });
+
     return await this.categoriaContratoService.update(categoriaContrato);
   }
 

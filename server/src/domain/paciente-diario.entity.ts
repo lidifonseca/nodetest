@@ -2,28 +2,19 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
-import Paciente from './paciente.entity';
-import Usuario from './usuario.entity';
-
 /**
  * A PacienteDiario.
  */
-@Entity('paciente_diario')
+@Entity('tb_paciente_diario')
 export default class PacienteDiario extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_operadora' })
+  @Column({ type: 'integer', name: 'ID_OPERADORA' })
   idOperadora: number;
 
-  @Column({ type: 'blob', name: 'historico' })
-  historico: any;
+  @Column({ name: 'HISTORICO' })
+  historico: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
-
-  @ManyToOne(type => Paciente)
-  idPaciente: Paciente;
-
-  @ManyToOne(type => Usuario)
-  idUsuario: Usuario;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

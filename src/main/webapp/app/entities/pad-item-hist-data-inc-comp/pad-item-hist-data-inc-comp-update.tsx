@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './pad-item-hist-data-inc-comp.reducer';
+import {
+  IPadItemHistDataIncCompUpdateState,
+  getEntity,
+  getPadItemHistDataIncCompState,
+  IPadItemHistDataIncCompBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pad-item-hist-data-inc-comp.reducer';
 import { IPadItemHistDataIncComp } from 'app/shared/model/pad-item-hist-data-inc-comp.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadItemHistDataIncCompUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadItemHistDataIncCompUpdateState {
-  isNew: boolean;
-}
-
 export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDataIncCompUpdateProps, IPadItemHistDataIncCompUpdateState> {
   constructor(props: Readonly<IPadItemHistDataIncCompUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPadItemHistDataIncCompState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,21 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPadItem'] ? '&idPadItem=' + fieldsBase['idPadItem'] : '') +
+      (fieldsBase['dataPadItemIncompleto'] ? '&dataPadItemIncompleto=' + fieldsBase['dataPadItemIncompleto'] : '') +
+      (fieldsBase['dataPadItemCompleto'] ? '&dataPadItemCompleto=' + fieldsBase['dataPadItemCompleto'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataPadItemIncompleto = convertDateTimeToServer(values.dataPadItemIncompleto);
     values.dataPadItemCompleto = convertDateTimeToServer(values.dataPadItemCompleto);
@@ -60,13 +81,14 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-item-hist-data-inc-comp');
+    this.props.history.push('/pad-item-hist-data-inc-comp?' + this.getFiltersURL());
   };
 
   render() {
     const { padItemHistDataIncCompEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +126,7 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/pad-item-hist-data-inc-comp"
+                  to={'/pad-item-hist-data-inc-comp?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +145,7 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,78 +168,97 @@ export class PadItemHistDataIncCompUpdate extends React.Component<IPadItemHistDa
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idPadItem' ? (
+                          <Col md="idPadItem">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPadItemLabel" for="pad-item-hist-data-inc-comp-idPadItem">
+                                    <Translate contentKey="generadorApp.padItemHistDataIncComp.idPadItem">Id Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-hist-data-inc-comp-idPadItem" type="text" name="idPadItem" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPadItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPadItemLabel" for="pad-item-hist-data-inc-comp-idPadItem">
-                                <Translate contentKey="generadorApp.padItemHistDataIncComp.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-hist-data-inc-comp-idPadItem" type="text" name="idPadItem" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataPadItemIncompleto' ? (
+                          <Col md="dataPadItemIncompleto">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="dataPadItemIncompletoLabel"
+                                    for="pad-item-hist-data-inc-comp-dataPadItemIncompleto"
+                                  >
+                                    <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemIncompleto">
+                                      Data Pad Item Incompleto
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="pad-item-hist-data-inc-comp-dataPadItemIncompleto"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataPadItemIncompleto"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={
+                                      isNew
+                                        ? null
+                                        : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemIncompleto)
+                                    }
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataPadItemIncompleto" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="dataPadItemIncompletoLabel"
-                                for="pad-item-hist-data-inc-comp-dataPadItemIncompleto"
-                              >
-                                <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemIncompleto">
-                                  Data Pad Item Incompleto
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="pad-item-hist-data-inc-comp-dataPadItemIncompleto"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPadItemIncompleto"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={
-                                  isNew ? null : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemIncompleto)
-                                }
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPadItemCompletoLabel" for="pad-item-hist-data-inc-comp-dataPadItemCompleto">
-                                <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemCompleto">
-                                  Data Pad Item Completo
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="pad-item-hist-data-inc-comp-dataPadItemCompleto"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataPadItemCompleto"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={
-                                  isNew ? null : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemCompleto)
-                                }
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'dataPadItemCompleto' ? (
+                          <Col md="dataPadItemCompleto">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="dataPadItemCompletoLabel"
+                                    for="pad-item-hist-data-inc-comp-dataPadItemCompleto"
+                                  >
+                                    <Translate contentKey="generadorApp.padItemHistDataIncComp.dataPadItemCompleto">
+                                      Data Pad Item Completo
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="pad-item-hist-data-inc-comp-dataPadItemCompleto"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataPadItemCompleto"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={
+                                      isNew ? null : convertDateTimeFromServer(this.props.padItemHistDataIncCompEntity.dataPadItemCompleto)
+                                    }
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataPadItemCompleto" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

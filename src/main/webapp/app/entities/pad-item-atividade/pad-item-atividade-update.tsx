@@ -8,29 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
-import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './pad-item-atividade.reducer';
+import {
+  IPadItemAtividadeUpdateState,
+  getEntity,
+  getPadItemAtividadeState,
+  IPadItemAtividadeBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pad-item-atividade.reducer';
 import { IPadItemAtividade } from 'app/shared/model/pad-item-atividade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadItemAtividadeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadItemAtividadeUpdateState {
-  isNew: boolean;
-  idAtividadeId: string;
-  idPadItemId: string;
-}
-
 export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpdateProps, IPadItemAtividadeUpdateState> {
   constructor(props: Readonly<IPadItemAtividadeUpdateProps>) {
     super(props);
+
     this.state = {
-      idAtividadeId: '0',
-      idPadItemId: '0',
+      fieldsBase: getPadItemAtividadeState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,11 +44,22 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getCategoriaAtividades();
-    this.props.getPadItems();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['dataInicio'] ? '&dataInicio=' + fieldsBase['dataInicio'] : '') +
+      (fieldsBase['dataFim'] ? '&dataFim=' + fieldsBase['dataFim'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padItemAtividadeEntity } = this.props;
@@ -68,13 +77,14 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-item-atividade');
+    this.props.history.push('/pad-item-atividade?' + this.getFiltersURL());
   };
 
   render() {
-    const { padItemAtividadeEntity, categoriaAtividades, padItems, loading, updating } = this.props;
+    const { padItemAtividadeEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -90,9 +100,7 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
             isNew
               ? {}
               : {
-                  ...padItemAtividadeEntity,
-                  idAtividade: padItemAtividadeEntity.idAtividade ? padItemAtividadeEntity.idAtividade.id : null,
-                  idPadItem: padItemAtividadeEntity.idPadItem ? padItemAtividadeEntity.idPadItem.id : null
+                  ...padItemAtividadeEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -109,7 +117,14 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/pad-item-atividade" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/pad-item-atividade?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -124,7 +139,7 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -140,88 +155,46 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'dataInicio' ? (
+                          <Col md="dataInicio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataInicioLabel" for="pad-item-atividade-dataInicio">
+                                    <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-atividade-dataInicio" type="date" className="form-control" name="dataInicio" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataInicioLabel" for="pad-item-atividade-dataInicio">
-                                <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-atividade-dataInicio" type="date" className="form-control" name="dataInicio" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataFimLabel" for="pad-item-atividade-dataFim">
-                                <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-atividade-dataFim" type="date" className="form-control" name="dataFim" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="pad-item-atividade-idAtividade">
-                                <Translate contentKey="generadorApp.padItemAtividade.idAtividade">Id Atividade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-item-atividade-idAtividade" type="select" className="form-control" name="idAtividade">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.padItemAtividade.idAtividade.empty')}
-                                </option>
-                                {categoriaAtividades
-                                  ? categoriaAtividades.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="pad-item-atividade-idPadItem">
-                                <Translate contentKey="generadorApp.padItemAtividade.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-item-atividade-idPadItem" type="select" className="form-control" name="idPadItem">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.padItemAtividade.idPadItem.empty')}
-                                </option>
-                                {padItems
-                                  ? padItems.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'dataFim' ? (
+                          <Col md="dataFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataFimLabel" for="pad-item-atividade-dataFim">
+                                    <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-atividade-dataFim" type="date" className="form-control" name="dataFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -234,8 +207,6 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  categoriaAtividades: storeState.categoriaAtividade.entities,
-  padItems: storeState.padItem.entities,
   padItemAtividadeEntity: storeState.padItemAtividade.entity,
   loading: storeState.padItemAtividade.loading,
   updating: storeState.padItemAtividade.updating,
@@ -243,8 +214,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getCategoriaAtividades,
-  getPadItems,
   getEntity,
   updateEntity,
   createEntity,

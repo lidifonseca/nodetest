@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IMatMed, defaultValue } from 'app/shared/model/mat-med.model';
 
 export const ACTION_TYPES = {
+  FETCH_MATMED_LIST_EXPORT: 'matMed/FETCH_MATMED_LIST_EXPORT',
   FETCH_MATMED_LIST: 'matMed/FETCH_MATMED_LIST',
   FETCH_MATMED: 'matMed/FETCH_MATMED',
   CREATE_MATMED: 'matMed/CREATE_MATMED',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type MatMedState = Readonly<typeof initialState>;
 
+export interface IMatMedBaseState {
+  baseFilters: any;
+  nome: any;
+  idTipoMatMed: any;
+  valor: any;
+  ativo: any;
+}
+
+export interface IMatMedUpdateState {
+  fieldsBase: IMatMedBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: MatMedState = initialState, action): MatMedState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_MATMED_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_MATMED_LIST):
     case REQUEST(ACTION_TYPES.FETCH_MATMED):
       return {
@@ -51,6 +66,7 @@ export default (state: MatMedState = initialState, action): MatMedState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_MATMED_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_MATMED_LIST):
     case FAILURE(ACTION_TYPES.FETCH_MATMED):
     case FAILURE(ACTION_TYPES.CREATE_MATMED):
@@ -137,6 +153,21 @@ export const getEntity: ICrudGetAction<IMatMed> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionMatMed<IMatMed> = (nome, idTipoMatMed, valor, ativo, page, size, sort) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const idTipoMatMedRequest = idTipoMatMed ? `idTipoMatMed.contains=${idTipoMatMed}&` : '';
+  const valorRequest = valor ? `valor.contains=${valor}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_MATMED_LIST,
+    payload: axios.get<IMatMed>(
+      `${requestUrl}${nomeRequest}${idTipoMatMedRequest}${valorRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IMatMed> = entity => async dispatch => {
   entity = {
     ...entity
@@ -172,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<IMatMed> = id => async dispatch => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getMatMedState = (location): IMatMedBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const idTipoMatMed = url.searchParams.get('idTipoMatMed') || '';
+  const valor = url.searchParams.get('valor') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    nome,
+    idTipoMatMed,
+    valor,
+    ativo
+  };
+};

@@ -10,6 +10,8 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalDispositivoComplexidade, defaultValue } from 'app/shared/model/profissional-dispositivo-complexidade.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT:
+    'profissionalDispositivoComplexidade/FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT',
   FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST: 'profissionalDispositivoComplexidade/FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST',
   FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE: 'profissionalDispositivoComplexidade/FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE',
   CREATE_PROFISSIONALDISPOSITIVOCOMPLEXIDADE: 'profissionalDispositivoComplexidade/CREATE_PROFISSIONALDISPOSITIVOCOMPLEXIDADE',
@@ -30,10 +32,23 @@ const initialState = {
 
 export type ProfissionalDispositivoComplexidadeState = Readonly<typeof initialState>;
 
+export interface IProfissionalDispositivoComplexidadeBaseState {
+  baseFilters: any;
+  caracteristica: any;
+  ativo: any;
+  tipo: any;
+}
+
+export interface IProfissionalDispositivoComplexidadeUpdateState {
+  fieldsBase: IProfissionalDispositivoComplexidadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalDispositivoComplexidadeState = initialState, action): ProfissionalDispositivoComplexidadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE):
       return {
@@ -51,6 +66,7 @@ export default (state: ProfissionalDispositivoComplexidadeState = initialState, 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALDISPOSITIVOCOMPLEXIDADE):
@@ -142,6 +158,27 @@ export const getEntity: ICrudGetAction<IProfissionalDispositivoComplexidade> = i
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalDispositivoComplexidade<IProfissionalDispositivoComplexidade> = (
+  caracteristica,
+  ativo,
+  tipo,
+  page,
+  size,
+  sort
+) => {
+  const caracteristicaRequest = caracteristica ? `caracteristica.contains=${caracteristica}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADE_LIST,
+    payload: axios.get<IProfissionalDispositivoComplexidade>(
+      `${requestUrl}${caracteristicaRequest}${ativoRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalDispositivoComplexidade> = entity => async dispatch => {
   entity = {
     ...entity
@@ -177,3 +214,18 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalDispositivoComplexidad
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalDispositivoComplexidadeState = (location): IProfissionalDispositivoComplexidadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const caracteristica = url.searchParams.get('caracteristica') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const tipo = url.searchParams.get('tipo') || '';
+
+  return {
+    baseFilters,
+    caracteristica,
+    ativo,
+    tipo
+  };
+};

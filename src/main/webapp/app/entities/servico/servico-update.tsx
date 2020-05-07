@@ -8,21 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './servico.reducer';
+import { IServicoUpdateState, getEntity, getServicoState, IServicoBaseState, updateEntity, createEntity, reset } from './servico.reducer';
 import { IServico } from 'app/shared/model/servico.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IServicoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IServicoUpdateState {
-  isNew: boolean;
-}
-
 export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServicoUpdateState> {
   constructor(props: Readonly<IServicoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getServicoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +38,20 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['servico'] ? '&servico=' + fieldsBase['servico'] : '') +
+      (fieldsBase['styleLabel'] ? '&styleLabel=' + fieldsBase['styleLabel'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { servicoEntity } = this.props;
@@ -57,13 +69,14 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
   };
 
   handleClose = () => {
-    this.props.history.push('/servico');
+    this.props.history.push('/servico?' + this.getFiltersURL());
   };
 
   render() {
     const { servicoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +109,14 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/servico" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/servico?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +131,7 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,51 +147,46 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'servico' ? (
+                          <Col md="servico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="servicoLabel" for="servico-servico">
+                                    <Translate contentKey="generadorApp.servico.servico">Servico</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="servico-servico" type="text" name="servico" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="servicoLabel" for="servico-servico">
-                                <Translate contentKey="generadorApp.servico.servico">Servico</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="servico-servico"
-                                type="text"
-                                name="servico"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="styleLabelLabel" for="servico-styleLabel">
-                                <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="servico-styleLabel"
-                                type="text"
-                                name="styleLabel"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="servico-styleLabel">
+                                    <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="servico-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

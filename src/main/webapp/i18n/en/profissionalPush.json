@@ -3,15 +3,15 @@
     "profissionalPush": {
       "home": {
         "title": "Profissional Pushes",
-        "createLabel": "Criar novo Profissional Push",
-        "createOrEditLabel": "Criar ou editar Profissional Push",
-        "notFound": "Nenhum Profissional Push encontrado"
+        "createLabel": "Create a new Profissional Push",
+        "createOrEditLabel": "Create or edit a Profissional Push",
+        "notFound": "No Profissional Pushes found"
       },
-      "created": "Um novo Profissional Push foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Push foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Push foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Push is created with identifier {{ param }}",
+      "updated": "A Profissional Push is updated with identifier {{ param }}",
+      "deleted": "A Profissional Push is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Push {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Push {{ id }}?"
       },
       "detail": {
         "title": "Profissional Push"

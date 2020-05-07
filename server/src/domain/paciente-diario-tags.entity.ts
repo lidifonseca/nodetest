@@ -7,228 +7,228 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A PacienteDiarioTags.
  */
-@Entity('paciente_diario_tags')
+@Entity('tb_paciente_diario_tags')
 export default class PacienteDiarioTags extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_paciente_diario', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE_DIARIO', nullable: false })
   idPacienteDiario: number;
 
-  @Column({ type: 'integer', name: 'id_diario_tags', nullable: false })
+  @Column({ type: 'integer', name: 'ID_DIARIO_TAGS', nullable: false })
   idDiarioTags: number;
 
-  @Column({ type: 'integer', name: 'escala_de_plantao' })
+  @Column({ type: 'integer', name: 'ESCALA_DE_PLANTAO' })
   escalaDePlantao: number;
 
-  @Column({ type: 'integer', name: 'captacao_edp' })
+  @Column({ type: 'integer', name: 'CAPTACAO_EDP' })
   captacaoEdp: number;
 
-  @Column({ type: 'integer', name: 'implantacao_edp' })
+  @Column({ type: 'integer', name: 'IMPLANTACAO_EDP' })
   implantacaoEdp: number;
 
-  @Column({ type: 'integer', name: 'furo_de_escala_edp' })
+  @Column({ type: 'integer', name: 'FURO_DE_ESCALA_EDP' })
   furoDeEscalaEdp: number;
 
-  @Column({ type: 'integer', name: 'solicitacao_de_folga_edp' })
+  @Column({ type: 'integer', name: 'SOLICITACAO_DE_FOLGA_EDP' })
   solicitacaoDeFolgaEdp: number;
 
-  @Column({ type: 'integer', name: 'troca_de_profissional_edp' })
+  @Column({ type: 'integer', name: 'TROCA_DE_PROFISSIONAL_EDP' })
   trocaDeProfissionalEdp: number;
 
-  @Column({ type: 'integer', name: 'reclamacao_edp' })
+  @Column({ type: 'integer', name: 'RECLAMACAO_EDP' })
   reclamacaoEdp: number;
 
-  @Column({ type: 'integer', name: 'elogio_edp' })
+  @Column({ type: 'integer', name: 'ELOGIO_EDP' })
   elogioEdp: number;
 
-  @Column({ type: 'integer', name: 'recusa_de_atendimento_edp' })
+  @Column({ type: 'integer', name: 'RECUSA_DE_ATENDIMENTO_EDP' })
   recusaDeAtendimentoEdp: number;
 
-  @Column({ type: 'integer', name: 'duplicidade_edp' })
+  @Column({ type: 'integer', name: 'DUPLICIDADE_EDP' })
   duplicidadeEdp: number;
 
-  @Column({ type: 'integer', name: 'monitorar_edp' })
+  @Column({ type: 'integer', name: 'MONITORAR_EDP' })
   monitorarEdp: number;
 
-  @Column({ type: 'integer', name: 'pendente_edp', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_EDP', nullable: false })
   pendenteEdp: number;
 
-  @Column({ type: 'integer', name: 'escala_multi_profissional' })
+  @Column({ type: 'integer', name: 'ESCALA_MULTI_PROFISSIONAL' })
   escalaMultiProfissional: number;
 
-  @Column({ type: 'integer', name: 'captacao_emp' })
+  @Column({ type: 'integer', name: 'CAPTACAO_EMP' })
   captacaoEmp: number;
 
-  @Column({ type: 'integer', name: 'implantacao_emp' })
+  @Column({ type: 'integer', name: 'IMPLANTACAO_EMP' })
   implantacaoEmp: number;
 
-  @Column({ type: 'integer', name: 'solicitacao_de_folga_emp' })
+  @Column({ type: 'integer', name: 'SOLICITACAO_DE_FOLGA_EMP' })
   solicitacaoDeFolgaEmp: number;
 
-  @Column({ type: 'integer', name: 'troca_de_profissional_emp' })
+  @Column({ type: 'integer', name: 'TROCA_DE_PROFISSIONAL_EMP' })
   trocaDeProfissionalEmp: number;
 
-  @Column({ type: 'integer', name: 'reclamacao_emp' })
+  @Column({ type: 'integer', name: 'RECLAMACAO_EMP' })
   reclamacaoEmp: number;
 
-  @Column({ type: 'integer', name: 'elogio_emp' })
+  @Column({ type: 'integer', name: 'ELOGIO_EMP' })
   elogioEmp: number;
 
-  @Column({ type: 'integer', name: 'pad_incompleto_emp' })
+  @Column({ type: 'integer', name: 'PAD_INCOMPLETO_EMP' })
   padIncompletoEmp: number;
 
-  @Column({ type: 'integer', name: 'visita_improdutiva_emp' })
+  @Column({ type: 'integer', name: 'VISITA_IMPRODUTIVA_EMP' })
   visitaImprodutivaEmp: number;
 
-  @Column({ type: 'integer', name: 'monitorar_emp' })
+  @Column({ type: 'integer', name: 'MONITORAR_EMP' })
   monitorarEmp: number;
 
-  @Column({ type: 'integer', name: 'pendente_emp', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_EMP', nullable: false })
   pendenteEmp: number;
 
-  @Column({ type: 'integer', name: 'intercorrencia' })
+  @Column({ type: 'integer', name: 'INTERCORRENCIA' })
   intercorrencia: number;
 
-  @Column({ type: 'integer', name: 'clinica_inter' })
+  @Column({ type: 'integer', name: 'CLINICA_INTER' })
   clinicaInter: number;
 
-  @Column({ type: 'integer', name: 'aph_inter' })
+  @Column({ type: 'integer', name: 'APH_INTER' })
   aphInter: number;
 
-  @Column({ type: 'integer', name: 'pendente_inter', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_INTER', nullable: false })
   pendenteInter: number;
 
-  @Column({ type: 'integer', name: 'solicitacoes' })
+  @Column({ type: 'integer', name: 'SOLICITACOES' })
   solicitacoes: number;
 
-  @Column({ type: 'integer', name: 'recarga_de_oxigenio_solic' })
+  @Column({ type: 'integer', name: 'RECARGA_DE_OXIGENIO_SOLIC' })
   recargaDeOxigenioSolic: number;
 
-  @Column({ type: 'integer', name: 'equipamentos_solic' })
+  @Column({ type: 'integer', name: 'EQUIPAMENTOS_SOLIC' })
   equipamentosSolic: number;
 
-  @Column({ type: 'integer', name: 'matmed_solic' })
+  @Column({ type: 'integer', name: 'MATMED_SOLIC' })
   matmedSolic: number;
 
-  @Column({ type: 'integer', name: 'prontuario_solic' })
+  @Column({ type: 'integer', name: 'PRONTUARIO_SOLIC' })
   prontuarioSolic: number;
 
-  @Column({ type: 'integer', name: 'prescricoes_solic' })
+  @Column({ type: 'integer', name: 'PRESCRICOES_SOLIC' })
   prescricoesSolic: number;
 
-  @Column({ type: 'integer', name: 'exames_solic' })
+  @Column({ type: 'integer', name: 'EXAMES_SOLIC' })
   examesSolic: number;
 
-  @Column({ type: 'integer', name: 'ambulancia_solic' })
+  @Column({ type: 'integer', name: 'AMBULANCIA_SOLIC' })
   ambulanciaSolic: number;
 
-  @Column({ type: 'integer', name: 'atendimento_de_equipe_solic' })
+  @Column({ type: 'integer', name: 'ATENDIMENTO_DE_EQUIPE_SOLIC' })
   atendimentoDeEquipeSolic: number;
 
-  @Column({ type: 'integer', name: 'monitorar_solic' })
+  @Column({ type: 'integer', name: 'MONITORAR_SOLIC' })
   monitorarSolic: number;
 
-  @Column({ type: 'integer', name: 'pendente_solic', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_SOLIC', nullable: false })
   pendenteSolic: number;
 
-  @Column({ type: 'integer', name: 'avaliacao' })
+  @Column({ type: 'integer', name: 'AVALIACAO' })
   avaliacao: number;
 
-  @Column({ type: 'integer', name: 'residencia_aval' })
+  @Column({ type: 'integer', name: 'RESIDENCIA_AVAL' })
   residenciaAval: number;
 
-  @Column({ type: 'integer', name: 'hospital_aval' })
+  @Column({ type: 'integer', name: 'HOSPITAL_AVAL' })
   hospitalAval: number;
 
-  @Column({ type: 'integer', name: 'monitorar_aval' })
+  @Column({ type: 'integer', name: 'MONITORAR_AVAL' })
   monitorarAval: number;
 
-  @Column({ type: 'integer', name: 'captacao_ativa_aval' })
+  @Column({ type: 'integer', name: 'CAPTACAO_ATIVA_AVAL' })
   captacaoAtivaAval: number;
 
-  @Column({ type: 'integer', name: 'pendente_aval', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_AVAL', nullable: false })
   pendenteAval: number;
 
-  @Column({ type: 'integer', name: 'implantacao' })
+  @Column({ type: 'integer', name: 'IMPLANTACAO' })
   implantacao: number;
 
-  @Column({ type: 'integer', name: 'monitorar_impl' })
+  @Column({ type: 'integer', name: 'MONITORAR_IMPL' })
   monitorarImpl: number;
 
-  @Column({ type: 'integer', name: 'pendente_impl', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_IMPL', nullable: false })
   pendenteImpl: number;
 
-  @Column({ type: 'integer', name: 'alta' })
+  @Column({ type: 'integer', name: 'ALTA' })
   alta: number;
 
-  @Column({ type: 'integer', name: 'hospitalizacao_alt' })
+  @Column({ type: 'integer', name: 'HOSPITALIZACAO_ALT' })
   hospitalizacaoAlt: number;
 
-  @Column({ type: 'integer', name: 'migracao_de_empresa_alt' })
+  @Column({ type: 'integer', name: 'MIGRACAO_DE_EMPRESA_ALT' })
   migracaoDeEmpresaAlt: number;
 
-  @Column({ type: 'integer', name: 'obito_em_casa_alt' })
+  @Column({ type: 'integer', name: 'OBITO_EM_CASA_ALT' })
   obitoEmCasaAlt: number;
 
-  @Column({ type: 'integer', name: 'termino_de_atendimento_alt' })
+  @Column({ type: 'integer', name: 'TERMINO_DE_ATENDIMENTO_ALT' })
   terminoDeAtendimentoAlt: number;
 
-  @Column({ type: 'integer', name: 'atendimento_suspenso_alt' })
+  @Column({ type: 'integer', name: 'ATENDIMENTO_SUSPENSO_ALT' })
   atendimentoSuspensoAlt: number;
 
-  @Column({ type: 'integer', name: 'monitorar_alt' })
+  @Column({ type: 'integer', name: 'MONITORAR_ALT' })
   monitorarAlt: number;
 
-  @Column({ type: 'integer', name: 'pendente_alt', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_ALT', nullable: false })
   pendenteAlt: number;
 
-  @Column({ type: 'integer', name: 'e_commerce_seg_viagem' })
+  @Column({ type: 'integer', name: 'E_COMMERCE_SEG_VIAGEM' })
   eCommerceSegViagem: number;
 
-  @Column({ type: 'integer', name: 'monitorar_ecsv' })
+  @Column({ type: 'integer', name: 'MONITORAR_ECSV' })
   monitorarEcsv: number;
 
-  @Column({ type: 'integer', name: 'pendente_ecsv', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_ECSV', nullable: false })
   pendenteEcsv: number;
 
-  @Column({ type: 'integer', name: 'farmacia', nullable: false })
+  @Column({ type: 'integer', name: 'FARMACIA', nullable: false })
   farmacia: number;
 
-  @Column({ type: 'integer', name: 'mat_med_farm', nullable: false })
+  @Column({ type: 'integer', name: 'MAT_MED_FARM', nullable: false })
   matMedFarm: number;
 
-  @Column({ type: 'integer', name: 'receita_farm', nullable: false })
+  @Column({ type: 'integer', name: 'RECEITA_FARM', nullable: false })
   receitaFarm: number;
 
-  @Column({ type: 'integer', name: 'prontuario_farm', nullable: false })
+  @Column({ type: 'integer', name: 'PRONTUARIO_FARM', nullable: false })
   prontuarioFarm: number;
 
-  @Column({ type: 'integer', name: 'romaneio_manual_farm', nullable: false })
+  @Column({ type: 'integer', name: 'ROMANEIO_MANUAL_FARM', nullable: false })
   romaneioManualFarm: number;
 
-  @Column({ type: 'integer', name: 'outros_farm', nullable: false })
+  @Column({ type: 'integer', name: 'OUTROS_FARM', nullable: false })
   outrosFarm: number;
 
-  @Column({ type: 'integer', name: 'monitorar_farm', nullable: false })
+  @Column({ type: 'integer', name: 'MONITORAR_FARM', nullable: false })
   monitorarFarm: number;
 
-  @Column({ type: 'integer', name: 'pendente_farm', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_FARM', nullable: false })
   pendenteFarm: number;
 
-  @Column({ type: 'integer', name: 'contato_telefonico', nullable: false })
+  @Column({ type: 'integer', name: 'CONTATO_TELEFONICO', nullable: false })
   contatoTelefonico: number;
 
-  @Column({ type: 'integer', name: 'ativo_cont_tel', nullable: false })
+  @Column({ type: 'integer', name: 'ATIVO_CONT_TEL', nullable: false })
   ativoContTel: number;
 
-  @Column({ type: 'integer', name: 'receptivo_cont_tel', nullable: false })
+  @Column({ type: 'integer', name: 'RECEPTIVO_CONT_TEL', nullable: false })
   receptivoContTel: number;
 
-  @Column({ type: 'integer', name: 'monitorar_cont_tel', nullable: false })
+  @Column({ type: 'integer', name: 'MONITORAR_CONT_TEL', nullable: false })
   monitorarContTel: number;
 
-  @Column({ type: 'integer', name: 'pendente_cont_tel', nullable: false })
+  @Column({ type: 'integer', name: 'PENDENTE_CONT_TEL', nullable: false })
   pendenteContTel: number;
 
-  @Column({ type: 'timestamp', name: 'dt_post', nullable: false })
+  @Column({ type: 'timestamp', name: 'DT_POST', nullable: false })
   dtPost: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

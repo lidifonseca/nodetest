@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import PadMatMed from './pad-mat-med';
 import PadMatMedDetail from './pad-mat-med-detail';
+import PadMatMedRelatorioCSV from './relatorio/pad-mat-med.csv';
 import PadMatMedUpdate from './pad-mat-med-update';
 import PadMatMedDeleteDialog from './pad-mat-med-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={PadMatMedRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={PadMatMedUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={PadMatMedUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={PadMatMedDetail} />

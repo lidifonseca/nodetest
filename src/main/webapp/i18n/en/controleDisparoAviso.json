@@ -3,15 +3,15 @@
     "controleDisparoAviso": {
       "home": {
         "title": "Controle Disparo Avisos",
-        "createLabel": "Criar novo Controle Disparo Aviso",
-        "createOrEditLabel": "Criar ou editar Controle Disparo Aviso",
-        "notFound": "Nenhum Controle Disparo Aviso encontrado"
+        "createLabel": "Create a new Controle Disparo Aviso",
+        "createOrEditLabel": "Create or edit a Controle Disparo Aviso",
+        "notFound": "No Controle Disparo Avisos found"
       },
-      "created": "Um novo Controle Disparo Aviso foi criado com o identificador {{ param }}",
-      "updated": "Um Controle Disparo Aviso foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Controle Disparo Aviso foi excluído com o identificador {{ param }}",
+      "created": "A new Controle Disparo Aviso is created with identifier {{ param }}",
+      "updated": "A Controle Disparo Aviso is updated with identifier {{ param }}",
+      "deleted": "A Controle Disparo Aviso is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Controle Disparo Aviso {{ id }}?"
+        "question": "Are you sure you want to delete Controle Disparo Aviso {{ id }}?"
       },
       "detail": {
         "title": "Controle Disparo Aviso"

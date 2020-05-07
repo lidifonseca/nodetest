@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -38,12 +29,6 @@ import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { ICategoria } from 'app/shared/model/categoria.model';
-import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
-import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
-import { getEntities as getTipoEspecialidades } from 'app/entities/tipo-especialidade/tipo-especialidade.reducer';
-import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
-import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-unidade.reducer';
 
 export interface IEspecialidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -64,9 +49,6 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
     this.getEntities();
 
     this.props.getUnidadeEasies();
-    this.props.getCategorias();
-    this.props.getTipoEspecialidades();
-    this.props.getTipoUnidades();
   }
 
   cancelCourse = () => {
@@ -78,16 +60,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
         duracao: '',
         importante: '',
         ativo: '',
-        atendimento: '',
-        especialidadeOperadora: '',
-        especialidadeUnidade: '',
-        especialidadeValor: '',
-        pacientePedido: '',
-        padItem: '',
-        unidade: '',
-        idCategoria: '',
-        idTipoEspecialidade: '',
-        idTipoUnidade: ''
+        unidade: ''
       },
       () => this.sortEntities()
     );
@@ -120,7 +93,9 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -150,35 +125,8 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       'ativo=' +
       this.state.ativo +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
-      'especialidadeOperadora=' +
-      this.state.especialidadeOperadora +
-      '&' +
-      'especialidadeUnidade=' +
-      this.state.especialidadeUnidade +
-      '&' +
-      'especialidadeValor=' +
-      this.state.especialidadeValor +
-      '&' +
-      'pacientePedido=' +
-      this.state.pacientePedido +
-      '&' +
-      'padItem=' +
-      this.state.padItem +
-      '&' +
       'unidade=' +
       this.state.unidade +
-      '&' +
-      'idCategoria=' +
-      this.state.idCategoria +
-      '&' +
-      'idTipoEspecialidade=' +
-      this.state.idTipoEspecialidade +
-      '&' +
-      'idTipoUnidade=' +
-      this.state.idTipoUnidade +
       '&' +
       ''
     );
@@ -187,28 +135,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      icon,
-      especialidade,
-      descricao,
-      duracao,
-      importante,
-      ativo,
-      atendimento,
-      especialidadeOperadora,
-      especialidadeUnidade,
-      especialidadeValor,
-      pacientePedido,
-      padItem,
-      unidade,
-      idCategoria,
-      idTipoEspecialidade,
-      idTipoUnidade,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { icon, especialidade, descricao, duracao, importante, ativo, unidade, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       icon,
       especialidade,
@@ -216,16 +143,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
       duracao,
       importante,
       ativo,
-      atendimento,
-      especialidadeOperadora,
-      especialidadeUnidade,
-      especialidadeValor,
-      pacientePedido,
-      padItem,
       unidade,
-      idCategoria,
-      idTipoEspecialidade,
-      idTipoUnidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -233,7 +151,7 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
   };
 
   render() {
-    const { unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, especialidadeList, match, totalItems } = this.props;
+    const { unidadeEasies, especialidadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -251,7 +169,11 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.especialidade.home.createLabel">Create a new Especialidade</Translate>
@@ -264,166 +186,96 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="iconLabel" for="especialidade-icon">
-                            <Translate contentKey="generadorApp.especialidade.icon">Icon</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="icon" id="especialidade-icon" value={this.state.icon} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="especialidadeLabel" for="especialidade-especialidade">
-                            <Translate contentKey="generadorApp.especialidade.especialidade">Especialidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="especialidade" id="especialidade-especialidade" value={this.state.especialidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descricaoLabel" for="especialidade-descricao">
-                            <Translate contentKey="generadorApp.especialidade.descricao">Descricao</Translate>
-                          </Label>
-                          <AvInput id="especialidade-descricao" type="textarea" name="descricao" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="duracaoLabel" for="especialidade-duracao">
-                            <Translate contentKey="generadorApp.especialidade.duracao">Duracao</Translate>
-                          </Label>
-                          <AvInput type="string" name="duracao" id="especialidade-duracao" value={this.state.duracao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="importanteLabel" for="especialidade-importante">
-                            <Translate contentKey="generadorApp.especialidade.importante">Importante</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="importante" id="especialidade-importante" value={this.state.importante} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="especialidade-ativo">
-                            <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="especialidade-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-unidade">
-                              <Translate contentKey="generadorApp.especialidade.unidade">Unidade</Translate>
+                      {this.state.baseFilters !== 'icon' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="iconLabel" for="especialidade-icon">
+                              <Translate contentKey="generadorApp.especialidade.icon">Icon</Translate>
                             </Label>
-                            <AvInput id="especialidade-unidade" type="select" className="form-control" name="unidadeId">
-                              <option value="" key="0" />
-                              {unidadeEasies
-                                ? unidadeEasies.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.razaoSocial}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-idCategoria">
-                              <Translate contentKey="generadorApp.especialidade.idCategoria">Id Categoria</Translate>
-                            </Label>
-                            <AvInput id="especialidade-idCategoria" type="select" className="form-control" name="idCategoriaId">
-                              <option value="" key="0" />
-                              {categorias
-                                ? categorias.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="icon" id="especialidade-icon" value={this.state.icon} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-idTipoEspecialidade">
-                              <Translate contentKey="generadorApp.especialidade.idTipoEspecialidade">Id Tipo Especialidade</Translate>
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="especialidadeLabel" for="especialidade-especialidade">
+                              <Translate contentKey="generadorApp.especialidade.especialidade">Especialidade</Translate>
                             </Label>
-                            <AvInput
-                              id="especialidade-idTipoEspecialidade"
-                              type="select"
-                              className="form-control"
-                              name="idTipoEspecialidadeId"
-                            >
-                              <option value="" key="0" />
-                              {tipoEspecialidades
-                                ? tipoEspecialidades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-idTipoUnidade">
-                              <Translate contentKey="generadorApp.especialidade.idTipoUnidade">Id Tipo Unidade</Translate>
+                            <AvInput type="text" name="especialidade" id="especialidade-especialidade" value={this.state.especialidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descricaoLabel" for="especialidade-descricao">
+                              <Translate contentKey="generadorApp.especialidade.descricao">Descricao</Translate>
                             </Label>
-                            <AvInput id="especialidade-idTipoUnidade" type="select" className="form-control" name="idTipoUnidadeId">
-                              <option value="" key="0" />
-                              {tipoUnidades
-                                ? tipoUnidades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput id="especialidade-descricao" type="textarea" name="descricao" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'duracao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="duracaoLabel" for="especialidade-duracao">
+                              <Translate contentKey="generadorApp.especialidade.duracao">Duracao</Translate>
+                            </Label>
+                            <AvInput type="string" name="duracao" id="especialidade-duracao" value={this.state.duracao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'importante' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="importanteLabel" for="especialidade-importante">
+                              <Translate contentKey="generadorApp.especialidade.importante">Importante</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="importante" id="especialidade-importante" value={this.state.importante} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="especialidade-ativo">
+                              <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="especialidade-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="especialidade-unidade">
+                                <Translate contentKey="generadorApp.especialidade.unidade">Unidade</Translate>
+                              </Label>
+                              <AvInput id="especialidade-unidade" type="select" className="form-control" name="unidadeId">
+                                <option value="" key="0" />
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -451,46 +303,49 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('icon')}>
-                        <Translate contentKey="generadorApp.especialidade.icon">Icon</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('especialidade')}>
-                        <Translate contentKey="generadorApp.especialidade.especialidade">Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descricao')}>
-                        <Translate contentKey="generadorApp.especialidade.descricao">Descricao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('duracao')}>
-                        <Translate contentKey="generadorApp.especialidade.duracao">Duracao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('importante')}>
-                        <Translate contentKey="generadorApp.especialidade.importante">Importante</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidade.unidade">Unidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidade.idCategoria">Id Categoria</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidade.idTipoEspecialidade">Id Tipo Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidade.idTipoUnidade">Id Tipo Unidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'icon' ? (
+                        <th className="hand" onClick={this.sort('icon')}>
+                          <Translate contentKey="generadorApp.especialidade.icon">Icon</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th className="hand" onClick={this.sort('especialidade')}>
+                          <Translate contentKey="generadorApp.especialidade.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <th className="hand" onClick={this.sort('descricao')}>
+                          <Translate contentKey="generadorApp.especialidade.descricao">Descricao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'duracao' ? (
+                        <th className="hand" onClick={this.sort('duracao')}>
+                          <Translate contentKey="generadorApp.especialidade.duracao">Duracao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'importante' ? (
+                        <th className="hand" onClick={this.sort('importante')}>
+                          <Translate contentKey="generadorApp.especialidade.importante">Importante</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.especialidade.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.especialidade.unidade">Unidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -505,50 +360,61 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
                           </Button>
                         </td>
 
-                        <td>{especialidade.icon}</td>
+                        {this.state.baseFilters !== 'icon' ? <td>{especialidade.icon}</td> : null}
 
-                        <td>{especialidade.especialidade}</td>
+                        {this.state.baseFilters !== 'especialidade' ? <td>{especialidade.especialidade}</td> : null}
 
-                        <td>{especialidade.descricao}</td>
+                        {this.state.baseFilters !== 'descricao' ? (
+                          <td>{especialidade.descricao ? Buffer.from(especialidade.descricao).toString() : null}</td>
+                        ) : null}
 
-                        <td>{especialidade.duracao}</td>
+                        {this.state.baseFilters !== 'duracao' ? <td>{especialidade.duracao}</td> : null}
 
-                        <td>{especialidade.importante}</td>
+                        {this.state.baseFilters !== 'importante' ? <td>{especialidade.importante}</td> : null}
 
-                        <td>{especialidade.ativo}</td>
-                        <td>
-                          {especialidade.unidade ? (
-                            <Link to={`unidade-easy/${especialidade.unidade.id}`}>{especialidade.unidade.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {especialidade.idCategoria ? (
-                            <Link to={`categoria/${especialidade.idCategoria.id}`}>{especialidade.idCategoria.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {especialidade.idTipoEspecialidade ? (
-                            <Link to={`tipo-especialidade/${especialidade.idTipoEspecialidade.id}`}>
-                              {especialidade.idTipoEspecialidade.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {especialidade.idTipoUnidade ? (
-                            <Link to={`tipo-unidade/${especialidade.idTipoUnidade.id}`}>{especialidade.idTipoUnidade.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{especialidade.ativo}</td> : null}
+
+                        {this.state.baseFilters !== 'unidade' ? (
+                          <td>
+                            {especialidade.unidade ? (
+                              <Link to={`unidade-easy/${especialidade.unidade.id}`}>{especialidade.unidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${especialidade.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidade.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidade.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -585,18 +451,12 @@ export class Especialidade extends React.Component<IEspecialidadeProps, IEspecia
 
 const mapStateToProps = ({ especialidade, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  categorias: storeState.categoria.entities,
-  tipoEspecialidades: storeState.tipoEspecialidade.entities,
-  tipoUnidades: storeState.tipoUnidade.entities,
   especialidadeList: especialidade.entities,
   totalItems: especialidade.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getCategorias,
-  getTipoEspecialidades,
-  getTipoUnidades,
   getEntities
 };
 

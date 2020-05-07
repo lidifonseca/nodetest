@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalAreaAtuacao, defaultValue } from 'app/shared/model/profissional-area-atuacao.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALAREAATUACAO_LIST_EXPORT: 'profissionalAreaAtuacao/FETCH_PROFISSIONALAREAATUACAO_LIST_EXPORT',
   FETCH_PROFISSIONALAREAATUACAO_LIST: 'profissionalAreaAtuacao/FETCH_PROFISSIONALAREAATUACAO_LIST',
   FETCH_PROFISSIONALAREAATUACAO: 'profissionalAreaAtuacao/FETCH_PROFISSIONALAREAATUACAO',
   CREATE_PROFISSIONALAREAATUACAO: 'profissionalAreaAtuacao/CREATE_PROFISSIONALAREAATUACAO',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type ProfissionalAreaAtuacaoState = Readonly<typeof initialState>;
 
+export interface IProfissionalAreaAtuacaoBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  cepArea: any;
+  cepFim: any;
+  ativo: any;
+  cepIni: any;
+}
+
+export interface IProfissionalAreaAtuacaoUpdateState {
+  fieldsBase: IProfissionalAreaAtuacaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalAreaAtuacaoState = initialState, action): ProfissionalAreaAtuacaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO):
       return {
@@ -51,6 +67,7 @@ export default (state: ProfissionalAreaAtuacaoState = initialState, action): Pro
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALAREAATUACAO):
@@ -148,6 +165,31 @@ export const getEntity: ICrudGetAction<IProfissionalAreaAtuacao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalAreaAtuacao<IProfissionalAreaAtuacao> = (
+  idProfissional,
+  cepArea,
+  cepFim,
+  ativo,
+  cepIni,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const cepAreaRequest = cepArea ? `cepArea.contains=${cepArea}&` : '';
+  const cepFimRequest = cepFim ? `cepFim.contains=${cepFim}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const cepIniRequest = cepIni ? `cepIni.contains=${cepIni}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALAREAATUACAO_LIST,
+    payload: axios.get<IProfissionalAreaAtuacao>(
+      `${requestUrl}${idProfissionalRequest}${cepAreaRequest}${cepFimRequest}${ativoRequest}${cepIniRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalAreaAtuacao> = entity => async dispatch => {
   entity = {
     ...entity
@@ -183,3 +225,22 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalAreaAtuacao> = id => a
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalAreaAtuacaoState = (location): IProfissionalAreaAtuacaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const cepArea = url.searchParams.get('cepArea') || '';
+  const cepFim = url.searchParams.get('cepFim') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const cepIni = url.searchParams.get('cepIni') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    cepArea,
+    cepFim,
+    ativo,
+    cepIni
+  };
+};

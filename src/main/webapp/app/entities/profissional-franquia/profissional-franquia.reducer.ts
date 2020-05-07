@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalFranquia, defaultValue } from 'app/shared/model/profissional-franquia.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALFRANQUIA_LIST_EXPORT: 'profissionalFranquia/FETCH_PROFISSIONALFRANQUIA_LIST_EXPORT',
   FETCH_PROFISSIONALFRANQUIA_LIST: 'profissionalFranquia/FETCH_PROFISSIONALFRANQUIA_LIST',
   FETCH_PROFISSIONALFRANQUIA: 'profissionalFranquia/FETCH_PROFISSIONALFRANQUIA',
   CREATE_PROFISSIONALFRANQUIA: 'profissionalFranquia/CREATE_PROFISSIONALFRANQUIA',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type ProfissionalFranquiaState = Readonly<typeof initialState>;
 
+export interface IProfissionalFranquiaBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  idFranquia: any;
+}
+
+export interface IProfissionalFranquiaUpdateState {
+  fieldsBase: IProfissionalFranquiaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalFranquiaState = initialState, action): ProfissionalFranquiaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA):
       return {
@@ -51,6 +64,7 @@ export default (state: ProfissionalFranquiaState = initialState, action): Profis
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALFRANQUIA):
@@ -133,6 +147,25 @@ export const getEntity: ICrudGetAction<IProfissionalFranquia> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalFranquia<IProfissionalFranquia> = (
+  idProfissional,
+  idFranquia,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALFRANQUIA_LIST,
+    payload: axios.get<IProfissionalFranquia>(
+      `${requestUrl}${idProfissionalRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalFranquia> = entity => async dispatch => {
   entity = {
     ...entity
@@ -168,3 +201,16 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalFranquia> = id => asyn
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalFranquiaState = (location): IProfissionalFranquiaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const idFranquia = url.searchParams.get('idFranquia') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    idFranquia
+  };
+};

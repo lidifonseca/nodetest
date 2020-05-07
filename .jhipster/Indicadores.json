@@ -10,15 +10,8 @@
             "fieldValidateRulesMaxlength": "145"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "indicadoresValores",
-            "otherEntityRelationshipName": "indicadoresId",
-            "relationshipName": "indicadoresValores"
-        }
-    ],
-    "changelogDate": "20200502233700",
+    "relationships": [],
+    "changelogDate": "20200507111000",
     "entityTableName": "indicadores",
     "dto": "mapstruct",
     "pagination": "pagination",

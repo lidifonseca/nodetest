@@ -71,7 +71,9 @@ export class PacienteDispositivoComplexidadeController {
     @Req() req: Request,
     @Body() pacienteDispositivoComplexidade: PacienteDispositivoComplexidade
   ): Promise<PacienteDispositivoComplexidade> {
+    console.info(pacienteDispositivoComplexidade);
     const created = await this.pacienteDispositivoComplexidadeService.save(pacienteDispositivoComplexidade);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteDispositivoComplexidade', created.id);
     return created;
   }
@@ -89,6 +91,7 @@ export class PacienteDispositivoComplexidadeController {
     @Body() pacienteDispositivoComplexidade: PacienteDispositivoComplexidade
   ): Promise<PacienteDispositivoComplexidade> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteDispositivoComplexidade', pacienteDispositivoComplexidade.id);
+
     return await this.pacienteDispositivoComplexidadeService.update(pacienteDispositivoComplexidade);
   }
 

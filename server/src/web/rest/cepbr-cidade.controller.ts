@@ -68,7 +68,9 @@ export class CepbrCidadeController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() cepbrCidade: CepbrCidade): Promise<CepbrCidade> {
+    console.info(cepbrCidade);
     const created = await this.cepbrCidadeService.save(cepbrCidade);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CepbrCidade', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class CepbrCidadeController {
   })
   async put(@Req() req: Request, @Body() cepbrCidade: CepbrCidade): Promise<CepbrCidade> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CepbrCidade', cepbrCidade.id);
+
     return await this.cepbrCidadeService.update(cepbrCidade);
   }
 

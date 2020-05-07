@@ -3,21 +3,20 @@
     "usuarioPanico": {
       "home": {
         "title": "Usuario Panicos",
-        "createLabel": "Criar novo Usuario Panico",
-        "createOrEditLabel": "Criar ou editar Usuario Panico",
-        "notFound": "Nenhum Usuario Panico encontrado"
+        "createLabel": "Create a new Usuario Panico",
+        "createOrEditLabel": "Create or edit a Usuario Panico",
+        "notFound": "No Usuario Panicos found"
       },
-      "created": "Um novo Usuario Panico foi criado com o identificador {{ param }}",
-      "updated": "Um Usuario Panico foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Usuario Panico foi excluído com o identificador {{ param }}",
+      "created": "A new Usuario Panico is created with identifier {{ param }}",
+      "updated": "A Usuario Panico is updated with identifier {{ param }}",
+      "deleted": "A Usuario Panico is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Usuario Panico {{ id }}?"
+        "question": "Are you sure you want to delete Usuario Panico {{ id }}?"
       },
       "detail": {
         "title": "Usuario Panico"
       },
       "idPaciente": "Id Paciente",
-      "idUsuario": "Id Usuario",
       "idProfissional": "Id Profissional",
       "observacao": "Observacao",
       "resolvido": "Resolvido",

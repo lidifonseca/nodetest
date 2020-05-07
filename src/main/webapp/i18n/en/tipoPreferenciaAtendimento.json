@@ -3,15 +3,15 @@
     "tipoPreferenciaAtendimento": {
       "home": {
         "title": "Tipo Preferencia Atendimentos",
-        "createLabel": "Criar novo Tipo Preferencia Atendimento",
-        "createOrEditLabel": "Criar ou editar Tipo Preferencia Atendimento",
-        "notFound": "Nenhum Tipo Preferencia Atendimento encontrado"
+        "createLabel": "Create a new Tipo Preferencia Atendimento",
+        "createOrEditLabel": "Create or edit a Tipo Preferencia Atendimento",
+        "notFound": "No Tipo Preferencia Atendimentos found"
       },
-      "created": "Um novo Tipo Preferencia Atendimento foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Preferencia Atendimento foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Preferencia Atendimento foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Preferencia Atendimento is created with identifier {{ param }}",
+      "updated": "A Tipo Preferencia Atendimento is updated with identifier {{ param }}",
+      "deleted": "A Tipo Preferencia Atendimento is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Preferencia Atendimento {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Preferencia Atendimento {{ id }}?"
       },
       "detail": {
         "title": "Tipo Preferencia Atendimento"

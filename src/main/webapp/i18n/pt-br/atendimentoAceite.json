@@ -16,9 +16,7 @@
       "detail": {
         "title": "Atendimento Aceite"
       },
-      "msgPush": "Msg Push",
-      "idProfissional": "Id Profissional",
-      "idAtendimento": "Id Atendimento"
+      "msgPush": "Msg Push"
     }
   }
 }

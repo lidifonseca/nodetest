@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import Resultados from './resultados';
 import ResultadosDetail from './resultados-detail';
+import ResultadosRelatorioCSV from './relatorio/resultados.csv';
 import ResultadosUpdate from './resultados-update';
 import ResultadosDeleteDialog from './resultados-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={ResultadosRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={ResultadosUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={ResultadosUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={ResultadosDetail} />

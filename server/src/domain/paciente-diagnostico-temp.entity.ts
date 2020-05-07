@@ -7,24 +7,24 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A PacienteDiagnosticoTemp.
  */
-@Entity('paciente_diagnostico_temp')
+@Entity('tb_paciente_diagnostico_temp')
 export default class PacienteDiagnosticoTemp extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_cid' })
+  @Column({ type: 'integer', name: 'ID_CID' })
   idCid: number;
 
-  @Column({ type: 'boolean', name: 'cid_primario' })
+  @Column({ type: 'boolean', name: 'CID_PRIMARIO' })
   cidPrimario: boolean;
 
-  @Column({ name: 'complexidade', length: 45 })
+  @Column({ name: 'COMPLEXIDADE', length: 45 })
   complexidade: string;
 
-  @Column({ type: 'date', name: 'created_at' })
+  @Column({ type: 'date', name: 'CREATED_AT' })
   createdAt: any;
 
-  @Column({ name: 'session_id', length: 255 })
+  @Column({ name: 'SESSION_ID', length: 255 })
   sessionId: string;
 
-  @Column({ name: 'observacao', length: 245 })
+  @Column({ name: 'OBSERVACAO', length: 245 })
   observacao: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

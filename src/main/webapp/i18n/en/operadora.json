@@ -3,15 +3,15 @@
     "operadora": {
       "home": {
         "title": "Operadoras",
-        "createLabel": "Criar novo Operadora",
-        "createOrEditLabel": "Criar ou editar Operadora",
-        "notFound": "Nenhum Operadora encontrado"
+        "createLabel": "Create a new Operadora",
+        "createOrEditLabel": "Create or edit a Operadora",
+        "notFound": "No Operadoras found"
       },
-      "created": "Um novo Operadora foi criado com o identificador {{ param }}",
-      "updated": "Um Operadora foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Operadora foi excluído com o identificador {{ param }}",
+      "created": "A new Operadora is created with identifier {{ param }}",
+      "updated": "A Operadora is updated with identifier {{ param }}",
+      "deleted": "A Operadora is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Operadora {{ id }}?"
+        "question": "Are you sure you want to delete Operadora {{ id }}?"
       },
       "detail": {
         "title": "Operadora"
@@ -31,9 +31,6 @@
       "nomeContatoFinanceiro": "Nome Contato Financeiro",
       "contatoFinanceiro": "Contato Financeiro",
       "emailFinanceiro": "Email Financeiro",
-      "atendimento": "Atendimento",
-      "especialidadeOperadora": "Especialidade Operadora",
-      "pacienteOperadora": "Paciente Operadora",
       "unidade": "Unidade",
       "tipoOperadora": "Tipo Operadora"
     }

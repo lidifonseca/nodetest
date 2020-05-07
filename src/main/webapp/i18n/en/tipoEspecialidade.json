@@ -3,21 +3,20 @@
     "tipoEspecialidade": {
       "home": {
         "title": "Tipo Especialidades",
-        "createLabel": "Criar novo Tipo Especialidade",
-        "createOrEditLabel": "Criar ou editar Tipo Especialidade",
-        "notFound": "Nenhum Tipo Especialidade encontrado"
+        "createLabel": "Create a new Tipo Especialidade",
+        "createOrEditLabel": "Create or edit a Tipo Especialidade",
+        "notFound": "No Tipo Especialidades found"
       },
-      "created": "Um novo Tipo Especialidade foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Especialidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Especialidade foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Especialidade is created with identifier {{ param }}",
+      "updated": "A Tipo Especialidade is updated with identifier {{ param }}",
+      "deleted": "A Tipo Especialidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Especialidade {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Especialidade {{ id }}?"
       },
       "detail": {
         "title": "Tipo Especialidade"
       },
-      "tipoEspecialidade": "Tipo Especialidade",
-      "especialidade": "Especialidade"
+      "tipoEspecialidade": "Tipo Especialidade"
     }
   }
 }

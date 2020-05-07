@@ -21,7 +21,6 @@ export interface IPadItemMeta {
   maximoSistolica?: string;
   minimoDiastolica?: string;
   maximoDiastolica?: string;
-  idUsuario?: number;
   score?: number;
   alteracaoEsperada?: boolean;
 }

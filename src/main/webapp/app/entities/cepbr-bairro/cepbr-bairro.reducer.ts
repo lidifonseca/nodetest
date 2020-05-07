@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICepbrBairro, defaultValue } from 'app/shared/model/cepbr-bairro.model';
 
 export const ACTION_TYPES = {
+  FETCH_CEPBRBAIRRO_LIST_EXPORT: 'cepbrBairro/FETCH_CEPBRBAIRRO_LIST_EXPORT',
   FETCH_CEPBRBAIRRO_LIST: 'cepbrBairro/FETCH_CEPBRBAIRRO_LIST',
   FETCH_CEPBRBAIRRO: 'cepbrBairro/FETCH_CEPBRBAIRRO',
   CREATE_CEPBRBAIRRO: 'cepbrBairro/CREATE_CEPBRBAIRRO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type CepbrBairroState = Readonly<typeof initialState>;
 
+export interface ICepbrBairroBaseState {
+  baseFilters: any;
+  idBairro: any;
+  bairro: any;
+}
+
+export interface ICepbrBairroUpdateState {
+  fieldsBase: ICepbrBairroBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CepbrBairroState = initialState, action): CepbrBairroState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CEPBRBAIRRO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRBAIRRO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRBAIRRO):
       return {
@@ -51,6 +64,7 @@ export default (state: CepbrBairroState = initialState, action): CepbrBairroStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CEPBRBAIRRO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRBAIRRO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRBAIRRO):
     case FAILURE(ACTION_TYPES.CREATE_CEPBRBAIRRO):
@@ -108,25 +122,19 @@ const apiUrl = 'api/cepbr-bairros';
 export type ICrudGetAllActionCepbrBairro<T> = (
   idBairro?: any,
   bairro?: any,
-  cepbrEndereco?: any,
-  idCidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCepbrBairro<ICepbrBairro> = (idBairro, bairro, cepbrEndereco, idCidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCepbrBairro<ICepbrBairro> = (idBairro, bairro, page, size, sort) => {
   const idBairroRequest = idBairro ? `idBairro.contains=${idBairro}&` : '';
   const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
-  const cepbrEnderecoRequest = cepbrEndereco ? `cepbrEndereco.equals=${cepbrEndereco}&` : '';
-  const idCidadeRequest = idCidade ? `idCidade.equals=${idCidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CEPBRBAIRRO_LIST,
-    payload: axios.get<ICepbrBairro>(
-      `${requestUrl}${idBairroRequest}${bairroRequest}${cepbrEnderecoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ICepbrBairro>(`${requestUrl}${idBairroRequest}${bairroRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ICepbrBairro> = id => {
@@ -137,10 +145,20 @@ export const getEntity: ICrudGetAction<ICepbrBairro> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCepbrBairro<ICepbrBairro> = (idBairro, bairro, page, size, sort) => {
+  const idBairroRequest = idBairro ? `idBairro.contains=${idBairro}&` : '';
+  const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CEPBRBAIRRO_LIST,
+    payload: axios.get<ICepbrBairro>(`${requestUrl}${idBairroRequest}${bairroRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ICepbrBairro> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idCidade: entity.idCidade === 'null' ? null : entity.idCidade
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CEPBRBAIRRO,
@@ -151,7 +169,7 @@ export const createEntity: ICrudPutAction<ICepbrBairro> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<ICepbrBairro> = entity => async dispatch => {
-  entity = { ...entity, idCidade: entity.idCidade === 'null' ? null : entity.idCidade };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CEPBRBAIRRO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -173,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<ICepbrBairro> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCepbrBairroState = (location): ICepbrBairroBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idBairro = url.searchParams.get('idBairro') || '';
+  const bairro = url.searchParams.get('bairro') || '';
+
+  return {
+    baseFilters,
+    idBairro,
+    bairro
+  };
+};

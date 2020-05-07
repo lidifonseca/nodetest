@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './profissional-area-atuacao-new.reducer';
+import {
+  IProfissionalAreaAtuacaoNewUpdateState,
+  getEntity,
+  getProfissionalAreaAtuacaoNewState,
+  IProfissionalAreaAtuacaoNewBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './profissional-area-atuacao-new.reducer';
 import { IProfissionalAreaAtuacaoNew } from 'app/shared/model/profissional-area-atuacao-new.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProfissionalAreaAtuacaoNewUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IProfissionalAreaAtuacaoNewUpdateState {
-  isNew: boolean;
-}
 
 export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
   IProfissionalAreaAtuacaoNewUpdateProps,
@@ -25,7 +29,9 @@ export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
 > {
   constructor(props: Readonly<IProfissionalAreaAtuacaoNewUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProfissionalAreaAtuacaoNewState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,23 @@ export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
+      (fieldsBase['cepArea'] ? '&cepArea=' + fieldsBase['cepArea'] : '') +
+      (fieldsBase['cepFim'] ? '&cepFim=' + fieldsBase['cepFim'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['cepIni'] ? '&cepIni=' + fieldsBase['cepIni'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalAreaAtuacaoNewEntity } = this.props;
@@ -60,13 +83,14 @@ export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-area-atuacao-new');
+    this.props.history.push('/profissional-area-atuacao-new?' + this.getFiltersURL());
   };
 
   render() {
     const { profissionalAreaAtuacaoNewEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +128,7 @@ export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/profissional-area-atuacao-new"
+                  to={'/profissional-area-atuacao-new?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +147,7 @@ export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,103 +170,105 @@ export class ProfissionalAreaAtuacaoNewUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-area-atuacao-new-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-new-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idProfissionalLabel" for="profissional-area-atuacao-new-idProfissional">
-                                <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.idProfissional">Id Profissional</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-area-atuacao-new-idProfissional" type="text" name="idProfissional" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cepArea' ? (
+                          <Col md="cepArea">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepAreaLabel" for="profissional-area-atuacao-new-cepArea">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepArea">Cep Area</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-new-cepArea" type="text" name="cepArea" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepArea" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepAreaLabel" for="profissional-area-atuacao-new-cepArea">
-                                <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepArea">Cep Area</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-area-atuacao-new-cepArea"
-                                type="text"
-                                name="cepArea"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cepFim' ? (
+                          <Col md="cepFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepFimLabel" for="profissional-area-atuacao-new-cepFim">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepFim">Cep Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-new-cepFim" type="text" name="cepFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepFimLabel" for="profissional-area-atuacao-new-cepFim">
-                                <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepFim">Cep Fim</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-area-atuacao-new-cepFim"
-                                type="text"
-                                name="cepFim"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="profissional-area-atuacao-new-ativo">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-new-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="profissional-area-atuacao-new-ativo">
-                                <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-area-atuacao-new-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepIniLabel" for="profissional-area-atuacao-new-cepIni">
-                                <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-area-atuacao-new-cepIni"
-                                type="text"
-                                name="cepIni"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'cepIni' ? (
+                          <Col md="cepIni">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepIniLabel" for="profissional-area-atuacao-new-cepIni">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-new-cepIni" type="text" name="cepIni" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepIni" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

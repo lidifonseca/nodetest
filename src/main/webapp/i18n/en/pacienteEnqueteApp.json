@@ -3,21 +3,20 @@
     "pacienteEnqueteApp": {
       "home": {
         "title": "Paciente Enquete Apps",
-        "createLabel": "Criar novo Paciente Enquete App",
-        "createOrEditLabel": "Criar ou editar Paciente Enquete App",
-        "notFound": "Nenhum Paciente Enquete App encontrado"
+        "createLabel": "Create a new Paciente Enquete App",
+        "createOrEditLabel": "Create or edit a Paciente Enquete App",
+        "notFound": "No Paciente Enquete Apps found"
       },
-      "created": "Um novo Paciente Enquete App foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Enquete App foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Enquete App foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Enquete App is created with identifier {{ param }}",
+      "updated": "A Paciente Enquete App is updated with identifier {{ param }}",
+      "deleted": "A Paciente Enquete App is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Enquete App {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Enquete App {{ id }}?"
       },
       "detail": {
         "title": "Paciente Enquete App"
       },
-      "votacao": "Votacao",
-      "idPaciente": "Id Paciente"
+      "votacao": "Votacao"
     }
   }
 }

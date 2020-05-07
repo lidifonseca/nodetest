@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './imagem-prontuario.reducer';
+import { getEntity, IImagemProntuarioBaseState, getImagemProntuarioState } from './imagem-prontuario.reducer';
 import { IImagemProntuario } from 'app/shared/model/imagem-prontuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IImagemProntuarioState {
+  fieldsBase: IImagemProntuarioBaseState;
+}
+
 export interface IImagemProntuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ImagemProntuarioDetail extends React.Component<IImagemProntuarioDetailProps> {
+export class ImagemProntuarioDetail extends React.Component<IImagemProntuarioDetailProps, IImagemProntuarioState> {
   constructor(props: Readonly<IImagemProntuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getImagemProntuarioState(this.props.location)
     };
   }
 

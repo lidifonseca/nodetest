@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './profissional-especialidade-new.reducer';
+import {
+  IProfissionalEspecialidadeNewUpdateState,
+  getEntity,
+  getProfissionalEspecialidadeNewState,
+  IProfissionalEspecialidadeNewBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './profissional-especialidade-new.reducer';
 import { IProfissionalEspecialidadeNew } from 'app/shared/model/profissional-especialidade-new.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProfissionalEspecialidadeNewUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IProfissionalEspecialidadeNewUpdateState {
-  isNew: boolean;
-}
 
 export class ProfissionalEspecialidadeNewUpdate extends React.Component<
   IProfissionalEspecialidadeNewUpdateProps,
@@ -25,7 +29,9 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
 > {
   constructor(props: Readonly<IProfissionalEspecialidadeNewUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProfissionalEspecialidadeNewState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,20 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idEspecialidade'] ? '&idEspecialidade=' + fieldsBase['idEspecialidade'] : '') +
+      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalEspecialidadeNewEntity } = this.props;
@@ -60,13 +80,14 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-especialidade-new');
+    this.props.history.push('/profissional-especialidade-new?' + this.getFiltersURL());
   };
 
   render() {
     const { profissionalEspecialidadeNewEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +125,7 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/profissional-especialidade-new"
+                  to={'/profissional-especialidade-new?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +144,7 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,55 +167,55 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idEspecialidade' ? (
+                          <Col md="idEspecialidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idEspecialidadeLabel" for="profissional-especialidade-new-idEspecialidade">
+                                    <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">
+                                      Id Especialidade
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-especialidade-new-idEspecialidade"
+                                    type="string"
+                                    className="form-control"
+                                    name="idEspecialidade"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idEspecialidadeLabel" for="profissional-especialidade-new-idEspecialidade">
-                                <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">
-                                  Id Especialidade
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-especialidade-new-idEspecialidade"
-                                type="string"
-                                className="form-control"
-                                name="idEspecialidade"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idProfissionalLabel" for="profissional-especialidade-new-idProfissional">
-                                <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">Id Profissional</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-especialidade-new-idProfissional"
-                                type="text"
-                                name="idProfissional"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-especialidade-new-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-especialidade-new-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

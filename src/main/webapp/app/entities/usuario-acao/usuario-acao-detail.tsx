@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -59,21 +59,6 @@ export class UsuarioAcaoDetail extends React.Component<IUsuarioAcaoDetailProps, 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.usuarioAcao.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioAcaoEntity.idUsuario}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="idAtendimento">
                             <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
                           </span>
@@ -96,32 +81,6 @@ export class UsuarioAcaoDetail extends React.Component<IUsuarioAcaoDetailProps, 
                       </Col>
                       <Col md="9">
                         <dd>{usuarioAcaoEntity.descricao}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.usuarioAcao.idTela">Id Tela</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioAcaoEntity.idTela ? usuarioAcaoEntity.idTela.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.usuarioAcao.idAcao">Id Acao</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioAcaoEntity.idAcao ? usuarioAcaoEntity.idAcao.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

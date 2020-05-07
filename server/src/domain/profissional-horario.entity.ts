@@ -7,18 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProfissionalHorario.
  */
-@Entity('profissional_horario')
+@Entity('tb_profissional_horario')
 export default class ProfissionalHorario extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_atendimento', nullable: false })
+  @Column({ type: 'integer', name: 'ID_ATENDIMENTO', nullable: false })
   idAtendimento: number;
 
-  @Column({ type: 'integer', name: 'id_profissional', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PROFISSIONAL', nullable: false })
   idProfissional: number;
 
-  @Column({ type: 'timestamp', name: 'horario', nullable: false })
+  @Column({ type: 'timestamp', name: 'HORARIO', nullable: false })
   horario: any;
 
-  @Column({ type: 'integer', name: 'confirm' })
+  @Column({ type: 'integer', name: 'CONFIRM' })
   confirm: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

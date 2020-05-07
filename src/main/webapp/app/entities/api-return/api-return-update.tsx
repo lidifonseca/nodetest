@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './api-return.reducer';
+import {
+  IApiReturnUpdateState,
+  getEntity,
+  getApiReturnState,
+  IApiReturnBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './api-return.reducer';
 import { IApiReturn } from 'app/shared/model/api-return.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IApiReturnUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IApiReturnUpdateState {
-  isNew: boolean;
-}
-
 export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApiReturnUpdateState> {
   constructor(props: Readonly<IApiReturnUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getApiReturnState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,23 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idApiName'] ? '&idApiName=' + fieldsBase['idApiName'] : '') +
+      (fieldsBase['apiReturn'] ? '&apiReturn=' + fieldsBase['apiReturn'] : '') +
+      (fieldsBase['apiType'] ? '&apiType=' + fieldsBase['apiType'] : '') +
+      (fieldsBase['obs'] ? '&obs=' + fieldsBase['obs'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { apiReturnEntity } = this.props;
@@ -57,13 +80,14 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
   };
 
   handleClose = () => {
-    this.props.history.push('/api-return');
+    this.props.history.push('/api-return?' + this.getFiltersURL());
   };
 
   render() {
     const { apiReturnEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +120,14 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/api-return" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/api-return?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +142,7 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,103 +158,103 @@ export class ApiReturnUpdate extends React.Component<IApiReturnUpdateProps, IApi
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idApiName' ? (
+                          <Col md="idApiName">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idApiNameLabel" for="api-return-idApiName">
+                                    <Translate contentKey="generadorApp.apiReturn.idApiName">Id Api Name</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-return-idApiName" type="string" className="form-control" name="idApiName" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idApiName" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idApiNameLabel" for="api-return-idApiName">
-                                <Translate contentKey="generadorApp.apiReturn.idApiName">Id Api Name</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="api-return-idApiName" type="string" className="form-control" name="idApiName" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'apiReturn' ? (
+                          <Col md="apiReturn">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiReturnLabel" for="api-return-apiReturn">
+                                    <Translate contentKey="generadorApp.apiReturn.apiReturn">Api Return</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-return-apiReturn" type="text" name="apiReturn" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiReturn" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="apiReturnLabel" for="api-return-apiReturn">
-                                <Translate contentKey="generadorApp.apiReturn.apiReturn">Api Return</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="api-return-apiReturn"
-                                type="text"
-                                name="apiReturn"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'apiType' ? (
+                          <Col md="apiType">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiTypeLabel" for="api-return-apiType">
+                                    <Translate contentKey="generadorApp.apiReturn.apiType">Api Type</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-return-apiType" type="text" name="apiType" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiType" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="apiTypeLabel" for="api-return-apiType">
-                                <Translate contentKey="generadorApp.apiReturn.apiType">Api Type</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="api-return-apiType"
-                                type="text"
-                                name="apiType"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'obs' ? (
+                          <Col md="obs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="obsLabel" for="api-return-obs">
+                                    <Translate contentKey="generadorApp.apiReturn.obs">Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-return-obs" type="text" name="obs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="obsLabel" for="api-return-obs">
-                                <Translate contentKey="generadorApp.apiReturn.obs">Obs</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="api-return-obs"
-                                type="text"
-                                name="obs"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="api-return-ativo">
-                                <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="api-return-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="api-return-ativo">
+                                    <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-return-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

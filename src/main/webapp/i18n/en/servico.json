@@ -3,15 +3,15 @@
     "servico": {
       "home": {
         "title": "Servicos",
-        "createLabel": "Criar novo Servico",
-        "createOrEditLabel": "Criar ou editar Servico",
-        "notFound": "Nenhum Servico encontrado"
+        "createLabel": "Create a new Servico",
+        "createOrEditLabel": "Create or edit a Servico",
+        "notFound": "No Servicos found"
       },
-      "created": "Um novo Servico foi criado com o identificador {{ param }}",
-      "updated": "Um Servico foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Servico foi excluído com o identificador {{ param }}",
+      "created": "A new Servico is created with identifier {{ param }}",
+      "updated": "A Servico is updated with identifier {{ param }}",
+      "deleted": "A Servico is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Servico {{ id }}?"
+        "question": "Are you sure you want to delete Servico {{ id }}?"
       },
       "detail": {
         "title": "Servico"

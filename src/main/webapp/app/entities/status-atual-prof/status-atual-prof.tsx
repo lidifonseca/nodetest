@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './status-atual-prof.reducer';
+import { getStatusAtualProfState, IStatusAtualProfBaseState, getEntities } from './status-atual-prof.reducer';
 import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IStatusAtualProfProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IStatusAtualProfBaseState {
-  statusAtualProf: any;
-  styleLabel: any;
-  profissionalStatusAtual: any;
-}
 export interface IStatusAtualProfState extends IStatusAtualProfBaseState, IPaginationBaseState {}
 
 export class StatusAtualProf extends React.Component<IStatusAtualProfProps, IStatusAtualProfState> {
@@ -43,23 +38,9 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getStatusAtualProfState(this.props.location)
+      ...getStatusAtualProfState(this.props.location)
     };
   }
-
-  getStatusAtualProfState = (location): IStatusAtualProfBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const statusAtualProf = url.searchParams.get('statusAtualProf') || '';
-    const styleLabel = url.searchParams.get('styleLabel') || '';
-
-    const profissionalStatusAtual = url.searchParams.get('profissionalStatusAtual') || '';
-
-    return {
-      statusAtualProf,
-      styleLabel,
-      profissionalStatusAtual
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -69,8 +50,7 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
     this.setState(
       {
         statusAtualProf: '',
-        styleLabel: '',
-        profissionalStatusAtual: ''
+        styleLabel: ''
       },
       () => this.sortEntities()
     );
@@ -103,7 +83,9 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -121,9 +103,6 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
       'styleLabel=' +
       this.state.styleLabel +
       '&' +
-      'profissionalStatusAtual=' +
-      this.state.profissionalStatusAtual +
-      '&' +
       ''
     );
   };
@@ -131,8 +110,8 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtualProf, styleLabel, profissionalStatusAtual, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtualProf, styleLabel, profissionalStatusAtual, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtualProf, styleLabel, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtualProf, styleLabel, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -154,7 +133,11 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.statusAtualProf.home.createLabel">Create a new Status Atual Prof</Translate>
@@ -167,33 +150,34 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="statusAtualProfLabel" for="status-atual-prof-statusAtualProf">
-                            <Translate contentKey="generadorApp.statusAtualProf.statusAtualProf">Status Atual Prof</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'statusAtualProf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="statusAtualProfLabel" for="status-atual-prof-statusAtualProf">
+                              <Translate contentKey="generadorApp.statusAtualProf.statusAtualProf">Status Atual Prof</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="statusAtualProf"
-                            id="status-atual-prof-statusAtualProf"
-                            value={this.state.statusAtualProf}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="styleLabelLabel" for="status-atual-prof-styleLabel">
-                            <Translate contentKey="generadorApp.statusAtualProf.styleLabel">Style Label</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="statusAtualProf"
+                              id="status-atual-prof-statusAtualProf"
+                              value={this.state.statusAtualProf}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="styleLabel" id="status-atual-prof-styleLabel" value={this.state.styleLabel} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="styleLabelLabel" for="status-atual-prof-styleLabel">
+                              <Translate contentKey="generadorApp.statusAtualProf.styleLabel">Style Label</Translate>
+                            </Label>
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="styleLabel" id="status-atual-prof-styleLabel" value={this.state.styleLabel} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -221,14 +205,18 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('statusAtualProf')}>
-                        <Translate contentKey="generadorApp.statusAtualProf.statusAtualProf">Status Atual Prof</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('styleLabel')}>
-                        <Translate contentKey="generadorApp.statusAtualProf.styleLabel">Style Label</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'statusAtualProf' ? (
+                        <th className="hand" onClick={this.sort('statusAtualProf')}>
+                          <Translate contentKey="generadorApp.statusAtualProf.statusAtualProf">Status Atual Prof</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <th className="hand" onClick={this.sort('styleLabel')}>
+                          <Translate contentKey="generadorApp.statusAtualProf.styleLabel">Style Label</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -243,25 +231,35 @@ export class StatusAtualProf extends React.Component<IStatusAtualProfProps, ISta
                           </Button>
                         </td>
 
-                        <td>{statusAtualProf.statusAtualProf}</td>
+                        {this.state.baseFilters !== 'statusAtualProf' ? <td>{statusAtualProf.statusAtualProf}</td> : null}
 
-                        <td>{statusAtualProf.styleLabel}</td>
+                        {this.state.baseFilters !== 'styleLabel' ? <td>{statusAtualProf.styleLabel}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${statusAtualProf.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${statusAtualProf.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${statusAtualProf.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${statusAtualProf.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${statusAtualProf.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${statusAtualProf.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

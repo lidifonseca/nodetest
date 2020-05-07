@@ -9,108 +9,121 @@ import UnidadeEasy from './unidade-easy.entity';
 /**
  * A ProfissionalNew.
  */
-@Entity('profissional_new')
+@Entity('tb_profissional_new')
 export default class ProfissionalNew extends BaseEntity {
-  @Column({ name: 'id_cidade' })
+  @Column({ name: 'ID_CIDADE' })
   idCidade: string;
 
-  @Column({ type: 'integer', name: 'id_tempo_experiencia' })
+  @Column({ type: 'integer', name: 'ID_TEMPO_EXPERIENCIA' })
   idTempoExperiencia: number;
 
-  @Column({ type: 'integer', name: 'id_banco' })
+  @Column({ type: 'integer', name: 'ID_BANCO' })
   idBanco: number;
 
-  @Column({ name: 'senha', length: 100 })
+  @Column({ name: 'SENHA', length: 100 })
   senha: string;
 
-  @Column({ name: 'nome', length: 60 })
+  @Column({ name: 'NOME', length: 60 })
   nome: string;
 
-  @Column({ name: 'email', length: 100 })
+  @Column({ name: 'EMAIL', length: 100 })
   email: string;
 
-  @Column({ name: 'cpf', length: 20 })
+  @Column({ name: 'CPF', length: 20 })
   cpf: string;
 
-  @Column({ name: 'rg', length: 30 })
+  @Column({ name: 'RG', length: 30 })
   rg: string;
 
-  @Column({ name: 'nome_empresa', length: 150 })
+  @Column({ name: 'NOME_EMPRESA', length: 150 })
   nomeEmpresa: string;
 
-  @Column({ name: 'cnpj', length: 20 })
+  @Column({ name: 'CNPJ', length: 20 })
   cnpj: string;
 
-  @Column({ name: 'registro', length: 50 })
+  @Column({ name: 'REGISTRO', length: 50 })
   registro: string;
 
-  @Column({ type: 'date', name: 'nascimento' })
+  @Column({ type: 'date', name: 'NASCIMENTO' })
   nascimento: any;
 
-  @Column({ type: 'integer', name: 'sexo' })
+  @Column({ type: 'integer', name: 'SEXO' })
   sexo: number;
 
-  @Column({ name: 'telefone_1', length: 20 })
+  /**
+   * @dbName TELEFONE1@@
+   */
+  @Column({ name: 'TELEFONE1', length: 20 })
   telefone1: string;
 
-  @Column({ name: 'telefone_2', length: 20 })
+  /**
+   * @dbName TELEFONE2@@
+   */
+  @Column({ name: 'TELEFONE2', length: 20 })
   telefone2: string;
 
-  @Column({ name: 'celular_1', length: 20 })
+  /**
+   * @dbName CELULAR1@@
+   */
+  @Column({ name: 'CELULAR1', length: 20 })
   celular1: string;
 
-  @Column({ name: 'celular_2', length: 20 })
+  /**
+   * @dbName CELULAR2@@
+   */
+  @Column({ name: 'CELULAR2', length: 20 })
   celular2: string;
 
-  @Column({ name: 'cep', length: 10 })
+  @Column({ name: 'CEP', length: 10 })
   cep: string;
 
-  @Column({ name: 'endereco', length: 100 })
+  @Column({ name: 'ENDERECO', length: 100 })
   endereco: string;
 
-  @Column({ name: 'numero', length: 30 })
+  @Column({ name: 'NUMERO', length: 30 })
   numero: string;
 
-  @Column({ name: 'complemento', length: 20 })
+  @Column({ name: 'COMPLEMENTO', length: 20 })
   complemento: string;
 
-  @Column({ name: 'bairro', length: 40 })
+  @Column({ name: 'BAIRRO', length: 40 })
   bairro: string;
 
-  @Column({ name: 'cidade', length: 100 })
+  @Column({ name: 'CIDADE', length: 100 })
   cidade: string;
 
-  @Column({ name: 'uf', length: 5 })
+  @Column({ name: 'UF', length: 5 })
   uf: string;
 
-  @Column({ type: 'integer', name: 'atende_crianca' })
+  @Column({ type: 'integer', name: 'ATENDE_CRIANCA' })
   atendeCrianca: number;
 
-  @Column({ type: 'integer', name: 'atende_idoso' })
+  @Column({ type: 'integer', name: 'ATENDE_IDOSO' })
   atendeIdoso: number;
 
-  @Column({ name: 'ag', length: 10 })
+  @Column({ name: 'AG', length: 10 })
   ag: string;
 
-  @Column({ name: 'conta', length: 25 })
+  @Column({ name: 'CONTA', length: 25 })
   conta: string;
 
-  @Column({ name: 'tipo_conta', length: 20 })
+  @Column({ name: 'TIPO_CONTA', length: 20 })
   tipoConta: string;
 
-  @Column({ name: 'origem_cadastro', length: 100 })
+  @Column({ name: 'ORIGEM_CADASTRO', length: 100 })
   origemCadastro: string;
 
-  @Column({ type: 'blob', name: 'obs' })
-  obs: any;
+  @Column({ name: 'OBS' })
+  obs: string;
 
-  @Column({ name: 'chave_privada', length: 255 })
+  @Column({ name: 'CHAVE_PRIVADA', length: 255 })
   chavePrivada: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   @ManyToOne(type => UnidadeEasy)
+  @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

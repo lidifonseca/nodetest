@@ -3,15 +3,15 @@
     "profissionalFranquia": {
       "home": {
         "title": "Profissional Franquias",
-        "createLabel": "Criar novo Profissional Franquia",
-        "createOrEditLabel": "Criar ou editar Profissional Franquia",
-        "notFound": "Nenhum Profissional Franquia encontrado"
+        "createLabel": "Create a new Profissional Franquia",
+        "createOrEditLabel": "Create or edit a Profissional Franquia",
+        "notFound": "No Profissional Franquias found"
       },
-      "created": "Um novo Profissional Franquia foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Franquia foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Franquia foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Franquia is created with identifier {{ param }}",
+      "updated": "A Profissional Franquia is updated with identifier {{ param }}",
+      "deleted": "A Profissional Franquia is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Franquia {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Franquia {{ id }}?"
       },
       "detail": {
         "title": "Profissional Franquia"

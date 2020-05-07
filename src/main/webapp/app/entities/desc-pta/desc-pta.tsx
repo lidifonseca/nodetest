@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './desc-pta.reducer';
+import { getDescPtaState, IDescPtaBaseState, getEntities } from './desc-pta.reducer';
 import { IDescPta } from 'app/shared/model/desc-pta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IDescPtaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IDescPtaBaseState {
-  nome: any;
-  resultadoEsperado: any;
-  ativo: any;
-}
 export interface IDescPtaState extends IDescPtaBaseState, IPaginationBaseState {}
 
 export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
@@ -43,22 +38,9 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getDescPtaState(this.props.location)
+      ...getDescPtaState(this.props.location)
     };
   }
-
-  getDescPtaState = (location): IDescPtaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nome = url.searchParams.get('nome') || '';
-    const resultadoEsperado = url.searchParams.get('resultadoEsperado') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      nome,
-      resultadoEsperado,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -102,7 +84,9 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -153,7 +137,11 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.descPta.home.createLabel">Create a new Desc Pta</Translate>
@@ -166,57 +154,45 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="desc-pta-nome">
-                            <Translate contentKey="generadorApp.descPta.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="desc-pta-nome">
+                              <Translate contentKey="generadorApp.descPta.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="desc-pta-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="resultadoEsperadoLabel" for="desc-pta-resultadoEsperado">
-                            <Translate contentKey="generadorApp.descPta.resultadoEsperado">Resultado Esperado</Translate>
-                          </Label>
+                            <AvInput type="text" name="nome" id="desc-pta-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="resultadoEsperado"
-                            id="desc-pta-resultadoEsperado"
-                            value={this.state.resultadoEsperado}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="desc-pta-ativo">
-                            <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ativo"
-                            id="desc-pta-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'resultadoEsperado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="resultadoEsperadoLabel" for="desc-pta-resultadoEsperado">
+                              <Translate contentKey="generadorApp.descPta.resultadoEsperado">Resultado Esperado</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="resultadoEsperado"
+                              id="desc-pta-resultadoEsperado"
+                              value={this.state.resultadoEsperado}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="desc-pta-ativo">
+                              <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="desc-pta-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -244,18 +220,24 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.descPta.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('resultadoEsperado')}>
-                        <Translate contentKey="generadorApp.descPta.resultadoEsperado">Resultado Esperado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.descPta.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'resultadoEsperado' ? (
+                        <th className="hand" onClick={this.sort('resultadoEsperado')}>
+                          <Translate contentKey="generadorApp.descPta.resultadoEsperado">Resultado Esperado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -270,27 +252,27 @@ export class DescPta extends React.Component<IDescPtaProps, IDescPtaState> {
                           </Button>
                         </td>
 
-                        <td>{descPta.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{descPta.nome}</td> : null}
 
-                        <td>{descPta.resultadoEsperado}</td>
+                        {this.state.baseFilters !== 'resultadoEsperado' ? <td>{descPta.resultadoEsperado}</td> : null}
 
-                        <td>{descPta.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{descPta.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${descPta.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${descPta.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${descPta.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${descPta.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${descPta.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${descPta.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

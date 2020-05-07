@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './uf.reducer';
+import { getUfState, IUfBaseState, getEntities } from './uf.reducer';
 import { IUf } from 'app/shared/model/uf.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IUfProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IUfBaseState {
-  siglaUf: any;
-  descrUf: any;
-  cidade: any;
-}
 export interface IUfState extends IUfBaseState, IPaginationBaseState {}
 
 export class Uf extends React.Component<IUfProps, IUfState> {
@@ -43,23 +38,9 @@ export class Uf extends React.Component<IUfProps, IUfState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getUfState(this.props.location)
+      ...getUfState(this.props.location)
     };
   }
-
-  getUfState = (location): IUfBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const siglaUf = url.searchParams.get('siglaUf') || '';
-    const descrUf = url.searchParams.get('descrUf') || '';
-
-    const cidade = url.searchParams.get('cidade') || '';
-
-    return {
-      siglaUf,
-      descrUf,
-      cidade
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -69,8 +50,7 @@ export class Uf extends React.Component<IUfProps, IUfState> {
     this.setState(
       {
         siglaUf: '',
-        descrUf: '',
-        cidade: ''
+        descrUf: ''
       },
       () => this.sortEntities()
     );
@@ -103,7 +83,9 @@ export class Uf extends React.Component<IUfProps, IUfState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -121,9 +103,6 @@ export class Uf extends React.Component<IUfProps, IUfState> {
       'descrUf=' +
       this.state.descrUf +
       '&' +
-      'cidade=' +
-      this.state.cidade +
-      '&' +
       ''
     );
   };
@@ -131,8 +110,8 @@ export class Uf extends React.Component<IUfProps, IUfState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { siglaUf, descrUf, cidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(siglaUf, descrUf, cidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { siglaUf, descrUf, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(siglaUf, descrUf, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -154,7 +133,11 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.uf.home.createLabel">Create a new Uf</Translate>
@@ -167,28 +150,29 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="siglaUfLabel" for="uf-siglaUf">
-                            <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'siglaUf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="siglaUfLabel" for="uf-siglaUf">
+                              <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="siglaUf" id="uf-siglaUf" value={this.state.siglaUf} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descrUfLabel" for="uf-descrUf">
-                            <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
-                          </Label>
+                            <AvInput type="text" name="siglaUf" id="uf-siglaUf" value={this.state.siglaUf} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="descrUf" id="uf-descrUf" value={this.state.descrUf} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'descrUf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descrUfLabel" for="uf-descrUf">
+                              <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
+                            </Label>
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="descrUf" id="uf-descrUf" value={this.state.descrUf} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -216,14 +200,18 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('siglaUf')}>
-                        <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descrUf')}>
-                        <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'siglaUf' ? (
+                        <th className="hand" onClick={this.sort('siglaUf')}>
+                          <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'descrUf' ? (
+                        <th className="hand" onClick={this.sort('descrUf')}>
+                          <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -238,25 +226,25 @@ export class Uf extends React.Component<IUfProps, IUfState> {
                           </Button>
                         </td>
 
-                        <td>{uf.siglaUf}</td>
+                        {this.state.baseFilters !== 'siglaUf' ? <td>{uf.siglaUf}</td> : null}
 
-                        <td>{uf.descrUf}</td>
+                        {this.state.baseFilters !== 'descrUf' ? <td>{uf.descrUf}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${uf.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${uf.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${uf.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${uf.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${uf.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${uf.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

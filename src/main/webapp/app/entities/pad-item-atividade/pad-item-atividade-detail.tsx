@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-atividade.reducer';
+import { getEntity, IPadItemAtividadeBaseState, getPadItemAtividadeState } from './pad-item-atividade.reducer';
 import { IPadItemAtividade } from 'app/shared/model/pad-item-atividade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemAtividadeState {
+  fieldsBase: IPadItemAtividadeBaseState;
+}
+
 export interface IPadItemAtividadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemAtividadeDetail extends React.Component<IPadItemAtividadeDetailProps> {
+export class PadItemAtividadeDetail extends React.Component<IPadItemAtividadeDetailProps, IPadItemAtividadeState> {
   constructor(props: Readonly<IPadItemAtividadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemAtividadeState(this.props.location)
     };
   }
 
@@ -81,32 +86,6 @@ export class PadItemAtividadeDetail extends React.Component<IPadItemAtividadeDet
                         <dd>
                           <TextFormat value={padItemAtividadeEntity.dataFim} type="date" format={APP_LOCAL_DATE_FORMAT} />
                         </dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItemAtividade.idAtividade">Id Atividade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemAtividadeEntity.idAtividade ? padItemAtividadeEntity.idAtividade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItemAtividade.idPadItem">Id Pad Item</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemAtividadeEntity.idPadItem ? padItemAtividadeEntity.idPadItem.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

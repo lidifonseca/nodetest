@@ -68,7 +68,9 @@ export class ProfissionalPushController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() profissionalPush: ProfissionalPush): Promise<ProfissionalPush> {
+    console.info(profissionalPush);
     const created = await this.profissionalPushService.save(profissionalPush);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalPush', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ProfissionalPushController {
   })
   async put(@Req() req: Request, @Body() profissionalPush: ProfissionalPush): Promise<ProfissionalPush> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalPush', profissionalPush.id);
+
     return await this.profissionalPushService.update(profissionalPush);
   }
 

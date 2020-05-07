@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './tipo-usuario.reducer';
+import { getTipoUsuarioState, ITipoUsuarioBaseState, getEntities } from './tipo-usuario.reducer';
 import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ITipoUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ITipoUsuarioBaseState {
-  tipoUsuario: any;
-  ativo: any;
-  usuario: any;
-}
 export interface ITipoUsuarioState extends ITipoUsuarioBaseState, IPaginationBaseState {}
 
 export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuarioState> {
@@ -43,23 +38,9 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getTipoUsuarioState(this.props.location)
+      ...getTipoUsuarioState(this.props.location)
     };
   }
-
-  getTipoUsuarioState = (location): ITipoUsuarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const tipoUsuario = url.searchParams.get('tipoUsuario') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const usuario = url.searchParams.get('usuario') || '';
-
-    return {
-      tipoUsuario,
-      ativo,
-      usuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -69,8 +50,7 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
     this.setState(
       {
         tipoUsuario: '',
-        ativo: '',
-        usuario: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -103,7 +83,9 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -121,9 +103,6 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
       'ativo=' +
       this.state.ativo +
       '&' +
-      'usuario=' +
-      this.state.usuario +
-      '&' +
       ''
     );
   };
@@ -131,8 +110,8 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tipoUsuario, ativo, usuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tipoUsuario, ativo, usuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tipoUsuario, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tipoUsuario, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -154,7 +133,11 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.tipoUsuario.home.createLabel">Create a new Tipo Usuario</Translate>
@@ -167,27 +150,28 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoUsuarioLabel" for="tipo-usuario-tipoUsuario">
-                            <Translate contentKey="generadorApp.tipoUsuario.tipoUsuario">Tipo Usuario</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'tipoUsuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoUsuarioLabel" for="tipo-usuario-tipoUsuario">
+                              <Translate contentKey="generadorApp.tipoUsuario.tipoUsuario">Tipo Usuario</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="tipoUsuario" id="tipo-usuario-tipoUsuario" value={this.state.tipoUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="tipo-usuario-ativo">
-                            <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="tipo-usuario-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="tipoUsuario" id="tipo-usuario-tipoUsuario" value={this.state.tipoUsuario} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="tipo-usuario-ativo">
+                              <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="tipo-usuario-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -215,14 +199,18 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('tipoUsuario')}>
-                        <Translate contentKey="generadorApp.tipoUsuario.tipoUsuario">Tipo Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'tipoUsuario' ? (
+                        <th className="hand" onClick={this.sort('tipoUsuario')}>
+                          <Translate contentKey="generadorApp.tipoUsuario.tipoUsuario">Tipo Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -237,25 +225,30 @@ export class TipoUsuario extends React.Component<ITipoUsuarioProps, ITipoUsuario
                           </Button>
                         </td>
 
-                        <td>{tipoUsuario.tipoUsuario}</td>
+                        {this.state.baseFilters !== 'tipoUsuario' ? <td>{tipoUsuario.tipoUsuario}</td> : null}
 
-                        <td>{tipoUsuario.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{tipoUsuario.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${tipoUsuario.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${tipoUsuario.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tipoUsuario.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${tipoUsuario.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tipoUsuario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${tipoUsuario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

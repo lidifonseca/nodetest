@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IFranquia } from 'app/shared/model/franquia.model';
-import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './franquia-status-atual.reducer';
+import {
+  IFranquiaStatusAtualUpdateState,
+  getEntity,
+  getFranquiaStatusAtualState,
+  IFranquiaStatusAtualBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './franquia-status-atual.reducer';
 import { IFranquiaStatusAtual } from 'app/shared/model/franquia-status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IFranquiaStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IFranquiaStatusAtualUpdateState {
-  isNew: boolean;
-  idFranquiaId: string;
-}
-
 export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAtualUpdateProps, IFranquiaStatusAtualUpdateState> {
   constructor(props: Readonly<IFranquiaStatusAtualUpdateProps>) {
     super(props);
+
     this.state = {
-      idFranquiaId: '0',
+      fieldsBase: getFranquiaStatusAtualState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,23 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getFranquias();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['statusAtual'] ? '&statusAtual=' + fieldsBase['statusAtual'] : '') +
+      (fieldsBase['obs'] ? '&obs=' + fieldsBase['obs'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { franquiaStatusAtualEntity } = this.props;
@@ -63,13 +78,14 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
   };
 
   handleClose = () => {
-    this.props.history.push('/franquia-status-atual');
+    this.props.history.push('/franquia-status-atual?' + this.getFiltersURL());
   };
 
   render() {
-    const { franquiaStatusAtualEntity, franquias, loading, updating } = this.props;
+    const { franquiaStatusAtualEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +101,7 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
             isNew
               ? {}
               : {
-                  ...franquiaStatusAtualEntity,
-                  idFranquia: franquiaStatusAtualEntity.idFranquia ? franquiaStatusAtualEntity.idFranquia.id : null
+                  ...franquiaStatusAtualEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -108,7 +123,7 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/franquia-status-atual"
+                  to={'/franquia-status-atual?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -127,7 +142,7 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,84 +158,70 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'statusAtual' ? (
+                          <Col md="statusAtual">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusAtualLabel" for="franquia-status-atual-statusAtual">
+                                    <Translate contentKey="generadorApp.franquiaStatusAtual.statusAtual">Status Atual</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="franquia-status-atual-statusAtual"
+                                    type="string"
+                                    className="form-control"
+                                    name="statusAtual"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtual" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="statusAtualLabel" for="franquia-status-atual-statusAtual">
-                                <Translate contentKey="generadorApp.franquiaStatusAtual.statusAtual">Status Atual</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="franquia-status-atual-statusAtual" type="string" className="form-control" name="statusAtual" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'obs' ? (
+                          <Col md="obs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="obsLabel" for="franquia-status-atual-obs">
+                                    <Translate contentKey="generadorApp.franquiaStatusAtual.obs">Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-status-atual-obs" type="text" name="obs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="obsLabel" for="franquia-status-atual-obs">
-                                <Translate contentKey="generadorApp.franquiaStatusAtual.obs">Obs</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-status-atual-obs"
-                                type="text"
-                                name="obs"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="franquia-status-atual-ativo">
-                                <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="franquia-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="franquia-status-atual-idFranquia">
-                                <Translate contentKey="generadorApp.franquiaStatusAtual.idFranquia">Id Franquia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="franquia-status-atual-idFranquia" type="select" className="form-control" name="idFranquia">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.franquiaStatusAtual.idFranquia.empty')}
-                                </option>
-                                {franquias
-                                  ? franquias.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="franquia-status-atual-ativo">
+                                    <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-status-atual-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -233,7 +234,6 @@ export class FranquiaStatusAtualUpdate extends React.Component<IFranquiaStatusAt
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  franquias: storeState.franquia.entities,
   franquiaStatusAtualEntity: storeState.franquiaStatusAtual.entity,
   loading: storeState.franquiaStatusAtual.loading,
   updating: storeState.franquiaStatusAtual.updating,
@@ -241,7 +241,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getFranquias,
   getEntity,
   updateEntity,
   createEntity,

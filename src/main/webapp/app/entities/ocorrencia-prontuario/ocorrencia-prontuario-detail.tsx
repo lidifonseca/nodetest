@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './ocorrencia-prontuario.reducer';
+import { getEntity, IOcorrenciaProntuarioBaseState, getOcorrenciaProntuarioState } from './ocorrencia-prontuario.reducer';
 import { IOcorrenciaProntuario } from 'app/shared/model/ocorrencia-prontuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IOcorrenciaProntuarioState {
+  fieldsBase: IOcorrenciaProntuarioBaseState;
+}
+
 export interface IOcorrenciaProntuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class OcorrenciaProntuarioDetail extends React.Component<IOcorrenciaProntuarioDetailProps> {
+export class OcorrenciaProntuarioDetail extends React.Component<IOcorrenciaProntuarioDetailProps, IOcorrenciaProntuarioState> {
   constructor(props: Readonly<IOcorrenciaProntuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getOcorrenciaProntuarioState(this.props.location)
     };
   }
 

@@ -31,19 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-horario.reducer';
+import { getProfissionalHorarioState, IProfissionalHorarioBaseState, getEntities } from './profissional-horario.reducer';
 import { IProfissionalHorario } from 'app/shared/model/profissional-horario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalHorarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalHorarioBaseState {
-  idAtendimento: any;
-  idProfissional: any;
-  horario: any;
-  confirm: any;
-}
 export interface IProfissionalHorarioState extends IProfissionalHorarioBaseState, IPaginationBaseState {}
 
 export class ProfissionalHorario extends React.Component<IProfissionalHorarioProps, IProfissionalHorarioState> {
@@ -53,24 +47,9 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalHorarioState(this.props.location)
+      ...getProfissionalHorarioState(this.props.location)
     };
   }
-
-  getProfissionalHorarioState = (location): IProfissionalHorarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idAtendimento = url.searchParams.get('idAtendimento') || '';
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const horario = url.searchParams.get('horario') || '';
-    const confirm = url.searchParams.get('confirm') || '';
-
-    return {
-      idAtendimento,
-      idProfissional,
-      horario,
-      confirm
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -115,7 +94,9 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -169,7 +150,11 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalHorario.home.createLabel">Create a new Profissional Horario</Translate>
@@ -182,55 +167,66 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idAtendimentoLabel" for="profissional-horario-idAtendimento">
-                            <Translate contentKey="generadorApp.profissionalHorario.idAtendimento">Id Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idAtendimento"
-                            id="profissional-horario-idAtendimento"
-                            value={this.state.idAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-horario-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalHorario.idProfissional">Id Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idProfissional"
-                            id="profissional-horario-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="horarioLabel" for="profissional-horario-horario">
-                            <Translate contentKey="generadorApp.profissionalHorario.horario">Horario</Translate>
-                          </Label>
-                          <AvInput
-                            id="profissional-horario-horario"
-                            type="datetime-local"
-                            className="form-control"
-                            name="horario"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.horario ? convertDateTimeFromServer(this.state.horario) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="confirmLabel" for="profissional-horario-confirm">
-                            <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
-                          </Label>
-                          <AvInput type="string" name="confirm" id="profissional-horario-confirm" value={this.state.confirm} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idAtendimentoLabel" for="profissional-horario-idAtendimento">
+                              <Translate contentKey="generadorApp.profissionalHorario.idAtendimento">Id Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idAtendimento"
+                              id="profissional-horario-idAtendimento"
+                              value={this.state.idAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-horario-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalHorario.idProfissional">Id Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idProfissional"
+                              id="profissional-horario-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'horario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="horarioLabel" for="profissional-horario-horario">
+                              <Translate contentKey="generadorApp.profissionalHorario.horario">Horario</Translate>
+                            </Label>
+                            <AvInput
+                              id="profissional-horario-horario"
+                              type="datetime-local"
+                              className="form-control"
+                              name="horario"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.horario ? convertDateTimeFromServer(this.state.horario) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'confirm' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="confirmLabel" for="profissional-horario-confirm">
+                              <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
+                            </Label>
+                            <AvInput type="string" name="confirm" id="profissional-horario-confirm" value={this.state.confirm} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -258,22 +254,30 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idAtendimento')}>
-                        <Translate contentKey="generadorApp.profissionalHorario.idAtendimento">Id Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalHorario.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('horario')}>
-                        <Translate contentKey="generadorApp.profissionalHorario.horario">Horario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('confirm')}>
-                        <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <th className="hand" onClick={this.sort('idAtendimento')}>
+                          <Translate contentKey="generadorApp.profissionalHorario.idAtendimento">Id Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalHorario.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'horario' ? (
+                        <th className="hand" onClick={this.sort('horario')}>
+                          <Translate contentKey="generadorApp.profissionalHorario.horario">Horario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'confirm' ? (
+                        <th className="hand" onClick={this.sort('confirm')}>
+                          <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -288,31 +292,43 @@ export class ProfissionalHorario extends React.Component<IProfissionalHorarioPro
                           </Button>
                         </td>
 
-                        <td>{profissionalHorario.idAtendimento}</td>
+                        {this.state.baseFilters !== 'idAtendimento' ? <td>{profissionalHorario.idAtendimento}</td> : null}
 
-                        <td>{profissionalHorario.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalHorario.idProfissional}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={profissionalHorario.horario} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'horario' ? (
+                          <td>
+                            <TextFormat type="date" value={profissionalHorario.horario} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{profissionalHorario.confirm}</td>
+                        {this.state.baseFilters !== 'confirm' ? <td>{profissionalHorario.confirm}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalHorario.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${profissionalHorario.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalHorario.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalHorario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalHorario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalHorario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

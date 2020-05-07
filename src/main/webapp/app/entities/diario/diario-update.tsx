@@ -8,29 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IUsuario } from 'app/shared/model/usuario.model';
-import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './diario.reducer';
+import { IDiarioUpdateState, getEntity, getDiarioState, IDiarioBaseState, updateEntity, createEntity, reset } from './diario.reducer';
 import { IDiario } from 'app/shared/model/diario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IDiarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IDiarioUpdateState {
-  isNew: boolean;
-  idUsuarioId: string;
-  idPacienteId: string;
-}
-
 export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpdateState> {
   constructor(props: Readonly<IDiarioUpdateProps>) {
     super(props);
+
     this.state = {
-      idUsuarioId: '0',
-      idPacienteId: '0',
+      fieldsBase: getDiarioState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,11 +36,22 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getUsuarios();
-    this.props.getPacientes();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['historico'] ? '&historico=' + fieldsBase['historico'] : '') +
+      (fieldsBase['gerarPdf'] ? '&gerarPdf=' + fieldsBase['gerarPdf'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { diarioEntity } = this.props;
@@ -68,13 +69,14 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/diario');
+    this.props.history.push('/diario?' + this.getFiltersURL());
   };
 
   render() {
-    const { diarioEntity, usuarios, pacientes, loading, updating } = this.props;
+    const { diarioEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -90,9 +92,7 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
             isNew
               ? {}
               : {
-                  ...diarioEntity,
-                  idUsuario: diarioEntity.idUsuario ? diarioEntity.idUsuario.id : null,
-                  idPaciente: diarioEntity.idPaciente ? diarioEntity.idPaciente.id : null
+                  ...diarioEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -109,7 +109,14 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/diario" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/diario?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -124,7 +131,7 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -140,95 +147,46 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'historico' ? (
+                          <Col md="historico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="historicoLabel" for="diario-historico">
+                                    <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-historico" type="text" name="historico" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="historico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="historicoLabel" for="diario-historico">
-                                <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="diario-historico"
-                                type="text"
-                                name="historico"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="gerarPdfLabel" for="diario-gerarPdf">
-                                <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="diario-gerarPdf" type="string" className="form-control" name="gerarPdf" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="diario-idUsuario">
-                                <Translate contentKey="generadorApp.diario.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="diario-idUsuario" type="select" className="form-control" name="idUsuario">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.diario.idUsuario.empty')}
-                                </option>
-                                {usuarios
-                                  ? usuarios.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="diario-idPaciente">
-                                <Translate contentKey="generadorApp.diario.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="diario-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.diario.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'gerarPdf' ? (
+                          <Col md="gerarPdf">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="gerarPdfLabel" for="diario-gerarPdf">
+                                    <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-gerarPdf" type="string" className="form-control" name="gerarPdf" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="gerarPdf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -241,8 +199,6 @@ export class DiarioUpdate extends React.Component<IDiarioUpdateProps, IDiarioUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  usuarios: storeState.usuario.entities,
-  pacientes: storeState.paciente.entities,
   diarioEntity: storeState.diario.entity,
   loading: storeState.diario.loading,
   updating: storeState.diario.updating,
@@ -250,8 +206,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getUsuarios,
-  getPacientes,
   getEntity,
   updateEntity,
   createEntity,

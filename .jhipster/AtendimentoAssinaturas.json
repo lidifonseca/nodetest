@@ -10,30 +10,8 @@
             "fieldValidateRulesMaxlength": "150"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "atendimento",
-            "otherEntityRelationshipName": "atendimentoAssinaturas",
-            "relationshipName": "idAtendimento",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "profissional",
-            "otherEntityRelationshipName": "atendimentoAssinaturas",
-            "relationshipName": "idProfissional",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "paciente",
-            "otherEntityRelationshipName": "atendimentoAssinaturas",
-            "relationshipName": "idPaciente",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502230200",
+    "relationships": [],
+    "changelogDate": "20200507103500",
     "entityTableName": "atendimento_assinaturas",
     "dto": "mapstruct",
     "pagination": "pagination",

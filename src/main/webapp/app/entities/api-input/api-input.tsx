@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './api-input.reducer';
+import { getApiInputState, IApiInputBaseState, getEntities } from './api-input.reducer';
 import { IApiInput } from 'app/shared/model/api-input.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IApiInputProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IApiInputBaseState {
-  idApiName: any;
-  apiInput: any;
-  apiType: any;
-  obs: any;
-  ativo: any;
-}
 export interface IApiInputState extends IApiInputBaseState, IPaginationBaseState {}
 
 export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
@@ -45,26 +38,9 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getApiInputState(this.props.location)
+      ...getApiInputState(this.props.location)
     };
   }
-
-  getApiInputState = (location): IApiInputBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idApiName = url.searchParams.get('idApiName') || '';
-    const apiInput = url.searchParams.get('apiInput') || '';
-    const apiType = url.searchParams.get('apiType') || '';
-    const obs = url.searchParams.get('obs') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      idApiName,
-      apiInput,
-      apiType,
-      obs,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -110,7 +86,9 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -167,7 +145,11 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.apiInput.home.createLabel">Create a new Api Input</Translate>
@@ -180,49 +162,63 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idApiNameLabel" for="api-input-idApiName">
-                            <Translate contentKey="generadorApp.apiInput.idApiName">Id Api Name</Translate>
-                          </Label>
-                          <AvInput type="string" name="idApiName" id="api-input-idApiName" value={this.state.idApiName} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="apiInputLabel" for="api-input-apiInput">
-                            <Translate contentKey="generadorApp.apiInput.apiInput">Api Input</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idApiName' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idApiNameLabel" for="api-input-idApiName">
+                              <Translate contentKey="generadorApp.apiInput.idApiName">Id Api Name</Translate>
+                            </Label>
+                            <AvInput type="string" name="idApiName" id="api-input-idApiName" value={this.state.idApiName} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="apiInput" id="api-input-apiInput" value={this.state.apiInput} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="apiTypeLabel" for="api-input-apiType">
-                            <Translate contentKey="generadorApp.apiInput.apiType">Api Type</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'apiInput' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="apiInputLabel" for="api-input-apiInput">
+                              <Translate contentKey="generadorApp.apiInput.apiInput">Api Input</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="apiType" id="api-input-apiType" value={this.state.apiType} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="obsLabel" for="api-input-obs">
-                            <Translate contentKey="generadorApp.apiInput.obs">Obs</Translate>
-                          </Label>
+                            <AvInput type="text" name="apiInput" id="api-input-apiInput" value={this.state.apiInput} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="obs" id="api-input-obs" value={this.state.obs} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="api-input-ativo">
-                            <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="api-input-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'apiType' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="apiTypeLabel" for="api-input-apiType">
+                              <Translate contentKey="generadorApp.apiInput.apiType">Api Type</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="apiType" id="api-input-apiType" value={this.state.apiType} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'obs' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="obsLabel" for="api-input-obs">
+                              <Translate contentKey="generadorApp.apiInput.obs">Obs</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="obs" id="api-input-obs" value={this.state.obs} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="api-input-ativo">
+                              <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="api-input-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -250,26 +246,36 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idApiName')}>
-                        <Translate contentKey="generadorApp.apiInput.idApiName">Id Api Name</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('apiInput')}>
-                        <Translate contentKey="generadorApp.apiInput.apiInput">Api Input</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('apiType')}>
-                        <Translate contentKey="generadorApp.apiInput.apiType">Api Type</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('obs')}>
-                        <Translate contentKey="generadorApp.apiInput.obs">Obs</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idApiName' ? (
+                        <th className="hand" onClick={this.sort('idApiName')}>
+                          <Translate contentKey="generadorApp.apiInput.idApiName">Id Api Name</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'apiInput' ? (
+                        <th className="hand" onClick={this.sort('apiInput')}>
+                          <Translate contentKey="generadorApp.apiInput.apiInput">Api Input</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'apiType' ? (
+                        <th className="hand" onClick={this.sort('apiType')}>
+                          <Translate contentKey="generadorApp.apiInput.apiType">Api Type</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'obs' ? (
+                        <th className="hand" onClick={this.sort('obs')}>
+                          <Translate contentKey="generadorApp.apiInput.obs">Obs</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.apiInput.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -284,31 +290,31 @@ export class ApiInput extends React.Component<IApiInputProps, IApiInputState> {
                           </Button>
                         </td>
 
-                        <td>{apiInput.idApiName}</td>
+                        {this.state.baseFilters !== 'idApiName' ? <td>{apiInput.idApiName}</td> : null}
 
-                        <td>{apiInput.apiInput}</td>
+                        {this.state.baseFilters !== 'apiInput' ? <td>{apiInput.apiInput}</td> : null}
 
-                        <td>{apiInput.apiType}</td>
+                        {this.state.baseFilters !== 'apiType' ? <td>{apiInput.apiType}</td> : null}
 
-                        <td>{apiInput.obs}</td>
+                        {this.state.baseFilters !== 'obs' ? <td>{apiInput.obs}</td> : null}
 
-                        <td>{apiInput.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{apiInput.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${apiInput.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${apiInput.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${apiInput.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${apiInput.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${apiInput.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${apiInput.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

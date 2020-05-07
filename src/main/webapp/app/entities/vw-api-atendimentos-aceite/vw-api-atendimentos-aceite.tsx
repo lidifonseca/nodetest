@@ -22,36 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './vw-api-atendimentos-aceite.reducer';
+import { getVwApiAtendimentosAceiteState, IVwApiAtendimentosAceiteBaseState, getEntities } from './vw-api-atendimentos-aceite.reducer';
 import { IVwApiAtendimentosAceite } from 'app/shared/model/vw-api-atendimentos-aceite.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IVwApiAtendimentosAceiteProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IVwApiAtendimentosAceiteBaseState {
-  idPadItem: any;
-  idPaciente: any;
-  idPeriodo: any;
-  idPeriodicidade: any;
-  idProfissional: any;
-  aceito: any;
-  bairro: any;
-  cep: any;
-  cidade: any;
-  complemento: any;
-  endereco: any;
-  especialidade: any;
-  latitude: any;
-  longitude: any;
-  numero: any;
-  paciente: any;
-  periodo: any;
-  periodicidade: any;
-  qtdSessoes: any;
-  uf: any;
-  valor: any;
-}
 export interface IVwApiAtendimentosAceiteState extends IVwApiAtendimentosAceiteBaseState, IPaginationBaseState {}
 
 export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosAceiteProps, IVwApiAtendimentosAceiteState> {
@@ -61,58 +38,9 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getVwApiAtendimentosAceiteState(this.props.location)
+      ...getVwApiAtendimentosAceiteState(this.props.location)
     };
   }
-
-  getVwApiAtendimentosAceiteState = (location): IVwApiAtendimentosAceiteBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPadItem = url.searchParams.get('idPadItem') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idPeriodo = url.searchParams.get('idPeriodo') || '';
-    const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const aceito = url.searchParams.get('aceito') || '';
-    const bairro = url.searchParams.get('bairro') || '';
-    const cep = url.searchParams.get('cep') || '';
-    const cidade = url.searchParams.get('cidade') || '';
-    const complemento = url.searchParams.get('complemento') || '';
-    const endereco = url.searchParams.get('endereco') || '';
-    const especialidade = url.searchParams.get('especialidade') || '';
-    const latitude = url.searchParams.get('latitude') || '';
-    const longitude = url.searchParams.get('longitude') || '';
-    const numero = url.searchParams.get('numero') || '';
-    const paciente = url.searchParams.get('paciente') || '';
-    const periodo = url.searchParams.get('periodo') || '';
-    const periodicidade = url.searchParams.get('periodicidade') || '';
-    const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
-    const uf = url.searchParams.get('uf') || '';
-    const valor = url.searchParams.get('valor') || '';
-
-    return {
-      idPadItem,
-      idPaciente,
-      idPeriodo,
-      idPeriodicidade,
-      idProfissional,
-      aceito,
-      bairro,
-      cep,
-      cidade,
-      complemento,
-      endereco,
-      especialidade,
-      latitude,
-      longitude,
-      numero,
-      paciente,
-      periodo,
-      periodicidade,
-      qtdSessoes,
-      uf,
-      valor
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -174,7 +102,9 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -330,7 +260,11 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.vwApiAtendimentosAceite.home.createLabel">
@@ -345,363 +279,286 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPadItemLabel" for="vw-api-atendimentos-aceite-idPadItem">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPadItem">Id Pad Item</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPadItem"
-                            id="vw-api-atendimentos-aceite-idPadItem"
-                            value={this.state.idPadItem}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="vw-api-atendimentos-aceite-idPaciente">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="vw-api-atendimentos-aceite-idPaciente"
-                            value={this.state.idPaciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodoLabel" for="vw-api-atendimentos-aceite-idPeriodo">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodo">Id Periodo</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPeriodo"
-                            id="vw-api-atendimentos-aceite-idPeriodo"
-                            value={this.state.idPeriodo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodicidadeLabel" for="vw-api-atendimentos-aceite-idPeriodicidade">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodicidade">Id Periodicidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPeriodicidade"
-                            id="vw-api-atendimentos-aceite-idPeriodicidade"
-                            value={this.state.idPeriodicidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="vw-api-atendimentos-aceite-idProfissional">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idProfissional">Id Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idProfissional"
-                            id="vw-api-atendimentos-aceite-idProfissional"
-                            value={this.state.idProfissional}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="aceitoLabel" for="vw-api-atendimentos-aceite-aceito">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.aceito">Aceito</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="aceito"
-                            id="vw-api-atendimentos-aceite-aceito"
-                            value={this.state.aceito}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="bairroLabel" for="vw-api-atendimentos-aceite-bairro">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.bairro">Bairro</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="bairro"
-                            id="vw-api-atendimentos-aceite-bairro"
-                            value={this.state.bairro}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepLabel" for="vw-api-atendimentos-aceite-cep">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cep">Cep</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="cep"
-                            id="vw-api-atendimentos-aceite-cep"
-                            value={this.state.cep}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidadeLabel" for="vw-api-atendimentos-aceite-cidade">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cidade">Cidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="cidade"
-                            id="vw-api-atendimentos-aceite-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="complementoLabel" for="vw-api-atendimentos-aceite-complemento">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.complemento">Complemento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="complemento"
-                            id="vw-api-atendimentos-aceite-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="enderecoLabel" for="vw-api-atendimentos-aceite-endereco">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.endereco">Endereco</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="endereco"
-                            id="vw-api-atendimentos-aceite-endereco"
-                            value={this.state.endereco}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="especialidadeLabel" for="vw-api-atendimentos-aceite-especialidade">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.especialidade">Especialidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="especialidade"
-                            id="vw-api-atendimentos-aceite-especialidade"
-                            value={this.state.especialidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="latitudeLabel" for="vw-api-atendimentos-aceite-latitude">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.latitude">Latitude</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="latitude"
-                            id="vw-api-atendimentos-aceite-latitude"
-                            value={this.state.latitude}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="longitudeLabel" for="vw-api-atendimentos-aceite-longitude">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.longitude">Longitude</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="longitude"
-                            id="vw-api-atendimentos-aceite-longitude"
-                            value={this.state.longitude}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="numeroLabel" for="vw-api-atendimentos-aceite-numero">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.numero">Numero</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="numero"
-                            id="vw-api-atendimentos-aceite-numero"
-                            value={this.state.numero}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="pacienteLabel" for="vw-api-atendimentos-aceite-paciente">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.paciente">Paciente</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="paciente"
-                            id="vw-api-atendimentos-aceite-paciente"
-                            value={this.state.paciente}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="periodoLabel" for="vw-api-atendimentos-aceite-periodo">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodo">Periodo</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="periodo"
-                            id="vw-api-atendimentos-aceite-periodo"
-                            value={this.state.periodo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="periodicidadeLabel" for="vw-api-atendimentos-aceite-periodicidade">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodicidade">Periodicidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="periodicidade"
-                            id="vw-api-atendimentos-aceite-periodicidade"
-                            value={this.state.periodicidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="qtdSessoesLabel" for="vw-api-atendimentos-aceite-qtdSessoes">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.qtdSessoes">Qtd Sessoes</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="qtdSessoes"
-                            id="vw-api-atendimentos-aceite-qtdSessoes"
-                            value={this.state.qtdSessoes}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ufLabel" for="vw-api-atendimentos-aceite-uf">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.uf">Uf</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="uf"
-                            id="vw-api-atendimentos-aceite-uf"
-                            value={this.state.uf}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorLabel" for="vw-api-atendimentos-aceite-valor">
-                            <Translate contentKey="generadorApp.vwApiAtendimentosAceite.valor">Valor</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="valor"
-                            id="vw-api-atendimentos-aceite-valor"
-                            value={this.state.valor}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idPadItem' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPadItemLabel" for="vw-api-atendimentos-aceite-idPadItem">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPadItem">Id Pad Item</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPadItem"
+                              id="vw-api-atendimentos-aceite-idPadItem"
+                              value={this.state.idPadItem}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="vw-api-atendimentos-aceite-idPaciente">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPaciente"
+                              id="vw-api-atendimentos-aceite-idPaciente"
+                              value={this.state.idPaciente}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodoLabel" for="vw-api-atendimentos-aceite-idPeriodo">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodo">Id Periodo</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPeriodo"
+                              id="vw-api-atendimentos-aceite-idPeriodo"
+                              value={this.state.idPeriodo}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodicidadeLabel" for="vw-api-atendimentos-aceite-idPeriodicidade">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodicidade">Id Periodicidade</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPeriodicidade"
+                              id="vw-api-atendimentos-aceite-idPeriodicidade"
+                              value={this.state.idPeriodicidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="vw-api-atendimentos-aceite-idProfissional">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idProfissional">Id Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idProfissional"
+                              id="vw-api-atendimentos-aceite-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'aceito' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="aceitoLabel" for="vw-api-atendimentos-aceite-aceito">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.aceito">Aceito</Translate>
+                            </Label>
+                            <AvInput type="string" name="aceito" id="vw-api-atendimentos-aceite-aceito" value={this.state.aceito} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'bairro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="bairroLabel" for="vw-api-atendimentos-aceite-bairro">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.bairro">Bairro</Translate>
+                            </Label>
+                            <AvInput type="string" name="bairro" id="vw-api-atendimentos-aceite-bairro" value={this.state.bairro} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cep' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepLabel" for="vw-api-atendimentos-aceite-cep">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cep">Cep</Translate>
+                            </Label>
+                            <AvInput type="string" name="cep" id="vw-api-atendimentos-aceite-cep" value={this.state.cep} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidadeLabel" for="vw-api-atendimentos-aceite-cidade">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cidade">Cidade</Translate>
+                            </Label>
+                            <AvInput type="string" name="cidade" id="vw-api-atendimentos-aceite-cidade" value={this.state.cidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="complementoLabel" for="vw-api-atendimentos-aceite-complemento">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.complemento">Complemento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="complemento"
+                              id="vw-api-atendimentos-aceite-complemento"
+                              value={this.state.complemento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'endereco' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="enderecoLabel" for="vw-api-atendimentos-aceite-endereco">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.endereco">Endereco</Translate>
+                            </Label>
+                            <AvInput type="string" name="endereco" id="vw-api-atendimentos-aceite-endereco" value={this.state.endereco} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="especialidadeLabel" for="vw-api-atendimentos-aceite-especialidade">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.especialidade">Especialidade</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="especialidade"
+                              id="vw-api-atendimentos-aceite-especialidade"
+                              value={this.state.especialidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'latitude' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="latitudeLabel" for="vw-api-atendimentos-aceite-latitude">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.latitude">Latitude</Translate>
+                            </Label>
+                            <AvInput type="string" name="latitude" id="vw-api-atendimentos-aceite-latitude" value={this.state.latitude} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'longitude' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="longitudeLabel" for="vw-api-atendimentos-aceite-longitude">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.longitude">Longitude</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="longitude"
+                              id="vw-api-atendimentos-aceite-longitude"
+                              value={this.state.longitude}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'numero' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="numeroLabel" for="vw-api-atendimentos-aceite-numero">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.numero">Numero</Translate>
+                            </Label>
+                            <AvInput type="string" name="numero" id="vw-api-atendimentos-aceite-numero" value={this.state.numero} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="pacienteLabel" for="vw-api-atendimentos-aceite-paciente">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.paciente">Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="paciente" id="vw-api-atendimentos-aceite-paciente" value={this.state.paciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="periodoLabel" for="vw-api-atendimentos-aceite-periodo">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodo">Periodo</Translate>
+                            </Label>
+                            <AvInput type="string" name="periodo" id="vw-api-atendimentos-aceite-periodo" value={this.state.periodo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodicidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="periodicidadeLabel" for="vw-api-atendimentos-aceite-periodicidade">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodicidade">Periodicidade</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="periodicidade"
+                              id="vw-api-atendimentos-aceite-periodicidade"
+                              value={this.state.periodicidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="qtdSessoesLabel" for="vw-api-atendimentos-aceite-qtdSessoes">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.qtdSessoes">Qtd Sessoes</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="qtdSessoes"
+                              id="vw-api-atendimentos-aceite-qtdSessoes"
+                              value={this.state.qtdSessoes}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'uf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ufLabel" for="vw-api-atendimentos-aceite-uf">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.uf">Uf</Translate>
+                            </Label>
+                            <AvInput type="string" name="uf" id="vw-api-atendimentos-aceite-uf" value={this.state.uf} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'valor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorLabel" for="vw-api-atendimentos-aceite-valor">
+                              <Translate contentKey="generadorApp.vwApiAtendimentosAceite.valor">Valor</Translate>
+                            </Label>
+                            <AvInput type="string" name="valor" id="vw-api-atendimentos-aceite-valor" value={this.state.valor} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -729,90 +586,132 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPadItem')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPadItem">Id Pad Item</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodo')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodo">Id Periodo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodicidade')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodicidade">Id Periodicidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('aceito')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.aceito">Aceito</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('bairro')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.bairro">Bairro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cep')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cep">Cep</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidade')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cidade">Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('complemento')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.complemento">Complemento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('endereco')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.endereco">Endereco</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('especialidade')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.especialidade">Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('latitude')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.latitude">Latitude</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('longitude')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.longitude">Longitude</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('numero')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.numero">Numero</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('paciente')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.paciente">Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('periodo')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodo">Periodo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('periodicidade')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodicidade">Periodicidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('qtdSessoes')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.qtdSessoes">Qtd Sessoes</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('uf')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.uf">Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('valor')}>
-                        <Translate contentKey="generadorApp.vwApiAtendimentosAceite.valor">Valor</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPadItem' ? (
+                        <th className="hand" onClick={this.sort('idPadItem')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPadItem">Id Pad Item</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <th className="hand" onClick={this.sort('idPeriodo')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodo">Id Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <th className="hand" onClick={this.sort('idPeriodicidade')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idPeriodicidade">Id Periodicidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'aceito' ? (
+                        <th className="hand" onClick={this.sort('aceito')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.aceito">Aceito</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'bairro' ? (
+                        <th className="hand" onClick={this.sort('bairro')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.bairro">Bairro</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cep' ? (
+                        <th className="hand" onClick={this.sort('cep')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cep">Cep</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <th className="hand" onClick={this.sort('cidade')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.cidade">Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <th className="hand" onClick={this.sort('complemento')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.complemento">Complemento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'endereco' ? (
+                        <th className="hand" onClick={this.sort('endereco')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.endereco">Endereco</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th className="hand" onClick={this.sort('especialidade')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'latitude' ? (
+                        <th className="hand" onClick={this.sort('latitude')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.latitude">Latitude</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'longitude' ? (
+                        <th className="hand" onClick={this.sort('longitude')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.longitude">Longitude</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'numero' ? (
+                        <th className="hand" onClick={this.sort('numero')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.numero">Numero</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'paciente' ? (
+                        <th className="hand" onClick={this.sort('paciente')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.paciente">Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <th className="hand" onClick={this.sort('periodo')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodo">Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'periodicidade' ? (
+                        <th className="hand" onClick={this.sort('periodicidade')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.periodicidade">Periodicidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <th className="hand" onClick={this.sort('qtdSessoes')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.qtdSessoes">Qtd Sessoes</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'uf' ? (
+                        <th className="hand" onClick={this.sort('uf')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.uf">Uf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'valor' ? (
+                        <th className="hand" onClick={this.sort('valor')}>
+                          <Translate contentKey="generadorApp.vwApiAtendimentosAceite.valor">Valor</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -827,63 +726,78 @@ export class VwApiAtendimentosAceite extends React.Component<IVwApiAtendimentosA
                           </Button>
                         </td>
 
-                        <td>{vwApiAtendimentosAceite.idPadItem}</td>
+                        {this.state.baseFilters !== 'idPadItem' ? <td>{vwApiAtendimentosAceite.idPadItem}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{vwApiAtendimentosAceite.idPaciente}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.idPeriodo}</td>
+                        {this.state.baseFilters !== 'idPeriodo' ? <td>{vwApiAtendimentosAceite.idPeriodo}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.idPeriodicidade}</td>
+                        {this.state.baseFilters !== 'idPeriodicidade' ? <td>{vwApiAtendimentosAceite.idPeriodicidade}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{vwApiAtendimentosAceite.idProfissional}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.aceito}</td>
+                        {this.state.baseFilters !== 'aceito' ? <td>{vwApiAtendimentosAceite.aceito}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.bairro}</td>
+                        {this.state.baseFilters !== 'bairro' ? <td>{vwApiAtendimentosAceite.bairro}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.cep}</td>
+                        {this.state.baseFilters !== 'cep' ? <td>{vwApiAtendimentosAceite.cep}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.cidade}</td>
+                        {this.state.baseFilters !== 'cidade' ? <td>{vwApiAtendimentosAceite.cidade}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.complemento}</td>
+                        {this.state.baseFilters !== 'complemento' ? <td>{vwApiAtendimentosAceite.complemento}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.endereco}</td>
+                        {this.state.baseFilters !== 'endereco' ? <td>{vwApiAtendimentosAceite.endereco}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.especialidade}</td>
+                        {this.state.baseFilters !== 'especialidade' ? <td>{vwApiAtendimentosAceite.especialidade}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.latitude}</td>
+                        {this.state.baseFilters !== 'latitude' ? <td>{vwApiAtendimentosAceite.latitude}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.longitude}</td>
+                        {this.state.baseFilters !== 'longitude' ? <td>{vwApiAtendimentosAceite.longitude}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.numero}</td>
+                        {this.state.baseFilters !== 'numero' ? <td>{vwApiAtendimentosAceite.numero}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.paciente}</td>
+                        {this.state.baseFilters !== 'paciente' ? <td>{vwApiAtendimentosAceite.paciente}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.periodo}</td>
+                        {this.state.baseFilters !== 'periodo' ? <td>{vwApiAtendimentosAceite.periodo}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.periodicidade}</td>
+                        {this.state.baseFilters !== 'periodicidade' ? <td>{vwApiAtendimentosAceite.periodicidade}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.qtdSessoes}</td>
+                        {this.state.baseFilters !== 'qtdSessoes' ? <td>{vwApiAtendimentosAceite.qtdSessoes}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.uf}</td>
+                        {this.state.baseFilters !== 'uf' ? <td>{vwApiAtendimentosAceite.uf}</td> : null}
 
-                        <td>{vwApiAtendimentosAceite.valor}</td>
+                        {this.state.baseFilters !== 'valor' ? <td>{vwApiAtendimentosAceite.valor}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${vwApiAtendimentosAceite.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${vwApiAtendimentosAceite.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${vwApiAtendimentosAceite.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${vwApiAtendimentosAceite.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${vwApiAtendimentosAceite.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${vwApiAtendimentosAceite.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

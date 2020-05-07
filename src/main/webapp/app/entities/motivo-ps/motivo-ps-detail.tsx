@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './motivo-ps.reducer';
+import { getEntity, IMotivoPsBaseState, getMotivoPsState } from './motivo-ps.reducer';
 import { IMotivoPs } from 'app/shared/model/motivo-ps.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IMotivoPsState {
+  fieldsBase: IMotivoPsBaseState;
+}
+
 export interface IMotivoPsDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class MotivoPsDetail extends React.Component<IMotivoPsDetailProps> {
+export class MotivoPsDetail extends React.Component<IMotivoPsDetailProps, IMotivoPsState> {
   constructor(props: Readonly<IMotivoPsDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getMotivoPsState(this.props.location)
     };
   }
 

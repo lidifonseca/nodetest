@@ -3,15 +3,15 @@
     "empresa": {
       "home": {
         "title": "Empresas",
-        "createLabel": "Criar novo Empresa",
-        "createOrEditLabel": "Criar ou editar Empresa",
-        "notFound": "Nenhum Empresa encontrado"
+        "createLabel": "Create a new Empresa",
+        "createOrEditLabel": "Create or edit a Empresa",
+        "notFound": "No Empresas found"
       },
-      "created": "Um novo Empresa foi criado com o identificador {{ param }}",
-      "updated": "Um Empresa foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Empresa foi excluído com o identificador {{ param }}",
+      "created": "A new Empresa is created with identifier {{ param }}",
+      "updated": "A Empresa is updated with identifier {{ param }}",
+      "deleted": "A Empresa is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Empresa {{ id }}?"
+        "question": "Are you sure you want to delete Empresa {{ id }}?"
       },
       "detail": {
         "title": "Empresa"
@@ -35,7 +35,12 @@
       "cidade": "Cidade",
       "uf": "Uf",
       "tipo": "Tipo",
-      "idCidade": "Id Cidade"
+      "help": {
+        "telefone1": "@dbName TELEFONE1@@",
+        "telefone2": "@dbName TELEFONE2@@",
+        "celular1": "@dbName CELULAR1@@",
+        "celular2": "@dbName CELULAR2@@"
+      }
     }
   }
 }

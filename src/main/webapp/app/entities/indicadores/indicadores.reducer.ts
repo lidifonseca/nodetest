@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IIndicadores, defaultValue } from 'app/shared/model/indicadores.model';
 
 export const ACTION_TYPES = {
+  FETCH_INDICADORES_LIST_EXPORT: 'indicadores/FETCH_INDICADORES_LIST_EXPORT',
   FETCH_INDICADORES_LIST: 'indicadores/FETCH_INDICADORES_LIST',
   FETCH_INDICADORES: 'indicadores/FETCH_INDICADORES',
   CREATE_INDICADORES: 'indicadores/CREATE_INDICADORES',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type IndicadoresState = Readonly<typeof initialState>;
 
+export interface IIndicadoresBaseState {
+  baseFilters: any;
+  titulo: any;
+}
+
+export interface IIndicadoresUpdateState {
+  fieldsBase: IIndicadoresBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: IndicadoresState = initialState, action): IndicadoresState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_INDICADORES_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_INDICADORES_LIST):
     case REQUEST(ACTION_TYPES.FETCH_INDICADORES):
       return {
@@ -51,6 +63,7 @@ export default (state: IndicadoresState = initialState, action): IndicadoresStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_INDICADORES_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_INDICADORES_LIST):
     case FAILURE(ACTION_TYPES.FETCH_INDICADORES):
     case FAILURE(ACTION_TYPES.CREATE_INDICADORES):
@@ -107,20 +120,18 @@ const apiUrl = 'api/indicadores';
 // Actions
 export type ICrudGetAllActionIndicadores<T> = (
   titulo?: any,
-  indicadoresValores?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionIndicadores<IIndicadores> = (titulo, indicadoresValores, page, size, sort) => {
+export const getEntities: ICrudGetAllActionIndicadores<IIndicadores> = (titulo, page, size, sort) => {
   const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
-  const indicadoresValoresRequest = indicadoresValores ? `indicadoresValores.equals=${indicadoresValores}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_INDICADORES_LIST,
-    payload: axios.get<IIndicadores>(`${requestUrl}${tituloRequest}${indicadoresValoresRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IIndicadores>(`${requestUrl}${tituloRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IIndicadores> = id => {
@@ -128,6 +139,16 @@ export const getEntity: ICrudGetAction<IIndicadores> = id => {
   return {
     type: ACTION_TYPES.FETCH_INDICADORES,
     payload: axios.get<IIndicadores>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionIndicadores<IIndicadores> = (titulo, page, size, sort) => {
+  const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_INDICADORES_LIST,
+    payload: axios.get<IIndicadores>(`${requestUrl}${tituloRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -166,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<IIndicadores> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getIndicadoresState = (location): IIndicadoresBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const titulo = url.searchParams.get('titulo') || '';
+
+  return {
+    baseFilters,
+    titulo
+  };
+};

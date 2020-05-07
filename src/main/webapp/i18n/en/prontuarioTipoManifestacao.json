@@ -3,15 +3,15 @@
     "prontuarioTipoManifestacao": {
       "home": {
         "title": "Prontuario Tipo Manifestacaos",
-        "createLabel": "Criar novo Prontuario Tipo Manifestacao",
-        "createOrEditLabel": "Criar ou editar Prontuario Tipo Manifestacao",
-        "notFound": "Nenhum Prontuario Tipo Manifestacao encontrado"
+        "createLabel": "Create a new Prontuario Tipo Manifestacao",
+        "createOrEditLabel": "Create or edit a Prontuario Tipo Manifestacao",
+        "notFound": "No Prontuario Tipo Manifestacaos found"
       },
-      "created": "Um novo Prontuario Tipo Manifestacao foi criado com o identificador {{ param }}",
-      "updated": "Um Prontuario Tipo Manifestacao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Prontuario Tipo Manifestacao foi excluído com o identificador {{ param }}",
+      "created": "A new Prontuario Tipo Manifestacao is created with identifier {{ param }}",
+      "updated": "A Prontuario Tipo Manifestacao is updated with identifier {{ param }}",
+      "deleted": "A Prontuario Tipo Manifestacao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Prontuario Tipo Manifestacao {{ id }}?"
+        "question": "Are you sure you want to delete Prontuario Tipo Manifestacao {{ id }}?"
       },
       "detail": {
         "title": "Prontuario Tipo Manifestacao"

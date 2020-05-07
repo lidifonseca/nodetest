@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-temp.reducer';
+import { getEntity, IPadItemTempBaseState, getPadItemTempState } from './pad-item-temp.reducer';
 import { IPadItemTemp } from 'app/shared/model/pad-item-temp.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemTempState {
+  fieldsBase: IPadItemTempBaseState;
+}
+
 export interface IPadItemTempDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemTempDetail extends React.Component<IPadItemTempDetailProps> {
+export class PadItemTempDetail extends React.Component<IPadItemTempDetailProps, IPadItemTempState> {
   constructor(props: Readonly<IPadItemTempDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemTempState(this.props.location)
     };
   }
 

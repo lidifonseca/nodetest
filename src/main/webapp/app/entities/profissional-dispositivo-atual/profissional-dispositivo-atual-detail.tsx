@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-dispositivo-atual.reducer';
+import {
+  getEntity,
+  IProfissionalDispositivoAtualBaseState,
+  getProfissionalDispositivoAtualState
+} from './profissional-dispositivo-atual.reducer';
 import { IProfissionalDispositivoAtual } from 'app/shared/model/profissional-dispositivo-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalDispositivoAtualState {
+  fieldsBase: IProfissionalDispositivoAtualBaseState;
+}
+
 export interface IProfissionalDispositivoAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalDispositivoAtualDetail extends React.Component<IProfissionalDispositivoAtualDetailProps> {
+export class ProfissionalDispositivoAtualDetail extends React.Component<
+  IProfissionalDispositivoAtualDetailProps,
+  IProfissionalDispositivoAtualState
+> {
   constructor(props: Readonly<IProfissionalDispositivoAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalDispositivoAtualState(this.props.location)
     };
   }
 
@@ -367,21 +379,6 @@ export class ProfissionalDispositivoAtualDetail extends React.Component<IProfiss
                       </Col>
                       <Col md="9">
                         <dd>{profissionalDispositivoAtualEntity.entubacaoOrotraqueal}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{profissionalDispositivoAtualEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

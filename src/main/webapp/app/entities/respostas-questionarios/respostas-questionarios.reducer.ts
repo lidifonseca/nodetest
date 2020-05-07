@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IRespostasQuestionarios, defaultValue } from 'app/shared/model/respostas-questionarios.model';
 
 export const ACTION_TYPES = {
+  FETCH_RESPOSTASQUESTIONARIOS_LIST_EXPORT: 'respostasQuestionarios/FETCH_RESPOSTASQUESTIONARIOS_LIST_EXPORT',
   FETCH_RESPOSTASQUESTIONARIOS_LIST: 'respostasQuestionarios/FETCH_RESPOSTASQUESTIONARIOS_LIST',
   FETCH_RESPOSTASQUESTIONARIOS: 'respostasQuestionarios/FETCH_RESPOSTASQUESTIONARIOS',
   CREATE_RESPOSTASQUESTIONARIOS: 'respostasQuestionarios/CREATE_RESPOSTASQUESTIONARIOS',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type RespostasQuestionariosState = Readonly<typeof initialState>;
 
+export interface IRespostasQuestionariosBaseState {
+  baseFilters: any;
+  dataResposta: any;
+  informacaoAdicional: any;
+  questionarioId: any;
+}
+
+export interface IRespostasQuestionariosUpdateState {
+  fieldsBase: IRespostasQuestionariosBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: RespostasQuestionariosState = initialState, action): RespostasQuestionariosState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS):
       return {
@@ -51,6 +65,7 @@ export default (state: RespostasQuestionariosState = initialState, action): Resp
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS):
     case FAILURE(ACTION_TYPES.CREATE_RESPOSTASQUESTIONARIOS):
@@ -109,7 +124,6 @@ export type ICrudGetAllActionRespostasQuestionarios<T> = (
   dataResposta?: any,
   informacaoAdicional?: any,
   questionarioId?: any,
-  questionariosId?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +133,6 @@ export const getEntities: ICrudGetAllActionRespostasQuestionarios<IRespostasQues
   dataResposta,
   informacaoAdicional,
   questionarioId,
-  questionariosId,
   page,
   size,
   sort
@@ -127,13 +140,12 @@ export const getEntities: ICrudGetAllActionRespostasQuestionarios<IRespostasQues
   const dataRespostaRequest = dataResposta ? `dataResposta.contains=${dataResposta}&` : '';
   const informacaoAdicionalRequest = informacaoAdicional ? `informacaoAdicional.contains=${informacaoAdicional}&` : '';
   const questionarioIdRequest = questionarioId ? `questionarioId.contains=${questionarioId}&` : '';
-  const questionariosIdRequest = questionariosId ? `questionariosId.equals=${questionariosId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST,
     payload: axios.get<IRespostasQuestionarios>(
-      `${requestUrl}${dataRespostaRequest}${informacaoAdicionalRequest}${questionarioIdRequest}${questionariosIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataRespostaRequest}${informacaoAdicionalRequest}${questionarioIdRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -145,10 +157,30 @@ export const getEntity: ICrudGetAction<IRespostasQuestionarios> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionRespostasQuestionarios<IRespostasQuestionarios> = (
+  dataResposta,
+  informacaoAdicional,
+  questionarioId,
+  page,
+  size,
+  sort
+) => {
+  const dataRespostaRequest = dataResposta ? `dataResposta.contains=${dataResposta}&` : '';
+  const informacaoAdicionalRequest = informacaoAdicional ? `informacaoAdicional.contains=${informacaoAdicional}&` : '';
+  const questionarioIdRequest = questionarioId ? `questionarioId.contains=${questionarioId}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_RESPOSTASQUESTIONARIOS_LIST,
+    payload: axios.get<IRespostasQuestionarios>(
+      `${requestUrl}${dataRespostaRequest}${informacaoAdicionalRequest}${questionarioIdRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IRespostasQuestionarios> = entity => async dispatch => {
   entity = {
-    ...entity,
-    questionariosId: entity.questionariosId === 'null' ? null : entity.questionariosId
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_RESPOSTASQUESTIONARIOS,
@@ -159,7 +191,7 @@ export const createEntity: ICrudPutAction<IRespostasQuestionarios> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IRespostasQuestionarios> = entity => async dispatch => {
-  entity = { ...entity, questionariosId: entity.questionariosId === 'null' ? null : entity.questionariosId };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_RESPOSTASQUESTIONARIOS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -181,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IRespostasQuestionarios> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getRespostasQuestionariosState = (location): IRespostasQuestionariosBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const dataResposta = url.searchParams.get('dataResposta') || '';
+  const informacaoAdicional = url.searchParams.get('informacaoAdicional') || '';
+  const questionarioId = url.searchParams.get('questionarioId') || '';
+
+  return {
+    baseFilters,
+    dataResposta,
+    informacaoAdicional,
+    questionarioId
+  };
+};

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './geo-panico.reducer';
+import { getEntity, IGeoPanicoBaseState, getGeoPanicoState } from './geo-panico.reducer';
 import { IGeoPanico } from 'app/shared/model/geo-panico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IGeoPanicoState {
+  fieldsBase: IGeoPanicoBaseState;
+}
+
 export interface IGeoPanicoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class GeoPanicoDetail extends React.Component<IGeoPanicoDetailProps> {
+export class GeoPanicoDetail extends React.Component<IGeoPanicoDetailProps, IGeoPanicoState> {
   constructor(props: Readonly<IGeoPanicoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getGeoPanicoState(this.props.location)
     };
   }
 

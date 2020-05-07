@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ControleDisparoAviso.
  */
-@Entity('controle_disparo_aviso')
+@Entity('tb_controle_disparo_aviso')
 export default class ControleDisparoAviso extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_atendimento', nullable: false })
+  @Column({ type: 'integer', name: 'ID_ATENDIMENTO', nullable: false })
   idAtendimento: number;
 
-  @Column({ type: 'integer', name: 'qtd_disparo' })
+  @Column({ type: 'integer', name: 'QTD_DISPARO' })
   qtdDisparo: number;
 
-  @Column({ type: 'integer', name: 'avisopush' })
+  @Column({ type: 'integer', name: 'AVISOPUSH' })
   avisopush: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

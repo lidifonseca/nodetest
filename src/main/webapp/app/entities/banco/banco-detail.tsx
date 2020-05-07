@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './banco.reducer';
+import { getEntity, IBancoBaseState, getBancoState } from './banco.reducer';
 import { IBanco } from 'app/shared/model/banco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IBancoState {
+  fieldsBase: IBancoBaseState;
+}
+
 export interface IBancoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class BancoDetail extends React.Component<IBancoDetailProps> {
+export class BancoDetail extends React.Component<IBancoDetailProps, IBancoState> {
   constructor(props: Readonly<IBancoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getBancoState(this.props.location)
     };
   }
 

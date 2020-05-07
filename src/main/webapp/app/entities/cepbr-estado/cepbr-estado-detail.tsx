@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './cepbr-estado.reducer';
+import { getEntity, ICepbrEstadoBaseState, getCepbrEstadoState } from './cepbr-estado.reducer';
 import { ICepbrEstado } from 'app/shared/model/cepbr-estado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICepbrEstadoState {
+  fieldsBase: ICepbrEstadoBaseState;
+}
+
 export interface ICepbrEstadoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CepbrEstadoDetail extends React.Component<ICepbrEstadoDetailProps> {
+export class CepbrEstadoDetail extends React.Component<ICepbrEstadoDetailProps, ICepbrEstadoState> {
   constructor(props: Readonly<ICepbrEstadoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCepbrEstadoState(this.props.location)
     };
   }
 

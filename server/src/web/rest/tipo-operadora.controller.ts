@@ -68,7 +68,9 @@ export class TipoOperadoraController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() tipoOperadora: TipoOperadora): Promise<TipoOperadora> {
+    console.info(tipoOperadora);
     const created = await this.tipoOperadoraService.save(tipoOperadora);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TipoOperadora', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class TipoOperadoraController {
   })
   async put(@Req() req: Request, @Body() tipoOperadora: TipoOperadora): Promise<TipoOperadora> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TipoOperadora', tipoOperadora.id);
+
     return await this.tipoOperadoraService.update(tipoOperadora);
   }
 

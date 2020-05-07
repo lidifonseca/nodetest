@@ -68,7 +68,9 @@ export class CepbrEnderecoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() cepbrEndereco: CepbrEndereco): Promise<CepbrEndereco> {
+    console.info(cepbrEndereco);
     const created = await this.cepbrEnderecoService.save(cepbrEndereco);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CepbrEndereco', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class CepbrEnderecoController {
   })
   async put(@Req() req: Request, @Body() cepbrEndereco: CepbrEndereco): Promise<CepbrEndereco> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CepbrEndereco', cepbrEndereco.id);
+
     return await this.cepbrEnderecoService.update(cepbrEndereco);
   }
 

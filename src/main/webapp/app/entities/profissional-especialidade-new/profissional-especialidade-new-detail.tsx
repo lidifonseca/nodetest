@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-especialidade-new.reducer';
+import {
+  getEntity,
+  IProfissionalEspecialidadeNewBaseState,
+  getProfissionalEspecialidadeNewState
+} from './profissional-especialidade-new.reducer';
 import { IProfissionalEspecialidadeNew } from 'app/shared/model/profissional-especialidade-new.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalEspecialidadeNewState {
+  fieldsBase: IProfissionalEspecialidadeNewBaseState;
+}
+
 export interface IProfissionalEspecialidadeNewDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalEspecialidadeNewDetail extends React.Component<IProfissionalEspecialidadeNewDetailProps> {
+export class ProfissionalEspecialidadeNewDetail extends React.Component<
+  IProfissionalEspecialidadeNewDetailProps,
+  IProfissionalEspecialidadeNewState
+> {
   constructor(props: Readonly<IProfissionalEspecialidadeNewDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalEspecialidadeNewState(this.props.location)
     };
   }
 

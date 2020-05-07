@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './unidade-easy-area-atuacao.reducer';
+import { getEntity, IUnidadeEasyAreaAtuacaoBaseState, getUnidadeEasyAreaAtuacaoState } from './unidade-easy-area-atuacao.reducer';
 import { IUnidadeEasyAreaAtuacao } from 'app/shared/model/unidade-easy-area-atuacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUnidadeEasyAreaAtuacaoState {
+  fieldsBase: IUnidadeEasyAreaAtuacaoBaseState;
+}
+
 export interface IUnidadeEasyAreaAtuacaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UnidadeEasyAreaAtuacaoDetail extends React.Component<IUnidadeEasyAreaAtuacaoDetailProps> {
+export class UnidadeEasyAreaAtuacaoDetail extends React.Component<IUnidadeEasyAreaAtuacaoDetailProps, IUnidadeEasyAreaAtuacaoState> {
   constructor(props: Readonly<IUnidadeEasyAreaAtuacaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUnidadeEasyAreaAtuacaoState(this.props.location)
     };
   }
 

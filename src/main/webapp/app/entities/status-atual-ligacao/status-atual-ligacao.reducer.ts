@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IStatusAtualLigacao, defaultValue } from 'app/shared/model/status-atual-ligacao.model';
 
 export const ACTION_TYPES = {
+  FETCH_STATUSATUALLIGACAO_LIST_EXPORT: 'statusAtualLigacao/FETCH_STATUSATUALLIGACAO_LIST_EXPORT',
   FETCH_STATUSATUALLIGACAO_LIST: 'statusAtualLigacao/FETCH_STATUSATUALLIGACAO_LIST',
   FETCH_STATUSATUALLIGACAO: 'statusAtualLigacao/FETCH_STATUSATUALLIGACAO',
   CREATE_STATUSATUALLIGACAO: 'statusAtualLigacao/CREATE_STATUSATUALLIGACAO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type StatusAtualLigacaoState = Readonly<typeof initialState>;
 
+export interface IStatusAtualLigacaoBaseState {
+  baseFilters: any;
+  statusAtualLigacao: any;
+  styleLabel: any;
+}
+
+export interface IStatusAtualLigacaoUpdateState {
+  fieldsBase: IStatusAtualLigacaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: StatusAtualLigacaoState = initialState, action): StatusAtualLigacaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_STATUSATUALLIGACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATUALLIGACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATUALLIGACAO):
       return {
@@ -51,6 +64,7 @@ export default (state: StatusAtualLigacaoState = initialState, action): StatusAt
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_STATUSATUALLIGACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATUALLIGACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATUALLIGACAO):
     case FAILURE(ACTION_TYPES.CREATE_STATUSATUALLIGACAO):
@@ -133,6 +147,25 @@ export const getEntity: ICrudGetAction<IStatusAtualLigacao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionStatusAtualLigacao<IStatusAtualLigacao> = (
+  statusAtualLigacao,
+  styleLabel,
+  page,
+  size,
+  sort
+) => {
+  const statusAtualLigacaoRequest = statusAtualLigacao ? `statusAtualLigacao.contains=${statusAtualLigacao}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_STATUSATUALLIGACAO_LIST,
+    payload: axios.get<IStatusAtualLigacao>(
+      `${requestUrl}${statusAtualLigacaoRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IStatusAtualLigacao> = entity => async dispatch => {
   entity = {
     ...entity
@@ -168,3 +201,16 @@ export const deleteEntity: ICrudDeleteAction<IStatusAtualLigacao> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getStatusAtualLigacaoState = (location): IStatusAtualLigacaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const statusAtualLigacao = url.searchParams.get('statusAtualLigacao') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+
+  return {
+    baseFilters,
+    statusAtualLigacao,
+    styleLabel
+  };
+};

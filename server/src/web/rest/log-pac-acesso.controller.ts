@@ -68,7 +68,9 @@ export class LogPacAcessoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() logPacAcesso: LogPacAcesso): Promise<LogPacAcesso> {
+    console.info(logPacAcesso);
     const created = await this.logPacAcessoService.save(logPacAcesso);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'LogPacAcesso', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class LogPacAcessoController {
   })
   async put(@Req() req: Request, @Body() logPacAcesso: LogPacAcesso): Promise<LogPacAcesso> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'LogPacAcesso', logPacAcesso.id);
+
     return await this.logPacAcessoService.update(logPacAcesso);
   }
 

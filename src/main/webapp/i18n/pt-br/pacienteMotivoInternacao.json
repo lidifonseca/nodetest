@@ -17,8 +17,7 @@
         "title": "Paciente Motivo Internacao"
       },
       "idPaciente": "Id Paciente",
-      "idMotivoInternacao": "Id Motivo Internacao",
-      "idUsuario": "Id Usuario"
+      "idMotivoInternacao": "Id Motivo Internacao"
     }
   }
 }

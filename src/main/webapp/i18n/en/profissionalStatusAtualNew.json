@@ -19,8 +19,7 @@
       "idProfissional": "Id Profissional",
       "idStatusAtualProf": "Id Status Atual Prof",
       "obs": "Obs",
-      "ativo": "Ativo",
-      "idUsuario": "Id Usuario"
+      "ativo": "Ativo"
     }
   }
 }

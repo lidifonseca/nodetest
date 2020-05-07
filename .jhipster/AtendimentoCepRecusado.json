@@ -11,16 +11,8 @@
             "fieldValidateRulesMaxlength": "10"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "padItem",
-            "otherEntityRelationshipName": "atendimentoCepRecusado",
-            "relationshipName": "idPadItem",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502230400",
+    "relationships": [],
+    "changelogDate": "20200507103700",
     "entityTableName": "atendimento_cep_recusado",
     "dto": "mapstruct",
     "pagination": "pagination",

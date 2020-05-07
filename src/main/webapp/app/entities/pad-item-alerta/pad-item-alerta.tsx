@@ -31,21 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-item-alerta.reducer';
+import { getPadItemAlertaState, IPadItemAlertaBaseState, getEntities } from './pad-item-alerta.reducer';
 import { IPadItemAlerta } from 'app/shared/model/pad-item-alerta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPadItemAlertaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadItemAlertaBaseState {
-  padItemMetaId: any;
-  envioEmailEm: any;
-  visualizadoEm: any;
-  criadoEm: any;
-  ativo: any;
-  mensagem: any;
-}
 export interface IPadItemAlertaState extends IPadItemAlertaBaseState, IPaginationBaseState {}
 
 export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItemAlertaState> {
@@ -55,28 +47,9 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadItemAlertaState(this.props.location)
+      ...getPadItemAlertaState(this.props.location)
     };
   }
-
-  getPadItemAlertaState = (location): IPadItemAlertaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const padItemMetaId = url.searchParams.get('padItemMetaId') || '';
-    const envioEmailEm = url.searchParams.get('envioEmailEm') || '';
-    const visualizadoEm = url.searchParams.get('visualizadoEm') || '';
-    const criadoEm = url.searchParams.get('criadoEm') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const mensagem = url.searchParams.get('mensagem') || '';
-
-    return {
-      padItemMetaId,
-      envioEmailEm,
-      visualizadoEm,
-      criadoEm,
-      ativo,
-      mensagem
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -123,7 +96,9 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -193,7 +168,11 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padItemAlerta.home.createLabel">Create a new Pad Item Alerta</Translate>
@@ -206,93 +185,98 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="padItemMetaIdLabel" for="pad-item-alerta-padItemMetaId">
-                            <Translate contentKey="generadorApp.padItemAlerta.padItemMetaId">Pad Item Meta Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="padItemMetaId"
-                            id="pad-item-alerta-padItemMetaId"
-                            value={this.state.padItemMetaId}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="envioEmailEmLabel" for="pad-item-alerta-envioEmailEm">
-                            <Translate contentKey="generadorApp.padItemAlerta.envioEmailEm">Envio Email Em</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-alerta-envioEmailEm"
-                            type="datetime-local"
-                            className="form-control"
-                            name="envioEmailEm"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.envioEmailEm ? convertDateTimeFromServer(this.state.envioEmailEm) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="visualizadoEmLabel" for="pad-item-alerta-visualizadoEm">
-                            <Translate contentKey="generadorApp.padItemAlerta.visualizadoEm">Visualizado Em</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-alerta-visualizadoEm"
-                            type="datetime-local"
-                            className="form-control"
-                            name="visualizadoEm"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.visualizadoEm ? convertDateTimeFromServer(this.state.visualizadoEm) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="criadoEmLabel" for="pad-item-alerta-criadoEm">
-                            <Translate contentKey="generadorApp.padItemAlerta.criadoEm">Criado Em</Translate>
-                          </Label>
-                          <AvInput
-                            id="pad-item-alerta-criadoEm"
-                            type="datetime-local"
-                            className="form-control"
-                            name="criadoEm"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.criadoEm ? convertDateTimeFromServer(this.state.criadoEm) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" check>
-                            <AvInput id="pad-item-alerta-ativo" type="checkbox" className="form-control" name="ativo" />
-                            <Translate contentKey="generadorApp.padItemAlerta.ativo">Ativo</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="mensagemLabel" for="pad-item-alerta-mensagem">
-                            <Translate contentKey="generadorApp.padItemAlerta.mensagem">Mensagem</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'padItemMetaId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="padItemMetaIdLabel" for="pad-item-alerta-padItemMetaId">
+                              <Translate contentKey="generadorApp.padItemAlerta.padItemMetaId">Pad Item Meta Id</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="padItemMetaId"
+                              id="pad-item-alerta-padItemMetaId"
+                              value={this.state.padItemMetaId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="mensagem"
-                            id="pad-item-alerta-mensagem"
-                            value={this.state.mensagem}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'envioEmailEm' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="envioEmailEmLabel" for="pad-item-alerta-envioEmailEm">
+                              <Translate contentKey="generadorApp.padItemAlerta.envioEmailEm">Envio Email Em</Translate>
+                            </Label>
+                            <AvInput
+                              id="pad-item-alerta-envioEmailEm"
+                              type="datetime-local"
+                              className="form-control"
+                              name="envioEmailEm"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.envioEmailEm ? convertDateTimeFromServer(this.state.envioEmailEm) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'visualizadoEm' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="visualizadoEmLabel" for="pad-item-alerta-visualizadoEm">
+                              <Translate contentKey="generadorApp.padItemAlerta.visualizadoEm">Visualizado Em</Translate>
+                            </Label>
+                            <AvInput
+                              id="pad-item-alerta-visualizadoEm"
+                              type="datetime-local"
+                              className="form-control"
+                              name="visualizadoEm"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.visualizadoEm ? convertDateTimeFromServer(this.state.visualizadoEm) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'criadoEm' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="criadoEmLabel" for="pad-item-alerta-criadoEm">
+                              <Translate contentKey="generadorApp.padItemAlerta.criadoEm">Criado Em</Translate>
+                            </Label>
+                            <AvInput
+                              id="pad-item-alerta-criadoEm"
+                              type="datetime-local"
+                              className="form-control"
+                              name="criadoEm"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.criadoEm ? convertDateTimeFromServer(this.state.criadoEm) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" check>
+                              <AvInput id="pad-item-alerta-ativo" type="checkbox" className="form-control" name="ativo" />
+                              <Translate contentKey="generadorApp.padItemAlerta.ativo">Ativo</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'mensagem' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="mensagemLabel" for="pad-item-alerta-mensagem">
+                              <Translate contentKey="generadorApp.padItemAlerta.mensagem">Mensagem</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="mensagem" id="pad-item-alerta-mensagem" value={this.state.mensagem} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -320,30 +304,42 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('padItemMetaId')}>
-                        <Translate contentKey="generadorApp.padItemAlerta.padItemMetaId">Pad Item Meta Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('envioEmailEm')}>
-                        <Translate contentKey="generadorApp.padItemAlerta.envioEmailEm">Envio Email Em</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('visualizadoEm')}>
-                        <Translate contentKey="generadorApp.padItemAlerta.visualizadoEm">Visualizado Em</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('criadoEm')}>
-                        <Translate contentKey="generadorApp.padItemAlerta.criadoEm">Criado Em</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.padItemAlerta.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('mensagem')}>
-                        <Translate contentKey="generadorApp.padItemAlerta.mensagem">Mensagem</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'padItemMetaId' ? (
+                        <th className="hand" onClick={this.sort('padItemMetaId')}>
+                          <Translate contentKey="generadorApp.padItemAlerta.padItemMetaId">Pad Item Meta Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'envioEmailEm' ? (
+                        <th className="hand" onClick={this.sort('envioEmailEm')}>
+                          <Translate contentKey="generadorApp.padItemAlerta.envioEmailEm">Envio Email Em</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'visualizadoEm' ? (
+                        <th className="hand" onClick={this.sort('visualizadoEm')}>
+                          <Translate contentKey="generadorApp.padItemAlerta.visualizadoEm">Visualizado Em</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'criadoEm' ? (
+                        <th className="hand" onClick={this.sort('criadoEm')}>
+                          <Translate contentKey="generadorApp.padItemAlerta.criadoEm">Criado Em</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.padItemAlerta.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'mensagem' ? (
+                        <th className="hand" onClick={this.sort('mensagem')}>
+                          <Translate contentKey="generadorApp.padItemAlerta.mensagem">Mensagem</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -358,39 +354,55 @@ export class PadItemAlerta extends React.Component<IPadItemAlertaProps, IPadItem
                           </Button>
                         </td>
 
-                        <td>{padItemAlerta.padItemMetaId}</td>
+                        {this.state.baseFilters !== 'padItemMetaId' ? <td>{padItemAlerta.padItemMetaId}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={padItemAlerta.envioEmailEm} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'envioEmailEm' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemAlerta.envioEmailEm} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={padItemAlerta.visualizadoEm} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'visualizadoEm' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemAlerta.visualizadoEm} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={padItemAlerta.criadoEm} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'criadoEm' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemAlerta.criadoEm} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{padItemAlerta.ativo ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{padItemAlerta.ativo ? 'true' : 'false'}</td> : null}
 
-                        <td>{padItemAlerta.mensagem}</td>
+                        {this.state.baseFilters !== 'mensagem' ? <td>{padItemAlerta.mensagem}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padItemAlerta.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padItemAlerta.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemAlerta.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemAlerta.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemAlerta.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemAlerta.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

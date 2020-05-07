@@ -3,15 +3,15 @@
     "apiReturn": {
       "home": {
         "title": "Api Returns",
-        "createLabel": "Criar novo Api Return",
-        "createOrEditLabel": "Criar ou editar Api Return",
-        "notFound": "Nenhum Api Return encontrado"
+        "createLabel": "Create a new Api Return",
+        "createOrEditLabel": "Create or edit a Api Return",
+        "notFound": "No Api Returns found"
       },
-      "created": "Um novo Api Return foi criado com o identificador {{ param }}",
-      "updated": "Um Api Return foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Api Return foi excluído com o identificador {{ param }}",
+      "created": "A new Api Return is created with identifier {{ param }}",
+      "updated": "A Api Return is updated with identifier {{ param }}",
+      "deleted": "A Api Return is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Api Return {{ id }}?"
+        "question": "Are you sure you want to delete Api Return {{ id }}?"
       },
       "detail": {
         "title": "Api Return"

@@ -3,15 +3,15 @@
     "licaoCasa": {
       "home": {
         "title": "Licao Casas",
-        "createLabel": "Criar novo Licao Casa",
-        "createOrEditLabel": "Criar ou editar Licao Casa",
-        "notFound": "Nenhum Licao Casa encontrado"
+        "createLabel": "Create a new Licao Casa",
+        "createOrEditLabel": "Create or edit a Licao Casa",
+        "notFound": "No Licao Casas found"
       },
-      "created": "Um novo Licao Casa foi criado com o identificador {{ param }}",
-      "updated": "Um Licao Casa foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Licao Casa foi excluído com o identificador {{ param }}",
+      "created": "A new Licao Casa is created with identifier {{ param }}",
+      "updated": "A Licao Casa is updated with identifier {{ param }}",
+      "deleted": "A Licao Casa is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Licao Casa {{ id }}?"
+        "question": "Are you sure you want to delete Licao Casa {{ id }}?"
       },
       "detail": {
         "title": "Licao Casa"

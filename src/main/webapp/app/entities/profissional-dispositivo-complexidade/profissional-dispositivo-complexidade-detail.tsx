@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-dispositivo-complexidade.reducer';
+import {
+  getEntity,
+  IProfissionalDispositivoComplexidadeBaseState,
+  getProfissionalDispositivoComplexidadeState
+} from './profissional-dispositivo-complexidade.reducer';
 import { IProfissionalDispositivoComplexidade } from 'app/shared/model/profissional-dispositivo-complexidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalDispositivoComplexidadeState {
+  fieldsBase: IProfissionalDispositivoComplexidadeBaseState;
+}
+
 export interface IProfissionalDispositivoComplexidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalDispositivoComplexidadeDetail extends React.Component<IProfissionalDispositivoComplexidadeDetailProps> {
+export class ProfissionalDispositivoComplexidadeDetail extends React.Component<
+  IProfissionalDispositivoComplexidadeDetailProps,
+  IProfissionalDispositivoComplexidadeState
+> {
   constructor(props: Readonly<IProfissionalDispositivoComplexidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalDispositivoComplexidadeState(this.props.location)
     };
   }
 

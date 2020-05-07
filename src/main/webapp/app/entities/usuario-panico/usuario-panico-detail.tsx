@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './usuario-panico.reducer';
+import { getEntity, IUsuarioPanicoBaseState, getUsuarioPanicoState } from './usuario-panico.reducer';
 import { IUsuarioPanico } from 'app/shared/model/usuario-panico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUsuarioPanicoState {
+  fieldsBase: IUsuarioPanicoBaseState;
+}
+
 export interface IUsuarioPanicoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UsuarioPanicoDetail extends React.Component<IUsuarioPanicoDetailProps> {
+export class UsuarioPanicoDetail extends React.Component<IUsuarioPanicoDetailProps, IUsuarioPanicoState> {
   constructor(props: Readonly<IUsuarioPanicoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUsuarioPanicoState(this.props.location)
     };
   }
 
@@ -61,21 +66,6 @@ export class UsuarioPanicoDetail extends React.Component<IUsuarioPanicoDetailPro
                       </Col>
                       <Col md="9">
                         <dd>{usuarioPanicoEntity.idPaciente}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.usuarioPanico.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioPanicoEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

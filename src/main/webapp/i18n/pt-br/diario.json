@@ -17,9 +17,7 @@
         "title": "Diario"
       },
       "historico": "Historico",
-      "gerarPdf": "Gerar Pdf",
-      "idUsuario": "Id Usuario",
-      "idPaciente": "Id Paciente"
+      "gerarPdf": "Gerar Pdf"
     }
   }
 }

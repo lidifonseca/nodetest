@@ -28,14 +28,10 @@
         {
             "fieldName": "telemonitoramente",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer"
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502235700",
+    "changelogDate": "20200507113000",
     "entityTableName": "paciente_complexidade_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

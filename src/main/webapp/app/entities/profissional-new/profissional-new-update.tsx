@@ -2,15 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Button, Row, Col, Label } from 'reactstrap';
+import { Button, Row, Col, Label, UncontrolledTooltip } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
 import {
+  IProfissionalNewUpdateState,
   getEntity,
   getProfissionalNewState,
   IProfissionalNewBaseState,
@@ -25,15 +26,14 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProfissionalNewUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IProfissionalNewUpdateState {
-  fieldsBase: IProfissionalNewBaseState;
-  isNew: boolean;
-  unidadeId: string;
-}
-
 export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdateProps, IProfissionalNewUpdateState> {
+  obsFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IProfissionalNewUpdateProps>) {
     super(props);
+
+    this.obsFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getProfissionalNewState(this.props.location),
       unidadeId: '0',
@@ -56,14 +56,60 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
     this.props.getUnidadeEasies();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idCidade'] ? '&idCidade=' + fieldsBase['idCidade'] : '') +
+      (fieldsBase['idTempoExperiencia'] ? '&idTempoExperiencia=' + fieldsBase['idTempoExperiencia'] : '') +
+      (fieldsBase['idBanco'] ? '&idBanco=' + fieldsBase['idBanco'] : '') +
+      (fieldsBase['senha'] ? '&senha=' + fieldsBase['senha'] : '') +
+      (fieldsBase['nome'] ? '&nome=' + fieldsBase['nome'] : '') +
+      (fieldsBase['email'] ? '&email=' + fieldsBase['email'] : '') +
+      (fieldsBase['cpf'] ? '&cpf=' + fieldsBase['cpf'] : '') +
+      (fieldsBase['rg'] ? '&rg=' + fieldsBase['rg'] : '') +
+      (fieldsBase['nomeEmpresa'] ? '&nomeEmpresa=' + fieldsBase['nomeEmpresa'] : '') +
+      (fieldsBase['cnpj'] ? '&cnpj=' + fieldsBase['cnpj'] : '') +
+      (fieldsBase['registro'] ? '&registro=' + fieldsBase['registro'] : '') +
+      (fieldsBase['nascimento'] ? '&nascimento=' + fieldsBase['nascimento'] : '') +
+      (fieldsBase['sexo'] ? '&sexo=' + fieldsBase['sexo'] : '') +
+      (fieldsBase['telefone1'] ? '&telefone1=' + fieldsBase['telefone1'] : '') +
+      (fieldsBase['telefone2'] ? '&telefone2=' + fieldsBase['telefone2'] : '') +
+      (fieldsBase['celular1'] ? '&celular1=' + fieldsBase['celular1'] : '') +
+      (fieldsBase['celular2'] ? '&celular2=' + fieldsBase['celular2'] : '') +
+      (fieldsBase['cep'] ? '&cep=' + fieldsBase['cep'] : '') +
+      (fieldsBase['endereco'] ? '&endereco=' + fieldsBase['endereco'] : '') +
+      (fieldsBase['numero'] ? '&numero=' + fieldsBase['numero'] : '') +
+      (fieldsBase['complemento'] ? '&complemento=' + fieldsBase['complemento'] : '') +
+      (fieldsBase['bairro'] ? '&bairro=' + fieldsBase['bairro'] : '') +
+      (fieldsBase['cidade'] ? '&cidade=' + fieldsBase['cidade'] : '') +
+      (fieldsBase['uf'] ? '&uf=' + fieldsBase['uf'] : '') +
+      (fieldsBase['atendeCrianca'] ? '&atendeCrianca=' + fieldsBase['atendeCrianca'] : '') +
+      (fieldsBase['atendeIdoso'] ? '&atendeIdoso=' + fieldsBase['atendeIdoso'] : '') +
+      (fieldsBase['ag'] ? '&ag=' + fieldsBase['ag'] : '') +
+      (fieldsBase['conta'] ? '&conta=' + fieldsBase['conta'] : '') +
+      (fieldsBase['tipoConta'] ? '&tipoConta=' + fieldsBase['tipoConta'] : '') +
+      (fieldsBase['origemCadastro'] ? '&origemCadastro=' + fieldsBase['origemCadastro'] : '') +
+      (fieldsBase['obs'] ? '&obs=' + fieldsBase['obs'] : '') +
+      (fieldsBase['chavePrivada'] ? '&chavePrivada=' + fieldsBase['chavePrivada'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalNewEntity } = this.props;
@@ -81,7 +127,7 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-new');
+    this.props.history.push('/profissional-new?' + this.getFiltersURL());
   };
 
   render() {
@@ -89,7 +135,7 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
     const { isNew } = this.state;
 
     const { obs } = profissionalNewEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -123,7 +169,14 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/profissional-new" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/profissional-new?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -155,7 +208,7 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idCidade ? (
+                        {baseFilters !== 'idCidade' ? (
                           <Col md="idCidade">
                             <AvGroup>
                               <Row>
@@ -171,10 +224,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idCidade" value={this.state.fieldsBase.idCidade} />
+                          <AvInput type="hidden" name="idCidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idTempoExperiencia ? (
+                        {baseFilters !== 'idTempoExperiencia' ? (
                           <Col md="idTempoExperiencia">
                             <AvGroup>
                               <Row>
@@ -195,10 +248,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idTempoExperiencia" value={this.state.fieldsBase.idTempoExperiencia} />
+                          <AvInput type="hidden" name="idTempoExperiencia" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idBanco ? (
+                        {baseFilters !== 'idBanco' ? (
                           <Col md="idBanco">
                             <AvGroup>
                               <Row>
@@ -214,10 +267,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idBanco" value={this.state.fieldsBase.idBanco} />
+                          <AvInput type="hidden" name="idBanco" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.senha ? (
+                        {baseFilters !== 'senha' ? (
                           <Col md="senha">
                             <AvGroup>
                               <Row>
@@ -233,10 +286,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="senha" value={this.state.fieldsBase.senha} />
+                          <AvInput type="hidden" name="senha" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.nome ? (
+                        {baseFilters !== 'nome' ? (
                           <Col md="nome">
                             <AvGroup>
                               <Row>
@@ -252,10 +305,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase.nome} />
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.email ? (
+                        {baseFilters !== 'email' ? (
                           <Col md="email">
                             <AvGroup>
                               <Row>
@@ -271,10 +324,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="email" value={this.state.fieldsBase.email} />
+                          <AvInput type="hidden" name="email" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.cpf ? (
+                        {baseFilters !== 'cpf' ? (
                           <Col md="cpf">
                             <AvGroup>
                               <Row>
@@ -290,10 +343,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="cpf" value={this.state.fieldsBase.cpf} />
+                          <AvInput type="hidden" name="cpf" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.rg ? (
+                        {baseFilters !== 'rg' ? (
                           <Col md="rg">
                             <AvGroup>
                               <Row>
@@ -309,10 +362,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="rg" value={this.state.fieldsBase.rg} />
+                          <AvInput type="hidden" name="rg" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.nomeEmpresa ? (
+                        {baseFilters !== 'nomeEmpresa' ? (
                           <Col md="nomeEmpresa">
                             <AvGroup>
                               <Row>
@@ -328,10 +381,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="nomeEmpresa" value={this.state.fieldsBase.nomeEmpresa} />
+                          <AvInput type="hidden" name="nomeEmpresa" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.cnpj ? (
+                        {baseFilters !== 'cnpj' ? (
                           <Col md="cnpj">
                             <AvGroup>
                               <Row>
@@ -347,10 +400,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="cnpj" value={this.state.fieldsBase.cnpj} />
+                          <AvInput type="hidden" name="cnpj" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.registro ? (
+                        {baseFilters !== 'registro' ? (
                           <Col md="registro">
                             <AvGroup>
                               <Row>
@@ -366,10 +419,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="registro" value={this.state.fieldsBase.registro} />
+                          <AvInput type="hidden" name="registro" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.nascimento ? (
+                        {baseFilters !== 'nascimento' ? (
                           <Col md="nascimento">
                             <AvGroup>
                               <Row>
@@ -385,10 +438,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="nascimento" value={this.state.fieldsBase.nascimento} />
+                          <AvInput type="hidden" name="nascimento" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.sexo ? (
+                        {baseFilters !== 'sexo' ? (
                           <Col md="sexo">
                             <AvGroup>
                               <Row>
@@ -404,10 +457,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="sexo" value={this.state.fieldsBase.sexo} />
+                          <AvInput type="hidden" name="sexo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.telefone1 ? (
+                        {baseFilters !== 'telefone1' ? (
                           <Col md="telefone1">
                             <AvGroup>
                               <Row>
@@ -419,14 +472,17 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                                 <Col md="9">
                                   <AvField id="profissional-new-telefone1" type="text" name="telefone1" />
                                 </Col>
+                                <UncontrolledTooltip target="telefone1Label">
+                                  <Translate contentKey="generadorApp.profissionalNew.help.telefone1" />
+                                </UncontrolledTooltip>
                               </Row>
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="telefone1" value={this.state.fieldsBase.telefone1} />
+                          <AvInput type="hidden" name="telefone1" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.telefone2 ? (
+                        {baseFilters !== 'telefone2' ? (
                           <Col md="telefone2">
                             <AvGroup>
                               <Row>
@@ -438,14 +494,17 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                                 <Col md="9">
                                   <AvField id="profissional-new-telefone2" type="text" name="telefone2" />
                                 </Col>
+                                <UncontrolledTooltip target="telefone2Label">
+                                  <Translate contentKey="generadorApp.profissionalNew.help.telefone2" />
+                                </UncontrolledTooltip>
                               </Row>
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="telefone2" value={this.state.fieldsBase.telefone2} />
+                          <AvInput type="hidden" name="telefone2" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.celular1 ? (
+                        {baseFilters !== 'celular1' ? (
                           <Col md="celular1">
                             <AvGroup>
                               <Row>
@@ -457,14 +516,17 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                                 <Col md="9">
                                   <AvField id="profissional-new-celular1" type="text" name="celular1" />
                                 </Col>
+                                <UncontrolledTooltip target="celular1Label">
+                                  <Translate contentKey="generadorApp.profissionalNew.help.celular1" />
+                                </UncontrolledTooltip>
                               </Row>
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="celular1" value={this.state.fieldsBase.celular1} />
+                          <AvInput type="hidden" name="celular1" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.celular2 ? (
+                        {baseFilters !== 'celular2' ? (
                           <Col md="celular2">
                             <AvGroup>
                               <Row>
@@ -476,14 +538,17 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                                 <Col md="9">
                                   <AvField id="profissional-new-celular2" type="text" name="celular2" />
                                 </Col>
+                                <UncontrolledTooltip target="celular2Label">
+                                  <Translate contentKey="generadorApp.profissionalNew.help.celular2" />
+                                </UncontrolledTooltip>
                               </Row>
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="celular2" value={this.state.fieldsBase.celular2} />
+                          <AvInput type="hidden" name="celular2" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.cep ? (
+                        {baseFilters !== 'cep' ? (
                           <Col md="cep">
                             <AvGroup>
                               <Row>
@@ -499,10 +564,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="cep" value={this.state.fieldsBase.cep} />
+                          <AvInput type="hidden" name="cep" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.endereco ? (
+                        {baseFilters !== 'endereco' ? (
                           <Col md="endereco">
                             <AvGroup>
                               <Row>
@@ -518,10 +583,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="endereco" value={this.state.fieldsBase.endereco} />
+                          <AvInput type="hidden" name="endereco" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.numero ? (
+                        {baseFilters !== 'numero' ? (
                           <Col md="numero">
                             <AvGroup>
                               <Row>
@@ -537,10 +602,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="numero" value={this.state.fieldsBase.numero} />
+                          <AvInput type="hidden" name="numero" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.complemento ? (
+                        {baseFilters !== 'complemento' ? (
                           <Col md="complemento">
                             <AvGroup>
                               <Row>
@@ -556,10 +621,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="complemento" value={this.state.fieldsBase.complemento} />
+                          <AvInput type="hidden" name="complemento" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.bairro ? (
+                        {baseFilters !== 'bairro' ? (
                           <Col md="bairro">
                             <AvGroup>
                               <Row>
@@ -575,10 +640,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="bairro" value={this.state.fieldsBase.bairro} />
+                          <AvInput type="hidden" name="bairro" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.cidade ? (
+                        {baseFilters !== 'cidade' ? (
                           <Col md="cidade">
                             <AvGroup>
                               <Row>
@@ -594,10 +659,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="cidade" value={this.state.fieldsBase.cidade} />
+                          <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.uf ? (
+                        {baseFilters !== 'uf' ? (
                           <Col md="uf">
                             <AvGroup>
                               <Row>
@@ -613,10 +678,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="uf" value={this.state.fieldsBase.uf} />
+                          <AvInput type="hidden" name="uf" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.atendeCrianca ? (
+                        {baseFilters !== 'atendeCrianca' ? (
                           <Col md="atendeCrianca">
                             <AvGroup>
                               <Row>
@@ -637,10 +702,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="atendeCrianca" value={this.state.fieldsBase.atendeCrianca} />
+                          <AvInput type="hidden" name="atendeCrianca" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.atendeIdoso ? (
+                        {baseFilters !== 'atendeIdoso' ? (
                           <Col md="atendeIdoso">
                             <AvGroup>
                               <Row>
@@ -656,10 +721,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="atendeIdoso" value={this.state.fieldsBase.atendeIdoso} />
+                          <AvInput type="hidden" name="atendeIdoso" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ag ? (
+                        {baseFilters !== 'ag' ? (
                           <Col md="ag">
                             <AvGroup>
                               <Row>
@@ -675,10 +740,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ag" value={this.state.fieldsBase.ag} />
+                          <AvInput type="hidden" name="ag" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.conta ? (
+                        {baseFilters !== 'conta' ? (
                           <Col md="conta">
                             <AvGroup>
                               <Row>
@@ -694,10 +759,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="conta" value={this.state.fieldsBase.conta} />
+                          <AvInput type="hidden" name="conta" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.tipoConta ? (
+                        {baseFilters !== 'tipoConta' ? (
                           <Col md="tipoConta">
                             <AvGroup>
                               <Row>
@@ -713,10 +778,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="tipoConta" value={this.state.fieldsBase.tipoConta} />
+                          <AvInput type="hidden" name="tipoConta" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.origemCadastro ? (
+                        {baseFilters !== 'origemCadastro' ? (
                           <Col md="origemCadastro">
                             <AvGroup>
                               <Row>
@@ -732,10 +797,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="origemCadastro" value={this.state.fieldsBase.origemCadastro} />
+                          <AvInput type="hidden" name="origemCadastro" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.obs ? (
+                        {baseFilters !== 'obs' ? (
                           <Col md="obs">
                             <AvGroup>
                               <Row>
@@ -751,10 +816,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase.obs} />
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.chavePrivada ? (
+                        {baseFilters !== 'chavePrivada' ? (
                           <Col md="chavePrivada">
                             <AvGroup>
                               <Row>
@@ -770,10 +835,10 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="chavePrivada" value={this.state.fieldsBase.chavePrivada} />
+                          <AvInput type="hidden" name="chavePrivada" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -789,9 +854,9 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
-                        {!this.state.fieldsBase.unidade ? (
+                        {baseFilters !== 'unidade' ? (
                           <Col md="12">
                             <AvGroup>
                               <Row>
@@ -818,7 +883,7 @@ export class ProfissionalNewUpdate extends React.Component<IProfissionalNewUpdat
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase.unidade} />
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

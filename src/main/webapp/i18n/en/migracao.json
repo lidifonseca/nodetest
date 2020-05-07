@@ -3,15 +3,15 @@
     "migracao": {
       "home": {
         "title": "Migracaos",
-        "createLabel": "Criar novo Migracao",
-        "createOrEditLabel": "Criar ou editar Migracao",
-        "notFound": "Nenhum Migracao encontrado"
+        "createLabel": "Create a new Migracao",
+        "createOrEditLabel": "Create or edit a Migracao",
+        "notFound": "No Migracaos found"
       },
-      "created": "Um novo Migracao foi criado com o identificador {{ param }}",
-      "updated": "Um Migracao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Migracao foi excluído com o identificador {{ param }}",
+      "created": "A new Migracao is created with identifier {{ param }}",
+      "updated": "A Migracao is updated with identifier {{ param }}",
+      "deleted": "A Migracao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Migracao {{ id }}?"
+        "question": "Are you sure you want to delete Migracao {{ id }}?"
       },
       "detail": {
         "title": "Migracao"

@@ -531,45 +531,18 @@
         {
             "fieldName": "envioMelhoraTempo",
             "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "senhaChat",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "45"
         }
     ],
     "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "diario",
-            "otherEntityRelationshipName": "idUsuario",
-            "relationshipName": "diario"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "pacienteDiario",
-            "otherEntityRelationshipName": "idUsuario",
-            "relationshipName": "pacienteDiario"
-        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "usuario",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "tipoUsuario",
-            "otherEntityRelationshipName": "usuario",
-            "relationshipName": "idTipoUsuario",
-            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200503012500",
+    "changelogDate": "20200507125800",
     "entityTableName": "usuario",
     "dto": "mapstruct",
     "pagination": "pagination",

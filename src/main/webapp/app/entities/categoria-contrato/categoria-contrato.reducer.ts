@@ -33,9 +33,14 @@ const initialState = {
 export type CategoriaContratoState = Readonly<typeof initialState>;
 
 export interface ICategoriaContratoBaseState {
+  baseFilters: any;
   contrato: any;
   ativo: any;
-  idCategoria: any;
+}
+
+export interface ICategoriaContratoUpdateState {
+  fieldsBase: ICategoriaContratoBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -102,13 +107,14 @@ export default (state: CategoriaContratoState = initialState, action): Categoria
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -129,23 +135,19 @@ const apiUrl = 'api/categoria-contratoes';
 export type ICrudGetAllActionCategoriaContrato<T> = (
   contrato?: any,
   ativo?: any,
-  idCategoria?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, idCategoria, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, page, size, sort) => {
   const contratoRequest = contrato ? `contrato.contains=${contrato}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIACONTRATO_LIST,
-    payload: axios.get<ICategoriaContrato>(
-      `${requestUrl}${contratoRequest}${ativoRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ICategoriaContrato>(`${requestUrl}${contratoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ICategoriaContrato> = id => {
@@ -156,31 +158,20 @@ export const getEntity: ICrudGetAction<ICategoriaContrato> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (
-  contrato,
-  ativo,
-  idCategoria,
-  page,
-  size,
-  sort
-) => {
+export const getEntitiesExport: ICrudGetAllActionCategoriaContrato<ICategoriaContrato> = (contrato, ativo, page, size, sort) => {
   const contratoRequest = contrato ? `contrato.contains=${contrato}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIACONTRATO_LIST,
-    payload: axios.get<ICategoriaContrato>(
-      `${requestUrl}${contratoRequest}${ativoRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ICategoriaContrato>(`${requestUrl}${contratoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<ICategoriaContrato> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CATEGORIACONTRATO,
@@ -191,7 +182,7 @@ export const createEntity: ICrudPutAction<ICategoriaContrato> = entity => async 
 };
 
 export const updateEntity: ICrudPutAction<ICategoriaContrato> = entity => async dispatch => {
-  entity = { ...entity, idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CATEGORIACONTRATO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -210,12 +201,13 @@ export const deleteEntity: ICrudDeleteAction<ICategoriaContrato> = id => async d
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -225,14 +217,13 @@ export const reset = () => ({
 
 export const getCategoriaContratoState = (location): ICategoriaContratoBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const contrato = url.searchParams.get('contrato') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
-  const idCategoria = url.searchParams.get('idCategoria') || '';
-
   return {
+    baseFilters,
     contrato,
-    ativo,
-    idCategoria
+    ativo
   };
 };

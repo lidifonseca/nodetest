@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import ApiInput from './api-input';
 import ApiInputDetail from './api-input-detail';
+import ApiInputRelatorioCSV from './relatorio/api-input.csv';
 import ApiInputUpdate from './api-input-update';
 import ApiInputDeleteDialog from './api-input-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={ApiInputRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={ApiInputUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={ApiInputUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={ApiInputDetail} />

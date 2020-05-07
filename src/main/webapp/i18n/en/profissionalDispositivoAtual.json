@@ -3,15 +3,15 @@
     "profissionalDispositivoAtual": {
       "home": {
         "title": "Profissional Dispositivo Atuals",
-        "createLabel": "Criar novo Profissional Dispositivo Atual",
-        "createOrEditLabel": "Criar ou editar Profissional Dispositivo Atual",
-        "notFound": "Nenhum Profissional Dispositivo Atual encontrado"
+        "createLabel": "Create a new Profissional Dispositivo Atual",
+        "createOrEditLabel": "Create or edit a Profissional Dispositivo Atual",
+        "notFound": "No Profissional Dispositivo Atuals found"
       },
-      "created": "Um novo Profissional Dispositivo Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Dispositivo Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Dispositivo Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Dispositivo Atual is created with identifier {{ param }}",
+      "updated": "A Profissional Dispositivo Atual is updated with identifier {{ param }}",
+      "deleted": "A Profissional Dispositivo Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Dispositivo Atual {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Dispositivo Atual {{ id }}?"
       },
       "detail": {
         "title": "Profissional Dispositivo Atual"
@@ -35,8 +35,7 @@
       "cistostomia": "Cistostomia",
       "cateterNasalDeOxigenio": "Cateter Nasal De Oxigenio",
       "mascaraDeVentilacao": "Mascara De Ventilacao",
-      "entubacaoOrotraqueal": "Entubacao Orotraqueal",
-      "idUsuario": "Id Usuario"
+      "entubacaoOrotraqueal": "Entubacao Orotraqueal"
     }
   }
 }

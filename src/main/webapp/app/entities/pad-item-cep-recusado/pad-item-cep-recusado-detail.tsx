@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-cep-recusado.reducer';
+import { getEntity, IPadItemCepRecusadoBaseState, getPadItemCepRecusadoState } from './pad-item-cep-recusado.reducer';
 import { IPadItemCepRecusado } from 'app/shared/model/pad-item-cep-recusado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemCepRecusadoState {
+  fieldsBase: IPadItemCepRecusadoBaseState;
+}
+
 export interface IPadItemCepRecusadoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemCepRecusadoDetail extends React.Component<IPadItemCepRecusadoDetailProps> {
+export class PadItemCepRecusadoDetail extends React.Component<IPadItemCepRecusadoDetailProps, IPadItemCepRecusadoState> {
   constructor(props: Readonly<IPadItemCepRecusadoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemCepRecusadoState(this.props.location)
     };
   }
 
@@ -62,19 +67,6 @@ export class PadItemCepRecusadoDetail extends React.Component<IPadItemCepRecusad
                       </Col>
                       <Col md="9">
                         <dd>{padItemCepRecusadoEntity.cep}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItemCepRecusado.idPadItem">Id Pad Item</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemCepRecusadoEntity.idPadItem ? padItemCepRecusadoEntity.idPadItem.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

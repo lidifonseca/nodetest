@@ -68,7 +68,9 @@ export class EspecialidadeValorController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() especialidadeValor: EspecialidadeValor): Promise<EspecialidadeValor> {
+    console.info(especialidadeValor);
     const created = await this.especialidadeValorService.save(especialidadeValor);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'EspecialidadeValor', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class EspecialidadeValorController {
   })
   async put(@Req() req: Request, @Body() especialidadeValor: EspecialidadeValor): Promise<EspecialidadeValor> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'EspecialidadeValor', especialidadeValor.id);
+
     return await this.especialidadeValorService.update(especialidadeValor);
   }
 

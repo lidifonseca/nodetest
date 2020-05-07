@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IApiInput, defaultValue } from 'app/shared/model/api-input.model';
 
 export const ACTION_TYPES = {
+  FETCH_APIINPUT_LIST_EXPORT: 'apiInput/FETCH_APIINPUT_LIST_EXPORT',
   FETCH_APIINPUT_LIST: 'apiInput/FETCH_APIINPUT_LIST',
   FETCH_APIINPUT: 'apiInput/FETCH_APIINPUT',
   CREATE_APIINPUT: 'apiInput/CREATE_APIINPUT',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type ApiInputState = Readonly<typeof initialState>;
 
+export interface IApiInputBaseState {
+  baseFilters: any;
+  idApiName: any;
+  apiInput: any;
+  apiType: any;
+  obs: any;
+  ativo: any;
+}
+
+export interface IApiInputUpdateState {
+  fieldsBase: IApiInputBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ApiInputState = initialState, action): ApiInputState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_APIINPUT_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_APIINPUT_LIST):
     case REQUEST(ACTION_TYPES.FETCH_APIINPUT):
       return {
@@ -51,6 +67,7 @@ export default (state: ApiInputState = initialState, action): ApiInputState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_APIINPUT_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_APIINPUT_LIST):
     case FAILURE(ACTION_TYPES.FETCH_APIINPUT):
     case FAILURE(ACTION_TYPES.CREATE_APIINPUT):
@@ -139,6 +156,22 @@ export const getEntity: ICrudGetAction<IApiInput> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionApiInput<IApiInput> = (idApiName, apiInput, apiType, obs, ativo, page, size, sort) => {
+  const idApiNameRequest = idApiName ? `idApiName.contains=${idApiName}&` : '';
+  const apiInputRequest = apiInput ? `apiInput.contains=${apiInput}&` : '';
+  const apiTypeRequest = apiType ? `apiType.contains=${apiType}&` : '';
+  const obsRequest = obs ? `obs.contains=${obs}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_APIINPUT_LIST,
+    payload: axios.get<IApiInput>(
+      `${requestUrl}${idApiNameRequest}${apiInputRequest}${apiTypeRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IApiInput> = entity => async dispatch => {
   entity = {
     ...entity
@@ -174,3 +207,22 @@ export const deleteEntity: ICrudDeleteAction<IApiInput> = id => async dispatch =
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getApiInputState = (location): IApiInputBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idApiName = url.searchParams.get('idApiName') || '';
+  const apiInput = url.searchParams.get('apiInput') || '';
+  const apiType = url.searchParams.get('apiType') || '';
+  const obs = url.searchParams.get('obs') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idApiName,
+    apiInput,
+    apiType,
+    obs,
+    ativo
+  };
+};

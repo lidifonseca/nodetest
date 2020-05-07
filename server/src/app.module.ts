@@ -5,16 +5,7 @@ import { AuthModule } from './module/auth.module';
 import { ormconfig } from './orm.config';
 import { PacienteModule } from './module/paciente.module';
 import { CidadeModule } from './module/cidade.module';
-import { CepbrBairroModule } from './module/cepbr-bairro.module';
-import { CepbrCidadeModule } from './module/cepbr-cidade.module';
-import { CepbrEnderecoModule } from './module/cepbr-endereco.module';
-import { CepbrEstadoModule } from './module/cepbr-estado.module';
 import { CidModule } from './module/cid.module';
-import { JulhoModule } from './module/julho.module';
-import { JunhoModule } from './module/junho.module';
-import { MaioModule } from './module/maio.module';
-import { PadCsvModule } from './module/pad-csv.module';
-import { PhinxlogModule } from './module/phinxlog.module';
 import { AcaoModule } from './module/acao.module';
 import { AcoesRespostasModule } from './module/acoes-respostas.module';
 import { AlertasIndicadoresModule } from './module/alertas-indicadores.module';
@@ -37,10 +28,8 @@ import { BancoModule } from './module/banco.module';
 import { CategoriaModule } from './module/categoria.module';
 import { CategoriaAtividadeModule } from './module/categoria-atividade.module';
 import { CategoriaContratoModule } from './module/categoria-contrato.module';
-import { CategoriaUnidadeModule } from './module/categoria-unidade.module';
 import { CidPtaModule } from './module/cid-pta.module';
 import { CidXPtaNovoModule } from './module/cid-x-pta-novo.module';
-import { CidXPtaNovoPadItemIndicadoresModule } from './module/cid-x-pta-novo-pad-item-indicadores.module';
 import { ControleDisparoAvisoModule } from './module/controle-disparo-aviso.module';
 import { DescPtaModule } from './module/desc-pta.module';
 import { DiarioModule } from './module/diario.module';
@@ -184,16 +173,7 @@ import { CidXPtaNovoPadItemIndiModule } from './module/cid-x-pta-novo-pad-item-i
     CidadeModule,
     PacienteModule,
     CidadeModule,
-    CepbrBairroModule,
-    CepbrCidadeModule,
-    CepbrEnderecoModule,
-    CepbrEstadoModule,
     CidModule,
-    JulhoModule,
-    JunhoModule,
-    MaioModule,
-    PadCsvModule,
-    PhinxlogModule,
     AcaoModule,
     AcoesRespostasModule,
     AlertasIndicadoresModule,
@@ -216,10 +196,8 @@ import { CidXPtaNovoPadItemIndiModule } from './module/cid-x-pta-novo-pad-item-i
     CategoriaModule,
     CategoriaAtividadeModule,
     CategoriaContratoModule,
-    CategoriaUnidadeModule,
     CidPtaModule,
     CidXPtaNovoModule,
-    CidXPtaNovoPadItemIndicadoresModule,
     CidadeModule,
     ControleDisparoAvisoModule,
     DescPtaModule,

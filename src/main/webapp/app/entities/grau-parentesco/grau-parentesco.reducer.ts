@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IGrauParentesco, defaultValue } from 'app/shared/model/grau-parentesco.model';
 
 export const ACTION_TYPES = {
+  FETCH_GRAUPARENTESCO_LIST_EXPORT: 'grauParentesco/FETCH_GRAUPARENTESCO_LIST_EXPORT',
   FETCH_GRAUPARENTESCO_LIST: 'grauParentesco/FETCH_GRAUPARENTESCO_LIST',
   FETCH_GRAUPARENTESCO: 'grauParentesco/FETCH_GRAUPARENTESCO',
   CREATE_GRAUPARENTESCO: 'grauParentesco/CREATE_GRAUPARENTESCO',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type GrauParentescoState = Readonly<typeof initialState>;
 
+export interface IGrauParentescoBaseState {
+  baseFilters: any;
+  grauParentesco: any;
+}
+
+export interface IGrauParentescoUpdateState {
+  fieldsBase: IGrauParentescoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: GrauParentescoState = initialState, action): GrauParentescoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_GRAUPARENTESCO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_GRAUPARENTESCO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_GRAUPARENTESCO):
       return {
@@ -51,6 +63,7 @@ export default (state: GrauParentescoState = initialState, action): GrauParentes
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_GRAUPARENTESCO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_GRAUPARENTESCO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_GRAUPARENTESCO):
     case FAILURE(ACTION_TYPES.CREATE_GRAUPARENTESCO):
@@ -129,6 +142,16 @@ export const getEntity: ICrudGetAction<IGrauParentesco> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionGrauParentesco<IGrauParentesco> = (grauParentesco, page, size, sort) => {
+  const grauParentescoRequest = grauParentesco ? `grauParentesco.contains=${grauParentesco}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_GRAUPARENTESCO_LIST,
+    payload: axios.get<IGrauParentesco>(`${requestUrl}${grauParentescoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IGrauParentesco> = entity => async dispatch => {
   entity = {
     ...entity
@@ -164,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<IGrauParentesco> = id => async disp
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getGrauParentescoState = (location): IGrauParentescoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const grauParentesco = url.searchParams.get('grauParentesco') || '';
+
+  return {
+    baseFilters,
+    grauParentesco
+  };
+};

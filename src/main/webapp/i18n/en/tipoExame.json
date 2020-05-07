@@ -3,15 +3,15 @@
     "tipoExame": {
       "home": {
         "title": "Tipo Exames",
-        "createLabel": "Criar novo Tipo Exame",
-        "createOrEditLabel": "Criar ou editar Tipo Exame",
-        "notFound": "Nenhum Tipo Exame encontrado"
+        "createLabel": "Create a new Tipo Exame",
+        "createOrEditLabel": "Create or edit a Tipo Exame",
+        "notFound": "No Tipo Exames found"
       },
-      "created": "Um novo Tipo Exame foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Exame foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Exame foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Exame is created with identifier {{ param }}",
+      "updated": "A Tipo Exame is updated with identifier {{ param }}",
+      "deleted": "A Tipo Exame is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Exame {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Exame {{ id }}?"
       },
       "detail": {
         "title": "Tipo Exame"

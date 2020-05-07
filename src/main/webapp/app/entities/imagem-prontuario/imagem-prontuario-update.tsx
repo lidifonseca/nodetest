@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './imagem-prontuario.reducer';
+import {
+  IImagemProntuarioUpdateState,
+  getEntity,
+  getImagemProntuarioState,
+  IImagemProntuarioBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './imagem-prontuario.reducer';
 import { IImagemProntuario } from 'app/shared/model/imagem-prontuario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IImagemProntuarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IImagemProntuarioUpdateState {
-  isNew: boolean;
-}
-
 export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpdateProps, IImagemProntuarioUpdateState> {
   constructor(props: Readonly<IImagemProntuarioUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getImagemProntuarioState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,22 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idProntuario'] ? '&idProntuario=' + fieldsBase['idProntuario'] : '') +
+      (fieldsBase['imagem'] ? '&imagem=' + fieldsBase['imagem'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['diretorio'] ? '&diretorio=' + fieldsBase['diretorio'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { imagemProntuarioEntity } = this.props;
@@ -57,13 +79,14 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/imagem-prontuario');
+    this.props.history.push('/imagem-prontuario?' + this.getFiltersURL());
   };
 
   render() {
     const { imagemProntuarioEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +119,14 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/imagem-prontuario" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/imagem-prontuario?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +141,7 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,98 +157,84 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idProntuario' ? (
+                          <Col md="idProntuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProntuarioLabel" for="imagem-prontuario-idProntuario">
+                                    <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-idProntuario" type="text" name="idProntuario" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idProntuarioLabel" for="imagem-prontuario-idProntuario">
-                                <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="imagem-prontuario-idProntuario"
-                                type="text"
-                                name="idProntuario"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'imagem' ? (
+                          <Col md="imagem">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="imagemLabel" for="imagem-prontuario-imagem">
+                                    <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-imagem" type="text" name="imagem" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="imagem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="imagemLabel" for="imagem-prontuario-imagem">
-                                <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="imagem-prontuario-imagem"
-                                type="text"
-                                name="imagem"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="imagem-prontuario-ativo">
+                                    <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="imagem-prontuario-ativo">
-                                <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="imagem-prontuario-ativo"
-                                type="string"
-                                className="form-control"
-                                name="ativo"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="diretorioLabel" for="imagem-prontuario-diretorio">
-                                <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="imagem-prontuario-diretorio"
-                                type="text"
-                                name="diretorio"
-                                validate={{
-                                  maxLength: { value: 500, errorMessage: translate('entity.validation.maxlength', { max: 500 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'diretorio' ? (
+                          <Col md="diretorio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="diretorioLabel" for="imagem-prontuario-diretorio">
+                                    <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-diretorio" type="text" name="diretorio" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="diretorio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteDiagnosticoTemp, defaultValue } from 'app/shared/model/paciente-diagnostico-temp.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEDIAGNOSTICOTEMP_LIST_EXPORT: 'pacienteDiagnosticoTemp/FETCH_PACIENTEDIAGNOSTICOTEMP_LIST_EXPORT',
   FETCH_PACIENTEDIAGNOSTICOTEMP_LIST: 'pacienteDiagnosticoTemp/FETCH_PACIENTEDIAGNOSTICOTEMP_LIST',
   FETCH_PACIENTEDIAGNOSTICOTEMP: 'pacienteDiagnosticoTemp/FETCH_PACIENTEDIAGNOSTICOTEMP',
   CREATE_PACIENTEDIAGNOSTICOTEMP: 'pacienteDiagnosticoTemp/CREATE_PACIENTEDIAGNOSTICOTEMP',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type PacienteDiagnosticoTempState = Readonly<typeof initialState>;
 
+export interface IPacienteDiagnosticoTempBaseState {
+  baseFilters: any;
+  idCid: any;
+  cidPrimario: any;
+  complexidade: any;
+  createdAt: any;
+  sessionId: any;
+  observacao: any;
+}
+
+export interface IPacienteDiagnosticoTempUpdateState {
+  fieldsBase: IPacienteDiagnosticoTempBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteDiagnosticoTempState = initialState, action): PacienteDiagnosticoTempState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICOTEMP_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICOTEMP_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICOTEMP):
       return {
@@ -51,6 +68,7 @@ export default (state: PacienteDiagnosticoTempState = initialState, action): Pac
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICOTEMP_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICOTEMP_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICOTEMP):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEDIAGNOSTICOTEMP):
@@ -151,6 +169,33 @@ export const getEntity: ICrudGetAction<IPacienteDiagnosticoTemp> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteDiagnosticoTemp<IPacienteDiagnosticoTemp> = (
+  idCid,
+  cidPrimario,
+  complexidade,
+  createdAt,
+  sessionId,
+  observacao,
+  page,
+  size,
+  sort
+) => {
+  const idCidRequest = idCid ? `idCid.contains=${idCid}&` : '';
+  const cidPrimarioRequest = cidPrimario ? `cidPrimario.contains=${cidPrimario}&` : '';
+  const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
+  const createdAtRequest = createdAt ? `createdAt.equals=${createdAt}&` : '';
+  const sessionIdRequest = sessionId ? `sessionId.contains=${sessionId}&` : '';
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICOTEMP_LIST,
+    payload: axios.get<IPacienteDiagnosticoTemp>(
+      `${requestUrl}${idCidRequest}${cidPrimarioRequest}${complexidadeRequest}${createdAtRequest}${sessionIdRequest}${observacaoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteDiagnosticoTemp> = entity => async dispatch => {
   entity = {
     ...entity
@@ -186,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDiagnosticoTemp> = id => a
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteDiagnosticoTempState = (location): IPacienteDiagnosticoTempBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idCid = url.searchParams.get('idCid') || '';
+  const cidPrimario = url.searchParams.get('cidPrimario') || '';
+  const complexidade = url.searchParams.get('complexidade') || '';
+  const createdAt = url.searchParams.get('createdAt') || '';
+  const sessionId = url.searchParams.get('sessionId') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+
+  return {
+    baseFilters,
+    idCid,
+    cidPrimario,
+    complexidade,
+    createdAt,
+    sessionId,
+    observacao
+  };
+};

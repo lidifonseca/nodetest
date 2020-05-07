@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './tipo-unidade.reducer';
+import {
+  ITipoUnidadeUpdateState,
+  getEntity,
+  getTipoUnidadeState,
+  ITipoUnidadeBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './tipo-unidade.reducer';
 import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITipoUnidadeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ITipoUnidadeUpdateState {
-  isNew: boolean;
-}
-
 export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, ITipoUnidadeUpdateState> {
   constructor(props: Readonly<ITipoUnidadeUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getTipoUnidadeState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,19 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['tipoUnidade'] ? '&tipoUnidade=' + fieldsBase['tipoUnidade'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { tipoUnidadeEntity } = this.props;
@@ -57,13 +76,14 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/tipo-unidade');
+    this.props.history.push('/tipo-unidade?' + this.getFiltersURL());
   };
 
   render() {
     const { tipoUnidadeEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +116,14 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/tipo-unidade" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/tipo-unidade?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +138,7 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,29 +154,27 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoUnidadeLabel" for="tipo-unidade-tipoUnidade">
-                                <Translate contentKey="generadorApp.tipoUnidade.tipoUnidade">Tipo Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="tipo-unidade-tipoUnidade"
-                                type="text"
-                                name="tipoUnidade"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'tipoUnidade' ? (
+                          <Col md="tipoUnidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoUnidadeLabel" for="tipo-unidade-tipoUnidade">
+                                    <Translate contentKey="generadorApp.tipoUnidade.tipoUnidade">Tipo Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-unidade-tipoUnidade" type="text" name="tipoUnidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoUnidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

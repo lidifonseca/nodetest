@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProntuarioTipoMotivo, defaultValue } from 'app/shared/model/prontuario-tipo-motivo.model';
 
 export const ACTION_TYPES = {
+  FETCH_PRONTUARIOTIPOMOTIVO_LIST_EXPORT: 'prontuarioTipoMotivo/FETCH_PRONTUARIOTIPOMOTIVO_LIST_EXPORT',
   FETCH_PRONTUARIOTIPOMOTIVO_LIST: 'prontuarioTipoMotivo/FETCH_PRONTUARIOTIPOMOTIVO_LIST',
   FETCH_PRONTUARIOTIPOMOTIVO: 'prontuarioTipoMotivo/FETCH_PRONTUARIOTIPOMOTIVO',
   CREATE_PRONTUARIOTIPOMOTIVO: 'prontuarioTipoMotivo/CREATE_PRONTUARIOTIPOMOTIVO',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type ProntuarioTipoMotivoState = Readonly<typeof initialState>;
 
+export interface IProntuarioTipoMotivoBaseState {
+  baseFilters: any;
+  nome: any;
+  idPai: any;
+  ativo: any;
+  classe: any;
+  name: any;
+  idTipoProntuario: any;
+}
+
+export interface IProntuarioTipoMotivoUpdateState {
+  fieldsBase: IProntuarioTipoMotivoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProntuarioTipoMotivoState = initialState, action): ProntuarioTipoMotivoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PRONTUARIOTIPOMOTIVO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PRONTUARIOTIPOMOTIVO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PRONTUARIOTIPOMOTIVO):
       return {
@@ -51,6 +68,7 @@ export default (state: ProntuarioTipoMotivoState = initialState, action): Prontu
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PRONTUARIOTIPOMOTIVO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PRONTUARIOTIPOMOTIVO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PRONTUARIOTIPOMOTIVO):
     case FAILURE(ACTION_TYPES.CREATE_PRONTUARIOTIPOMOTIVO):
@@ -151,6 +169,33 @@ export const getEntity: ICrudGetAction<IProntuarioTipoMotivo> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProntuarioTipoMotivo<IProntuarioTipoMotivo> = (
+  nome,
+  idPai,
+  ativo,
+  classe,
+  name,
+  idTipoProntuario,
+  page,
+  size,
+  sort
+) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const idPaiRequest = idPai ? `idPai.contains=${idPai}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const classeRequest = classe ? `classe.contains=${classe}&` : '';
+  const nameRequest = name ? `name.contains=${name}&` : '';
+  const idTipoProntuarioRequest = idTipoProntuario ? `idTipoProntuario.contains=${idTipoProntuario}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PRONTUARIOTIPOMOTIVO_LIST,
+    payload: axios.get<IProntuarioTipoMotivo>(
+      `${requestUrl}${nomeRequest}${idPaiRequest}${ativoRequest}${classeRequest}${nameRequest}${idTipoProntuarioRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProntuarioTipoMotivo> = entity => async dispatch => {
   entity = {
     ...entity
@@ -186,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<IProntuarioTipoMotivo> = id => asyn
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProntuarioTipoMotivoState = (location): IProntuarioTipoMotivoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const idPai = url.searchParams.get('idPai') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const classe = url.searchParams.get('classe') || '';
+  const name = url.searchParams.get('name') || '';
+  const idTipoProntuario = url.searchParams.get('idTipoProntuario') || '';
+
+  return {
+    baseFilters,
+    nome,
+    idPai,
+    ativo,
+    classe,
+    name,
+    idTipoProntuario
+  };
+};

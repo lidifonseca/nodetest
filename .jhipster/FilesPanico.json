@@ -41,7 +41,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502232800",
+    "changelogDate": "20200507110100",
     "entityTableName": "files_panico",
     "dto": "mapstruct",
     "pagination": "pagination",

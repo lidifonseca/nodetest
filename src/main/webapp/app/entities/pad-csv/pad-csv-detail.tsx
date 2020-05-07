@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-csv.reducer';
+import { getEntity, IPadCsvBaseState, getPadCsvState } from './pad-csv.reducer';
 import { IPadCsv } from 'app/shared/model/pad-csv.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadCsvState {
+  fieldsBase: IPadCsvBaseState;
+}
+
 export interface IPadCsvDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadCsvDetail extends React.Component<IPadCsvDetailProps> {
+export class PadCsvDetail extends React.Component<IPadCsvDetailProps, IPadCsvState> {
   constructor(props: Readonly<IPadCsvDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadCsvState(this.props.location)
     };
   }
 

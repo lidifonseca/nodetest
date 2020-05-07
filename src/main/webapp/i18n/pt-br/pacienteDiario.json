@@ -18,9 +18,7 @@
       },
       "idOperadora": "Id Operadora",
       "historico": "Historico",
-      "ativo": "Ativo",
-      "idPaciente": "Id Paciente",
-      "idUsuario": "Id Usuario"
+      "ativo": "Ativo"
     }
   }
 }

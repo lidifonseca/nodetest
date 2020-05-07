@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadPtaTemp, defaultValue } from 'app/shared/model/pad-pta-temp.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADPTATEMP_LIST_EXPORT: 'padPtaTemp/FETCH_PADPTATEMP_LIST_EXPORT',
   FETCH_PADPTATEMP_LIST: 'padPtaTemp/FETCH_PADPTATEMP_LIST',
   FETCH_PADPTATEMP: 'padPtaTemp/FETCH_PADPTATEMP',
   CREATE_PADPTATEMP: 'padPtaTemp/CREATE_PADPTATEMP',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type PadPtaTempState = Readonly<typeof initialState>;
 
+export interface IPadPtaTempBaseState {
+  baseFilters: any;
+  sessionId: any;
+  idPta: any;
+  idCid: any;
+  cidXPtaNovoId: any;
+}
+
+export interface IPadPtaTempUpdateState {
+  fieldsBase: IPadPtaTempBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PadPtaTempState = initialState, action): PadPtaTempState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADPTATEMP_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADPTATEMP_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADPTATEMP):
       return {
@@ -51,6 +66,7 @@ export default (state: PadPtaTempState = initialState, action): PadPtaTempState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADPTATEMP_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADPTATEMP_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADPTATEMP):
     case FAILURE(ACTION_TYPES.CREATE_PADPTATEMP):
@@ -109,34 +125,23 @@ export type ICrudGetAllActionPadPtaTemp<T> = (
   sessionId?: any,
   idPta?: any,
   idCid?: any,
-  idUsuario?: any,
   cidXPtaNovoId?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadPtaTemp<IPadPtaTemp> = (
-  sessionId,
-  idPta,
-  idCid,
-  idUsuario,
-  cidXPtaNovoId,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionPadPtaTemp<IPadPtaTemp> = (sessionId, idPta, idCid, cidXPtaNovoId, page, size, sort) => {
   const sessionIdRequest = sessionId ? `sessionId.contains=${sessionId}&` : '';
   const idPtaRequest = idPta ? `idPta.contains=${idPta}&` : '';
   const idCidRequest = idCid ? `idCid.contains=${idCid}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const cidXPtaNovoIdRequest = cidXPtaNovoId ? `cidXPtaNovoId.contains=${cidXPtaNovoId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADPTATEMP_LIST,
     payload: axios.get<IPadPtaTemp>(
-      `${requestUrl}${sessionIdRequest}${idPtaRequest}${idCidRequest}${idUsuarioRequest}${cidXPtaNovoIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${sessionIdRequest}${idPtaRequest}${idCidRequest}${cidXPtaNovoIdRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -145,6 +150,21 @@ export const getEntity: ICrudGetAction<IPadPtaTemp> = id => {
   return {
     type: ACTION_TYPES.FETCH_PADPTATEMP,
     payload: axios.get<IPadPtaTemp>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPadPtaTemp<IPadPtaTemp> = (sessionId, idPta, idCid, cidXPtaNovoId, page, size, sort) => {
+  const sessionIdRequest = sessionId ? `sessionId.contains=${sessionId}&` : '';
+  const idPtaRequest = idPta ? `idPta.contains=${idPta}&` : '';
+  const idCidRequest = idCid ? `idCid.contains=${idCid}&` : '';
+  const cidXPtaNovoIdRequest = cidXPtaNovoId ? `cidXPtaNovoId.contains=${cidXPtaNovoId}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADPTATEMP_LIST,
+    payload: axios.get<IPadPtaTemp>(
+      `${requestUrl}${sessionIdRequest}${idPtaRequest}${idCidRequest}${cidXPtaNovoIdRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -183,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<IPadPtaTemp> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadPtaTempState = (location): IPadPtaTempBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const sessionId = url.searchParams.get('sessionId') || '';
+  const idPta = url.searchParams.get('idPta') || '';
+  const idCid = url.searchParams.get('idCid') || '';
+  const cidXPtaNovoId = url.searchParams.get('cidXPtaNovoId') || '';
+
+  return {
+    baseFilters,
+    sessionId,
+    idPta,
+    idCid,
+    cidXPtaNovoId
+  };
+};

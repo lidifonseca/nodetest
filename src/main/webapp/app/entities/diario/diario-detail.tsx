@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './diario.reducer';
+import { getEntity, IDiarioBaseState, getDiarioState } from './diario.reducer';
 import { IDiario } from 'app/shared/model/diario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IDiarioState {
+  fieldsBase: IDiarioBaseState;
+}
+
 export interface IDiarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class DiarioDetail extends React.Component<IDiarioDetailProps> {
+export class DiarioDetail extends React.Component<IDiarioDetailProps, IDiarioState> {
   constructor(props: Readonly<IDiarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getDiarioState(this.props.location)
     };
   }
 
@@ -76,32 +81,6 @@ export class DiarioDetail extends React.Component<IDiarioDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{diarioEntity.gerarPdf}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.diario.idUsuario">Id Usuario</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{diarioEntity.idUsuario ? diarioEntity.idUsuario.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.diario.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{diarioEntity.idPaciente ? diarioEntity.idPaciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

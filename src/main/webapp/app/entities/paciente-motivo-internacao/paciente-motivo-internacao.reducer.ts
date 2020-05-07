@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteMotivoInternacao, defaultValue } from 'app/shared/model/paciente-motivo-internacao.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEMOTIVOINTERNACAO_LIST_EXPORT: 'pacienteMotivoInternacao/FETCH_PACIENTEMOTIVOINTERNACAO_LIST_EXPORT',
   FETCH_PACIENTEMOTIVOINTERNACAO_LIST: 'pacienteMotivoInternacao/FETCH_PACIENTEMOTIVOINTERNACAO_LIST',
   FETCH_PACIENTEMOTIVOINTERNACAO: 'pacienteMotivoInternacao/FETCH_PACIENTEMOTIVOINTERNACAO',
   CREATE_PACIENTEMOTIVOINTERNACAO: 'pacienteMotivoInternacao/CREATE_PACIENTEMOTIVOINTERNACAO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PacienteMotivoInternacaoState = Readonly<typeof initialState>;
 
+export interface IPacienteMotivoInternacaoBaseState {
+  baseFilters: any;
+  idPaciente: any;
+  idMotivoInternacao: any;
+}
+
+export interface IPacienteMotivoInternacaoUpdateState {
+  fieldsBase: IPacienteMotivoInternacaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteMotivoInternacaoState = initialState, action): PacienteMotivoInternacaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO):
       return {
@@ -51,6 +64,7 @@ export default (state: PacienteMotivoInternacaoState = initialState, action): Pa
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEMOTIVOINTERNACAO):
@@ -108,7 +122,6 @@ const apiUrl = 'api/paciente-motivo-internacaos';
 export type ICrudGetAllActionPacienteMotivoInternacao<T> = (
   idPaciente?: any,
   idMotivoInternacao?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -117,20 +130,18 @@ export type ICrudGetAllActionPacienteMotivoInternacao<T> = (
 export const getEntities: ICrudGetAllActionPacienteMotivoInternacao<IPacienteMotivoInternacao> = (
   idPaciente,
   idMotivoInternacao,
-  idUsuario,
   page,
   size,
   sort
 ) => {
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const idMotivoInternacaoRequest = idMotivoInternacao ? `idMotivoInternacao.contains=${idMotivoInternacao}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO_LIST,
     payload: axios.get<IPacienteMotivoInternacao>(
-      `${requestUrl}${idPacienteRequest}${idMotivoInternacaoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idMotivoInternacaoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -139,6 +150,25 @@ export const getEntity: ICrudGetAction<IPacienteMotivoInternacao> = id => {
   return {
     type: ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO,
     payload: axios.get<IPacienteMotivoInternacao>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPacienteMotivoInternacao<IPacienteMotivoInternacao> = (
+  idPaciente,
+  idMotivoInternacao,
+  page,
+  size,
+  sort
+) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const idMotivoInternacaoRequest = idMotivoInternacao ? `idMotivoInternacao.contains=${idMotivoInternacao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEMOTIVOINTERNACAO_LIST,
+    payload: axios.get<IPacienteMotivoInternacao>(
+      `${requestUrl}${idPacienteRequest}${idMotivoInternacaoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -177,3 +207,16 @@ export const deleteEntity: ICrudDeleteAction<IPacienteMotivoInternacao> = id => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteMotivoInternacaoState = (location): IPacienteMotivoInternacaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idMotivoInternacao = url.searchParams.get('idMotivoInternacao') || '';
+
+  return {
+    baseFilters,
+    idPaciente,
+    idMotivoInternacao
+  };
+};

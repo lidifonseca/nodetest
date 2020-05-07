@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-unidade.reducer';
+import { getEntity, ITipoUnidadeBaseState, getTipoUnidadeState } from './tipo-unidade.reducer';
 import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoUnidadeState {
+  fieldsBase: ITipoUnidadeBaseState;
+}
+
 export interface ITipoUnidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoUnidadeDetail extends React.Component<ITipoUnidadeDetailProps> {
+export class TipoUnidadeDetail extends React.Component<ITipoUnidadeDetailProps, ITipoUnidadeState> {
   constructor(props: Readonly<ITipoUnidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoUnidadeState(this.props.location)
     };
   }
 

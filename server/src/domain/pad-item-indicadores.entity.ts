@@ -4,36 +4,28 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import CidXPtaNovoPadItemIndi from './cid-x-pta-novo-pad-item-indi.entity';
-
 /**
  * A PadItemIndicadores.
  */
-@Entity('pad_item_indicadores')
+@Entity('tb_pad_item_indicadores')
 export default class PadItemIndicadores extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_unidade_medida' })
+  @Column({ type: 'integer', name: 'ID_UNIDADE_MEDIDA' })
   idUnidadeMedida: number;
 
-  @Column({ name: 'titulo', length: 45, nullable: false })
+  @Column({ name: 'TITULO', length: 45, nullable: false })
   titulo: string;
 
-  @Column({ type: 'blob', name: 'descricao' })
-  descricao: any;
+  @Column({ name: 'DESCRICAO' })
+  descricao: string;
 
-  @Column({ type: 'integer', name: 'meta' })
+  @Column({ type: 'integer', name: 'META' })
   meta: number;
 
-  @Column({ type: 'integer', name: 'maximo_st' })
+  @Column({ type: 'integer', name: 'MAXIMO_ST' })
   maximoSt: number;
 
-  @Column({ type: 'integer', name: 'minimo_st' })
+  @Column({ type: 'integer', name: 'MINIMO_ST' })
   minimoSt: number;
-
-  @OneToMany(
-    type => CidXPtaNovoPadItemIndi,
-    other => other.padItemIndicadoresId
-  )
-  cidXPtaNovoPadItemIndis: CidXPtaNovoPadItemIndi[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

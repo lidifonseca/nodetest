@@ -6,13 +6,6 @@ import { AtendimentoRepository } from '../repository/atendimento.repository';
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
-relationshipNames.push('idPaciente');
-relationshipNames.push('idOperadora');
-relationshipNames.push('idEspecialidade');
-relationshipNames.push('idPadItem');
-relationshipNames.push('idStatusAtendimento');
-relationshipNames.push('idPeriodo');
-relationshipNames.push('idCidade');
 
 @Injectable()
 export class AtendimentoService {

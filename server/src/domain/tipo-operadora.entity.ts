@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A TipoOperadora.
  */
-@Entity('tipo_operadora')
+@Entity('tb_tipo_operadora')
 export default class TipoOperadora extends BaseEntity {
-  @Column({ name: 'tipo', length: 50 })
+  @Column({ name: 'TIPO', length: 50 })
   tipo: string;
 
-  @Column({ name: 'ativo', length: 1 })
+  @Column({ name: 'ATIVO', length: 1 })
   ativo: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

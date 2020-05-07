@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './acoes-respostas.reducer';
+import { getEntity, IAcoesRespostasBaseState, getAcoesRespostasState } from './acoes-respostas.reducer';
 import { IAcoesRespostas } from 'app/shared/model/acoes-respostas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAcoesRespostasState {
+  fieldsBase: IAcoesRespostasBaseState;
+}
+
 export interface IAcoesRespostasDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AcoesRespostasDetail extends React.Component<IAcoesRespostasDetailProps> {
+export class AcoesRespostasDetail extends React.Component<IAcoesRespostasDetailProps, IAcoesRespostasState> {
   constructor(props: Readonly<IAcoesRespostasDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAcoesRespostasState(this.props.location)
     };
   }
 
@@ -124,32 +129,6 @@ export class AcoesRespostasDetail extends React.Component<IAcoesRespostasDetailP
                       </Col>
                       <Col md="9">
                         <dd>{acoesRespostasEntity.tipoCampo2}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.acoesRespostas.respostasId">Respostas Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{acoesRespostasEntity.respostasId ? acoesRespostasEntity.respostasId.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionarioId">Perguntas Questionario Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{acoesRespostasEntity.perguntasQuestionarioId ? acoesRespostasEntity.perguntasQuestionarioId.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

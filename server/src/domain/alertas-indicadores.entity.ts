@@ -4,27 +4,22 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import CidXPtaNovoPadItemIndi from './cid-x-pta-novo-pad-item-indi.entity';
-
 /**
  * A AlertasIndicadores.
  */
-@Entity('alertas_indicadores')
+@Entity('tb_alertas_indicadores')
 export default class AlertasIndicadores extends BaseEntity {
-  @Column({ type: 'double', name: 'pontuacao' })
+  @Column({ type: 'double', name: 'PONTUACAO' })
   pontuacao: number;
 
-  @Column({ type: 'boolean', name: 'alteracao_esperada' })
+  @Column({ type: 'boolean', name: 'ALTERACAO_ESPERADA' })
   alteracaoEsperada: boolean;
 
-  @Column({ name: 'observacoes', length: 255 })
+  @Column({ name: 'OBSERVACOES', length: 255 })
   observacoes: string;
 
-  @Column({ type: 'integer', name: 'usuario_id' })
+  @Column({ type: 'integer', name: 'USUARIO_ID' })
   usuarioId: number;
-
-  @ManyToOne(type => CidXPtaNovoPadItemIndi)
-  padItemIndicadoresId: CidXPtaNovoPadItemIndi;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

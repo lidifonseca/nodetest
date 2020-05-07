@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './maio.reducer';
+import { getEntity, IMaioBaseState, getMaioState } from './maio.reducer';
 import { IMaio } from 'app/shared/model/maio.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IMaioState {
+  fieldsBase: IMaioBaseState;
+}
+
 export interface IMaioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class MaioDetail extends React.Component<IMaioDetailProps> {
+export class MaioDetail extends React.Component<IMaioDetailProps, IMaioState> {
   constructor(props: Readonly<IMaioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getMaioState(this.props.location)
     };
   }
 

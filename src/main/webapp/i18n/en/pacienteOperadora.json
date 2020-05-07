@@ -3,23 +3,21 @@
     "pacienteOperadora": {
       "home": {
         "title": "Paciente Operadoras",
-        "createLabel": "Criar novo Paciente Operadora",
-        "createOrEditLabel": "Criar ou editar Paciente Operadora",
-        "notFound": "Nenhum Paciente Operadora encontrado"
+        "createLabel": "Create a new Paciente Operadora",
+        "createOrEditLabel": "Create or edit a Paciente Operadora",
+        "notFound": "No Paciente Operadoras found"
       },
-      "created": "Um novo Paciente Operadora foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Operadora foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Operadora foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Operadora is created with identifier {{ param }}",
+      "updated": "A Paciente Operadora is updated with identifier {{ param }}",
+      "deleted": "A Paciente Operadora is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Operadora {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Operadora {{ id }}?"
       },
       "detail": {
         "title": "Paciente Operadora"
       },
       "registro": "Registro",
-      "ativo": "Ativo",
-      "idPaciente": "Id Paciente",
-      "idOperadora": "Id Operadora"
+      "ativo": "Ativo"
     }
   }
 }

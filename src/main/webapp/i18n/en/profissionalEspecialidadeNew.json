@@ -3,15 +3,15 @@
     "profissionalEspecialidadeNew": {
       "home": {
         "title": "Profissional Especialidade News",
-        "createLabel": "Criar novo Profissional Especialidade New",
-        "createOrEditLabel": "Criar ou editar Profissional Especialidade New",
-        "notFound": "Nenhum Profissional Especialidade New encontrado"
+        "createLabel": "Create a new Profissional Especialidade New",
+        "createOrEditLabel": "Create or edit a Profissional Especialidade New",
+        "notFound": "No Profissional Especialidade News found"
       },
-      "created": "Um novo Profissional Especialidade New foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Especialidade New foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Especialidade New foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Especialidade New is created with identifier {{ param }}",
+      "updated": "A Profissional Especialidade New is updated with identifier {{ param }}",
+      "deleted": "A Profissional Especialidade New is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Especialidade New {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Especialidade New {{ id }}?"
       },
       "detail": {
         "title": "Profissional Especialidade New"

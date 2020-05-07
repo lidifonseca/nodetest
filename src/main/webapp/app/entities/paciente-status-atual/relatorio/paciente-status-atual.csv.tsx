@@ -80,7 +80,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
         dataStatus: '',
         observacao: '',
         ativo: '',
-        idUsuario: '',
         paciente: '',
         status: ''
       },
@@ -136,9 +135,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'paciente=' +
       this.state.paciente +
       '&' +
@@ -152,18 +148,8 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataStatus, observacao, ativo, idUsuario, paciente, status, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(
-      dataStatus,
-      observacao,
-      ativo,
-      idUsuario,
-      paciente,
-      status,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { dataStatus, observacao, ativo, paciente, status, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(dataStatus, observacao, ativo, paciente, status, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   confirmExport() {}

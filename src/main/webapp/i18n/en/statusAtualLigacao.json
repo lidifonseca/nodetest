@@ -3,15 +3,15 @@
     "statusAtualLigacao": {
       "home": {
         "title": "Status Atual Ligacaos",
-        "createLabel": "Criar novo Status Atual Ligacao",
-        "createOrEditLabel": "Criar ou editar Status Atual Ligacao",
-        "notFound": "Nenhum Status Atual Ligacao encontrado"
+        "createLabel": "Create a new Status Atual Ligacao",
+        "createOrEditLabel": "Create or edit a Status Atual Ligacao",
+        "notFound": "No Status Atual Ligacaos found"
       },
-      "created": "Um novo Status Atual Ligacao foi criado com o identificador {{ param }}",
-      "updated": "Um Status Atual Ligacao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Status Atual Ligacao foi excluído com o identificador {{ param }}",
+      "created": "A new Status Atual Ligacao is created with identifier {{ param }}",
+      "updated": "A Status Atual Ligacao is updated with identifier {{ param }}",
+      "deleted": "A Status Atual Ligacao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Status Atual Ligacao {{ id }}?"
+        "question": "Are you sure you want to delete Status Atual Ligacao {{ id }}?"
       },
       "detail": {
         "title": "Status Atual Ligacao"

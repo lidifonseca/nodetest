@@ -68,7 +68,9 @@ export class ApiReturnController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() apiReturn: ApiReturn): Promise<ApiReturn> {
+    console.info(apiReturn);
     const created = await this.apiReturnService.save(apiReturn);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ApiReturn', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ApiReturnController {
   })
   async put(@Req() req: Request, @Body() apiReturn: ApiReturn): Promise<ApiReturn> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ApiReturn', apiReturn.id);
+
     return await this.apiReturnService.update(apiReturn);
   }
 

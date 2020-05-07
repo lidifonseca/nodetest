@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IResultados, defaultValue } from 'app/shared/model/resultados.model';
 
 export const ACTION_TYPES = {
+  FETCH_RESULTADOS_LIST_EXPORT: 'resultados/FETCH_RESULTADOS_LIST_EXPORT',
   FETCH_RESULTADOS_LIST: 'resultados/FETCH_RESULTADOS_LIST',
   FETCH_RESULTADOS: 'resultados/FETCH_RESULTADOS',
   CREATE_RESULTADOS: 'resultados/CREATE_RESULTADOS',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type ResultadosState = Readonly<typeof initialState>;
 
+export interface IResultadosBaseState {
+  baseFilters: any;
+  objetivo: any;
+  valor: any;
+  prazo: any;
+  complemento: any;
+  dataCadastro: any;
+  dataVencimentoPrazo: any;
+}
+
+export interface IResultadosUpdateState {
+  fieldsBase: IResultadosBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ResultadosState = initialState, action): ResultadosState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_RESULTADOS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_RESULTADOS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_RESULTADOS):
       return {
@@ -51,6 +68,7 @@ export default (state: ResultadosState = initialState, action): ResultadosState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_RESULTADOS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_RESULTADOS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_RESULTADOS):
     case FAILURE(ACTION_TYPES.CREATE_RESULTADOS):
@@ -112,7 +130,6 @@ export type ICrudGetAllActionResultados<T> = (
   complemento?: any,
   dataCadastro?: any,
   dataVencimentoPrazo?: any,
-  alertasResultadosEsperados?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -125,7 +142,6 @@ export const getEntities: ICrudGetAllActionResultados<IResultados> = (
   complemento,
   dataCadastro,
   dataVencimentoPrazo,
-  alertasResultadosEsperados,
   page,
   size,
   sort
@@ -136,15 +152,12 @@ export const getEntities: ICrudGetAllActionResultados<IResultados> = (
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const dataCadastroRequest = dataCadastro ? `dataCadastro.contains=${dataCadastro}&` : '';
   const dataVencimentoPrazoRequest = dataVencimentoPrazo ? `dataVencimentoPrazo.equals=${dataVencimentoPrazo}&` : '';
-  const alertasResultadosEsperadosRequest = alertasResultadosEsperados
-    ? `alertasResultadosEsperados.equals=${alertasResultadosEsperados}&`
-    : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESULTADOS_LIST,
     payload: axios.get<IResultados>(
-      `${requestUrl}${objetivoRequest}${valorRequest}${prazoRequest}${complementoRequest}${dataCadastroRequest}${dataVencimentoPrazoRequest}${alertasResultadosEsperadosRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${objetivoRequest}${valorRequest}${prazoRequest}${complementoRequest}${dataCadastroRequest}${dataVencimentoPrazoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -153,6 +166,33 @@ export const getEntity: ICrudGetAction<IResultados> = id => {
   return {
     type: ACTION_TYPES.FETCH_RESULTADOS,
     payload: axios.get<IResultados>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionResultados<IResultados> = (
+  objetivo,
+  valor,
+  prazo,
+  complemento,
+  dataCadastro,
+  dataVencimentoPrazo,
+  page,
+  size,
+  sort
+) => {
+  const objetivoRequest = objetivo ? `objetivo.contains=${objetivo}&` : '';
+  const valorRequest = valor ? `valor.contains=${valor}&` : '';
+  const prazoRequest = prazo ? `prazo.contains=${prazo}&` : '';
+  const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
+  const dataCadastroRequest = dataCadastro ? `dataCadastro.contains=${dataCadastro}&` : '';
+  const dataVencimentoPrazoRequest = dataVencimentoPrazo ? `dataVencimentoPrazo.equals=${dataVencimentoPrazo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_RESULTADOS_LIST,
+    payload: axios.get<IResultados>(
+      `${requestUrl}${objetivoRequest}${valorRequest}${prazoRequest}${complementoRequest}${dataCadastroRequest}${dataVencimentoPrazoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -191,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<IResultados> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getResultadosState = (location): IResultadosBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const objetivo = url.searchParams.get('objetivo') || '';
+  const valor = url.searchParams.get('valor') || '';
+  const prazo = url.searchParams.get('prazo') || '';
+  const complemento = url.searchParams.get('complemento') || '';
+  const dataCadastro = url.searchParams.get('dataCadastro') || '';
+  const dataVencimentoPrazo = url.searchParams.get('dataVencimentoPrazo') || '';
+
+  return {
+    baseFilters,
+    objetivo,
+    valor,
+    prazo,
+    complemento,
+    dataCadastro,
+    dataVencimentoPrazo
+  };
+};

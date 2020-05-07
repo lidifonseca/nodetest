@@ -8,21 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './uf.reducer';
+import { IUfUpdateState, getEntity, getUfState, IUfBaseState, updateEntity, createEntity, reset } from './uf.reducer';
 import { IUf } from 'app/shared/model/uf.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IUfUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IUfUpdateState {
-  isNew: boolean;
-}
-
 export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
   constructor(props: Readonly<IUfUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getUfState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +38,20 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['siglaUf'] ? '&siglaUf=' + fieldsBase['siglaUf'] : '') +
+      (fieldsBase['descrUf'] ? '&descrUf=' + fieldsBase['descrUf'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { ufEntity } = this.props;
@@ -57,13 +69,14 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
   };
 
   handleClose = () => {
-    this.props.history.push('/uf');
+    this.props.history.push('/uf?' + this.getFiltersURL());
   };
 
   render() {
     const { ufEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +109,14 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/uf" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/uf?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +131,7 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,51 +147,46 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'siglaUf' ? (
+                          <Col md="siglaUf">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="siglaUfLabel" for="uf-siglaUf">
+                                    <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="uf-siglaUf" type="text" name="siglaUf" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="siglaUf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="siglaUfLabel" for="uf-siglaUf">
-                                <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="uf-siglaUf"
-                                type="text"
-                                name="siglaUf"
-                                validate={{
-                                  maxLength: { value: 4, errorMessage: translate('entity.validation.maxlength', { max: 4 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="descrUfLabel" for="uf-descrUf">
-                                <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="uf-descrUf"
-                                type="text"
-                                name="descrUf"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'descrUf' ? (
+                          <Col md="descrUf">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descrUfLabel" for="uf-descrUf">
+                                    <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="uf-descrUf" type="text" name="descrUf" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descrUf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

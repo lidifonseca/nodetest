@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-arquivo.reducer';
+import { getEntity, IProfissionalArquivoBaseState, getProfissionalArquivoState } from './profissional-arquivo.reducer';
 import { IProfissionalArquivo } from 'app/shared/model/profissional-arquivo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalArquivoState {
+  fieldsBase: IProfissionalArquivoBaseState;
+}
+
 export interface IProfissionalArquivoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalArquivoDetail extends React.Component<IProfissionalArquivoDetailProps> {
+export class ProfissionalArquivoDetail extends React.Component<IProfissionalArquivoDetailProps, IProfissionalArquivoState> {
   constructor(props: Readonly<IProfissionalArquivoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalArquivoState(this.props.location)
     };
   }
 

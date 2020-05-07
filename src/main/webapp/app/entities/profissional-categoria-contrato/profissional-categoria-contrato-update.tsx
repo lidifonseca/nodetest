@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './profissional-categoria-contrato.reducer';
+import {
+  IProfissionalCategoriaContratoUpdateState,
+  getEntity,
+  getProfissionalCategoriaContratoState,
+  IProfissionalCategoriaContratoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './profissional-categoria-contrato.reducer';
 import { IProfissionalCategoriaContrato } from 'app/shared/model/profissional-categoria-contrato.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProfissionalCategoriaContratoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IProfissionalCategoriaContratoUpdateState {
-  isNew: boolean;
-}
 
 export class ProfissionalCategoriaContratoUpdate extends React.Component<
   IProfissionalCategoriaContratoUpdateProps,
@@ -25,7 +29,9 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
 > {
   constructor(props: Readonly<IProfissionalCategoriaContratoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProfissionalCategoriaContratoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,21 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
+      (fieldsBase['idCategoriaContrato'] ? '&idCategoriaContrato=' + fieldsBase['idCategoriaContrato'] : '') +
+      (fieldsBase['aceito'] ? '&aceito=' + fieldsBase['aceito'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalCategoriaContratoEntity } = this.props;
@@ -60,13 +81,14 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-categoria-contrato');
+    this.props.history.push('/profissional-categoria-contrato?' + this.getFiltersURL());
   };
 
   render() {
     const { profissionalCategoriaContratoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +126,7 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/profissional-categoria-contrato"
+                  to={'/profissional-categoria-contrato?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +145,7 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,76 +168,83 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-categoria-contrato-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-categoria-contrato-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idProfissionalLabel" for="profissional-categoria-contrato-idProfissional">
-                                <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">
-                                  Id Profissional
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-categoria-contrato-idProfissional"
-                                type="text"
-                                name="idProfissional"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idCategoriaContrato' ? (
+                          <Col md="idCategoriaContrato">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idCategoriaContratoLabel"
+                                    for="profissional-categoria-contrato-idCategoriaContrato"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">
+                                      Id Categoria Contrato
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-categoria-contrato-idCategoriaContrato"
+                                    type="string"
+                                    className="form-control"
+                                    name="idCategoriaContrato"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCategoriaContrato" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="idCategoriaContratoLabel"
-                                for="profissional-categoria-contrato-idCategoriaContrato"
-                              >
-                                <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">
-                                  Id Categoria Contrato
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-categoria-contrato-idCategoriaContrato"
-                                type="string"
-                                className="form-control"
-                                name="idCategoriaContrato"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="aceitoLabel" for="profissional-categoria-contrato-aceito">
-                                <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-categoria-contrato-aceito" type="string" className="form-control" name="aceito" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'aceito' ? (
+                          <Col md="aceito">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="aceitoLabel" for="profissional-categoria-contrato-aceito">
+                                    <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-categoria-contrato-aceito"
+                                    type="string"
+                                    className="form-control"
+                                    name="aceito"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="aceito" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

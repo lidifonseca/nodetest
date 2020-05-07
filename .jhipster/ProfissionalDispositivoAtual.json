@@ -82,10 +82,6 @@
         },
         {
             "fieldName": "entubacaoOrotraqueal",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "idUsuario",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "required"
@@ -93,7 +89,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503003900",
+    "changelogDate": "20200507121200",
     "entityTableName": "profissional_dispositivo_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -7,9 +7,9 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A TempoExperiencia.
  */
-@Entity('tempo_experiencia')
+@Entity('tb_tempo_experiencia')
 export default class TempoExperiencia extends BaseEntity {
-  @Column({ name: 'tempo_experiencia', length: 60 })
+  @Column({ name: 'TEMPO_EXPERIENCIA', length: 60 })
   tempoExperiencia: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

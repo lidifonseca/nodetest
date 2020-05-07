@@ -14,15 +14,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItem",
-            "otherEntityRelationshipName": "idPeriodicidade",
-            "relationshipName": "padItem"
-        }
-    ],
-    "changelogDate": "20200503003100",
+    "relationships": [],
+    "changelogDate": "20200507120400",
     "entityTableName": "periodicidade",
     "dto": "mapstruct",
     "pagination": "pagination",

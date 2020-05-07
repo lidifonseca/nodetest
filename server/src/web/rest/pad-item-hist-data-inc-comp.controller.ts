@@ -68,7 +68,9 @@ export class PadItemHistDataIncCompController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() padItemHistDataIncComp: PadItemHistDataIncComp): Promise<PadItemHistDataIncComp> {
+    console.info(padItemHistDataIncComp);
     const created = await this.padItemHistDataIncCompService.save(padItemHistDataIncComp);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadItemHistDataIncComp', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PadItemHistDataIncCompController {
   })
   async put(@Req() req: Request, @Body() padItemHistDataIncComp: PadItemHistDataIncComp): Promise<PadItemHistDataIncComp> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadItemHistDataIncComp', padItemHistDataIncComp.id);
+
     return await this.padItemHistDataIncCompService.update(padItemHistDataIncComp);
   }
 

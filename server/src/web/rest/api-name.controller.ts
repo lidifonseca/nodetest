@@ -68,7 +68,9 @@ export class ApiNameController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() apiName: ApiName): Promise<ApiName> {
+    console.info(apiName);
     const created = await this.apiNameService.save(apiName);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ApiName', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ApiNameController {
   })
   async put(@Req() req: Request, @Body() apiName: ApiName): Promise<ApiName> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ApiName', apiName.id);
+
     return await this.apiNameService.update(apiName);
   }
 

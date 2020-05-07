@@ -3,15 +3,15 @@
     "unidadeEasyAreaAtuacao": {
       "home": {
         "title": "Unidade Easy Area Atuacaos",
-        "createLabel": "Criar novo Unidade Easy Area Atuacao",
-        "createOrEditLabel": "Criar ou editar Unidade Easy Area Atuacao",
-        "notFound": "Nenhum Unidade Easy Area Atuacao encontrado"
+        "createLabel": "Create a new Unidade Easy Area Atuacao",
+        "createOrEditLabel": "Create or edit a Unidade Easy Area Atuacao",
+        "notFound": "No Unidade Easy Area Atuacaos found"
       },
-      "created": "Um novo Unidade Easy Area Atuacao foi criado com o identificador {{ param }}",
-      "updated": "Um Unidade Easy Area Atuacao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Unidade Easy Area Atuacao foi excluído com o identificador {{ param }}",
+      "created": "A new Unidade Easy Area Atuacao is created with identifier {{ param }}",
+      "updated": "A Unidade Easy Area Atuacao is updated with identifier {{ param }}",
+      "deleted": "A Unidade Easy Area Atuacao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Unidade Easy Area Atuacao {{ id }}?"
+        "question": "Are you sure you want to delete Unidade Easy Area Atuacao {{ id }}?"
       },
       "detail": {
         "title": "Unidade Easy Area Atuacao"

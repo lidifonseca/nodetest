@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './atendimento-glosado.reducer';
+import {
+  IAtendimentoGlosadoUpdateState,
+  getEntity,
+  getAtendimentoGlosadoState,
+  IAtendimentoGlosadoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './atendimento-glosado.reducer';
 import { IAtendimentoGlosado } from 'app/shared/model/atendimento-glosado.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAtendimentoGlosadoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IAtendimentoGlosadoUpdateState {
-  isNew: boolean;
-}
-
 export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosadoUpdateProps, IAtendimentoGlosadoUpdateState> {
   constructor(props: Readonly<IAtendimentoGlosadoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getAtendimentoGlosadoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idAtendimento'] ? '&idAtendimento=' + fieldsBase['idAtendimento'] : '') +
+      (fieldsBase['glosado'] ? '&glosado=' + fieldsBase['glosado'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { atendimentoGlosadoEntity } = this.props;
@@ -57,13 +77,14 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
   };
 
   handleClose = () => {
-    this.props.history.push('/atendimento-glosado');
+    this.props.history.push('/atendimento-glosado?' + this.getFiltersURL());
   };
 
   render() {
     const { atendimentoGlosadoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -98,7 +119,14 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/atendimento-glosado" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/atendimento-glosado?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -113,7 +141,7 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -129,68 +157,51 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="atendimento-glosado-idAtendimento">
+                                    <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="atendimento-glosado-idAtendimento"
+                                    type="string"
+                                    className="form-control"
+                                    name="idAtendimento"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idAtendimentoLabel" for="atendimento-glosado-idAtendimento">
-                                <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-glosado-idAtendimento"
-                                type="string"
-                                className="form-control"
-                                name="idAtendimento"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="glosadoLabel" for="atendimento-glosado-glosado">
-                                <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-glosado-glosado"
-                                type="text"
-                                name="glosado"
-                                validate={{
-                                  maxLength: { value: 1, errorMessage: translate('entity.validation.maxlength', { max: 1 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="atendimento-glosado-idUsuario">
-                                <Translate contentKey="generadorApp.atendimentoGlosado.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="atendimento-glosado-idUsuario" type="string" className="form-control" name="idUsuario" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'glosado' ? (
+                          <Col md="glosado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="glosadoLabel" for="atendimento-glosado-glosado">
+                                    <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-glosado-glosado" type="text" name="glosado" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="glosado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

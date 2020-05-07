@@ -68,7 +68,9 @@ export class NotificacaoConfigController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() notificacaoConfig: NotificacaoConfig): Promise<NotificacaoConfig> {
+    console.info(notificacaoConfig);
     const created = await this.notificacaoConfigService.save(notificacaoConfig);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'NotificacaoConfig', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class NotificacaoConfigController {
   })
   async put(@Req() req: Request, @Body() notificacaoConfig: NotificacaoConfig): Promise<NotificacaoConfig> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'NotificacaoConfig', notificacaoConfig.id);
+
     return await this.notificacaoConfigService.update(notificacaoConfig);
   }
 

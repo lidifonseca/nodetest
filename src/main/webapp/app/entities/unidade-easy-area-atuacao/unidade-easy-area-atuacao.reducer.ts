@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IUnidadeEasyAreaAtuacao, defaultValue } from 'app/shared/model/unidade-easy-area-atuacao.model';
 
 export const ACTION_TYPES = {
+  FETCH_UNIDADEEASYAREAATUACAO_LIST_EXPORT: 'unidadeEasyAreaAtuacao/FETCH_UNIDADEEASYAREAATUACAO_LIST_EXPORT',
   FETCH_UNIDADEEASYAREAATUACAO_LIST: 'unidadeEasyAreaAtuacao/FETCH_UNIDADEEASYAREAATUACAO_LIST',
   FETCH_UNIDADEEASYAREAATUACAO: 'unidadeEasyAreaAtuacao/FETCH_UNIDADEEASYAREAATUACAO',
   CREATE_UNIDADEEASYAREAATUACAO: 'unidadeEasyAreaAtuacao/CREATE_UNIDADEEASYAREAATUACAO',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type UnidadeEasyAreaAtuacaoState = Readonly<typeof initialState>;
 
+export interface IUnidadeEasyAreaAtuacaoBaseState {
+  baseFilters: any;
+  cepInicial: any;
+  cepFinal: any;
+  unidade: any;
+}
+
+export interface IUnidadeEasyAreaAtuacaoUpdateState {
+  fieldsBase: IUnidadeEasyAreaAtuacaoBaseState;
+  isNew: boolean;
+  unidadeId: string;
+}
+
 // Reducer
 
 export default (state: UnidadeEasyAreaAtuacaoState = initialState, action): UnidadeEasyAreaAtuacaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO):
       return {
@@ -51,6 +66,7 @@ export default (state: UnidadeEasyAreaAtuacaoState = initialState, action): Unid
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO):
     case FAILURE(ACTION_TYPES.CREATE_UNIDADEEASYAREAATUACAO):
@@ -142,6 +158,27 @@ export const getEntity: ICrudGetAction<IUnidadeEasyAreaAtuacao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionUnidadeEasyAreaAtuacao<IUnidadeEasyAreaAtuacao> = (
+  cepInicial,
+  cepFinal,
+  unidade,
+  page,
+  size,
+  sort
+) => {
+  const cepInicialRequest = cepInicial ? `cepInicial.contains=${cepInicial}&` : '';
+  const cepFinalRequest = cepFinal ? `cepFinal.contains=${cepFinal}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_UNIDADEEASYAREAATUACAO_LIST,
+    payload: axios.get<IUnidadeEasyAreaAtuacao>(
+      `${requestUrl}${cepInicialRequest}${cepFinalRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IUnidadeEasyAreaAtuacao> = entity => async dispatch => {
   entity = {
     ...entity,
@@ -178,3 +215,19 @@ export const deleteEntity: ICrudDeleteAction<IUnidadeEasyAreaAtuacao> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getUnidadeEasyAreaAtuacaoState = (location): IUnidadeEasyAreaAtuacaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const cepInicial = url.searchParams.get('cepInicial') || '';
+  const cepFinal = url.searchParams.get('cepFinal') || '';
+
+  const unidade = url.searchParams.get('unidade') || '';
+
+  return {
+    baseFilters,
+    cepInicial,
+    cepFinal,
+    unidade
+  };
+};

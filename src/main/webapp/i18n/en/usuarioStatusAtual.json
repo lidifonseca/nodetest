@@ -3,20 +3,19 @@
     "usuarioStatusAtual": {
       "home": {
         "title": "Usuario Status Atuals",
-        "createLabel": "Criar novo Usuario Status Atual",
-        "createOrEditLabel": "Criar ou editar Usuario Status Atual",
-        "notFound": "Nenhum Usuario Status Atual encontrado"
+        "createLabel": "Create a new Usuario Status Atual",
+        "createOrEditLabel": "Create or edit a Usuario Status Atual",
+        "notFound": "No Usuario Status Atuals found"
       },
-      "created": "Um novo Usuario Status Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Usuario Status Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Usuario Status Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Usuario Status Atual is created with identifier {{ param }}",
+      "updated": "A Usuario Status Atual is updated with identifier {{ param }}",
+      "deleted": "A Usuario Status Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Usuario Status Atual {{ id }}?"
+        "question": "Are you sure you want to delete Usuario Status Atual {{ id }}?"
       },
       "detail": {
         "title": "Usuario Status Atual"
       },
-      "idUsuario": "Id Usuario",
       "statusAtual": "Status Atual",
       "obs": "Obs",
       "ativo": "Ativo"

@@ -4,8 +4,6 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import CepbrCidade from './cepbr-cidade.entity';
-
 /**
  * A CepbrEstado.
  */
@@ -19,12 +17,6 @@ export default class CepbrEstado extends BaseEntity {
 
   @Column({ name: 'cod_ibge', length: 10, nullable: false })
   codIbge: string;
-
-  @OneToMany(
-    type => CepbrCidade,
-    other => other.uf
-  )
-  cepbrCidades: CepbrCidade[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

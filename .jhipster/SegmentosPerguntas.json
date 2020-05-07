@@ -10,15 +10,8 @@
             "fieldValidateRulesMaxlength": "100"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "perguntasQuestionario",
-            "otherEntityRelationshipName": "segmentosPerguntasId",
-            "relationshipName": "perguntasQuestionario"
-        }
-    ],
-    "changelogDate": "20200503010100",
+    "relationships": [],
+    "changelogDate": "20200507123400",
     "entityTableName": "segmentos_perguntas",
     "dto": "mapstruct",
     "pagination": "pagination",

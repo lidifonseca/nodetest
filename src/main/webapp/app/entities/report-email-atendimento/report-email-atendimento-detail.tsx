@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './report-email-atendimento.reducer';
+import { getEntity, IReportEmailAtendimentoBaseState, getReportEmailAtendimentoState } from './report-email-atendimento.reducer';
 import { IReportEmailAtendimento } from 'app/shared/model/report-email-atendimento.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IReportEmailAtendimentoState {
+  fieldsBase: IReportEmailAtendimentoBaseState;
+}
+
 export interface IReportEmailAtendimentoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ReportEmailAtendimentoDetail extends React.Component<IReportEmailAtendimentoDetailProps> {
+export class ReportEmailAtendimentoDetail extends React.Component<IReportEmailAtendimentoDetailProps, IReportEmailAtendimentoState> {
   constructor(props: Readonly<IReportEmailAtendimentoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getReportEmailAtendimentoState(this.props.location)
     };
   }
 

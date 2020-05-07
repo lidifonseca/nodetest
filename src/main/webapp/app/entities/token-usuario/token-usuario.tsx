@@ -31,18 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './token-usuario.reducer';
+import { getTokenUsuarioState, ITokenUsuarioBaseState, getEntities } from './token-usuario.reducer';
 import { ITokenUsuario } from 'app/shared/model/token-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ITokenUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ITokenUsuarioBaseState {
-  idPaciente: any;
-  token: any;
-  dataValida: any;
-}
 export interface ITokenUsuarioState extends ITokenUsuarioBaseState, IPaginationBaseState {}
 
 export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsuarioState> {
@@ -52,22 +47,9 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getTokenUsuarioState(this.props.location)
+      ...getTokenUsuarioState(this.props.location)
     };
   }
-
-  getTokenUsuarioState = (location): ITokenUsuarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const token = url.searchParams.get('token') || '';
-    const dataValida = url.searchParams.get('dataValida') || '';
-
-    return {
-      idPaciente,
-      token,
-      dataValida
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -111,7 +93,9 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -162,7 +146,11 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.tokenUsuario.home.createLabel">Create a new Token Usuario</Translate>
@@ -175,38 +163,46 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="token-usuario-idPaciente">
-                            <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPaciente" id="token-usuario-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tokenLabel" for="token-usuario-token">
-                            <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="token-usuario-idPaciente">
+                              <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPaciente" id="token-usuario-idPaciente" value={this.state.idPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="token" id="token-usuario-token" value={this.state.token} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataValidaLabel" for="token-usuario-dataValida">
-                            <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
-                          </Label>
-                          <AvInput
-                            id="token-usuario-dataValida"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataValida"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataValida ? convertDateTimeFromServer(this.state.dataValida) : null}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'token' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tokenLabel" for="token-usuario-token">
+                              <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="token" id="token-usuario-token" value={this.state.token} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataValida' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataValidaLabel" for="token-usuario-dataValida">
+                              <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
+                            </Label>
+                            <AvInput
+                              id="token-usuario-dataValida"
+                              type="datetime-local"
+                              className="form-control"
+                              name="dataValida"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.dataValida ? convertDateTimeFromServer(this.state.dataValida) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -234,18 +230,24 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('token')}>
-                        <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataValida')}>
-                        <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'token' ? (
+                        <th className="hand" onClick={this.sort('token')}>
+                          <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataValida' ? (
+                        <th className="hand" onClick={this.sort('dataValida')}>
+                          <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -260,29 +262,41 @@ export class TokenUsuario extends React.Component<ITokenUsuarioProps, ITokenUsua
                           </Button>
                         </td>
 
-                        <td>{tokenUsuario.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{tokenUsuario.idPaciente}</td> : null}
 
-                        <td>{tokenUsuario.token}</td>
+                        {this.state.baseFilters !== 'token' ? <td>{tokenUsuario.token}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={tokenUsuario.dataValida} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataValida' ? (
+                          <td>
+                            <TextFormat type="date" value={tokenUsuario.dataValida} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${tokenUsuario.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${tokenUsuario.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tokenUsuario.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${tokenUsuario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tokenUsuario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${tokenUsuario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

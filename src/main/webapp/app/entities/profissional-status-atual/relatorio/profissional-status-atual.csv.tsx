@@ -47,9 +47,6 @@ import { IProfissionalStatusAtual } from 'app/shared/model/profissional-status-a
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
-import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-prof/status-atual-prof.reducer';
-
 export interface IProfissionalStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IProfissionalStatusAtualState extends IProfissionalStatusAtualBaseState, IPaginationBaseState {
@@ -70,8 +67,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getStatusAtualProfs();
   }
 
   cancelCourse = () => {
@@ -79,9 +74,7 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       {
         idProfissional: '',
         obs: '',
-        ativo: '',
-        idUsuario: '',
-        idStatusAtualProf: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -135,12 +128,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
-      'idStatusAtualProf=' +
-      this.state.idStatusAtualProf +
-      '&' +
       ''
     );
   };
@@ -148,26 +135,18 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, obs, ativo, idUsuario, idStatusAtualProf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(
-      idProfissional,
-      obs,
-      ativo,
-      idUsuario,
-      idStatusAtualProf,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idProfissional, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(idProfissional, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();
@@ -206,13 +185,11 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
 }
 
 const mapStateToProps = ({ profissionalStatusAtual, ...storeState }: IRootState) => ({
-  statusAtualProfs: storeState.statusAtualProf.entities,
   profissionalStatusAtualList: profissionalStatusAtual.entities,
   totalItems: profissionalStatusAtual.totalItems
 });
 
 const mapDispatchToProps = {
-  getStatusAtualProfs,
   getEntitiesExport
 };
 

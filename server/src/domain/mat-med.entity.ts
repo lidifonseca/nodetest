@@ -7,21 +7,21 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A MatMed.
  */
-@Entity('mat_med')
+@Entity('tb_mat_med')
 export default class MatMed extends BaseEntity {
-  @Column({ name: 'nome', length: 80 })
+  @Column({ name: 'NOME', length: 80 })
   nome: string;
 
   /**
    * Tipo 1 - Medicamento, Tipo 2 - Materiais, Tipo 3 - Equipamento
    */
-  @Column({ type: 'integer', name: 'id_tipo_mat_med' })
+  @Column({ type: 'integer', name: 'ID_TIPO_MAT_MED' })
   idTipoMatMed: number;
 
-  @Column({ type: 'decimal', name: 'valor', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', name: 'VALOR', precision: 10, scale: 2 })
   valor: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

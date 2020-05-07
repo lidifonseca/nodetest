@@ -6,7 +6,6 @@ import { UsuarioRepository } from '../repository/usuario.repository';
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
-relationshipNames.push('idTipoUsuario');
 
 @Injectable()
 export class UsuarioService {

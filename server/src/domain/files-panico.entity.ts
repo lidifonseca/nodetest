@@ -7,21 +7,21 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A FilesPanico.
  */
-@Entity('files_panico')
+@Entity('tb_files_panico')
 export default class FilesPanico extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_panico', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PANICO', nullable: false })
   idPanico: number;
 
-  @Column({ type: 'integer', name: 'id_paciente', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE', nullable: false })
   idPaciente: number;
 
-  @Column({ name: 'tipo', length: 3 })
+  @Column({ name: 'TIPO', length: 3 })
   tipo: string;
 
-  @Column({ name: 'imagem', length: 100, nullable: false })
+  @Column({ name: 'IMAGEM', length: 100, nullable: false })
   imagem: string;
 
-  @Column({ type: 'timestamp', name: 'criado_em', nullable: false })
+  @Column({ type: 'timestamp', name: 'CRIADO_EM', nullable: false })
   criadoEm: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento-assinaturas.reducer';
+import { getEntity, IAtendimentoAssinaturasBaseState, getAtendimentoAssinaturasState } from './atendimento-assinaturas.reducer';
 import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoAssinaturasState {
+  fieldsBase: IAtendimentoAssinaturasBaseState;
+}
+
 export interface IAtendimentoAssinaturasDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoAssinaturasDetail extends React.Component<IAtendimentoAssinaturasDetailProps> {
+export class AtendimentoAssinaturasDetail extends React.Component<IAtendimentoAssinaturasDetailProps, IAtendimentoAssinaturasState> {
   constructor(props: Readonly<IAtendimentoAssinaturasDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoAssinaturasState(this.props.location)
     };
   }
 
@@ -62,45 +67,6 @@ export class AtendimentoAssinaturasDetail extends React.Component<IAtendimentoAs
                       </Col>
                       <Col md="9">
                         <dd>{atendimentoAssinaturasEntity.arquivoAssinatura}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimentoAssinaturas.idAtendimento">Id Atendimento</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoAssinaturasEntity.idAtendimento ? atendimentoAssinaturasEntity.idAtendimento.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimentoAssinaturas.idProfissional">Id Profissional</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoAssinaturasEntity.idProfissional ? atendimentoAssinaturasEntity.idProfissional.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimentoAssinaturas.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoAssinaturasEntity.idPaciente ? atendimentoAssinaturasEntity.idPaciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

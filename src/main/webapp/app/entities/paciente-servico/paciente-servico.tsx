@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-servico.reducer';
+import { getPacienteServicoState, IPacienteServicoBaseState, getEntities } from './paciente-servico.reducer';
 import { IPacienteServico } from 'app/shared/model/paciente-servico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPacienteServicoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteServicoBaseState {
-  idPaciente: any;
-  servico: any;
-}
 export interface IPacienteServicoState extends IPacienteServicoBaseState, IPaginationBaseState {}
 
 export class PacienteServico extends React.Component<IPacienteServicoProps, IPacienteServicoState> {
@@ -42,20 +38,9 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteServicoState(this.props.location)
+      ...getPacienteServicoState(this.props.location)
     };
   }
-
-  getPacienteServicoState = (location): IPacienteServicoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const servico = url.searchParams.get('servico') || '';
-
-    return {
-      idPaciente,
-      servico
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +83,9 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +133,11 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteServico.home.createLabel">Create a new Paciente Servico</Translate>
@@ -159,22 +150,27 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="paciente-servico-idPaciente">
-                            <Translate contentKey="generadorApp.pacienteServico.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPaciente" id="paciente-servico-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="servicoLabel" for="paciente-servico-servico">
-                            <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
-                          </Label>
-                          <AvInput type="string" name="servico" id="paciente-servico-servico" value={this.state.servico} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="paciente-servico-idPaciente">
+                              <Translate contentKey="generadorApp.pacienteServico.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPaciente" id="paciente-servico-idPaciente" value={this.state.idPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'servico' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="servicoLabel" for="paciente-servico-servico">
+                              <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
+                            </Label>
+                            <AvInput type="string" name="servico" id="paciente-servico-servico" value={this.state.servico} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -202,14 +198,18 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.pacienteServico.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('servico')}>
-                        <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.pacienteServico.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'servico' ? (
+                        <th className="hand" onClick={this.sort('servico')}>
+                          <Translate contentKey="generadorApp.pacienteServico.servico">Servico</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -224,25 +224,35 @@ export class PacienteServico extends React.Component<IPacienteServicoProps, IPac
                           </Button>
                         </td>
 
-                        <td>{pacienteServico.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{pacienteServico.idPaciente}</td> : null}
 
-                        <td>{pacienteServico.servico}</td>
+                        {this.state.baseFilters !== 'servico' ? <td>{pacienteServico.servico}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteServico.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pacienteServico.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteServico.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteServico.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteServico.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteServico.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A Atividades.
  */
-@Entity('atividades')
+@Entity('tb_atividades')
 export default class Atividades extends BaseEntity {
-  @Column({ name: 'atividade', length: 100 })
+  @Column({ name: 'ATIVIDADE', length: 100 })
   atividade: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -7,9 +7,9 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A GrauParentesco.
  */
-@Entity('grau_parentesco')
+@Entity('tb_grau_parentesco')
 export default class GrauParentesco extends BaseEntity {
-  @Column({ name: 'grau_parentesco', length: 60 })
+  @Column({ name: 'GRAU_PARENTESCO', length: 60 })
   grauParentesco: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

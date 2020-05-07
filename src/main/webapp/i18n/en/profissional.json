@@ -53,10 +53,13 @@
       "dataSenha": "Data Senha",
       "expoToken": "Expo Token",
       "preferenciaAtendimento": "Preferencia Atendimento",
-      "senhaChat": "Senha Chat",
-      "atendimentoAceite": "Atendimento Aceite",
-      "atendimentoAssinaturas": "Atendimento Assinaturas",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "help": {
+        "telefone1": "@dbName TELEFONE1@@",
+        "telefone2": "@dbName TELEFONE2@@",
+        "celular1": "@dbName CELULAR1@@",
+        "celular2": "@dbName CELULAR2@@"
+      }
     }
   }
 }

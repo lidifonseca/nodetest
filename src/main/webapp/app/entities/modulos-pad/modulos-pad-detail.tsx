@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './modulos-pad.reducer';
+import { getEntity, IModulosPadBaseState, getModulosPadState } from './modulos-pad.reducer';
 import { IModulosPad } from 'app/shared/model/modulos-pad.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IModulosPadState {
+  fieldsBase: IModulosPadBaseState;
+}
+
 export interface IModulosPadDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ModulosPadDetail extends React.Component<IModulosPadDetailProps> {
+export class ModulosPadDetail extends React.Component<IModulosPadDetailProps, IModulosPadState> {
   constructor(props: Readonly<IModulosPadDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getModulosPadState(this.props.location)
     };
   }
 

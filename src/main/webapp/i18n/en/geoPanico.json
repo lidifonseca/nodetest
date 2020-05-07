@@ -3,15 +3,15 @@
     "geoPanico": {
       "home": {
         "title": "Geo Panicos",
-        "createLabel": "Criar novo Geo Panico",
-        "createOrEditLabel": "Criar ou editar Geo Panico",
-        "notFound": "Nenhum Geo Panico encontrado"
+        "createLabel": "Create a new Geo Panico",
+        "createOrEditLabel": "Create or edit a Geo Panico",
+        "notFound": "No Geo Panicos found"
       },
-      "created": "Um novo Geo Panico foi criado com o identificador {{ param }}",
-      "updated": "Um Geo Panico foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Geo Panico foi excluído com o identificador {{ param }}",
+      "created": "A new Geo Panico is created with identifier {{ param }}",
+      "updated": "A Geo Panico is updated with identifier {{ param }}",
+      "deleted": "A Geo Panico is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Geo Panico {{ id }}?"
+        "question": "Are you sure you want to delete Geo Panico {{ id }}?"
       },
       "detail": {
         "title": "Geo Panico"

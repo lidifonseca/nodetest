@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITipoPreferenciaAtendimento, defaultValue } from 'app/shared/model/tipo-preferencia-atendimento.model';
 
 export const ACTION_TYPES = {
+  FETCH_TIPOPREFERENCIAATENDIMENTO_LIST_EXPORT: 'tipoPreferenciaAtendimento/FETCH_TIPOPREFERENCIAATENDIMENTO_LIST_EXPORT',
   FETCH_TIPOPREFERENCIAATENDIMENTO_LIST: 'tipoPreferenciaAtendimento/FETCH_TIPOPREFERENCIAATENDIMENTO_LIST',
   FETCH_TIPOPREFERENCIAATENDIMENTO: 'tipoPreferenciaAtendimento/FETCH_TIPOPREFERENCIAATENDIMENTO',
   CREATE_TIPOPREFERENCIAATENDIMENTO: 'tipoPreferenciaAtendimento/CREATE_TIPOPREFERENCIAATENDIMENTO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type TipoPreferenciaAtendimentoState = Readonly<typeof initialState>;
 
+export interface ITipoPreferenciaAtendimentoBaseState {
+  baseFilters: any;
+  nome: any;
+  ativo: any;
+}
+
+export interface ITipoPreferenciaAtendimentoUpdateState {
+  fieldsBase: ITipoPreferenciaAtendimentoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TipoPreferenciaAtendimentoState = initialState, action): TipoPreferenciaAtendimentoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TIPOPREFERENCIAATENDIMENTO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TIPOPREFERENCIAATENDIMENTO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TIPOPREFERENCIAATENDIMENTO):
       return {
@@ -51,6 +64,7 @@ export default (state: TipoPreferenciaAtendimentoState = initialState, action): 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TIPOPREFERENCIAATENDIMENTO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TIPOPREFERENCIAATENDIMENTO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TIPOPREFERENCIAATENDIMENTO):
     case FAILURE(ACTION_TYPES.CREATE_TIPOPREFERENCIAATENDIMENTO):
@@ -131,6 +145,23 @@ export const getEntity: ICrudGetAction<ITipoPreferenciaAtendimento> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTipoPreferenciaAtendimento<ITipoPreferenciaAtendimento> = (
+  nome,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TIPOPREFERENCIAATENDIMENTO_LIST,
+    payload: axios.get<ITipoPreferenciaAtendimento>(`${requestUrl}${nomeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ITipoPreferenciaAtendimento> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +197,16 @@ export const deleteEntity: ICrudDeleteAction<ITipoPreferenciaAtendimento> = id =
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTipoPreferenciaAtendimentoState = (location): ITipoPreferenciaAtendimentoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    nome,
+    ativo
+  };
+};

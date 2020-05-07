@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './cidade.reducer';
+import { getEntity, ICidadeBaseState, getCidadeState } from './cidade.reducer';
 import { ICidade } from 'app/shared/model/cidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICidadeState {
+  fieldsBase: ICidadeBaseState;
+}
+
 export interface ICidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CidadeDetail extends React.Component<ICidadeDetailProps> {
+export class CidadeDetail extends React.Component<ICidadeDetailProps, ICidadeState> {
   constructor(props: Readonly<ICidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCidadeState(this.props.location)
     };
   }
 
@@ -61,19 +66,6 @@ export class CidadeDetail extends React.Component<ICidadeDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{cidadeEntity.descrCidade}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cidade.idUf">Id Uf</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cidadeEntity.idUf ? cidadeEntity.idUf.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

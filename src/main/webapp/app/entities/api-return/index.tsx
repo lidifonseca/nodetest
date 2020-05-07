@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import ApiReturn from './api-return';
 import ApiReturnDetail from './api-return-detail';
+import ApiReturnRelatorioCSV from './relatorio/api-return.csv';
 import ApiReturnUpdate from './api-return-update';
 import ApiReturnDeleteDialog from './api-return-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={ApiReturnRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={ApiReturnUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={ApiReturnUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={ApiReturnDetail} />

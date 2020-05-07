@@ -3,15 +3,15 @@
     "unidadeMedida": {
       "home": {
         "title": "Unidade Medidas",
-        "createLabel": "Criar novo Unidade Medida",
-        "createOrEditLabel": "Criar ou editar Unidade Medida",
-        "notFound": "Nenhum Unidade Medida encontrado"
+        "createLabel": "Create a new Unidade Medida",
+        "createOrEditLabel": "Create or edit a Unidade Medida",
+        "notFound": "No Unidade Medidas found"
       },
-      "created": "Um novo Unidade Medida foi criado com o identificador {{ param }}",
-      "updated": "Um Unidade Medida foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Unidade Medida foi excluído com o identificador {{ param }}",
+      "created": "A new Unidade Medida is created with identifier {{ param }}",
+      "updated": "A Unidade Medida is updated with identifier {{ param }}",
+      "deleted": "A Unidade Medida is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Unidade Medida {{ id }}?"
+        "question": "Are you sure you want to delete Unidade Medida {{ id }}?"
       },
       "detail": {
         "title": "Unidade Medida"

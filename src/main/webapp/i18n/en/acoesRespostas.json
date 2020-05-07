@@ -3,15 +3,15 @@
     "acoesRespostas": {
       "home": {
         "title": "Acoes Respostas",
-        "createLabel": "Criar novo Acoes Respostas",
-        "createOrEditLabel": "Criar ou editar Acoes Respostas",
-        "notFound": "Nenhum Acoes Respostas encontrado"
+        "createLabel": "Create a new Acoes Respostas",
+        "createOrEditLabel": "Create or edit a Acoes Respostas",
+        "notFound": "No Acoes Respostas found"
       },
-      "created": "Um novo Acoes Respostas foi criado com o identificador {{ param }}",
-      "updated": "Um Acoes Respostas foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Acoes Respostas foi excluído com o identificador {{ param }}",
+      "created": "A new Acoes Respostas is created with identifier {{ param }}",
+      "updated": "A Acoes Respostas is updated with identifier {{ param }}",
+      "deleted": "A Acoes Respostas is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Acoes Respostas {{ id }}?"
+        "question": "Are you sure you want to delete Acoes Respostas {{ id }}?"
       },
       "detail": {
         "title": "Acoes Respostas"
@@ -20,9 +20,7 @@
       "condicaoSexo": "Condicao Sexo",
       "observacoes": "Observacoes",
       "tipoCampo1": "Tipo Campo 1",
-      "tipoCampo2": "Tipo Campo 2",
-      "respostasId": "Respostas Id",
-      "perguntasQuestionarioId": "Perguntas Questionario Id"
+      "tipoCampo2": "Tipo Campo 2"
     }
   }
 }

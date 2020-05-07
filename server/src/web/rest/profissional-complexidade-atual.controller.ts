@@ -71,7 +71,9 @@ export class ProfissionalComplexidadeAtualController {
     @Req() req: Request,
     @Body() profissionalComplexidadeAtual: ProfissionalComplexidadeAtual
   ): Promise<ProfissionalComplexidadeAtual> {
+    console.info(profissionalComplexidadeAtual);
     const created = await this.profissionalComplexidadeAtualService.save(profissionalComplexidadeAtual);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalComplexidadeAtual', created.id);
     return created;
   }
@@ -89,6 +91,7 @@ export class ProfissionalComplexidadeAtualController {
     @Body() profissionalComplexidadeAtual: ProfissionalComplexidadeAtual
   ): Promise<ProfissionalComplexidadeAtual> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalComplexidadeAtual', profissionalComplexidadeAtual.id);
+
     return await this.profissionalComplexidadeAtualService.update(profissionalComplexidadeAtual);
   }
 

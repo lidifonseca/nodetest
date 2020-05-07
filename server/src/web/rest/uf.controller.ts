@@ -68,7 +68,9 @@ export class UfController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() uf: Uf): Promise<Uf> {
+    console.info(uf);
     const created = await this.ufService.save(uf);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Uf', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class UfController {
   })
   async put(@Req() req: Request, @Body() uf: Uf): Promise<Uf> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Uf', uf.id);
+
     return await this.ufService.update(uf);
   }
 

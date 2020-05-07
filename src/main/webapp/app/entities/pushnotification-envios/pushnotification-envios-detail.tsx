@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pushnotification-envios.reducer';
+import { getEntity, IPushnotificationEnviosBaseState, getPushnotificationEnviosState } from './pushnotification-envios.reducer';
 import { IPushnotificationEnvios } from 'app/shared/model/pushnotification-envios.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPushnotificationEnviosState {
+  fieldsBase: IPushnotificationEnviosBaseState;
+}
+
 export interface IPushnotificationEnviosDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PushnotificationEnviosDetail extends React.Component<IPushnotificationEnviosDetailProps> {
+export class PushnotificationEnviosDetail extends React.Component<IPushnotificationEnviosDetailProps, IPushnotificationEnviosState> {
   constructor(props: Readonly<IPushnotificationEnviosDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPushnotificationEnviosState(this.props.location)
     };
   }
 

@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ModulosPad.
  */
-@Entity('modulos_pad')
+@Entity('tb_modulos_pad')
 export default class ModulosPad extends BaseEntity {
-  @Column({ name: 'nome_modulo', length: 45 })
+  @Column({ name: 'NOME_MODULO', length: 45 })
   nomeModulo: string;
 
-  @Column({ name: 'ativo', length: 1 })
+  @Column({ name: 'ATIVO', length: 1 })
   ativo: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

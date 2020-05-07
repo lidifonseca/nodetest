@@ -68,7 +68,9 @@ export class PadMatMedController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() padMatMed: PadMatMed): Promise<PadMatMed> {
+    console.info(padMatMed);
     const created = await this.padMatMedService.save(padMatMed);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadMatMed', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PadMatMedController {
   })
   async put(@Req() req: Request, @Body() padMatMed: PadMatMed): Promise<PadMatMed> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadMatMed', padMatMed.id);
+
     return await this.padMatMedService.update(padMatMed);
   }
 

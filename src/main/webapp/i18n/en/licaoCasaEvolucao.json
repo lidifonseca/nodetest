@@ -3,15 +3,15 @@
     "licaoCasaEvolucao": {
       "home": {
         "title": "Licao Casa Evolucaos",
-        "createLabel": "Criar novo Licao Casa Evolucao",
-        "createOrEditLabel": "Criar ou editar Licao Casa Evolucao",
-        "notFound": "Nenhum Licao Casa Evolucao encontrado"
+        "createLabel": "Create a new Licao Casa Evolucao",
+        "createOrEditLabel": "Create or edit a Licao Casa Evolucao",
+        "notFound": "No Licao Casa Evolucaos found"
       },
-      "created": "Um novo Licao Casa Evolucao foi criado com o identificador {{ param }}",
-      "updated": "Um Licao Casa Evolucao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Licao Casa Evolucao foi excluído com o identificador {{ param }}",
+      "created": "A new Licao Casa Evolucao is created with identifier {{ param }}",
+      "updated": "A Licao Casa Evolucao is updated with identifier {{ param }}",
+      "deleted": "A Licao Casa Evolucao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Licao Casa Evolucao {{ id }}?"
+        "question": "Are you sure you want to delete Licao Casa Evolucao {{ id }}?"
       },
       "detail": {
         "title": "Licao Casa Evolucao"

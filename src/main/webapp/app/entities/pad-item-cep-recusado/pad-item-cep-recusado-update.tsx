@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './pad-item-cep-recusado.reducer';
+import {
+  IPadItemCepRecusadoUpdateState,
+  getEntity,
+  getPadItemCepRecusadoState,
+  IPadItemCepRecusadoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pad-item-cep-recusado.reducer';
 import { IPadItemCepRecusado } from 'app/shared/model/pad-item-cep-recusado.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadItemCepRecusadoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadItemCepRecusadoUpdateState {
-  isNew: boolean;
-  idPadItemId: string;
-}
-
 export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusadoUpdateProps, IPadItemCepRecusadoUpdateState> {
   constructor(props: Readonly<IPadItemCepRecusadoUpdateProps>) {
     super(props);
+
     this.state = {
-      idPadItemId: '0',
+      fieldsBase: getPadItemCepRecusadoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,21 @@ export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusad
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPadItems();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['cep'] ? '&cep=' + fieldsBase['cep'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padItemCepRecusadoEntity } = this.props;
@@ -63,13 +76,14 @@ export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusad
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-item-cep-recusado');
+    this.props.history.push('/pad-item-cep-recusado?' + this.getFiltersURL());
   };
 
   render() {
-    const { padItemCepRecusadoEntity, padItems, loading, updating } = this.props;
+    const { padItemCepRecusadoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +99,7 @@ export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusad
             isNew
               ? {}
               : {
-                  ...padItemCepRecusadoEntity,
-                  idPadItem: padItemCepRecusadoEntity.idPadItem ? padItemCepRecusadoEntity.idPadItem.id : null
+                  ...padItemCepRecusadoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -108,7 +121,7 @@ export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusad
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/pad-item-cep-recusado"
+                  to={'/pad-item-cep-recusado?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -127,7 +140,7 @@ export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusad
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,55 +156,27 @@ export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusad
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepLabel" for="pad-item-cep-recusado-cep">
-                                <Translate contentKey="generadorApp.padItemCepRecusado.cep">Cep</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-cep-recusado-cep"
-                                type="text"
-                                name="cep"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="pad-item-cep-recusado-idPadItem">
-                                <Translate contentKey="generadorApp.padItemCepRecusado.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-item-cep-recusado-idPadItem" type="select" className="form-control" name="idPadItem">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.padItemCepRecusado.idPadItem.empty')}
-                                </option>
-                                {padItems
-                                  ? padItems.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'cep' ? (
+                          <Col md="cep">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepLabel" for="pad-item-cep-recusado-cep">
+                                    <Translate contentKey="generadorApp.padItemCepRecusado.cep">Cep</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-cep-recusado-cep" type="text" name="cep" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cep" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -204,7 +189,6 @@ export class PadItemCepRecusadoUpdate extends React.Component<IPadItemCepRecusad
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  padItems: storeState.padItem.entities,
   padItemCepRecusadoEntity: storeState.padItemCepRecusado.entity,
   loading: storeState.padItemCepRecusado.loading,
   updating: storeState.padItemCepRecusado.updating,
@@ -212,7 +196,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntity,
   updateEntity,
   createEntity,

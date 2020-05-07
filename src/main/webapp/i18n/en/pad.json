@@ -3,15 +3,15 @@
     "pad": {
       "home": {
         "title": "Pads",
-        "createLabel": "Criar novo Pad",
-        "createOrEditLabel": "Criar ou editar Pad",
-        "notFound": "Nenhum Pad encontrado"
+        "createLabel": "Create a new Pad",
+        "createOrEditLabel": "Create or edit a Pad",
+        "notFound": "No Pads found"
       },
-      "created": "Um novo Pad foi criado com o identificador {{ param }}",
-      "updated": "Um Pad foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad foi excluído com o identificador {{ param }}",
+      "created": "A new Pad is created with identifier {{ param }}",
+      "updated": "A Pad is updated with identifier {{ param }}",
+      "deleted": "A Pad is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad {{ id }}?"
+        "question": "Are you sure you want to delete Pad {{ id }}?"
       },
       "detail": {
         "title": "Pad"
@@ -23,15 +23,11 @@
       "dataFim": "Data Fim",
       "dataConferido": "Data Conferido",
       "ativo": "Ativo",
-      "idUsuario": "Id Usuario",
       "statusPad": "Status Pad",
       "novoModelo": "Novo Modelo",
       "imagePath": "Image Path",
       "score": "Score",
-      "padCid": "Pad Cid",
-      "padItem": "Pad Item",
-      "unidade": "Unidade",
-      "idPaciente": "Id Paciente"
+      "unidade": "Unidade"
     }
   }
 }

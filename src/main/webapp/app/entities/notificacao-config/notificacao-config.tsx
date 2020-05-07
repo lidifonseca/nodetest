@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -99,7 +98,9 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -190,7 +191,11 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.notificacaoConfig.home.createLabel">Create a new Notificacao Config</Translate>
@@ -203,98 +208,126 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="criadoEmLabel" for="notificacao-config-criadoEm">
-                            <Translate contentKey="generadorApp.notificacaoConfig.criadoEm">Criado Em</Translate>
-                          </Label>
-                          <AvInput
-                            id="notificacao-config-criadoEm"
-                            type="datetime-local"
-                            className="form-control"
-                            name="criadoEm"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.criadoEm ? convertDateTimeFromServer(this.state.criadoEm) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tituloLabel" for="notificacao-config-titulo">
-                            <Translate contentKey="generadorApp.notificacaoConfig.titulo">Titulo</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="titulo" id="notificacao-config-titulo" value={this.state.titulo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="referenciaLabel" for="notificacao-config-referencia">
-                            <Translate contentKey="generadorApp.notificacaoConfig.referencia">Referencia</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="referencia" id="notificacao-config-referencia" value={this.state.referencia} />
-                          <UncontrolledTooltip target="referenciaLabel">
-                            <Translate contentKey="generadorApp.notificacaoConfig.help.referencia" />
-                          </UncontrolledTooltip>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descricaoLabel" for="notificacao-config-descricao">
-                            <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
-                          </Label>
-                          <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" check>
-                            <AvInput id="notificacao-config-ativo" type="checkbox" className="form-control" name="ativo" />
-                            <Translate contentKey="generadorApp.notificacaoConfig.ativo">Ativo</Translate>
-                          </Label>
-                          <UncontrolledTooltip target="ativoLabel">
-                            <Translate contentKey="generadorApp.notificacaoConfig.help.ativo" />
-                          </UncontrolledTooltip>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="envioObrigatorioLabel" check>
+                      {this.state.baseFilters !== 'criadoEm' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="criadoEmLabel" for="notificacao-config-criadoEm">
+                              <Translate contentKey="generadorApp.notificacaoConfig.criadoEm">Criado Em</Translate>
+                            </Label>
                             <AvInput
-                              id="notificacao-config-envioObrigatorio"
-                              type="checkbox"
+                              id="notificacao-config-criadoEm"
+                              type="datetime-local"
                               className="form-control"
-                              name="envioObrigatorio"
+                              name="criadoEm"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.criadoEm ? convertDateTimeFromServer(this.state.criadoEm) : null}
                             />
-                            <Translate contentKey="generadorApp.notificacaoConfig.envioObrigatorio">Envio Obrigatorio</Translate>
-                          </Label>
-                          <UncontrolledTooltip target="envioObrigatorioLabel">
-                            <Translate contentKey="generadorApp.notificacaoConfig.help.envioObrigatorio" />
-                          </UncontrolledTooltip>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="serveProfissionalLabel" check>
-                            <AvInput
-                              id="notificacao-config-serveProfissional"
-                              type="checkbox"
-                              className="form-control"
-                              name="serveProfissional"
-                            />
-                            <Translate contentKey="generadorApp.notificacaoConfig.serveProfissional">Serve Profissional</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="servePacienteLabel" check>
-                            <AvInput id="notificacao-config-servePaciente" type="checkbox" className="form-control" name="servePaciente" />
-                            <Translate contentKey="generadorApp.notificacaoConfig.servePaciente">Serve Paciente</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tituloLabel" for="notificacao-config-titulo">
+                              <Translate contentKey="generadorApp.notificacaoConfig.titulo">Titulo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="titulo" id="notificacao-config-titulo" value={this.state.titulo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'referencia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="referenciaLabel" for="notificacao-config-referencia">
+                              <Translate contentKey="generadorApp.notificacaoConfig.referencia">Referencia</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="referencia" id="notificacao-config-referencia" value={this.state.referencia} />
+                            <UncontrolledTooltip target="referenciaLabel">
+                              <Translate contentKey="generadorApp.notificacaoConfig.help.referencia" />
+                            </UncontrolledTooltip>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descricaoLabel" for="notificacao-config-descricao">
+                              <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
+                            </Label>
+                            <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" check>
+                              <AvInput id="notificacao-config-ativo" type="checkbox" className="form-control" name="ativo" />
+                              <Translate contentKey="generadorApp.notificacaoConfig.ativo">Ativo</Translate>
+                            </Label>
+                            <UncontrolledTooltip target="ativoLabel">
+                              <Translate contentKey="generadorApp.notificacaoConfig.help.ativo" />
+                            </UncontrolledTooltip>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'envioObrigatorio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="envioObrigatorioLabel" check>
+                              <AvInput
+                                id="notificacao-config-envioObrigatorio"
+                                type="checkbox"
+                                className="form-control"
+                                name="envioObrigatorio"
+                              />
+                              <Translate contentKey="generadorApp.notificacaoConfig.envioObrigatorio">Envio Obrigatorio</Translate>
+                            </Label>
+                            <UncontrolledTooltip target="envioObrigatorioLabel">
+                              <Translate contentKey="generadorApp.notificacaoConfig.help.envioObrigatorio" />
+                            </UncontrolledTooltip>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'serveProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="serveProfissionalLabel" check>
+                              <AvInput
+                                id="notificacao-config-serveProfissional"
+                                type="checkbox"
+                                className="form-control"
+                                name="serveProfissional"
+                              />
+                              <Translate contentKey="generadorApp.notificacaoConfig.serveProfissional">Serve Profissional</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'servePaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="servePacienteLabel" check>
+                              <AvInput
+                                id="notificacao-config-servePaciente"
+                                type="checkbox"
+                                className="form-control"
+                                name="servePaciente"
+                              />
+                              <Translate contentKey="generadorApp.notificacaoConfig.servePaciente">Serve Paciente</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -322,38 +355,54 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('criadoEm')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.criadoEm">Criado Em</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('titulo')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.titulo">Titulo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('referencia')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.referencia">Referencia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descricao')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('envioObrigatorio')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.envioObrigatorio">Envio Obrigatorio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('serveProfissional')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.serveProfissional">Serve Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('servePaciente')}>
-                        <Translate contentKey="generadorApp.notificacaoConfig.servePaciente">Serve Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'criadoEm' ? (
+                        <th className="hand" onClick={this.sort('criadoEm')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.criadoEm">Criado Em</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <th className="hand" onClick={this.sort('titulo')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.titulo">Titulo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'referencia' ? (
+                        <th className="hand" onClick={this.sort('referencia')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.referencia">Referencia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <th className="hand" onClick={this.sort('descricao')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'envioObrigatorio' ? (
+                        <th className="hand" onClick={this.sort('envioObrigatorio')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.envioObrigatorio">Envio Obrigatorio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'serveProfissional' ? (
+                        <th className="hand" onClick={this.sort('serveProfissional')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.serveProfissional">Serve Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'servePaciente' ? (
+                        <th className="hand" onClick={this.sort('servePaciente')}>
+                          <Translate contentKey="generadorApp.notificacaoConfig.servePaciente">Serve Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -368,26 +417,63 @@ export class NotificacaoConfig extends React.Component<INotificacaoConfigProps, 
                           </Button>
                         </td>
 
-                        <td>
-                          <TextFormat type="date" value={notificacaoConfig.criadoEm} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'criadoEm' ? (
+                          <td>
+                            <TextFormat type="date" value={notificacaoConfig.criadoEm} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{notificacaoConfig.titulo}</td>
+                        {this.state.baseFilters !== 'titulo' ? <td>{notificacaoConfig.titulo}</td> : null}
 
-                        <td>{notificacaoConfig.referencia}</td>
+                        {this.state.baseFilters !== 'referencia' ? <td>{notificacaoConfig.referencia}</td> : null}
 
-                        <td>{notificacaoConfig.descricao}</td>
+                        {this.state.baseFilters !== 'descricao' ? (
+                          <td>{notificacaoConfig.descricao ? Buffer.from(notificacaoConfig.descricao).toString() : null}</td>
+                        ) : null}
 
-                        <td>{notificacaoConfig.ativo ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{notificacaoConfig.ativo ? 'true' : 'false'}</td> : null}
 
-                        <td>{notificacaoConfig.envioObrigatorio ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'envioObrigatorio' ? (
+                          <td>{notificacaoConfig.envioObrigatorio ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        <td>{notificacaoConfig.serveProfissional ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'serveProfissional' ? (
+                          <td>{notificacaoConfig.serveProfissional ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        <td>{notificacaoConfig.servePaciente ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'servePaciente' ? <td>{notificacaoConfig.servePaciente ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${notificacaoConfig.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${notificacaoConfig.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${notificacaoConfig.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

@@ -13,25 +13,10 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "statusAtualProf",
-            "otherEntityRelationshipName": "profissionalStatusAtual",
-            "relationshipName": "idStatusAtualProf",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200503004800",
+    "relationships": [],
+    "changelogDate": "20200507122100",
     "entityTableName": "profissional_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

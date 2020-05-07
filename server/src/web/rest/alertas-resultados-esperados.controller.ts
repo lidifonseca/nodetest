@@ -68,7 +68,9 @@ export class AlertasResultadosEsperadosController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() alertasResultadosEsperados: AlertasResultadosEsperados): Promise<AlertasResultadosEsperados> {
+    console.info(alertasResultadosEsperados);
     const created = await this.alertasResultadosEsperadosService.save(alertasResultadosEsperados);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'AlertasResultadosEsperados', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class AlertasResultadosEsperadosController {
   })
   async put(@Req() req: Request, @Body() alertasResultadosEsperados: AlertasResultadosEsperados): Promise<AlertasResultadosEsperados> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'AlertasResultadosEsperados', alertasResultadosEsperados.id);
+
     return await this.alertasResultadosEsperadosService.update(alertasResultadosEsperados);
   }
 

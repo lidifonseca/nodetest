@@ -3,15 +3,15 @@
     "vwApiAtendimentosAceite": {
       "home": {
         "title": "Vw Api Atendimentos Aceites",
-        "createLabel": "Criar novo Vw Api Atendimentos Aceite",
-        "createOrEditLabel": "Criar ou editar Vw Api Atendimentos Aceite",
-        "notFound": "Nenhum Vw Api Atendimentos Aceite encontrado"
+        "createLabel": "Create a new Vw Api Atendimentos Aceite",
+        "createOrEditLabel": "Create or edit a Vw Api Atendimentos Aceite",
+        "notFound": "No Vw Api Atendimentos Aceites found"
       },
-      "created": "Um novo Vw Api Atendimentos Aceite foi criado com o identificador {{ param }}",
-      "updated": "Um Vw Api Atendimentos Aceite foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Vw Api Atendimentos Aceite foi excluído com o identificador {{ param }}",
+      "created": "A new Vw Api Atendimentos Aceite is created with identifier {{ param }}",
+      "updated": "A Vw Api Atendimentos Aceite is updated with identifier {{ param }}",
+      "deleted": "A Vw Api Atendimentos Aceite is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Vw Api Atendimentos Aceite {{ id }}?"
+        "question": "Are you sure you want to delete Vw Api Atendimentos Aceite {{ id }}?"
       },
       "detail": {
         "title": "Vw Api Atendimentos Aceite"

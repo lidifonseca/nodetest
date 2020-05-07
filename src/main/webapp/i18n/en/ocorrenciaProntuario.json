@@ -3,15 +3,15 @@
     "ocorrenciaProntuario": {
       "home": {
         "title": "Ocorrencia Prontuarios",
-        "createLabel": "Criar novo Ocorrencia Prontuario",
-        "createOrEditLabel": "Criar ou editar Ocorrencia Prontuario",
-        "notFound": "Nenhum Ocorrencia Prontuario encontrado"
+        "createLabel": "Create a new Ocorrencia Prontuario",
+        "createOrEditLabel": "Create or edit a Ocorrencia Prontuario",
+        "notFound": "No Ocorrencia Prontuarios found"
       },
-      "created": "Um novo Ocorrencia Prontuario foi criado com o identificador {{ param }}",
-      "updated": "Um Ocorrencia Prontuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Ocorrencia Prontuario foi excluído com o identificador {{ param }}",
+      "created": "A new Ocorrencia Prontuario is created with identifier {{ param }}",
+      "updated": "A Ocorrencia Prontuario is updated with identifier {{ param }}",
+      "deleted": "A Ocorrencia Prontuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Ocorrencia Prontuario {{ id }}?"
+        "question": "Are you sure you want to delete Ocorrencia Prontuario {{ id }}?"
       },
       "detail": {
         "title": "Ocorrencia Prontuario"

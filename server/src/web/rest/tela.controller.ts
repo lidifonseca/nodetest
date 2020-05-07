@@ -68,7 +68,9 @@ export class TelaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() tela: Tela): Promise<Tela> {
+    console.info(tela);
     const created = await this.telaService.save(tela);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Tela', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class TelaController {
   })
   async put(@Req() req: Request, @Body() tela: Tela): Promise<Tela> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Tela', tela.id);
+
     return await this.telaService.update(tela);
   }
 

@@ -1,8 +1,4 @@
-import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
-import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
-import { ICategoriaUnidade } from 'app/shared/model/categoria-unidade.model';
-import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 
 export interface ICategoria {
   id?: string;
@@ -12,11 +8,7 @@ export interface ICategoria {
   publicar?: number;
   ordem?: number;
   publicarSite?: number;
-  categoriaAtividades?: ICategoriaAtividade[];
-  categoriaContratoes?: ICategoriaContrato[];
-  categoriaUnidades?: ICategoriaUnidade[];
-  cidXPtaNovoPadItemIndis?: ICidXPtaNovoPadItemIndi[];
-  especialidades?: IEspecialidade[];
+  unidades?: IUnidadeEasy[];
 }
 
 export const defaultValue: Readonly<ICategoria> = {};

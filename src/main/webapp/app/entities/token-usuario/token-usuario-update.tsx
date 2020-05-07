@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './token-usuario.reducer';
+import {
+  ITokenUsuarioUpdateState,
+  getEntity,
+  getTokenUsuarioState,
+  ITokenUsuarioBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './token-usuario.reducer';
 import { ITokenUsuario } from 'app/shared/model/token-usuario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITokenUsuarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ITokenUsuarioUpdateState {
-  isNew: boolean;
-}
-
 export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps, ITokenUsuarioUpdateState> {
   constructor(props: Readonly<ITokenUsuarioUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getTokenUsuarioState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,21 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['token'] ? '&token=' + fieldsBase['token'] : '') +
+      (fieldsBase['dataValida'] ? '&dataValida=' + fieldsBase['dataValida'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataValida = convertDateTimeToServer(values.dataValida);
 
@@ -59,13 +80,14 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
   };
 
   handleClose = () => {
-    this.props.history.push('/token-usuario');
+    this.props.history.push('/token-usuario?' + this.getFiltersURL());
   };
 
   render() {
     const { tokenUsuarioEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -98,7 +120,14 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/token-usuario" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/token-usuario?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -113,7 +142,7 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -129,75 +158,72 @@ export class TokenUsuarioUpdate extends React.Component<ITokenUsuarioUpdateProps
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="token-usuario-idPaciente">
+                                    <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="token-usuario-idPaciente" type="string" className="form-control" name="idPaciente" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="token-usuario-idPaciente">
-                                <Translate contentKey="generadorApp.tokenUsuario.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="token-usuario-idPaciente"
-                                type="string"
-                                className="form-control"
-                                name="idPaciente"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'token' ? (
+                          <Col md="token">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tokenLabel" for="token-usuario-token">
+                                    <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="token-usuario-token" type="text" name="token" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="token" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tokenLabel" for="token-usuario-token">
-                                <Translate contentKey="generadorApp.tokenUsuario.token">Token</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="token-usuario-token"
-                                type="text"
-                                name="token"
-                                validate={{
-                                  maxLength: { value: 200, errorMessage: translate('entity.validation.maxlength', { max: 200 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataValidaLabel" for="token-usuario-dataValida">
-                                <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="token-usuario-dataValida"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataValida"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.tokenUsuarioEntity.dataValida)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'dataValida' ? (
+                          <Col md="dataValida">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataValidaLabel" for="token-usuario-dataValida">
+                                    <Translate contentKey="generadorApp.tokenUsuario.dataValida">Data Valida</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="token-usuario-dataValida"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataValida"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.tokenUsuarioEntity.dataValida)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataValida" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

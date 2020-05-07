@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-sorteio-feito.reducer';
+import { getEntity, IPadItemSorteioFeitoBaseState, getPadItemSorteioFeitoState } from './pad-item-sorteio-feito.reducer';
 import { IPadItemSorteioFeito } from 'app/shared/model/pad-item-sorteio-feito.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemSorteioFeitoState {
+  fieldsBase: IPadItemSorteioFeitoBaseState;
+}
+
 export interface IPadItemSorteioFeitoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemSorteioFeitoDetail extends React.Component<IPadItemSorteioFeitoDetailProps> {
+export class PadItemSorteioFeitoDetail extends React.Component<IPadItemSorteioFeitoDetailProps, IPadItemSorteioFeitoState> {
   constructor(props: Readonly<IPadItemSorteioFeitoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemSorteioFeitoState(this.props.location)
     };
   }
 
@@ -62,19 +67,6 @@ export class PadItemSorteioFeitoDetail extends React.Component<IPadItemSorteioFe
                       </Col>
                       <Col md="9">
                         <dd>{padItemSorteioFeitoEntity.sorteioFeito}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItemSorteioFeito.idPadItem">Id Pad Item</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemSorteioFeitoEntity.idPadItem ? padItemSorteioFeitoEntity.idPadItem.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IUf, defaultValue } from 'app/shared/model/uf.model';
 
 export const ACTION_TYPES = {
+  FETCH_UF_LIST_EXPORT: 'uf/FETCH_UF_LIST_EXPORT',
   FETCH_UF_LIST: 'uf/FETCH_UF_LIST',
   FETCH_UF: 'uf/FETCH_UF',
   CREATE_UF: 'uf/CREATE_UF',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type UfState = Readonly<typeof initialState>;
 
+export interface IUfBaseState {
+  baseFilters: any;
+  siglaUf: any;
+  descrUf: any;
+}
+
+export interface IUfUpdateState {
+  fieldsBase: IUfBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: UfState = initialState, action): UfState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_UF_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_UF_LIST):
     case REQUEST(ACTION_TYPES.FETCH_UF):
       return {
@@ -51,6 +64,7 @@ export default (state: UfState = initialState, action): UfState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_UF_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_UF_LIST):
     case FAILURE(ACTION_TYPES.FETCH_UF):
     case FAILURE(ACTION_TYPES.CREATE_UF):
@@ -108,21 +122,19 @@ const apiUrl = 'api/ufs';
 export type ICrudGetAllActionUf<T> = (
   siglaUf?: any,
   descrUf?: any,
-  cidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionUf<IUf> = (siglaUf, descrUf, cidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionUf<IUf> = (siglaUf, descrUf, page, size, sort) => {
   const siglaUfRequest = siglaUf ? `siglaUf.contains=${siglaUf}&` : '';
   const descrUfRequest = descrUf ? `descrUf.contains=${descrUf}&` : '';
-  const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_UF_LIST,
-    payload: axios.get<IUf>(`${requestUrl}${siglaUfRequest}${descrUfRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IUf>(`${requestUrl}${siglaUfRequest}${descrUfRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IUf> = id => {
@@ -130,6 +142,17 @@ export const getEntity: ICrudGetAction<IUf> = id => {
   return {
     type: ACTION_TYPES.FETCH_UF,
     payload: axios.get<IUf>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionUf<IUf> = (siglaUf, descrUf, page, size, sort) => {
+  const siglaUfRequest = siglaUf ? `siglaUf.contains=${siglaUf}&` : '';
+  const descrUfRequest = descrUf ? `descrUf.contains=${descrUf}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_UF_LIST,
+    payload: axios.get<IUf>(`${requestUrl}${siglaUfRequest}${descrUfRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -168,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IUf> = id => async dispatch => {
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getUfState = (location): IUfBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const siglaUf = url.searchParams.get('siglaUf') || '';
+  const descrUf = url.searchParams.get('descrUf') || '';
+
+  return {
+    baseFilters,
+    siglaUf,
+    descrUf
+  };
+};

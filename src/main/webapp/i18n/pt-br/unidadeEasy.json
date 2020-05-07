@@ -36,7 +36,9 @@
       "tissinscricao": "Tissinscricao",
       "tisscbo": "Tisscbo",
       "tisscoduf": "Tisscoduf",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "categoria": "Categoria",
+      "help": {}
     }
   }
 }

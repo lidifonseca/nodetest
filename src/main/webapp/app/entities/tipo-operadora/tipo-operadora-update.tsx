@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './tipo-operadora.reducer';
+import {
+  ITipoOperadoraUpdateState,
+  getEntity,
+  getTipoOperadoraState,
+  ITipoOperadoraBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './tipo-operadora.reducer';
 import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITipoOperadoraUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ITipoOperadoraUpdateState {
-  isNew: boolean;
-}
-
 export class TipoOperadoraUpdate extends React.Component<ITipoOperadoraUpdateProps, ITipoOperadoraUpdateState> {
   constructor(props: Readonly<ITipoOperadoraUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getTipoOperadoraState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class TipoOperadoraUpdate extends React.Component<ITipoOperadoraUpdatePro
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['tipo'] ? '&tipo=' + fieldsBase['tipo'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { tipoOperadoraEntity } = this.props;
@@ -57,13 +77,14 @@ export class TipoOperadoraUpdate extends React.Component<ITipoOperadoraUpdatePro
   };
 
   handleClose = () => {
-    this.props.history.push('/tipo-operadora');
+    this.props.history.push('/tipo-operadora?' + this.getFiltersURL());
   };
 
   render() {
     const { tipoOperadoraEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +117,14 @@ export class TipoOperadoraUpdate extends React.Component<ITipoOperadoraUpdatePro
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/tipo-operadora" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/tipo-operadora?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +139,7 @@ export class TipoOperadoraUpdate extends React.Component<ITipoOperadoraUpdatePro
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,51 +155,46 @@ export class TipoOperadoraUpdate extends React.Component<ITipoOperadoraUpdatePro
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'tipo' ? (
+                          <Col md="tipo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoLabel" for="tipo-operadora-tipo">
+                                    <Translate contentKey="generadorApp.tipoOperadora.tipo">Tipo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-operadora-tipo" type="text" name="tipo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoLabel" for="tipo-operadora-tipo">
-                                <Translate contentKey="generadorApp.tipoOperadora.tipo">Tipo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="tipo-operadora-tipo"
-                                type="text"
-                                name="tipo"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="tipo-operadora-ativo">
-                                <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="tipo-operadora-ativo"
-                                type="text"
-                                name="ativo"
-                                validate={{
-                                  maxLength: { value: 1, errorMessage: translate('entity.validation.maxlength', { max: 1 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="tipo-operadora-ativo">
+                                    <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-operadora-ativo" type="text" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

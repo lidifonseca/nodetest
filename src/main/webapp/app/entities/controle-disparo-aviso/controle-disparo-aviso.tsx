@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './controle-disparo-aviso.reducer';
+import { getControleDisparoAvisoState, IControleDisparoAvisoBaseState, getEntities } from './controle-disparo-aviso.reducer';
 import { IControleDisparoAviso } from 'app/shared/model/controle-disparo-aviso.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IControleDisparoAvisoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IControleDisparoAvisoBaseState {
-  idAtendimento: any;
-  qtdDisparo: any;
-  avisopush: any;
-}
 export interface IControleDisparoAvisoState extends IControleDisparoAvisoBaseState, IPaginationBaseState {}
 
 export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoProps, IControleDisparoAvisoState> {
@@ -43,22 +38,9 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getControleDisparoAvisoState(this.props.location)
+      ...getControleDisparoAvisoState(this.props.location)
     };
   }
-
-  getControleDisparoAvisoState = (location): IControleDisparoAvisoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idAtendimento = url.searchParams.get('idAtendimento') || '';
-    const qtdDisparo = url.searchParams.get('qtdDisparo') || '';
-    const avisopush = url.searchParams.get('avisopush') || '';
-
-    return {
-      idAtendimento,
-      qtdDisparo,
-      avisopush
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -102,7 +84,9 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -153,7 +137,11 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.controleDisparoAviso.home.createLabel">Create a new Controle Disparo Aviso</Translate>
@@ -166,35 +154,43 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idAtendimentoLabel" for="controle-disparo-aviso-idAtendimento">
-                            <Translate contentKey="generadorApp.controleDisparoAviso.idAtendimento">Id Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idAtendimento"
-                            id="controle-disparo-aviso-idAtendimento"
-                            value={this.state.idAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="qtdDisparoLabel" for="controle-disparo-aviso-qtdDisparo">
-                            <Translate contentKey="generadorApp.controleDisparoAviso.qtdDisparo">Qtd Disparo</Translate>
-                          </Label>
-                          <AvInput type="string" name="qtdDisparo" id="controle-disparo-aviso-qtdDisparo" value={this.state.qtdDisparo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="avisopushLabel" for="controle-disparo-aviso-avisopush">
-                            <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
-                          </Label>
-                          <AvInput type="string" name="avisopush" id="controle-disparo-aviso-avisopush" value={this.state.avisopush} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idAtendimentoLabel" for="controle-disparo-aviso-idAtendimento">
+                              <Translate contentKey="generadorApp.controleDisparoAviso.idAtendimento">Id Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idAtendimento"
+                              id="controle-disparo-aviso-idAtendimento"
+                              value={this.state.idAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'qtdDisparo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="qtdDisparoLabel" for="controle-disparo-aviso-qtdDisparo">
+                              <Translate contentKey="generadorApp.controleDisparoAviso.qtdDisparo">Qtd Disparo</Translate>
+                            </Label>
+                            <AvInput type="string" name="qtdDisparo" id="controle-disparo-aviso-qtdDisparo" value={this.state.qtdDisparo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'avisopush' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="avisopushLabel" for="controle-disparo-aviso-avisopush">
+                              <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
+                            </Label>
+                            <AvInput type="string" name="avisopush" id="controle-disparo-aviso-avisopush" value={this.state.avisopush} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -222,18 +218,24 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idAtendimento')}>
-                        <Translate contentKey="generadorApp.controleDisparoAviso.idAtendimento">Id Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('qtdDisparo')}>
-                        <Translate contentKey="generadorApp.controleDisparoAviso.qtdDisparo">Qtd Disparo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('avisopush')}>
-                        <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <th className="hand" onClick={this.sort('idAtendimento')}>
+                          <Translate contentKey="generadorApp.controleDisparoAviso.idAtendimento">Id Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'qtdDisparo' ? (
+                        <th className="hand" onClick={this.sort('qtdDisparo')}>
+                          <Translate contentKey="generadorApp.controleDisparoAviso.qtdDisparo">Qtd Disparo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'avisopush' ? (
+                        <th className="hand" onClick={this.sort('avisopush')}>
+                          <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -248,27 +250,42 @@ export class ControleDisparoAviso extends React.Component<IControleDisparoAvisoP
                           </Button>
                         </td>
 
-                        <td>{controleDisparoAviso.idAtendimento}</td>
+                        {this.state.baseFilters !== 'idAtendimento' ? <td>{controleDisparoAviso.idAtendimento}</td> : null}
 
-                        <td>{controleDisparoAviso.qtdDisparo}</td>
+                        {this.state.baseFilters !== 'qtdDisparo' ? <td>{controleDisparoAviso.qtdDisparo}</td> : null}
 
-                        <td>{controleDisparoAviso.avisopush}</td>
+                        {this.state.baseFilters !== 'avisopush' ? <td>{controleDisparoAviso.avisopush}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${controleDisparoAviso.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${controleDisparoAviso.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${controleDisparoAviso.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${controleDisparoAviso.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${controleDisparoAviso.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${controleDisparoAviso.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

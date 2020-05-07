@@ -68,7 +68,9 @@ export class ProfissionalNewController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() profissionalNew: ProfissionalNew): Promise<ProfissionalNew> {
+    console.info(profissionalNew);
     const created = await this.profissionalNewService.save(profissionalNew);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalNew', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ProfissionalNewController {
   })
   async put(@Req() req: Request, @Body() profissionalNew: ProfissionalNew): Promise<ProfissionalNew> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalNew', profissionalNew.id);
+
     return await this.profissionalNewService.update(profissionalNew);
   }
 

@@ -68,7 +68,9 @@ export class GrauParentescoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() grauParentesco: GrauParentesco): Promise<GrauParentesco> {
+    console.info(grauParentesco);
     const created = await this.grauParentescoService.save(grauParentesco);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'GrauParentesco', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class GrauParentescoController {
   })
   async put(@Req() req: Request, @Body() grauParentesco: GrauParentesco): Promise<GrauParentesco> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'GrauParentesco', grauParentesco.id);
+
     return await this.grauParentescoService.update(grauParentesco);
   }
 

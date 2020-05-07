@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './licao-casa.reducer';
+import { getEntity, ILicaoCasaBaseState, getLicaoCasaState } from './licao-casa.reducer';
 import { ILicaoCasa } from 'app/shared/model/licao-casa.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ILicaoCasaState {
+  fieldsBase: ILicaoCasaBaseState;
+}
+
 export interface ILicaoCasaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class LicaoCasaDetail extends React.Component<ILicaoCasaDetailProps> {
+export class LicaoCasaDetail extends React.Component<ILicaoCasaDetailProps, ILicaoCasaState> {
   constructor(props: Readonly<ILicaoCasaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getLicaoCasaState(this.props.location)
     };
   }
 

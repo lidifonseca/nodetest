@@ -68,7 +68,9 @@ export class GeoPanicoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() geoPanico: GeoPanico): Promise<GeoPanico> {
+    console.info(geoPanico);
     const created = await this.geoPanicoService.save(geoPanico);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'GeoPanico', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class GeoPanicoController {
   })
   async put(@Req() req: Request, @Body() geoPanico: GeoPanico): Promise<GeoPanico> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'GeoPanico', geoPanico.id);
+
     return await this.geoPanicoService.update(geoPanico);
   }
 

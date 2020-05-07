@@ -31,26 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-item-temp.reducer';
+import { getPadItemTempState, IPadItemTempBaseState, getEntities } from './pad-item-temp.reducer';
 import { IPadItemTemp } from 'app/shared/model/pad-item-temp.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPadItemTempProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadItemTempBaseState {
-  sessionId: any;
-  idEspecialidade: any;
-  idPeriodicidade: any;
-  idPeriodo: any;
-  dataInicio: any;
-  dataFim: any;
-  qtdSessoes: any;
-  observacao: any;
-  cidXPtaNovoId: any;
-  categoriaId: any;
-  numGhc: any;
-}
 export interface IPadItemTempState extends IPadItemTempBaseState, IPaginationBaseState {}
 
 export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTempState> {
@@ -60,38 +47,9 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadItemTempState(this.props.location)
+      ...getPadItemTempState(this.props.location)
     };
   }
-
-  getPadItemTempState = (location): IPadItemTempBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const sessionId = url.searchParams.get('sessionId') || '';
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-    const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
-    const idPeriodo = url.searchParams.get('idPeriodo') || '';
-    const dataInicio = url.searchParams.get('dataInicio') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-    const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
-    const observacao = url.searchParams.get('observacao') || '';
-    const cidXPtaNovoId = url.searchParams.get('cidXPtaNovoId') || '';
-    const categoriaId = url.searchParams.get('categoriaId') || '';
-    const numGhc = url.searchParams.get('numGhc') || '';
-
-    return {
-      sessionId,
-      idEspecialidade,
-      idPeriodicidade,
-      idPeriodo,
-      dataInicio,
-      dataFim,
-      qtdSessoes,
-      observacao,
-      cidXPtaNovoId,
-      categoriaId,
-      numGhc
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -143,7 +101,9 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -249,7 +209,11 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padItemTemp.home.createLabel">Create a new Pad Item Temp</Translate>
@@ -262,107 +226,139 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="sessionIdLabel" for="pad-item-temp-sessionId">
-                            <Translate contentKey="generadorApp.padItemTemp.sessionId">Session Id</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'sessionId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="sessionIdLabel" for="pad-item-temp-sessionId">
+                              <Translate contentKey="generadorApp.padItemTemp.sessionId">Session Id</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="sessionId" id="pad-item-temp-sessionId" value={this.state.sessionId} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idEspecialidadeLabel" for="pad-item-temp-idEspecialidade">
-                            <Translate contentKey="generadorApp.padItemTemp.idEspecialidade">Id Especialidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idEspecialidade"
-                            id="pad-item-temp-idEspecialidade"
-                            value={this.state.idEspecialidade}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodicidadeLabel" for="pad-item-temp-idPeriodicidade">
-                            <Translate contentKey="generadorApp.padItemTemp.idPeriodicidade">Id Periodicidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPeriodicidade"
-                            id="pad-item-temp-idPeriodicidade"
-                            value={this.state.idPeriodicidade}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodoLabel" for="pad-item-temp-idPeriodo">
-                            <Translate contentKey="generadorApp.padItemTemp.idPeriodo">Id Periodo</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPeriodo" id="pad-item-temp-idPeriodo" value={this.state.idPeriodo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataInicioLabel" for="pad-item-temp-dataInicio">
-                            <Translate contentKey="generadorApp.padItemTemp.dataInicio">Data Inicio</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataInicio" id="pad-item-temp-dataInicio" value={this.state.dataInicio} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataFimLabel" for="pad-item-temp-dataFim">
-                            <Translate contentKey="generadorApp.padItemTemp.dataFim">Data Fim</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataFim" id="pad-item-temp-dataFim" value={this.state.dataFim} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="qtdSessoesLabel" for="pad-item-temp-qtdSessoes">
-                            <Translate contentKey="generadorApp.padItemTemp.qtdSessoes">Qtd Sessoes</Translate>
-                          </Label>
-                          <AvInput type="string" name="qtdSessoes" id="pad-item-temp-qtdSessoes" value={this.state.qtdSessoes} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacaoLabel" for="pad-item-temp-observacao">
-                            <Translate contentKey="generadorApp.padItemTemp.observacao">Observacao</Translate>
-                          </Label>
+                            <AvInput type="text" name="sessionId" id="pad-item-temp-sessionId" value={this.state.sessionId} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="observacao" id="pad-item-temp-observacao" value={this.state.observacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidXPtaNovoIdLabel" for="pad-item-temp-cidXPtaNovoId">
-                            <Translate contentKey="generadorApp.padItemTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                          </Label>
-                          <AvInput type="string" name="cidXPtaNovoId" id="pad-item-temp-cidXPtaNovoId" value={this.state.cidXPtaNovoId} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="categoriaIdLabel" for="pad-item-temp-categoriaId">
-                            <Translate contentKey="generadorApp.padItemTemp.categoriaId">Categoria Id</Translate>
-                          </Label>
-                          <AvInput type="string" name="categoriaId" id="pad-item-temp-categoriaId" value={this.state.categoriaId} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="numGhcLabel" for="pad-item-temp-numGhc">
-                            <Translate contentKey="generadorApp.padItemTemp.numGhc">Num Ghc</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idEspecialidadeLabel" for="pad-item-temp-idEspecialidade">
+                              <Translate contentKey="generadorApp.padItemTemp.idEspecialidade">Id Especialidade</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idEspecialidade"
+                              id="pad-item-temp-idEspecialidade"
+                              value={this.state.idEspecialidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="numGhc" id="pad-item-temp-numGhc" value={this.state.numGhc} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodicidadeLabel" for="pad-item-temp-idPeriodicidade">
+                              <Translate contentKey="generadorApp.padItemTemp.idPeriodicidade">Id Periodicidade</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPeriodicidade"
+                              id="pad-item-temp-idPeriodicidade"
+                              value={this.state.idPeriodicidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodoLabel" for="pad-item-temp-idPeriodo">
+                              <Translate contentKey="generadorApp.padItemTemp.idPeriodo">Id Periodo</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPeriodo" id="pad-item-temp-idPeriodo" value={this.state.idPeriodo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataInicioLabel" for="pad-item-temp-dataInicio">
+                              <Translate contentKey="generadorApp.padItemTemp.dataInicio">Data Inicio</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataInicio" id="pad-item-temp-dataInicio" value={this.state.dataInicio} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataFimLabel" for="pad-item-temp-dataFim">
+                              <Translate contentKey="generadorApp.padItemTemp.dataFim">Data Fim</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataFim" id="pad-item-temp-dataFim" value={this.state.dataFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="qtdSessoesLabel" for="pad-item-temp-qtdSessoes">
+                              <Translate contentKey="generadorApp.padItemTemp.qtdSessoes">Qtd Sessoes</Translate>
+                            </Label>
+                            <AvInput type="string" name="qtdSessoes" id="pad-item-temp-qtdSessoes" value={this.state.qtdSessoes} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacaoLabel" for="pad-item-temp-observacao">
+                              <Translate contentKey="generadorApp.padItemTemp.observacao">Observacao</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="observacao" id="pad-item-temp-observacao" value={this.state.observacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidXPtaNovoId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidXPtaNovoIdLabel" for="pad-item-temp-cidXPtaNovoId">
+                              <Translate contentKey="generadorApp.padItemTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
+                            </Label>
+                            <AvInput type="string" name="cidXPtaNovoId" id="pad-item-temp-cidXPtaNovoId" value={this.state.cidXPtaNovoId} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'categoriaId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="categoriaIdLabel" for="pad-item-temp-categoriaId">
+                              <Translate contentKey="generadorApp.padItemTemp.categoriaId">Categoria Id</Translate>
+                            </Label>
+                            <AvInput type="string" name="categoriaId" id="pad-item-temp-categoriaId" value={this.state.categoriaId} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'numGhc' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="numGhcLabel" for="pad-item-temp-numGhc">
+                              <Translate contentKey="generadorApp.padItemTemp.numGhc">Num Ghc</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="numGhc" id="pad-item-temp-numGhc" value={this.state.numGhc} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -390,50 +386,72 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('sessionId')}>
-                        <Translate contentKey="generadorApp.padItemTemp.sessionId">Session Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idEspecialidade')}>
-                        <Translate contentKey="generadorApp.padItemTemp.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodicidade')}>
-                        <Translate contentKey="generadorApp.padItemTemp.idPeriodicidade">Id Periodicidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodo')}>
-                        <Translate contentKey="generadorApp.padItemTemp.idPeriodo">Id Periodo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataInicio')}>
-                        <Translate contentKey="generadorApp.padItemTemp.dataInicio">Data Inicio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataFim')}>
-                        <Translate contentKey="generadorApp.padItemTemp.dataFim">Data Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('qtdSessoes')}>
-                        <Translate contentKey="generadorApp.padItemTemp.qtdSessoes">Qtd Sessoes</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('observacao')}>
-                        <Translate contentKey="generadorApp.padItemTemp.observacao">Observacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidXPtaNovoId')}>
-                        <Translate contentKey="generadorApp.padItemTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('categoriaId')}>
-                        <Translate contentKey="generadorApp.padItemTemp.categoriaId">Categoria Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('numGhc')}>
-                        <Translate contentKey="generadorApp.padItemTemp.numGhc">Num Ghc</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'sessionId' ? (
+                        <th className="hand" onClick={this.sort('sessionId')}>
+                          <Translate contentKey="generadorApp.padItemTemp.sessionId">Session Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <th className="hand" onClick={this.sort('idEspecialidade')}>
+                          <Translate contentKey="generadorApp.padItemTemp.idEspecialidade">Id Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <th className="hand" onClick={this.sort('idPeriodicidade')}>
+                          <Translate contentKey="generadorApp.padItemTemp.idPeriodicidade">Id Periodicidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <th className="hand" onClick={this.sort('idPeriodo')}>
+                          <Translate contentKey="generadorApp.padItemTemp.idPeriodo">Id Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <th className="hand" onClick={this.sort('dataInicio')}>
+                          <Translate contentKey="generadorApp.padItemTemp.dataInicio">Data Inicio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <th className="hand" onClick={this.sort('dataFim')}>
+                          <Translate contentKey="generadorApp.padItemTemp.dataFim">Data Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <th className="hand" onClick={this.sort('qtdSessoes')}>
+                          <Translate contentKey="generadorApp.padItemTemp.qtdSessoes">Qtd Sessoes</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <th className="hand" onClick={this.sort('observacao')}>
+                          <Translate contentKey="generadorApp.padItemTemp.observacao">Observacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidXPtaNovoId' ? (
+                        <th className="hand" onClick={this.sort('cidXPtaNovoId')}>
+                          <Translate contentKey="generadorApp.padItemTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'categoriaId' ? (
+                        <th className="hand" onClick={this.sort('categoriaId')}>
+                          <Translate contentKey="generadorApp.padItemTemp.categoriaId">Categoria Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'numGhc' ? (
+                        <th className="hand" onClick={this.sort('numGhc')}>
+                          <Translate contentKey="generadorApp.padItemTemp.numGhc">Num Ghc</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -448,47 +466,56 @@ export class PadItemTemp extends React.Component<IPadItemTempProps, IPadItemTemp
                           </Button>
                         </td>
 
-                        <td>{padItemTemp.sessionId}</td>
+                        {this.state.baseFilters !== 'sessionId' ? <td>{padItemTemp.sessionId}</td> : null}
 
-                        <td>{padItemTemp.idEspecialidade}</td>
+                        {this.state.baseFilters !== 'idEspecialidade' ? <td>{padItemTemp.idEspecialidade}</td> : null}
 
-                        <td>{padItemTemp.idPeriodicidade}</td>
+                        {this.state.baseFilters !== 'idPeriodicidade' ? <td>{padItemTemp.idPeriodicidade}</td> : null}
 
-                        <td>{padItemTemp.idPeriodo}</td>
+                        {this.state.baseFilters !== 'idPeriodo' ? <td>{padItemTemp.idPeriodo}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={padItemTemp.dataInicio} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataInicio' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemTemp.dataInicio} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={padItemTemp.dataFim} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataFim' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemTemp.dataFim} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{padItemTemp.qtdSessoes}</td>
+                        {this.state.baseFilters !== 'qtdSessoes' ? <td>{padItemTemp.qtdSessoes}</td> : null}
 
-                        <td>{padItemTemp.observacao}</td>
+                        {this.state.baseFilters !== 'observacao' ? <td>{padItemTemp.observacao}</td> : null}
 
-                        <td>{padItemTemp.cidXPtaNovoId}</td>
+                        {this.state.baseFilters !== 'cidXPtaNovoId' ? <td>{padItemTemp.cidXPtaNovoId}</td> : null}
 
-                        <td>{padItemTemp.categoriaId}</td>
+                        {this.state.baseFilters !== 'categoriaId' ? <td>{padItemTemp.categoriaId}</td> : null}
 
-                        <td>{padItemTemp.numGhc}</td>
+                        {this.state.baseFilters !== 'numGhc' ? <td>{padItemTemp.numGhc}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padItemTemp.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padItemTemp.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemTemp.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padItemTemp.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemTemp.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemTemp.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

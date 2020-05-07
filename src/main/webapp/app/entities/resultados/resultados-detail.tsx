@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './resultados.reducer';
+import { getEntity, IResultadosBaseState, getResultadosState } from './resultados.reducer';
 import { IResultados } from 'app/shared/model/resultados.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IResultadosState {
+  fieldsBase: IResultadosBaseState;
+}
+
 export interface IResultadosDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ResultadosDetail extends React.Component<IResultadosDetailProps> {
+export class ResultadosDetail extends React.Component<IResultadosDetailProps, IResultadosState> {
   constructor(props: Readonly<IResultadosDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getResultadosState(this.props.location)
     };
   }
 

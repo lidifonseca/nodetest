@@ -22,7 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './unidade-easy-area-atuacao.reducer';
+import { getUnidadeEasyAreaAtuacaoState, IUnidadeEasyAreaAtuacaoBaseState, getEntities } from './unidade-easy-area-atuacao.reducer';
 import { IUnidadeEasyAreaAtuacao } from 'app/shared/model/unidade-easy-area-atuacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -32,11 +32,6 @@ import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unida
 
 export interface IUnidadeEasyAreaAtuacaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IUnidadeEasyAreaAtuacaoBaseState {
-  cepInicial: any;
-  cepFinal: any;
-  unidade: any;
-}
 export interface IUnidadeEasyAreaAtuacaoState extends IUnidadeEasyAreaAtuacaoBaseState, IPaginationBaseState {}
 
 export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtuacaoProps, IUnidadeEasyAreaAtuacaoState> {
@@ -46,23 +41,9 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getUnidadeEasyAreaAtuacaoState(this.props.location)
+      ...getUnidadeEasyAreaAtuacaoState(this.props.location)
     };
   }
-
-  getUnidadeEasyAreaAtuacaoState = (location): IUnidadeEasyAreaAtuacaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const cepInicial = url.searchParams.get('cepInicial') || '';
-    const cepFinal = url.searchParams.get('cepFinal') || '';
-
-    const unidade = url.searchParams.get('unidade') || '';
-
-    return {
-      cepInicial,
-      cepFinal,
-      unidade
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -108,7 +89,9 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -159,7 +142,11 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.home.createLabel">
@@ -174,44 +161,56 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepInicialLabel" for="unidade-easy-area-atuacao-cepInicial">
-                            <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepInicial">Cep Inicial</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cepInicial" id="unidade-easy-area-atuacao-cepInicial" value={this.state.cepInicial} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepFinalLabel" for="unidade-easy-area-atuacao-cepFinal">
-                            <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cepFinal" id="unidade-easy-area-atuacao-cepFinal" value={this.state.cepFinal} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="unidade-easy-area-atuacao-unidade">
-                              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
+                      {this.state.baseFilters !== 'cepInicial' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepInicialLabel" for="unidade-easy-area-atuacao-cepInicial">
+                              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepInicial">Cep Inicial</Translate>
                             </Label>
-                            <AvInput id="unidade-easy-area-atuacao-unidade" type="select" className="form-control" name="unidadeId">
-                              <option value="" key="0" />
-                              {unidadeEasies
-                                ? unidadeEasies.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.razaoSocial}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput
+                              type="text"
+                              name="cepInicial"
+                              id="unidade-easy-area-atuacao-cepInicial"
+                              value={this.state.cepInicial}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cepFinal' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepFinalLabel" for="unidade-easy-area-atuacao-cepFinal">
+                              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cepFinal" id="unidade-easy-area-atuacao-cepFinal" value={this.state.cepFinal} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="unidade-easy-area-atuacao-unidade">
+                                <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
+                              </Label>
+                              <AvInput id="unidade-easy-area-atuacao-unidade" type="select" className="form-control" name="unidadeId">
+                                <option value="" key="0" />
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -239,18 +238,25 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('cepInicial')}>
-                        <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepInicial">Cep Inicial</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cepFinal')}>
-                        <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'cepInicial' ? (
+                        <th className="hand" onClick={this.sort('cepInicial')}>
+                          <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepInicial">Cep Inicial</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cepFinal' ? (
+                        <th className="hand" onClick={this.sort('cepFinal')}>
+                          <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -265,32 +271,50 @@ export class UnidadeEasyAreaAtuacao extends React.Component<IUnidadeEasyAreaAtua
                           </Button>
                         </td>
 
-                        <td>{unidadeEasyAreaAtuacao.cepInicial}</td>
+                        {this.state.baseFilters !== 'cepInicial' ? <td>{unidadeEasyAreaAtuacao.cepInicial}</td> : null}
 
-                        <td>{unidadeEasyAreaAtuacao.cepFinal}</td>
-                        <td>
-                          {unidadeEasyAreaAtuacao.unidade ? (
-                            <Link to={`unidade-easy/${unidadeEasyAreaAtuacao.unidade.id}`}>{unidadeEasyAreaAtuacao.unidade.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'cepFinal' ? <td>{unidadeEasyAreaAtuacao.cepFinal}</td> : null}
+
+                        {this.state.baseFilters !== 'unidade' ? (
+                          <td>
+                            {unidadeEasyAreaAtuacao.unidade ? (
+                              <Link to={`unidade-easy/${unidadeEasyAreaAtuacao.unidade.id}`}>{unidadeEasyAreaAtuacao.unidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${unidadeEasyAreaAtuacao.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${unidadeEasyAreaAtuacao.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${unidadeEasyAreaAtuacao.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${unidadeEasyAreaAtuacao.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${unidadeEasyAreaAtuacao.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${unidadeEasyAreaAtuacao.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

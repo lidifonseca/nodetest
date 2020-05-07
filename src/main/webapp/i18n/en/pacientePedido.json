@@ -3,15 +3,15 @@
     "pacientePedido": {
       "home": {
         "title": "Paciente Pedidos",
-        "createLabel": "Criar novo Paciente Pedido",
-        "createOrEditLabel": "Criar ou editar Paciente Pedido",
-        "notFound": "Nenhum Paciente Pedido encontrado"
+        "createLabel": "Create a new Paciente Pedido",
+        "createOrEditLabel": "Create or edit a Paciente Pedido",
+        "notFound": "No Paciente Pedidos found"
       },
-      "created": "Um novo Paciente Pedido foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Pedido foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Pedido foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Pedido is created with identifier {{ param }}",
+      "updated": "A Paciente Pedido is updated with identifier {{ param }}",
+      "deleted": "A Paciente Pedido is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Pedido {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Pedido {{ id }}?"
       },
       "detail": {
         "title": "Paciente Pedido"
@@ -23,10 +23,7 @@
       "valor": "Valor",
       "desconto": "Desconto",
       "tipoValor": "Tipo Valor",
-      "unidade": "Unidade",
-      "idPaciente": "Id Paciente",
-      "idCartao": "Id Cartao",
-      "idEspecialidade": "Id Especialidade"
+      "unidade": "Unidade"
     }
   }
 }

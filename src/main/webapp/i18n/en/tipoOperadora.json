@@ -3,15 +3,15 @@
     "tipoOperadora": {
       "home": {
         "title": "Tipo Operadoras",
-        "createLabel": "Criar novo Tipo Operadora",
-        "createOrEditLabel": "Criar ou editar Tipo Operadora",
-        "notFound": "Nenhum Tipo Operadora encontrado"
+        "createLabel": "Create a new Tipo Operadora",
+        "createOrEditLabel": "Create or edit a Tipo Operadora",
+        "notFound": "No Tipo Operadoras found"
       },
-      "created": "Um novo Tipo Operadora foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Operadora foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Operadora foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Operadora is created with identifier {{ param }}",
+      "updated": "A Tipo Operadora is updated with identifier {{ param }}",
+      "deleted": "A Tipo Operadora is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Operadora {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Operadora {{ id }}?"
       },
       "detail": {
         "title": "Tipo Operadora"

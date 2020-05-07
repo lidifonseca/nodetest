@@ -131,13 +131,14 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
     this.props.getEntitiesExport(termosUso, tipo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();

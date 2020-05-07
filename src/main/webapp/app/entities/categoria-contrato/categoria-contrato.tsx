@@ -18,7 +18,6 @@ import {
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
   openFile,
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -37,9 +36,6 @@ import { ICategoriaContrato } from 'app/shared/model/categoria-contrato.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ICategoria } from 'app/shared/model/categoria.model';
-import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
-
 export interface ICategoriaContratoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ICategoriaContratoState extends ICategoriaContratoBaseState, IPaginationBaseState {}
@@ -57,16 +53,13 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getCategorias();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         contrato: '',
-        ativo: '',
-        idCategoria: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -99,7 +92,9 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -117,9 +112,6 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idCategoria=' +
-      this.state.idCategoria +
-      '&' +
       ''
     );
   };
@@ -127,12 +119,12 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { contrato, ativo, idCategoria, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(contrato, ativo, idCategoria, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { contrato, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(contrato, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { categorias, categoriaContratoList, match, totalItems } = this.props;
+    const { categoriaContratoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -150,7 +142,11 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.categoriaContrato.home.createLabel">Create a new Categoria Contrato</Translate>
@@ -163,66 +159,22 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label id="contratoLabel" for="contrato">
-                              <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                            </Label>
-                            <br />
-                            {contrato ? (
-                              <div>
-                                <a onClick={openFile(contratoContentType, contrato)}>
-                                  <Translate contentKey="entity.action.open">Open</Translate>
-                                </a>
-                                <br />
-                                <Row>
-                                  <Col md="11">
-                                    <span>
-                                      {contratoContentType}, {byteSize(contrato)}
-                                    </span>
-                                  </Col>
-                                  <Col md="1">
-                                    <Button color="danger" onClick={this.clearBlob('contrato')}>
-                                      <FontAwesomeIcon icon="times-circle" />
-                                    </Button>
-                                  </Col>
-                                </Row>
-                              </div>
-                            ) : null}
-                            <input id="file_contrato" type="file" onChange={this.onBlobChange(false, 'contrato')} />
-                            <AvInput type="hidden" name="contrato" value={contrato} />
-                          </div>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="categoria-contrato-ativo">
-                            <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="categoria-contrato-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'contrato' ? (
+                        <Col md="3">
+                          <Row></Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="categoria-contrato-idCategoria">
-                              <Translate contentKey="generadorApp.categoriaContrato.idCategoria">Id Categoria</Translate>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="categoria-contrato-ativo">
+                              <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput id="categoria-contrato-idCategoria" type="select" className="form-control" name="idCategoriaId">
-                              <option value="" key="0" />
-                              {categorias
-                                ? categorias.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="ativo" id="categoria-contrato-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -250,18 +202,18 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('contrato')}>
-                        <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.categoriaContrato.idCategoria">Id Categoria</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'contrato' ? (
+                        <th className="hand" onClick={this.sort('contrato')}>
+                          <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -276,31 +228,55 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
                           </Button>
                         </td>
 
-                        <td>
-                          {categoriaContrato.contrato ? (
-                            <div>
-                              <a onClick={openFile(categoriaContrato.contratoContentType, categoriaContrato.contrato)}>
-                                <Translate contentKey="entity.action.open">Open</Translate>
-                                &nbsp;
-                              </a>
-                              <span>
-                                {categoriaContrato.contratoContentType}, {byteSize(categoriaContrato.contrato)}
-                              </span>
-                            </div>
-                          ) : null}
-                        </td>
+                        {this.state.baseFilters !== 'contrato' ? (
+                          <td>
+                            {categoriaContrato.contrato ? (
+                              <div>
+                                <a rel="noopener noreferrer" target={'_blank'} href={`${categoriaContrato.contrato}`}>
+                                  {categoriaContrato.contratoContentType.indexOf('image/') !== -1 ? (
+                                    <img src={`${categoriaContrato.contrato}`} style={{ maxHeight: '30px' }} />
+                                  ) : (
+                                    <Translate contentKey="entity.action.open">Open</Translate>
+                                  )}
+                                </a>
+                              </div>
+                            ) : null}
+                          </td>
+                        ) : null}
 
-                        <td>{categoriaContrato.ativo}</td>
-                        <td>
-                          {categoriaContrato.idCategoria ? (
-                            <Link to={`categoria/${categoriaContrato.idCategoria.id}`}>{categoriaContrato.idCategoria.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{categoriaContrato.ativo}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${categoriaContrato.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${categoriaContrato.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${categoriaContrato.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -336,13 +312,11 @@ export class CategoriaContrato extends React.Component<ICategoriaContratoProps, 
 }
 
 const mapStateToProps = ({ categoriaContrato, ...storeState }: IRootState) => ({
-  categorias: storeState.categoria.entities,
   categoriaContratoList: categoriaContrato.entities,
   totalItems: categoriaContrato.totalItems
 });
 
 const mapDispatchToProps = {
-  getCategorias,
   getEntities
 };
 

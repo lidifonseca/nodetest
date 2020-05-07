@@ -3,7 +3,6 @@ export interface IPadPta {
   idPad?: string;
   idDescPta?: string;
   idCid?: string;
-  idUsuario?: string;
   idCidXPtaNovo?: number;
 }
 

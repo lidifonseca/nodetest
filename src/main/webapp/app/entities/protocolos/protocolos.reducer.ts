@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProtocolos, defaultValue } from 'app/shared/model/protocolos.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROTOCOLOS_LIST_EXPORT: 'protocolos/FETCH_PROTOCOLOS_LIST_EXPORT',
   FETCH_PROTOCOLOS_LIST: 'protocolos/FETCH_PROTOCOLOS_LIST',
   FETCH_PROTOCOLOS: 'protocolos/FETCH_PROTOCOLOS',
   CREATE_PROTOCOLOS: 'protocolos/CREATE_PROTOCOLOS',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type ProtocolosState = Readonly<typeof initialState>;
 
+export interface IProtocolosBaseState {
+  baseFilters: any;
+  protocolo: any;
+}
+
+export interface IProtocolosUpdateState {
+  fieldsBase: IProtocolosBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProtocolosState = initialState, action): ProtocolosState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROTOCOLOS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROTOCOLOS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROTOCOLOS):
       return {
@@ -51,6 +63,7 @@ export default (state: ProtocolosState = initialState, action): ProtocolosState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROTOCOLOS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROTOCOLOS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROTOCOLOS):
     case FAILURE(ACTION_TYPES.CREATE_PROTOCOLOS):
@@ -129,6 +142,16 @@ export const getEntity: ICrudGetAction<IProtocolos> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProtocolos<IProtocolos> = (protocolo, page, size, sort) => {
+  const protocoloRequest = protocolo ? `protocolo.contains=${protocolo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROTOCOLOS_LIST,
+    payload: axios.get<IProtocolos>(`${requestUrl}${protocoloRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IProtocolos> = entity => async dispatch => {
   entity = {
     ...entity
@@ -164,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<IProtocolos> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProtocolosState = (location): IProtocolosBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const protocolo = url.searchParams.get('protocolo') || '';
+
+  return {
+    baseFilters,
+    protocolo
+  };
+};

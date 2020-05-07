@@ -4,43 +4,34 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Operadora from './operadora.entity';
-import Especialidade from './especialidade.entity';
-
 /**
  * A EspecialidadeOperadora.
  */
-@Entity('especialidade_operadora')
+@Entity('tb_especialidade_operadora')
 export default class EspecialidadeOperadora extends BaseEntity {
-  @Column({ name: 'cod_tuss', length: 30 })
+  @Column({ name: 'COD_TUSS', length: 30 })
   codTuss: string;
 
-  @Column({ name: 'cod_despesa', length: 5 })
+  @Column({ name: 'COD_DESPESA', length: 5 })
   codDespesa: string;
 
-  @Column({ name: 'cod_tabela', length: 5 })
+  @Column({ name: 'COD_TABELA', length: 5 })
   codTabela: string;
 
-  @Column({ type: 'float', name: 'valor_custo' })
+  @Column({ type: 'float', name: 'VALOR_CUSTO' })
   valorCusto: number;
 
-  @Column({ type: 'float', name: 'valor_venda' })
+  @Column({ type: 'float', name: 'VALOR_VENDA' })
   valorVenda: number;
 
-  @Column({ type: 'float', name: 'desconto_custo' })
+  @Column({ type: 'float', name: 'DESCONTO_CUSTO' })
   descontoCusto: number;
 
-  @Column({ type: 'float', name: 'desconto_venda' })
+  @Column({ type: 'float', name: 'DESCONTO_VENDA' })
   descontoVenda: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
-
-  @ManyToOne(type => Operadora)
-  idOperadora: Operadora;
-
-  @ManyToOne(type => Especialidade)
-  idEspecialidade: Especialidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

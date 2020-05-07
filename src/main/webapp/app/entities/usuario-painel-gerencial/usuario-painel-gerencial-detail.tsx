@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './usuario-painel-gerencial.reducer';
+import { getEntity, IUsuarioPainelGerencialBaseState, getUsuarioPainelGerencialState } from './usuario-painel-gerencial.reducer';
 import { IUsuarioPainelGerencial } from 'app/shared/model/usuario-painel-gerencial.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUsuarioPainelGerencialState {
+  fieldsBase: IUsuarioPainelGerencialBaseState;
+}
+
 export interface IUsuarioPainelGerencialDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainelGerencialDetailProps> {
+export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainelGerencialDetailProps, IUsuarioPainelGerencialState> {
   constructor(props: Readonly<IUsuarioPainelGerencialDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUsuarioPainelGerencialState(this.props.location)
     };
   }
 
@@ -51,21 +56,6 @@ export class UsuarioPainelGerencialDetail extends React.Component<IUsuarioPainel
                   <b>{usuarioPainelGerencialEntity.id}</b>]
                 </h2>
                 <Row className="jh-entity-details">
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.usuarioPainelGerencial.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioPainelGerencialEntity.idUsuario}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
                   <Col md="12">
                     <Row>
                       <Col md="3">

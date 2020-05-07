@@ -22,27 +22,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './especialidade-unidade.reducer';
+import { getEspecialidadeUnidadeState, IEspecialidadeUnidadeBaseState, getEntities } from './especialidade-unidade.reducer';
 import { IEspecialidadeUnidade } from 'app/shared/model/especialidade-unidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
 
 export interface IEspecialidadeUnidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IEspecialidadeUnidadeBaseState {
-  valorBaixaUrg: any;
-  valorAltaUrg: any;
-  valorPagar: any;
-  publicar: any;
-  comentarioPreco: any;
-  unidade: any;
-  idEspecialidade: any;
-}
 export interface IEspecialidadeUnidadeState extends IEspecialidadeUnidadeBaseState, IPaginationBaseState {}
 
 export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeProps, IEspecialidadeUnidadeState> {
@@ -52,37 +41,14 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getEspecialidadeUnidadeState(this.props.location)
+      ...getEspecialidadeUnidadeState(this.props.location)
     };
   }
-
-  getEspecialidadeUnidadeState = (location): IEspecialidadeUnidadeBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const valorBaixaUrg = url.searchParams.get('valorBaixaUrg') || '';
-    const valorAltaUrg = url.searchParams.get('valorAltaUrg') || '';
-    const valorPagar = url.searchParams.get('valorPagar') || '';
-    const publicar = url.searchParams.get('publicar') || '';
-    const comentarioPreco = url.searchParams.get('comentarioPreco') || '';
-
-    const unidade = url.searchParams.get('unidade') || '';
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-
-    return {
-      valorBaixaUrg,
-      valorAltaUrg,
-      valorPagar,
-      publicar,
-      comentarioPreco,
-      unidade,
-      idEspecialidade
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
 
     this.props.getUnidadeEasies();
-    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -93,8 +59,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
         valorPagar: '',
         publicar: '',
         comentarioPreco: '',
-        unidade: '',
-        idEspecialidade: ''
+        unidade: ''
       },
       () => this.sortEntities()
     );
@@ -127,7 +92,9 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -157,9 +124,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       'unidade=' +
       this.state.unidade +
       '&' +
-      'idEspecialidade=' +
-      this.state.idEspecialidade +
-      '&' +
       ''
     );
   };
@@ -174,7 +138,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       publicar,
       comentarioPreco,
       unidade,
-      idEspecialidade,
       activePage,
       itemsPerPage,
       sort,
@@ -187,7 +150,6 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
       publicar,
       comentarioPreco,
       unidade,
-      idEspecialidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -195,7 +157,7 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
   };
 
   render() {
-    const { unidadeEasies, especialidades, especialidadeUnidadeList, match, totalItems } = this.props;
+    const { unidadeEasies, especialidadeUnidadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -213,7 +175,11 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.especialidadeUnidade.home.createLabel">Create a new Especialidade Unidade</Translate>
@@ -226,107 +192,98 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorBaixaUrgLabel" for="especialidade-unidade-valorBaixaUrg">
-                            <Translate contentKey="generadorApp.especialidadeUnidade.valorBaixaUrg">Valor Baixa Urg</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="valorBaixaUrg"
-                            id="especialidade-unidade-valorBaixaUrg"
-                            value={this.state.valorBaixaUrg}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorAltaUrgLabel" for="especialidade-unidade-valorAltaUrg">
-                            <Translate contentKey="generadorApp.especialidadeUnidade.valorAltaUrg">Valor Alta Urg</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="valorAltaUrg"
-                            id="especialidade-unidade-valorAltaUrg"
-                            value={this.state.valorAltaUrg}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorPagarLabel" for="especialidade-unidade-valorPagar">
-                            <Translate contentKey="generadorApp.especialidadeUnidade.valorPagar">Valor Pagar</Translate>
-                          </Label>
-                          <AvInput type="string" name="valorPagar" id="especialidade-unidade-valorPagar" value={this.state.valorPagar} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="publicarLabel" for="especialidade-unidade-publicar">
-                            <Translate contentKey="generadorApp.especialidadeUnidade.publicar">Publicar</Translate>
-                          </Label>
-                          <AvInput type="string" name="publicar" id="especialidade-unidade-publicar" value={this.state.publicar} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="comentarioPrecoLabel" for="especialidade-unidade-comentarioPreco">
-                            <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="comentarioPreco"
-                            id="especialidade-unidade-comentarioPreco"
-                            value={this.state.comentarioPreco}
-                          />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-unidade-unidade">
-                              <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
-                            </Label>
-                            <AvInput id="especialidade-unidade-unidade" type="select" className="form-control" name="unidadeId">
-                              <option value="" key="0" />
-                              {unidadeEasies
-                                ? unidadeEasies.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.razaoSocial}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-unidade-idEspecialidade">
-                              <Translate contentKey="generadorApp.especialidadeUnidade.idEspecialidade">Id Especialidade</Translate>
+                      {this.state.baseFilters !== 'valorBaixaUrg' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorBaixaUrgLabel" for="especialidade-unidade-valorBaixaUrg">
+                              <Translate contentKey="generadorApp.especialidadeUnidade.valorBaixaUrg">Valor Baixa Urg</Translate>
                             </Label>
                             <AvInput
-                              id="especialidade-unidade-idEspecialidade"
-                              type="select"
-                              className="form-control"
-                              name="idEspecialidadeId"
-                            >
-                              <option value="" key="0" />
-                              {especialidades
-                                ? especialidades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                              type="string"
+                              name="valorBaixaUrg"
+                              id="especialidade-unidade-valorBaixaUrg"
+                              value={this.state.valorBaixaUrg}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'valorAltaUrg' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorAltaUrgLabel" for="especialidade-unidade-valorAltaUrg">
+                              <Translate contentKey="generadorApp.especialidadeUnidade.valorAltaUrg">Valor Alta Urg</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="valorAltaUrg"
+                              id="especialidade-unidade-valorAltaUrg"
+                              value={this.state.valorAltaUrg}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'valorPagar' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorPagarLabel" for="especialidade-unidade-valorPagar">
+                              <Translate contentKey="generadorApp.especialidadeUnidade.valorPagar">Valor Pagar</Translate>
+                            </Label>
+                            <AvInput type="string" name="valorPagar" id="especialidade-unidade-valorPagar" value={this.state.valorPagar} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'publicar' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="publicarLabel" for="especialidade-unidade-publicar">
+                              <Translate contentKey="generadorApp.especialidadeUnidade.publicar">Publicar</Translate>
+                            </Label>
+                            <AvInput type="string" name="publicar" id="especialidade-unidade-publicar" value={this.state.publicar} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'comentarioPreco' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="comentarioPrecoLabel" for="especialidade-unidade-comentarioPreco">
+                              <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="comentarioPreco"
+                              id="especialidade-unidade-comentarioPreco"
+                              value={this.state.comentarioPreco}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="especialidade-unidade-unidade">
+                                <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
+                              </Label>
+                              <AvInput id="especialidade-unidade-unidade" type="select" className="form-control" name="unidadeId">
+                                <option value="" key="0" />
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -354,34 +311,43 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('valorBaixaUrg')}>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.valorBaixaUrg">Valor Baixa Urg</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('valorAltaUrg')}>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.valorAltaUrg">Valor Alta Urg</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('valorPagar')}>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.valorPagar">Valor Pagar</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('publicar')}>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.publicar">Publicar</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('comentarioPreco')}>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidadeUnidade.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'valorBaixaUrg' ? (
+                        <th className="hand" onClick={this.sort('valorBaixaUrg')}>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.valorBaixaUrg">Valor Baixa Urg</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'valorAltaUrg' ? (
+                        <th className="hand" onClick={this.sort('valorAltaUrg')}>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.valorAltaUrg">Valor Alta Urg</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'valorPagar' ? (
+                        <th className="hand" onClick={this.sort('valorPagar')}>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.valorPagar">Valor Pagar</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'publicar' ? (
+                        <th className="hand" onClick={this.sort('publicar')}>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.publicar">Publicar</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'comentarioPreco' ? (
+                        <th className="hand" onClick={this.sort('comentarioPreco')}>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -396,47 +362,56 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
                           </Button>
                         </td>
 
-                        <td>{especialidadeUnidade.valorBaixaUrg}</td>
+                        {this.state.baseFilters !== 'valorBaixaUrg' ? <td>{especialidadeUnidade.valorBaixaUrg}</td> : null}
 
-                        <td>{especialidadeUnidade.valorAltaUrg}</td>
+                        {this.state.baseFilters !== 'valorAltaUrg' ? <td>{especialidadeUnidade.valorAltaUrg}</td> : null}
 
-                        <td>{especialidadeUnidade.valorPagar}</td>
+                        {this.state.baseFilters !== 'valorPagar' ? <td>{especialidadeUnidade.valorPagar}</td> : null}
 
-                        <td>{especialidadeUnidade.publicar}</td>
+                        {this.state.baseFilters !== 'publicar' ? <td>{especialidadeUnidade.publicar}</td> : null}
 
-                        <td>{especialidadeUnidade.comentarioPreco}</td>
-                        <td>
-                          {especialidadeUnidade.unidade ? (
-                            <Link to={`unidade-easy/${especialidadeUnidade.unidade.id}`}>{especialidadeUnidade.unidade.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {especialidadeUnidade.idEspecialidade ? (
-                            <Link to={`especialidade/${especialidadeUnidade.idEspecialidade.id}`}>
-                              {especialidadeUnidade.idEspecialidade.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'comentarioPreco' ? <td>{especialidadeUnidade.comentarioPreco}</td> : null}
+
+                        {this.state.baseFilters !== 'unidade' ? (
+                          <td>
+                            {especialidadeUnidade.unidade ? (
+                              <Link to={`unidade-easy/${especialidadeUnidade.unidade.id}`}>{especialidadeUnidade.unidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${especialidadeUnidade.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeUnidade.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidadeUnidade.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeUnidade.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidadeUnidade.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeUnidade.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -479,14 +454,12 @@ export class EspecialidadeUnidade extends React.Component<IEspecialidadeUnidadeP
 
 const mapStateToProps = ({ especialidadeUnidade, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  especialidades: storeState.especialidade.entities,
   especialidadeUnidadeList: especialidadeUnidade.entities,
   totalItems: especialidadeUnidade.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getEspecialidades,
   getEntities
 };
 

@@ -18,8 +18,7 @@
       },
       "dataResposta": "Data Resposta",
       "informacaoAdicional": "Informacao Adicional",
-      "questionarioId": "Questionario Id",
-      "questionariosId": "Questionarios Id"
+      "questionarioId": "Questionario Id"
     }
   }
 }

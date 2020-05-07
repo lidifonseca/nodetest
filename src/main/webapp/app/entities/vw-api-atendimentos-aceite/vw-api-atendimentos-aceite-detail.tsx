@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './vw-api-atendimentos-aceite.reducer';
+import { getEntity, IVwApiAtendimentosAceiteBaseState, getVwApiAtendimentosAceiteState } from './vw-api-atendimentos-aceite.reducer';
 import { IVwApiAtendimentosAceite } from 'app/shared/model/vw-api-atendimentos-aceite.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IVwApiAtendimentosAceiteState {
+  fieldsBase: IVwApiAtendimentosAceiteBaseState;
+}
+
 export interface IVwApiAtendimentosAceiteDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class VwApiAtendimentosAceiteDetail extends React.Component<IVwApiAtendimentosAceiteDetailProps> {
+export class VwApiAtendimentosAceiteDetail extends React.Component<IVwApiAtendimentosAceiteDetailProps, IVwApiAtendimentosAceiteState> {
   constructor(props: Readonly<IVwApiAtendimentosAceiteDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getVwApiAtendimentosAceiteState(this.props.location)
     };
   }
 

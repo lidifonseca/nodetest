@@ -3,15 +3,15 @@
     "notificacaoConfigUsuario": {
       "home": {
         "title": "Notificacao Config Usuarios",
-        "createLabel": "Criar novo Notificacao Config Usuario",
-        "createOrEditLabel": "Criar ou editar Notificacao Config Usuario",
-        "notFound": "Nenhum Notificacao Config Usuario encontrado"
+        "createLabel": "Create a new Notificacao Config Usuario",
+        "createOrEditLabel": "Create or edit a Notificacao Config Usuario",
+        "notFound": "No Notificacao Config Usuarios found"
       },
-      "created": "Um novo Notificacao Config Usuario foi criado com o identificador {{ param }}",
-      "updated": "Um Notificacao Config Usuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Notificacao Config Usuario foi excluído com o identificador {{ param }}",
+      "created": "A new Notificacao Config Usuario is created with identifier {{ param }}",
+      "updated": "A Notificacao Config Usuario is updated with identifier {{ param }}",
+      "deleted": "A Notificacao Config Usuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Notificacao Config Usuario {{ id }}?"
+        "question": "Are you sure you want to delete Notificacao Config Usuario {{ id }}?"
       },
       "detail": {
         "title": "Notificacao Config Usuario"

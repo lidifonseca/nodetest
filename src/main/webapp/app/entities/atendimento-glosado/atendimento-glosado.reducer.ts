@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAtendimentoGlosado, defaultValue } from 'app/shared/model/atendimento-glosado.model';
 
 export const ACTION_TYPES = {
+  FETCH_ATENDIMENTOGLOSADO_LIST_EXPORT: 'atendimentoGlosado/FETCH_ATENDIMENTOGLOSADO_LIST_EXPORT',
   FETCH_ATENDIMENTOGLOSADO_LIST: 'atendimentoGlosado/FETCH_ATENDIMENTOGLOSADO_LIST',
   FETCH_ATENDIMENTOGLOSADO: 'atendimentoGlosado/FETCH_ATENDIMENTOGLOSADO',
   CREATE_ATENDIMENTOGLOSADO: 'atendimentoGlosado/CREATE_ATENDIMENTOGLOSADO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type AtendimentoGlosadoState = Readonly<typeof initialState>;
 
+export interface IAtendimentoGlosadoBaseState {
+  baseFilters: any;
+  idAtendimento: any;
+  glosado: any;
+}
+
+export interface IAtendimentoGlosadoUpdateState {
+  fieldsBase: IAtendimentoGlosadoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: AtendimentoGlosadoState = initialState, action): AtendimentoGlosadoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO):
       return {
@@ -51,6 +64,7 @@ export default (state: AtendimentoGlosadoState = initialState, action): Atendime
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO):
     case FAILURE(ACTION_TYPES.CREATE_ATENDIMENTOGLOSADO):
@@ -108,30 +122,19 @@ const apiUrl = 'api/atendimento-glosados';
 export type ICrudGetAllActionAtendimentoGlosado<T> = (
   idAtendimento?: any,
   glosado?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoGlosado<IAtendimentoGlosado> = (
-  idAtendimento,
-  glosado,
-  idUsuario,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionAtendimentoGlosado<IAtendimentoGlosado> = (idAtendimento, glosado, page, size, sort) => {
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const glosadoRequest = glosado ? `glosado.contains=${glosado}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO_LIST,
-    payload: axios.get<IAtendimentoGlosado>(
-      `${requestUrl}${idAtendimentoRequest}${glosadoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IAtendimentoGlosado>(`${requestUrl}${idAtendimentoRequest}${glosadoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoGlosado> = id => {
@@ -139,6 +142,17 @@ export const getEntity: ICrudGetAction<IAtendimentoGlosado> = id => {
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO,
     payload: axios.get<IAtendimentoGlosado>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionAtendimentoGlosado<IAtendimentoGlosado> = (idAtendimento, glosado, page, size, sort) => {
+  const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
+  const glosadoRequest = glosado ? `glosado.contains=${glosado}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ATENDIMENTOGLOSADO_LIST,
+    payload: axios.get<IAtendimentoGlosado>(`${requestUrl}${idAtendimentoRequest}${glosadoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -177,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IAtendimentoGlosado> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAtendimentoGlosadoState = (location): IAtendimentoGlosadoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idAtendimento = url.searchParams.get('idAtendimento') || '';
+  const glosado = url.searchParams.get('glosado') || '';
+
+  return {
+    baseFilters,
+    idAtendimento,
+    glosado
+  };
+};

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacientePedido, defaultValue } from 'app/shared/model/paciente-pedido.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEPEDIDO_LIST_EXPORT: 'pacientePedido/FETCH_PACIENTEPEDIDO_LIST_EXPORT',
   FETCH_PACIENTEPEDIDO_LIST: 'pacientePedido/FETCH_PACIENTEPEDIDO_LIST',
   FETCH_PACIENTEPEDIDO: 'pacientePedido/FETCH_PACIENTEPEDIDO',
   CREATE_PACIENTEPEDIDO: 'pacientePedido/CREATE_PACIENTEPEDIDO',
@@ -30,10 +31,29 @@ const initialState = {
 
 export type PacientePedidoState = Readonly<typeof initialState>;
 
+export interface IPacientePedidoBaseState {
+  baseFilters: any;
+  dataPedido: any;
+  dataAgenda: any;
+  qtdSessoes: any;
+  parcelas: any;
+  valor: any;
+  desconto: any;
+  tipoValor: any;
+  unidade: any;
+}
+
+export interface IPacientePedidoUpdateState {
+  fieldsBase: IPacientePedidoBaseState;
+  isNew: boolean;
+  unidadeId: string;
+}
+
 // Reducer
 
 export default (state: PacientePedidoState = initialState, action): PacientePedidoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEPEDIDO):
       return {
@@ -51,6 +71,7 @@ export default (state: PacientePedidoState = initialState, action): PacientePedi
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEPEDIDO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEPEDIDO):
@@ -114,9 +135,6 @@ export type ICrudGetAllActionPacientePedido<T> = (
   desconto?: any,
   tipoValor?: any,
   unidade?: any,
-  idPaciente?: any,
-  idCartao?: any,
-  idEspecialidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -131,9 +149,6 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   desconto,
   tipoValor,
   unidade,
-  idPaciente,
-  idCartao,
-  idEspecialidade,
   page,
   size,
   sort
@@ -146,15 +161,12 @@ export const getEntities: ICrudGetAllActionPacientePedido<IPacientePedido> = (
   const descontoRequest = desconto ? `desconto.contains=${desconto}&` : '';
   const tipoValorRequest = tipoValor ? `tipoValor.contains=${tipoValor}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
-  const idCartaoRequest = idCartao ? `idCartao.equals=${idCartao}&` : '';
-  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST,
     payload: axios.get<IPacientePedido>(
-      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}${idPacienteRequest}${idCartaoRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -166,13 +178,41 @@ export const getEntity: ICrudGetAction<IPacientePedido> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacientePedido<IPacientePedido> = (
+  dataPedido,
+  dataAgenda,
+  qtdSessoes,
+  parcelas,
+  valor,
+  desconto,
+  tipoValor,
+  unidade,
+  page,
+  size,
+  sort
+) => {
+  const dataPedidoRequest = dataPedido ? `dataPedido.equals=${dataPedido}&` : '';
+  const dataAgendaRequest = dataAgenda ? `dataAgenda.contains=${dataAgenda}&` : '';
+  const qtdSessoesRequest = qtdSessoes ? `qtdSessoes.contains=${qtdSessoes}&` : '';
+  const parcelasRequest = parcelas ? `parcelas.contains=${parcelas}&` : '';
+  const valorRequest = valor ? `valor.contains=${valor}&` : '';
+  const descontoRequest = desconto ? `desconto.contains=${desconto}&` : '';
+  const tipoValorRequest = tipoValor ? `tipoValor.contains=${tipoValor}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEPEDIDO_LIST,
+    payload: axios.get<IPacientePedido>(
+      `${requestUrl}${dataPedidoRequest}${dataAgendaRequest}${qtdSessoesRequest}${parcelasRequest}${valorRequest}${descontoRequest}${tipoValorRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacientePedido> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idCartao: entity.idCartao === 'null' ? null : entity.idCartao,
-    idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEPEDIDO,
@@ -183,13 +223,7 @@ export const createEntity: ICrudPutAction<IPacientePedido> = entity => async dis
 };
 
 export const updateEntity: ICrudPutAction<IPacientePedido> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idCartao: entity.idCartao === 'null' ? null : entity.idCartao,
-    idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
-  };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEPEDIDO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -211,3 +245,29 @@ export const deleteEntity: ICrudDeleteAction<IPacientePedido> = id => async disp
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacientePedidoState = (location): IPacientePedidoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const dataPedido = url.searchParams.get('dataPedido') || '';
+  const dataAgenda = url.searchParams.get('dataAgenda') || '';
+  const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
+  const parcelas = url.searchParams.get('parcelas') || '';
+  const valor = url.searchParams.get('valor') || '';
+  const desconto = url.searchParams.get('desconto') || '';
+  const tipoValor = url.searchParams.get('tipoValor') || '';
+
+  const unidade = url.searchParams.get('unidade') || '';
+
+  return {
+    baseFilters,
+    dataPedido,
+    dataAgenda,
+    qtdSessoes,
+    parcelas,
+    valor,
+    desconto,
+    tipoValor,
+    unidade
+  };
+};

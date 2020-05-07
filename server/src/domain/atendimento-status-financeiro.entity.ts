@@ -7,16 +7,13 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A AtendimentoStatusFinanceiro.
  */
-@Entity('atendimento_status_financeiro')
+@Entity('tb_atendimento_status_financeiro')
 export default class AtendimentoStatusFinanceiro extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_atendimento', nullable: false })
+  @Column({ type: 'integer', name: 'ID_ATENDIMENTO', nullable: false })
   idAtendimento: number;
 
-  @Column({ type: 'integer', name: 'id_status_financeiro', nullable: false })
+  @Column({ type: 'integer', name: 'ID_STATUS_FINANCEIRO', nullable: false })
   idStatusFinanceiro: number;
-
-  @Column({ type: 'integer', name: 'id_usuario' })
-  idUsuario: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

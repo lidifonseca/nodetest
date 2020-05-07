@@ -8,29 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IOperadora } from 'app/shared/model/operadora.model';
-import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './especialidade-operadora.reducer';
+import {
+  IEspecialidadeOperadoraUpdateState,
+  getEntity,
+  getEspecialidadeOperadoraState,
+  IEspecialidadeOperadoraBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './especialidade-operadora.reducer';
 import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operadora.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IEspecialidadeOperadoraUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IEspecialidadeOperadoraUpdateState {
-  isNew: boolean;
-  idOperadoraId: string;
-  idEspecialidadeId: string;
-}
-
 export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidadeOperadoraUpdateProps, IEspecialidadeOperadoraUpdateState> {
   constructor(props: Readonly<IEspecialidadeOperadoraUpdateProps>) {
     super(props);
+
     this.state = {
-      idOperadoraId: '0',
-      idEspecialidadeId: '0',
+      fieldsBase: getEspecialidadeOperadoraState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,11 +44,28 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getOperadoras();
-    this.props.getEspecialidades();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['codTuss'] ? '&codTuss=' + fieldsBase['codTuss'] : '') +
+      (fieldsBase['codDespesa'] ? '&codDespesa=' + fieldsBase['codDespesa'] : '') +
+      (fieldsBase['codTabela'] ? '&codTabela=' + fieldsBase['codTabela'] : '') +
+      (fieldsBase['valorCusto'] ? '&valorCusto=' + fieldsBase['valorCusto'] : '') +
+      (fieldsBase['valorVenda'] ? '&valorVenda=' + fieldsBase['valorVenda'] : '') +
+      (fieldsBase['descontoCusto'] ? '&descontoCusto=' + fieldsBase['descontoCusto'] : '') +
+      (fieldsBase['descontoVenda'] ? '&descontoVenda=' + fieldsBase['descontoVenda'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { especialidadeOperadoraEntity } = this.props;
@@ -68,13 +83,14 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
   };
 
   handleClose = () => {
-    this.props.history.push('/especialidade-operadora');
+    this.props.history.push('/especialidade-operadora?' + this.getFiltersURL());
   };
 
   render() {
-    const { especialidadeOperadoraEntity, operadoras, especialidades, loading, updating } = this.props;
+    const { especialidadeOperadoraEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -90,9 +106,7 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
             isNew
               ? {}
               : {
-                  ...especialidadeOperadoraEntity,
-                  idOperadora: especialidadeOperadoraEntity.idOperadora ? especialidadeOperadoraEntity.idOperadora.id : null,
-                  idEspecialidade: especialidadeOperadoraEntity.idEspecialidade ? especialidadeOperadoraEntity.idEspecialidade.id : null
+                  ...especialidadeOperadoraEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -114,7 +128,7 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/especialidade-operadora"
+                  to={'/especialidade-operadora?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -133,7 +147,7 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -149,214 +163,180 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'codTuss' ? (
+                          <Col md="codTuss">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codTussLabel" for="especialidade-operadora-codTuss">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-codTuss" type="text" name="codTuss" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codTuss" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="codTussLabel" for="especialidade-operadora-codTuss">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="especialidade-operadora-codTuss"
-                                type="text"
-                                name="codTuss"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'codDespesa' ? (
+                          <Col md="codDespesa">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codDespesaLabel" for="especialidade-operadora-codDespesa">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-codDespesa" type="text" name="codDespesa" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codDespesa" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="codDespesaLabel" for="especialidade-operadora-codDespesa">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="especialidade-operadora-codDespesa"
-                                type="text"
-                                name="codDespesa"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'codTabela' ? (
+                          <Col md="codTabela">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codTabelaLabel" for="especialidade-operadora-codTabela">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-codTabela" type="text" name="codTabela" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codTabela" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="codTabelaLabel" for="especialidade-operadora-codTabela">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="especialidade-operadora-codTabela"
-                                type="text"
-                                name="codTabela"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'valorCusto' ? (
+                          <Col md="valorCusto">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorCustoLabel" for="especialidade-operadora-valorCusto">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-valorCusto"
+                                    type="string"
+                                    className="form-control"
+                                    name="valorCusto"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorCusto" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="valorCustoLabel" for="especialidade-operadora-valorCusto">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="especialidade-operadora-valorCusto" type="string" className="form-control" name="valorCusto" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'valorVenda' ? (
+                          <Col md="valorVenda">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorVendaLabel" for="especialidade-operadora-valorVenda">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-valorVenda"
+                                    type="string"
+                                    className="form-control"
+                                    name="valorVenda"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorVenda" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="valorVendaLabel" for="especialidade-operadora-valorVenda">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="especialidade-operadora-valorVenda" type="string" className="form-control" name="valorVenda" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'descontoCusto' ? (
+                          <Col md="descontoCusto">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-descontoCusto"
+                                    type="string"
+                                    className="form-control"
+                                    name="descontoCusto"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descontoCusto" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="especialidade-operadora-descontoCusto"
-                                type="string"
-                                className="form-control"
-                                name="descontoCusto"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'descontoVenda' ? (
+                          <Col md="descontoVenda">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-descontoVenda"
+                                    type="string"
+                                    className="form-control"
+                                    name="descontoVenda"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descontoVenda" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="especialidade-operadora-descontoVenda"
-                                type="string"
-                                className="form-control"
-                                name="descontoVenda"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="especialidade-operadora-ativo">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="especialidade-operadora-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="especialidade-operadora-idOperadora">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.idOperadora">Id Operadora</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="especialidade-operadora-idOperadora" type="select" className="form-control" name="idOperadora">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.especialidadeOperadora.idOperadora.empty')}
-                                </option>
-                                {operadoras
-                                  ? operadoras.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="especialidade-operadora-idEspecialidade">
-                                <Translate contentKey="generadorApp.especialidadeOperadora.idEspecialidade">Id Especialidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="especialidade-operadora-idEspecialidade"
-                                type="select"
-                                className="form-control"
-                                name="idEspecialidade"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.especialidadeOperadora.idEspecialidade.empty')}
-                                </option>
-                                {especialidades
-                                  ? especialidades.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="especialidade-operadora-ativo">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -369,8 +349,6 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  operadoras: storeState.operadora.entities,
-  especialidades: storeState.especialidade.entities,
   especialidadeOperadoraEntity: storeState.especialidadeOperadora.entity,
   loading: storeState.especialidadeOperadora.loading,
   updating: storeState.especialidadeOperadora.updating,
@@ -378,8 +356,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getOperadoras,
-  getEspecialidades,
   getEntity,
   updateEntity,
   createEntity,

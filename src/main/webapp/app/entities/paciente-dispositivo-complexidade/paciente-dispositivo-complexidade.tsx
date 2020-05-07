@@ -22,18 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-dispositivo-complexidade.reducer';
+import {
+  getPacienteDispositivoComplexidadeState,
+  IPacienteDispositivoComplexidadeBaseState,
+  getEntities
+} from './paciente-dispositivo-complexidade.reducer';
 import { IPacienteDispositivoComplexidade } from 'app/shared/model/paciente-dispositivo-complexidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPacienteDispositivoComplexidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteDispositivoComplexidadeBaseState {
-  caracteristica: any;
-  ativo: any;
-  tipo: any;
-}
 export interface IPacienteDispositivoComplexidadeState extends IPacienteDispositivoComplexidadeBaseState, IPaginationBaseState {}
 
 export class PacienteDispositivoComplexidade extends React.Component<
@@ -46,22 +45,9 @@ export class PacienteDispositivoComplexidade extends React.Component<
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteDispositivoComplexidadeState(this.props.location)
+      ...getPacienteDispositivoComplexidadeState(this.props.location)
     };
   }
-
-  getPacienteDispositivoComplexidadeState = (location): IPacienteDispositivoComplexidadeBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const caracteristica = url.searchParams.get('caracteristica') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const tipo = url.searchParams.get('tipo') || '';
-
-    return {
-      caracteristica,
-      ativo,
-      tipo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -105,7 +91,9 @@ export class PacienteDispositivoComplexidade extends React.Component<
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -156,7 +144,11 @@ export class PacienteDispositivoComplexidade extends React.Component<
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.home.createLabel">
@@ -171,58 +163,45 @@ export class PacienteDispositivoComplexidade extends React.Component<
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="caracteristicaLabel" for="paciente-dispositivo-complexidade-caracteristica">
-                            <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.caracteristica">Caracteristica</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'caracteristica' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="caracteristicaLabel" for="paciente-dispositivo-complexidade-caracteristica">
+                              <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.caracteristica">Caracteristica</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="caracteristica"
-                            id="paciente-dispositivo-complexidade-caracteristica"
-                            value={this.state.caracteristica}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-dispositivo-complexidade-ativo">
-                            <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ativo"
-                            id="paciente-dispositivo-complexidade-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoLabel" for="paciente-dispositivo-complexidade-tipo">
-                            <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.tipo">Tipo</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="caracteristica"
+                              id="paciente-dispositivo-complexidade-caracteristica"
+                              value={this.state.caracteristica}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="tipo"
-                            id="paciente-dispositivo-complexidade-tipo"
-                            value={this.state.tipo}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-dispositivo-complexidade-ativo">
+                              <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="paciente-dispositivo-complexidade-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoLabel" for="paciente-dispositivo-complexidade-tipo">
+                              <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.tipo">Tipo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tipo" id="paciente-dispositivo-complexidade-tipo" value={this.state.tipo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -250,18 +229,24 @@ export class PacienteDispositivoComplexidade extends React.Component<
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('caracteristica')}>
-                        <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.caracteristica">Caracteristica</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipo')}>
-                        <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.tipo">Tipo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'caracteristica' ? (
+                        <th className="hand" onClick={this.sort('caracteristica')}>
+                          <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.caracteristica">Caracteristica</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <th className="hand" onClick={this.sort('tipo')}>
+                          <Translate contentKey="generadorApp.pacienteDispositivoComplexidade.tipo">Tipo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -276,27 +261,42 @@ export class PacienteDispositivoComplexidade extends React.Component<
                           </Button>
                         </td>
 
-                        <td>{pacienteDispositivoComplexidade.caracteristica}</td>
+                        {this.state.baseFilters !== 'caracteristica' ? <td>{pacienteDispositivoComplexidade.caracteristica}</td> : null}
 
-                        <td>{pacienteDispositivoComplexidade.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDispositivoComplexidade.ativo}</td> : null}
 
-                        <td>{pacienteDispositivoComplexidade.tipo}</td>
+                        {this.state.baseFilters !== 'tipo' ? <td>{pacienteDispositivoComplexidade.tipo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteDispositivoComplexidade.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDispositivoComplexidade.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDispositivoComplexidade.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDispositivoComplexidade.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDispositivoComplexidade.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDispositivoComplexidade.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

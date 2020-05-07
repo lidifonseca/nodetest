@@ -30,23 +30,8 @@
             "fieldType": "Boolean"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "paciente",
-            "otherEntityRelationshipName": "pacienteDiagnostico",
-            "relationshipName": "idPaciente",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cid",
-            "otherEntityRelationshipName": "pacienteDiagnostico",
-            "relationshipName": "idCid",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502235900",
+    "relationships": [],
+    "changelogDate": "20200507113200",
     "entityTableName": "paciente_diagnostico",
     "dto": "mapstruct",
     "pagination": "pagination",

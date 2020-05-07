@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-caracteristica-atual.reducer';
+import {
+  getEntity,
+  IPacienteCaracteristicaAtualBaseState,
+  getPacienteCaracteristicaAtualState
+} from './paciente-caracteristica-atual.reducer';
 import { IPacienteCaracteristicaAtual } from 'app/shared/model/paciente-caracteristica-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteCaracteristicaAtualState {
+  fieldsBase: IPacienteCaracteristicaAtualBaseState;
+}
+
 export interface IPacienteCaracteristicaAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteCaracteristicaAtualDetail extends React.Component<IPacienteCaracteristicaAtualDetailProps> {
+export class PacienteCaracteristicaAtualDetail extends React.Component<
+  IPacienteCaracteristicaAtualDetailProps,
+  IPacienteCaracteristicaAtualState
+> {
   constructor(props: Readonly<IPacienteCaracteristicaAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteCaracteristicaAtualState(this.props.location)
     };
   }
 
@@ -79,21 +91,6 @@ export class PacienteCaracteristicaAtualDetail extends React.Component<IPaciente
                       </Col>
                       <Col md="9">
                         <dd>{pacienteCaracteristicaAtualEntity.idPacienteCaracteristica}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteCaracteristicaAtualEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

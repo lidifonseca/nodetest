@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './acao.reducer';
+import { getAcaoState, IAcaoBaseState, getEntities } from './acao.reducer';
 import { IAcao } from 'app/shared/model/acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IAcaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAcaoBaseState {
-  acao: any;
-  logUser: any;
-  logUserFranquia: any;
-  usuarioAcao: any;
-}
 export interface IAcaoState extends IAcaoBaseState, IPaginationBaseState {}
 
 export class Acao extends React.Component<IAcaoProps, IAcaoState> {
@@ -44,25 +38,9 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAcaoState(this.props.location)
+      ...getAcaoState(this.props.location)
     };
   }
-
-  getAcaoState = (location): IAcaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const acao = url.searchParams.get('acao') || '';
-
-    const logUser = url.searchParams.get('logUser') || '';
-    const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
-    const usuarioAcao = url.searchParams.get('usuarioAcao') || '';
-
-    return {
-      acao,
-      logUser,
-      logUserFranquia,
-      usuarioAcao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -71,10 +49,7 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   cancelCourse = () => {
     this.setState(
       {
-        acao: '',
-        logUser: '',
-        logUserFranquia: '',
-        usuarioAcao: ''
+        acao: ''
       },
       () => this.sortEntities()
     );
@@ -107,7 +82,9 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -122,15 +99,6 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
       'acao=' +
       this.state.acao +
       '&' +
-      'logUser=' +
-      this.state.logUser +
-      '&' +
-      'logUserFranquia=' +
-      this.state.logUserFranquia +
-      '&' +
-      'usuarioAcao=' +
-      this.state.usuarioAcao +
-      '&' +
       ''
     );
   };
@@ -138,8 +106,8 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { acao, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(acao, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { acao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(acao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -161,7 +129,11 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.acao.home.createLabel">Create a new Acao</Translate>
@@ -174,27 +146,17 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="acaoLabel" for="acao-acao">
-                            <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'acao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="acaoLabel" for="acao-acao">
+                              <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="acao" id="acao-acao" value={this.state.acao} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="acao" id="acao-acao" value={this.state.acao} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -222,10 +184,12 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('acao')}>
-                        <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'acao' ? (
+                        <th className="hand" onClick={this.sort('acao')}>
+                          <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -240,23 +204,23 @@ export class Acao extends React.Component<IAcaoProps, IAcaoState> {
                           </Button>
                         </td>
 
-                        <td>{acao.acao}</td>
+                        {this.state.baseFilters !== 'acao' ? <td>{acao.acao}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${acao.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${acao.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${acao.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${acao.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${acao.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${acao.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

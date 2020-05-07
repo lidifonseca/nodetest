@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-prontuario.reducer';
+import { getEntity, ITipoProntuarioBaseState, getTipoProntuarioState } from './tipo-prontuario.reducer';
 import { ITipoProntuario } from 'app/shared/model/tipo-prontuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoProntuarioState {
+  fieldsBase: ITipoProntuarioBaseState;
+}
+
 export interface ITipoProntuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoProntuarioDetail extends React.Component<ITipoProntuarioDetailProps> {
+export class TipoProntuarioDetail extends React.Component<ITipoProntuarioDetailProps, ITipoProntuarioState> {
   constructor(props: Readonly<ITipoProntuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoProntuarioState(this.props.location)
     };
   }
 

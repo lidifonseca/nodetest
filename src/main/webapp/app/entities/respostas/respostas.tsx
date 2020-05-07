@@ -22,23 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './respostas.reducer';
+import { getRespostasState, IRespostasBaseState, getEntities } from './respostas.reducer';
 import { IRespostas } from 'app/shared/model/respostas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
-import { getEntities as getPerguntasQuestionarios } from 'app/entities/perguntas-questionario/perguntas-questionario.reducer';
-
 export interface IRespostasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IRespostasBaseState {
-  resposta: any;
-  pontuacao: any;
-  respostaAtiva: any;
-  acoesRespostas: any;
-  perguntasQuestionarioId: any;
-}
 export interface IRespostasState extends IRespostasBaseState, IPaginationBaseState {}
 
 export class Respostas extends React.Component<IRespostasProps, IRespostasState> {
@@ -48,32 +38,12 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getRespostasState(this.props.location)
+      ...getRespostasState(this.props.location)
     };
   }
 
-  getRespostasState = (location): IRespostasBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const resposta = url.searchParams.get('resposta') || '';
-    const pontuacao = url.searchParams.get('pontuacao') || '';
-    const respostaAtiva = url.searchParams.get('respostaAtiva') || '';
-
-    const acoesRespostas = url.searchParams.get('acoesRespostas') || '';
-    const perguntasQuestionarioId = url.searchParams.get('perguntasQuestionarioId') || '';
-
-    return {
-      resposta,
-      pontuacao,
-      respostaAtiva,
-      acoesRespostas,
-      perguntasQuestionarioId
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPerguntasQuestionarios();
   }
 
   cancelCourse = () => {
@@ -81,9 +51,7 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
       {
         resposta: '',
         pontuacao: '',
-        respostaAtiva: '',
-        acoesRespostas: '',
-        perguntasQuestionarioId: ''
+        respostaAtiva: ''
       },
       () => this.sortEntities()
     );
@@ -116,7 +84,9 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -137,12 +107,6 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
       'respostaAtiva=' +
       this.state.respostaAtiva +
       '&' +
-      'acoesRespostas=' +
-      this.state.acoesRespostas +
-      '&' +
-      'perguntasQuestionarioId=' +
-      this.state.perguntasQuestionarioId +
-      '&' +
       ''
     );
   };
@@ -150,31 +114,12 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      resposta,
-      pontuacao,
-      respostaAtiva,
-      acoesRespostas,
-      perguntasQuestionarioId,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      resposta,
-      pontuacao,
-      respostaAtiva,
-      acoesRespostas,
-      perguntasQuestionarioId,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { resposta, pontuacao, respostaAtiva, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(resposta, pontuacao, respostaAtiva, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { perguntasQuestionarios, respostasList, match, totalItems } = this.props;
+    const { respostasList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -192,7 +137,11 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.respostas.home.createLabel">Create a new Respostas</Translate>
@@ -205,60 +154,39 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="respostaLabel" for="respostas-resposta">
-                            <Translate contentKey="generadorApp.respostas.resposta">Resposta</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="resposta" id="respostas-resposta" value={this.state.resposta} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="pontuacaoLabel" for="respostas-pontuacao">
-                            <Translate contentKey="generadorApp.respostas.pontuacao">Pontuacao</Translate>
-                          </Label>
-                          <AvInput type="string" name="pontuacao" id="respostas-pontuacao" value={this.state.pontuacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="respostaAtivaLabel" check>
-                            <AvInput id="respostas-respostaAtiva" type="checkbox" className="form-control" name="respostaAtiva" />
-                            <Translate contentKey="generadorApp.respostas.respostaAtiva">Resposta Ativa</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="respostas-perguntasQuestionarioId">
-                              <Translate contentKey="generadorApp.respostas.perguntasQuestionarioId">Perguntas Questionario Id</Translate>
+                      {this.state.baseFilters !== 'resposta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="respostaLabel" for="respostas-resposta">
+                              <Translate contentKey="generadorApp.respostas.resposta">Resposta</Translate>
                             </Label>
-                            <AvInput
-                              id="respostas-perguntasQuestionarioId"
-                              type="select"
-                              className="form-control"
-                              name="perguntasQuestionarioIdId"
-                            >
-                              <option value="" key="0" />
-                              {perguntasQuestionarios
-                                ? perguntasQuestionarios.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="resposta" id="respostas-resposta" value={this.state.resposta} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'pontuacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="pontuacaoLabel" for="respostas-pontuacao">
+                              <Translate contentKey="generadorApp.respostas.pontuacao">Pontuacao</Translate>
+                            </Label>
+                            <AvInput type="string" name="pontuacao" id="respostas-pontuacao" value={this.state.pontuacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'respostaAtiva' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="respostaAtivaLabel" check>
+                              <AvInput id="respostas-respostaAtiva" type="checkbox" className="form-control" name="respostaAtiva" />
+                              <Translate contentKey="generadorApp.respostas.respostaAtiva">Resposta Ativa</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -286,22 +214,24 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('resposta')}>
-                        <Translate contentKey="generadorApp.respostas.resposta">Resposta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('pontuacao')}>
-                        <Translate contentKey="generadorApp.respostas.pontuacao">Pontuacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('respostaAtiva')}>
-                        <Translate contentKey="generadorApp.respostas.respostaAtiva">Resposta Ativa</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.respostas.perguntasQuestionarioId">Perguntas Questionario Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'resposta' ? (
+                        <th className="hand" onClick={this.sort('resposta')}>
+                          <Translate contentKey="generadorApp.respostas.resposta">Resposta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'pontuacao' ? (
+                        <th className="hand" onClick={this.sort('pontuacao')}>
+                          <Translate contentKey="generadorApp.respostas.pontuacao">Pontuacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'respostaAtiva' ? (
+                        <th className="hand" onClick={this.sort('respostaAtiva')}>
+                          <Translate contentKey="generadorApp.respostas.respostaAtiva">Resposta Ativa</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -316,36 +246,27 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
                           </Button>
                         </td>
 
-                        <td>{respostas.resposta}</td>
+                        {this.state.baseFilters !== 'resposta' ? <td>{respostas.resposta}</td> : null}
 
-                        <td>{respostas.pontuacao}</td>
+                        {this.state.baseFilters !== 'pontuacao' ? <td>{respostas.pontuacao}</td> : null}
 
-                        <td>{respostas.respostaAtiva ? 'true' : 'false'}</td>
-                        <td>
-                          {respostas.perguntasQuestionarioId ? (
-                            <Link to={`perguntas-questionario/${respostas.perguntasQuestionarioId.id}`}>
-                              {respostas.perguntasQuestionarioId.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'respostaAtiva' ? <td>{respostas.respostaAtiva ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${respostas.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${respostas.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${respostas.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${respostas.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${respostas.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${respostas.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -387,13 +308,11 @@ export class Respostas extends React.Component<IRespostasProps, IRespostasState>
 }
 
 const mapStateToProps = ({ respostas, ...storeState }: IRootState) => ({
-  perguntasQuestionarios: storeState.perguntasQuestionario.entities,
   respostasList: respostas.entities,
   totalItems: respostas.totalItems
 });
 
 const mapDispatchToProps = {
-  getPerguntasQuestionarios,
   getEntities
 };
 

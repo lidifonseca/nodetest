@@ -33,10 +33,13 @@ const initialState = {
 export type LogUserState = Readonly<typeof initialState>;
 
 export interface ILogUserBaseState {
-  idUsuario: any;
+  baseFilters: any;
   descricao: any;
-  idAcao: any;
-  idTela: any;
+}
+
+export interface ILogUserUpdateState {
+  fieldsBase: ILogUserBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -82,6 +85,9 @@ export default (state: LogUserState = initialState, action): LogUserState => {
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_LOGUSER):
+      action.payload.data.descricao = action.payload.data.descricao
+        ? Buffer.from(action.payload.data.descricao).toString()
+        : action.payload.data.descricao;
       return {
         ...state,
         loading: false,
@@ -103,13 +109,14 @@ export default (state: LogUserState = initialState, action): LogUserState => {
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -128,27 +135,19 @@ const apiUrl = 'api/log-users';
 
 // Actions
 export type ICrudGetAllActionLogUser<T> = (
-  idUsuario?: any,
   descricao?: any,
-  idAcao?: any,
-  idTela?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionLogUser<ILogUser> = (idUsuario, descricao, idAcao, idTela, page, size, sort) => {
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+export const getEntities: ICrudGetAllActionLogUser<ILogUser> = (descricao, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
-  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
-  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSER_LIST,
-    payload: axios.get<ILogUser>(
-      `${requestUrl}${idUsuarioRequest}${descricaoRequest}${idAcaoRequest}${idTelaRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ILogUser>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ILogUser> = id => {
@@ -159,26 +158,19 @@ export const getEntity: ICrudGetAction<ILogUser> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionLogUser<ILogUser> = (idUsuario, descricao, idAcao, idTela, page, size, sort) => {
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+export const getEntitiesExport: ICrudGetAllActionLogUser<ILogUser> = (descricao, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
-  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
-  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSER_LIST,
-    payload: axios.get<ILogUser>(
-      `${requestUrl}${idUsuarioRequest}${descricaoRequest}${idAcaoRequest}${idTelaRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ILogUser>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<ILogUser> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idAcao: entity.idAcao === 'null' ? null : entity.idAcao,
-    idTela: entity.idTela === 'null' ? null : entity.idTela
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_LOGUSER,
@@ -189,7 +181,7 @@ export const createEntity: ICrudPutAction<ILogUser> = entity => async dispatch =
 };
 
 export const updateEntity: ICrudPutAction<ILogUser> = entity => async dispatch => {
-  entity = { ...entity, idAcao: entity.idAcao === 'null' ? null : entity.idAcao, idTela: entity.idTela === 'null' ? null : entity.idTela };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_LOGUSER,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -208,12 +200,13 @@ export const deleteEntity: ICrudDeleteAction<ILogUser> = id => async dispatch =>
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -223,16 +216,11 @@ export const reset = () => ({
 
 export const getLogUserState = (location): ILogUserBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-  const idUsuario = url.searchParams.get('idUsuario') || '';
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const descricao = url.searchParams.get('descricao') || '';
 
-  const idAcao = url.searchParams.get('idAcao') || '';
-  const idTela = url.searchParams.get('idTela') || '';
-
   return {
-    idUsuario,
-    descricao,
-    idAcao,
-    idTela
+    baseFilters,
+    descricao
   };
 };

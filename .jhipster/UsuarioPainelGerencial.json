@@ -2,13 +2,6 @@
     "name": "UsuarioPainelGerencial",
     "fields": [
         {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "verCronicos",
             "fieldType": "Integer"
         },
@@ -166,7 +159,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503012700",
+    "changelogDate": "20200507130000",
     "entityTableName": "usuario_painel_gerencial",
     "dto": "mapstruct",
     "pagination": "pagination",

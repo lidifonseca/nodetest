@@ -4,13 +4,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
 import {
+  IPadItemResultadoUpdateState,
   getEntity,
   getPadItemResultadoState,
   IPadItemResultadoBaseState,
@@ -25,18 +24,16 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadItemResultadoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadItemResultadoUpdateState {
-  fieldsBase: IPadItemResultadoBaseState;
-  isNew: boolean;
-  idPadItemId: string;
-}
-
 export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpdateProps, IPadItemResultadoUpdateState> {
+  resultadoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IPadItemResultadoUpdateProps>) {
     super(props);
+
+    this.resultadoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getPadItemResultadoState(this.props.location),
-      idPadItemId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -52,18 +49,32 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPadItems();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['resultado'] ? '&resultado=' + fieldsBase['resultado'] : '') +
+      (fieldsBase['dataFim'] ? '&dataFim=' + fieldsBase['dataFim'] : '') +
+      (fieldsBase['resultadoAnalisado'] ? '&resultadoAnalisado=' + fieldsBase['resultadoAnalisado'] : '') +
+      (fieldsBase['usuarioId'] ? '&usuarioId=' + fieldsBase['usuarioId'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padItemResultadoEntity } = this.props;
@@ -81,15 +92,15 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-item-resultado');
+    this.props.history.push('/pad-item-resultado?' + this.getFiltersURL());
   };
 
   render() {
-    const { padItemResultadoEntity, padItems, loading, updating } = this.props;
+    const { padItemResultadoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { resultado } = padItemResultadoEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -105,8 +116,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
             isNew
               ? {}
               : {
-                  ...padItemResultadoEntity,
-                  idPadItem: padItemResultadoEntity.idPadItem ? padItemResultadoEntity.idPadItem.id : null
+                  ...padItemResultadoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -123,7 +133,14 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/pad-item-resultado" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/pad-item-resultado?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -155,7 +172,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.resultado ? (
+                        {baseFilters !== 'resultado' ? (
                           <Col md="resultado">
                             <AvGroup>
                               <Row>
@@ -171,10 +188,10 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="resultado" value={this.state.fieldsBase.resultado} />
+                          <AvInput type="hidden" name="resultado" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataFim ? (
+                        {baseFilters !== 'dataFim' ? (
                           <Col md="dataFim">
                             <AvGroup>
                               <Row>
@@ -190,10 +207,10 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase.dataFim} />
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.resultadoAnalisado ? (
+                        {baseFilters !== 'resultadoAnalisado' ? (
                           <Col md="resultadoAnalisado">
                             <AvGroup>
                               <Row>
@@ -212,10 +229,10 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="resultadoAnalisado" value={this.state.fieldsBase.resultadoAnalisado} />
+                          <AvInput type="hidden" name="resultadoAnalisado" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.usuarioId ? (
+                        {baseFilters !== 'usuarioId' ? (
                           <Col md="usuarioId">
                             <AvGroup>
                               <Row>
@@ -231,36 +248,7 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase.usuarioId} />
-                        )}
-                        {!this.state.fieldsBase.idPadItem ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="pad-item-resultado-idPadItem">
-                                    <Translate contentKey="generadorApp.padItemResultado.idPadItem">Id Pad Item</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="pad-item-resultado-idPadItem" type="select" className="form-control" name="idPadItem">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.padItemResultado.idPadItem.empty')}
-                                    </option>
-                                    {padItems
-                                      ? padItems.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPadItem" value={this.state.fieldsBase.idPadItem} />
+                          <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>
@@ -276,7 +264,6 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  padItems: storeState.padItem.entities,
   padItemResultadoEntity: storeState.padItemResultado.entity,
   loading: storeState.padItemResultado.loading,
   updating: storeState.padItemResultado.updating,
@@ -284,7 +271,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntity,
   updateEntity,
   setBlob,

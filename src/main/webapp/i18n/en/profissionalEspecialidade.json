@@ -3,15 +3,15 @@
     "profissionalEspecialidade": {
       "home": {
         "title": "Profissional Especialidades",
-        "createLabel": "Criar novo Profissional Especialidade",
-        "createOrEditLabel": "Criar ou editar Profissional Especialidade",
-        "notFound": "Nenhum Profissional Especialidade encontrado"
+        "createLabel": "Create a new Profissional Especialidade",
+        "createOrEditLabel": "Create or edit a Profissional Especialidade",
+        "notFound": "No Profissional Especialidades found"
       },
-      "created": "Um novo Profissional Especialidade foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Especialidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Especialidade foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Especialidade is created with identifier {{ param }}",
+      "updated": "A Profissional Especialidade is updated with identifier {{ param }}",
+      "deleted": "A Profissional Especialidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Especialidade {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Especialidade {{ id }}?"
       },
       "detail": {
         "title": "Profissional Especialidade"

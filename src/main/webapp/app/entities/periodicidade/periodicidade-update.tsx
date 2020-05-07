@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './periodicidade.reducer';
+import {
+  IPeriodicidadeUpdateState,
+  getEntity,
+  getPeriodicidadeState,
+  IPeriodicidadeBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './periodicidade.reducer';
 import { IPeriodicidade } from 'app/shared/model/periodicidade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPeriodicidadeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPeriodicidadeUpdateState {
-  isNew: boolean;
-}
-
 export class PeriodicidadeUpdate extends React.Component<IPeriodicidadeUpdateProps, IPeriodicidadeUpdateState> {
   constructor(props: Readonly<IPeriodicidadeUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPeriodicidadeState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class PeriodicidadeUpdate extends React.Component<IPeriodicidadeUpdatePro
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['periodicidade'] ? '&periodicidade=' + fieldsBase['periodicidade'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { periodicidadeEntity } = this.props;
@@ -57,13 +77,14 @@ export class PeriodicidadeUpdate extends React.Component<IPeriodicidadeUpdatePro
   };
 
   handleClose = () => {
-    this.props.history.push('/periodicidade');
+    this.props.history.push('/periodicidade?' + this.getFiltersURL());
   };
 
   render() {
     const { periodicidadeEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +117,14 @@ export class PeriodicidadeUpdate extends React.Component<IPeriodicidadeUpdatePro
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/periodicidade" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/periodicidade?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +139,7 @@ export class PeriodicidadeUpdate extends React.Component<IPeriodicidadeUpdatePro
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,44 +155,46 @@ export class PeriodicidadeUpdate extends React.Component<IPeriodicidadeUpdatePro
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'periodicidade' ? (
+                          <Col md="periodicidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="periodicidadeLabel" for="periodicidade-periodicidade">
+                                    <Translate contentKey="generadorApp.periodicidade.periodicidade">Periodicidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="periodicidade-periodicidade" type="text" name="periodicidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="periodicidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="periodicidadeLabel" for="periodicidade-periodicidade">
-                                <Translate contentKey="generadorApp.periodicidade.periodicidade">Periodicidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="periodicidade-periodicidade"
-                                type="text"
-                                name="periodicidade"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="periodicidade-ativo">
-                                <Translate contentKey="generadorApp.periodicidade.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="periodicidade-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="periodicidade-ativo">
+                                    <Translate contentKey="generadorApp.periodicidade.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="periodicidade-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

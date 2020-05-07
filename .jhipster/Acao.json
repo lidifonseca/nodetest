@@ -10,27 +10,8 @@
             "fieldValidateRulesMaxlength": "100"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "logUser",
-            "otherEntityRelationshipName": "idAcao",
-            "relationshipName": "logUser"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "logUserFranquia",
-            "otherEntityRelationshipName": "idAcao",
-            "relationshipName": "logUserFranquia"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "usuarioAcao",
-            "otherEntityRelationshipName": "idAcao",
-            "relationshipName": "usuarioAcao"
-        }
-    ],
-    "changelogDate": "20200502225200",
+    "relationships": [],
+    "changelogDate": "20200507102500",
     "entityTableName": "acao",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './report-email-atendimento.reducer';
+import {
+  IReportEmailAtendimentoUpdateState,
+  getEntity,
+  getReportEmailAtendimentoState,
+  IReportEmailAtendimentoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './report-email-atendimento.reducer';
 import { IReportEmailAtendimento } from 'app/shared/model/report-email-atendimento.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IReportEmailAtendimentoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IReportEmailAtendimentoUpdateState {
-  isNew: boolean;
-}
-
 export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAtendimentoUpdateProps, IReportEmailAtendimentoUpdateState> {
   constructor(props: Readonly<IReportEmailAtendimentoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getReportEmailAtendimentoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idAtendimento'] ? '&idAtendimento=' + fieldsBase['idAtendimento'] : '') +
+      (fieldsBase['tipoReport'] ? '&tipoReport=' + fieldsBase['tipoReport'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { reportEmailAtendimentoEntity } = this.props;
@@ -57,13 +77,14 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
   };
 
   handleClose = () => {
-    this.props.history.push('/report-email-atendimento');
+    this.props.history.push('/report-email-atendimento?' + this.getFiltersURL());
   };
 
   render() {
     const { reportEmailAtendimentoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -101,7 +122,7 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/report-email-atendimento"
+                  to={'/report-email-atendimento?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -120,7 +141,7 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,42 +164,56 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="report-email-atendimento-idAtendimento">
+                                    <Translate contentKey="generadorApp.reportEmailAtendimento.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="report-email-atendimento-idAtendimento"
+                                    type="string"
+                                    className="form-control"
+                                    name="idAtendimento"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idAtendimentoLabel" for="report-email-atendimento-idAtendimento">
-                                <Translate contentKey="generadorApp.reportEmailAtendimento.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="report-email-atendimento-idAtendimento"
-                                type="string"
-                                className="form-control"
-                                name="idAtendimento"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoReportLabel" for="report-email-atendimento-tipoReport">
-                                <Translate contentKey="generadorApp.reportEmailAtendimento.tipoReport">Tipo Report</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="report-email-atendimento-tipoReport" type="string" className="form-control" name="tipoReport" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'tipoReport' ? (
+                          <Col md="tipoReport">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoReportLabel" for="report-email-atendimento-tipoReport">
+                                    <Translate contentKey="generadorApp.reportEmailAtendimento.tipoReport">Tipo Report</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="report-email-atendimento-tipoReport"
+                                    type="string"
+                                    className="form-control"
+                                    name="tipoReport"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoReport" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

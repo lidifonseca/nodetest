@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './indicadores.reducer';
+import { getIndicadoresState, IIndicadoresBaseState, getEntities } from './indicadores.reducer';
 import { IIndicadores } from 'app/shared/model/indicadores.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IIndicadoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IIndicadoresBaseState {
-  titulo: any;
-  indicadoresValores: any;
-}
 export interface IIndicadoresState extends IIndicadoresBaseState, IPaginationBaseState {}
 
 export class Indicadores extends React.Component<IIndicadoresProps, IIndicadoresState> {
@@ -42,21 +38,9 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getIndicadoresState(this.props.location)
+      ...getIndicadoresState(this.props.location)
     };
   }
-
-  getIndicadoresState = (location): IIndicadoresBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const titulo = url.searchParams.get('titulo') || '';
-
-    const indicadoresValores = url.searchParams.get('indicadoresValores') || '';
-
-    return {
-      titulo,
-      indicadoresValores
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -65,8 +49,7 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
   cancelCourse = () => {
     this.setState(
       {
-        titulo: '',
-        indicadoresValores: ''
+        titulo: ''
       },
       () => this.sortEntities()
     );
@@ -99,7 +82,9 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -114,9 +99,6 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
       'titulo=' +
       this.state.titulo +
       '&' +
-      'indicadoresValores=' +
-      this.state.indicadoresValores +
-      '&' +
       ''
     );
   };
@@ -124,8 +106,8 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { titulo, indicadoresValores, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(titulo, indicadoresValores, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { titulo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(titulo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -147,7 +129,11 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.indicadores.home.createLabel">Create a new Indicadores</Translate>
@@ -160,19 +146,17 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="tituloLabel" for="indicadores-titulo">
-                            <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tituloLabel" for="indicadores-titulo">
+                              <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="titulo" id="indicadores-titulo" value={this.state.titulo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="titulo" id="indicadores-titulo" value={this.state.titulo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -200,10 +184,12 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('titulo')}>
-                        <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <th className="hand" onClick={this.sort('titulo')}>
+                          <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -218,23 +204,28 @@ export class Indicadores extends React.Component<IIndicadoresProps, IIndicadores
                           </Button>
                         </td>
 
-                        <td>{indicadores.titulo}</td>
+                        {this.state.baseFilters !== 'titulo' ? <td>{indicadores.titulo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${indicadores.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${indicadores.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${indicadores.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${indicadores.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${indicadores.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${indicadores.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

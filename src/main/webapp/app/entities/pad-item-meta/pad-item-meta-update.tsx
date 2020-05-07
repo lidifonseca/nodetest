@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './pad-item-meta.reducer';
+import {
+  IPadItemMetaUpdateState,
+  getEntity,
+  getPadItemMetaState,
+  IPadItemMetaBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pad-item-meta.reducer';
 import { IPadItemMeta } from 'app/shared/model/pad-item-meta.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadItemMetaUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadItemMetaUpdateState {
-  isNew: boolean;
-}
-
 export class PadItemMetaUpdate extends React.Component<IPadItemMetaUpdateProps, IPadItemMetaUpdateState> {
   constructor(props: Readonly<IPadItemMetaUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPadItemMetaState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,39 @@ export class PadItemMetaUpdate extends React.Component<IPadItemMetaUpdateProps, 
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['unidadeMedidaId'] ? '&unidadeMedidaId=' + fieldsBase['unidadeMedidaId'] : '') +
+      (fieldsBase['indicadorId'] ? '&indicadorId=' + fieldsBase['indicadorId'] : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['idPad'] ? '&idPad=' + fieldsBase['idPad'] : '') +
+      (fieldsBase['idPadItem'] ? '&idPadItem=' + fieldsBase['idPadItem'] : '') +
+      (fieldsBase['minimo'] ? '&minimo=' + fieldsBase['minimo'] : '') +
+      (fieldsBase['maximo'] ? '&maximo=' + fieldsBase['maximo'] : '') +
+      (fieldsBase['meta'] ? '&meta=' + fieldsBase['meta'] : '') +
+      (fieldsBase['valorAtual'] ? '&valorAtual=' + fieldsBase['valorAtual'] : '') +
+      (fieldsBase['atualizadoEm'] ? '&atualizadoEm=' + fieldsBase['atualizadoEm'] : '') +
+      (fieldsBase['dataLimite'] ? '&dataLimite=' + fieldsBase['dataLimite'] : '') +
+      (fieldsBase['frequenciaMedicaoHoras'] ? '&frequenciaMedicaoHoras=' + fieldsBase['frequenciaMedicaoHoras'] : '') +
+      (fieldsBase['tipoAcompanhamento'] ? '&tipoAcompanhamento=' + fieldsBase['tipoAcompanhamento'] : '') +
+      (fieldsBase['atendimentoId'] ? '&atendimentoId=' + fieldsBase['atendimentoId'] : '') +
+      (fieldsBase['email'] ? '&email=' + fieldsBase['email'] : '') +
+      (fieldsBase['minimoSistolica'] ? '&minimoSistolica=' + fieldsBase['minimoSistolica'] : '') +
+      (fieldsBase['maximoSistolica'] ? '&maximoSistolica=' + fieldsBase['maximoSistolica'] : '') +
+      (fieldsBase['minimoDiastolica'] ? '&minimoDiastolica=' + fieldsBase['minimoDiastolica'] : '') +
+      (fieldsBase['maximoDiastolica'] ? '&maximoDiastolica=' + fieldsBase['maximoDiastolica'] : '') +
+      (fieldsBase['score'] ? '&score=' + fieldsBase['score'] : '') +
+      (fieldsBase['alteracaoEsperada'] ? '&alteracaoEsperada=' + fieldsBase['alteracaoEsperada'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.atualizadoEm = convertDateTimeToServer(values.atualizadoEm);
     values.dataLimite = convertDateTimeToServer(values.dataLimite);
@@ -60,13 +99,14 @@ export class PadItemMetaUpdate extends React.Component<IPadItemMetaUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-item-meta');
+    this.props.history.push('/pad-item-meta?' + this.getFiltersURL());
   };
 
   render() {
     const { padItemMetaEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -99,7 +139,14 @@ export class PadItemMetaUpdate extends React.Component<IPadItemMetaUpdateProps, 
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/pad-item-meta" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/pad-item-meta?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -114,7 +161,7 @@ export class PadItemMetaUpdate extends React.Component<IPadItemMetaUpdateProps, 
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -130,452 +177,439 @@ export class PadItemMetaUpdate extends React.Component<IPadItemMetaUpdateProps, 
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'unidadeMedidaId' ? (
+                          <Col md="unidadeMedidaId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="unidadeMedidaIdLabel" for="pad-item-meta-unidadeMedidaId">
+                                    <Translate contentKey="generadorApp.padItemMeta.unidadeMedidaId">Unidade Medida Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="pad-item-meta-unidadeMedidaId"
+                                    type="string"
+                                    className="form-control"
+                                    name="unidadeMedidaId"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidadeMedidaId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="unidadeMedidaIdLabel" for="pad-item-meta-unidadeMedidaId">
-                                <Translate contentKey="generadorApp.padItemMeta.unidadeMedidaId">Unidade Medida Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-meta-unidadeMedidaId" type="string" className="form-control" name="unidadeMedidaId" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'indicadorId' ? (
+                          <Col md="indicadorId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="indicadorIdLabel" for="pad-item-meta-indicadorId">
+                                    <Translate contentKey="generadorApp.padItemMeta.indicadorId">Indicador Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-indicadorId" type="string" className="form-control" name="indicadorId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="indicadorId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="indicadorIdLabel" for="pad-item-meta-indicadorId">
-                                <Translate contentKey="generadorApp.padItemMeta.indicadorId">Indicador Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-indicadorId"
-                                type="string"
-                                className="form-control"
-                                name="indicadorId"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="pad-item-meta-idPaciente">
+                                    <Translate contentKey="generadorApp.padItemMeta.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-idPaciente" type="string" className="form-control" name="idPaciente" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="pad-item-meta-idPaciente">
-                                <Translate contentKey="generadorApp.padItemMeta.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-idPaciente"
-                                type="string"
-                                className="form-control"
-                                name="idPaciente"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPad' ? (
+                          <Col md="idPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPadLabel" for="pad-item-meta-idPad">
+                                    <Translate contentKey="generadorApp.padItemMeta.idPad">Id Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-idPad" type="string" className="form-control" name="idPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPadLabel" for="pad-item-meta-idPad">
-                                <Translate contentKey="generadorApp.padItemMeta.idPad">Id Pad</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-meta-idPad" type="string" className="form-control" name="idPad" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPadItem' ? (
+                          <Col md="idPadItem">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPadItemLabel" for="pad-item-meta-idPadItem">
+                                    <Translate contentKey="generadorApp.padItemMeta.idPadItem">Id Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-idPadItem" type="string" className="form-control" name="idPadItem" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPadItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPadItemLabel" for="pad-item-meta-idPadItem">
-                                <Translate contentKey="generadorApp.padItemMeta.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-meta-idPadItem" type="string" className="form-control" name="idPadItem" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'minimo' ? (
+                          <Col md="minimo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="minimoLabel" for="pad-item-meta-minimo">
+                                    <Translate contentKey="generadorApp.padItemMeta.minimo">Minimo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-minimo" type="text" name="minimo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="minimo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="minimoLabel" for="pad-item-meta-minimo">
-                                <Translate contentKey="generadorApp.padItemMeta.minimo">Minimo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-minimo"
-                                type="text"
-                                name="minimo"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'maximo' ? (
+                          <Col md="maximo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="maximoLabel" for="pad-item-meta-maximo">
+                                    <Translate contentKey="generadorApp.padItemMeta.maximo">Maximo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-maximo" type="text" name="maximo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="maximo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="maximoLabel" for="pad-item-meta-maximo">
-                                <Translate contentKey="generadorApp.padItemMeta.maximo">Maximo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-maximo"
-                                type="text"
-                                name="maximo"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'meta' ? (
+                          <Col md="meta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="metaLabel" for="pad-item-meta-meta">
+                                    <Translate contentKey="generadorApp.padItemMeta.meta">Meta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-meta" type="text" name="meta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="meta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="metaLabel" for="pad-item-meta-meta">
-                                <Translate contentKey="generadorApp.padItemMeta.meta">Meta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-meta"
-                                type="text"
-                                name="meta"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'valorAtual' ? (
+                          <Col md="valorAtual">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorAtualLabel" for="pad-item-meta-valorAtual">
+                                    <Translate contentKey="generadorApp.padItemMeta.valorAtual">Valor Atual</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-valorAtual" type="text" name="valorAtual" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorAtual" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="valorAtualLabel" for="pad-item-meta-valorAtual">
-                                <Translate contentKey="generadorApp.padItemMeta.valorAtual">Valor Atual</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-valorAtual"
-                                type="text"
-                                name="valorAtual"
-                                validate={{
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'atualizadoEm' ? (
+                          <Col md="atualizadoEm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atualizadoEmLabel" for="pad-item-meta-atualizadoEm">
+                                    <Translate contentKey="generadorApp.padItemMeta.atualizadoEm">Atualizado Em</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="pad-item-meta-atualizadoEm"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="atualizadoEm"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.padItemMetaEntity.atualizadoEm)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atualizadoEm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="atualizadoEmLabel" for="pad-item-meta-atualizadoEm">
-                                <Translate contentKey="generadorApp.padItemMeta.atualizadoEm">Atualizado Em</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="pad-item-meta-atualizadoEm"
-                                type="datetime-local"
-                                className="form-control"
-                                name="atualizadoEm"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.padItemMetaEntity.atualizadoEm)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataLimite' ? (
+                          <Col md="dataLimite">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataLimiteLabel" for="pad-item-meta-dataLimite">
+                                    <Translate contentKey="generadorApp.padItemMeta.dataLimite">Data Limite</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="pad-item-meta-dataLimite"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataLimite"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.padItemMetaEntity.dataLimite)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataLimite" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataLimiteLabel" for="pad-item-meta-dataLimite">
-                                <Translate contentKey="generadorApp.padItemMeta.dataLimite">Data Limite</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="pad-item-meta-dataLimite"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataLimite"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.padItemMetaEntity.dataLimite)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'frequenciaMedicaoHoras' ? (
+                          <Col md="frequenciaMedicaoHoras">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="frequenciaMedicaoHorasLabel" for="pad-item-meta-frequenciaMedicaoHoras">
+                                    <Translate contentKey="generadorApp.padItemMeta.frequenciaMedicaoHoras">
+                                      Frequencia Medicao Horas
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="pad-item-meta-frequenciaMedicaoHoras"
+                                    type="string"
+                                    className="form-control"
+                                    name="frequenciaMedicaoHoras"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="frequenciaMedicaoHoras" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="frequenciaMedicaoHorasLabel" for="pad-item-meta-frequenciaMedicaoHoras">
-                                <Translate contentKey="generadorApp.padItemMeta.frequenciaMedicaoHoras">Frequencia Medicao Horas</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-frequenciaMedicaoHoras"
-                                type="string"
-                                className="form-control"
-                                name="frequenciaMedicaoHoras"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'tipoAcompanhamento' ? (
+                          <Col md="tipoAcompanhamento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoAcompanhamentoLabel" for="pad-item-meta-tipoAcompanhamento">
+                                    <Translate contentKey="generadorApp.padItemMeta.tipoAcompanhamento">Tipo Acompanhamento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-tipoAcompanhamento" type="text" name="tipoAcompanhamento" />
+                                </Col>
+                                <UncontrolledTooltip target="tipoAcompanhamentoLabel">
+                                  <Translate contentKey="generadorApp.padItemMeta.help.tipoAcompanhamento" />
+                                </UncontrolledTooltip>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoAcompanhamento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoAcompanhamentoLabel" for="pad-item-meta-tipoAcompanhamento">
-                                <Translate contentKey="generadorApp.padItemMeta.tipoAcompanhamento">Tipo Acompanhamento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-tipoAcompanhamento"
-                                type="text"
-                                name="tipoAcompanhamento"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                            <UncontrolledTooltip target="tipoAcompanhamentoLabel">
-                              <Translate contentKey="generadorApp.padItemMeta.help.tipoAcompanhamento" />
-                            </UncontrolledTooltip>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'atendimentoId' ? (
+                          <Col md="atendimentoId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atendimentoIdLabel" for="pad-item-meta-atendimentoId">
+                                    <Translate contentKey="generadorApp.padItemMeta.atendimentoId">Atendimento Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-atendimentoId" type="string" className="form-control" name="atendimentoId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimentoId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="atendimentoIdLabel" for="pad-item-meta-atendimentoId">
-                                <Translate contentKey="generadorApp.padItemMeta.atendimentoId">Atendimento Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-meta-atendimentoId" type="string" className="form-control" name="atendimentoId" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'email' ? (
+                          <Col md="email">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="emailLabel" for="pad-item-meta-email">
+                                    <Translate contentKey="generadorApp.padItemMeta.email">Email</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-email" type="string" className="form-control" name="email" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="email" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="emailLabel" for="pad-item-meta-email">
-                                <Translate contentKey="generadorApp.padItemMeta.email">Email</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-email"
-                                type="string"
-                                className="form-control"
-                                name="email"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'minimoSistolica' ? (
+                          <Col md="minimoSistolica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="minimoSistolicaLabel" for="pad-item-meta-minimoSistolica">
+                                    <Translate contentKey="generadorApp.padItemMeta.minimoSistolica">Minimo Sistolica</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-minimoSistolica" type="text" name="minimoSistolica" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="minimoSistolica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="minimoSistolicaLabel" for="pad-item-meta-minimoSistolica">
-                                <Translate contentKey="generadorApp.padItemMeta.minimoSistolica">Minimo Sistolica</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-minimoSistolica"
-                                type="text"
-                                name="minimoSistolica"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'maximoSistolica' ? (
+                          <Col md="maximoSistolica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="maximoSistolicaLabel" for="pad-item-meta-maximoSistolica">
+                                    <Translate contentKey="generadorApp.padItemMeta.maximoSistolica">Maximo Sistolica</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-maximoSistolica" type="text" name="maximoSistolica" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="maximoSistolica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="maximoSistolicaLabel" for="pad-item-meta-maximoSistolica">
-                                <Translate contentKey="generadorApp.padItemMeta.maximoSistolica">Maximo Sistolica</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-maximoSistolica"
-                                type="text"
-                                name="maximoSistolica"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'minimoDiastolica' ? (
+                          <Col md="minimoDiastolica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="minimoDiastolicaLabel" for="pad-item-meta-minimoDiastolica">
+                                    <Translate contentKey="generadorApp.padItemMeta.minimoDiastolica">Minimo Diastolica</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-minimoDiastolica" type="text" name="minimoDiastolica" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="minimoDiastolica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="minimoDiastolicaLabel" for="pad-item-meta-minimoDiastolica">
-                                <Translate contentKey="generadorApp.padItemMeta.minimoDiastolica">Minimo Diastolica</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-minimoDiastolica"
-                                type="text"
-                                name="minimoDiastolica"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'maximoDiastolica' ? (
+                          <Col md="maximoDiastolica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="maximoDiastolicaLabel" for="pad-item-meta-maximoDiastolica">
+                                    <Translate contentKey="generadorApp.padItemMeta.maximoDiastolica">Maximo Diastolica</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-maximoDiastolica" type="text" name="maximoDiastolica" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="maximoDiastolica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="maximoDiastolicaLabel" for="pad-item-meta-maximoDiastolica">
-                                <Translate contentKey="generadorApp.padItemMeta.maximoDiastolica">Maximo Diastolica</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-meta-maximoDiastolica"
-                                type="text"
-                                name="maximoDiastolica"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'score' ? (
+                          <Col md="score">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="scoreLabel" for="pad-item-meta-score">
+                                    <Translate contentKey="generadorApp.padItemMeta.score">Score</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-meta-score" type="string" className="form-control" name="score" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="pad-item-meta-idUsuario">
-                                <Translate contentKey="generadorApp.padItemMeta.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-meta-idUsuario" type="string" className="form-control" name="idUsuario" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="scoreLabel" for="pad-item-meta-score">
-                                <Translate contentKey="generadorApp.padItemMeta.score">Score</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-item-meta-score" type="string" className="form-control" name="score" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="alteracaoEsperadaLabel" check>
-                                <AvInput
-                                  id="pad-item-meta-alteracaoEsperada"
-                                  type="checkbox"
-                                  className="form-control"
-                                  name="alteracaoEsperada"
-                                />
-                                <Translate contentKey="generadorApp.padItemMeta.alteracaoEsperada">Alteracao Esperada</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'alteracaoEsperada' ? (
+                          <Col md="alteracaoEsperada">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="alteracaoEsperadaLabel" check>
+                                    <AvInput
+                                      id="pad-item-meta-alteracaoEsperada"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="alteracaoEsperada"
+                                    />
+                                    <Translate contentKey="generadorApp.padItemMeta.alteracaoEsperada">Alteracao Esperada</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="alteracaoEsperada" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

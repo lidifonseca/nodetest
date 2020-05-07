@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './api-return.reducer';
+import { getEntity, IApiReturnBaseState, getApiReturnState } from './api-return.reducer';
 import { IApiReturn } from 'app/shared/model/api-return.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IApiReturnState {
+  fieldsBase: IApiReturnBaseState;
+}
+
 export interface IApiReturnDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ApiReturnDetail extends React.Component<IApiReturnDetailProps> {
+export class ApiReturnDetail extends React.Component<IApiReturnDetailProps, IApiReturnState> {
   constructor(props: Readonly<IApiReturnDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getApiReturnState(this.props.location)
     };
   }
 

@@ -1,5 +1,3 @@
-import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
-
 export interface IPadItemIndicadores {
   id?: string;
   idUnidadeMedida?: number;
@@ -8,7 +6,6 @@ export interface IPadItemIndicadores {
   meta?: number;
   maximoSt?: number;
   minimoSt?: number;
-  cidXPtaNovoPadItemIndis?: ICidXPtaNovoPadItemIndi[];
 }
 
 export const defaultValue: Readonly<IPadItemIndicadores> = {};

@@ -3,15 +3,15 @@
     "pacienteGrauParentesco": {
       "home": {
         "title": "Paciente Grau Parentescos",
-        "createLabel": "Criar novo Paciente Grau Parentesco",
-        "createOrEditLabel": "Criar ou editar Paciente Grau Parentesco",
-        "notFound": "Nenhum Paciente Grau Parentesco encontrado"
+        "createLabel": "Create a new Paciente Grau Parentesco",
+        "createOrEditLabel": "Create or edit a Paciente Grau Parentesco",
+        "notFound": "No Paciente Grau Parentescos found"
       },
-      "created": "Um novo Paciente Grau Parentesco foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Grau Parentesco foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Grau Parentesco foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Grau Parentesco is created with identifier {{ param }}",
+      "updated": "A Paciente Grau Parentesco is updated with identifier {{ param }}",
+      "deleted": "A Paciente Grau Parentesco is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Grau Parentesco {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Grau Parentesco {{ id }}?"
       },
       "detail": {
         "title": "Paciente Grau Parentesco"

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './cid-x-pta-novo-pad-item-indi.reducer';
+import { getEntity, ICidXPtaNovoPadItemIndiBaseState, getCidXPtaNovoPadItemIndiState } from './cid-x-pta-novo-pad-item-indi.reducer';
 import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICidXPtaNovoPadItemIndiState {
+  fieldsBase: ICidXPtaNovoPadItemIndiBaseState;
+}
+
 export interface ICidXPtaNovoPadItemIndiDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CidXPtaNovoPadItemIndiDetail extends React.Component<ICidXPtaNovoPadItemIndiDetailProps> {
+export class CidXPtaNovoPadItemIndiDetail extends React.Component<ICidXPtaNovoPadItemIndiDetailProps, ICidXPtaNovoPadItemIndiState> {
   constructor(props: Readonly<ICidXPtaNovoPadItemIndiDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCidXPtaNovoPadItemIndiState(this.props.location)
     };
   }
 
@@ -137,49 +142,6 @@ export class CidXPtaNovoPadItemIndiDetail extends React.Component<ICidXPtaNovoPa
                       </Col>
                       <Col md="9">
                         <dd>{cidXPtaNovoPadItemIndiEntity.score}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadoresId">
-                            Pad Item Indicadores Id
-                          </Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          {cidXPtaNovoPadItemIndiEntity.padItemIndicadoresId ? cidXPtaNovoPadItemIndiEntity.padItemIndicadoresId.id : ''}
-                        </dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categoriasId">Categorias Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cidXPtaNovoPadItemIndiEntity.categoriasId ? cidXPtaNovoPadItemIndiEntity.categoriasId.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cidXPtaNovoPadItemIndiEntity.cidXPtaNovoId ? cidXPtaNovoPadItemIndiEntity.cidXPtaNovoId.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './especialidade-valor.reducer';
+import { getEntity, IEspecialidadeValorBaseState, getEspecialidadeValorState } from './especialidade-valor.reducer';
 import { IEspecialidadeValor } from 'app/shared/model/especialidade-valor.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IEspecialidadeValorState {
+  fieldsBase: IEspecialidadeValorBaseState;
+}
+
 export interface IEspecialidadeValorDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class EspecialidadeValorDetail extends React.Component<IEspecialidadeValorDetailProps> {
+export class EspecialidadeValorDetail extends React.Component<IEspecialidadeValorDetailProps, IEspecialidadeValorState> {
   constructor(props: Readonly<IEspecialidadeValorDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getEspecialidadeValorState(this.props.location)
     };
   }
 
@@ -92,19 +97,6 @@ export class EspecialidadeValorDetail extends React.Component<IEspecialidadeValo
                       </Col>
                       <Col md="9">
                         <dd>{especialidadeValorEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.especialidadeValor.idEspecialidade">Id Especialidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{especialidadeValorEntity.idEspecialidade ? especialidadeValorEntity.idEspecialidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

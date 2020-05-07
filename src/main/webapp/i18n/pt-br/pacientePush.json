@@ -18,8 +18,7 @@
       },
       "idFranquia": "Id Franquia",
       "mensagem": "Mensagem",
-      "ativo": "Ativo",
-      "idPaciente": "Id Paciente"
+      "ativo": "Ativo"
     }
   }
 }

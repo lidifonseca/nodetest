@@ -4,24 +4,16 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Cidade from './cidade.entity';
-
 /**
  * A Uf.
  */
-@Entity('uf')
+@Entity('tb_uf')
 export default class Uf extends BaseEntity {
-  @Column({ name: 'sigla_uf', length: 4 })
+  @Column({ name: 'SIGLA_UF', length: 4 })
   siglaUf: string;
 
-  @Column({ name: 'descr_uf', length: 255 })
+  @Column({ name: 'DESCR_UF', length: 255 })
   descrUf: string;
-
-  @OneToMany(
-    type => Cidade,
-    other => other.idUf
-  )
-  cidades: Cidade[];
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

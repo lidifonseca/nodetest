@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './pad-item-sorteio-feito.reducer';
+import {
+  IPadItemSorteioFeitoUpdateState,
+  getEntity,
+  getPadItemSorteioFeitoState,
+  IPadItemSorteioFeitoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pad-item-sorteio-feito.reducer';
 import { IPadItemSorteioFeito } from 'app/shared/model/pad-item-sorteio-feito.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadItemSorteioFeitoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadItemSorteioFeitoUpdateState {
-  isNew: boolean;
-  idPadItemId: string;
-}
-
 export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFeitoUpdateProps, IPadItemSorteioFeitoUpdateState> {
   constructor(props: Readonly<IPadItemSorteioFeitoUpdateProps>) {
     super(props);
+
     this.state = {
-      idPadItemId: '0',
+      fieldsBase: getPadItemSorteioFeitoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,21 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPadItems();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['sorteioFeito'] ? '&sorteioFeito=' + fieldsBase['sorteioFeito'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padItemSorteioFeitoEntity } = this.props;
@@ -63,13 +76,14 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-item-sorteio-feito');
+    this.props.history.push('/pad-item-sorteio-feito?' + this.getFiltersURL());
   };
 
   render() {
-    const { padItemSorteioFeitoEntity, padItems, loading, updating } = this.props;
+    const { padItemSorteioFeitoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +99,7 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
             isNew
               ? {}
               : {
-                  ...padItemSorteioFeitoEntity,
-                  idPadItem: padItemSorteioFeitoEntity.idPadItem ? padItemSorteioFeitoEntity.idPadItem.id : null
+                  ...padItemSorteioFeitoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -108,7 +121,7 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/pad-item-sorteio-feito"
+                  to={'/pad-item-sorteio-feito?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -127,7 +140,7 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,56 +156,32 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="sorteioFeitoLabel" for="pad-item-sorteio-feito-sorteioFeito">
-                                <Translate contentKey="generadorApp.padItemSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-item-sorteio-feito-sorteioFeito"
-                                type="string"
-                                className="form-control"
-                                name="sorteioFeito"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="pad-item-sorteio-feito-idPadItem">
-                                <Translate contentKey="generadorApp.padItemSorteioFeito.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-item-sorteio-feito-idPadItem" type="select" className="form-control" name="idPadItem">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.padItemSorteioFeito.idPadItem.empty')}
-                                </option>
-                                {padItems
-                                  ? padItems.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'sorteioFeito' ? (
+                          <Col md="sorteioFeito">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sorteioFeitoLabel" for="pad-item-sorteio-feito-sorteioFeito">
+                                    <Translate contentKey="generadorApp.padItemSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="pad-item-sorteio-feito-sorteioFeito"
+                                    type="string"
+                                    className="form-control"
+                                    name="sorteioFeito"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sorteioFeito" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -205,7 +194,6 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  padItems: storeState.padItem.entities,
   padItemSorteioFeitoEntity: storeState.padItemSorteioFeito.entity,
   loading: storeState.padItemSorteioFeito.loading,
   updating: storeState.padItemSorteioFeito.updating,
@@ -213,7 +201,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntity,
   updateEntity,
   createEntity,

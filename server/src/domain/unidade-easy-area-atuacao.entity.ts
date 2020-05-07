@@ -9,15 +9,16 @@ import UnidadeEasy from './unidade-easy.entity';
 /**
  * A UnidadeEasyAreaAtuacao.
  */
-@Entity('unidade_easy_area_atuacao')
+@Entity('tb_unidade_easy_area_atuacao')
 export default class UnidadeEasyAreaAtuacao extends BaseEntity {
-  @Column({ name: 'cep_inicial', length: 10 })
+  @Column({ name: 'CEP_INICIAL', length: 10 })
   cepInicial: string;
 
-  @Column({ name: 'cep_final', length: 10 })
+  @Column({ name: 'CEP_FINAL', length: 10 })
   cepFinal: string;
 
   @ManyToOne(type => UnidadeEasy)
+  @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

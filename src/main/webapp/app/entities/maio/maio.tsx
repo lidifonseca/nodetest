@@ -22,24 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './maio.reducer';
+import { getMaioState, IMaioBaseState, getEntities } from './maio.reducer';
 import { IMaio } from 'app/shared/model/maio.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IMaioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IMaioBaseState {
-  idFranquia: any;
-  idPaciente: any;
-  nroPad: any;
-  dataInicio: any;
-  dataFim: any;
-  idEspecialidade: any;
-  idPeriodicidade: any;
-  idPeriodo: any;
-  qtdSessoes: any;
-}
 export interface IMaioState extends IMaioBaseState, IPaginationBaseState {}
 
 export class Maio extends React.Component<IMaioProps, IMaioState> {
@@ -49,34 +38,9 @@ export class Maio extends React.Component<IMaioProps, IMaioState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getMaioState(this.props.location)
+      ...getMaioState(this.props.location)
     };
   }
-
-  getMaioState = (location): IMaioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const nroPad = url.searchParams.get('nroPad') || '';
-    const dataInicio = url.searchParams.get('dataInicio') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-    const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
-    const idPeriodo = url.searchParams.get('idPeriodo') || '';
-    const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
-
-    return {
-      idFranquia,
-      idPaciente,
-      nroPad,
-      dataInicio,
-      dataFim,
-      idEspecialidade,
-      idPeriodicidade,
-      idPeriodo,
-      qtdSessoes
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -126,7 +90,9 @@ export class Maio extends React.Component<IMaioProps, IMaioState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -222,7 +188,11 @@ export class Maio extends React.Component<IMaioProps, IMaioState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.maio.home.createLabel">Create a new Maio</Translate>
@@ -235,96 +205,106 @@ export class Maio extends React.Component<IMaioProps, IMaioState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idFranquiaLabel" for="maio-idFranquia">
-                            <Translate contentKey="generadorApp.maio.idFranquia">Id Franquia</Translate>
-                          </Label>
-                          <AvInput type="string" name="idFranquia" id="maio-idFranquia" value={this.state.idFranquia} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="maio-idPaciente">
-                            <Translate contentKey="generadorApp.maio.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPaciente" id="maio-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nroPadLabel" for="maio-nroPad">
-                            <Translate contentKey="generadorApp.maio.nroPad">Nro Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="nroPad" id="maio-nroPad" value={this.state.nroPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataInicioLabel" for="maio-dataInicio">
-                            <Translate contentKey="generadorApp.maio.dataInicio">Data Inicio</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idFranquiaLabel" for="maio-idFranquia">
+                              <Translate contentKey="generadorApp.maio.idFranquia">Id Franquia</Translate>
+                            </Label>
+                            <AvInput type="string" name="idFranquia" id="maio-idFranquia" value={this.state.idFranquia} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="dataInicio"
-                            id="maio-dataInicio"
-                            value={this.state.dataInicio}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataFimLabel" for="maio-dataFim">
-                            <Translate contentKey="generadorApp.maio.dataFim">Data Fim</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="maio-idPaciente">
+                              <Translate contentKey="generadorApp.maio.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPaciente" id="maio-idPaciente" value={this.state.idPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="dataFim"
-                            id="maio-dataFim"
-                            value={this.state.dataFim}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idEspecialidadeLabel" for="maio-idEspecialidade">
-                            <Translate contentKey="generadorApp.maio.idEspecialidade">Id Especialidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="idEspecialidade" id="maio-idEspecialidade" value={this.state.idEspecialidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodicidadeLabel" for="maio-idPeriodicidade">
-                            <Translate contentKey="generadorApp.maio.idPeriodicidade">Id Periodicidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPeriodicidade" id="maio-idPeriodicidade" value={this.state.idPeriodicidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodoLabel" for="maio-idPeriodo">
-                            <Translate contentKey="generadorApp.maio.idPeriodo">Id Periodo</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPeriodo" id="maio-idPeriodo" value={this.state.idPeriodo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="qtdSessoesLabel" for="maio-qtdSessoes">
-                            <Translate contentKey="generadorApp.maio.qtdSessoes">Qtd Sessoes</Translate>
-                          </Label>
-                          <AvInput type="string" name="qtdSessoes" id="maio-qtdSessoes" value={this.state.qtdSessoes} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'nroPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nroPadLabel" for="maio-nroPad">
+                              <Translate contentKey="generadorApp.maio.nroPad">Nro Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="nroPad" id="maio-nroPad" value={this.state.nroPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataInicioLabel" for="maio-dataInicio">
+                              <Translate contentKey="generadorApp.maio.dataInicio">Data Inicio</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="dataInicio" id="maio-dataInicio" value={this.state.dataInicio} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataFimLabel" for="maio-dataFim">
+                              <Translate contentKey="generadorApp.maio.dataFim">Data Fim</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="dataFim" id="maio-dataFim" value={this.state.dataFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idEspecialidadeLabel" for="maio-idEspecialidade">
+                              <Translate contentKey="generadorApp.maio.idEspecialidade">Id Especialidade</Translate>
+                            </Label>
+                            <AvInput type="string" name="idEspecialidade" id="maio-idEspecialidade" value={this.state.idEspecialidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodicidadeLabel" for="maio-idPeriodicidade">
+                              <Translate contentKey="generadorApp.maio.idPeriodicidade">Id Periodicidade</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPeriodicidade" id="maio-idPeriodicidade" value={this.state.idPeriodicidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodoLabel" for="maio-idPeriodo">
+                              <Translate contentKey="generadorApp.maio.idPeriodo">Id Periodo</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPeriodo" id="maio-idPeriodo" value={this.state.idPeriodo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="qtdSessoesLabel" for="maio-qtdSessoes">
+                              <Translate contentKey="generadorApp.maio.qtdSessoes">Qtd Sessoes</Translate>
+                            </Label>
+                            <AvInput type="string" name="qtdSessoes" id="maio-qtdSessoes" value={this.state.qtdSessoes} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -352,42 +332,60 @@ export class Maio extends React.Component<IMaioProps, IMaioState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idFranquia')}>
-                        <Translate contentKey="generadorApp.maio.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.maio.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nroPad')}>
-                        <Translate contentKey="generadorApp.maio.nroPad">Nro Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataInicio')}>
-                        <Translate contentKey="generadorApp.maio.dataInicio">Data Inicio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataFim')}>
-                        <Translate contentKey="generadorApp.maio.dataFim">Data Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idEspecialidade')}>
-                        <Translate contentKey="generadorApp.maio.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodicidade')}>
-                        <Translate contentKey="generadorApp.maio.idPeriodicidade">Id Periodicidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodo')}>
-                        <Translate contentKey="generadorApp.maio.idPeriodo">Id Periodo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('qtdSessoes')}>
-                        <Translate contentKey="generadorApp.maio.qtdSessoes">Qtd Sessoes</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <th className="hand" onClick={this.sort('idFranquia')}>
+                          <Translate contentKey="generadorApp.maio.idFranquia">Id Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.maio.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nroPad' ? (
+                        <th className="hand" onClick={this.sort('nroPad')}>
+                          <Translate contentKey="generadorApp.maio.nroPad">Nro Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <th className="hand" onClick={this.sort('dataInicio')}>
+                          <Translate contentKey="generadorApp.maio.dataInicio">Data Inicio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <th className="hand" onClick={this.sort('dataFim')}>
+                          <Translate contentKey="generadorApp.maio.dataFim">Data Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <th className="hand" onClick={this.sort('idEspecialidade')}>
+                          <Translate contentKey="generadorApp.maio.idEspecialidade">Id Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <th className="hand" onClick={this.sort('idPeriodicidade')}>
+                          <Translate contentKey="generadorApp.maio.idPeriodicidade">Id Periodicidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <th className="hand" onClick={this.sort('idPeriodo')}>
+                          <Translate contentKey="generadorApp.maio.idPeriodo">Id Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <th className="hand" onClick={this.sort('qtdSessoes')}>
+                          <Translate contentKey="generadorApp.maio.qtdSessoes">Qtd Sessoes</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -402,39 +400,39 @@ export class Maio extends React.Component<IMaioProps, IMaioState> {
                           </Button>
                         </td>
 
-                        <td>{maio.idFranquia}</td>
+                        {this.state.baseFilters !== 'idFranquia' ? <td>{maio.idFranquia}</td> : null}
 
-                        <td>{maio.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{maio.idPaciente}</td> : null}
 
-                        <td>{maio.nroPad}</td>
+                        {this.state.baseFilters !== 'nroPad' ? <td>{maio.nroPad}</td> : null}
 
-                        <td>{maio.dataInicio}</td>
+                        {this.state.baseFilters !== 'dataInicio' ? <td>{maio.dataInicio}</td> : null}
 
-                        <td>{maio.dataFim}</td>
+                        {this.state.baseFilters !== 'dataFim' ? <td>{maio.dataFim}</td> : null}
 
-                        <td>{maio.idEspecialidade}</td>
+                        {this.state.baseFilters !== 'idEspecialidade' ? <td>{maio.idEspecialidade}</td> : null}
 
-                        <td>{maio.idPeriodicidade}</td>
+                        {this.state.baseFilters !== 'idPeriodicidade' ? <td>{maio.idPeriodicidade}</td> : null}
 
-                        <td>{maio.idPeriodo}</td>
+                        {this.state.baseFilters !== 'idPeriodo' ? <td>{maio.idPeriodo}</td> : null}
 
-                        <td>{maio.qtdSessoes}</td>
+                        {this.state.baseFilters !== 'qtdSessoes' ? <td>{maio.qtdSessoes}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${maio.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${maio.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${maio.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${maio.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${maio.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${maio.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

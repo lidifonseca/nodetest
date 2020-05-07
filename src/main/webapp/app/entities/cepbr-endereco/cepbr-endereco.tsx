@@ -22,27 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './cepbr-endereco.reducer';
+import { getCepbrEnderecoState, ICepbrEnderecoBaseState, getEntities } from './cepbr-endereco.reducer';
 import { ICepbrEndereco } from 'app/shared/model/cepbr-endereco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ICepbrCidade } from 'app/shared/model/cepbr-cidade.model';
-import { getEntities as getCepbrCidades } from 'app/entities/cepbr-cidade/cepbr-cidade.reducer';
-import { ICepbrBairro } from 'app/shared/model/cepbr-bairro.model';
-import { getEntities as getCepbrBairros } from 'app/entities/cepbr-bairro/cepbr-bairro.reducer';
-
 export interface ICepbrEnderecoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICepbrEnderecoBaseState {
-  cep: any;
-  logradouro: any;
-  tipoLogradouro: any;
-  complemento: any;
-  local: any;
-  idCidade: any;
-  idBairro: any;
-}
 export interface ICepbrEnderecoState extends ICepbrEnderecoBaseState, IPaginationBaseState {}
 
 export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEnderecoState> {
@@ -52,37 +38,12 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCepbrEnderecoState(this.props.location)
+      ...getCepbrEnderecoState(this.props.location)
     };
   }
 
-  getCepbrEnderecoState = (location): ICepbrEnderecoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const cep = url.searchParams.get('cep') || '';
-    const logradouro = url.searchParams.get('logradouro') || '';
-    const tipoLogradouro = url.searchParams.get('tipoLogradouro') || '';
-    const complemento = url.searchParams.get('complemento') || '';
-    const local = url.searchParams.get('local') || '';
-
-    const idCidade = url.searchParams.get('idCidade') || '';
-    const idBairro = url.searchParams.get('idBairro') || '';
-
-    return {
-      cep,
-      logradouro,
-      tipoLogradouro,
-      complemento,
-      local,
-      idCidade,
-      idBairro
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getCepbrCidades();
-    this.props.getCepbrBairros();
   }
 
   cancelCourse = () => {
@@ -92,9 +53,7 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
         logradouro: '',
         tipoLogradouro: '',
         complemento: '',
-        local: '',
-        idCidade: '',
-        idBairro: ''
+        local: ''
       },
       () => this.sortEntities()
     );
@@ -127,7 +86,9 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -154,12 +115,6 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
       'local=' +
       this.state.local +
       '&' +
-      'idCidade=' +
-      this.state.idCidade +
-      '&' +
-      'idBairro=' +
-      this.state.idBairro +
-      '&' +
       ''
     );
   };
@@ -167,23 +122,12 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cep, logradouro, tipoLogradouro, complemento, local, idCidade, idBairro, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      cep,
-      logradouro,
-      tipoLogradouro,
-      complemento,
-      local,
-      idCidade,
-      idBairro,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { cep, logradouro, tipoLogradouro, complemento, local, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cep, logradouro, tipoLogradouro, complemento, local, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { cepbrCidades, cepbrBairros, cepbrEnderecoList, match, totalItems } = this.props;
+    const { cepbrEnderecoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -201,7 +145,11 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.cepbrEndereco.home.createLabel">Create a new Cepbr Endereco</Translate>
@@ -214,132 +162,70 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepLabel" for="cepbr-endereco-cep">
-                            <Translate contentKey="generadorApp.cepbrEndereco.cep">Cep</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="cep"
-                            id="cepbr-endereco-cep"
-                            value={this.state.cep}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="logradouroLabel" for="cepbr-endereco-logradouro">
-                            <Translate contentKey="generadorApp.cepbrEndereco.logradouro">Logradouro</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="logradouro"
-                            id="cepbr-endereco-logradouro"
-                            value={this.state.logradouro}
-                            validate={{
-                              maxLength: { value: 200, errorMessage: translate('entity.validation.maxlength', { max: 200 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoLogradouroLabel" for="cepbr-endereco-tipoLogradouro">
-                            <Translate contentKey="generadorApp.cepbrEndereco.tipoLogradouro">Tipo Logradouro</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="tipoLogradouro"
-                            id="cepbr-endereco-tipoLogradouro"
-                            value={this.state.tipoLogradouro}
-                            validate={{
-                              maxLength: { value: 80, errorMessage: translate('entity.validation.maxlength', { max: 80 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="complementoLabel" for="cepbr-endereco-complemento">
-                            <Translate contentKey="generadorApp.cepbrEndereco.complemento">Complemento</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="complemento"
-                            id="cepbr-endereco-complemento"
-                            value={this.state.complemento}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="localLabel" for="cepbr-endereco-local">
-                            <Translate contentKey="generadorApp.cepbrEndereco.local">Local</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="local"
-                            id="cepbr-endereco-local"
-                            value={this.state.local}
-                            validate={{
-                              maxLength: { value: 120, errorMessage: translate('entity.validation.maxlength', { max: 120 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cepbr-endereco-idCidade">
-                              <Translate contentKey="generadorApp.cepbrEndereco.idCidade">Id Cidade</Translate>
+                      {this.state.baseFilters !== 'cep' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepLabel" for="cepbr-endereco-cep">
+                              <Translate contentKey="generadorApp.cepbrEndereco.cep">Cep</Translate>
                             </Label>
-                            <AvInput id="cepbr-endereco-idCidade" type="select" className="form-control" name="idCidadeId">
-                              <option value="" key="0" />
-                              {cepbrCidades
-                                ? cepbrCidades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cepbr-endereco-idBairro">
-                              <Translate contentKey="generadorApp.cepbrEndereco.idBairro">Id Bairro</Translate>
+                            <AvInput type="text" name="cep" id="cepbr-endereco-cep" value={this.state.cep} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'logradouro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="logradouroLabel" for="cepbr-endereco-logradouro">
+                              <Translate contentKey="generadorApp.cepbrEndereco.logradouro">Logradouro</Translate>
                             </Label>
-                            <AvInput id="cepbr-endereco-idBairro" type="select" className="form-control" name="idBairroId">
-                              <option value="" key="0" />
-                              {cepbrBairros
-                                ? cepbrBairros.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="logradouro" id="cepbr-endereco-logradouro" value={this.state.logradouro} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipoLogradouro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoLogradouroLabel" for="cepbr-endereco-tipoLogradouro">
+                              <Translate contentKey="generadorApp.cepbrEndereco.tipoLogradouro">Tipo Logradouro</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="tipoLogradouro"
+                              id="cepbr-endereco-tipoLogradouro"
+                              value={this.state.tipoLogradouro}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="complementoLabel" for="cepbr-endereco-complemento">
+                              <Translate contentKey="generadorApp.cepbrEndereco.complemento">Complemento</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="complemento" id="cepbr-endereco-complemento" value={this.state.complemento} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'local' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="localLabel" for="cepbr-endereco-local">
+                              <Translate contentKey="generadorApp.cepbrEndereco.local">Local</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="local" id="cepbr-endereco-local" value={this.state.local} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -367,34 +253,36 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('cep')}>
-                        <Translate contentKey="generadorApp.cepbrEndereco.cep">Cep</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('logradouro')}>
-                        <Translate contentKey="generadorApp.cepbrEndereco.logradouro">Logradouro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipoLogradouro')}>
-                        <Translate contentKey="generadorApp.cepbrEndereco.tipoLogradouro">Tipo Logradouro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('complemento')}>
-                        <Translate contentKey="generadorApp.cepbrEndereco.complemento">Complemento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('local')}>
-                        <Translate contentKey="generadorApp.cepbrEndereco.local">Local</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cepbrEndereco.idCidade">Id Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cepbrEndereco.idBairro">Id Bairro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'cep' ? (
+                        <th className="hand" onClick={this.sort('cep')}>
+                          <Translate contentKey="generadorApp.cepbrEndereco.cep">Cep</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'logradouro' ? (
+                        <th className="hand" onClick={this.sort('logradouro')}>
+                          <Translate contentKey="generadorApp.cepbrEndereco.logradouro">Logradouro</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipoLogradouro' ? (
+                        <th className="hand" onClick={this.sort('tipoLogradouro')}>
+                          <Translate contentKey="generadorApp.cepbrEndereco.tipoLogradouro">Tipo Logradouro</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <th className="hand" onClick={this.sort('complemento')}>
+                          <Translate contentKey="generadorApp.cepbrEndereco.complemento">Complemento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'local' ? (
+                        <th className="hand" onClick={this.sort('local')}>
+                          <Translate contentKey="generadorApp.cepbrEndereco.local">Local</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -409,45 +297,41 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
                           </Button>
                         </td>
 
-                        <td>{cepbrEndereco.cep}</td>
+                        {this.state.baseFilters !== 'cep' ? <td>{cepbrEndereco.cep}</td> : null}
 
-                        <td>{cepbrEndereco.logradouro}</td>
+                        {this.state.baseFilters !== 'logradouro' ? <td>{cepbrEndereco.logradouro}</td> : null}
 
-                        <td>{cepbrEndereco.tipoLogradouro}</td>
+                        {this.state.baseFilters !== 'tipoLogradouro' ? <td>{cepbrEndereco.tipoLogradouro}</td> : null}
 
-                        <td>{cepbrEndereco.complemento}</td>
+                        {this.state.baseFilters !== 'complemento' ? <td>{cepbrEndereco.complemento}</td> : null}
 
-                        <td>{cepbrEndereco.local}</td>
-                        <td>
-                          {cepbrEndereco.idCidade ? (
-                            <Link to={`cepbr-cidade/${cepbrEndereco.idCidade.id}`}>{cepbrEndereco.idCidade.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {cepbrEndereco.idBairro ? (
-                            <Link to={`cepbr-bairro/${cepbrEndereco.idBairro.id}`}>{cepbrEndereco.idBairro.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'local' ? <td>{cepbrEndereco.local}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${cepbrEndereco.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cepbrEndereco.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cepbrEndereco.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cepbrEndereco.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cepbrEndereco.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cepbrEndereco.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -489,15 +373,11 @@ export class CepbrEndereco extends React.Component<ICepbrEnderecoProps, ICepbrEn
 }
 
 const mapStateToProps = ({ cepbrEndereco, ...storeState }: IRootState) => ({
-  cepbrCidades: storeState.cepbrCidade.entities,
-  cepbrBairros: storeState.cepbrBairro.entities,
   cepbrEnderecoList: cepbrEndereco.entities,
   totalItems: cepbrEndereco.totalItems
 });
 
 const mapDispatchToProps = {
-  getCepbrCidades,
-  getCepbrBairros,
   getEntities
 };
 

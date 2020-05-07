@@ -20,13 +20,6 @@
             ]
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idCidXPtaNovo",
             "fieldType": "Integer",
             "fieldValidateRules": [
@@ -35,7 +28,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503002800",
+    "changelogDate": "20200507120100",
     "entityTableName": "pad_pta",
     "dto": "mapstruct",
     "pagination": "pagination",

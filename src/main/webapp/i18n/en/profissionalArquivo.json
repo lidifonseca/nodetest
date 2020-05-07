@@ -3,15 +3,15 @@
     "profissionalArquivo": {
       "home": {
         "title": "Profissional Arquivos",
-        "createLabel": "Criar novo Profissional Arquivo",
-        "createOrEditLabel": "Criar ou editar Profissional Arquivo",
-        "notFound": "Nenhum Profissional Arquivo encontrado"
+        "createLabel": "Create a new Profissional Arquivo",
+        "createOrEditLabel": "Create or edit a Profissional Arquivo",
+        "notFound": "No Profissional Arquivos found"
       },
-      "created": "Um novo Profissional Arquivo foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Arquivo foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Arquivo foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Arquivo is created with identifier {{ param }}",
+      "updated": "A Profissional Arquivo is updated with identifier {{ param }}",
+      "deleted": "A Profissional Arquivo is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Arquivo {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Arquivo {{ id }}?"
       },
       "detail": {
         "title": "Profissional Arquivo"

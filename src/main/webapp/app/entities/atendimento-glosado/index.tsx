@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import AtendimentoGlosado from './atendimento-glosado';
 import AtendimentoGlosadoDetail from './atendimento-glosado-detail';
+import AtendimentoGlosadoRelatorioCSV from './relatorio/atendimento-glosado.csv';
 import AtendimentoGlosadoUpdate from './atendimento-glosado-update';
 import AtendimentoGlosadoDeleteDialog from './atendimento-glosado-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={AtendimentoGlosadoRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={AtendimentoGlosadoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={AtendimentoGlosadoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={AtendimentoGlosadoDetail} />

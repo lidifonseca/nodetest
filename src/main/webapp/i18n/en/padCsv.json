@@ -3,15 +3,15 @@
     "padCsv": {
       "home": {
         "title": "Pad Csvs",
-        "createLabel": "Criar novo Pad Csv",
-        "createOrEditLabel": "Criar ou editar Pad Csv",
-        "notFound": "Nenhum Pad Csv encontrado"
+        "createLabel": "Create a new Pad Csv",
+        "createOrEditLabel": "Create or edit a Pad Csv",
+        "notFound": "No Pad Csvs found"
       },
-      "created": "Um novo Pad Csv foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Csv foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Csv foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Csv is created with identifier {{ param }}",
+      "updated": "A Pad Csv is updated with identifier {{ param }}",
+      "deleted": "A Pad Csv is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Csv {{ id }}?"
+        "question": "Are you sure you want to delete Pad Csv {{ id }}?"
       },
       "detail": {
         "title": "Pad Csv"

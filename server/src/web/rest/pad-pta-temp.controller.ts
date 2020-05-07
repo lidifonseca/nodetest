@@ -68,7 +68,9 @@ export class PadPtaTempController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() padPtaTemp: PadPtaTemp): Promise<PadPtaTemp> {
+    console.info(padPtaTemp);
     const created = await this.padPtaTempService.save(padPtaTemp);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadPtaTemp', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PadPtaTempController {
   })
   async put(@Req() req: Request, @Body() padPtaTemp: PadPtaTemp): Promise<PadPtaTemp> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadPtaTemp', padPtaTemp.id);
+
     return await this.padPtaTempService.update(padPtaTemp);
   }
 

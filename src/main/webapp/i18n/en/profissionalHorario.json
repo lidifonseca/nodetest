@@ -3,15 +3,15 @@
     "profissionalHorario": {
       "home": {
         "title": "Profissional Horarios",
-        "createLabel": "Criar novo Profissional Horario",
-        "createOrEditLabel": "Criar ou editar Profissional Horario",
-        "notFound": "Nenhum Profissional Horario encontrado"
+        "createLabel": "Create a new Profissional Horario",
+        "createOrEditLabel": "Create or edit a Profissional Horario",
+        "notFound": "No Profissional Horarios found"
       },
-      "created": "Um novo Profissional Horario foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Horario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Horario foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Horario is created with identifier {{ param }}",
+      "updated": "A Profissional Horario is updated with identifier {{ param }}",
+      "deleted": "A Profissional Horario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Horario {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Horario {{ id }}?"
       },
       "detail": {
         "title": "Profissional Horario"

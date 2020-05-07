@@ -22,27 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './cid-x-pta-novo.reducer';
+import { getCidXPtaNovoState, ICidXPtaNovoBaseState, getEntities } from './cid-x-pta-novo.reducer';
 import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { getEntities as getCidXPtaNovos } from 'app/entities/cid-x-pta-novo/cid-x-pta-novo.reducer';
-import { ICid } from 'app/shared/model/cid.model';
-import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
-
 export interface ICidXPtaNovoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICidXPtaNovoBaseState {
-  complexidade: any;
-  versao: any;
-  score: any;
-  titulo: any;
-  cidXPtaNovo: any;
-  cidXPtaNovoPadItemIndi: any;
-  cidId: any;
-  cidXPtaNovoId: any;
-}
 export interface ICidXPtaNovoState extends ICidXPtaNovoBaseState, IPaginationBaseState {}
 
 export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovoState> {
@@ -52,39 +38,12 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCidXPtaNovoState(this.props.location)
+      ...getCidXPtaNovoState(this.props.location)
     };
   }
 
-  getCidXPtaNovoState = (location): ICidXPtaNovoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const complexidade = url.searchParams.get('complexidade') || '';
-    const versao = url.searchParams.get('versao') || '';
-    const score = url.searchParams.get('score') || '';
-    const titulo = url.searchParams.get('titulo') || '';
-
-    const cidXPtaNovo = url.searchParams.get('cidXPtaNovo') || '';
-    const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
-    const cidId = url.searchParams.get('cidId') || '';
-    const cidXPtaNovoId = url.searchParams.get('cidXPtaNovoId') || '';
-
-    return {
-      complexidade,
-      versao,
-      score,
-      titulo,
-      cidXPtaNovo,
-      cidXPtaNovoPadItemIndi,
-      cidId,
-      cidXPtaNovoId
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getCidXPtaNovos();
-    this.props.getCids();
   }
 
   cancelCourse = () => {
@@ -93,11 +52,7 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
         complexidade: '',
         versao: '',
         score: '',
-        titulo: '',
-        cidXPtaNovo: '',
-        cidXPtaNovoPadItemIndi: '',
-        cidId: '',
-        cidXPtaNovoId: ''
+        titulo: ''
       },
       () => this.sortEntities()
     );
@@ -130,7 +85,9 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -154,18 +111,6 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
       'titulo=' +
       this.state.titulo +
       '&' +
-      'cidXPtaNovo=' +
-      this.state.cidXPtaNovo +
-      '&' +
-      'cidXPtaNovoPadItemIndi=' +
-      this.state.cidXPtaNovoPadItemIndi +
-      '&' +
-      'cidId=' +
-      this.state.cidId +
-      '&' +
-      'cidXPtaNovoId=' +
-      this.state.cidXPtaNovoId +
-      '&' +
       ''
     );
   };
@@ -173,37 +118,12 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      complexidade,
-      versao,
-      score,
-      titulo,
-      cidXPtaNovo,
-      cidXPtaNovoPadItemIndi,
-      cidId,
-      cidXPtaNovoId,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      complexidade,
-      versao,
-      score,
-      titulo,
-      cidXPtaNovo,
-      cidXPtaNovoPadItemIndi,
-      cidId,
-      cidXPtaNovoId,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { complexidade, versao, score, titulo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(complexidade, versao, score, titulo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { cidXPtaNovos, cids, cidXPtaNovoList, match, totalItems } = this.props;
+    const { cidXPtaNovoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -221,7 +141,11 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.cidXPtaNovo.home.createLabel">Create a new Cid X Pta Novo</Translate>
@@ -234,88 +158,51 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="complexidadeLabel" for="cid-x-pta-novo-complexidade">
-                            <Translate contentKey="generadorApp.cidXPtaNovo.complexidade">Complexidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="complexidade" id="cid-x-pta-novo-complexidade" value={this.state.complexidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="versaoLabel" for="cid-x-pta-novo-versao">
-                            <Translate contentKey="generadorApp.cidXPtaNovo.versao">Versao</Translate>
-                          </Label>
-                          <AvInput type="string" name="versao" id="cid-x-pta-novo-versao" value={this.state.versao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="scoreLabel" for="cid-x-pta-novo-score">
-                            <Translate contentKey="generadorApp.cidXPtaNovo.score">Score</Translate>
-                          </Label>
-                          <AvInput type="string" name="score" id="cid-x-pta-novo-score" value={this.state.score} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tituloLabel" for="cid-x-pta-novo-titulo">
-                            <Translate contentKey="generadorApp.cidXPtaNovo.titulo">Titulo</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="titulo" id="cid-x-pta-novo-titulo" value={this.state.titulo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cid-x-pta-novo-cidId">
-                              <Translate contentKey="generadorApp.cidXPtaNovo.cidId">Cid Id</Translate>
+                      {this.state.baseFilters !== 'complexidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="complexidadeLabel" for="cid-x-pta-novo-complexidade">
+                              <Translate contentKey="generadorApp.cidXPtaNovo.complexidade">Complexidade</Translate>
                             </Label>
-                            <AvInput id="cid-x-pta-novo-cidId" type="select" className="form-control" name="cidIdId">
-                              <option value="" key="0" />
-                              {cids
-                                ? cids.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cid-x-pta-novo-cidXPtaNovoId">
-                              <Translate contentKey="generadorApp.cidXPtaNovo.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
+                            <AvInput type="text" name="complexidade" id="cid-x-pta-novo-complexidade" value={this.state.complexidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'versao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="versaoLabel" for="cid-x-pta-novo-versao">
+                              <Translate contentKey="generadorApp.cidXPtaNovo.versao">Versao</Translate>
                             </Label>
-                            <AvInput id="cid-x-pta-novo-cidXPtaNovoId" type="select" className="form-control" name="cidXPtaNovoIdId">
-                              <option value="" key="0" />
-                              {cidXPtaNovos
-                                ? cidXPtaNovos.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="versao" id="cid-x-pta-novo-versao" value={this.state.versao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'score' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="scoreLabel" for="cid-x-pta-novo-score">
+                              <Translate contentKey="generadorApp.cidXPtaNovo.score">Score</Translate>
+                            </Label>
+                            <AvInput type="string" name="score" id="cid-x-pta-novo-score" value={this.state.score} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tituloLabel" for="cid-x-pta-novo-titulo">
+                              <Translate contentKey="generadorApp.cidXPtaNovo.titulo">Titulo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="titulo" id="cid-x-pta-novo-titulo" value={this.state.titulo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -343,30 +230,30 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('complexidade')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovo.complexidade">Complexidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('versao')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovo.versao">Versao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('score')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovo.score">Score</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('titulo')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovo.titulo">Titulo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cidXPtaNovo.cidId">Cid Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cidXPtaNovo.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'complexidade' ? (
+                        <th className="hand" onClick={this.sort('complexidade')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovo.complexidade">Complexidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'versao' ? (
+                        <th className="hand" onClick={this.sort('versao')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovo.versao">Versao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'score' ? (
+                        <th className="hand" onClick={this.sort('score')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovo.score">Score</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <th className="hand" onClick={this.sort('titulo')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovo.titulo">Titulo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -381,37 +268,34 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
                           </Button>
                         </td>
 
-                        <td>{cidXPtaNovo.complexidade}</td>
+                        {this.state.baseFilters !== 'complexidade' ? <td>{cidXPtaNovo.complexidade}</td> : null}
 
-                        <td>{cidXPtaNovo.versao}</td>
+                        {this.state.baseFilters !== 'versao' ? <td>{cidXPtaNovo.versao}</td> : null}
 
-                        <td>{cidXPtaNovo.score}</td>
+                        {this.state.baseFilters !== 'score' ? <td>{cidXPtaNovo.score}</td> : null}
 
-                        <td>{cidXPtaNovo.titulo}</td>
-                        <td>{cidXPtaNovo.cidId ? <Link to={`cid/${cidXPtaNovo.cidId.id}`}>{cidXPtaNovo.cidId.id}</Link> : ''}</td>
-                        <td>
-                          {cidXPtaNovo.cidXPtaNovoId ? (
-                            <Link to={`cid-x-pta-novo/${cidXPtaNovo.cidXPtaNovoId.id}`}>{cidXPtaNovo.cidXPtaNovoId.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'titulo' ? <td>{cidXPtaNovo.titulo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${cidXPtaNovo.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cidXPtaNovo.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cidXPtaNovo.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cidXPtaNovo.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cidXPtaNovo.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cidXPtaNovo.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -453,15 +337,11 @@ export class CidXPtaNovo extends React.Component<ICidXPtaNovoProps, ICidXPtaNovo
 }
 
 const mapStateToProps = ({ cidXPtaNovo, ...storeState }: IRootState) => ({
-  cidXPtaNovos: storeState.cidXPtaNovo.entities,
-  cids: storeState.cid.entities,
   cidXPtaNovoList: cidXPtaNovo.entities,
   totalItems: cidXPtaNovo.totalItems
 });
 
 const mapDispatchToProps = {
-  getCidXPtaNovos,
-  getCids,
   getEntities
 };
 

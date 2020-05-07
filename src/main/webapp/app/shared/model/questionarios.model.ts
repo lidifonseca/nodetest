@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-import { IRespostasQuestionarios } from 'app/shared/model/respostas-questionarios.model';
 import { IPaciente } from 'app/shared/model/paciente.model';
 
 export interface IQuestionarios {
@@ -8,7 +7,6 @@ export interface IQuestionarios {
   etapaAtual?: string;
   finalizado?: boolean;
   ultimaPerguntaRespondida?: number;
-  respostasQuestionarios?: IRespostasQuestionarios[];
   pacienteNome?: string;
   paciente?: string | any;
 }

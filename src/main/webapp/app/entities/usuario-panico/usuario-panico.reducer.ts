@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IUsuarioPanico, defaultValue } from 'app/shared/model/usuario-panico.model';
 
 export const ACTION_TYPES = {
+  FETCH_USUARIOPANICO_LIST_EXPORT: 'usuarioPanico/FETCH_USUARIOPANICO_LIST_EXPORT',
   FETCH_USUARIOPANICO_LIST: 'usuarioPanico/FETCH_USUARIOPANICO_LIST',
   FETCH_USUARIOPANICO: 'usuarioPanico/FETCH_USUARIOPANICO',
   CREATE_USUARIOPANICO: 'usuarioPanico/CREATE_USUARIOPANICO',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type UsuarioPanicoState = Readonly<typeof initialState>;
 
+export interface IUsuarioPanicoBaseState {
+  baseFilters: any;
+  idPaciente: any;
+  idProfissional: any;
+  observacao: any;
+  resolvido: any;
+  idUserResolvido: any;
+}
+
+export interface IUsuarioPanicoUpdateState {
+  fieldsBase: IUsuarioPanicoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: UsuarioPanicoState = initialState, action): UsuarioPanicoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_USUARIOPANICO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_USUARIOPANICO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_USUARIOPANICO):
       return {
@@ -51,6 +67,7 @@ export default (state: UsuarioPanicoState = initialState, action): UsuarioPanico
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_USUARIOPANICO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_USUARIOPANICO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_USUARIOPANICO):
     case FAILURE(ACTION_TYPES.CREATE_USUARIOPANICO):
@@ -107,7 +124,6 @@ const apiUrl = 'api/usuario-panicos';
 // Actions
 export type ICrudGetAllActionUsuarioPanico<T> = (
   idPaciente?: any,
-  idUsuario?: any,
   idProfissional?: any,
   observacao?: any,
   resolvido?: any,
@@ -119,7 +135,6 @@ export type ICrudGetAllActionUsuarioPanico<T> = (
 
 export const getEntities: ICrudGetAllActionUsuarioPanico<IUsuarioPanico> = (
   idPaciente,
-  idUsuario,
   idProfissional,
   observacao,
   resolvido,
@@ -129,7 +144,6 @@ export const getEntities: ICrudGetAllActionUsuarioPanico<IUsuarioPanico> = (
   sort
 ) => {
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const resolvidoRequest = resolvido ? `resolvido.contains=${resolvido}&` : '';
@@ -139,7 +153,7 @@ export const getEntities: ICrudGetAllActionUsuarioPanico<IUsuarioPanico> = (
   return {
     type: ACTION_TYPES.FETCH_USUARIOPANICO_LIST,
     payload: axios.get<IUsuarioPanico>(
-      `${requestUrl}${idPacienteRequest}${idUsuarioRequest}${idProfissionalRequest}${observacaoRequest}${resolvidoRequest}${idUserResolvidoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idProfissionalRequest}${observacaoRequest}${resolvidoRequest}${idUserResolvidoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -148,6 +162,31 @@ export const getEntity: ICrudGetAction<IUsuarioPanico> = id => {
   return {
     type: ACTION_TYPES.FETCH_USUARIOPANICO,
     payload: axios.get<IUsuarioPanico>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionUsuarioPanico<IUsuarioPanico> = (
+  idPaciente,
+  idProfissional,
+  observacao,
+  resolvido,
+  idUserResolvido,
+  page,
+  size,
+  sort
+) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+  const resolvidoRequest = resolvido ? `resolvido.contains=${resolvido}&` : '';
+  const idUserResolvidoRequest = idUserResolvido ? `idUserResolvido.contains=${idUserResolvido}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_USUARIOPANICO_LIST,
+    payload: axios.get<IUsuarioPanico>(
+      `${requestUrl}${idPacienteRequest}${idProfissionalRequest}${observacaoRequest}${resolvidoRequest}${idUserResolvidoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -186,3 +225,22 @@ export const deleteEntity: ICrudDeleteAction<IUsuarioPanico> = id => async dispa
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getUsuarioPanicoState = (location): IUsuarioPanicoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+  const resolvido = url.searchParams.get('resolvido') || '';
+  const idUserResolvido = url.searchParams.get('idUserResolvido') || '';
+
+  return {
+    baseFilters,
+    idPaciente,
+    idProfissional,
+    observacao,
+    resolvido,
+    idUserResolvido
+  };
+};

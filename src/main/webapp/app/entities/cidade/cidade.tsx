@@ -22,22 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './cidade.reducer';
+import { getCidadeState, ICidadeBaseState, getEntities } from './cidade.reducer';
 import { ICidade } from 'app/shared/model/cidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IUf } from 'app/shared/model/uf.model';
-import { getEntities as getUfs } from 'app/entities/uf/uf.reducer';
-
 export interface ICidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICidadeBaseState {
-  descrCidade: any;
-  atendimento: any;
-  empresa: any;
-  idUf: any;
-}
 export interface ICidadeState extends ICidadeBaseState, IPaginationBaseState {}
 
 export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
@@ -47,39 +38,18 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCidadeState(this.props.location)
+      ...getCidadeState(this.props.location)
     };
   }
 
-  getCidadeState = (location): ICidadeBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const descrCidade = url.searchParams.get('descrCidade') || '';
-
-    const atendimento = url.searchParams.get('atendimento') || '';
-    const empresa = url.searchParams.get('empresa') || '';
-    const idUf = url.searchParams.get('idUf') || '';
-
-    return {
-      descrCidade,
-      atendimento,
-      empresa,
-      idUf
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getUfs();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        descrCidade: '',
-        atendimento: '',
-        empresa: '',
-        idUf: ''
+        descrCidade: ''
       },
       () => this.sortEntities()
     );
@@ -112,7 +82,9 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -127,15 +99,6 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
       'descrCidade=' +
       this.state.descrCidade +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
-      'empresa=' +
-      this.state.empresa +
-      '&' +
-      'idUf=' +
-      this.state.idUf +
-      '&' +
       ''
     );
   };
@@ -143,12 +106,12 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { descrCidade, atendimento, empresa, idUf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(descrCidade, atendimento, empresa, idUf, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descrCidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(descrCidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { ufs, cidadeList, match, totalItems } = this.props;
+    const { cidadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -166,7 +129,11 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.cidade.home.createLabel">Create a new Cidade</Translate>
@@ -179,43 +146,17 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="descrCidadeLabel" for="cidade-descrCidade">
-                            <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="descrCidade" id="cidade-descrCidade" value={this.state.descrCidade} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cidade-idUf">
-                              <Translate contentKey="generadorApp.cidade.idUf">Id Uf</Translate>
+                      {this.state.baseFilters !== 'descrCidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descrCidadeLabel" for="cidade-descrCidade">
+                              <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
                             </Label>
-                            <AvInput id="cidade-idUf" type="select" className="form-control" name="idUfId">
-                              <option value="" key="0" />
-                              {ufs
-                                ? ufs.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="descrCidade" id="cidade-descrCidade" value={this.state.descrCidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -243,14 +184,12 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('descrCidade')}>
-                        <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cidade.idUf">Id Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'descrCidade' ? (
+                        <th className="hand" onClick={this.sort('descrCidade')}>
+                          <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -265,24 +204,23 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
                           </Button>
                         </td>
 
-                        <td>{cidade.descrCidade}</td>
-                        <td>{cidade.idUf ? <Link to={`uf/${cidade.idUf.id}`}>{cidade.idUf.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'descrCidade' ? <td>{cidade.descrCidade}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${cidade.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cidade.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cidade.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cidade.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cidade.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cidade.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -324,13 +262,11 @@ export class Cidade extends React.Component<ICidadeProps, ICidadeState> {
 }
 
 const mapStateToProps = ({ cidade, ...storeState }: IRootState) => ({
-  ufs: storeState.uf.entities,
   cidadeList: cidade.entities,
   totalItems: cidade.totalItems
 });
 
 const mapDispatchToProps = {
-  getUfs,
   getEntities
 };
 

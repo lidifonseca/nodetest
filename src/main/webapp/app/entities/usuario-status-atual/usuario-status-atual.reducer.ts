@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IUsuarioStatusAtual, defaultValue } from 'app/shared/model/usuario-status-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_USUARIOSTATUSATUAL_LIST_EXPORT: 'usuarioStatusAtual/FETCH_USUARIOSTATUSATUAL_LIST_EXPORT',
   FETCH_USUARIOSTATUSATUAL_LIST: 'usuarioStatusAtual/FETCH_USUARIOSTATUSATUAL_LIST',
   FETCH_USUARIOSTATUSATUAL: 'usuarioStatusAtual/FETCH_USUARIOSTATUSATUAL',
   CREATE_USUARIOSTATUSATUAL: 'usuarioStatusAtual/CREATE_USUARIOSTATUSATUAL',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type UsuarioStatusAtualState = Readonly<typeof initialState>;
 
+export interface IUsuarioStatusAtualBaseState {
+  baseFilters: any;
+  statusAtual: any;
+  obs: any;
+  ativo: any;
+}
+
+export interface IUsuarioStatusAtualUpdateState {
+  fieldsBase: IUsuarioStatusAtualBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: UsuarioStatusAtualState = initialState, action): UsuarioStatusAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_USUARIOSTATUSATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_USUARIOSTATUSATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_USUARIOSTATUSATUAL):
       return {
@@ -51,6 +65,7 @@ export default (state: UsuarioStatusAtualState = initialState, action): UsuarioS
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_USUARIOSTATUSATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_USUARIOSTATUSATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_USUARIOSTATUSATUAL):
     case FAILURE(ACTION_TYPES.CREATE_USUARIOSTATUSATUAL):
@@ -106,7 +121,6 @@ const apiUrl = 'api/usuario-status-atuals';
 
 // Actions
 export type ICrudGetAllActionUsuarioStatusAtual<T> = (
-  idUsuario?: any,
   statusAtual?: any,
   obs?: any,
   ativo?: any,
@@ -115,16 +129,7 @@ export type ICrudGetAllActionUsuarioStatusAtual<T> = (
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionUsuarioStatusAtual<IUsuarioStatusAtual> = (
-  idUsuario,
-  statusAtual,
-  obs,
-  ativo,
-  page,
-  size,
-  sort
-) => {
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+export const getEntities: ICrudGetAllActionUsuarioStatusAtual<IUsuarioStatusAtual> = (statusAtual, obs, ativo, page, size, sort) => {
   const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
@@ -133,7 +138,7 @@ export const getEntities: ICrudGetAllActionUsuarioStatusAtual<IUsuarioStatusAtua
   return {
     type: ACTION_TYPES.FETCH_USUARIOSTATUSATUAL_LIST,
     payload: axios.get<IUsuarioStatusAtual>(
-      `${requestUrl}${idUsuarioRequest}${statusAtualRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -142,6 +147,20 @@ export const getEntity: ICrudGetAction<IUsuarioStatusAtual> = id => {
   return {
     type: ACTION_TYPES.FETCH_USUARIOSTATUSATUAL,
     payload: axios.get<IUsuarioStatusAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionUsuarioStatusAtual<IUsuarioStatusAtual> = (statusAtual, obs, ativo, page, size, sort) => {
+  const statusAtualRequest = statusAtual ? `statusAtual.contains=${statusAtual}&` : '';
+  const obsRequest = obs ? `obs.contains=${obs}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_USUARIOSTATUSATUAL_LIST,
+    payload: axios.get<IUsuarioStatusAtual>(
+      `${requestUrl}${statusAtualRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -180,3 +199,18 @@ export const deleteEntity: ICrudDeleteAction<IUsuarioStatusAtual> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getUsuarioStatusAtualState = (location): IUsuarioStatusAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const statusAtual = url.searchParams.get('statusAtual') || '';
+  const obs = url.searchParams.get('obs') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    statusAtual,
+    obs,
+    ativo
+  };
+};

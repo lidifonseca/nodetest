@@ -43,37 +43,15 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "categoriaAtividade",
-            "otherEntityRelationshipName": "idCategoria",
-            "relationshipName": "categoriaAtividade"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "categoriaContrato",
-            "otherEntityRelationshipName": "idCategoria",
-            "relationshipName": "categoriaContrato"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "categoriaUnidade",
-            "otherEntityRelationshipName": "idCategoria",
-            "relationshipName": "categoriaUnidade"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "cidXPtaNovoPadItemIndi",
-            "otherEntityRelationshipName": "categoriasId",
-            "relationshipName": "cidXPtaNovoPadItemIndi"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "especialidade",
-            "otherEntityRelationshipName": "idCategoria",
-            "relationshipName": "especialidade"
+            "relationshipType": "many-to-many",
+            "otherEntityName": "unidadeEasy",
+            "otherEntityRelationshipName": "categoria",
+            "relationshipName": "unidade",
+            "otherEntityField": "razaoSocial",
+            "ownerSide": true
         }
     ],
-    "changelogDate": "20200502231100",
+    "changelogDate": "20200507104400",
     "entityTableName": "categoria",
     "dto": "mapstruct",
     "pagination": "pagination",

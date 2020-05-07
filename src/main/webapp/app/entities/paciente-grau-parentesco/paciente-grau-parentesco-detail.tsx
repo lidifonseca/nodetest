@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-grau-parentesco.reducer';
+import { getEntity, IPacienteGrauParentescoBaseState, getPacienteGrauParentescoState } from './paciente-grau-parentesco.reducer';
 import { IPacienteGrauParentesco } from 'app/shared/model/paciente-grau-parentesco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteGrauParentescoState {
+  fieldsBase: IPacienteGrauParentescoBaseState;
+}
+
 export interface IPacienteGrauParentescoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteGrauParentescoDetail extends React.Component<IPacienteGrauParentescoDetailProps> {
+export class PacienteGrauParentescoDetail extends React.Component<IPacienteGrauParentescoDetailProps, IPacienteGrauParentescoState> {
   constructor(props: Readonly<IPacienteGrauParentescoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteGrauParentescoState(this.props.location)
     };
   }
 

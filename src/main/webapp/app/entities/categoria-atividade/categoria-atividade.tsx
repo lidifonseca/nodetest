@@ -22,25 +22,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './categoria-atividade.reducer';
+import { getCategoriaAtividadeState, ICategoriaAtividadeBaseState, getEntities } from './categoria-atividade.reducer';
 import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { ICategoria } from 'app/shared/model/categoria.model';
-import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
 
 export interface ICategoriaAtividadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICategoriaAtividadeBaseState {
-  atividade: any;
-  atendimentoAtividades: any;
-  padItemAtividade: any;
-  unidade: any;
-  idCategoria: any;
-}
 export interface ICategoriaAtividadeState extends ICategoriaAtividadeBaseState, IPaginationBaseState {}
 
 export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps, ICategoriaAtividadeState> {
@@ -50,43 +41,21 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCategoriaAtividadeState(this.props.location)
+      ...getCategoriaAtividadeState(this.props.location)
     };
   }
-
-  getCategoriaAtividadeState = (location): ICategoriaAtividadeBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const atividade = url.searchParams.get('atividade') || '';
-
-    const atendimentoAtividades = url.searchParams.get('atendimentoAtividades') || '';
-    const padItemAtividade = url.searchParams.get('padItemAtividade') || '';
-    const unidade = url.searchParams.get('unidade') || '';
-    const idCategoria = url.searchParams.get('idCategoria') || '';
-
-    return {
-      atividade,
-      atendimentoAtividades,
-      padItemAtividade,
-      unidade,
-      idCategoria
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
 
     this.props.getUnidadeEasies();
-    this.props.getCategorias();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         atividade: '',
-        atendimentoAtividades: '',
-        padItemAtividade: '',
-        unidade: '',
-        idCategoria: ''
+        unidade: ''
       },
       () => this.sortEntities()
     );
@@ -119,7 +88,9 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -134,17 +105,8 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
       'atividade=' +
       this.state.atividade +
       '&' +
-      'atendimentoAtividades=' +
-      this.state.atendimentoAtividades +
-      '&' +
-      'padItemAtividade=' +
-      this.state.padItemAtividade +
-      '&' +
       'unidade=' +
       this.state.unidade +
-      '&' +
-      'idCategoria=' +
-      this.state.idCategoria +
       '&' +
       ''
     );
@@ -153,21 +115,12 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { atividade, atendimentoAtividades, padItemAtividade, unidade, idCategoria, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      atividade,
-      atendimentoAtividades,
-      padItemAtividade,
-      unidade,
-      idCategoria,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { atividade, unidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(atividade, unidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { unidadeEasies, categorias, categoriaAtividadeList, match, totalItems } = this.props;
+    const { unidadeEasies, categoriaAtividadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -185,7 +138,11 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.categoriaAtividade.home.createLabel">Create a new Categoria Atividade</Translate>
@@ -198,63 +155,39 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="atividadeLabel" for="categoria-atividade-atividade">
-                            <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="atividade" id="categoria-atividade-atividade" value={this.state.atividade} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="categoria-atividade-unidade">
-                              <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="atividadeLabel" for="categoria-atividade-atividade">
+                              <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
                             </Label>
-                            <AvInput id="categoria-atividade-unidade" type="select" className="form-control" name="unidadeId">
-                              <option value="" key="0" />
-                              {unidadeEasies
-                                ? unidadeEasies.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.razaoSocial}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="categoria-atividade-idCategoria">
-                              <Translate contentKey="generadorApp.categoriaAtividade.idCategoria">Id Categoria</Translate>
-                            </Label>
-                            <AvInput id="categoria-atividade-idCategoria" type="select" className="form-control" name="idCategoriaId">
-                              <option value="" key="0" />
-                              {categorias
-                                ? categorias.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="atividade" id="categoria-atividade-atividade" value={this.state.atividade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="categoria-atividade-unidade">
+                                <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
+                              </Label>
+                              <AvInput id="categoria-atividade-unidade" type="select" className="form-control" name="unidadeId">
+                                <option value="" key="0" />
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -282,18 +215,19 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('atividade')}>
-                        <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.categoriaAtividade.idCategoria">Id Categoria</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <th className="hand" onClick={this.sort('atividade')}>
+                          <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -308,37 +242,43 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
                           </Button>
                         </td>
 
-                        <td>{categoriaAtividade.atividade}</td>
-                        <td>
-                          {categoriaAtividade.unidade ? (
-                            <Link to={`unidade-easy/${categoriaAtividade.unidade.id}`}>{categoriaAtividade.unidade.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {categoriaAtividade.idCategoria ? (
-                            <Link to={`categoria/${categoriaAtividade.idCategoria.id}`}>{categoriaAtividade.idCategoria.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'atividade' ? <td>{categoriaAtividade.atividade}</td> : null}
+
+                        {this.state.baseFilters !== 'unidade' ? (
+                          <td>
+                            {categoriaAtividade.unidade ? (
+                              <Link to={`unidade-easy/${categoriaAtividade.unidade.id}`}>{categoriaAtividade.unidade.id}</Link>
+                            ) : (
+                              ''
+                            )}
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${categoriaAtividade.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${categoriaAtividade.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${categoriaAtividade.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${categoriaAtividade.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${categoriaAtividade.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${categoriaAtividade.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -381,14 +321,12 @@ export class CategoriaAtividade extends React.Component<ICategoriaAtividadeProps
 
 const mapStateToProps = ({ categoriaAtividade, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  categorias: storeState.categoria.entities,
   categoriaAtividadeList: categoriaAtividade.entities,
   totalItems: categoriaAtividade.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getCategorias,
   getEntities
 };
 

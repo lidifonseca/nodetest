@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ILicaoCasaEvolucao, defaultValue } from 'app/shared/model/licao-casa-evolucao.model';
 
 export const ACTION_TYPES = {
+  FETCH_LICAOCASAEVOLUCAO_LIST_EXPORT: 'licaoCasaEvolucao/FETCH_LICAOCASAEVOLUCAO_LIST_EXPORT',
   FETCH_LICAOCASAEVOLUCAO_LIST: 'licaoCasaEvolucao/FETCH_LICAOCASAEVOLUCAO_LIST',
   FETCH_LICAOCASAEVOLUCAO: 'licaoCasaEvolucao/FETCH_LICAOCASAEVOLUCAO',
   CREATE_LICAOCASAEVOLUCAO: 'licaoCasaEvolucao/CREATE_LICAOCASAEVOLUCAO',
@@ -30,10 +31,28 @@ const initialState = {
 
 export type LicaoCasaEvolucaoState = Readonly<typeof initialState>;
 
+export interface ILicaoCasaEvolucaoBaseState {
+  baseFilters: any;
+  licaoCasaId: any;
+  atualizadoEm: any;
+  realizada: any;
+  realizadaEm: any;
+  observacoes: any;
+  instrucoes: any;
+  dataAgenda: any;
+  qtdLembrete: any;
+}
+
+export interface ILicaoCasaEvolucaoUpdateState {
+  fieldsBase: ILicaoCasaEvolucaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: LicaoCasaEvolucaoState = initialState, action): LicaoCasaEvolucaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_LICAOCASAEVOLUCAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_LICAOCASAEVOLUCAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_LICAOCASAEVOLUCAO):
       return {
@@ -51,6 +70,7 @@ export default (state: LicaoCasaEvolucaoState = initialState, action): LicaoCasa
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_LICAOCASAEVOLUCAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_LICAOCASAEVOLUCAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_LICAOCASAEVOLUCAO):
     case FAILURE(ACTION_TYPES.CREATE_LICAOCASAEVOLUCAO):
@@ -157,6 +177,37 @@ export const getEntity: ICrudGetAction<ILicaoCasaEvolucao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionLicaoCasaEvolucao<ILicaoCasaEvolucao> = (
+  licaoCasaId,
+  atualizadoEm,
+  realizada,
+  realizadaEm,
+  observacoes,
+  instrucoes,
+  dataAgenda,
+  qtdLembrete,
+  page,
+  size,
+  sort
+) => {
+  const licaoCasaIdRequest = licaoCasaId ? `licaoCasaId.contains=${licaoCasaId}&` : '';
+  const atualizadoEmRequest = atualizadoEm ? `atualizadoEm.contains=${atualizadoEm}&` : '';
+  const realizadaRequest = realizada ? `realizada.contains=${realizada}&` : '';
+  const realizadaEmRequest = realizadaEm ? `realizadaEm.contains=${realizadaEm}&` : '';
+  const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
+  const instrucoesRequest = instrucoes ? `instrucoes.contains=${instrucoes}&` : '';
+  const dataAgendaRequest = dataAgenda ? `dataAgenda.contains=${dataAgenda}&` : '';
+  const qtdLembreteRequest = qtdLembrete ? `qtdLembrete.contains=${qtdLembrete}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_LICAOCASAEVOLUCAO_LIST,
+    payload: axios.get<ILicaoCasaEvolucao>(
+      `${requestUrl}${licaoCasaIdRequest}${atualizadoEmRequest}${realizadaRequest}${realizadaEmRequest}${observacoesRequest}${instrucoesRequest}${dataAgendaRequest}${qtdLembreteRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ILicaoCasaEvolucao> = entity => async dispatch => {
   entity = {
     ...entity
@@ -192,3 +243,28 @@ export const deleteEntity: ICrudDeleteAction<ILicaoCasaEvolucao> = id => async d
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getLicaoCasaEvolucaoState = (location): ILicaoCasaEvolucaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const licaoCasaId = url.searchParams.get('licaoCasaId') || '';
+  const atualizadoEm = url.searchParams.get('atualizadoEm') || '';
+  const realizada = url.searchParams.get('realizada') || '';
+  const realizadaEm = url.searchParams.get('realizadaEm') || '';
+  const observacoes = url.searchParams.get('observacoes') || '';
+  const instrucoes = url.searchParams.get('instrucoes') || '';
+  const dataAgenda = url.searchParams.get('dataAgenda') || '';
+  const qtdLembrete = url.searchParams.get('qtdLembrete') || '';
+
+  return {
+    baseFilters,
+    licaoCasaId,
+    atualizadoEm,
+    realizada,
+    realizadaEm,
+    observacoes,
+    instrucoes,
+    dataAgenda,
+    qtdLembrete
+  };
+};

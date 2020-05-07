@@ -3,24 +3,22 @@
     "respostas": {
       "home": {
         "title": "Respostas",
-        "createLabel": "Criar novo Respostas",
-        "createOrEditLabel": "Criar ou editar Respostas",
-        "notFound": "Nenhum Respostas encontrado"
+        "createLabel": "Create a new Respostas",
+        "createOrEditLabel": "Create or edit a Respostas",
+        "notFound": "No Respostas found"
       },
-      "created": "Um novo Respostas foi criado com o identificador {{ param }}",
-      "updated": "Um Respostas foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Respostas foi excluído com o identificador {{ param }}",
+      "created": "A new Respostas is created with identifier {{ param }}",
+      "updated": "A Respostas is updated with identifier {{ param }}",
+      "deleted": "A Respostas is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Respostas {{ id }}?"
+        "question": "Are you sure you want to delete Respostas {{ id }}?"
       },
       "detail": {
         "title": "Respostas"
       },
       "resposta": "Resposta",
       "pontuacao": "Pontuacao",
-      "respostaAtiva": "Resposta Ativa",
-      "acoesRespostas": "Acoes Respostas",
-      "perguntasQuestionarioId": "Perguntas Questionario Id"
+      "respostaAtiva": "Resposta Ativa"
     }
   }
 }

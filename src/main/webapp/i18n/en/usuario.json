@@ -3,15 +3,15 @@
     "usuario": {
       "home": {
         "title": "Usuarios",
-        "createLabel": "Criar novo Usuario",
-        "createOrEditLabel": "Criar ou editar Usuario",
-        "notFound": "Nenhum Usuario encontrado"
+        "createLabel": "Create a new Usuario",
+        "createOrEditLabel": "Create or edit a Usuario",
+        "notFound": "No Usuarios found"
       },
-      "created": "Um novo Usuario foi criado com o identificador {{ param }}",
-      "updated": "Um Usuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Usuario foi excluído com o identificador {{ param }}",
+      "created": "A new Usuario is created with identifier {{ param }}",
+      "updated": "A Usuario is updated with identifier {{ param }}",
+      "deleted": "A Usuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Usuario {{ id }}?"
+        "question": "Are you sure you want to delete Usuario {{ id }}?"
       },
       "detail": {
         "title": "Usuario"
@@ -139,11 +139,7 @@
       "envioAnaliseResultadoEsperado": "Envio Analise Resultado Esperado",
       "envioDescumprimento": "Envio Descumprimento",
       "envioMelhoraTempo": "Envio Melhora Tempo",
-      "senhaChat": "Senha Chat",
-      "diario": "Diario",
-      "pacienteDiario": "Paciente Diario",
-      "unidade": "Unidade",
-      "idTipoUsuario": "Id Tipo Usuario"
+      "unidade": "Unidade"
     }
   }
 }

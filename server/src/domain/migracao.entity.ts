@@ -5,12 +5,12 @@ import { BaseEntity } from './base/base.entity';
 /**
  * A Migracao.
  */
-@Entity('migracao')
+@Entity('tb_migracao')
 export default class Migracao extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_pad' })
+  @Column({ type: 'integer', name: 'ID_PAD' })
   idPad: number;
 
-  @Column({ type: 'timestamp', name: 'data_hora_migracao' })
+  @Column({ type: 'timestamp', name: 'DATA_HORA_MIGRACAO' })
   dataHoraMigracao: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

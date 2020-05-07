@@ -13,6 +13,8 @@ import {
 } from 'app/shared/model/profissional-dispositivo-complexidade-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST_EXPORT:
+    'profissionalDispositivoComplexidadeAtual/FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST_EXPORT',
   FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST:
     'profissionalDispositivoComplexidadeAtual/FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST',
   FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL: 'profissionalDispositivoComplexidadeAtual/FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL',
@@ -37,6 +39,17 @@ const initialState = {
 
 export type ProfissionalDispositivoComplexidadeAtualState = Readonly<typeof initialState>;
 
+export interface IProfissionalDispositivoComplexidadeAtualBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  idProfissionalDispositivoComplexidade: any;
+}
+
+export interface IProfissionalDispositivoComplexidadeAtualUpdateState {
+  fieldsBase: IProfissionalDispositivoComplexidadeAtualBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (
@@ -44,6 +57,7 @@ export default (
   action
 ): ProfissionalDispositivoComplexidadeAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL):
       return {
@@ -61,6 +75,7 @@ export default (
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL):
@@ -118,7 +133,6 @@ const apiUrl = 'api/profissional-dispositivo-complexidade-atuals';
 export type ICrudGetAllActionProfissionalDispositivoComplexidadeAtual<T> = (
   idProfissional?: any,
   idProfissionalDispositivoComplexidade?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -127,7 +141,6 @@ export type ICrudGetAllActionProfissionalDispositivoComplexidadeAtual<T> = (
 export const getEntities: ICrudGetAllActionProfissionalDispositivoComplexidadeAtual<IProfissionalDispositivoComplexidadeAtual> = (
   idProfissional,
   idProfissionalDispositivoComplexidade,
-  idUsuario,
   page,
   size,
   sort
@@ -136,13 +149,12 @@ export const getEntities: ICrudGetAllActionProfissionalDispositivoComplexidadeAt
   const idProfissionalDispositivoComplexidadeRequest = idProfissionalDispositivoComplexidade
     ? `idProfissionalDispositivoComplexidade.contains=${idProfissionalDispositivoComplexidade}&`
     : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST,
     payload: axios.get<IProfissionalDispositivoComplexidadeAtual>(
-      `${requestUrl}${idProfissionalRequest}${idProfissionalDispositivoComplexidadeRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idProfissionalDispositivoComplexidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,6 +163,27 @@ export const getEntity: ICrudGetAction<IProfissionalDispositivoComplexidadeAtual
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL,
     payload: axios.get<IProfissionalDispositivoComplexidadeAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionProfissionalDispositivoComplexidadeAtual<IProfissionalDispositivoComplexidadeAtual> = (
+  idProfissional,
+  idProfissionalDispositivoComplexidade,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const idProfissionalDispositivoComplexidadeRequest = idProfissionalDispositivoComplexidade
+    ? `idProfissionalDispositivoComplexidade.contains=${idProfissionalDispositivoComplexidade}&`
+    : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOCOMPLEXIDADEATUAL_LIST,
+    payload: axios.get<IProfissionalDispositivoComplexidadeAtual>(
+      `${requestUrl}${idProfissionalRequest}${idProfissionalDispositivoComplexidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -189,3 +222,16 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalDispositivoComplexidad
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalDispositivoComplexidadeAtualState = (location): IProfissionalDispositivoComplexidadeAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const idProfissionalDispositivoComplexidade = url.searchParams.get('idProfissionalDispositivoComplexidade') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    idProfissionalDispositivoComplexidade
+  };
+};

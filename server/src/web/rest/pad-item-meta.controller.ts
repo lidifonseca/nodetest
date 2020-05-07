@@ -68,7 +68,9 @@ export class PadItemMetaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() padItemMeta: PadItemMeta): Promise<PadItemMeta> {
+    console.info(padItemMeta);
     const created = await this.padItemMetaService.save(padItemMeta);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadItemMeta', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PadItemMetaController {
   })
   async put(@Req() req: Request, @Body() padItemMeta: PadItemMeta): Promise<PadItemMeta> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadItemMeta', padItemMeta.id);
+
     return await this.padItemMetaService.update(padItemMeta);
   }
 

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAtendimento, defaultValue } from 'app/shared/model/atendimento.model';
 
 export const ACTION_TYPES = {
+  FETCH_ATENDIMENTO_LIST_EXPORT: 'atendimento/FETCH_ATENDIMENTO_LIST_EXPORT',
   FETCH_ATENDIMENTO_LIST: 'atendimento/FETCH_ATENDIMENTO_LIST',
   FETCH_ATENDIMENTO: 'atendimento/FETCH_ATENDIMENTO',
   CREATE_ATENDIMENTO: 'atendimento/CREATE_ATENDIMENTO',
@@ -30,10 +31,57 @@ const initialState = {
 
 export type AtendimentoState = Readonly<typeof initialState>;
 
+export interface IAtendimentoBaseState {
+  baseFilters: any;
+  idFranquia: any;
+  idProfissional: any;
+  cep: any;
+  endereco: any;
+  numero: any;
+  complemento: any;
+  bairro: any;
+  cidade: any;
+  uf: any;
+  latitude: any;
+  longitude: any;
+  dataAgenda: any;
+  horario: any;
+  dataChegada: any;
+  latitudeChegada: any;
+  longitudeChegada: any;
+  dataSaida: any;
+  latitudeSaida: any;
+  longitudeSaida: any;
+  evolucao: any;
+  observacao: any;
+  intercorrencia: any;
+  avaliacao: any;
+  aceito: any;
+  motivo: any;
+  valor: any;
+  ordemAtendimento: any;
+  ativo: any;
+  dataForaHora: any;
+  idUsuarioCancelamento: any;
+  dataCancelamento: any;
+  tipoUsuarioCancelamento: any;
+  confidencialProfissional: any;
+  confidencialPaciente: any;
+  imagemAssinatura: any;
+  unidade: any;
+}
+
+export interface IAtendimentoUpdateState {
+  fieldsBase: IAtendimentoBaseState;
+  isNew: boolean;
+  unidadeId: string;
+}
+
 // Reducer
 
 export default (state: AtendimentoState = initialState, action): AtendimentoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTO):
       return {
@@ -51,6 +99,7 @@ export default (state: AtendimentoState = initialState, action): AtendimentoStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTO):
     case FAILURE(ACTION_TYPES.CREATE_ATENDIMENTO):
@@ -141,17 +190,7 @@ export type ICrudGetAllActionAtendimento<T> = (
   confidencialProfissional?: any,
   confidencialPaciente?: any,
   imagemAssinatura?: any,
-  atendimentoAceite?: any,
-  atendimentoAssinaturas?: any,
-  atendimentoAtividades?: any,
   unidade?: any,
-  idPaciente?: any,
-  idOperadora?: any,
-  idEspecialidade?: any,
-  idPadItem?: any,
-  idStatusAtendimento?: any,
-  idPeriodo?: any,
-  idCidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -193,17 +232,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   confidencialProfissional,
   confidencialPaciente,
   imagemAssinatura,
-  atendimentoAceite,
-  atendimentoAssinaturas,
-  atendimentoAtividades,
   unidade,
-  idPaciente,
-  idOperadora,
-  idEspecialidade,
-  idPadItem,
-  idStatusAtendimento,
-  idPeriodo,
-  idCidade,
   page,
   size,
   sort
@@ -243,23 +272,13 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   const confidencialProfissionalRequest = confidencialProfissional ? `confidencialProfissional.contains=${confidencialProfissional}&` : '';
   const confidencialPacienteRequest = confidencialPaciente ? `confidencialPaciente.contains=${confidencialPaciente}&` : '';
   const imagemAssinaturaRequest = imagemAssinatura ? `imagemAssinatura.contains=${imagemAssinatura}&` : '';
-  const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
-  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
-  const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
-  const idOperadoraRequest = idOperadora ? `idOperadora.equals=${idOperadora}&` : '';
-  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
-  const idPadItemRequest = idPadItem ? `idPadItem.equals=${idPadItem}&` : '';
-  const idStatusAtendimentoRequest = idStatusAtendimento ? `idStatusAtendimento.equals=${idStatusAtendimento}&` : '';
-  const idPeriodoRequest = idPeriodo ? `idPeriodo.equals=${idPeriodo}&` : '';
-  const idCidadeRequest = idCidade ? `idCidade.equals=${idCidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${idPacienteRequest}${idOperadoraRequest}${idEspecialidadeRequest}${idPadItemRequest}${idStatusAtendimentoRequest}${idPeriodoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -271,17 +290,97 @@ export const getEntity: ICrudGetAction<IAtendimento> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
+  idFranquia,
+  idProfissional,
+  cep,
+  endereco,
+  numero,
+  complemento,
+  bairro,
+  cidade,
+  uf,
+  latitude,
+  longitude,
+  dataAgenda,
+  horario,
+  dataChegada,
+  latitudeChegada,
+  longitudeChegada,
+  dataSaida,
+  latitudeSaida,
+  longitudeSaida,
+  evolucao,
+  observacao,
+  intercorrencia,
+  avaliacao,
+  aceito,
+  motivo,
+  valor,
+  ordemAtendimento,
+  ativo,
+  dataForaHora,
+  idUsuarioCancelamento,
+  dataCancelamento,
+  tipoUsuarioCancelamento,
+  confidencialProfissional,
+  confidencialPaciente,
+  imagemAssinatura,
+  unidade,
+  page,
+  size,
+  sort
+) => {
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const cepRequest = cep ? `cep.contains=${cep}&` : '';
+  const enderecoRequest = endereco ? `endereco.contains=${endereco}&` : '';
+  const numeroRequest = numero ? `numero.contains=${numero}&` : '';
+  const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
+  const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
+  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
+  const ufRequest = uf ? `uf.contains=${uf}&` : '';
+  const latitudeRequest = latitude ? `latitude.contains=${latitude}&` : '';
+  const longitudeRequest = longitude ? `longitude.contains=${longitude}&` : '';
+  const dataAgendaRequest = dataAgenda ? `dataAgenda.contains=${dataAgenda}&` : '';
+  const horarioRequest = horario ? `horario.contains=${horario}&` : '';
+  const dataChegadaRequest = dataChegada ? `dataChegada.contains=${dataChegada}&` : '';
+  const latitudeChegadaRequest = latitudeChegada ? `latitudeChegada.contains=${latitudeChegada}&` : '';
+  const longitudeChegadaRequest = longitudeChegada ? `longitudeChegada.contains=${longitudeChegada}&` : '';
+  const dataSaidaRequest = dataSaida ? `dataSaida.contains=${dataSaida}&` : '';
+  const latitudeSaidaRequest = latitudeSaida ? `latitudeSaida.contains=${latitudeSaida}&` : '';
+  const longitudeSaidaRequest = longitudeSaida ? `longitudeSaida.contains=${longitudeSaida}&` : '';
+  const evolucaoRequest = evolucao ? `evolucao.contains=${evolucao}&` : '';
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+  const intercorrenciaRequest = intercorrencia ? `intercorrencia.contains=${intercorrencia}&` : '';
+  const avaliacaoRequest = avaliacao ? `avaliacao.contains=${avaliacao}&` : '';
+  const aceitoRequest = aceito ? `aceito.contains=${aceito}&` : '';
+  const motivoRequest = motivo ? `motivo.contains=${motivo}&` : '';
+  const valorRequest = valor ? `valor.contains=${valor}&` : '';
+  const ordemAtendimentoRequest = ordemAtendimento ? `ordemAtendimento.contains=${ordemAtendimento}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const dataForaHoraRequest = dataForaHora ? `dataForaHora.contains=${dataForaHora}&` : '';
+  const idUsuarioCancelamentoRequest = idUsuarioCancelamento ? `idUsuarioCancelamento.contains=${idUsuarioCancelamento}&` : '';
+  const dataCancelamentoRequest = dataCancelamento ? `dataCancelamento.equals=${dataCancelamento}&` : '';
+  const tipoUsuarioCancelamentoRequest = tipoUsuarioCancelamento ? `tipoUsuarioCancelamento.contains=${tipoUsuarioCancelamento}&` : '';
+  const confidencialProfissionalRequest = confidencialProfissional ? `confidencialProfissional.contains=${confidencialProfissional}&` : '';
+  const confidencialPacienteRequest = confidencialPaciente ? `confidencialPaciente.contains=${confidencialPaciente}&` : '';
+  const imagemAssinaturaRequest = imagemAssinatura ? `imagemAssinatura.contains=${imagemAssinatura}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
+    payload: axios.get<IAtendimento>(
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IAtendimento> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idOperadora: entity.idOperadora === 'null' ? null : entity.idOperadora,
-    idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade,
-    idPadItem: entity.idPadItem === 'null' ? null : entity.idPadItem,
-    idStatusAtendimento: entity.idStatusAtendimento === 'null' ? null : entity.idStatusAtendimento,
-    idPeriodo: entity.idPeriodo === 'null' ? null : entity.idPeriodo,
-    idCidade: entity.idCidade === 'null' ? null : entity.idCidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTO,
@@ -292,17 +391,7 @@ export const createEntity: ICrudPutAction<IAtendimento> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<IAtendimento> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idOperadora: entity.idOperadora === 'null' ? null : entity.idOperadora,
-    idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade,
-    idPadItem: entity.idPadItem === 'null' ? null : entity.idPadItem,
-    idStatusAtendimento: entity.idStatusAtendimento === 'null' ? null : entity.idStatusAtendimento,
-    idPeriodo: entity.idPeriodo === 'null' ? null : entity.idPeriodo,
-    idCidade: entity.idCidade === 'null' ? null : entity.idCidade
-  };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -324,3 +413,85 @@ export const deleteEntity: ICrudDeleteAction<IAtendimento> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAtendimentoState = (location): IAtendimentoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idFranquia = url.searchParams.get('idFranquia') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const cep = url.searchParams.get('cep') || '';
+  const endereco = url.searchParams.get('endereco') || '';
+  const numero = url.searchParams.get('numero') || '';
+  const complemento = url.searchParams.get('complemento') || '';
+  const bairro = url.searchParams.get('bairro') || '';
+  const cidade = url.searchParams.get('cidade') || '';
+  const uf = url.searchParams.get('uf') || '';
+  const latitude = url.searchParams.get('latitude') || '';
+  const longitude = url.searchParams.get('longitude') || '';
+  const dataAgenda = url.searchParams.get('dataAgenda') || '';
+  const horario = url.searchParams.get('horario') || '';
+  const dataChegada = url.searchParams.get('dataChegada') || '';
+  const latitudeChegada = url.searchParams.get('latitudeChegada') || '';
+  const longitudeChegada = url.searchParams.get('longitudeChegada') || '';
+  const dataSaida = url.searchParams.get('dataSaida') || '';
+  const latitudeSaida = url.searchParams.get('latitudeSaida') || '';
+  const longitudeSaida = url.searchParams.get('longitudeSaida') || '';
+  const evolucao = url.searchParams.get('evolucao') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+  const intercorrencia = url.searchParams.get('intercorrencia') || '';
+  const avaliacao = url.searchParams.get('avaliacao') || '';
+  const aceito = url.searchParams.get('aceito') || '';
+  const motivo = url.searchParams.get('motivo') || '';
+  const valor = url.searchParams.get('valor') || '';
+  const ordemAtendimento = url.searchParams.get('ordemAtendimento') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const dataForaHora = url.searchParams.get('dataForaHora') || '';
+  const idUsuarioCancelamento = url.searchParams.get('idUsuarioCancelamento') || '';
+  const dataCancelamento = url.searchParams.get('dataCancelamento') || '';
+  const tipoUsuarioCancelamento = url.searchParams.get('tipoUsuarioCancelamento') || '';
+  const confidencialProfissional = url.searchParams.get('confidencialProfissional') || '';
+  const confidencialPaciente = url.searchParams.get('confidencialPaciente') || '';
+  const imagemAssinatura = url.searchParams.get('imagemAssinatura') || '';
+
+  const unidade = url.searchParams.get('unidade') || '';
+
+  return {
+    baseFilters,
+    idFranquia,
+    idProfissional,
+    cep,
+    endereco,
+    numero,
+    complemento,
+    bairro,
+    cidade,
+    uf,
+    latitude,
+    longitude,
+    dataAgenda,
+    horario,
+    dataChegada,
+    latitudeChegada,
+    longitudeChegada,
+    dataSaida,
+    latitudeSaida,
+    longitudeSaida,
+    evolucao,
+    observacao,
+    intercorrencia,
+    avaliacao,
+    aceito,
+    motivo,
+    valor,
+    ordemAtendimento,
+    ativo,
+    dataForaHora,
+    idUsuarioCancelamento,
+    dataCancelamento,
+    tipoUsuarioCancelamento,
+    confidencialProfissional,
+    confidencialPaciente,
+    imagemAssinatura,
+    unidade
+  };
+};

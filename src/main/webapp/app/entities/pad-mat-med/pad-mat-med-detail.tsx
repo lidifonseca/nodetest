@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-mat-med.reducer';
+import { getEntity, IPadMatMedBaseState, getPadMatMedState } from './pad-mat-med.reducer';
 import { IPadMatMed } from 'app/shared/model/pad-mat-med.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadMatMedState {
+  fieldsBase: IPadMatMedBaseState;
+}
+
 export interface IPadMatMedDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadMatMedDetail extends React.Component<IPadMatMedDetailProps> {
+export class PadMatMedDetail extends React.Component<IPadMatMedDetailProps, IPadMatMedState> {
   constructor(props: Readonly<IPadMatMedDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadMatMedState(this.props.location)
     };
   }
 
@@ -91,21 +96,6 @@ export class PadMatMedDetail extends React.Component<IPadMatMedDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{padMatMedEntity.qtd}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.padMatMed.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padMatMedEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

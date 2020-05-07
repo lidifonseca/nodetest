@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IDescPta, defaultValue } from 'app/shared/model/desc-pta.model';
 
 export const ACTION_TYPES = {
+  FETCH_DESCPTA_LIST_EXPORT: 'descPta/FETCH_DESCPTA_LIST_EXPORT',
   FETCH_DESCPTA_LIST: 'descPta/FETCH_DESCPTA_LIST',
   FETCH_DESCPTA: 'descPta/FETCH_DESCPTA',
   CREATE_DESCPTA: 'descPta/CREATE_DESCPTA',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type DescPtaState = Readonly<typeof initialState>;
 
+export interface IDescPtaBaseState {
+  baseFilters: any;
+  nome: any;
+  resultadoEsperado: any;
+  ativo: any;
+}
+
+export interface IDescPtaUpdateState {
+  fieldsBase: IDescPtaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: DescPtaState = initialState, action): DescPtaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_DESCPTA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_DESCPTA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_DESCPTA):
       return {
@@ -51,6 +65,7 @@ export default (state: DescPtaState = initialState, action): DescPtaState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_DESCPTA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_DESCPTA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_DESCPTA):
     case FAILURE(ACTION_TYPES.CREATE_DESCPTA):
@@ -133,6 +148,18 @@ export const getEntity: ICrudGetAction<IDescPta> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionDescPta<IDescPta> = (nome, resultadoEsperado, ativo, page, size, sort) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const resultadoEsperadoRequest = resultadoEsperado ? `resultadoEsperado.contains=${resultadoEsperado}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_DESCPTA_LIST,
+    payload: axios.get<IDescPta>(`${requestUrl}${nomeRequest}${resultadoEsperadoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IDescPta> = entity => async dispatch => {
   entity = {
     ...entity
@@ -168,3 +195,18 @@ export const deleteEntity: ICrudDeleteAction<IDescPta> = id => async dispatch =>
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getDescPtaState = (location): IDescPtaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const resultadoEsperado = url.searchParams.get('resultadoEsperado') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    nome,
+    resultadoEsperado,
+    ativo
+  };
+};

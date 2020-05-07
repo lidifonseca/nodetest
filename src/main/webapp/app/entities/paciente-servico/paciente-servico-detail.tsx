@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-servico.reducer';
+import { getEntity, IPacienteServicoBaseState, getPacienteServicoState } from './paciente-servico.reducer';
 import { IPacienteServico } from 'app/shared/model/paciente-servico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteServicoState {
+  fieldsBase: IPacienteServicoBaseState;
+}
+
 export interface IPacienteServicoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteServicoDetail extends React.Component<IPacienteServicoDetailProps> {
+export class PacienteServicoDetail extends React.Component<IPacienteServicoDetailProps, IPacienteServicoState> {
   constructor(props: Readonly<IPacienteServicoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteServicoState(this.props.location)
     };
   }
 

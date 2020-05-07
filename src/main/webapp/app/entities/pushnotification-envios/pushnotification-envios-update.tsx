@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './pushnotification-envios.reducer';
+import {
+  IPushnotificationEnviosUpdateState,
+  getEntity,
+  getPushnotificationEnviosState,
+  IPushnotificationEnviosBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pushnotification-envios.reducer';
 import { IPushnotificationEnvios } from 'app/shared/model/pushnotification-envios.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPushnotificationEnviosUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPushnotificationEnviosUpdateState {
-  isNew: boolean;
-}
-
 export class PushnotificationEnviosUpdate extends React.Component<IPushnotificationEnviosUpdateProps, IPushnotificationEnviosUpdateState> {
   constructor(props: Readonly<IPushnotificationEnviosUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPushnotificationEnviosState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['referencia'] ? '&referencia=' + fieldsBase['referencia'] : '') +
+      (fieldsBase['ultimoEnvio'] ? '&ultimoEnvio=' + fieldsBase['ultimoEnvio'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.ultimoEnvio = convertDateTimeToServer(values.ultimoEnvio);
 
@@ -59,13 +79,14 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
   };
 
   handleClose = () => {
-    this.props.history.push('/pushnotification-envios');
+    this.props.history.push('/pushnotification-envios?' + this.getFiltersURL());
   };
 
   render() {
     const { pushnotificationEnviosEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -103,7 +124,7 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/pushnotification-envios"
+                  to={'/pushnotification-envios?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -122,7 +143,7 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -138,52 +159,53 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'referencia' ? (
+                          <Col md="referencia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="referenciaLabel" for="pushnotification-envios-referencia">
+                                    <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pushnotification-envios-referencia" type="text" name="referencia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="referenciaLabel" for="pushnotification-envios-referencia">
-                                <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pushnotification-envios-referencia"
-                                type="text"
-                                name="referencia"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
-                                <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="pushnotification-envios-ultimoEnvio"
-                                type="datetime-local"
-                                className="form-control"
-                                name="ultimoEnvio"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.pushnotificationEnviosEntity.ultimoEnvio)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ultimoEnvio' ? (
+                          <Col md="ultimoEnvio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
+                                    <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="pushnotification-envios-ultimoEnvio"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="ultimoEnvio"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.pushnotificationEnviosEntity.ultimoEnvio)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ultimoEnvio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

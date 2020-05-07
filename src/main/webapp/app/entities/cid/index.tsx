@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import Cid from './cid';
 import CidDetail from './cid-detail';
+import CidRelatorioCSV from './relatorio/cid.csv';
 import CidUpdate from './cid-update';
 import CidDeleteDialog from './cid-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={CidRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={CidUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={CidUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={CidDetail} />

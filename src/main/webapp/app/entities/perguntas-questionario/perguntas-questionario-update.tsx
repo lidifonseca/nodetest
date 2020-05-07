@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
-import { getEntities as getSegmentosPerguntas } from 'app/entities/segmentos-perguntas/segmentos-perguntas.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './perguntas-questionario.reducer';
+import {
+  IPerguntasQuestionarioUpdateState,
+  getEntity,
+  getPerguntasQuestionarioState,
+  IPerguntasQuestionarioBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './perguntas-questionario.reducer';
 import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPerguntasQuestionarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPerguntasQuestionarioUpdateState {
-  isNew: boolean;
-  segmentosPerguntasIdId: string;
-}
-
 export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuestionarioUpdateProps, IPerguntasQuestionarioUpdateState> {
   constructor(props: Readonly<IPerguntasQuestionarioUpdateProps>) {
     super(props);
+
     this.state = {
-      segmentosPerguntasIdId: '0',
+      fieldsBase: getPerguntasQuestionarioState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,24 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getSegmentosPerguntas();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['pergunta'] ? '&pergunta=' + fieldsBase['pergunta'] : '') +
+      (fieldsBase['tipoResposta'] ? '&tipoResposta=' + fieldsBase['tipoResposta'] : '') +
+      (fieldsBase['obrigatorio'] ? '&obrigatorio=' + fieldsBase['obrigatorio'] : '') +
+      (fieldsBase['tipoCampo'] ? '&tipoCampo=' + fieldsBase['tipoCampo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { perguntasQuestionarioEntity } = this.props;
@@ -63,13 +79,14 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
   };
 
   handleClose = () => {
-    this.props.history.push('/perguntas-questionario');
+    this.props.history.push('/perguntas-questionario?' + this.getFiltersURL());
   };
 
   render() {
-    const { perguntasQuestionarioEntity, segmentosPerguntas, loading, updating } = this.props;
+    const { perguntasQuestionarioEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,10 +102,7 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
             isNew
               ? {}
               : {
-                  ...perguntasQuestionarioEntity,
-                  segmentosPerguntasId: perguntasQuestionarioEntity.segmentosPerguntasId
-                    ? perguntasQuestionarioEntity.segmentosPerguntasId.id
-                    : null
+                  ...perguntasQuestionarioEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -110,7 +124,7 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/perguntas-questionario"
+                  to={'/perguntas-questionario?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -129,7 +143,7 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -145,123 +159,87 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'pergunta' ? (
+                          <Col md="pergunta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="perguntaLabel" for="perguntas-questionario-pergunta">
+                                    <Translate contentKey="generadorApp.perguntasQuestionario.pergunta">Pergunta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="perguntas-questionario-pergunta" type="text" name="pergunta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="pergunta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="perguntaLabel" for="perguntas-questionario-pergunta">
-                                <Translate contentKey="generadorApp.perguntasQuestionario.pergunta">Pergunta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="perguntas-questionario-pergunta"
-                                type="text"
-                                name="pergunta"
-                                validate={{
-                                  maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'tipoResposta' ? (
+                          <Col md="tipoResposta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoRespostaLabel" for="perguntas-questionario-tipoResposta">
+                                    <Translate contentKey="generadorApp.perguntasQuestionario.tipoResposta">Tipo Resposta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="perguntas-questionario-tipoResposta" type="text" name="tipoResposta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoResposta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoRespostaLabel" for="perguntas-questionario-tipoResposta">
-                                <Translate contentKey="generadorApp.perguntasQuestionario.tipoResposta">Tipo Resposta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="perguntas-questionario-tipoResposta"
-                                type="text"
-                                name="tipoResposta"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'obrigatorio' ? (
+                          <Col md="obrigatorio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="obrigatorioLabel" check>
+                                    <AvInput
+                                      id="perguntas-questionario-obrigatorio"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="obrigatorio"
+                                    />
+                                    <Translate contentKey="generadorApp.perguntasQuestionario.obrigatorio">Obrigatorio</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="obrigatorio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="obrigatorioLabel" check>
-                                <AvInput
-                                  id="perguntas-questionario-obrigatorio"
-                                  type="checkbox"
-                                  className="form-control"
-                                  name="obrigatorio"
-                                />
-                                <Translate contentKey="generadorApp.perguntasQuestionario.obrigatorio">Obrigatorio</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoCampoLabel" for="perguntas-questionario-tipoCampo">
-                                <Translate contentKey="generadorApp.perguntasQuestionario.tipoCampo">Tipo Campo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="perguntas-questionario-tipoCampo"
-                                type="text"
-                                name="tipoCampo"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="perguntas-questionario-segmentosPerguntasId">
-                                <Translate contentKey="generadorApp.perguntasQuestionario.segmentosPerguntasId">
-                                  Segmentos Perguntas Id
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="perguntas-questionario-segmentosPerguntasId"
-                                type="select"
-                                className="form-control"
-                                name="segmentosPerguntasId"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.perguntasQuestionario.segmentosPerguntasId.empty')}
-                                </option>
-                                {segmentosPerguntas
-                                  ? segmentosPerguntas.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'tipoCampo' ? (
+                          <Col md="tipoCampo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoCampoLabel" for="perguntas-questionario-tipoCampo">
+                                    <Translate contentKey="generadorApp.perguntasQuestionario.tipoCampo">Tipo Campo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="perguntas-questionario-tipoCampo" type="text" name="tipoCampo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoCampo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -274,7 +252,6 @@ export class PerguntasQuestionarioUpdate extends React.Component<IPerguntasQuest
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  segmentosPerguntas: storeState.segmentosPerguntas.entities,
   perguntasQuestionarioEntity: storeState.perguntasQuestionario.entity,
   loading: storeState.perguntasQuestionario.loading,
   updating: storeState.perguntasQuestionario.updating,
@@ -282,7 +259,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSegmentosPerguntas,
   getEntity,
   updateEntity,
   createEntity,

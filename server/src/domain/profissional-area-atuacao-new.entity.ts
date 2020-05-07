@@ -7,21 +7,21 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProfissionalAreaAtuacaoNew.
  */
-@Entity('profissional_area_atuacao_new')
+@Entity('tb_profissional_area_atuacao_new')
 export default class ProfissionalAreaAtuacaoNew extends BaseEntity {
-  @Column({ name: 'id_profissional' })
+  @Column({ name: 'ID_PROFISSIONAL' })
   idProfissional: string;
 
-  @Column({ name: 'cep_area', length: 10 })
+  @Column({ name: 'CEP_AREA', length: 10 })
   cepArea: string;
 
-  @Column({ name: 'cep_fim', length: 10 })
+  @Column({ name: 'CEP_FIM', length: 10 })
   cepFim: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @Column({ name: 'cep_ini', length: 45 })
+  @Column({ name: 'CEP_INI', length: 45 })
   cepIni: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

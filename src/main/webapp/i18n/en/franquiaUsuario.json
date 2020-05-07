@@ -3,15 +3,15 @@
     "franquiaUsuario": {
       "home": {
         "title": "Franquia Usuarios",
-        "createLabel": "Criar novo Franquia Usuario",
-        "createOrEditLabel": "Criar ou editar Franquia Usuario",
-        "notFound": "Nenhum Franquia Usuario encontrado"
+        "createLabel": "Create a new Franquia Usuario",
+        "createOrEditLabel": "Create or edit a Franquia Usuario",
+        "notFound": "No Franquia Usuarios found"
       },
-      "created": "Um novo Franquia Usuario foi criado com o identificador {{ param }}",
-      "updated": "Um Franquia Usuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Franquia Usuario foi excluído com o identificador {{ param }}",
+      "created": "A new Franquia Usuario is created with identifier {{ param }}",
+      "updated": "A Franquia Usuario is updated with identifier {{ param }}",
+      "deleted": "A Franquia Usuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Franquia Usuario {{ id }}?"
+        "question": "Are you sure you want to delete Franquia Usuario {{ id }}?"
       },
       "detail": {
         "title": "Franquia Usuario"
@@ -52,9 +52,7 @@
       "envioRecusa": "Envio Recusa",
       "envioIntercorrencia": "Envio Intercorrencia",
       "envioCancelamento": "Envio Cancelamento",
-      "ativo": "Ativo",
-      "logUserFranquia": "Log User Franquia",
-      "idFranquia": "Id Franquia"
+      "ativo": "Ativo"
     }
   }
 }

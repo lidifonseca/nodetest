@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './cepbr-endereco.reducer';
+import { getEntity, ICepbrEnderecoBaseState, getCepbrEnderecoState } from './cepbr-endereco.reducer';
 import { ICepbrEndereco } from 'app/shared/model/cepbr-endereco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICepbrEnderecoState {
+  fieldsBase: ICepbrEnderecoBaseState;
+}
+
 export interface ICepbrEnderecoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CepbrEnderecoDetail extends React.Component<ICepbrEnderecoDetailProps> {
+export class CepbrEnderecoDetail extends React.Component<ICepbrEnderecoDetailProps, ICepbrEnderecoState> {
   constructor(props: Readonly<ICepbrEnderecoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCepbrEnderecoState(this.props.location)
     };
   }
 
@@ -121,32 +126,6 @@ export class CepbrEnderecoDetail extends React.Component<ICepbrEnderecoDetailPro
                       </Col>
                       <Col md="9">
                         <dd>{cepbrEnderecoEntity.local}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cepbrEndereco.idCidade">Id Cidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cepbrEnderecoEntity.idCidade ? cepbrEnderecoEntity.idCidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cepbrEndereco.idBairro">Id Bairro</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cepbrEnderecoEntity.idBairro ? cepbrEnderecoEntity.idBairro.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

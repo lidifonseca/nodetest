@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize, TextFormat } from 'react-jhipster';
+import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -254,58 +254,6 @@ export class PadItemDetail extends React.Component<IPadItemDetailProps, IPadItem
                       </Col>
                       <Col md="9">
                         <dd>{padItemEntity.score}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItem.idPad">Id Pad</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemEntity.idPad ? padItemEntity.idPad.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItem.idEspecialidade">Id Especialidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemEntity.idEspecialidade ? padItemEntity.idEspecialidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItem.idPeriodicidade">Id Periodicidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemEntity.idPeriodicidade ? padItemEntity.idPeriodicidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padItem.idPeriodo">Id Periodo</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemEntity.idPeriodo ? padItemEntity.idPeriodo.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

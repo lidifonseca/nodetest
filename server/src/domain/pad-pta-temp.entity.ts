@@ -7,21 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A PadPtaTemp.
  */
-@Entity('pad_pta_temp')
+@Entity('tb_pad_pta_temp')
 export default class PadPtaTemp extends BaseEntity {
-  @Column({ name: 'session_id', length: 100 })
+  @Column({ name: 'SESSION_ID', length: 100 })
   sessionId: string;
 
-  @Column({ type: 'integer', name: 'id_pta', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PTA', nullable: false })
   idPta: number;
 
-  @Column({ type: 'integer', name: 'id_cid', nullable: false })
+  @Column({ type: 'integer', name: 'ID_CID', nullable: false })
   idCid: number;
 
-  @Column({ type: 'integer', name: 'id_usuario', nullable: false })
-  idUsuario: number;
-
-  @Column({ type: 'integer', name: 'cid_x_pta_novo_id' })
+  @Column({ type: 'integer', name: 'CID_X_PTA_NOVO_ID' })
   cidXPtaNovoId: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

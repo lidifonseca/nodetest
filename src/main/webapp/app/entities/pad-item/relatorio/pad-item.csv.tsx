@@ -44,15 +44,6 @@ import { IPadItem } from 'app/shared/model/pad-item.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPad } from 'app/shared/model/pad.model';
-import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-import { IPeriodicidade } from 'app/shared/model/periodicidade.model';
-import { getEntities as getPeriodicidades } from 'app/entities/periodicidade/periodicidade.reducer';
-import { IPeriodo } from 'app/shared/model/periodo.model';
-import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
-
 export interface IPadItemProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemState extends IPadItemBaseState, IPaginationBaseState {
@@ -73,11 +64,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPads();
-    this.props.getEspecialidades();
-    this.props.getPeriodicidades();
-    this.props.getPeriodos();
   }
 
   cancelCourse = () => {
@@ -95,18 +81,7 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
         numGhc: '',
         cidXPtaNovo: '',
         categoriaId: '',
-        score: '',
-        atendimento: '',
-        atendimentoCepRecusado: '',
-        atendimentoSorteioFeito: '',
-        padItemAtividade: '',
-        padItemCepRecusado: '',
-        padItemResultado: '',
-        padItemSorteioFeito: '',
-        idPad: '',
-        idEspecialidade: '',
-        idPeriodicidade: '',
-        idPeriodo: ''
+        score: ''
       },
       () => this.sortEntities()
     );
@@ -190,39 +165,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       'score=' +
       this.state.score +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
-      'atendimentoCepRecusado=' +
-      this.state.atendimentoCepRecusado +
-      '&' +
-      'atendimentoSorteioFeito=' +
-      this.state.atendimentoSorteioFeito +
-      '&' +
-      'padItemAtividade=' +
-      this.state.padItemAtividade +
-      '&' +
-      'padItemCepRecusado=' +
-      this.state.padItemCepRecusado +
-      '&' +
-      'padItemResultado=' +
-      this.state.padItemResultado +
-      '&' +
-      'padItemSorteioFeito=' +
-      this.state.padItemSorteioFeito +
-      '&' +
-      'idPad=' +
-      this.state.idPad +
-      '&' +
-      'idEspecialidade=' +
-      this.state.idEspecialidade +
-      '&' +
-      'idPeriodicidade=' +
-      this.state.idPeriodicidade +
-      '&' +
-      'idPeriodo=' +
-      this.state.idPeriodo +
-      '&' +
       ''
     );
   };
@@ -244,17 +186,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       cidXPtaNovo,
       categoriaId,
       score,
-      atendimento,
-      atendimentoCepRecusado,
-      atendimentoSorteioFeito,
-      padItemAtividade,
-      padItemCepRecusado,
-      padItemResultado,
-      padItemSorteioFeito,
-      idPad,
-      idEspecialidade,
-      idPeriodicidade,
-      idPeriodo,
       activePage,
       itemsPerPage,
       sort,
@@ -274,30 +205,20 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       cidXPtaNovo,
       categoriaId,
       score,
-      atendimento,
-      atendimentoCepRecusado,
-      atendimentoSorteioFeito,
-      padItemAtividade,
-      padItemCepRecusado,
-      padItemResultado,
-      padItemSorteioFeito,
-      idPad,
-      idEspecialidade,
-      idPeriodicidade,
-      idPeriodo,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
     );
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();
@@ -336,19 +257,11 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
 }
 
 const mapStateToProps = ({ padItem, ...storeState }: IRootState) => ({
-  pads: storeState.pad.entities,
-  especialidades: storeState.especialidade.entities,
-  periodicidades: storeState.periodicidade.entities,
-  periodos: storeState.periodo.entities,
   padItemList: padItem.entities,
   totalItems: padItem.totalItems
 });
 
 const mapDispatchToProps = {
-  getPads,
-  getEspecialidades,
-  getPeriodicidades,
-  getPeriodos,
   getEntitiesExport
 };
 

@@ -71,7 +71,9 @@ export class ProntuarioMotivoManifestacaoController {
     @Req() req: Request,
     @Body() prontuarioMotivoManifestacao: ProntuarioMotivoManifestacao
   ): Promise<ProntuarioMotivoManifestacao> {
+    console.info(prontuarioMotivoManifestacao);
     const created = await this.prontuarioMotivoManifestacaoService.save(prontuarioMotivoManifestacao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProntuarioMotivoManifestacao', created.id);
     return created;
   }
@@ -89,6 +91,7 @@ export class ProntuarioMotivoManifestacaoController {
     @Body() prontuarioMotivoManifestacao: ProntuarioMotivoManifestacao
   ): Promise<ProntuarioMotivoManifestacao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProntuarioMotivoManifestacao', prontuarioMotivoManifestacao.id);
+
     return await this.prontuarioMotivoManifestacaoService.update(prontuarioMotivoManifestacao);
   }
 

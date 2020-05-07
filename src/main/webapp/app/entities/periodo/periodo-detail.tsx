@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './periodo.reducer';
+import { getEntity, IPeriodoBaseState, getPeriodoState } from './periodo.reducer';
 import { IPeriodo } from 'app/shared/model/periodo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPeriodoState {
+  fieldsBase: IPeriodoBaseState;
+}
+
 export interface IPeriodoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PeriodoDetail extends React.Component<IPeriodoDetailProps> {
+export class PeriodoDetail extends React.Component<IPeriodoDetailProps, IPeriodoState> {
   constructor(props: Readonly<IPeriodoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPeriodoState(this.props.location)
     };
   }
 

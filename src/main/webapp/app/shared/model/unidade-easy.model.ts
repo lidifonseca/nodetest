@@ -1,3 +1,5 @@
+import { ICategoria } from 'app/shared/model/categoria.model';
+
 export interface IUnidadeEasy {
   id?: string;
   razaoSocial?: string;
@@ -21,6 +23,7 @@ export interface IUnidadeEasy {
   tisscbo?: string;
   tisscoduf?: string;
   ativo?: number;
+  categorias?: ICategoria[];
 }
 
 export const defaultValue: Readonly<IUnidadeEasy> = {};

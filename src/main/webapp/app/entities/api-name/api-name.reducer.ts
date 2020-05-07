@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IApiName, defaultValue } from 'app/shared/model/api-name.model';
 
 export const ACTION_TYPES = {
+  FETCH_APINAME_LIST_EXPORT: 'apiName/FETCH_APINAME_LIST_EXPORT',
   FETCH_APINAME_LIST: 'apiName/FETCH_APINAME_LIST',
   FETCH_APINAME: 'apiName/FETCH_APINAME',
   CREATE_APINAME: 'apiName/CREATE_APINAME',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type ApiNameState = Readonly<typeof initialState>;
 
+export interface IApiNameBaseState {
+  baseFilters: any;
+  apiName: any;
+  apiReceiver: any;
+  apiObs: any;
+  ativo: any;
+}
+
+export interface IApiNameUpdateState {
+  fieldsBase: IApiNameBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ApiNameState = initialState, action): ApiNameState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_APINAME_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_APINAME_LIST):
     case REQUEST(ACTION_TYPES.FETCH_APINAME):
       return {
@@ -51,6 +66,7 @@ export default (state: ApiNameState = initialState, action): ApiNameState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_APINAME_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_APINAME_LIST):
     case FAILURE(ACTION_TYPES.FETCH_APINAME):
     case FAILURE(ACTION_TYPES.CREATE_APINAME):
@@ -137,6 +153,21 @@ export const getEntity: ICrudGetAction<IApiName> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionApiName<IApiName> = (apiName, apiReceiver, apiObs, ativo, page, size, sort) => {
+  const apiNameRequest = apiName ? `apiName.contains=${apiName}&` : '';
+  const apiReceiverRequest = apiReceiver ? `apiReceiver.contains=${apiReceiver}&` : '';
+  const apiObsRequest = apiObs ? `apiObs.contains=${apiObs}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_APINAME_LIST,
+    payload: axios.get<IApiName>(
+      `${requestUrl}${apiNameRequest}${apiReceiverRequest}${apiObsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IApiName> = entity => async dispatch => {
   entity = {
     ...entity
@@ -172,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<IApiName> = id => async dispatch =>
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getApiNameState = (location): IApiNameBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const apiName = url.searchParams.get('apiName') || '';
+  const apiReceiver = url.searchParams.get('apiReceiver') || '';
+  const apiObs = url.searchParams.get('apiObs') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    apiName,
+    apiReceiver,
+    apiObs,
+    ativo
+  };
+};

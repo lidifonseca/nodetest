@@ -3,15 +3,15 @@
     "statusFinanceiro": {
       "home": {
         "title": "Status Financeiros",
-        "createLabel": "Criar novo Status Financeiro",
-        "createOrEditLabel": "Criar ou editar Status Financeiro",
-        "notFound": "Nenhum Status Financeiro encontrado"
+        "createLabel": "Create a new Status Financeiro",
+        "createOrEditLabel": "Create or edit a Status Financeiro",
+        "notFound": "No Status Financeiros found"
       },
-      "created": "Um novo Status Financeiro foi criado com o identificador {{ param }}",
-      "updated": "Um Status Financeiro foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Status Financeiro foi excluído com o identificador {{ param }}",
+      "created": "A new Status Financeiro is created with identifier {{ param }}",
+      "updated": "A Status Financeiro is updated with identifier {{ param }}",
+      "deleted": "A Status Financeiro is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Status Financeiro {{ id }}?"
+        "question": "Are you sure you want to delete Status Financeiro {{ id }}?"
       },
       "detail": {
         "title": "Status Financeiro"

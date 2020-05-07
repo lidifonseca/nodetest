@@ -3,7 +3,6 @@ export interface IPadMatMed {
   idPad?: number;
   idMatMed?: number;
   qtd?: number;
-  idUsuario?: number;
   ativo?: number;
 }
 

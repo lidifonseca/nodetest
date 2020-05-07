@@ -68,7 +68,9 @@ export class StatusPadItemMetaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() statusPadItemMeta: StatusPadItemMeta): Promise<StatusPadItemMeta> {
+    console.info(statusPadItemMeta);
     const created = await this.statusPadItemMetaService.save(statusPadItemMeta);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'StatusPadItemMeta', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class StatusPadItemMetaController {
   })
   async put(@Req() req: Request, @Body() statusPadItemMeta: StatusPadItemMeta): Promise<StatusPadItemMeta> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'StatusPadItemMeta', statusPadItemMeta.id);
+
     return await this.statusPadItemMetaService.update(statusPadItemMeta);
   }
 

@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -37,9 +36,6 @@ import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-
 export interface IPadItemResultadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemResultadoState extends IPadItemResultadoBaseState, IPaginationBaseState {}
@@ -57,8 +53,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPadItems();
   }
 
   cancelCourse = () => {
@@ -67,8 +61,7 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
         resultado: '',
         dataFim: '',
         resultadoAnalisado: '',
-        usuarioId: '',
-        idPadItem: ''
+        usuarioId: ''
       },
       () => this.sortEntities()
     );
@@ -101,7 +94,9 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -125,9 +120,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
       'usuarioId=' +
       this.state.usuarioId +
       '&' +
-      'idPadItem=' +
-      this.state.idPadItem +
-      '&' +
       ''
     );
   };
@@ -135,12 +127,12 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { resultado, dataFim, resultadoAnalisado, usuarioId, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(resultado, dataFim, resultadoAnalisado, usuarioId, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { resultado, dataFim, resultadoAnalisado, usuarioId, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(resultado, dataFim, resultadoAnalisado, usuarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { padItems, padItemResultadoList, match, totalItems } = this.props;
+    const { padItemResultadoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -158,7 +150,11 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padItemResultado.home.createLabel">Create a new Pad Item Resultado</Translate>
@@ -171,63 +167,54 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="resultadoLabel" for="pad-item-resultado-resultado">
-                            <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
-                          </Label>
-                          <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataFimLabel" for="pad-item-resultado-dataFim">
-                            <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataFim" id="pad-item-resultado-dataFim" value={this.state.dataFim} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="resultadoAnalisadoLabel" check>
-                            <AvInput
-                              id="pad-item-resultado-resultadoAnalisado"
-                              type="checkbox"
-                              className="form-control"
-                              name="resultadoAnalisado"
-                            />
-                            <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="usuarioIdLabel" for="pad-item-resultado-usuarioId">
-                            <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
-                          </Label>
-                          <AvInput type="string" name="usuarioId" id="pad-item-resultado-usuarioId" value={this.state.usuarioId} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="pad-item-resultado-idPadItem">
-                              <Translate contentKey="generadorApp.padItemResultado.idPadItem">Id Pad Item</Translate>
+                      {this.state.baseFilters !== 'resultado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="resultadoLabel" for="pad-item-resultado-resultado">
+                              <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
                             </Label>
-                            <AvInput id="pad-item-resultado-idPadItem" type="select" className="form-control" name="idPadItemId">
-                              <option value="" key="0" />
-                              {padItems
-                                ? padItems.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataFimLabel" for="pad-item-resultado-dataFim">
+                              <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataFim" id="pad-item-resultado-dataFim" value={this.state.dataFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'resultadoAnalisado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="resultadoAnalisadoLabel" check>
+                              <AvInput
+                                id="pad-item-resultado-resultadoAnalisado"
+                                type="checkbox"
+                                className="form-control"
+                                name="resultadoAnalisado"
+                              />
+                              <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'usuarioId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="usuarioIdLabel" for="pad-item-resultado-usuarioId">
+                              <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
+                            </Label>
+                            <AvInput type="string" name="usuarioId" id="pad-item-resultado-usuarioId" value={this.state.usuarioId} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -255,26 +242,30 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('resultado')}>
-                        <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataFim')}>
-                        <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('resultadoAnalisado')}>
-                        <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('usuarioId')}>
-                        <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.padItemResultado.idPadItem">Id Pad Item</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'resultado' ? (
+                        <th className="hand" onClick={this.sort('resultado')}>
+                          <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <th className="hand" onClick={this.sort('dataFim')}>
+                          <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'resultadoAnalisado' ? (
+                        <th className="hand" onClick={this.sort('resultadoAnalisado')}>
+                          <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'usuarioId' ? (
+                        <th className="hand" onClick={this.sort('usuarioId')}>
+                          <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -289,25 +280,53 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
                           </Button>
                         </td>
 
-                        <td>{padItemResultado.resultado}</td>
+                        {this.state.baseFilters !== 'resultado' ? (
+                          <td>{padItemResultado.resultado ? Buffer.from(padItemResultado.resultado).toString() : null}</td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={padItemResultado.dataFim} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataFim' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemResultado.dataFim} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{padItemResultado.resultadoAnalisado ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'resultadoAnalisado' ? (
+                          <td>{padItemResultado.resultadoAnalisado ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        <td>{padItemResultado.usuarioId}</td>
-                        <td>
-                          {padItemResultado.idPadItem ? (
-                            <Link to={`pad-item/${padItemResultado.idPadItem.id}`}>{padItemResultado.idPadItem.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'usuarioId' ? <td>{padItemResultado.usuarioId}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${padItemResultado.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemResultado.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemResultado.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -343,13 +362,11 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 }
 
 const mapStateToProps = ({ padItemResultado, ...storeState }: IRootState) => ({
-  padItems: storeState.padItem.entities,
   padItemResultadoList: padItemResultado.entities,
   totalItems: padItemResultado.totalItems
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntities
 };
 

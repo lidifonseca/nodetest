@@ -22,23 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './cid.reducer';
+import { getCidState, ICidBaseState, getEntities } from './cid.reducer';
 import { ICid } from 'app/shared/model/cid.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ICidProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICidBaseState {
-  codigo: any;
-  diagnostico: any;
-  gr: any;
-  temp: any;
-  apelido: any;
-  cidXPtaNovo: any;
-  pacienteDiagnostico: any;
-  padCid: any;
-}
 export interface ICidState extends ICidBaseState, IPaginationBaseState {}
 
 export class Cid extends React.Component<ICidProps, ICidState> {
@@ -48,33 +38,9 @@ export class Cid extends React.Component<ICidProps, ICidState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCidState(this.props.location)
+      ...getCidState(this.props.location)
     };
   }
-
-  getCidState = (location): ICidBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const codigo = url.searchParams.get('codigo') || '';
-    const diagnostico = url.searchParams.get('diagnostico') || '';
-    const gr = url.searchParams.get('gr') || '';
-    const temp = url.searchParams.get('temp') || '';
-    const apelido = url.searchParams.get('apelido') || '';
-
-    const cidXPtaNovo = url.searchParams.get('cidXPtaNovo') || '';
-    const pacienteDiagnostico = url.searchParams.get('pacienteDiagnostico') || '';
-    const padCid = url.searchParams.get('padCid') || '';
-
-    return {
-      codigo,
-      diagnostico,
-      gr,
-      temp,
-      apelido,
-      cidXPtaNovo,
-      pacienteDiagnostico,
-      padCid
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -87,10 +53,7 @@ export class Cid extends React.Component<ICidProps, ICidState> {
         diagnostico: '',
         gr: '',
         temp: '',
-        apelido: '',
-        cidXPtaNovo: '',
-        pacienteDiagnostico: '',
-        padCid: ''
+        apelido: ''
       },
       () => this.sortEntities()
     );
@@ -123,7 +86,9 @@ export class Cid extends React.Component<ICidProps, ICidState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -150,15 +115,6 @@ export class Cid extends React.Component<ICidProps, ICidState> {
       'apelido=' +
       this.state.apelido +
       '&' +
-      'cidXPtaNovo=' +
-      this.state.cidXPtaNovo +
-      '&' +
-      'pacienteDiagnostico=' +
-      this.state.pacienteDiagnostico +
-      '&' +
-      'padCid=' +
-      this.state.padCid +
-      '&' +
       ''
     );
   };
@@ -166,33 +122,8 @@ export class Cid extends React.Component<ICidProps, ICidState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      codigo,
-      diagnostico,
-      gr,
-      temp,
-      apelido,
-      cidXPtaNovo,
-      pacienteDiagnostico,
-      padCid,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      codigo,
-      diagnostico,
-      gr,
-      temp,
-      apelido,
-      cidXPtaNovo,
-      pacienteDiagnostico,
-      padCid,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { codigo, diagnostico, gr, temp, apelido, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(codigo, diagnostico, gr, temp, apelido, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -214,7 +145,11 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.cid.home.createLabel">Create a new Cid</Translate>
@@ -227,63 +162,65 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="codigoLabel" for="cid-codigo">
-                            <Translate contentKey="generadorApp.cid.codigo">Codigo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'codigo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codigoLabel" for="cid-codigo">
+                              <Translate contentKey="generadorApp.cid.codigo">Codigo</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="codigo" id="cid-codigo" value={this.state.codigo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="diagnosticoLabel" for="cid-diagnostico">
-                            <Translate contentKey="generadorApp.cid.diagnostico">Diagnostico</Translate>
-                          </Label>
+                            <AvInput type="text" name="codigo" id="cid-codigo" value={this.state.codigo} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="diagnostico" id="cid-diagnostico" value={this.state.diagnostico} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="grLabel" for="cid-gr">
-                            <Translate contentKey="generadorApp.cid.gr">Gr</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'diagnostico' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="diagnosticoLabel" for="cid-diagnostico">
+                              <Translate contentKey="generadorApp.cid.diagnostico">Diagnostico</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="gr" id="cid-gr" value={this.state.gr} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tempLabel" for="cid-temp">
-                            <Translate contentKey="generadorApp.cid.temp">Temp</Translate>
-                          </Label>
+                            <AvInput type="text" name="diagnostico" id="cid-diagnostico" value={this.state.diagnostico} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="temp" id="cid-temp" value={this.state.temp} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="apelidoLabel" for="cid-apelido">
-                            <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'gr' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="grLabel" for="cid-gr">
+                              <Translate contentKey="generadorApp.cid.gr">Gr</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="apelido" id="cid-apelido" value={this.state.apelido} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="gr" id="cid-gr" value={this.state.gr} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'temp' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tempLabel" for="cid-temp">
+                              <Translate contentKey="generadorApp.cid.temp">Temp</Translate>
+                            </Label>
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="temp" id="cid-temp" value={this.state.temp} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'apelido' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="apelidoLabel" for="cid-apelido">
+                              <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="apelido" id="cid-apelido" value={this.state.apelido} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -311,26 +248,36 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('codigo')}>
-                        <Translate contentKey="generadorApp.cid.codigo">Codigo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('diagnostico')}>
-                        <Translate contentKey="generadorApp.cid.diagnostico">Diagnostico</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('gr')}>
-                        <Translate contentKey="generadorApp.cid.gr">Gr</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('temp')}>
-                        <Translate contentKey="generadorApp.cid.temp">Temp</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('apelido')}>
-                        <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'codigo' ? (
+                        <th className="hand" onClick={this.sort('codigo')}>
+                          <Translate contentKey="generadorApp.cid.codigo">Codigo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'diagnostico' ? (
+                        <th className="hand" onClick={this.sort('diagnostico')}>
+                          <Translate contentKey="generadorApp.cid.diagnostico">Diagnostico</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'gr' ? (
+                        <th className="hand" onClick={this.sort('gr')}>
+                          <Translate contentKey="generadorApp.cid.gr">Gr</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'temp' ? (
+                        <th className="hand" onClick={this.sort('temp')}>
+                          <Translate contentKey="generadorApp.cid.temp">Temp</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'apelido' ? (
+                        <th className="hand" onClick={this.sort('apelido')}>
+                          <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -345,31 +292,31 @@ export class Cid extends React.Component<ICidProps, ICidState> {
                           </Button>
                         </td>
 
-                        <td>{cid.codigo}</td>
+                        {this.state.baseFilters !== 'codigo' ? <td>{cid.codigo}</td> : null}
 
-                        <td>{cid.diagnostico}</td>
+                        {this.state.baseFilters !== 'diagnostico' ? <td>{cid.diagnostico}</td> : null}
 
-                        <td>{cid.gr}</td>
+                        {this.state.baseFilters !== 'gr' ? <td>{cid.gr}</td> : null}
 
-                        <td>{cid.temp}</td>
+                        {this.state.baseFilters !== 'temp' ? <td>{cid.temp}</td> : null}
 
-                        <td>{cid.apelido}</td>
+                        {this.state.baseFilters !== 'apelido' ? <td>{cid.apelido}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${cid.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cid.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cid.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cid.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cid.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cid.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

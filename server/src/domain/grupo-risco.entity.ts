@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A GrupoRisco.
  */
-@Entity('grupo_risco')
+@Entity('tb_grupo_risco')
 export default class GrupoRisco extends BaseEntity {
-  @Column({ name: 'grupo_risco', length: 40 })
+  @Column({ name: 'GRUPO_RISCO', length: 40 })
   grupoRisco: string;
 
-  @Column({ name: 'style_label', length: 40 })
+  @Column({ name: 'STYLE_LABEL', length: 40 })
   styleLabel: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

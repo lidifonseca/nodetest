@@ -18,15 +18,8 @@
             "fieldValidateRulesMaxlength": "40"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "profissionalStatusAtual",
-            "otherEntityRelationshipName": "idStatusAtualProf",
-            "relationshipName": "profissionalStatusAtual"
-        }
-    ],
-    "changelogDate": "20200503010600",
+    "relationships": [],
+    "changelogDate": "20200507123900",
     "entityTableName": "status_atual_prof",
     "dto": "mapstruct",
     "pagination": "pagination",

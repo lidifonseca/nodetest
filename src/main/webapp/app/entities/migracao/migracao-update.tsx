@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './migracao.reducer';
+import {
+  IMigracaoUpdateState,
+  getEntity,
+  getMigracaoState,
+  IMigracaoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './migracao.reducer';
 import { IMigracao } from 'app/shared/model/migracao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IMigracaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IMigracaoUpdateState {
-  isNew: boolean;
-}
-
 export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigracaoUpdateState> {
   constructor(props: Readonly<IMigracaoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getMigracaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigra
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPad'] ? '&idPad=' + fieldsBase['idPad'] : '') +
+      (fieldsBase['dataHoraMigracao'] ? '&dataHoraMigracao=' + fieldsBase['dataHoraMigracao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataHoraMigracao = convertDateTimeToServer(values.dataHoraMigracao);
 
@@ -59,13 +79,14 @@ export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigra
   };
 
   handleClose = () => {
-    this.props.history.push('/migracao');
+    this.props.history.push('/migracao?' + this.getFiltersURL());
   };
 
   render() {
     const { migracaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -98,7 +119,14 @@ export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigra
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/migracao" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/migracao?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -113,7 +141,7 @@ export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigra
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -129,44 +157,53 @@ export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigra
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idPad' ? (
+                          <Col md="idPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPadLabel" for="migracao-idPad">
+                                    <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="migracao-idPad" type="string" className="form-control" name="idPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPadLabel" for="migracao-idPad">
-                                <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="migracao-idPad" type="string" className="form-control" name="idPad" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataHoraMigracaoLabel" for="migracao-dataHoraMigracao">
-                                <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="migracao-dataHoraMigracao"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataHoraMigracao"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.migracaoEntity.dataHoraMigracao)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'dataHoraMigracao' ? (
+                          <Col md="dataHoraMigracao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataHoraMigracaoLabel" for="migracao-dataHoraMigracao">
+                                    <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="migracao-dataHoraMigracao"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataHoraMigracao"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.migracaoEntity.dataHoraMigracao)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataHoraMigracao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

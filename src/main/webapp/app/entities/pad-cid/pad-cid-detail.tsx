@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-cid.reducer';
+import { getEntity, IPadCidBaseState, getPadCidState } from './pad-cid.reducer';
 import { IPadCid } from 'app/shared/model/pad-cid.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadCidState {
+  fieldsBase: IPadCidBaseState;
+}
+
 export interface IPadCidDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadCidDetail extends React.Component<IPadCidDetailProps> {
+export class PadCidDetail extends React.Component<IPadCidDetailProps, IPadCidState> {
   constructor(props: Readonly<IPadCidDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadCidState(this.props.location)
     };
   }
 
@@ -76,32 +81,6 @@ export class PadCidDetail extends React.Component<IPadCidDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{padCidEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padCid.idPad">Id Pad</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padCidEntity.idPad ? padCidEntity.idPad.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.padCid.idCid">Id Cid</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padCidEntity.idCid ? padCidEntity.idCid.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -111,9 +111,6 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
         dataSenha: '',
         expoToken: '',
         preferenciaAtendimento: '',
-        senhaChat: '',
-        atendimentoAceite: '',
-        atendimentoAssinaturas: '',
         unidade: ''
       },
       () => this.sortEntities()
@@ -270,15 +267,6 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
       'preferenciaAtendimento=' +
       this.state.preferenciaAtendimento +
       '&' +
-      'senhaChat=' +
-      this.state.senhaChat +
-      '&' +
-      'atendimentoAceite=' +
-      this.state.atendimentoAceite +
-      '&' +
-      'atendimentoAssinaturas=' +
-      this.state.atendimentoAssinaturas +
-      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -327,9 +315,6 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
       dataSenha,
       expoToken,
       preferenciaAtendimento,
-      senhaChat,
-      atendimentoAceite,
-      atendimentoAssinaturas,
       unidade,
       activePage,
       itemsPerPage,
@@ -374,9 +359,6 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
       dataSenha,
       expoToken,
       preferenciaAtendimento,
-      senhaChat,
-      atendimentoAceite,
-      atendimentoAssinaturas,
       unidade,
       activePage - 1,
       itemsPerPage,
@@ -384,13 +366,14 @@ export class Profissional extends React.Component<IProfissionalProps, IProfissio
     );
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();

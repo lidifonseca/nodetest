@@ -83,7 +83,9 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -131,7 +133,11 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.statusAtual.home.createLabel">Create a new Status Atual</Translate>
@@ -144,24 +150,29 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="statusAtualLabel" for="status-atual-statusAtual">
-                            <Translate contentKey="generadorApp.statusAtual.statusAtual">Status Atual</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'statusAtual' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="statusAtualLabel" for="status-atual-statusAtual">
+                              <Translate contentKey="generadorApp.statusAtual.statusAtual">Status Atual</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="statusAtual" id="status-atual-statusAtual" value={this.state.statusAtual} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="styleLabelLabel" for="status-atual-styleLabel">
-                            <Translate contentKey="generadorApp.statusAtual.styleLabel">Style Label</Translate>
-                          </Label>
+                            <AvInput type="text" name="statusAtual" id="status-atual-statusAtual" value={this.state.statusAtual} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="styleLabel" id="status-atual-styleLabel" value={this.state.styleLabel} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="styleLabelLabel" for="status-atual-styleLabel">
+                              <Translate contentKey="generadorApp.statusAtual.styleLabel">Style Label</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="styleLabel" id="status-atual-styleLabel" value={this.state.styleLabel} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -189,14 +200,18 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('statusAtual')}>
-                        <Translate contentKey="generadorApp.statusAtual.statusAtual">Status Atual</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('styleLabel')}>
-                        <Translate contentKey="generadorApp.statusAtual.styleLabel">Style Label</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'statusAtual' ? (
+                        <th className="hand" onClick={this.sort('statusAtual')}>
+                          <Translate contentKey="generadorApp.statusAtual.statusAtual">Status Atual</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <th className="hand" onClick={this.sort('styleLabel')}>
+                          <Translate contentKey="generadorApp.statusAtual.styleLabel">Style Label</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -211,12 +226,36 @@ export class StatusAtual extends React.Component<IStatusAtualProps, IStatusAtual
                           </Button>
                         </td>
 
-                        <td>{statusAtual.statusAtual}</td>
+                        {this.state.baseFilters !== 'statusAtual' ? <td>{statusAtual.statusAtual}</td> : null}
 
-                        <td>{statusAtual.styleLabel}</td>
+                        {this.state.baseFilters !== 'styleLabel' ? <td>{statusAtual.styleLabel}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${statusAtual.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${statusAtual.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${statusAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

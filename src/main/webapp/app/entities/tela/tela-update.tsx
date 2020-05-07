@@ -8,21 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './tela.reducer';
+import { ITelaUpdateState, getEntity, getTelaState, ITelaBaseState, updateEntity, createEntity, reset } from './tela.reducer';
 import { ITela } from 'app/shared/model/tela.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITelaUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ITelaUpdateState {
-  isNew: boolean;
-}
-
 export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateState> {
   constructor(props: Readonly<ITelaUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getTelaState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +38,19 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['tela'] ? '&tela=' + fieldsBase['tela'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { telaEntity } = this.props;
@@ -57,13 +68,14 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
   };
 
   handleClose = () => {
-    this.props.history.push('/tela');
+    this.props.history.push('/tela?' + this.getFiltersURL());
   };
 
   render() {
     const { telaEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +108,14 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/tela" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/tela?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +130,7 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,29 +146,27 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="telaLabel" for="tela-tela">
-                                <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="tela-tela"
-                                type="text"
-                                name="tela"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'tela' ? (
+                          <Col md="tela">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="telaLabel" for="tela-tela">
+                                    <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tela-tela" type="text" name="tela" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

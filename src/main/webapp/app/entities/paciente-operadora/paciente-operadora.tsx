@@ -22,24 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-operadora.reducer';
+import { getPacienteOperadoraState, IPacienteOperadoraBaseState, getEntities } from './paciente-operadora.reducer';
 import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { IOperadora } from 'app/shared/model/operadora.model';
-import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
-
 export interface IPacienteOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteOperadoraBaseState {
-  registro: any;
-  ativo: any;
-  idPaciente: any;
-  idOperadora: any;
-}
 export interface IPacienteOperadoraState extends IPacienteOperadoraBaseState, IPaginationBaseState {}
 
 export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, IPacienteOperadoraState> {
@@ -49,40 +38,19 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteOperadoraState(this.props.location)
+      ...getPacienteOperadoraState(this.props.location)
     };
   }
 
-  getPacienteOperadoraState = (location): IPacienteOperadoraBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const registro = url.searchParams.get('registro') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idOperadora = url.searchParams.get('idOperadora') || '';
-
-    return {
-      registro,
-      ativo,
-      idPaciente,
-      idOperadora
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPacientes();
-    this.props.getOperadoras();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         registro: '',
-        ativo: '',
-        idPaciente: '',
-        idOperadora: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -115,7 +83,9 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -133,12 +103,6 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
-      'idOperadora=' +
-      this.state.idOperadora +
-      '&' +
       ''
     );
   };
@@ -146,12 +110,12 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { registro, ativo, idPaciente, idOperadora, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(registro, ativo, idPaciente, idOperadora, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { registro, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(registro, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacientes, operadoras, pacienteOperadoraList, match, totalItems } = this.props;
+    const { pacienteOperadoraList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -169,7 +133,11 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteOperadora.home.createLabel">Create a new Paciente Operadora</Translate>
@@ -182,63 +150,28 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="registroLabel" for="paciente-operadora-registro">
-                            <Translate contentKey="generadorApp.pacienteOperadora.registro">Registro</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="registro" id="paciente-operadora-registro" value={this.state.registro} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-operadora-ativo">
-                            <Translate contentKey="generadorApp.pacienteOperadora.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-operadora-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-operadora-idPaciente">
-                              <Translate contentKey="generadorApp.pacienteOperadora.idPaciente">Id Paciente</Translate>
+                      {this.state.baseFilters !== 'registro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="registroLabel" for="paciente-operadora-registro">
+                              <Translate contentKey="generadorApp.pacienteOperadora.registro">Registro</Translate>
                             </Label>
-                            <AvInput id="paciente-operadora-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-operadora-idOperadora">
-                              <Translate contentKey="generadorApp.pacienteOperadora.idOperadora">Id Operadora</Translate>
+                            <AvInput type="text" name="registro" id="paciente-operadora-registro" value={this.state.registro} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-operadora-ativo">
+                              <Translate contentKey="generadorApp.pacienteOperadora.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput id="paciente-operadora-idOperadora" type="select" className="form-control" name="idOperadoraId">
-                              <option value="" key="0" />
-                              {operadoras
-                                ? operadoras.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="ativo" id="paciente-operadora-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -266,22 +199,18 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('registro')}>
-                        <Translate contentKey="generadorApp.pacienteOperadora.registro">Registro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteOperadora.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteOperadora.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteOperadora.idOperadora">Id Operadora</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'registro' ? (
+                        <th className="hand" onClick={this.sort('registro')}>
+                          <Translate contentKey="generadorApp.pacienteOperadora.registro">Registro</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteOperadora.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -296,39 +225,35 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
                           </Button>
                         </td>
 
-                        <td>{pacienteOperadora.registro}</td>
+                        {this.state.baseFilters !== 'registro' ? <td>{pacienteOperadora.registro}</td> : null}
 
-                        <td>{pacienteOperadora.ativo}</td>
-                        <td>
-                          {pacienteOperadora.idPaciente ? (
-                            <Link to={`paciente/${pacienteOperadora.idPaciente.id}`}>{pacienteOperadora.idPaciente.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {pacienteOperadora.idOperadora ? (
-                            <Link to={`operadora/${pacienteOperadora.idOperadora.id}`}>{pacienteOperadora.idOperadora.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteOperadora.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteOperadora.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pacienteOperadora.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteOperadora.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteOperadora.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteOperadora.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteOperadora.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -370,15 +295,11 @@ export class PacienteOperadora extends React.Component<IPacienteOperadoraProps, 
 }
 
 const mapStateToProps = ({ pacienteOperadora, ...storeState }: IRootState) => ({
-  pacientes: storeState.paciente.entities,
-  operadoras: storeState.operadora.entities,
   pacienteOperadoraList: pacienteOperadora.entities,
   totalItems: pacienteOperadora.totalItems
 });
 
 const mapDispatchToProps = {
-  getPacientes,
-  getOperadoras,
   getEntities
 };
 

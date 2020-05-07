@@ -21,7 +21,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -147,18 +146,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
         detalhes: '',
         liminar: '',
         expoToken: '',
-        senhaChat: '',
-        atendimento: '',
-        atendimentoAssinaturas: '',
-        diario: '',
-        pacienteDadosCartao: '',
-        pacienteDiagnostico: '',
-        pacienteDiario: '',
-        pacienteEnqueteApp: '',
-        pacienteOperadora: '',
-        pacientePedido: '',
-        pacientePush: '',
-        pad: '',
         unidade: '',
         franquia: '',
         cidade: '',
@@ -377,42 +364,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       'expoToken=' +
       this.state.expoToken +
       '&' +
-      'senhaChat=' +
-      this.state.senhaChat +
-      '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
-      'atendimentoAssinaturas=' +
-      this.state.atendimentoAssinaturas +
-      '&' +
-      'diario=' +
-      this.state.diario +
-      '&' +
-      'pacienteDadosCartao=' +
-      this.state.pacienteDadosCartao +
-      '&' +
-      'pacienteDiagnostico=' +
-      this.state.pacienteDiagnostico +
-      '&' +
-      'pacienteDiario=' +
-      this.state.pacienteDiario +
-      '&' +
-      'pacienteEnqueteApp=' +
-      this.state.pacienteEnqueteApp +
-      '&' +
-      'pacienteOperadora=' +
-      this.state.pacienteOperadora +
-      '&' +
-      'pacientePedido=' +
-      this.state.pacientePedido +
-      '&' +
-      'pacientePush=' +
-      this.state.pacientePush +
-      '&' +
-      'pad=' +
-      this.state.pad +
-      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -497,18 +448,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       detalhes,
       liminar,
       expoToken,
-      senhaChat,
-      atendimento,
-      atendimentoAssinaturas,
-      diario,
-      pacienteDadosCartao,
-      pacienteDiagnostico,
-      pacienteDiario,
-      pacienteEnqueteApp,
-      pacienteOperadora,
-      pacientePedido,
-      pacientePush,
-      pad,
       unidade,
       franquia,
       cidade,
@@ -577,18 +516,6 @@ export class Paciente extends React.Component<IPacienteProps, IPacienteState> {
       detalhes,
       liminar,
       expoToken,
-      senhaChat,
-      atendimento,
-      atendimentoAssinaturas,
-      diario,
-      pacienteDadosCartao,
-      pacienteDiagnostico,
-      pacienteDiario,
-      pacienteEnqueteApp,
-      pacienteOperadora,
-      pacientePedido,
-      pacientePush,
-      pad,
       unidade,
       franquia,
       cidade,

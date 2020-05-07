@@ -3,21 +3,20 @@
     "padItemCepRecusado": {
       "home": {
         "title": "Pad Item Cep Recusados",
-        "createLabel": "Criar novo Pad Item Cep Recusado",
-        "createOrEditLabel": "Criar ou editar Pad Item Cep Recusado",
-        "notFound": "Nenhum Pad Item Cep Recusado encontrado"
+        "createLabel": "Create a new Pad Item Cep Recusado",
+        "createOrEditLabel": "Create or edit a Pad Item Cep Recusado",
+        "notFound": "No Pad Item Cep Recusados found"
       },
-      "created": "Um novo Pad Item Cep Recusado foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Cep Recusado foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Cep Recusado foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Cep Recusado is created with identifier {{ param }}",
+      "updated": "A Pad Item Cep Recusado is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Cep Recusado is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Cep Recusado {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Cep Recusado {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Cep Recusado"
       },
-      "cep": "Cep",
-      "idPadItem": "Id Pad Item"
+      "cep": "Cep"
     }
   }
 }

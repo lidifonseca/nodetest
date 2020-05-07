@@ -4,17 +4,6 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Atendimento from './atendimento.entity';
-import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
-import Diario from './diario.entity';
-import PacienteDadosCartao from './paciente-dados-cartao.entity';
-import PacienteDiagnostico from './paciente-diagnostico.entity';
-import PacienteDiario from './paciente-diario.entity';
-import PacienteEnqueteApp from './paciente-enquete-app.entity';
-import PacienteOperadora from './paciente-operadora.entity';
-import PacientePedido from './paciente-pedido.entity';
-import PacientePush from './paciente-push.entity';
-import Pad from './pad.entity';
 import UnidadeEasy from './unidade-easy.entity';
 import Franquia from './franquia.entity';
 import Cidade from './cidade.entity';
@@ -23,263 +12,213 @@ import Profissional from './profissional.entity';
 import PacienteHospital from './paciente-hospital.entity';
 
 /**
- * @toStringFields nome@@\n@listTableLayout nome cep bairro rg registro@@\n@listFilterLayout\nnome{Label:top,Size:6}\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@\n@formTab DadosDoPaciente<unidade,email,nome,cpf,rg,cep,nascimento,sexo,endereco,telefone,celular,bairro,numero,complemento,cidade,uf,profissionalPref,tipohospital,liminar,detalhes,observacao>@@\n@formTab DadosDoFamiliar<cepFamiliar,enderecoFamiliar,numeroFamiliar,complementoFamiliar,cidadeFamiliar,bairroFamiliar,ufFamiliar,latitudeFamiliar,longitudeFamiliar,acessoFamiliar,emailFamiliar,cpfFamiliar,rgFamiliar,nascimentoFamiliar,sexoFamiliar,telefoneFamiliar,celularFamiliar,observacaoFamiliar>@@\n@listButtons\nview{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}`,color:info,size:sm,icon:eye,text:View}\nedit{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Edit}\ndelete{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:trash,text:Delete}\nRelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatoriodeInformacoes}\nIndicadoresClinicos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:IndicadoresClinicos}\nMonitoramento{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:Monitoramento}\nVisualizarProntuario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:search,text:VisualizarProntuario}\nStatus{inDropdown:true,tag:Link,to:`/paciente-status-atual?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:pencil,text:Status}\nArquivos{inDropdown:true,tag:Link,to:`/paciente-arquivo?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:upload,text:Arquivos}\nDiagnostico{inDropdown:true,tag:Link,to:`/paciente-diagnostico?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:Diagnostico}\nOperadora{inDropdown:true,tag:Link,to:`/paciente-operadora?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:medkit,text:Operadora}\nResetSenha{inDropdown:true,tag:Link,to:`/reset-senha?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:refresh,text:ResetSenha}\nProntuarioEletronico{inDropdown:true,tag:Link,to:`/paciente-prontuario?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:ProntuarioEletronico}\nToken{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:key,text:Token}\nQuestionario{inDropdown:true,tag:Link,to:`/questionarios?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:question,text:Questionario}\nTratamentoIndicado{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:fa-list-ol,text:TratamentoIndicado}\n@@\n@viewButtons\nview{tag:Link,to:`/paciente/${pacienteEntity.id}`,color:info,size:sm,icon:eye,text:View}\nedit{tag:Link,to:`/paciente/${pacienteEntity.id}/edit`,color:primary,size:sm,icon:pencil-alt,text:Edit}\ndelete{tag:Link,to:`/paciente/${pacienteEntity.id}/delete`,color:danger,size:sm,icon:trash,text:Delete}\n@@\n@formLayout\nunidade{Label:top,Size:6}\nemail{Label:top,Size:6}\nnome{Label:top,Size:6}\ncpf{Label:top,Size:3}\nrg{Label:top,Size:3}\ncep{Label:top,Size:6}\nnascimento{Label:top,Size:3}\nsexo{Label:top,Size:3}\nendereco{Label:top,Size:6}\ntelefone{Label:top,Size:3}\ncelular{Label:top,Size:3}\nbairro{Label:top,Size:4}\nnumero{Label:top,Size:6}\ncomplemento{Label:top,Size:6}\ncidade{Label:top,Size:8}\nuf{Label:top,Size:4}\nprofissionalPref{Label:top,Size:6}\ntipohospital{Label:top,Size:6}\nliminar{Label:top,Size:12}\ndetalhes{Label:top,Size:12}\nobservacao{Label:top,Size:12}\ncomResponsavel{Label:top,Size:12}\n\ngrauParentesco{Label:top,Size:12}\nresponsavelFamiliar{Label:top,Size:12}\n\n\n\ncepFamiliar{Label:top,Size:12}\nenderecoFamiliar{Label:top,Size:12}\nnumeroFamiliar{Label:top,Size:12}\ncomplementoFamiliar{Label:top,Size:12}\ncidadeFamiliar{Label:top,Size:12}\nbairroFamiliar{Label:top,Size:12}\nufFamiliar{Label:top,Size:12}\nlatitudeFamiliar{Label:top,Size:12}\nlongitudeFamiliar{Label:top,Size:12}\nacessoFamiliar{Label:top,Size:12}\nemailFamiliar{Label:top,Size:12}\ncpfFamiliar{Label:top,Size:12}\nrgFamiliar{Label:top,Size:12}\nnascimentoFamiliar{Label:top,Size:12}\nsexoFamiliar{Label:top,Size:12}\ntelefoneFamiliar{Label:top,Size:12}\ncelularFamiliar{Label:top,Size:12}\nobservacaoFamiliar{Label:top,Size:12}\n\n\nfranquia{Label:top,Size:12}\nsenha{Label:top,Size:12}\nregistro{Label:top,Size:12}\nlatitude{Label:top,Size:12}\nlongitude{Label:top,Size:12}\naph{Label:top,Size:12}\nnivelComplexidade{Label:top,Size:12}\npassagemPs{Label:top,Size:12}\nobsPs{Label:top,Size:12}\npassagemInternacao{Label:top,Size:12}\nobsInternacao{Label:top,Size:12}\ncustoTotal{Label:top,Size:12}\nmesmoEndereco{Label:top,Size:12}\ncadastroCompleto{Label:top,Size:12}\nativo{Label:top,Size:12}\nexpoToken{Label:top,Size:12}\nsenhaChat{Label:top,Size:12}\n@@\n@viewLayout\ncidade{Label:top,Size:6}\nnome{Label:top,Size:6}\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@
+ * @toStringFields nome@@\n@listTableLayout nome cep bairro rg registro@@\n@listFilterLayout\nnome{Label:top,Size:6}\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@\n@formTab DadosDoPaciente<unidade,email,nome,cpf,rg,cep,nascimento,sexo,endereco,telefone,celular,bairro,numero,complemento,cidade,uf,profissionalPref,tipohospital,liminar,detalhes,observacao>@@\n@formTab DadosDoFamiliar<cepFamiliar,enderecoFamiliar,numeroFamiliar,complementoFamiliar,cidadeFamiliar,bairroFamiliar,ufFamiliar,latitudeFamiliar,longitudeFamiliar,acessoFamiliar,emailFamiliar,cpfFamiliar,rgFamiliar,nascimentoFamiliar,sexoFamiliar,telefoneFamiliar,celularFamiliar,observacaoFamiliar>@@\n@listButtons\nview{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}`,color:info,size:sm,icon:eye,text:View}\nedit{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Edit}\ndelete{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:trash,text:Delete}\nRelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatoriodeInformacoes}\nIndicadoresClinicos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:IndicadoresClinicos}\nMonitoramento{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:Monitoramento}\nVisualizarProntuario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:search,text:VisualizarProntuario}\nStatus{inDropdown:true,tag:Link,to:`/paciente-status-atual?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:pencil,text:Status}\nArquivos{inDropdown:true,tag:Link,to:`/paciente-arquivo?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:upload,text:Arquivos}\nDiagnostico{inDropdown:true,tag:Link,to:`/paciente-diagnostico?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:Diagnostico}\nOperadora{inDropdown:true,tag:Link,to:`/paciente-operadora?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:medkit,text:Operadora}\nResetSenha{inDropdown:true,tag:Link,to:`/reset-senha?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:refresh,text:ResetSenha}\nProntuarioEletronico{inDropdown:true,tag:Link,to:`/paciente-prontuario?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:ProntuarioEletronico}\nToken{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:key,text:Token}\nQuestionario{inDropdown:true,tag:Link,to:`/questionarios?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:question,text:Questionario}\nTratamentoIndicado{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:fa-list-ol,text:TratamentoIndicado}\n@@\n@viewButtons\nview{tag:Link,to:`/paciente/${pacienteEntity.id}`,color:info,size:sm,icon:eye,text:View}\nedit{tag:Link,to:`/paciente/${pacienteEntity.id}/edit`,color:primary,size:sm,icon:pencil-alt,text:Edit}\ndelete{tag:Link,to:`/paciente/${pacienteEntity.id}/delete`,color:danger,size:sm,icon:trash,text:Delete}\n@@\n@formLayout\nunidade{Label:top,Size:6}\nemail{Label:top,Size:6}\nnome{Label:top,Size:6}\ncpf{Label:top,Size:3}\nrg{Label:top,Size:3}\ncep{Label:top,Size:6}\nnascimento{Label:top,Size:3}\nsexo{Label:top,Size:3}\nendereco{Label:top,Size:6}\ntelefone{Label:top,Size:3}\ncelular{Label:top,Size:3}\nbairro{Label:top,Size:4}\nnumero{Label:top,Size:6}\ncomplemento{Label:top,Size:6}\ncidade{Label:top,Size:8}\nuf{Label:top,Size:4}\nprofissionalPref{Label:top,Size:6}\ntipohospital{Label:top,Size:6}\nliminar{Label:top,Size:12}\ndetalhes{Label:top,Size:12}\nobservacao{Label:top,Size:12}\ncomResponsavel{Label:top,Size:12}\n\ngrauParentesco{Label:top,Size:12}\nresponsavelFamiliar{Label:top,Size:12}\n\n\n\ncepFamiliar{Label:top,Size:12}\nenderecoFamiliar{Label:top,Size:12}\nnumeroFamiliar{Label:top,Size:12}\ncomplementoFamiliar{Label:top,Size:12}\ncidadeFamiliar{Label:top,Size:12}\nbairroFamiliar{Label:top,Size:12}\nufFamiliar{Label:top,Size:12}\nlatitudeFamiliar{Label:top,Size:12}\nlongitudeFamiliar{Label:top,Size:12}\nacessoFamiliar{Label:top,Size:12}\nemailFamiliar{Label:top,Size:12}\ncpfFamiliar{Label:top,Size:12}\nrgFamiliar{Label:top,Size:12}\nnascimentoFamiliar{Label:top,Size:12}\nsexoFamiliar{Label:top,Size:12}\ntelefoneFamiliar{Label:top,Size:12}\ncelularFamiliar{Label:top,Size:12}\nobservacaoFamiliar{Label:top,Size:12}\n\n\nfranquia{Label:top,Size:12}\nsenha{Label:top,Size:12}\nregistro{Label:top,Size:12}\nlatitude{Label:top,Size:12}\nlongitude{Label:top,Size:12}\naph{Label:top,Size:12}\nnivelComplexidade{Label:top,Size:12}\npassagemPs{Label:top,Size:12}\nobsPs{Label:top,Size:12}\npassagemInternacao{Label:top,Size:12}\nobsInternacao{Label:top,Size:12}\ncustoTotal{Label:top,Size:12}\nmesmoEndereco{Label:top,Size:12}\ncadastroCompleto{Label:top,Size:12}\nativo{Label:top,Size:12}\nexpoToken{Label:top,Size:12}\n@@\n@viewLayout\ncidade{Label:top,Size:6}\nnome{Label:top,Size:6}\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@
  */
-@Entity('paciente')
+@Entity('tb_paciente')
 export default class Paciente extends BaseEntity {
-  @Column({ name: 'senha', length: 100 })
+  @Column({ name: 'SENHA', length: 100 })
   senha: string;
 
-  @Column({ name: 'nome', length: 60 })
+  @Column({ name: 'NOME', length: 60 })
   nome: string;
 
-  @Column({ name: 'email', length: 100 })
+  @Column({ name: 'EMAIL', length: 100 })
   email: string;
 
-  @Column({ name: 'cpf', length: 20 })
+  @Column({ name: 'CPF', length: 20 })
   cpf: string;
 
-  @Column({ name: 'rg', length: 30 })
+  @Column({ name: 'RG', length: 30 })
   rg: string;
 
-  @Column({ name: 'registro', length: 50 })
+  @Column({ name: 'REGISTRO', length: 50 })
   registro: string;
 
-  @Column({ type: 'date', name: 'nascimento' })
+  @Column({ type: 'date', name: 'NASCIMENTO' })
   nascimento: any;
 
-  @Column({ type: 'integer', name: 'sexo' })
+  @Column({ type: 'integer', name: 'SEXO' })
   sexo: number;
 
-  @Column({ name: 'telefone', length: 20 })
+  @Column({ name: 'TELEFONE', length: 20 })
   telefone: string;
 
-  @Column({ name: 'telefone_2', length: 20 })
+  /**
+   * @dbName TELEFONE2@@
+   */
+  @Column({ name: 'TELEFONE2', length: 20 })
   telefone2: string;
 
-  @Column({ name: 'celular', length: 20 })
+  @Column({ name: 'CELULAR', length: 20 })
   celular: string;
 
-  @Column({ name: 'celular_1', length: 20 })
+  /**
+   * @dbName CELULAR1@@
+   */
+  @Column({ name: 'CELULAR1', length: 20 })
   celular1: string;
 
-  @Column({ name: 'cep', length: 10 })
+  @Column({ name: 'CEP', length: 10 })
   cep: string;
 
-  @Column({ name: 'endereco', length: 100 })
+  @Column({ name: 'ENDERECO', length: 100 })
   endereco: string;
 
-  @Column({ name: 'numero', length: 30 })
+  @Column({ name: 'NUMERO', length: 30 })
   numero: string;
 
-  @Column({ name: 'complemento', length: 20 })
+  @Column({ name: 'COMPLEMENTO', length: 20 })
   complemento: string;
 
-  @Column({ name: 'bairro', length: 40 })
+  @Column({ name: 'BAIRRO', length: 40 })
   bairro: string;
 
-  @Column({ name: 'uf', length: 5 })
+  @Column({ name: 'UF', length: 5 })
   uf: string;
 
-  @Column({ name: 'latitude', length: 60 })
+  @Column({ name: 'LATITUDE', length: 60 })
   latitude: string;
 
-  @Column({ name: 'longitude', length: 60 })
+  @Column({ name: 'LONGITUDE', length: 60 })
   longitude: string;
 
-  @Column({ name: 'responsavel_familiar', length: 60 })
+  @Column({ name: 'RESPONSAVEL_FAMILIAR', length: 60 })
   responsavelFamiliar: string;
 
-  @Column({ name: 'email_familiar', length: 100 })
+  @Column({ name: 'EMAIL_FAMILIAR', length: 100 })
   emailFamiliar: string;
 
-  @Column({ name: 'cpf_familiar', length: 20 })
+  @Column({ name: 'CPF_FAMILIAR', length: 20 })
   cpfFamiliar: string;
 
-  @Column({ name: 'rg_familiar', length: 30 })
+  @Column({ name: 'RG_FAMILIAR', length: 30 })
   rgFamiliar: string;
 
-  @Column({ type: 'date', name: 'nascimento_familiar' })
+  @Column({ type: 'date', name: 'NASCIMENTO_FAMILIAR' })
   nascimentoFamiliar: any;
 
-  @Column({ type: 'integer', name: 'sexo_familiar' })
+  @Column({ type: 'integer', name: 'SEXO_FAMILIAR' })
   sexoFamiliar: number;
 
-  @Column({ name: 'telefone_familiar', length: 20 })
+  @Column({ name: 'TELEFONE_FAMILIAR', length: 20 })
   telefoneFamiliar: string;
 
-  @Column({ name: 'telefone_2_familiar', length: 20 })
+  /**
+   * @dbName TELEFONE2_FAMILIAR@@
+   */
+  @Column({ name: 'TELEFONE2_FAMILIAR', length: 20 })
   telefone2Familiar: string;
 
-  @Column({ name: 'celular_familiar', length: 20 })
+  @Column({ name: 'CELULAR_FAMILIAR', length: 20 })
   celularFamiliar: string;
 
-  @Column({ name: 'celular_2_familiar', length: 20 })
+  /**
+   * @dbName CELULAR2_FAMILIAR@@
+   */
+  @Column({ name: 'CELULAR2_FAMILIAR', length: 20 })
   celular2Familiar: string;
 
-  @Column({ name: 'cep_familiar', length: 10 })
+  @Column({ name: 'CEP_FAMILIAR', length: 10 })
   cepFamiliar: string;
 
-  @Column({ name: 'endereco_familiar', length: 100 })
+  @Column({ name: 'ENDERECO_FAMILIAR', length: 100 })
   enderecoFamiliar: string;
 
-  @Column({ name: 'numero_familiar', length: 30 })
+  @Column({ name: 'NUMERO_FAMILIAR', length: 30 })
   numeroFamiliar: string;
 
-  @Column({ name: 'complemento_familiar', length: 20 })
+  @Column({ name: 'COMPLEMENTO_FAMILIAR', length: 20 })
   complementoFamiliar: string;
 
-  @Column({ name: 'bairro_familiar', length: 40 })
+  @Column({ name: 'BAIRRO_FAMILIAR', length: 40 })
   bairroFamiliar: string;
 
-  @Column({ name: 'uf_familiar', length: 5 })
+  @Column({ name: 'UF_FAMILIAR', length: 5 })
   ufFamiliar: string;
 
-  @Column({ name: 'latitude_familiar', length: 60 })
+  @Column({ name: 'LATITUDE_FAMILIAR', length: 60 })
   latitudeFamiliar: string;
 
-  @Column({ name: 'longitude_familiar', length: 60 })
+  @Column({ name: 'LONGITUDE_FAMILIAR', length: 60 })
   longitudeFamiliar: string;
 
-  @Column({ type: 'blob', name: 'observacao' })
-  observacao: any;
+  @Column({ name: 'OBSERVACAO' })
+  observacao: string;
 
-  @Column({ type: 'integer', name: 'aph', nullable: false })
+  @Column({ type: 'integer', name: 'APH', nullable: false })
   aph: number;
 
-  @Column({ type: 'integer', name: 'nivel_complexidade' })
+  @Column({ type: 'integer', name: 'NIVEL_COMPLEXIDADE' })
   nivelComplexidade: number;
 
-  @Column({ type: 'integer', name: 'passagem_ps' })
+  @Column({ type: 'integer', name: 'PASSAGEM_PS' })
   passagemPs: number;
 
-  @Column({ name: 'obs_ps', length: 255 })
+  @Column({ name: 'OBS_PS', length: 255 })
   obsPs: string;
 
-  @Column({ type: 'integer', name: 'passagem_internacao' })
+  @Column({ type: 'integer', name: 'PASSAGEM_INTERNACAO' })
   passagemInternacao: number;
 
-  @Column({ name: 'obs_internacao', length: 255 })
+  @Column({ name: 'OBS_INTERNACAO', length: 255 })
   obsInternacao: string;
 
-  @Column({ type: 'float', name: 'custo_total' })
+  @Column({ type: 'float', name: 'CUSTO_TOTAL' })
   custoTotal: number;
 
-  @Column({ name: 'observacao_familiar', length: 255 })
+  @Column({ name: 'OBSERVACAO_FAMILIAR', length: 255 })
   observacaoFamiliar: string;
 
-  @Column({ type: 'integer', name: 'mesmo_endereco' })
+  @Column({ type: 'integer', name: 'MESMO_ENDERECO' })
   mesmoEndereco: number;
 
-  @Column({ type: 'integer', name: 'acesso_familiar' })
+  @Column({ type: 'integer', name: 'ACESSO_FAMILIAR' })
   acessoFamiliar: number;
 
-  @Column({ type: 'integer', name: 'com_responsavel' })
+  @Column({ type: 'integer', name: 'COM_RESPONSAVEL' })
   comResponsavel: number;
 
-  @Column({ type: 'integer', name: 'cadastro_completo' })
+  @Column({ type: 'integer', name: 'CADASTRO_COMPLETO' })
   cadastroCompleto: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @Column({ type: 'blob', name: 'detalhes' })
-  detalhes: any;
+  @Column({ name: 'DETALHES' })
+  detalhes: string;
 
-  @Column({ name: 'liminar', length: 50 })
+  @Column({ name: 'LIMINAR', length: 50 })
   liminar: string;
 
-  @Column({ name: 'expo_token', length: 255 })
+  @Column({ name: 'EXPO_TOKEN', length: 255 })
   expoToken: string;
 
-  @Column({ name: 'senha_chat', length: 45 })
-  senhaChat: string;
-
-  @OneToMany(
-    type => Atendimento,
-    other => other.idPaciente
-  )
-  atendimentos: Atendimento[];
-
-  @OneToMany(
-    type => AtendimentoAssinaturas,
-    other => other.idPaciente
-  )
-  atendimentoAssinaturas: AtendimentoAssinaturas[];
-
-  @OneToMany(
-    type => Diario,
-    other => other.idPaciente
-  )
-  diarios: Diario[];
-
-  @OneToMany(
-    type => PacienteDadosCartao,
-    other => other.idPaciente
-  )
-  pacienteDadosCartaos: PacienteDadosCartao[];
-
-  @OneToMany(
-    type => PacienteDiagnostico,
-    other => other.idPaciente
-  )
-  pacienteDiagnosticos: PacienteDiagnostico[];
-
-  @OneToMany(
-    type => PacienteDiario,
-    other => other.idPaciente
-  )
-  pacienteDiarios: PacienteDiario[];
-
-  @OneToMany(
-    type => PacienteEnqueteApp,
-    other => other.idPaciente
-  )
-  pacienteEnqueteApps: PacienteEnqueteApp[];
-
-  @OneToMany(
-    type => PacienteOperadora,
-    other => other.idPaciente
-  )
-  pacienteOperadoras: PacienteOperadora[];
-
-  @OneToMany(
-    type => PacientePedido,
-    other => other.idPaciente
-  )
-  pacientePedidos: PacientePedido[];
-
-  @OneToMany(
-    type => PacientePush,
-    other => other.idPaciente
-  )
-  pacientePushes: PacientePush[];
-
-  @OneToMany(
-    type => Pad,
-    other => other.idPaciente
-  )
-  pads: Pad[];
-
   @ManyToOne(type => UnidadeEasy)
+  @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
 
   @ManyToOne(type => Franquia)
+  @JoinColumn({ name: 'ID_FRANQUIA', referencedColumnName: 'id' })
   franquia: Franquia;
 
   @ManyToOne(type => Cidade)
+  @JoinColumn({ name: 'ID_CIDADE', referencedColumnName: 'id' })
   cidade: Cidade;
 
   @ManyToOne(type => Cidade)
+  @JoinColumn({ name: 'ID_CIDADE_FAMILIAR', referencedColumnName: 'id' })
   cidadeFamiliar: Cidade;
 
   @ManyToOne(type => GrauParentesco)
+  @JoinColumn({ name: 'ID_GRAU_PARENTESCO', referencedColumnName: 'id' })
   grauParentesco: GrauParentesco;
 
   @ManyToOne(type => Profissional)
+  @JoinColumn({ name: 'ID_PROFISSIONAL_PREF', referencedColumnName: 'id' })
   profissionalPref: Profissional;
 
   @ManyToOne(type => PacienteHospital)
+  @JoinColumn({ name: 'ID_TIPOHOSPITAL', referencedColumnName: 'id' })
   tipohospital: PacienteHospital;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

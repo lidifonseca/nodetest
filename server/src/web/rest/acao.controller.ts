@@ -68,7 +68,9 @@ export class AcaoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() acao: Acao): Promise<Acao> {
+    console.info(acao);
     const created = await this.acaoService.save(acao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Acao', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class AcaoController {
   })
   async put(@Req() req: Request, @Body() acao: Acao): Promise<Acao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Acao', acao.id);
+
     return await this.acaoService.update(acao);
   }
 

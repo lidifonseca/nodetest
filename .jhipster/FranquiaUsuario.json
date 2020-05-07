@@ -162,22 +162,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "logUserFranquia",
-            "otherEntityRelationshipName": "idUsuario",
-            "relationshipName": "logUserFranquia"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "franquia",
-            "otherEntityRelationshipName": "franquiaUsuario",
-            "relationshipName": "idFranquia",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502233200",
+    "relationships": [],
+    "changelogDate": "20200507110500",
     "entityTableName": "franquia_usuario",
     "dto": "mapstruct",
     "pagination": "pagination",

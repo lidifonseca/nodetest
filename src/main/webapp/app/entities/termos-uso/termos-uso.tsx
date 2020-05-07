@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -92,7 +83,9 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -140,7 +133,11 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.termosUso.home.createLabel">Create a new Termos Uso</Translate>
@@ -153,22 +150,27 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="termosUsoLabel" for="termos-uso-termosUso">
-                            <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
-                          </Label>
-                          <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoLabel" for="termos-uso-tipo">
-                            <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
-                          </Label>
-                          <AvInput type="string" name="tipo" id="termos-uso-tipo" value={this.state.tipo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'termosUso' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="termosUsoLabel" for="termos-uso-termosUso">
+                              <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
+                            </Label>
+                            <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoLabel" for="termos-uso-tipo">
+                              <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
+                            </Label>
+                            <AvInput type="string" name="tipo" id="termos-uso-tipo" value={this.state.tipo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -196,14 +198,18 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('termosUso')}>
-                        <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipo')}>
-                        <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'termosUso' ? (
+                        <th className="hand" onClick={this.sort('termosUso')}>
+                          <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <th className="hand" onClick={this.sort('tipo')}>
+                          <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -218,12 +224,33 @@ export class TermosUso extends React.Component<ITermosUsoProps, ITermosUsoState>
                           </Button>
                         </td>
 
-                        <td>{termosUso.termosUso}</td>
+                        {this.state.baseFilters !== 'termosUso' ? (
+                          <td>{termosUso.termosUso ? Buffer.from(termosUso.termosUso).toString() : null}</td>
+                        ) : null}
 
-                        <td>{termosUso.tipo}</td>
+                        {this.state.baseFilters !== 'tipo' ? <td>{termosUso.tipo}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${termosUso.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${termosUso.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${termosUso.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

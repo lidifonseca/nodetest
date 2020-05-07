@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -63,8 +54,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
         descricao: '',
         meta: '',
         maximoSt: '',
-        minimoSt: '',
-        cidXPtaNovoPadItemIndi: ''
+        minimoSt: ''
       },
       () => this.sortEntities()
     );
@@ -97,7 +87,9 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -127,9 +119,6 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
       'minimoSt=' +
       this.state.minimoSt +
       '&' +
-      'cidXPtaNovoPadItemIndi=' +
-      this.state.cidXPtaNovoPadItemIndi +
-      '&' +
       ''
     );
   };
@@ -137,31 +126,8 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      idUnidadeMedida,
-      titulo,
-      descricao,
-      meta,
-      maximoSt,
-      minimoSt,
-      cidXPtaNovoPadItemIndi,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      idUnidadeMedida,
-      titulo,
-      descricao,
-      meta,
-      maximoSt,
-      minimoSt,
-      cidXPtaNovoPadItemIndi,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idUnidadeMedida, titulo, descricao, meta, maximoSt, minimoSt, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idUnidadeMedida, titulo, descricao, meta, maximoSt, minimoSt, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -183,7 +149,11 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padItemIndicadores.home.createLabel">Create a new Pad Item Indicadores</Translate>
@@ -196,64 +166,77 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUnidadeMedidaLabel" for="pad-item-indicadores-idUnidadeMedida">
-                            <Translate contentKey="generadorApp.padItemIndicadores.idUnidadeMedida">Id Unidade Medida</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idUnidadeMedida"
-                            id="pad-item-indicadores-idUnidadeMedida"
-                            value={this.state.idUnidadeMedida}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tituloLabel" for="pad-item-indicadores-titulo">
-                            <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idUnidadeMedida' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idUnidadeMedidaLabel" for="pad-item-indicadores-idUnidadeMedida">
+                              <Translate contentKey="generadorApp.padItemIndicadores.idUnidadeMedida">Id Unidade Medida</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idUnidadeMedida"
+                              id="pad-item-indicadores-idUnidadeMedida"
+                              value={this.state.idUnidadeMedida}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="titulo" id="pad-item-indicadores-titulo" value={this.state.titulo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descricaoLabel" for="pad-item-indicadores-descricao">
-                            <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
-                          </Label>
-                          <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="metaLabel" for="pad-item-indicadores-meta">
-                            <Translate contentKey="generadorApp.padItemIndicadores.meta">Meta</Translate>
-                          </Label>
-                          <AvInput type="string" name="meta" id="pad-item-indicadores-meta" value={this.state.meta} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="maximoStLabel" for="pad-item-indicadores-maximoSt">
-                            <Translate contentKey="generadorApp.padItemIndicadores.maximoSt">Maximo St</Translate>
-                          </Label>
-                          <AvInput type="string" name="maximoSt" id="pad-item-indicadores-maximoSt" value={this.state.maximoSt} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="minimoStLabel" for="pad-item-indicadores-minimoSt">
-                            <Translate contentKey="generadorApp.padItemIndicadores.minimoSt">Minimo St</Translate>
-                          </Label>
-                          <AvInput type="string" name="minimoSt" id="pad-item-indicadores-minimoSt" value={this.state.minimoSt} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tituloLabel" for="pad-item-indicadores-titulo">
+                              <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
+                            </Label>
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="titulo" id="pad-item-indicadores-titulo" value={this.state.titulo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descricaoLabel" for="pad-item-indicadores-descricao">
+                              <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
+                            </Label>
+                            <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'meta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="metaLabel" for="pad-item-indicadores-meta">
+                              <Translate contentKey="generadorApp.padItemIndicadores.meta">Meta</Translate>
+                            </Label>
+                            <AvInput type="string" name="meta" id="pad-item-indicadores-meta" value={this.state.meta} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'maximoSt' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="maximoStLabel" for="pad-item-indicadores-maximoSt">
+                              <Translate contentKey="generadorApp.padItemIndicadores.maximoSt">Maximo St</Translate>
+                            </Label>
+                            <AvInput type="string" name="maximoSt" id="pad-item-indicadores-maximoSt" value={this.state.maximoSt} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'minimoSt' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="minimoStLabel" for="pad-item-indicadores-minimoSt">
+                              <Translate contentKey="generadorApp.padItemIndicadores.minimoSt">Minimo St</Translate>
+                            </Label>
+                            <AvInput type="string" name="minimoSt" id="pad-item-indicadores-minimoSt" value={this.state.minimoSt} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -281,30 +264,42 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idUnidadeMedida')}>
-                        <Translate contentKey="generadorApp.padItemIndicadores.idUnidadeMedida">Id Unidade Medida</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('titulo')}>
-                        <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descricao')}>
-                        <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('meta')}>
-                        <Translate contentKey="generadorApp.padItemIndicadores.meta">Meta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('maximoSt')}>
-                        <Translate contentKey="generadorApp.padItemIndicadores.maximoSt">Maximo St</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('minimoSt')}>
-                        <Translate contentKey="generadorApp.padItemIndicadores.minimoSt">Minimo St</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idUnidadeMedida' ? (
+                        <th className="hand" onClick={this.sort('idUnidadeMedida')}>
+                          <Translate contentKey="generadorApp.padItemIndicadores.idUnidadeMedida">Id Unidade Medida</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'titulo' ? (
+                        <th className="hand" onClick={this.sort('titulo')}>
+                          <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <th className="hand" onClick={this.sort('descricao')}>
+                          <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'meta' ? (
+                        <th className="hand" onClick={this.sort('meta')}>
+                          <Translate contentKey="generadorApp.padItemIndicadores.meta">Meta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'maximoSt' ? (
+                        <th className="hand" onClick={this.sort('maximoSt')}>
+                          <Translate contentKey="generadorApp.padItemIndicadores.maximoSt">Maximo St</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'minimoSt' ? (
+                        <th className="hand" onClick={this.sort('minimoSt')}>
+                          <Translate contentKey="generadorApp.padItemIndicadores.minimoSt">Minimo St</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -319,20 +314,51 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
                           </Button>
                         </td>
 
-                        <td>{padItemIndicadores.idUnidadeMedida}</td>
+                        {this.state.baseFilters !== 'idUnidadeMedida' ? <td>{padItemIndicadores.idUnidadeMedida}</td> : null}
 
-                        <td>{padItemIndicadores.titulo}</td>
+                        {this.state.baseFilters !== 'titulo' ? <td>{padItemIndicadores.titulo}</td> : null}
 
-                        <td>{padItemIndicadores.descricao}</td>
+                        {this.state.baseFilters !== 'descricao' ? (
+                          <td>{padItemIndicadores.descricao ? Buffer.from(padItemIndicadores.descricao).toString() : null}</td>
+                        ) : null}
 
-                        <td>{padItemIndicadores.meta}</td>
+                        {this.state.baseFilters !== 'meta' ? <td>{padItemIndicadores.meta}</td> : null}
 
-                        <td>{padItemIndicadores.maximoSt}</td>
+                        {this.state.baseFilters !== 'maximoSt' ? <td>{padItemIndicadores.maximoSt}</td> : null}
 
-                        <td>{padItemIndicadores.minimoSt}</td>
+                        {this.state.baseFilters !== 'minimoSt' ? <td>{padItemIndicadores.minimoSt}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${padItemIndicadores.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemIndicadores.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemIndicadores.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

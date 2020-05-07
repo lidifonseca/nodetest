@@ -31,17 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pushnotification-envios.reducer';
+import { getPushnotificationEnviosState, IPushnotificationEnviosBaseState, getEntities } from './pushnotification-envios.reducer';
 import { IPushnotificationEnvios } from 'app/shared/model/pushnotification-envios.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPushnotificationEnviosProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPushnotificationEnviosBaseState {
-  referencia: any;
-  ultimoEnvio: any;
-}
 export interface IPushnotificationEnviosState extends IPushnotificationEnviosBaseState, IPaginationBaseState {}
 
 export class PushnotificationEnvios extends React.Component<IPushnotificationEnviosProps, IPushnotificationEnviosState> {
@@ -51,20 +47,9 @@ export class PushnotificationEnvios extends React.Component<IPushnotificationEnv
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPushnotificationEnviosState(this.props.location)
+      ...getPushnotificationEnviosState(this.props.location)
     };
   }
-
-  getPushnotificationEnviosState = (location): IPushnotificationEnviosBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const referencia = url.searchParams.get('referencia') || '';
-    const ultimoEnvio = url.searchParams.get('ultimoEnvio') || '';
-
-    return {
-      referencia,
-      ultimoEnvio
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -107,7 +92,9 @@ export class PushnotificationEnvios extends React.Component<IPushnotificationEnv
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -155,7 +142,11 @@ export class PushnotificationEnvios extends React.Component<IPushnotificationEnv
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pushnotificationEnvios.home.createLabel">
@@ -170,39 +161,35 @@ export class PushnotificationEnvios extends React.Component<IPushnotificationEnv
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="referenciaLabel" for="pushnotification-envios-referencia">
-                            <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'referencia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="referenciaLabel" for="pushnotification-envios-referencia">
+                              <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="referencia"
-                            id="pushnotification-envios-referencia"
-                            value={this.state.referencia}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 50, errorMessage: translate('entity.validation.maxlength', { max: 50 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
-                            <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
-                          </Label>
-                          <AvInput
-                            id="pushnotification-envios-ultimoEnvio"
-                            type="datetime-local"
-                            className="form-control"
-                            name="ultimoEnvio"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.ultimoEnvio ? convertDateTimeFromServer(this.state.ultimoEnvio) : null}
-                          />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="referencia" id="pushnotification-envios-referencia" value={this.state.referencia} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ultimoEnvio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
+                              <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
+                            </Label>
+                            <AvInput
+                              id="pushnotification-envios-ultimoEnvio"
+                              type="datetime-local"
+                              className="form-control"
+                              name="ultimoEnvio"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.ultimoEnvio ? convertDateTimeFromServer(this.state.ultimoEnvio) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -230,14 +217,18 @@ export class PushnotificationEnvios extends React.Component<IPushnotificationEnv
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('referencia')}>
-                        <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ultimoEnvio')}>
-                        <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'referencia' ? (
+                        <th className="hand" onClick={this.sort('referencia')}>
+                          <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ultimoEnvio' ? (
+                        <th className="hand" onClick={this.sort('ultimoEnvio')}>
+                          <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -252,27 +243,44 @@ export class PushnotificationEnvios extends React.Component<IPushnotificationEnv
                           </Button>
                         </td>
 
-                        <td>{pushnotificationEnvios.referencia}</td>
+                        {this.state.baseFilters !== 'referencia' ? <td>{pushnotificationEnvios.referencia}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={pushnotificationEnvios.ultimoEnvio} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'ultimoEnvio' ? (
+                          <td>
+                            <TextFormat type="date" value={pushnotificationEnvios.ultimoEnvio} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pushnotificationEnvios.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pushnotificationEnvios.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pushnotificationEnvios.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pushnotificationEnvios.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pushnotificationEnvios.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pushnotificationEnvios.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

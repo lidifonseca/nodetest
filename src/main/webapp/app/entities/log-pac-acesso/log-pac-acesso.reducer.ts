@@ -33,11 +33,17 @@ const initialState = {
 export type LogPacAcessoState = Readonly<typeof initialState>;
 
 export interface ILogPacAcessoBaseState {
+  baseFilters: any;
   idPaciente: any;
   profissional: any;
   token: any;
   ipLocal: any;
   inforAcesso: any;
+}
+
+export interface ILogPacAcessoUpdateState {
+  fieldsBase: ILogPacAcessoBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -83,6 +89,9 @@ export default (state: LogPacAcessoState = initialState, action): LogPacAcessoSt
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_LOGPACACESSO):
+      action.payload.data.inforAcesso = action.payload.data.inforAcesso
+        ? Buffer.from(action.payload.data.inforAcesso).toString()
+        : action.payload.data.inforAcesso;
       return {
         ...state,
         loading: false,
@@ -104,13 +113,14 @@ export default (state: LogPacAcessoState = initialState, action): LogPacAcessoSt
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -228,12 +238,13 @@ export const deleteEntity: ICrudDeleteAction<ILogPacAcesso> = id => async dispat
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -243,6 +254,7 @@ export const reset = () => ({
 
 export const getLogPacAcessoState = (location): ILogPacAcessoBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idPaciente = url.searchParams.get('idPaciente') || '';
   const profissional = url.searchParams.get('profissional') || '';
   const token = url.searchParams.get('token') || '';
@@ -250,6 +262,7 @@ export const getLogPacAcessoState = (location): ILogPacAcessoBaseState => {
   const inforAcesso = url.searchParams.get('inforAcesso') || '';
 
   return {
+    baseFilters,
     idPaciente,
     profissional,
     token,

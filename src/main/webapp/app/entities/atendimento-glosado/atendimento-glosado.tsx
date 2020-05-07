@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atendimento-glosado.reducer';
+import { getAtendimentoGlosadoState, IAtendimentoGlosadoBaseState, getEntities } from './atendimento-glosado.reducer';
 import { IAtendimentoGlosado } from 'app/shared/model/atendimento-glosado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IAtendimentoGlosadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtendimentoGlosadoBaseState {
-  idAtendimento: any;
-  glosado: any;
-  idUsuario: any;
-}
 export interface IAtendimentoGlosadoState extends IAtendimentoGlosadoBaseState, IPaginationBaseState {}
 
 export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps, IAtendimentoGlosadoState> {
@@ -43,22 +38,9 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtendimentoGlosadoState(this.props.location)
+      ...getAtendimentoGlosadoState(this.props.location)
     };
   }
-
-  getAtendimentoGlosadoState = (location): IAtendimentoGlosadoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idAtendimento = url.searchParams.get('idAtendimento') || '';
-    const glosado = url.searchParams.get('glosado') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idAtendimento,
-      glosado,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -68,8 +50,7 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
     this.setState(
       {
         idAtendimento: '',
-        glosado: '',
-        idUsuario: ''
+        glosado: ''
       },
       () => this.sortEntities()
     );
@@ -102,7 +83,9 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -120,9 +103,6 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
       'glosado=' +
       this.state.glosado +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -130,8 +110,8 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, glosado, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, glosado, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, glosado, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, glosado, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -153,7 +133,11 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atendimentoGlosado.home.createLabel">Create a new Atendimento Glosado</Translate>
@@ -166,36 +150,33 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idAtendimentoLabel" for="atendimento-glosado-idAtendimento">
-                            <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idAtendimento"
-                            id="atendimento-glosado-idAtendimento"
-                            value={this.state.idAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="glosadoLabel" for="atendimento-glosado-glosado">
-                            <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idAtendimentoLabel" for="atendimento-glosado-idAtendimento">
+                              <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idAtendimento"
+                              id="atendimento-glosado-idAtendimento"
+                              value={this.state.idAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="glosado" id="atendimento-glosado-glosado" value={this.state.glosado} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="atendimento-glosado-idUsuario">
-                            <Translate contentKey="generadorApp.atendimentoGlosado.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="idUsuario" id="atendimento-glosado-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'glosado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="glosadoLabel" for="atendimento-glosado-glosado">
+                              <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="glosado" id="atendimento-glosado-glosado" value={this.state.glosado} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -223,18 +204,18 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idAtendimento')}>
-                        <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('glosado')}>
-                        <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.atendimentoGlosado.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <th className="hand" onClick={this.sort('idAtendimento')}>
+                          <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'glosado' ? (
+                        <th className="hand" onClick={this.sort('glosado')}>
+                          <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -249,27 +230,35 @@ export class AtendimentoGlosado extends React.Component<IAtendimentoGlosadoProps
                           </Button>
                         </td>
 
-                        <td>{atendimentoGlosado.idAtendimento}</td>
+                        {this.state.baseFilters !== 'idAtendimento' ? <td>{atendimentoGlosado.idAtendimento}</td> : null}
 
-                        <td>{atendimentoGlosado.glosado}</td>
-
-                        <td>{atendimentoGlosado.idUsuario}</td>
+                        {this.state.baseFilters !== 'glosado' ? <td>{atendimentoGlosado.glosado}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atendimentoGlosado.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${atendimentoGlosado.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoGlosado.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoGlosado.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoGlosado.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoGlosado.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

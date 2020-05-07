@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
-import { getEntities as getPerguntasQuestionarios } from 'app/entities/perguntas-questionario/perguntas-questionario.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './respostas.reducer';
+import {
+  IRespostasUpdateState,
+  getEntity,
+  getRespostasState,
+  IRespostasBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './respostas.reducer';
 import { IRespostas } from 'app/shared/model/respostas.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IRespostasUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IRespostasUpdateState {
-  isNew: boolean;
-  perguntasQuestionarioIdId: string;
-}
-
 export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRespostasUpdateState> {
   constructor(props: Readonly<IRespostasUpdateProps>) {
     super(props);
+
     this.state = {
-      perguntasQuestionarioIdId: '0',
+      fieldsBase: getRespostasState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,23 @@ export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRes
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPerguntasQuestionarios();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['resposta'] ? '&resposta=' + fieldsBase['resposta'] : '') +
+      (fieldsBase['pontuacao'] ? '&pontuacao=' + fieldsBase['pontuacao'] : '') +
+      (fieldsBase['respostaAtiva'] ? '&respostaAtiva=' + fieldsBase['respostaAtiva'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { respostasEntity } = this.props;
@@ -63,13 +78,14 @@ export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRes
   };
 
   handleClose = () => {
-    this.props.history.push('/respostas');
+    this.props.history.push('/respostas?' + this.getFiltersURL());
   };
 
   render() {
-    const { respostasEntity, perguntasQuestionarios, loading, updating } = this.props;
+    const { respostasEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +101,7 @@ export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRes
             isNew
               ? {}
               : {
-                  ...respostasEntity,
-                  perguntasQuestionarioId: respostasEntity.perguntasQuestionarioId ? respostasEntity.perguntasQuestionarioId.id : null
+                  ...respostasEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -103,7 +118,14 @@ export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRes
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/respostas" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/respostas?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -118,7 +140,7 @@ export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRes
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -134,87 +156,63 @@ export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRes
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'resposta' ? (
+                          <Col md="resposta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="respostaLabel" for="respostas-resposta">
+                                    <Translate contentKey="generadorApp.respostas.resposta">Resposta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="respostas-resposta" type="text" name="resposta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="resposta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="respostaLabel" for="respostas-resposta">
-                                <Translate contentKey="generadorApp.respostas.resposta">Resposta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="respostas-resposta"
-                                type="text"
-                                name="resposta"
-                                validate={{
-                                  maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'pontuacao' ? (
+                          <Col md="pontuacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="pontuacaoLabel" for="respostas-pontuacao">
+                                    <Translate contentKey="generadorApp.respostas.pontuacao">Pontuacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="respostas-pontuacao" type="string" className="form-control" name="pontuacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="pontuacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="pontuacaoLabel" for="respostas-pontuacao">
-                                <Translate contentKey="generadorApp.respostas.pontuacao">Pontuacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="respostas-pontuacao" type="string" className="form-control" name="pontuacao" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="respostaAtivaLabel" check>
-                                <AvInput id="respostas-respostaAtiva" type="checkbox" className="form-control" name="respostaAtiva" />
-                                <Translate contentKey="generadorApp.respostas.respostaAtiva">Resposta Ativa</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="respostas-perguntasQuestionarioId">
-                                <Translate contentKey="generadorApp.respostas.perguntasQuestionarioId">Perguntas Questionario Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="respostas-perguntasQuestionarioId"
-                                type="select"
-                                className="form-control"
-                                name="perguntasQuestionarioId"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.respostas.perguntasQuestionarioId.empty')}
-                                </option>
-                                {perguntasQuestionarios
-                                  ? perguntasQuestionarios.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'respostaAtiva' ? (
+                          <Col md="respostaAtiva">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="respostaAtivaLabel" check>
+                                    <AvInput id="respostas-respostaAtiva" type="checkbox" className="form-control" name="respostaAtiva" />
+                                    <Translate contentKey="generadorApp.respostas.respostaAtiva">Resposta Ativa</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="respostaAtiva" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -227,7 +225,6 @@ export class RespostasUpdate extends React.Component<IRespostasUpdateProps, IRes
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  perguntasQuestionarios: storeState.perguntasQuestionario.entities,
   respostasEntity: storeState.respostas.entity,
   loading: storeState.respostas.loading,
   updating: storeState.respostas.updating,
@@ -235,7 +232,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPerguntasQuestionarios,
   getEntity,
   updateEntity,
   createEntity,

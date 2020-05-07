@@ -4,43 +4,36 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPad } from 'app/shared/model/pad.model';
-import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-import { IPeriodicidade } from 'app/shared/model/periodicidade.model';
-import { getEntities as getPeriodicidades } from 'app/entities/periodicidade/periodicidade.reducer';
-import { IPeriodo } from 'app/shared/model/periodo.model';
-import { getEntities as getPeriodos } from 'app/entities/periodo/periodo.reducer';
-import { getEntity, getPadItemState, IPadItemBaseState, updateEntity, createEntity, setBlob, reset } from './pad-item.reducer';
+import {
+  IPadItemUpdateState,
+  getEntity,
+  getPadItemState,
+  IPadItemBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './pad-item.reducer';
 import { IPadItem } from 'app/shared/model/pad-item.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadItemUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadItemUpdateState {
-  fieldsBase: IPadItemBaseState;
-  isNew: boolean;
-  idPadId: string;
-  idEspecialidadeId: string;
-  idPeriodicidadeId: string;
-  idPeriodoId: string;
-}
-
 export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItemUpdateState> {
+  observacaoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IPadItemUpdateProps>) {
     super(props);
+
+    this.observacaoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getPadItemState(this.props.location),
-      idPadId: '0',
-      idEspecialidadeId: '0',
-      idPeriodicidadeId: '0',
-      idPeriodoId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -56,21 +49,41 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPads();
-    this.props.getEspecialidades();
-    this.props.getPeriodicidades();
-    this.props.getPeriodos();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPedido'] ? '&idPedido=' + fieldsBase['idPedido'] : '') +
+      (fieldsBase['dataInicio'] ? '&dataInicio=' + fieldsBase['dataInicio'] : '') +
+      (fieldsBase['dataFim'] ? '&dataFim=' + fieldsBase['dataFim'] : '') +
+      (fieldsBase['qtdSessoes'] ? '&qtdSessoes=' + fieldsBase['qtdSessoes'] : '') +
+      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
+      (fieldsBase['sub'] ? '&sub=' + fieldsBase['sub'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['dataPadItemIncompleto'] ? '&dataPadItemIncompleto=' + fieldsBase['dataPadItemIncompleto'] : '') +
+      (fieldsBase['dataPadItemCompleto'] ? '&dataPadItemCompleto=' + fieldsBase['dataPadItemCompleto'] : '') +
+      (fieldsBase['numGhc'] ? '&numGhc=' + fieldsBase['numGhc'] : '') +
+      (fieldsBase['cidXPtaNovo'] ? '&cidXPtaNovo=' + fieldsBase['cidXPtaNovo'] : '') +
+      (fieldsBase['categoriaId'] ? '&categoriaId=' + fieldsBase['categoriaId'] : '') +
+      (fieldsBase['score'] ? '&score=' + fieldsBase['score'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataPadItemIncompleto = convertDateTimeToServer(values.dataPadItemIncompleto);
     values.dataPadItemCompleto = convertDateTimeToServer(values.dataPadItemCompleto);
@@ -91,15 +104,15 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-item');
+    this.props.history.push('/pad-item?' + this.getFiltersURL());
   };
 
   render() {
-    const { padItemEntity, pads, especialidades, periodicidades, periodos, loading, updating } = this.props;
+    const { padItemEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { observacao } = padItemEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -115,11 +128,7 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
             isNew
               ? {}
               : {
-                  ...padItemEntity,
-                  idPad: padItemEntity.idPad ? padItemEntity.idPad.id : null,
-                  idEspecialidade: padItemEntity.idEspecialidade ? padItemEntity.idEspecialidade.id : null,
-                  idPeriodicidade: padItemEntity.idPeriodicidade ? padItemEntity.idPeriodicidade.id : null,
-                  idPeriodo: padItemEntity.idPeriodo ? padItemEntity.idPeriodo.id : null
+                  ...padItemEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -136,7 +145,14 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/pad-item" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/pad-item?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -168,7 +184,7 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idPedido ? (
+                        {baseFilters !== 'idPedido' ? (
                           <Col md="idPedido">
                             <AvGroup>
                               <Row>
@@ -184,10 +200,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idPedido" value={this.state.fieldsBase.idPedido} />
+                          <AvInput type="hidden" name="idPedido" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataInicio ? (
+                        {baseFilters !== 'dataInicio' ? (
                           <Col md="dataInicio">
                             <AvGroup>
                               <Row>
@@ -203,10 +219,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase.dataInicio} />
+                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataFim ? (
+                        {baseFilters !== 'dataFim' ? (
                           <Col md="dataFim">
                             <AvGroup>
                               <Row>
@@ -222,10 +238,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase.dataFim} />
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.qtdSessoes ? (
+                        {baseFilters !== 'qtdSessoes' ? (
                           <Col md="qtdSessoes">
                             <AvGroup>
                               <Row>
@@ -241,10 +257,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="qtdSessoes" value={this.state.fieldsBase.qtdSessoes} />
+                          <AvInput type="hidden" name="qtdSessoes" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.observacao ? (
+                        {baseFilters !== 'observacao' ? (
                           <Col md="observacao">
                             <AvGroup>
                               <Row>
@@ -260,10 +276,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase.observacao} />
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.sub ? (
+                        {baseFilters !== 'sub' ? (
                           <Col md="sub">
                             <AvGroup>
                               <Row>
@@ -279,10 +295,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="sub" value={this.state.fieldsBase.sub} />
+                          <AvInput type="hidden" name="sub" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -298,10 +314,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataPadItemIncompleto ? (
+                        {baseFilters !== 'dataPadItemIncompleto' ? (
                           <Col md="dataPadItemIncompleto">
                             <AvGroup>
                               <Row>
@@ -324,10 +340,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataPadItemIncompleto" value={this.state.fieldsBase.dataPadItemIncompleto} />
+                          <AvInput type="hidden" name="dataPadItemIncompleto" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataPadItemCompleto ? (
+                        {baseFilters !== 'dataPadItemCompleto' ? (
                           <Col md="dataPadItemCompleto">
                             <AvGroup>
                               <Row>
@@ -350,10 +366,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataPadItemCompleto" value={this.state.fieldsBase.dataPadItemCompleto} />
+                          <AvInput type="hidden" name="dataPadItemCompleto" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.numGhc ? (
+                        {baseFilters !== 'numGhc' ? (
                           <Col md="numGhc">
                             <AvGroup>
                               <Row>
@@ -369,10 +385,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="numGhc" value={this.state.fieldsBase.numGhc} />
+                          <AvInput type="hidden" name="numGhc" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.cidXPtaNovo ? (
+                        {baseFilters !== 'cidXPtaNovo' ? (
                           <Col md="cidXPtaNovo">
                             <AvGroup>
                               <Row>
@@ -388,10 +404,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase.cidXPtaNovo} />
+                          <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.categoriaId ? (
+                        {baseFilters !== 'categoriaId' ? (
                           <Col md="categoriaId">
                             <AvGroup>
                               <Row>
@@ -407,10 +423,10 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="categoriaId" value={this.state.fieldsBase.categoriaId} />
+                          <AvInput type="hidden" name="categoriaId" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.score ? (
+                        {baseFilters !== 'score' ? (
                           <Col md="score">
                             <AvGroup>
                               <Row>
@@ -426,158 +442,7 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="score" value={this.state.fieldsBase.score} />
-                        )}
-                        {!this.state.fieldsBase.atendimento ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase.atendimento} />
-                        )}
-                        {!this.state.fieldsBase.atendimentoCepRecusado ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="atendimentoCepRecusado" value={this.state.fieldsBase.atendimentoCepRecusado} />
-                        )}
-                        {!this.state.fieldsBase.atendimentoSorteioFeito ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="atendimentoSorteioFeito" value={this.state.fieldsBase.atendimentoSorteioFeito} />
-                        )}
-                        {!this.state.fieldsBase.padItemAtividade ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="padItemAtividade" value={this.state.fieldsBase.padItemAtividade} />
-                        )}
-                        {!this.state.fieldsBase.padItemCepRecusado ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="padItemCepRecusado" value={this.state.fieldsBase.padItemCepRecusado} />
-                        )}
-                        {!this.state.fieldsBase.padItemResultado ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="padItemResultado" value={this.state.fieldsBase.padItemResultado} />
-                        )}
-                        {!this.state.fieldsBase.padItemSorteioFeito ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="padItemSorteioFeito" value={this.state.fieldsBase.padItemSorteioFeito} />
-                        )}
-                        {!this.state.fieldsBase.idPad ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="pad-item-idPad">
-                                    <Translate contentKey="generadorApp.padItem.idPad">Id Pad</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="pad-item-idPad" type="select" className="form-control" name="idPad">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.padItem.idPad.empty')}
-                                    </option>
-                                    {pads
-                                      ? pads.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPad" value={this.state.fieldsBase.idPad} />
-                        )}
-                        {!this.state.fieldsBase.idEspecialidade ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="pad-item-idEspecialidade">
-                                    <Translate contentKey="generadorApp.padItem.idEspecialidade">Id Especialidade</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="pad-item-idEspecialidade" type="select" className="form-control" name="idEspecialidade">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.padItem.idEspecialidade.empty')}
-                                    </option>
-                                    {especialidades
-                                      ? especialidades.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase.idEspecialidade} />
-                        )}
-                        {!this.state.fieldsBase.idPeriodicidade ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="pad-item-idPeriodicidade">
-                                    <Translate contentKey="generadorApp.padItem.idPeriodicidade">Id Periodicidade</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="pad-item-idPeriodicidade" type="select" className="form-control" name="idPeriodicidade">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.padItem.idPeriodicidade.empty')}
-                                    </option>
-                                    {periodicidades
-                                      ? periodicidades.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPeriodicidade" value={this.state.fieldsBase.idPeriodicidade} />
-                        )}
-                        {!this.state.fieldsBase.idPeriodo ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="pad-item-idPeriodo">
-                                    <Translate contentKey="generadorApp.padItem.idPeriodo">Id Periodo</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="pad-item-idPeriodo" type="select" className="form-control" name="idPeriodo">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.padItem.idPeriodo.empty')}
-                                    </option>
-                                    {periodos
-                                      ? periodos.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPeriodo" value={this.state.fieldsBase.idPeriodo} />
+                          <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>
@@ -593,10 +458,6 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  pads: storeState.pad.entities,
-  especialidades: storeState.especialidade.entities,
-  periodicidades: storeState.periodicidade.entities,
-  periodos: storeState.periodo.entities,
   padItemEntity: storeState.padItem.entity,
   loading: storeState.padItem.loading,
   updating: storeState.padItem.updating,
@@ -604,10 +465,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPads,
-  getEspecialidades,
-  getPeriodicidades,
-  getPeriodos,
   getEntity,
   updateEntity,
   setBlob,

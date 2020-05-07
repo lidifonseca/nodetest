@@ -68,7 +68,9 @@ export class UsuarioPainelGerencialController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() usuarioPainelGerencial: UsuarioPainelGerencial): Promise<UsuarioPainelGerencial> {
+    console.info(usuarioPainelGerencial);
     const created = await this.usuarioPainelGerencialService.save(usuarioPainelGerencial);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UsuarioPainelGerencial', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class UsuarioPainelGerencialController {
   })
   async put(@Req() req: Request, @Body() usuarioPainelGerencial: UsuarioPainelGerencial): Promise<UsuarioPainelGerencial> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UsuarioPainelGerencial', usuarioPainelGerencial.id);
+
     return await this.usuarioPainelGerencialService.update(usuarioPainelGerencial);
   }
 

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalArquivo, defaultValue } from 'app/shared/model/profissional-arquivo.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALARQUIVO_LIST_EXPORT: 'profissionalArquivo/FETCH_PROFISSIONALARQUIVO_LIST_EXPORT',
   FETCH_PROFISSIONALARQUIVO_LIST: 'profissionalArquivo/FETCH_PROFISSIONALARQUIVO_LIST',
   FETCH_PROFISSIONALARQUIVO: 'profissionalArquivo/FETCH_PROFISSIONALARQUIVO',
   CREATE_PROFISSIONALARQUIVO: 'profissionalArquivo/CREATE_PROFISSIONALARQUIVO',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type ProfissionalArquivoState = Readonly<typeof initialState>;
 
+export interface IProfissionalArquivoBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  arquivo: any;
+  ativo: any;
+}
+
+export interface IProfissionalArquivoUpdateState {
+  fieldsBase: IProfissionalArquivoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalArquivoState = initialState, action): ProfissionalArquivoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALARQUIVO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALARQUIVO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALARQUIVO):
       return {
@@ -51,6 +65,7 @@ export default (state: ProfissionalArquivoState = initialState, action): Profiss
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALARQUIVO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALARQUIVO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALARQUIVO):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALARQUIVO):
@@ -142,6 +157,27 @@ export const getEntity: ICrudGetAction<IProfissionalArquivo> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalArquivo<IProfissionalArquivo> = (
+  idProfissional,
+  arquivo,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const arquivoRequest = arquivo ? `arquivo.contains=${arquivo}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALARQUIVO_LIST,
+    payload: axios.get<IProfissionalArquivo>(
+      `${requestUrl}${idProfissionalRequest}${arquivoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalArquivo> = entity => async dispatch => {
   entity = {
     ...entity
@@ -177,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalArquivo> = id => async
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalArquivoState = (location): IProfissionalArquivoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const arquivo = url.searchParams.get('arquivo') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    arquivo,
+    ativo
+  };
+};

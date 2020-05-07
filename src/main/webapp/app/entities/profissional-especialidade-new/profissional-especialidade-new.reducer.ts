@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalEspecialidadeNew, defaultValue } from 'app/shared/model/profissional-especialidade-new.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALESPECIALIDADENEW_LIST_EXPORT: 'profissionalEspecialidadeNew/FETCH_PROFISSIONALESPECIALIDADENEW_LIST_EXPORT',
   FETCH_PROFISSIONALESPECIALIDADENEW_LIST: 'profissionalEspecialidadeNew/FETCH_PROFISSIONALESPECIALIDADENEW_LIST',
   FETCH_PROFISSIONALESPECIALIDADENEW: 'profissionalEspecialidadeNew/FETCH_PROFISSIONALESPECIALIDADENEW',
   CREATE_PROFISSIONALESPECIALIDADENEW: 'profissionalEspecialidadeNew/CREATE_PROFISSIONALESPECIALIDADENEW',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type ProfissionalEspecialidadeNewState = Readonly<typeof initialState>;
 
+export interface IProfissionalEspecialidadeNewBaseState {
+  baseFilters: any;
+  idEspecialidade: any;
+  idProfissional: any;
+}
+
+export interface IProfissionalEspecialidadeNewUpdateState {
+  fieldsBase: IProfissionalEspecialidadeNewBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalEspecialidadeNewState = initialState, action): ProfissionalEspecialidadeNewState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW):
       return {
@@ -51,6 +64,7 @@ export default (state: ProfissionalEspecialidadeNewState = initialState, action)
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALESPECIALIDADENEW):
@@ -139,6 +153,25 @@ export const getEntity: ICrudGetAction<IProfissionalEspecialidadeNew> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalEspecialidadeNew<IProfissionalEspecialidadeNew> = (
+  idEspecialidade,
+  idProfissional,
+  page,
+  size,
+  sort
+) => {
+  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.contains=${idEspecialidade}&` : '';
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALESPECIALIDADENEW_LIST,
+    payload: axios.get<IProfissionalEspecialidadeNew>(
+      `${requestUrl}${idEspecialidadeRequest}${idProfissionalRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalEspecialidadeNew> = entity => async dispatch => {
   entity = {
     ...entity
@@ -174,3 +207,16 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalEspecialidadeNew> = id
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalEspecialidadeNewState = (location): IProfissionalEspecialidadeNewBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+
+  return {
+    baseFilters,
+    idEspecialidade,
+    idProfissional
+  };
+};

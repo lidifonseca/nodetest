@@ -3,15 +3,15 @@
     "pacienteDadosCartao": {
       "home": {
         "title": "Paciente Dados Cartaos",
-        "createLabel": "Criar novo Paciente Dados Cartao",
-        "createOrEditLabel": "Criar ou editar Paciente Dados Cartao",
-        "notFound": "Nenhum Paciente Dados Cartao encontrado"
+        "createLabel": "Create a new Paciente Dados Cartao",
+        "createOrEditLabel": "Create or edit a Paciente Dados Cartao",
+        "notFound": "No Paciente Dados Cartaos found"
       },
-      "created": "Um novo Paciente Dados Cartao foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Dados Cartao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Dados Cartao foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Dados Cartao is created with identifier {{ param }}",
+      "updated": "A Paciente Dados Cartao is updated with identifier {{ param }}",
+      "deleted": "A Paciente Dados Cartao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Dados Cartao {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Dados Cartao {{ id }}?"
       },
       "detail": {
         "title": "Paciente Dados Cartao"
@@ -20,9 +20,7 @@
       "numeroCartao": "Numero Cartao",
       "validade": "Validade",
       "codAtivacao": "Cod Ativacao",
-      "ativo": "Ativo",
-      "pacientePedido": "Paciente Pedido",
-      "idPaciente": "Id Paciente"
+      "ativo": "Ativo"
     }
   }
 }

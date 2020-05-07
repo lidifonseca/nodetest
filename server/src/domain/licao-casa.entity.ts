@@ -7,54 +7,54 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A LicaoCasa.
  */
-@Entity('licao_casa')
+@Entity('tb_licao_casa')
 export default class LicaoCasa extends BaseEntity {
-  @Column({ type: 'integer', name: 'atendimento_id', nullable: false })
+  @Column({ type: 'integer', name: 'ATENDIMENTO_ID', nullable: false })
   atendimentoId: number;
 
-  @Column({ type: 'integer', name: 'paciente_id', nullable: false })
+  @Column({ type: 'integer', name: 'PACIENTE_ID', nullable: false })
   pacienteId: number;
 
-  @Column({ type: 'integer', name: 'profissional_id', nullable: false })
+  @Column({ type: 'integer', name: 'PROFISSIONAL_ID', nullable: false })
   profissionalId: number;
 
-  @Column({ name: 'atividade', length: 100, nullable: false })
+  @Column({ name: 'ATIVIDADE', length: 100, nullable: false })
   atividade: string;
 
-  @Column({ type: 'timestamp', name: 'hora_inicio' })
+  @Column({ type: 'timestamp', name: 'HORA_INICIO' })
   horaInicio: any;
 
-  @Column({ type: 'boolean', name: 'repeticao_horas', nullable: false })
+  @Column({ type: 'boolean', name: 'REPETICAO_HORAS', nullable: false })
   repeticaoHoras: boolean;
 
-  @Column({ type: 'boolean', name: 'qtd_dias', nullable: false })
+  @Column({ type: 'boolean', name: 'QTD_DIAS', nullable: false })
   qtdDias: boolean;
 
-  @Column({ type: 'boolean', name: 'intervalo_dias', nullable: false })
+  @Column({ type: 'boolean', name: 'INTERVALO_DIAS', nullable: false })
   intervaloDias: boolean;
 
-  @Column({ type: 'timestamp', name: 'criado_em' })
+  @Column({ type: 'timestamp', name: 'CRIADO_EM' })
   criadoEm: any;
 
-  @Column({ type: 'timestamp', name: 'concluida_em' })
+  @Column({ type: 'timestamp', name: 'CONCLUIDA_EM' })
   concluidaEm: any;
 
-  @Column({ type: 'boolean', name: 'ativo', nullable: false })
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
   ativo: boolean;
 
-  @Column({ type: 'integer', name: 'ativ' })
+  @Column({ type: 'integer', name: 'ATIV' })
   ativ: number;
 
-  @Column({ name: 'forma', length: 3 })
+  @Column({ name: 'FORMA', length: 3 })
   forma: string;
 
-  @Column({ name: 'enviar_para', length: 2 })
+  @Column({ name: 'ENVIAR_PARA', length: 2 })
   enviarPara: string;
 
-  @Column({ name: 'notificar_familiar', length: 1 })
+  @Column({ name: 'NOTIFICAR_FAMILIAR', length: 1 })
   notificarFamiliar: string;
 
-  @Column({ name: 'replicar_atividade', length: 1 })
+  @Column({ name: 'REPLICAR_ATIVIDADE', length: 1 })
   replicarAtividade: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

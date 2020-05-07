@@ -3,15 +3,15 @@
     "modulosPad": {
       "home": {
         "title": "Modulos Pads",
-        "createLabel": "Criar novo Modulos Pad",
-        "createOrEditLabel": "Criar ou editar Modulos Pad",
-        "notFound": "Nenhum Modulos Pad encontrado"
+        "createLabel": "Create a new Modulos Pad",
+        "createOrEditLabel": "Create or edit a Modulos Pad",
+        "notFound": "No Modulos Pads found"
       },
-      "created": "Um novo Modulos Pad foi criado com o identificador {{ param }}",
-      "updated": "Um Modulos Pad foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Modulos Pad foi excluído com o identificador {{ param }}",
+      "created": "A new Modulos Pad is created with identifier {{ param }}",
+      "updated": "A Modulos Pad is updated with identifier {{ param }}",
+      "deleted": "A Modulos Pad is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Modulos Pad {{ id }}?"
+        "question": "Are you sure you want to delete Modulos Pad {{ id }}?"
       },
       "detail": {
         "title": "Modulos Pad"

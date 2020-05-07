@@ -41,71 +41,14 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimento",
-            "otherEntityRelationshipName": "idEspecialidade",
-            "relationshipName": "atendimento"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "especialidadeOperadora",
-            "otherEntityRelationshipName": "idEspecialidade",
-            "relationshipName": "especialidadeOperadora"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "especialidadeUnidade",
-            "otherEntityRelationshipName": "idEspecialidade",
-            "relationshipName": "especialidadeUnidade"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "especialidadeValor",
-            "otherEntityRelationshipName": "idEspecialidade",
-            "relationshipName": "especialidadeValor"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "pacientePedido",
-            "otherEntityRelationshipName": "idEspecialidade",
-            "relationshipName": "pacientePedido"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItem",
-            "otherEntityRelationshipName": "idEspecialidade",
-            "relationshipName": "padItem"
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "especialidade",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "categoria",
-            "otherEntityRelationshipName": "especialidade",
-            "relationshipName": "idCategoria",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "tipoEspecialidade",
-            "otherEntityRelationshipName": "especialidade",
-            "relationshipName": "idTipoEspecialidade",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "tipoUnidade",
-            "otherEntityRelationshipName": "especialidade",
-            "relationshipName": "idTipoUnidade",
-            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200502232400",
+    "changelogDate": "20200507105700",
     "entityTableName": "especialidade",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -3,15 +3,15 @@
     "atendimento": {
       "home": {
         "title": "Atendimentos",
-        "createLabel": "Criar novo Atendimento",
-        "createOrEditLabel": "Criar ou editar Atendimento",
-        "notFound": "Nenhum Atendimento encontrado"
+        "createLabel": "Create a new Atendimento",
+        "createOrEditLabel": "Create or edit a Atendimento",
+        "notFound": "No Atendimentos found"
       },
-      "created": "Um novo Atendimento foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento is created with identifier {{ param }}",
+      "updated": "A Atendimento is updated with identifier {{ param }}",
+      "deleted": "A Atendimento is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento {{ id }}?"
       },
       "detail": {
         "title": "Atendimento"
@@ -51,17 +51,7 @@
       "confidencialProfissional": "Confidencial Profissional",
       "confidencialPaciente": "Confidencial Paciente",
       "imagemAssinatura": "Imagem Assinatura",
-      "atendimentoAceite": "Atendimento Aceite",
-      "atendimentoAssinaturas": "Atendimento Assinaturas",
-      "atendimentoAtividades": "Atendimento Atividades",
-      "unidade": "Unidade",
-      "idPaciente": "Id Paciente",
-      "idOperadora": "Id Operadora",
-      "idEspecialidade": "Id Especialidade",
-      "idPadItem": "Id Pad Item",
-      "idStatusAtendimento": "Id Status Atendimento",
-      "idPeriodo": "Id Periodo",
-      "idCidade": "Id Cidade"
+      "unidade": "Unidade"
     }
   }
 }

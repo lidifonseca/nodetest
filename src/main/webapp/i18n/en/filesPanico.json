@@ -3,15 +3,15 @@
     "filesPanico": {
       "home": {
         "title": "Files Panicos",
-        "createLabel": "Criar novo Files Panico",
-        "createOrEditLabel": "Criar ou editar Files Panico",
-        "notFound": "Nenhum Files Panico encontrado"
+        "createLabel": "Create a new Files Panico",
+        "createOrEditLabel": "Create or edit a Files Panico",
+        "notFound": "No Files Panicos found"
       },
-      "created": "Um novo Files Panico foi criado com o identificador {{ param }}",
-      "updated": "Um Files Panico foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Files Panico foi excluído com o identificador {{ param }}",
+      "created": "A new Files Panico is created with identifier {{ param }}",
+      "updated": "A Files Panico is updated with identifier {{ param }}",
+      "deleted": "A Files Panico is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Files Panico {{ id }}?"
+        "question": "Are you sure you want to delete Files Panico {{ id }}?"
       },
       "detail": {
         "title": "Files Panico"

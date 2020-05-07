@@ -68,7 +68,9 @@ export class CidXPtaNovoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() cidXPtaNovo: CidXPtaNovo): Promise<CidXPtaNovo> {
+    console.info(cidXPtaNovo);
     const created = await this.cidXPtaNovoService.save(cidXPtaNovo);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CidXPtaNovo', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class CidXPtaNovoController {
   })
   async put(@Req() req: Request, @Body() cidXPtaNovo: CidXPtaNovo): Promise<CidXPtaNovo> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CidXPtaNovo', cidXPtaNovo.id);
+
     return await this.cidXPtaNovoService.update(cidXPtaNovo);
   }
 

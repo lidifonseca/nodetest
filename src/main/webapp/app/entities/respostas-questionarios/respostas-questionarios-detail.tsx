@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './respostas-questionarios.reducer';
+import { getEntity, IRespostasQuestionariosBaseState, getRespostasQuestionariosState } from './respostas-questionarios.reducer';
 import { IRespostasQuestionarios } from 'app/shared/model/respostas-questionarios.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IRespostasQuestionariosState {
+  fieldsBase: IRespostasQuestionariosBaseState;
+}
+
 export interface IRespostasQuestionariosDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class RespostasQuestionariosDetail extends React.Component<IRespostasQuestionariosDetailProps> {
+export class RespostasQuestionariosDetail extends React.Component<IRespostasQuestionariosDetailProps, IRespostasQuestionariosState> {
   constructor(props: Readonly<IRespostasQuestionariosDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getRespostasQuestionariosState(this.props.location)
     };
   }
 
@@ -94,19 +99,6 @@ export class RespostasQuestionariosDetail extends React.Component<IRespostasQues
                       </Col>
                       <Col md="9">
                         <dd>{respostasQuestionariosEntity.questionarioId}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.respostasQuestionarios.questionariosId">Questionarios Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{respostasQuestionariosEntity.questionariosId ? respostasQuestionariosEntity.questionariosId.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

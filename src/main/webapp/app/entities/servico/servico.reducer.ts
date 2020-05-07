@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IServico, defaultValue } from 'app/shared/model/servico.model';
 
 export const ACTION_TYPES = {
+  FETCH_SERVICO_LIST_EXPORT: 'servico/FETCH_SERVICO_LIST_EXPORT',
   FETCH_SERVICO_LIST: 'servico/FETCH_SERVICO_LIST',
   FETCH_SERVICO: 'servico/FETCH_SERVICO',
   CREATE_SERVICO: 'servico/CREATE_SERVICO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type ServicoState = Readonly<typeof initialState>;
 
+export interface IServicoBaseState {
+  baseFilters: any;
+  servico: any;
+  styleLabel: any;
+}
+
+export interface IServicoUpdateState {
+  fieldsBase: IServicoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ServicoState = initialState, action): ServicoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_SERVICO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_SERVICO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_SERVICO):
       return {
@@ -51,6 +64,7 @@ export default (state: ServicoState = initialState, action): ServicoState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_SERVICO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_SERVICO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_SERVICO):
     case FAILURE(ACTION_TYPES.CREATE_SERVICO):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IServico> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionServico<IServico> = (servico, styleLabel, page, size, sort) => {
+  const servicoRequest = servico ? `servico.contains=${servico}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_SERVICO_LIST,
+    payload: axios.get<IServico>(`${requestUrl}${servicoRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IServico> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IServico> = id => async dispatch =>
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getServicoState = (location): IServicoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const servico = url.searchParams.get('servico') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+
+  return {
+    baseFilters,
+    servico,
+    styleLabel
+  };
+};

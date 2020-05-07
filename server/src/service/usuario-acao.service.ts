@@ -5,8 +5,6 @@ import UsuarioAcao from '../domain/usuario-acao.entity';
 import { UsuarioAcaoRepository } from '../repository/usuario-acao.repository';
 
 const relationshipNames = [];
-relationshipNames.push('idTela');
-relationshipNames.push('idAcao');
 
 @Injectable()
 export class UsuarioAcaoService {

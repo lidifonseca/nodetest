@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -35,11 +26,6 @@ import { getUsuarioAcaoState, IUsuarioAcaoBaseState, getEntities } from './usuar
 import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-
-import { ITela } from 'app/shared/model/tela.model';
-import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
-import { IAcao } from 'app/shared/model/acao.model';
-import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
 
 export interface IUsuarioAcaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -58,19 +44,13 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getTelas();
-    this.props.getAcaos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUsuario: '',
         idAtendimento: '',
-        descricao: '',
-        idTela: '',
-        idAcao: ''
+        descricao: ''
       },
       () => this.sortEntities()
     );
@@ -103,7 +83,9 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -115,20 +97,11 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
       ',' +
       this.state.order +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'idAtendimento=' +
       this.state.idAtendimento +
       '&' +
       'descricao=' +
       this.state.descricao +
-      '&' +
-      'idTela=' +
-      this.state.idTela +
-      '&' +
-      'idAcao=' +
-      this.state.idAcao +
       '&' +
       ''
     );
@@ -137,12 +110,12 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, idAtendimento, descricao, idTela, idAcao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idUsuario, idAtendimento, descricao, idTela, idAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, descricao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { telas, acaos, usuarioAcaoList, match, totalItems } = this.props;
+    const { usuarioAcaoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -160,7 +133,11 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.usuarioAcao.home.createLabel">Create a new Usuario Acao</Translate>
@@ -173,71 +150,27 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="usuario-acao-idUsuario">
-                            <Translate contentKey="generadorApp.usuarioAcao.idUsuario">Id Usuario</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUsuario" id="usuario-acao-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idAtendimentoLabel" for="usuario-acao-idAtendimento">
-                            <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
-                          </Label>
-                          <AvInput type="string" name="idAtendimento" id="usuario-acao-idAtendimento" value={this.state.idAtendimento} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descricaoLabel" for="usuario-acao-descricao">
-                            <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
-                          </Label>
-                          <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="usuario-acao-idTela">
-                              <Translate contentKey="generadorApp.usuarioAcao.idTela">Id Tela</Translate>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idAtendimentoLabel" for="usuario-acao-idAtendimento">
+                              <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
                             </Label>
-                            <AvInput id="usuario-acao-idTela" type="select" className="form-control" name="idTelaId">
-                              <option value="" key="0" />
-                              {telas
-                                ? telas.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="idAtendimento" id="usuario-acao-idAtendimento" value={this.state.idAtendimento} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="usuario-acao-idAcao">
-                              <Translate contentKey="generadorApp.usuarioAcao.idAcao">Id Acao</Translate>
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descricaoLabel" for="usuario-acao-descricao">
+                              <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
                             </Label>
-                            <AvInput id="usuario-acao-idAcao" type="select" className="form-control" name="idAcaoId">
-                              <option value="" key="0" />
-                              {acaos
-                                ? acaos.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -265,26 +198,18 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.usuarioAcao.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idAtendimento')}>
-                        <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descricao')}>
-                        <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.usuarioAcao.idTela">Id Tela</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.usuarioAcao.idAcao">Id Acao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <th className="hand" onClick={this.sort('idAtendimento')}>
+                          <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <th className="hand" onClick={this.sort('descricao')}>
+                          <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -299,16 +224,38 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
                           </Button>
                         </td>
 
-                        <td>{usuarioAcao.idUsuario}</td>
+                        {this.state.baseFilters !== 'idAtendimento' ? <td>{usuarioAcao.idAtendimento}</td> : null}
 
-                        <td>{usuarioAcao.idAtendimento}</td>
-
-                        <td>{usuarioAcao.descricao}</td>
-                        <td>{usuarioAcao.idTela ? <Link to={`tela/${usuarioAcao.idTela.id}`}>{usuarioAcao.idTela.id}</Link> : ''}</td>
-                        <td>{usuarioAcao.idAcao ? <Link to={`acao/${usuarioAcao.idAcao.id}`}>{usuarioAcao.idAcao.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'descricao' ? (
+                          <td>{usuarioAcao.descricao ? Buffer.from(usuarioAcao.descricao).toString() : null}</td>
+                        ) : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${usuarioAcao.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${usuarioAcao.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${usuarioAcao.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -344,15 +291,11 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 }
 
 const mapStateToProps = ({ usuarioAcao, ...storeState }: IRootState) => ({
-  telas: storeState.tela.entities,
-  acaos: storeState.acao.entities,
   usuarioAcaoList: usuarioAcao.entities,
   totalItems: usuarioAcao.totalItems
 });
 
 const mapDispatchToProps = {
-  getTelas,
-  getAcaos,
   getEntities
 };
 

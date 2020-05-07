@@ -1,13 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Like, Equal } from 'typeorm';
 import CidXPtaNovoPadItemIndi from '../domain/cid-x-pta-novo-pad-item-indi.entity';
 import { CidXPtaNovoPadItemIndiRepository } from '../repository/cid-x-pta-novo-pad-item-indi.repository';
 
 const relationshipNames = [];
-relationshipNames.push('padItemIndicadoresId');
-relationshipNames.push('categoriasId');
-relationshipNames.push('cidXPtaNovoId');
 
 @Injectable()
 export class CidXPtaNovoPadItemIndiService {
@@ -31,20 +28,14 @@ export class CidXPtaNovoPadItemIndiService {
     filters?: Array<{ column: string; value: string; operation: string }>[]
   ): Promise<[CidXPtaNovoPadItemIndi[], number]> {
     options.relations = relationshipNames;
-    let where = '';
-    let first = true;
+    let where = {};
     for (const i in filters) {
       if (filters.hasOwnProperty(i)) {
         const element = filters[i];
-        if (!first) {
-          where += 'and';
-        } else {
-          first = false;
-        }
         if (element['operation'] === 'contains') {
-          where += ' `CidXPtaNovoPadItemIndi`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+          where[element['column']] = Like('%' + element['value'] + '%');
         } else if (element['operation'] === 'equals') {
-          where += ' `CidXPtaNovoPadItemIndi`.`' + element['column'] + '` = "' + element['value'] + '" ';
+          where[element['column']] = Equal(element['value']);
         }
       }
     }

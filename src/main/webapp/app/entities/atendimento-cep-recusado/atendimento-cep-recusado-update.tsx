@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './atendimento-cep-recusado.reducer';
+import {
+  IAtendimentoCepRecusadoUpdateState,
+  getEntity,
+  getAtendimentoCepRecusadoState,
+  IAtendimentoCepRecusadoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './atendimento-cep-recusado.reducer';
 import { IAtendimentoCepRecusado } from 'app/shared/model/atendimento-cep-recusado.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAtendimentoCepRecusadoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IAtendimentoCepRecusadoUpdateState {
-  isNew: boolean;
-  idPadItemId: string;
-}
-
 export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCepRecusadoUpdateProps, IAtendimentoCepRecusadoUpdateState> {
   constructor(props: Readonly<IAtendimentoCepRecusadoUpdateProps>) {
     super(props);
+
     this.state = {
-      idPadItemId: '0',
+      fieldsBase: getAtendimentoCepRecusadoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,21 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPadItems();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['cep'] ? '&cep=' + fieldsBase['cep'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { atendimentoCepRecusadoEntity } = this.props;
@@ -63,13 +76,14 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
   };
 
   handleClose = () => {
-    this.props.history.push('/atendimento-cep-recusado');
+    this.props.history.push('/atendimento-cep-recusado?' + this.getFiltersURL());
   };
 
   render() {
-    const { atendimentoCepRecusadoEntity, padItems, loading, updating } = this.props;
+    const { atendimentoCepRecusadoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +99,7 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
             isNew
               ? {}
               : {
-                  ...atendimentoCepRecusadoEntity,
-                  idPadItem: atendimentoCepRecusadoEntity.idPadItem ? atendimentoCepRecusadoEntity.idPadItem.id : null
+                  ...atendimentoCepRecusadoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -108,7 +121,7 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/atendimento-cep-recusado"
+                  to={'/atendimento-cep-recusado?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -127,7 +140,7 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -150,55 +163,27 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepLabel" for="atendimento-cep-recusado-cep">
-                                <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-cep-recusado-cep"
-                                type="text"
-                                name="cep"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-cep-recusado-idPadItem">
-                                <Translate contentKey="generadorApp.atendimentoCepRecusado.idPadItem">Id Pad Item</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="atendimento-cep-recusado-idPadItem" type="select" className="form-control" name="idPadItem">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoCepRecusado.idPadItem.empty')}
-                                </option>
-                                {padItems
-                                  ? padItems.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'cep' ? (
+                          <Col md="cep">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepLabel" for="atendimento-cep-recusado-cep">
+                                    <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-cep-recusado-cep" type="text" name="cep" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cep" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -211,7 +196,6 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  padItems: storeState.padItem.entities,
   atendimentoCepRecusadoEntity: storeState.atendimentoCepRecusado.entity,
   loading: storeState.atendimentoCepRecusado.loading,
   updating: storeState.atendimentoCepRecusado.updating,
@@ -219,7 +203,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntity,
   updateEntity,
   createEntity,

@@ -22,30 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './especialidade-operadora.reducer';
+import { getEspecialidadeOperadoraState, IEspecialidadeOperadoraBaseState, getEntities } from './especialidade-operadora.reducer';
 import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IOperadora } from 'app/shared/model/operadora.model';
-import { getEntities as getOperadoras } from 'app/entities/operadora/operadora.reducer';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-
 export interface IEspecialidadeOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IEspecialidadeOperadoraBaseState {
-  codTuss: any;
-  codDespesa: any;
-  codTabela: any;
-  valorCusto: any;
-  valorVenda: any;
-  descontoCusto: any;
-  descontoVenda: any;
-  ativo: any;
-  idOperadora: any;
-  idEspecialidade: any;
-}
 export interface IEspecialidadeOperadoraState extends IEspecialidadeOperadoraBaseState, IPaginationBaseState {}
 
 export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperadoraProps, IEspecialidadeOperadoraState> {
@@ -55,43 +38,12 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getEspecialidadeOperadoraState(this.props.location)
+      ...getEspecialidadeOperadoraState(this.props.location)
     };
   }
 
-  getEspecialidadeOperadoraState = (location): IEspecialidadeOperadoraBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const codTuss = url.searchParams.get('codTuss') || '';
-    const codDespesa = url.searchParams.get('codDespesa') || '';
-    const codTabela = url.searchParams.get('codTabela') || '';
-    const valorCusto = url.searchParams.get('valorCusto') || '';
-    const valorVenda = url.searchParams.get('valorVenda') || '';
-    const descontoCusto = url.searchParams.get('descontoCusto') || '';
-    const descontoVenda = url.searchParams.get('descontoVenda') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idOperadora = url.searchParams.get('idOperadora') || '';
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-
-    return {
-      codTuss,
-      codDespesa,
-      codTabela,
-      valorCusto,
-      valorVenda,
-      descontoCusto,
-      descontoVenda,
-      ativo,
-      idOperadora,
-      idEspecialidade
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getOperadoras();
-    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -104,9 +56,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
         valorVenda: '',
         descontoCusto: '',
         descontoVenda: '',
-        ativo: '',
-        idOperadora: '',
-        idEspecialidade: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -139,7 +89,9 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -175,12 +127,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idOperadora=' +
-      this.state.idOperadora +
-      '&' +
-      'idEspecialidade=' +
-      this.state.idEspecialidade +
-      '&' +
       ''
     );
   };
@@ -197,8 +143,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
-      idOperadora,
-      idEspecialidade,
       activePage,
       itemsPerPage,
       sort,
@@ -213,8 +157,6 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
       descontoCusto,
       descontoVenda,
       ativo,
-      idOperadora,
-      idEspecialidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -222,7 +164,7 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
   };
 
   render() {
-    const { operadoras, especialidades, especialidadeOperadoraList, match, totalItems } = this.props;
+    const { especialidadeOperadoraList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -240,7 +182,11 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.especialidadeOperadora.home.createLabel">
@@ -255,128 +201,116 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="codTussLabel" for="especialidade-operadora-codTuss">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="codTuss" id="especialidade-operadora-codTuss" value={this.state.codTuss} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="codDespesaLabel" for="especialidade-operadora-codDespesa">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="codDespesa" id="especialidade-operadora-codDespesa" value={this.state.codDespesa} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="codTabelaLabel" for="especialidade-operadora-codTabela">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="codTabela" id="especialidade-operadora-codTabela" value={this.state.codTabela} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorCustoLabel" for="especialidade-operadora-valorCusto">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
-                          </Label>
-                          <AvInput type="string" name="valorCusto" id="especialidade-operadora-valorCusto" value={this.state.valorCusto} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorVendaLabel" for="especialidade-operadora-valorVenda">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
-                          </Label>
-                          <AvInput type="string" name="valorVenda" id="especialidade-operadora-valorVenda" value={this.state.valorVenda} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="descontoCusto"
-                            id="especialidade-operadora-descontoCusto"
-                            value={this.state.descontoCusto}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="descontoVenda"
-                            id="especialidade-operadora-descontoVenda"
-                            value={this.state.descontoVenda}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="especialidade-operadora-ativo">
-                            <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="especialidade-operadora-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-operadora-idOperadora">
-                              <Translate contentKey="generadorApp.especialidadeOperadora.idOperadora">Id Operadora</Translate>
+                      {this.state.baseFilters !== 'codTuss' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codTussLabel" for="especialidade-operadora-codTuss">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
                             </Label>
-                            <AvInput id="especialidade-operadora-idOperadora" type="select" className="form-control" name="idOperadoraId">
-                              <option value="" key="0" />
-                              {operadoras
-                                ? operadoras.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-operadora-idEspecialidade">
-                              <Translate contentKey="generadorApp.especialidadeOperadora.idEspecialidade">Id Especialidade</Translate>
+                            <AvInput type="text" name="codTuss" id="especialidade-operadora-codTuss" value={this.state.codTuss} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'codDespesa' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codDespesaLabel" for="especialidade-operadora-codDespesa">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="codDespesa" id="especialidade-operadora-codDespesa" value={this.state.codDespesa} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'codTabela' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codTabelaLabel" for="especialidade-operadora-codTabela">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="codTabela" id="especialidade-operadora-codTabela" value={this.state.codTabela} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'valorCusto' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorCustoLabel" for="especialidade-operadora-valorCusto">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
                             </Label>
                             <AvInput
-                              id="especialidade-operadora-idEspecialidade"
-                              type="select"
-                              className="form-control"
-                              name="idEspecialidadeId"
-                            >
-                              <option value="" key="0" />
-                              {especialidades
-                                ? especialidades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                              type="string"
+                              name="valorCusto"
+                              id="especialidade-operadora-valorCusto"
+                              value={this.state.valorCusto}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'valorVenda' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorVendaLabel" for="especialidade-operadora-valorVenda">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="valorVenda"
+                              id="especialidade-operadora-valorVenda"
+                              value={this.state.valorVenda}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'descontoCusto' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="descontoCusto"
+                              id="especialidade-operadora-descontoCusto"
+                              value={this.state.descontoCusto}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'descontoVenda' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="descontoVenda"
+                              id="especialidade-operadora-descontoVenda"
+                              value={this.state.descontoVenda}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="especialidade-operadora-ativo">
+                              <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="especialidade-operadora-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -404,46 +338,54 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('codTuss')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('codDespesa')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('codTabela')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('valorCusto')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('valorVenda')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descontoCusto')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descontoVenda')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.idOperadora">Id Operadora</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidadeOperadora.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'codTuss' ? (
+                        <th className="hand" onClick={this.sort('codTuss')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'codDespesa' ? (
+                        <th className="hand" onClick={this.sort('codDespesa')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'codTabela' ? (
+                        <th className="hand" onClick={this.sort('codTabela')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'valorCusto' ? (
+                        <th className="hand" onClick={this.sort('valorCusto')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'valorVenda' ? (
+                        <th className="hand" onClick={this.sort('valorVenda')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'descontoCusto' ? (
+                        <th className="hand" onClick={this.sort('descontoCusto')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'descontoVenda' ? (
+                        <th className="hand" onClick={this.sort('descontoVenda')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -458,53 +400,52 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
                           </Button>
                         </td>
 
-                        <td>{especialidadeOperadora.codTuss}</td>
+                        {this.state.baseFilters !== 'codTuss' ? <td>{especialidadeOperadora.codTuss}</td> : null}
 
-                        <td>{especialidadeOperadora.codDespesa}</td>
+                        {this.state.baseFilters !== 'codDespesa' ? <td>{especialidadeOperadora.codDespesa}</td> : null}
 
-                        <td>{especialidadeOperadora.codTabela}</td>
+                        {this.state.baseFilters !== 'codTabela' ? <td>{especialidadeOperadora.codTabela}</td> : null}
 
-                        <td>{especialidadeOperadora.valorCusto}</td>
+                        {this.state.baseFilters !== 'valorCusto' ? <td>{especialidadeOperadora.valorCusto}</td> : null}
 
-                        <td>{especialidadeOperadora.valorVenda}</td>
+                        {this.state.baseFilters !== 'valorVenda' ? <td>{especialidadeOperadora.valorVenda}</td> : null}
 
-                        <td>{especialidadeOperadora.descontoCusto}</td>
+                        {this.state.baseFilters !== 'descontoCusto' ? <td>{especialidadeOperadora.descontoCusto}</td> : null}
 
-                        <td>{especialidadeOperadora.descontoVenda}</td>
+                        {this.state.baseFilters !== 'descontoVenda' ? <td>{especialidadeOperadora.descontoVenda}</td> : null}
 
-                        <td>{especialidadeOperadora.ativo}</td>
-                        <td>
-                          {especialidadeOperadora.idOperadora ? (
-                            <Link to={`operadora/${especialidadeOperadora.idOperadora.id}`}>{especialidadeOperadora.idOperadora.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {especialidadeOperadora.idEspecialidade ? (
-                            <Link to={`especialidade/${especialidadeOperadora.idEspecialidade.id}`}>
-                              {especialidadeOperadora.idEspecialidade.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{especialidadeOperadora.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${especialidadeOperadora.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeOperadora.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidadeOperadora.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeOperadora.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidadeOperadora.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeOperadora.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -546,15 +487,11 @@ export class EspecialidadeOperadora extends React.Component<IEspecialidadeOperad
 }
 
 const mapStateToProps = ({ especialidadeOperadora, ...storeState }: IRootState) => ({
-  operadoras: storeState.operadora.entities,
-  especialidades: storeState.especialidade.entities,
   especialidadeOperadoraList: especialidadeOperadora.entities,
   totalItems: especialidadeOperadora.totalItems
 });
 
 const mapDispatchToProps = {
-  getOperadoras,
-  getEspecialidades,
   getEntities
 };
 

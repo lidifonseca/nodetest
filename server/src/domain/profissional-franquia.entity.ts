@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProfissionalFranquia.
  */
-@Entity('profissional_franquia')
+@Entity('tb_profissional_franquia')
 export default class ProfissionalFranquia extends BaseEntity {
-  @Column({ name: 'id_profissional', nullable: false })
+  @Column({ name: 'ID_PROFISSIONAL', nullable: false })
   idProfissional: string;
 
-  @Column({ name: 'id_franquia', nullable: false })
+  @Column({ name: 'ID_FRANQUIA', nullable: false })
   idFranquia: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

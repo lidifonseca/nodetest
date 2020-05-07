@@ -73,8 +73,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
         descricao: '',
         meta: '',
         maximoSt: '',
-        minimoSt: '',
-        cidXPtaNovoPadItemIndi: ''
+        minimoSt: ''
       },
       () => this.sortEntities()
     );
@@ -137,9 +136,6 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
       'minimoSt=' +
       this.state.minimoSt +
       '&' +
-      'cidXPtaNovoPadItemIndi=' +
-      this.state.cidXPtaNovoPadItemIndi +
-      '&' +
       ''
     );
   };
@@ -147,19 +143,7 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      idUnidadeMedida,
-      titulo,
-      descricao,
-      meta,
-      maximoSt,
-      minimoSt,
-      cidXPtaNovoPadItemIndi,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { idUnidadeMedida, titulo, descricao, meta, maximoSt, minimoSt, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntitiesExport(
       idUnidadeMedida,
       titulo,
@@ -167,20 +151,20 @@ export class PadItemIndicadores extends React.Component<IPadItemIndicadoresProps
       meta,
       maximoSt,
       minimoSt,
-      cidXPtaNovoPadItemIndi,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
     );
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();

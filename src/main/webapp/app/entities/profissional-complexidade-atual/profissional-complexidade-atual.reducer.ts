@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalComplexidadeAtual, defaultValue } from 'app/shared/model/profissional-complexidade-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST_EXPORT: 'profissionalComplexidadeAtual/FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST_EXPORT',
   FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST: 'profissionalComplexidadeAtual/FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST',
   FETCH_PROFISSIONALCOMPLEXIDADEATUAL: 'profissionalComplexidadeAtual/FETCH_PROFISSIONALCOMPLEXIDADEATUAL',
   CREATE_PROFISSIONALCOMPLEXIDADEATUAL: 'profissionalComplexidadeAtual/CREATE_PROFISSIONALCOMPLEXIDADEATUAL',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type ProfissionalComplexidadeAtualState = Readonly<typeof initialState>;
 
+export interface IProfissionalComplexidadeAtualBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  baixa: any;
+  media: any;
+  alta: any;
+  ventilacaoMecanica: any;
+  telemonitoramente: any;
+}
+
+export interface IProfissionalComplexidadeAtualUpdateState {
+  fieldsBase: IProfissionalComplexidadeAtualBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalComplexidadeAtualState = initialState, action): ProfissionalComplexidadeAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL):
       return {
@@ -51,6 +68,7 @@ export default (state: ProfissionalComplexidadeAtualState = initialState, action
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALCOMPLEXIDADEATUAL):
@@ -112,7 +130,6 @@ export type ICrudGetAllActionProfissionalComplexidadeAtual<T> = (
   alta?: any,
   ventilacaoMecanica?: any,
   telemonitoramente?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -125,7 +142,6 @@ export const getEntities: ICrudGetAllActionProfissionalComplexidadeAtual<IProfis
   alta,
   ventilacaoMecanica,
   telemonitoramente,
-  idUsuario,
   page,
   size,
   sort
@@ -136,13 +152,12 @@ export const getEntities: ICrudGetAllActionProfissionalComplexidadeAtual<IProfis
   const altaRequest = alta ? `alta.contains=${alta}&` : '';
   const ventilacaoMecanicaRequest = ventilacaoMecanica ? `ventilacaoMecanica.contains=${ventilacaoMecanica}&` : '';
   const telemonitoramenteRequest = telemonitoramente ? `telemonitoramente.contains=${telemonitoramente}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST,
     payload: axios.get<IProfissionalComplexidadeAtual>(
-      `${requestUrl}${idProfissionalRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,6 +166,33 @@ export const getEntity: ICrudGetAction<IProfissionalComplexidadeAtual> = id => {
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL,
     payload: axios.get<IProfissionalComplexidadeAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionProfissionalComplexidadeAtual<IProfissionalComplexidadeAtual> = (
+  idProfissional,
+  baixa,
+  media,
+  alta,
+  ventilacaoMecanica,
+  telemonitoramente,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const baixaRequest = baixa ? `baixa.contains=${baixa}&` : '';
+  const mediaRequest = media ? `media.contains=${media}&` : '';
+  const altaRequest = alta ? `alta.contains=${alta}&` : '';
+  const ventilacaoMecanicaRequest = ventilacaoMecanica ? `ventilacaoMecanica.contains=${ventilacaoMecanica}&` : '';
+  const telemonitoramenteRequest = telemonitoramente ? `telemonitoramente.contains=${telemonitoramente}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALCOMPLEXIDADEATUAL_LIST,
+    payload: axios.get<IProfissionalComplexidadeAtual>(
+      `${requestUrl}${idProfissionalRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -189,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalComplexidadeAtual> = i
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalComplexidadeAtualState = (location): IProfissionalComplexidadeAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const baixa = url.searchParams.get('baixa') || '';
+  const media = url.searchParams.get('media') || '';
+  const alta = url.searchParams.get('alta') || '';
+  const ventilacaoMecanica = url.searchParams.get('ventilacaoMecanica') || '';
+  const telemonitoramente = url.searchParams.get('telemonitoramente') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    baixa,
+    media,
+    alta,
+    ventilacaoMecanica,
+    telemonitoramente
+  };
+};

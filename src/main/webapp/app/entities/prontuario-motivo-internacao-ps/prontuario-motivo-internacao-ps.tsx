@@ -22,19 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './prontuario-motivo-internacao-ps.reducer';
+import {
+  getProntuarioMotivoInternacaoPsState,
+  IProntuarioMotivoInternacaoPsBaseState,
+  getEntities
+} from './prontuario-motivo-internacao-ps.reducer';
 import { IProntuarioMotivoInternacaoPs } from 'app/shared/model/prontuario-motivo-internacao-ps.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProntuarioMotivoInternacaoPsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProntuarioMotivoInternacaoPsBaseState {
-  idProntuario: any;
-  idPaciente: any;
-  idMotivo: any;
-  idUsuario: any;
-}
 export interface IProntuarioMotivoInternacaoPsState extends IProntuarioMotivoInternacaoPsBaseState, IPaginationBaseState {}
 
 export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMotivoInternacaoPsProps, IProntuarioMotivoInternacaoPsState> {
@@ -44,24 +42,9 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProntuarioMotivoInternacaoPsState(this.props.location)
+      ...getProntuarioMotivoInternacaoPsState(this.props.location)
     };
   }
-
-  getProntuarioMotivoInternacaoPsState = (location): IProntuarioMotivoInternacaoPsBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProntuario = url.searchParams.get('idProntuario') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idMotivo = url.searchParams.get('idMotivo') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idProntuario,
-      idPaciente,
-      idMotivo,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -72,8 +55,7 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
       {
         idProntuario: '',
         idPaciente: '',
-        idMotivo: '',
-        idUsuario: ''
+        idMotivo: ''
       },
       () => this.sortEntities()
     );
@@ -106,7 +88,9 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -127,9 +111,6 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
       'idMotivo=' +
       this.state.idMotivo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -137,8 +118,8 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProntuario, idPaciente, idMotivo, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProntuario, idPaciente, idMotivo, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProntuario, idPaciente, idMotivo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProntuario, idPaciente, idMotivo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -160,7 +141,11 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.home.createLabel">
@@ -175,58 +160,53 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProntuarioLabel" for="prontuario-motivo-internacao-ps-idProntuario">
-                            <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idProntuario">Id Prontuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idProntuario"
-                            id="prontuario-motivo-internacao-ps-idProntuario"
-                            value={this.state.idProntuario}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="prontuario-motivo-internacao-ps-idPaciente">
-                            <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="prontuario-motivo-internacao-ps-idPaciente"
-                            value={this.state.idPaciente}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idMotivoLabel" for="prontuario-motivo-internacao-ps-idMotivo">
-                            <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idMotivo">Id Motivo</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idMotivo"
-                            id="prontuario-motivo-internacao-ps-idMotivo"
-                            value={this.state.idMotivo}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="prontuario-motivo-internacao-ps-idUsuario">
-                            <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="prontuario-motivo-internacao-ps-idUsuario"
-                            value={this.state.idUsuario}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idProntuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProntuarioLabel" for="prontuario-motivo-internacao-ps-idProntuario">
+                              <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idProntuario">Id Prontuario</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idProntuario"
+                              id="prontuario-motivo-internacao-ps-idProntuario"
+                              value={this.state.idProntuario}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="prontuario-motivo-internacao-ps-idPaciente">
+                              <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPaciente"
+                              id="prontuario-motivo-internacao-ps-idPaciente"
+                              value={this.state.idPaciente}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idMotivo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idMotivoLabel" for="prontuario-motivo-internacao-ps-idMotivo">
+                              <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idMotivo">Id Motivo</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idMotivo"
+                              id="prontuario-motivo-internacao-ps-idMotivo"
+                              value={this.state.idMotivo}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -254,22 +234,24 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProntuario')}>
-                        <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idProntuario">Id Prontuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idMotivo')}>
-                        <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idMotivo">Id Motivo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProntuario' ? (
+                        <th className="hand" onClick={this.sort('idProntuario')}>
+                          <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idProntuario">Id Prontuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idMotivo' ? (
+                        <th className="hand" onClick={this.sort('idMotivo')}>
+                          <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idMotivo">Id Motivo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -284,29 +266,42 @@ export class ProntuarioMotivoInternacaoPs extends React.Component<IProntuarioMot
                           </Button>
                         </td>
 
-                        <td>{prontuarioMotivoInternacaoPs.idProntuario}</td>
+                        {this.state.baseFilters !== 'idProntuario' ? <td>{prontuarioMotivoInternacaoPs.idProntuario}</td> : null}
 
-                        <td>{prontuarioMotivoInternacaoPs.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{prontuarioMotivoInternacaoPs.idPaciente}</td> : null}
 
-                        <td>{prontuarioMotivoInternacaoPs.idMotivo}</td>
-
-                        <td>{prontuarioMotivoInternacaoPs.idUsuario}</td>
+                        {this.state.baseFilters !== 'idMotivo' ? <td>{prontuarioMotivoInternacaoPs.idMotivo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${prontuarioMotivoInternacaoPs.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioMotivoInternacaoPs.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioMotivoInternacaoPs.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioMotivoInternacaoPs.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioMotivoInternacaoPs.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioMotivoInternacaoPs.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

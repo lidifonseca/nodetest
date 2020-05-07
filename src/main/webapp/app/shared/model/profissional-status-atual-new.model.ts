@@ -4,7 +4,6 @@ export interface IProfissionalStatusAtualNew {
   idStatusAtualProf?: number;
   obs?: any;
   ativo?: number;
-  idUsuario?: string;
 }
 
 export const defaultValue: Readonly<IProfissionalStatusAtualNew> = {};

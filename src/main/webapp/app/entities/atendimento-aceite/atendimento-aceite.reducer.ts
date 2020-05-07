@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAtendimentoAceite, defaultValue } from 'app/shared/model/atendimento-aceite.model';
 
 export const ACTION_TYPES = {
+  FETCH_ATENDIMENTOACEITE_LIST_EXPORT: 'atendimentoAceite/FETCH_ATENDIMENTOACEITE_LIST_EXPORT',
   FETCH_ATENDIMENTOACEITE_LIST: 'atendimentoAceite/FETCH_ATENDIMENTOACEITE_LIST',
   FETCH_ATENDIMENTOACEITE: 'atendimentoAceite/FETCH_ATENDIMENTOACEITE',
   CREATE_ATENDIMENTOACEITE: 'atendimentoAceite/CREATE_ATENDIMENTOACEITE',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type AtendimentoAceiteState = Readonly<typeof initialState>;
 
+export interface IAtendimentoAceiteBaseState {
+  baseFilters: any;
+  msgPush: any;
+}
+
+export interface IAtendimentoAceiteUpdateState {
+  fieldsBase: IAtendimentoAceiteBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: AtendimentoAceiteState = initialState, action): AtendimentoAceiteState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOACEITE):
       return {
@@ -51,6 +63,7 @@ export default (state: AtendimentoAceiteState = initialState, action): Atendimen
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOACEITE):
     case FAILURE(ACTION_TYPES.CREATE_ATENDIMENTOACEITE):
@@ -107,31 +120,18 @@ const apiUrl = 'api/atendimento-aceites';
 // Actions
 export type ICrudGetAllActionAtendimentoAceite<T> = (
   msgPush?: any,
-  idProfissional?: any,
-  idAtendimento?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (
-  msgPush,
-  idProfissional,
-  idAtendimento,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (msgPush, page, size, sort) => {
   const msgPushRequest = msgPush ? `msgPush.contains=${msgPush}&` : '';
-  const idProfissionalRequest = idProfissional ? `idProfissional.equals=${idProfissional}&` : '';
-  const idAtendimentoRequest = idAtendimento ? `idAtendimento.equals=${idAtendimento}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST,
-    payload: axios.get<IAtendimentoAceite>(
-      `${requestUrl}${msgPushRequest}${idProfissionalRequest}${idAtendimentoRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IAtendimentoAceite>(`${requestUrl}${msgPushRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoAceite> = id => {
@@ -142,11 +142,19 @@ export const getEntity: ICrudGetAction<IAtendimentoAceite> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionAtendimentoAceite<IAtendimentoAceite> = (msgPush, page, size, sort) => {
+  const msgPushRequest = msgPush ? `msgPush.contains=${msgPush}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ATENDIMENTOACEITE_LIST,
+    payload: axios.get<IAtendimentoAceite>(`${requestUrl}${msgPushRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IAtendimentoAceite> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idProfissional: entity.idProfissional === 'null' ? null : entity.idProfissional,
-    idAtendimento: entity.idAtendimento === 'null' ? null : entity.idAtendimento
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTOACEITE,
@@ -157,11 +165,7 @@ export const createEntity: ICrudPutAction<IAtendimentoAceite> = entity => async 
 };
 
 export const updateEntity: ICrudPutAction<IAtendimentoAceite> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idProfissional: entity.idProfissional === 'null' ? null : entity.idProfissional,
-    idAtendimento: entity.idAtendimento === 'null' ? null : entity.idAtendimento
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTOACEITE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -183,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<IAtendimentoAceite> = id => async d
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAtendimentoAceiteState = (location): IAtendimentoAceiteBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const msgPush = url.searchParams.get('msgPush') || '';
+
+  return {
+    baseFilters,
+    msgPush
+  };
+};

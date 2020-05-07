@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './notificacao-config-usuario.reducer';
+import { getEntity, INotificacaoConfigUsuarioBaseState, getNotificacaoConfigUsuarioState } from './notificacao-config-usuario.reducer';
 import { INotificacaoConfigUsuario } from 'app/shared/model/notificacao-config-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface INotificacaoConfigUsuarioState {
+  fieldsBase: INotificacaoConfigUsuarioBaseState;
+}
+
 export interface INotificacaoConfigUsuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class NotificacaoConfigUsuarioDetail extends React.Component<INotificacaoConfigUsuarioDetailProps> {
+export class NotificacaoConfigUsuarioDetail extends React.Component<INotificacaoConfigUsuarioDetailProps, INotificacaoConfigUsuarioState> {
   constructor(props: Readonly<INotificacaoConfigUsuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getNotificacaoConfigUsuarioState(this.props.location)
     };
   }
 

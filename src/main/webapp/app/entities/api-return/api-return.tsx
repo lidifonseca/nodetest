@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './api-return.reducer';
+import { getApiReturnState, IApiReturnBaseState, getEntities } from './api-return.reducer';
 import { IApiReturn } from 'app/shared/model/api-return.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IApiReturnProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IApiReturnBaseState {
-  idApiName: any;
-  apiReturn: any;
-  apiType: any;
-  obs: any;
-  ativo: any;
-}
 export interface IApiReturnState extends IApiReturnBaseState, IPaginationBaseState {}
 
 export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState> {
@@ -45,26 +38,9 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getApiReturnState(this.props.location)
+      ...getApiReturnState(this.props.location)
     };
   }
-
-  getApiReturnState = (location): IApiReturnBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idApiName = url.searchParams.get('idApiName') || '';
-    const apiReturn = url.searchParams.get('apiReturn') || '';
-    const apiType = url.searchParams.get('apiType') || '';
-    const obs = url.searchParams.get('obs') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      idApiName,
-      apiReturn,
-      apiType,
-      obs,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -110,7 +86,9 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -167,7 +145,11 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.apiReturn.home.createLabel">Create a new Api Return</Translate>
@@ -180,49 +162,63 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idApiNameLabel" for="api-return-idApiName">
-                            <Translate contentKey="generadorApp.apiReturn.idApiName">Id Api Name</Translate>
-                          </Label>
-                          <AvInput type="string" name="idApiName" id="api-return-idApiName" value={this.state.idApiName} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="apiReturnLabel" for="api-return-apiReturn">
-                            <Translate contentKey="generadorApp.apiReturn.apiReturn">Api Return</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idApiName' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idApiNameLabel" for="api-return-idApiName">
+                              <Translate contentKey="generadorApp.apiReturn.idApiName">Id Api Name</Translate>
+                            </Label>
+                            <AvInput type="string" name="idApiName" id="api-return-idApiName" value={this.state.idApiName} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="apiReturn" id="api-return-apiReturn" value={this.state.apiReturn} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="apiTypeLabel" for="api-return-apiType">
-                            <Translate contentKey="generadorApp.apiReturn.apiType">Api Type</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'apiReturn' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="apiReturnLabel" for="api-return-apiReturn">
+                              <Translate contentKey="generadorApp.apiReturn.apiReturn">Api Return</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="apiType" id="api-return-apiType" value={this.state.apiType} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="obsLabel" for="api-return-obs">
-                            <Translate contentKey="generadorApp.apiReturn.obs">Obs</Translate>
-                          </Label>
+                            <AvInput type="text" name="apiReturn" id="api-return-apiReturn" value={this.state.apiReturn} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="obs" id="api-return-obs" value={this.state.obs} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="api-return-ativo">
-                            <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="api-return-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'apiType' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="apiTypeLabel" for="api-return-apiType">
+                              <Translate contentKey="generadorApp.apiReturn.apiType">Api Type</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="apiType" id="api-return-apiType" value={this.state.apiType} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'obs' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="obsLabel" for="api-return-obs">
+                              <Translate contentKey="generadorApp.apiReturn.obs">Obs</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="obs" id="api-return-obs" value={this.state.obs} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="api-return-ativo">
+                              <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="api-return-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -250,26 +246,36 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idApiName')}>
-                        <Translate contentKey="generadorApp.apiReturn.idApiName">Id Api Name</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('apiReturn')}>
-                        <Translate contentKey="generadorApp.apiReturn.apiReturn">Api Return</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('apiType')}>
-                        <Translate contentKey="generadorApp.apiReturn.apiType">Api Type</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('obs')}>
-                        <Translate contentKey="generadorApp.apiReturn.obs">Obs</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idApiName' ? (
+                        <th className="hand" onClick={this.sort('idApiName')}>
+                          <Translate contentKey="generadorApp.apiReturn.idApiName">Id Api Name</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'apiReturn' ? (
+                        <th className="hand" onClick={this.sort('apiReturn')}>
+                          <Translate contentKey="generadorApp.apiReturn.apiReturn">Api Return</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'apiType' ? (
+                        <th className="hand" onClick={this.sort('apiType')}>
+                          <Translate contentKey="generadorApp.apiReturn.apiType">Api Type</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'obs' ? (
+                        <th className="hand" onClick={this.sort('obs')}>
+                          <Translate contentKey="generadorApp.apiReturn.obs">Obs</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.apiReturn.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -284,31 +290,31 @@ export class ApiReturn extends React.Component<IApiReturnProps, IApiReturnState>
                           </Button>
                         </td>
 
-                        <td>{apiReturn.idApiName}</td>
+                        {this.state.baseFilters !== 'idApiName' ? <td>{apiReturn.idApiName}</td> : null}
 
-                        <td>{apiReturn.apiReturn}</td>
+                        {this.state.baseFilters !== 'apiReturn' ? <td>{apiReturn.apiReturn}</td> : null}
 
-                        <td>{apiReturn.apiType}</td>
+                        {this.state.baseFilters !== 'apiType' ? <td>{apiReturn.apiType}</td> : null}
 
-                        <td>{apiReturn.obs}</td>
+                        {this.state.baseFilters !== 'obs' ? <td>{apiReturn.obs}</td> : null}
 
-                        <td>{apiReturn.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{apiReturn.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${apiReturn.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${apiReturn.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${apiReturn.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${apiReturn.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${apiReturn.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${apiReturn.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

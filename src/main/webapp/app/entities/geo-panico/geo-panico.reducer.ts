@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IGeoPanico, defaultValue } from 'app/shared/model/geo-panico.model';
 
 export const ACTION_TYPES = {
+  FETCH_GEOPANICO_LIST_EXPORT: 'geoPanico/FETCH_GEOPANICO_LIST_EXPORT',
   FETCH_GEOPANICO_LIST: 'geoPanico/FETCH_GEOPANICO_LIST',
   FETCH_GEOPANICO: 'geoPanico/FETCH_GEOPANICO',
   CREATE_GEOPANICO: 'geoPanico/CREATE_GEOPANICO',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type GeoPanicoState = Readonly<typeof initialState>;
 
+export interface IGeoPanicoBaseState {
+  baseFilters: any;
+  idPanico: any;
+  idPaciente: any;
+  latitude: any;
+  longitude: any;
+}
+
+export interface IGeoPanicoUpdateState {
+  fieldsBase: IGeoPanicoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: GeoPanicoState = initialState, action): GeoPanicoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_GEOPANICO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_GEOPANICO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_GEOPANICO):
       return {
@@ -51,6 +66,7 @@ export default (state: GeoPanicoState = initialState, action): GeoPanicoState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_GEOPANICO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_GEOPANICO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_GEOPANICO):
     case FAILURE(ACTION_TYPES.CREATE_GEOPANICO):
@@ -137,6 +153,21 @@ export const getEntity: ICrudGetAction<IGeoPanico> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionGeoPanico<IGeoPanico> = (idPanico, idPaciente, latitude, longitude, page, size, sort) => {
+  const idPanicoRequest = idPanico ? `idPanico.contains=${idPanico}&` : '';
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const latitudeRequest = latitude ? `latitude.contains=${latitude}&` : '';
+  const longitudeRequest = longitude ? `longitude.contains=${longitude}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_GEOPANICO_LIST,
+    payload: axios.get<IGeoPanico>(
+      `${requestUrl}${idPanicoRequest}${idPacienteRequest}${latitudeRequest}${longitudeRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IGeoPanico> = entity => async dispatch => {
   entity = {
     ...entity
@@ -172,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<IGeoPanico> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getGeoPanicoState = (location): IGeoPanicoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPanico = url.searchParams.get('idPanico') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const latitude = url.searchParams.get('latitude') || '';
+  const longitude = url.searchParams.get('longitude') || '';
+
+  return {
+    baseFilters,
+    idPanico,
+    idPaciente,
+    latitude,
+    longitude
+  };
+};

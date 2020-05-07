@@ -1,5 +1,3 @@
-import { IResultados } from 'app/shared/model/resultados.model';
-
 export interface IAlertasResultadosEsperados {
   id?: string;
   pontuacao?: number;
@@ -7,7 +5,6 @@ export interface IAlertasResultadosEsperados {
   observacoes?: string;
   usuarioId?: number;
   valor?: number;
-  resultadosId?: string | any;
 }
 
 export const defaultValue: Readonly<IAlertasResultadosEsperados> = {

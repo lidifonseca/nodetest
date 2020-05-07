@@ -4,24 +4,19 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Questionarios from './questionarios.entity';
-
 /**
  * A RespostasQuestionarios.
  */
-@Entity('respostas_questionarios')
+@Entity('tb_respostas_questionarios')
 export default class RespostasQuestionarios extends BaseEntity {
-  @Column({ type: 'timestamp', name: 'data_resposta' })
+  @Column({ type: 'timestamp', name: 'DATA_RESPOSTA' })
   dataResposta: any;
 
-  @Column({ name: 'informacao_adicional', length: 255 })
+  @Column({ name: 'INFORMACAO_ADICIONAL', length: 255 })
   informacaoAdicional: string;
 
-  @Column({ type: 'integer', name: 'questionario_id' })
+  @Column({ type: 'integer', name: 'QUESTIONARIO_ID' })
   questionarioId: number;
-
-  @ManyToOne(type => Questionarios)
-  questionariosId: Questionarios;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

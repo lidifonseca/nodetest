@@ -3,22 +3,21 @@
     "uf": {
       "home": {
         "title": "Ufs",
-        "createLabel": "Criar novo Uf",
-        "createOrEditLabel": "Criar ou editar Uf",
-        "notFound": "Nenhum Uf encontrado"
+        "createLabel": "Create a new Uf",
+        "createOrEditLabel": "Create or edit a Uf",
+        "notFound": "No Ufs found"
       },
-      "created": "Um novo Uf foi criado com o identificador {{ param }}",
-      "updated": "Um Uf foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Uf foi excluído com o identificador {{ param }}",
+      "created": "A new Uf is created with identifier {{ param }}",
+      "updated": "A Uf is updated with identifier {{ param }}",
+      "deleted": "A Uf is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Uf {{ id }}?"
+        "question": "Are you sure you want to delete Uf {{ id }}?"
       },
       "detail": {
         "title": "Uf"
       },
       "siglaUf": "Sigla Uf",
-      "descrUf": "Descr Uf",
-      "cidade": "Cidade"
+      "descrUf": "Descr Uf"
     }
   }
 }

@@ -5,15 +5,15 @@ import { BaseEntity } from './base/base.entity';
 /**
  * A PadItemHistDataIncComp.
  */
-@Entity('pad_item_hist_data_inc_comp')
+@Entity('tb_pad_item_hist_data_inc_comp')
 export default class PadItemHistDataIncComp extends BaseEntity {
-  @Column({ name: 'id_pad_item' })
+  @Column({ name: 'ID_PAD_ITEM' })
   idPadItem: string;
 
-  @Column({ type: 'timestamp', name: 'data_pad_item_incompleto' })
+  @Column({ type: 'timestamp', name: 'DATA_PAD_ITEM_INCOMPLETO' })
   dataPadItemIncompleto: any;
 
-  @Column({ type: 'timestamp', name: 'data_pad_item_completo' })
+  @Column({ type: 'timestamp', name: 'DATA_PAD_ITEM_COMPLETO' })
   dataPadItemCompleto: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

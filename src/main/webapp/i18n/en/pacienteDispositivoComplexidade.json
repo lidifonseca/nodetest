@@ -3,15 +3,15 @@
     "pacienteDispositivoComplexidade": {
       "home": {
         "title": "Paciente Dispositivo Complexidades",
-        "createLabel": "Criar novo Paciente Dispositivo Complexidade",
-        "createOrEditLabel": "Criar ou editar Paciente Dispositivo Complexidade",
-        "notFound": "Nenhum Paciente Dispositivo Complexidade encontrado"
+        "createLabel": "Create a new Paciente Dispositivo Complexidade",
+        "createOrEditLabel": "Create or edit a Paciente Dispositivo Complexidade",
+        "notFound": "No Paciente Dispositivo Complexidades found"
       },
-      "created": "Um novo Paciente Dispositivo Complexidade foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Dispositivo Complexidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Dispositivo Complexidade foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Dispositivo Complexidade is created with identifier {{ param }}",
+      "updated": "A Paciente Dispositivo Complexidade is updated with identifier {{ param }}",
+      "deleted": "A Paciente Dispositivo Complexidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Dispositivo Complexidade {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Dispositivo Complexidade {{ id }}?"
       },
       "detail": {
         "title": "Paciente Dispositivo Complexidade"

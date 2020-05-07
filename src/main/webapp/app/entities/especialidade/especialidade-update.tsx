@@ -4,19 +4,14 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { ICategoria } from 'app/shared/model/categoria.model';
-import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
-import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
-import { getEntities as getTipoEspecialidades } from 'app/entities/tipo-especialidade/tipo-especialidade.reducer';
-import { ITipoUnidade } from 'app/shared/model/tipo-unidade.model';
-import { getEntities as getTipoUnidades } from 'app/entities/tipo-unidade/tipo-unidade.reducer';
 import {
+  IEspecialidadeUpdateState,
   getEntity,
   getEspecialidadeState,
   IEspecialidadeBaseState,
@@ -31,24 +26,17 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IEspecialidadeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IEspecialidadeUpdateState {
-  fieldsBase: IEspecialidadeBaseState;
-  isNew: boolean;
-  unidadeId: string;
-  idCategoriaId: string;
-  idTipoEspecialidadeId: string;
-  idTipoUnidadeId: string;
-}
-
 export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdateProps, IEspecialidadeUpdateState> {
+  descricaoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IEspecialidadeUpdateProps>) {
     super(props);
+
+    this.descricaoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getEspecialidadeState(this.props.location),
       unidadeId: '0',
-      idCategoriaId: '0',
-      idTipoEspecialidadeId: '0',
-      idTipoUnidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -66,19 +54,35 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
     }
 
     this.props.getUnidadeEasies();
-    this.props.getCategorias();
-    this.props.getTipoEspecialidades();
-    this.props.getTipoUnidades();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['icon'] ? '&icon=' + fieldsBase['icon'] : '') +
+      (fieldsBase['especialidade'] ? '&especialidade=' + fieldsBase['especialidade'] : '') +
+      (fieldsBase['descricao'] ? '&descricao=' + fieldsBase['descricao'] : '') +
+      (fieldsBase['duracao'] ? '&duracao=' + fieldsBase['duracao'] : '') +
+      (fieldsBase['importante'] ? '&importante=' + fieldsBase['importante'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { especialidadeEntity } = this.props;
@@ -96,15 +100,15 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
   };
 
   handleClose = () => {
-    this.props.history.push('/especialidade');
+    this.props.history.push('/especialidade?' + this.getFiltersURL());
   };
 
   render() {
-    const { especialidadeEntity, unidadeEasies, categorias, tipoEspecialidades, tipoUnidades, loading, updating } = this.props;
+    const { especialidadeEntity, unidadeEasies, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = especialidadeEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -121,10 +125,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
               ? {}
               : {
                   ...especialidadeEntity,
-                  unidade: especialidadeEntity.unidade ? especialidadeEntity.unidade.id : null,
-                  idCategoria: especialidadeEntity.idCategoria ? especialidadeEntity.idCategoria.id : null,
-                  idTipoEspecialidade: especialidadeEntity.idTipoEspecialidade ? especialidadeEntity.idTipoEspecialidade.id : null,
-                  idTipoUnidade: especialidadeEntity.idTipoUnidade ? especialidadeEntity.idTipoUnidade.id : null
+                  unidade: especialidadeEntity.unidade ? especialidadeEntity.unidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -141,7 +142,14 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/especialidade" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/especialidade?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -173,7 +181,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.icon ? (
+                        {baseFilters !== 'icon' ? (
                           <Col md="icon">
                             <AvGroup>
                               <Row>
@@ -189,10 +197,10 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="icon" value={this.state.fieldsBase.icon} />
+                          <AvInput type="hidden" name="icon" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.especialidade ? (
+                        {baseFilters !== 'especialidade' ? (
                           <Col md="especialidade">
                             <AvGroup>
                               <Row>
@@ -208,10 +216,10 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase.especialidade} />
+                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.descricao ? (
+                        {baseFilters !== 'descricao' ? (
                           <Col md="descricao">
                             <AvGroup>
                               <Row>
@@ -227,10 +235,10 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase.descricao} />
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.duracao ? (
+                        {baseFilters !== 'duracao' ? (
                           <Col md="duracao">
                             <AvGroup>
                               <Row>
@@ -246,10 +254,10 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="duracao" value={this.state.fieldsBase.duracao} />
+                          <AvInput type="hidden" name="duracao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.importante ? (
+                        {baseFilters !== 'importante' ? (
                           <Col md="importante">
                             <AvGroup>
                               <Row>
@@ -265,10 +273,10 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="importante" value={this.state.fieldsBase.importante} />
+                          <AvInput type="hidden" name="importante" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -284,39 +292,9 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
-                        {!this.state.fieldsBase.atendimento ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase.atendimento} />
-                        )}
-                        {!this.state.fieldsBase.especialidadeOperadora ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="especialidadeOperadora" value={this.state.fieldsBase.especialidadeOperadora} />
-                        )}
-                        {!this.state.fieldsBase.especialidadeUnidade ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="especialidadeUnidade" value={this.state.fieldsBase.especialidadeUnidade} />
-                        )}
-                        {!this.state.fieldsBase.especialidadeValor ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="especialidadeValor" value={this.state.fieldsBase.especialidadeValor} />
-                        )}
-                        {!this.state.fieldsBase.pacientePedido ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="pacientePedido" value={this.state.fieldsBase.pacientePedido} />
-                        )}
-                        {!this.state.fieldsBase.padItem ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase.padItem} />
-                        )}
-                        {!this.state.fieldsBase.unidade ? (
+                        {baseFilters !== 'unidade' ? (
                           <Col md="12">
                             <AvGroup>
                               <Row>
@@ -343,99 +321,7 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase.unidade} />
-                        )}
-                        {!this.state.fieldsBase.idCategoria ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="especialidade-idCategoria">
-                                    <Translate contentKey="generadorApp.especialidade.idCategoria">Id Categoria</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="especialidade-idCategoria" type="select" className="form-control" name="idCategoria">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.especialidade.idCategoria.empty')}
-                                    </option>
-                                    {categorias
-                                      ? categorias.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idCategoria" value={this.state.fieldsBase.idCategoria} />
-                        )}
-                        {!this.state.fieldsBase.idTipoEspecialidade ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="especialidade-idTipoEspecialidade">
-                                    <Translate contentKey="generadorApp.especialidade.idTipoEspecialidade">Id Tipo Especialidade</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="especialidade-idTipoEspecialidade"
-                                    type="select"
-                                    className="form-control"
-                                    name="idTipoEspecialidade"
-                                  >
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.especialidade.idTipoEspecialidade.empty')}
-                                    </option>
-                                    {tipoEspecialidades
-                                      ? tipoEspecialidades.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idTipoEspecialidade" value={this.state.fieldsBase.idTipoEspecialidade} />
-                        )}
-                        {!this.state.fieldsBase.idTipoUnidade ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="especialidade-idTipoUnidade">
-                                    <Translate contentKey="generadorApp.especialidade.idTipoUnidade">Id Tipo Unidade</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="especialidade-idTipoUnidade" type="select" className="form-control" name="idTipoUnidade">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.especialidade.idTipoUnidade.empty')}
-                                    </option>
-                                    {tipoUnidades
-                                      ? tipoUnidades.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idTipoUnidade" value={this.state.fieldsBase.idTipoUnidade} />
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>
@@ -452,9 +338,6 @@ export class EspecialidadeUpdate extends React.Component<IEspecialidadeUpdatePro
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  categorias: storeState.categoria.entities,
-  tipoEspecialidades: storeState.tipoEspecialidade.entities,
-  tipoUnidades: storeState.tipoUnidade.entities,
   especialidadeEntity: storeState.especialidade.entity,
   loading: storeState.especialidade.loading,
   updating: storeState.especialidade.updating,
@@ -463,9 +346,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getCategorias,
-  getTipoEspecialidades,
-  getTipoUnidades,
   getEntity,
   updateEntity,
   setBlob,

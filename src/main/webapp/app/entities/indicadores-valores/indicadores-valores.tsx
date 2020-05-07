@@ -22,25 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './indicadores-valores.reducer';
+import { getIndicadoresValoresState, IIndicadoresValoresBaseState, getEntities } from './indicadores-valores.reducer';
 import { IIndicadoresValores } from 'app/shared/model/indicadores-valores.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IIndicadores } from 'app/shared/model/indicadores.model';
-import { getEntities as getIndicadores } from 'app/entities/indicadores/indicadores.reducer';
-
 export interface IIndicadoresValoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IIndicadoresValoresBaseState {
-  sexo: any;
-  vlMinimo: any;
-  vlMaximo: any;
-  unidadeMedida: any;
-  idadeMinima: any;
-  idadeMaxima: any;
-  indicadoresId: any;
-}
 export interface IIndicadoresValoresState extends IIndicadoresValoresBaseState, IPaginationBaseState {}
 
 export class IndicadoresValores extends React.Component<IIndicadoresValoresProps, IIndicadoresValoresState> {
@@ -50,36 +38,12 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getIndicadoresValoresState(this.props.location)
+      ...getIndicadoresValoresState(this.props.location)
     };
   }
 
-  getIndicadoresValoresState = (location): IIndicadoresValoresBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const sexo = url.searchParams.get('sexo') || '';
-    const vlMinimo = url.searchParams.get('vlMinimo') || '';
-    const vlMaximo = url.searchParams.get('vlMaximo') || '';
-    const unidadeMedida = url.searchParams.get('unidadeMedida') || '';
-    const idadeMinima = url.searchParams.get('idadeMinima') || '';
-    const idadeMaxima = url.searchParams.get('idadeMaxima') || '';
-
-    const indicadoresId = url.searchParams.get('indicadoresId') || '';
-
-    return {
-      sexo,
-      vlMinimo,
-      vlMaximo,
-      unidadeMedida,
-      idadeMinima,
-      idadeMaxima,
-      indicadoresId
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getIndicadores();
   }
 
   cancelCourse = () => {
@@ -90,8 +54,7 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
         vlMaximo: '',
         unidadeMedida: '',
         idadeMinima: '',
-        idadeMaxima: '',
-        indicadoresId: ''
+        idadeMaxima: ''
       },
       () => this.sortEntities()
     );
@@ -124,7 +87,9 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -154,9 +119,6 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
       'idadeMaxima=' +
       this.state.idadeMaxima +
       '&' +
-      'indicadoresId=' +
-      this.state.indicadoresId +
-      '&' +
       ''
     );
   };
@@ -164,19 +126,7 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      sexo,
-      vlMinimo,
-      vlMaximo,
-      unidadeMedida,
-      idadeMinima,
-      idadeMaxima,
-      indicadoresId,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { sexo, vlMinimo, vlMaximo, unidadeMedida, idadeMinima, idadeMaxima, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       sexo,
       vlMinimo,
@@ -184,7 +134,6 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
       unidadeMedida,
       idadeMinima,
       idadeMaxima,
-      indicadoresId,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -192,7 +141,7 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
   };
 
   render() {
-    const { indicadores, indicadoresValoresList, match, totalItems } = this.props;
+    const { indicadoresValoresList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -210,7 +159,11 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.indicadoresValores.home.createLabel">Create a new Indicadores Valores</Translate>
@@ -223,128 +176,82 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="sexoLabel" for="indicadores-valores-sexo">
-                            <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="sexo"
-                            id="indicadores-valores-sexo"
-                            value={this.state.sexo}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="vlMinimoLabel" for="indicadores-valores-vlMinimo">
-                            <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="vlMinimo"
-                            id="indicadores-valores-vlMinimo"
-                            value={this.state.vlMinimo}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="vlMaximoLabel" for="indicadores-valores-vlMaximo">
-                            <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="vlMaximo"
-                            id="indicadores-valores-vlMaximo"
-                            value={this.state.vlMaximo}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="unidadeMedidaLabel" for="indicadores-valores-unidadeMedida">
-                            <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="unidadeMedida"
-                            id="indicadores-valores-unidadeMedida"
-                            value={this.state.unidadeMedida}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idadeMinimaLabel" for="indicadores-valores-idadeMinima">
-                            <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="idadeMinima"
-                            id="indicadores-valores-idadeMinima"
-                            value={this.state.idadeMinima}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idadeMaximaLabel" for="indicadores-valores-idadeMaxima">
-                            <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="idadeMaxima"
-                            id="indicadores-valores-idadeMaxima"
-                            value={this.state.idadeMaxima}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="indicadores-valores-indicadoresId">
-                              <Translate contentKey="generadorApp.indicadoresValores.indicadoresId">Indicadores Id</Translate>
+                      {this.state.baseFilters !== 'sexo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="sexoLabel" for="indicadores-valores-sexo">
+                              <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
                             </Label>
-                            <AvInput id="indicadores-valores-indicadoresId" type="select" className="form-control" name="indicadoresIdId">
-                              <option value="" key="0" />
-                              {indicadores
-                                ? indicadores.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="sexo" id="indicadores-valores-sexo" value={this.state.sexo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'vlMinimo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="vlMinimoLabel" for="indicadores-valores-vlMinimo">
+                              <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="vlMinimo" id="indicadores-valores-vlMinimo" value={this.state.vlMinimo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'vlMaximo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="vlMaximoLabel" for="indicadores-valores-vlMaximo">
+                              <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="vlMaximo" id="indicadores-valores-vlMaximo" value={this.state.vlMaximo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidadeMedida' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="unidadeMedidaLabel" for="indicadores-valores-unidadeMedida">
+                              <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="unidadeMedida"
+                              id="indicadores-valores-unidadeMedida"
+                              value={this.state.unidadeMedida}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idadeMinima' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idadeMinimaLabel" for="indicadores-valores-idadeMinima">
+                              <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="idadeMinima" id="indicadores-valores-idadeMinima" value={this.state.idadeMinima} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idadeMaxima' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idadeMaximaLabel" for="indicadores-valores-idadeMaxima">
+                              <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="idadeMaxima" id="indicadores-valores-idadeMaxima" value={this.state.idadeMaxima} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -372,34 +279,42 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('sexo')}>
-                        <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('vlMinimo')}>
-                        <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('vlMaximo')}>
-                        <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('unidadeMedida')}>
-                        <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idadeMinima')}>
-                        <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idadeMaxima')}>
-                        <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.indicadoresValores.indicadoresId">Indicadores Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'sexo' ? (
+                        <th className="hand" onClick={this.sort('sexo')}>
+                          <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'vlMinimo' ? (
+                        <th className="hand" onClick={this.sort('vlMinimo')}>
+                          <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'vlMaximo' ? (
+                        <th className="hand" onClick={this.sort('vlMaximo')}>
+                          <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'unidadeMedida' ? (
+                        <th className="hand" onClick={this.sort('unidadeMedida')}>
+                          <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idadeMinima' ? (
+                        <th className="hand" onClick={this.sort('idadeMinima')}>
+                          <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idadeMaxima' ? (
+                        <th className="hand" onClick={this.sort('idadeMaxima')}>
+                          <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -414,40 +329,43 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
                           </Button>
                         </td>
 
-                        <td>{indicadoresValores.sexo}</td>
+                        {this.state.baseFilters !== 'sexo' ? <td>{indicadoresValores.sexo}</td> : null}
 
-                        <td>{indicadoresValores.vlMinimo}</td>
+                        {this.state.baseFilters !== 'vlMinimo' ? <td>{indicadoresValores.vlMinimo}</td> : null}
 
-                        <td>{indicadoresValores.vlMaximo}</td>
+                        {this.state.baseFilters !== 'vlMaximo' ? <td>{indicadoresValores.vlMaximo}</td> : null}
 
-                        <td>{indicadoresValores.unidadeMedida}</td>
+                        {this.state.baseFilters !== 'unidadeMedida' ? <td>{indicadoresValores.unidadeMedida}</td> : null}
 
-                        <td>{indicadoresValores.idadeMinima}</td>
+                        {this.state.baseFilters !== 'idadeMinima' ? <td>{indicadoresValores.idadeMinima}</td> : null}
 
-                        <td>{indicadoresValores.idadeMaxima}</td>
-                        <td>
-                          {indicadoresValores.indicadoresId ? (
-                            <Link to={`indicadores/${indicadoresValores.indicadoresId.id}`}>{indicadoresValores.indicadoresId.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'idadeMaxima' ? <td>{indicadoresValores.idadeMaxima}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${indicadoresValores.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${indicadoresValores.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${indicadoresValores.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${indicadoresValores.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${indicadoresValores.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${indicadoresValores.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -489,13 +407,11 @@ export class IndicadoresValores extends React.Component<IIndicadoresValoresProps
 }
 
 const mapStateToProps = ({ indicadoresValores, ...storeState }: IRootState) => ({
-  indicadores: storeState.indicadores.entities,
   indicadoresValoresList: indicadoresValores.entities,
   totalItems: indicadoresValores.totalItems
 });
 
 const mapDispatchToProps = {
-  getIndicadores,
   getEntities
 };
 

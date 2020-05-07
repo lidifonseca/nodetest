@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './status-pad-item-meta.reducer';
+import { getStatusPadItemMetaState, IStatusPadItemMetaBaseState, getEntities } from './status-pad-item-meta.reducer';
 import { IStatusPadItemMeta } from 'app/shared/model/status-pad-item-meta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IStatusPadItemMetaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IStatusPadItemMetaBaseState {
-  statusItemMeta: any;
-  styleLabel: any;
-  ordenacao: any;
-  ativo: any;
-}
 export interface IStatusPadItemMetaState extends IStatusPadItemMetaBaseState, IPaginationBaseState {}
 
 export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, IStatusPadItemMetaState> {
@@ -44,24 +38,9 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getStatusPadItemMetaState(this.props.location)
+      ...getStatusPadItemMetaState(this.props.location)
     };
   }
-
-  getStatusPadItemMetaState = (location): IStatusPadItemMetaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const statusItemMeta = url.searchParams.get('statusItemMeta') || '';
-    const styleLabel = url.searchParams.get('styleLabel') || '';
-    const ordenacao = url.searchParams.get('ordenacao') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      statusItemMeta,
-      styleLabel,
-      ordenacao,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -106,7 +85,9 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -160,7 +141,11 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.statusPadItemMeta.home.createLabel">Create a new Status Pad Item Meta</Translate>
@@ -173,45 +158,56 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="statusItemMetaLabel" for="status-pad-item-meta-statusItemMeta">
-                            <Translate contentKey="generadorApp.statusPadItemMeta.statusItemMeta">Status Item Meta</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'statusItemMeta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="statusItemMetaLabel" for="status-pad-item-meta-statusItemMeta">
+                              <Translate contentKey="generadorApp.statusPadItemMeta.statusItemMeta">Status Item Meta</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="statusItemMeta"
-                            id="status-pad-item-meta-statusItemMeta"
-                            value={this.state.statusItemMeta}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="styleLabelLabel" for="status-pad-item-meta-styleLabel">
-                            <Translate contentKey="generadorApp.statusPadItemMeta.styleLabel">Style Label</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="statusItemMeta"
+                              id="status-pad-item-meta-statusItemMeta"
+                              value={this.state.statusItemMeta}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="styleLabel" id="status-pad-item-meta-styleLabel" value={this.state.styleLabel} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ordenacaoLabel" for="status-pad-item-meta-ordenacao">
-                            <Translate contentKey="generadorApp.statusPadItemMeta.ordenacao">Ordenacao</Translate>
-                          </Label>
-                          <AvInput type="string" name="ordenacao" id="status-pad-item-meta-ordenacao" value={this.state.ordenacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="status-pad-item-meta-ativo">
-                            <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="status-pad-item-meta-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="styleLabelLabel" for="status-pad-item-meta-styleLabel">
+                              <Translate contentKey="generadorApp.statusPadItemMeta.styleLabel">Style Label</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="styleLabel" id="status-pad-item-meta-styleLabel" value={this.state.styleLabel} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ordenacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ordenacaoLabel" for="status-pad-item-meta-ordenacao">
+                              <Translate contentKey="generadorApp.statusPadItemMeta.ordenacao">Ordenacao</Translate>
+                            </Label>
+                            <AvInput type="string" name="ordenacao" id="status-pad-item-meta-ordenacao" value={this.state.ordenacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="status-pad-item-meta-ativo">
+                              <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="status-pad-item-meta-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -239,22 +235,30 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('statusItemMeta')}>
-                        <Translate contentKey="generadorApp.statusPadItemMeta.statusItemMeta">Status Item Meta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('styleLabel')}>
-                        <Translate contentKey="generadorApp.statusPadItemMeta.styleLabel">Style Label</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ordenacao')}>
-                        <Translate contentKey="generadorApp.statusPadItemMeta.ordenacao">Ordenacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'statusItemMeta' ? (
+                        <th className="hand" onClick={this.sort('statusItemMeta')}>
+                          <Translate contentKey="generadorApp.statusPadItemMeta.statusItemMeta">Status Item Meta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <th className="hand" onClick={this.sort('styleLabel')}>
+                          <Translate contentKey="generadorApp.statusPadItemMeta.styleLabel">Style Label</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ordenacao' ? (
+                        <th className="hand" onClick={this.sort('ordenacao')}>
+                          <Translate contentKey="generadorApp.statusPadItemMeta.ordenacao">Ordenacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -269,29 +273,39 @@ export class StatusPadItemMeta extends React.Component<IStatusPadItemMetaProps, 
                           </Button>
                         </td>
 
-                        <td>{statusPadItemMeta.statusItemMeta}</td>
+                        {this.state.baseFilters !== 'statusItemMeta' ? <td>{statusPadItemMeta.statusItemMeta}</td> : null}
 
-                        <td>{statusPadItemMeta.styleLabel}</td>
+                        {this.state.baseFilters !== 'styleLabel' ? <td>{statusPadItemMeta.styleLabel}</td> : null}
 
-                        <td>{statusPadItemMeta.ordenacao}</td>
+                        {this.state.baseFilters !== 'ordenacao' ? <td>{statusPadItemMeta.ordenacao}</td> : null}
 
-                        <td>{statusPadItemMeta.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{statusPadItemMeta.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${statusPadItemMeta.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${statusPadItemMeta.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${statusPadItemMeta.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${statusPadItemMeta.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${statusPadItemMeta.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${statusPadItemMeta.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

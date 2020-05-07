@@ -3,15 +3,15 @@
     "atendimentoAcompanhamentoPush": {
       "home": {
         "title": "Atendimento Acompanhamento Pushes",
-        "createLabel": "Criar novo Atendimento Acompanhamento Push",
-        "createOrEditLabel": "Criar ou editar Atendimento Acompanhamento Push",
-        "notFound": "Nenhum Atendimento Acompanhamento Push encontrado"
+        "createLabel": "Create a new Atendimento Acompanhamento Push",
+        "createOrEditLabel": "Create or edit a Atendimento Acompanhamento Push",
+        "notFound": "No Atendimento Acompanhamento Pushes found"
       },
-      "created": "Um novo Atendimento Acompanhamento Push foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento Acompanhamento Push foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento Acompanhamento Push foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento Acompanhamento Push is created with identifier {{ param }}",
+      "updated": "A Atendimento Acompanhamento Push is updated with identifier {{ param }}",
+      "deleted": "A Atendimento Acompanhamento Push is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento Acompanhamento Push {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento Acompanhamento Push {{ id }}?"
       },
       "detail": {
         "title": "Atendimento Acompanhamento Push"

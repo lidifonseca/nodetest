@@ -33,10 +33,13 @@ const initialState = {
 export type LogUserFranquiaState = Readonly<typeof initialState>;
 
 export interface ILogUserFranquiaBaseState {
+  baseFilters: any;
   descricao: any;
-  idAcao: any;
-  idTela: any;
-  idUsuario: any;
+}
+
+export interface ILogUserFranquiaUpdateState {
+  fieldsBase: ILogUserFranquiaBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -82,6 +85,9 @@ export default (state: LogUserFranquiaState = initialState, action): LogUserFran
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_LOGUSERFRANQUIA):
+      action.payload.data.descricao = action.payload.data.descricao
+        ? Buffer.from(action.payload.data.descricao).toString()
+        : action.payload.data.descricao;
       return {
         ...state,
         loading: false,
@@ -103,13 +109,14 @@ export default (state: LogUserFranquiaState = initialState, action): LogUserFran
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -129,26 +136,18 @@ const apiUrl = 'api/log-user-franquias';
 // Actions
 export type ICrudGetAllActionLogUserFranquia<T> = (
   descricao?: any,
-  idAcao?: any,
-  idTela?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, idAcao, idTela, idUsuario, page, size, sort) => {
+export const getEntities: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
-  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
-  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST,
-    payload: axios.get<ILogUserFranquia>(
-      `${requestUrl}${descricaoRequest}${idAcaoRequest}${idTelaRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ILogUserFranquia>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ILogUserFranquia> = id => {
@@ -159,35 +158,19 @@ export const getEntity: ICrudGetAction<ILogUserFranquia> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (
-  descricao,
-  idAcao,
-  idTela,
-  idUsuario,
-  page,
-  size,
-  sort
-) => {
+export const getEntitiesExport: ICrudGetAllActionLogUserFranquia<ILogUserFranquia> = (descricao, page, size, sort) => {
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
-  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
-  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_LOGUSERFRANQUIA_LIST,
-    payload: axios.get<ILogUserFranquia>(
-      `${requestUrl}${descricaoRequest}${idAcaoRequest}${idTelaRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ILogUserFranquia>(`${requestUrl}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<ILogUserFranquia> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idAcao: entity.idAcao === 'null' ? null : entity.idAcao,
-    idTela: entity.idTela === 'null' ? null : entity.idTela,
-    idUsuario: entity.idUsuario === 'null' ? null : entity.idUsuario
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_LOGUSERFRANQUIA,
@@ -198,12 +181,7 @@ export const createEntity: ICrudPutAction<ILogUserFranquia> = entity => async di
 };
 
 export const updateEntity: ICrudPutAction<ILogUserFranquia> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idAcao: entity.idAcao === 'null' ? null : entity.idAcao,
-    idTela: entity.idTela === 'null' ? null : entity.idTela,
-    idUsuario: entity.idUsuario === 'null' ? null : entity.idUsuario
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_LOGUSERFRANQUIA,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -222,12 +200,13 @@ export const deleteEntity: ICrudDeleteAction<ILogUserFranquia> = id => async dis
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -237,16 +216,11 @@ export const reset = () => ({
 
 export const getLogUserFranquiaState = (location): ILogUserFranquiaBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const descricao = url.searchParams.get('descricao') || '';
 
-  const idAcao = url.searchParams.get('idAcao') || '';
-  const idTela = url.searchParams.get('idTela') || '';
-  const idUsuario = url.searchParams.get('idUsuario') || '';
-
   return {
-    descricao,
-    idAcao,
-    idTela,
-    idUsuario
+    baseFilters,
+    descricao
   };
 };

@@ -43,11 +43,6 @@ import { IUsuarioAcao } from 'app/shared/model/usuario-acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ITela } from 'app/shared/model/tela.model';
-import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
-import { IAcao } from 'app/shared/model/acao.model';
-import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-
 export interface IUsuarioAcaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IUsuarioAcaoState extends IUsuarioAcaoBaseState, IPaginationBaseState {
@@ -68,19 +63,13 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getTelas();
-    this.props.getAcaos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUsuario: '',
         idAtendimento: '',
-        descricao: '',
-        idTela: '',
-        idAcao: ''
+        descricao: ''
       },
       () => this.sortEntities()
     );
@@ -125,20 +114,11 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
       ',' +
       this.state.order +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'idAtendimento=' +
       this.state.idAtendimento +
       '&' +
       'descricao=' +
       this.state.descricao +
-      '&' +
-      'idTela=' +
-      this.state.idTela +
-      '&' +
-      'idAcao=' +
-      this.state.idAcao +
       '&' +
       ''
     );
@@ -147,17 +127,18 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, idAtendimento, descricao, idTela, idAcao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(idUsuario, idAtendimento, descricao, idTela, idAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, descricao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(idAtendimento, descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();
@@ -196,15 +177,11 @@ export class UsuarioAcao extends React.Component<IUsuarioAcaoProps, IUsuarioAcao
 }
 
 const mapStateToProps = ({ usuarioAcao, ...storeState }: IRootState) => ({
-  telas: storeState.tela.entities,
-  acaos: storeState.acao.entities,
   usuarioAcaoList: usuarioAcao.entities,
   totalItems: usuarioAcao.totalItems
 });
 
 const mapDispatchToProps = {
-  getTelas,
-  getAcaos,
   getEntitiesExport
 };
 

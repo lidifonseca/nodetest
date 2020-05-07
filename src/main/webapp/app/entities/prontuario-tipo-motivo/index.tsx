@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import ProntuarioTipoMotivo from './prontuario-tipo-motivo';
 import ProntuarioTipoMotivoDetail from './prontuario-tipo-motivo-detail';
+import ProntuarioTipoMotivoRelatorioCSV from './relatorio/prontuario-tipo-motivo.csv';
 import ProntuarioTipoMotivoUpdate from './prontuario-tipo-motivo-update';
 import ProntuarioTipoMotivoDeleteDialog from './prontuario-tipo-motivo-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={ProntuarioTipoMotivoRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={ProntuarioTipoMotivoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={ProntuarioTipoMotivoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={ProntuarioTipoMotivoDetail} />

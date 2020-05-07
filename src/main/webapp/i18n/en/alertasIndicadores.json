@@ -3,15 +3,15 @@
     "alertasIndicadores": {
       "home": {
         "title": "Alertas Indicadores",
-        "createLabel": "Criar novo Alertas Indicadores",
-        "createOrEditLabel": "Criar ou editar Alertas Indicadores",
-        "notFound": "Nenhum Alertas Indicadores encontrado"
+        "createLabel": "Create a new Alertas Indicadores",
+        "createOrEditLabel": "Create or edit a Alertas Indicadores",
+        "notFound": "No Alertas Indicadores found"
       },
-      "created": "Um novo Alertas Indicadores foi criado com o identificador {{ param }}",
-      "updated": "Um Alertas Indicadores foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Alertas Indicadores foi excluído com o identificador {{ param }}",
+      "created": "A new Alertas Indicadores is created with identifier {{ param }}",
+      "updated": "A Alertas Indicadores is updated with identifier {{ param }}",
+      "deleted": "A Alertas Indicadores is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Alertas Indicadores {{ id }}?"
+        "question": "Are you sure you want to delete Alertas Indicadores {{ id }}?"
       },
       "detail": {
         "title": "Alertas Indicadores"
@@ -19,8 +19,7 @@
       "pontuacao": "Pontuacao",
       "alteracaoEsperada": "Alteracao Esperada",
       "observacoes": "Observacoes",
-      "usuarioId": "Usuario Id",
-      "padItemIndicadoresId": "Pad Item Indicadores Id"
+      "usuarioId": "Usuario Id"
     }
   }
 }

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteDispositivoAtual, defaultValue } from 'app/shared/model/paciente-dispositivo-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEDISPOSITIVOATUAL_LIST_EXPORT: 'pacienteDispositivoAtual/FETCH_PACIENTEDISPOSITIVOATUAL_LIST_EXPORT',
   FETCH_PACIENTEDISPOSITIVOATUAL_LIST: 'pacienteDispositivoAtual/FETCH_PACIENTEDISPOSITIVOATUAL_LIST',
   FETCH_PACIENTEDISPOSITIVOATUAL: 'pacienteDispositivoAtual/FETCH_PACIENTEDISPOSITIVOATUAL',
   CREATE_PACIENTEDISPOSITIVOATUAL: 'pacienteDispositivoAtual/CREATE_PACIENTEDISPOSITIVOATUAL',
@@ -30,10 +31,44 @@ const initialState = {
 
 export type PacienteDispositivoAtualState = Readonly<typeof initialState>;
 
+export interface IPacienteDispositivoAtualBaseState {
+  baseFilters: any;
+  idPaciente: any;
+  idPacienteDispositivo: any;
+  tqtTraqueostomia: any;
+  gttGastrostomia: any;
+  sneSondaNasoenteral: any;
+  svdSondaVesicalDeDemora: any;
+  svaSondaVesicalDeAlivio: any;
+  portACath: any;
+  piccAcessoVenosoCentral: any;
+  ventiladores: any;
+  uppUlceraPorPressao: any;
+  avpAcessoVenosoPeriferico: any;
+  uripen: any;
+  fraldaGeriatrica: any;
+  sngSondaNasogastrica: any;
+  bipap: any;
+  cpap: any;
+  cistostomia: any;
+  cateterNasalDeOxigenio: any;
+  mascaraDeVentilacao: any;
+  entubacaoOrotraqueal: any;
+  ileostomia: any;
+  jejunostomia: any;
+  colostomia: any;
+}
+
+export interface IPacienteDispositivoAtualUpdateState {
+  fieldsBase: IPacienteDispositivoAtualBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteDispositivoAtualState = initialState, action): PacienteDispositivoAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL):
       return {
@@ -51,6 +86,7 @@ export default (state: PacienteDispositivoAtualState = initialState, action): Pa
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEDISPOSITIVOATUAL):
@@ -130,7 +166,6 @@ export type ICrudGetAllActionPacienteDispositivoAtual<T> = (
   ileostomia?: any,
   jejunostomia?: any,
   colostomia?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -161,7 +196,6 @@ export const getEntities: ICrudGetAllActionPacienteDispositivoAtual<IPacienteDis
   ileostomia,
   jejunostomia,
   colostomia,
-  idUsuario,
   page,
   size,
   sort
@@ -192,13 +226,12 @@ export const getEntities: ICrudGetAllActionPacienteDispositivoAtual<IPacienteDis
   const ileostomiaRequest = ileostomia ? `ileostomia.contains=${ileostomia}&` : '';
   const jejunostomiaRequest = jejunostomia ? `jejunostomia.contains=${jejunostomia}&` : '';
   const colostomiaRequest = colostomia ? `colostomia.contains=${colostomia}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL_LIST,
     payload: axios.get<IPacienteDispositivoAtual>(
-      `${requestUrl}${idPacienteRequest}${idPacienteDispositivoRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}${ileostomiaRequest}${jejunostomiaRequest}${colostomiaRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idPacienteDispositivoRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}${ileostomiaRequest}${jejunostomiaRequest}${colostomiaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -207,6 +240,71 @@ export const getEntity: ICrudGetAction<IPacienteDispositivoAtual> = id => {
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL,
     payload: axios.get<IPacienteDispositivoAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPacienteDispositivoAtual<IPacienteDispositivoAtual> = (
+  idPaciente,
+  idPacienteDispositivo,
+  tqtTraqueostomia,
+  gttGastrostomia,
+  sneSondaNasoenteral,
+  svdSondaVesicalDeDemora,
+  svaSondaVesicalDeAlivio,
+  portACath,
+  piccAcessoVenosoCentral,
+  ventiladores,
+  uppUlceraPorPressao,
+  avpAcessoVenosoPeriferico,
+  uripen,
+  fraldaGeriatrica,
+  sngSondaNasogastrica,
+  bipap,
+  cpap,
+  cistostomia,
+  cateterNasalDeOxigenio,
+  mascaraDeVentilacao,
+  entubacaoOrotraqueal,
+  ileostomia,
+  jejunostomia,
+  colostomia,
+  page,
+  size,
+  sort
+) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const idPacienteDispositivoRequest = idPacienteDispositivo ? `idPacienteDispositivo.contains=${idPacienteDispositivo}&` : '';
+  const tqtTraqueostomiaRequest = tqtTraqueostomia ? `tqtTraqueostomia.contains=${tqtTraqueostomia}&` : '';
+  const gttGastrostomiaRequest = gttGastrostomia ? `gttGastrostomia.contains=${gttGastrostomia}&` : '';
+  const sneSondaNasoenteralRequest = sneSondaNasoenteral ? `sneSondaNasoenteral.contains=${sneSondaNasoenteral}&` : '';
+  const svdSondaVesicalDeDemoraRequest = svdSondaVesicalDeDemora ? `svdSondaVesicalDeDemora.contains=${svdSondaVesicalDeDemora}&` : '';
+  const svaSondaVesicalDeAlivioRequest = svaSondaVesicalDeAlivio ? `svaSondaVesicalDeAlivio.contains=${svaSondaVesicalDeAlivio}&` : '';
+  const portACathRequest = portACath ? `portACath.contains=${portACath}&` : '';
+  const piccAcessoVenosoCentralRequest = piccAcessoVenosoCentral ? `piccAcessoVenosoCentral.contains=${piccAcessoVenosoCentral}&` : '';
+  const ventiladoresRequest = ventiladores ? `ventiladores.contains=${ventiladores}&` : '';
+  const uppUlceraPorPressaoRequest = uppUlceraPorPressao ? `uppUlceraPorPressao.contains=${uppUlceraPorPressao}&` : '';
+  const avpAcessoVenosoPerifericoRequest = avpAcessoVenosoPeriferico
+    ? `avpAcessoVenosoPeriferico.contains=${avpAcessoVenosoPeriferico}&`
+    : '';
+  const uripenRequest = uripen ? `uripen.contains=${uripen}&` : '';
+  const fraldaGeriatricaRequest = fraldaGeriatrica ? `fraldaGeriatrica.contains=${fraldaGeriatrica}&` : '';
+  const sngSondaNasogastricaRequest = sngSondaNasogastrica ? `sngSondaNasogastrica.contains=${sngSondaNasogastrica}&` : '';
+  const bipapRequest = bipap ? `bipap.contains=${bipap}&` : '';
+  const cpapRequest = cpap ? `cpap.contains=${cpap}&` : '';
+  const cistostomiaRequest = cistostomia ? `cistostomia.contains=${cistostomia}&` : '';
+  const cateterNasalDeOxigenioRequest = cateterNasalDeOxigenio ? `cateterNasalDeOxigenio.contains=${cateterNasalDeOxigenio}&` : '';
+  const mascaraDeVentilacaoRequest = mascaraDeVentilacao ? `mascaraDeVentilacao.contains=${mascaraDeVentilacao}&` : '';
+  const entubacaoOrotraquealRequest = entubacaoOrotraqueal ? `entubacaoOrotraqueal.contains=${entubacaoOrotraqueal}&` : '';
+  const ileostomiaRequest = ileostomia ? `ileostomia.contains=${ileostomia}&` : '';
+  const jejunostomiaRequest = jejunostomia ? `jejunostomia.contains=${jejunostomia}&` : '';
+  const colostomiaRequest = colostomia ? `colostomia.contains=${colostomia}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOATUAL_LIST,
+    payload: axios.get<IPacienteDispositivoAtual>(
+      `${requestUrl}${idPacienteRequest}${idPacienteDispositivoRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}${ileostomiaRequest}${jejunostomiaRequest}${colostomiaRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -245,3 +343,60 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDispositivoAtual> = id => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteDispositivoAtualState = (location): IPacienteDispositivoAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idPacienteDispositivo = url.searchParams.get('idPacienteDispositivo') || '';
+  const tqtTraqueostomia = url.searchParams.get('tqtTraqueostomia') || '';
+  const gttGastrostomia = url.searchParams.get('gttGastrostomia') || '';
+  const sneSondaNasoenteral = url.searchParams.get('sneSondaNasoenteral') || '';
+  const svdSondaVesicalDeDemora = url.searchParams.get('svdSondaVesicalDeDemora') || '';
+  const svaSondaVesicalDeAlivio = url.searchParams.get('svaSondaVesicalDeAlivio') || '';
+  const portACath = url.searchParams.get('portACath') || '';
+  const piccAcessoVenosoCentral = url.searchParams.get('piccAcessoVenosoCentral') || '';
+  const ventiladores = url.searchParams.get('ventiladores') || '';
+  const uppUlceraPorPressao = url.searchParams.get('uppUlceraPorPressao') || '';
+  const avpAcessoVenosoPeriferico = url.searchParams.get('avpAcessoVenosoPeriferico') || '';
+  const uripen = url.searchParams.get('uripen') || '';
+  const fraldaGeriatrica = url.searchParams.get('fraldaGeriatrica') || '';
+  const sngSondaNasogastrica = url.searchParams.get('sngSondaNasogastrica') || '';
+  const bipap = url.searchParams.get('bipap') || '';
+  const cpap = url.searchParams.get('cpap') || '';
+  const cistostomia = url.searchParams.get('cistostomia') || '';
+  const cateterNasalDeOxigenio = url.searchParams.get('cateterNasalDeOxigenio') || '';
+  const mascaraDeVentilacao = url.searchParams.get('mascaraDeVentilacao') || '';
+  const entubacaoOrotraqueal = url.searchParams.get('entubacaoOrotraqueal') || '';
+  const ileostomia = url.searchParams.get('ileostomia') || '';
+  const jejunostomia = url.searchParams.get('jejunostomia') || '';
+  const colostomia = url.searchParams.get('colostomia') || '';
+
+  return {
+    baseFilters,
+    idPaciente,
+    idPacienteDispositivo,
+    tqtTraqueostomia,
+    gttGastrostomia,
+    sneSondaNasoenteral,
+    svdSondaVesicalDeDemora,
+    svaSondaVesicalDeAlivio,
+    portACath,
+    piccAcessoVenosoCentral,
+    ventiladores,
+    uppUlceraPorPressao,
+    avpAcessoVenosoPeriferico,
+    uripen,
+    fraldaGeriatrica,
+    sngSondaNasogastrica,
+    bipap,
+    cpap,
+    cistostomia,
+    cateterNasalDeOxigenio,
+    mascaraDeVentilacao,
+    entubacaoOrotraqueal,
+    ileostomia,
+    jejunostomia,
+    colostomia
+  };
+};

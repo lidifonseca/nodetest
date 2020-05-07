@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './prontuario-motivo-internacao-ps.reducer';
+import {
+  getEntity,
+  IProntuarioMotivoInternacaoPsBaseState,
+  getProntuarioMotivoInternacaoPsState
+} from './prontuario-motivo-internacao-ps.reducer';
 import { IProntuarioMotivoInternacaoPs } from 'app/shared/model/prontuario-motivo-internacao-ps.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProntuarioMotivoInternacaoPsState {
+  fieldsBase: IProntuarioMotivoInternacaoPsBaseState;
+}
+
 export interface IProntuarioMotivoInternacaoPsDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProntuarioMotivoInternacaoPsDetail extends React.Component<IProntuarioMotivoInternacaoPsDetailProps> {
+export class ProntuarioMotivoInternacaoPsDetail extends React.Component<
+  IProntuarioMotivoInternacaoPsDetailProps,
+  IProntuarioMotivoInternacaoPsState
+> {
   constructor(props: Readonly<IProntuarioMotivoInternacaoPsDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProntuarioMotivoInternacaoPsState(this.props.location)
     };
   }
 
@@ -92,21 +104,6 @@ export class ProntuarioMotivoInternacaoPsDetail extends React.Component<IProntua
                       </Col>
                       <Col md="9">
                         <dd>{prontuarioMotivoInternacaoPsEntity.idMotivo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{prontuarioMotivoInternacaoPsEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

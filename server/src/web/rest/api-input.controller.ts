@@ -68,7 +68,9 @@ export class ApiInputController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() apiInput: ApiInput): Promise<ApiInput> {
+    console.info(apiInput);
     const created = await this.apiInputService.save(apiInput);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ApiInput', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ApiInputController {
   })
   async put(@Req() req: Request, @Body() apiInput: ApiInput): Promise<ApiInput> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ApiInput', apiInput.id);
+
     return await this.apiInputService.update(apiInput);
   }
 

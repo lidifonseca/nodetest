@@ -68,7 +68,9 @@ export class CidController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() cid: Cid): Promise<Cid> {
+    console.info(cid);
     const created = await this.cidService.save(cid);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Cid', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class CidController {
   })
   async put(@Req() req: Request, @Body() cid: Cid): Promise<Cid> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Cid', cid.id);
+
     return await this.cidService.update(cid);
   }
 

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './categoria-atividade.reducer';
+import { getEntity, ICategoriaAtividadeBaseState, getCategoriaAtividadeState } from './categoria-atividade.reducer';
 import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICategoriaAtividadeState {
+  fieldsBase: ICategoriaAtividadeBaseState;
+}
+
 export interface ICategoriaAtividadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CategoriaAtividadeDetail extends React.Component<ICategoriaAtividadeDetailProps> {
+export class CategoriaAtividadeDetail extends React.Component<ICategoriaAtividadeDetailProps, ICategoriaAtividadeState> {
   constructor(props: Readonly<ICategoriaAtividadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCategoriaAtividadeState(this.props.location)
     };
   }
 
@@ -75,19 +80,6 @@ export class CategoriaAtividadeDetail extends React.Component<ICategoriaAtividad
                       </Col>
                       <Col md="9">
                         <dd>{categoriaAtividadeEntity.unidade ? categoriaAtividadeEntity.unidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.categoriaAtividade.idCategoria">Id Categoria</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{categoriaAtividadeEntity.idCategoria ? categoriaAtividadeEntity.idCategoria.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

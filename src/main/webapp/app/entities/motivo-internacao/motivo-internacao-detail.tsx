@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './motivo-internacao.reducer';
+import { getEntity, IMotivoInternacaoBaseState, getMotivoInternacaoState } from './motivo-internacao.reducer';
 import { IMotivoInternacao } from 'app/shared/model/motivo-internacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IMotivoInternacaoState {
+  fieldsBase: IMotivoInternacaoBaseState;
+}
+
 export interface IMotivoInternacaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class MotivoInternacaoDetail extends React.Component<IMotivoInternacaoDetailProps> {
+export class MotivoInternacaoDetail extends React.Component<IMotivoInternacaoDetailProps, IMotivoInternacaoState> {
   constructor(props: Readonly<IMotivoInternacaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getMotivoInternacaoState(this.props.location)
     };
   }
 

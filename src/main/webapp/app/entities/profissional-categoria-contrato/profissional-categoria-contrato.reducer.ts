@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalCategoriaContrato, defaultValue } from 'app/shared/model/profissional-categoria-contrato.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALCATEGORIACONTRATO_LIST_EXPORT: 'profissionalCategoriaContrato/FETCH_PROFISSIONALCATEGORIACONTRATO_LIST_EXPORT',
   FETCH_PROFISSIONALCATEGORIACONTRATO_LIST: 'profissionalCategoriaContrato/FETCH_PROFISSIONALCATEGORIACONTRATO_LIST',
   FETCH_PROFISSIONALCATEGORIACONTRATO: 'profissionalCategoriaContrato/FETCH_PROFISSIONALCATEGORIACONTRATO',
   CREATE_PROFISSIONALCATEGORIACONTRATO: 'profissionalCategoriaContrato/CREATE_PROFISSIONALCATEGORIACONTRATO',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type ProfissionalCategoriaContratoState = Readonly<typeof initialState>;
 
+export interface IProfissionalCategoriaContratoBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  idCategoriaContrato: any;
+  aceito: any;
+}
+
+export interface IProfissionalCategoriaContratoUpdateState {
+  fieldsBase: IProfissionalCategoriaContratoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalCategoriaContratoState = initialState, action): ProfissionalCategoriaContratoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO):
       return {
@@ -51,6 +65,7 @@ export default (state: ProfissionalCategoriaContratoState = initialState, action
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALCATEGORIACONTRATO):
@@ -142,6 +157,27 @@ export const getEntity: ICrudGetAction<IProfissionalCategoriaContrato> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalCategoriaContrato<IProfissionalCategoriaContrato> = (
+  idProfissional,
+  idCategoriaContrato,
+  aceito,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const idCategoriaContratoRequest = idCategoriaContrato ? `idCategoriaContrato.contains=${idCategoriaContrato}&` : '';
+  const aceitoRequest = aceito ? `aceito.contains=${aceito}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALCATEGORIACONTRATO_LIST,
+    payload: axios.get<IProfissionalCategoriaContrato>(
+      `${requestUrl}${idProfissionalRequest}${idCategoriaContratoRequest}${aceitoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalCategoriaContrato> = entity => async dispatch => {
   entity = {
     ...entity
@@ -177,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalCategoriaContrato> = i
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalCategoriaContratoState = (location): IProfissionalCategoriaContratoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const idCategoriaContrato = url.searchParams.get('idCategoriaContrato') || '';
+  const aceito = url.searchParams.get('aceito') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    idCategoriaContrato,
+    aceito
+  };
+};

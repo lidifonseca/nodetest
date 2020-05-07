@@ -3,15 +3,15 @@
     "pushnotificationEnvios": {
       "home": {
         "title": "Pushnotification Envios",
-        "createLabel": "Criar novo Pushnotification Envios",
-        "createOrEditLabel": "Criar ou editar Pushnotification Envios",
-        "notFound": "Nenhum Pushnotification Envios encontrado"
+        "createLabel": "Create a new Pushnotification Envios",
+        "createOrEditLabel": "Create or edit a Pushnotification Envios",
+        "notFound": "No Pushnotification Envios found"
       },
-      "created": "Um novo Pushnotification Envios foi criado com o identificador {{ param }}",
-      "updated": "Um Pushnotification Envios foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pushnotification Envios foi excluído com o identificador {{ param }}",
+      "created": "A new Pushnotification Envios is created with identifier {{ param }}",
+      "updated": "A Pushnotification Envios is updated with identifier {{ param }}",
+      "deleted": "A Pushnotification Envios is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pushnotification Envios {{ id }}?"
+        "question": "Are you sure you want to delete Pushnotification Envios {{ id }}?"
       },
       "detail": {
         "title": "Pushnotification Envios"

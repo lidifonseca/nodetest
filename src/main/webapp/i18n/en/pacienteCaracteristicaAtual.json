@@ -3,22 +3,21 @@
     "pacienteCaracteristicaAtual": {
       "home": {
         "title": "Paciente Caracteristica Atuals",
-        "createLabel": "Criar novo Paciente Caracteristica Atual",
-        "createOrEditLabel": "Criar ou editar Paciente Caracteristica Atual",
-        "notFound": "Nenhum Paciente Caracteristica Atual encontrado"
+        "createLabel": "Create a new Paciente Caracteristica Atual",
+        "createOrEditLabel": "Create or edit a Paciente Caracteristica Atual",
+        "notFound": "No Paciente Caracteristica Atuals found"
       },
-      "created": "Um novo Paciente Caracteristica Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Caracteristica Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Caracteristica Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Caracteristica Atual is created with identifier {{ param }}",
+      "updated": "A Paciente Caracteristica Atual is updated with identifier {{ param }}",
+      "deleted": "A Paciente Caracteristica Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Caracteristica Atual {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Caracteristica Atual {{ id }}?"
       },
       "detail": {
         "title": "Paciente Caracteristica Atual"
       },
       "idPaciente": "Id Paciente",
-      "idPacienteCaracteristica": "Id Paciente Caracteristica",
-      "idUsuario": "Id Usuario"
+      "idPacienteCaracteristica": "Id Paciente Caracteristica"
     }
   }
 }

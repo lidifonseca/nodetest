@@ -3,15 +3,15 @@
     "unidadeEasy": {
       "home": {
         "title": "Unidade Easies",
-        "createLabel": "Criar novo Unidade Easy",
-        "createOrEditLabel": "Criar ou editar Unidade Easy",
-        "notFound": "Nenhum Unidade Easy encontrado"
+        "createLabel": "Create a new Unidade Easy",
+        "createOrEditLabel": "Create or edit a Unidade Easy",
+        "notFound": "No Unidade Easies found"
       },
-      "created": "Um novo Unidade Easy foi criado com o identificador {{ param }}",
-      "updated": "Um Unidade Easy foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Unidade Easy foi excluído com o identificador {{ param }}",
+      "created": "A new Unidade Easy is created with identifier {{ param }}",
+      "updated": "A Unidade Easy is updated with identifier {{ param }}",
+      "deleted": "A Unidade Easy is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Unidade Easy {{ id }}?"
+        "question": "Are you sure you want to delete Unidade Easy {{ id }}?"
       },
       "detail": {
         "title": "Unidade Easy"
@@ -36,7 +36,12 @@
       "tissinscricao": "Tissinscricao",
       "tisscbo": "Tisscbo",
       "tisscoduf": "Tisscoduf",
-      "ativo": "Ativo"
+      "ativo": "Ativo",
+      "categoria": "Categoria",
+      "help": {
+        "telefone1": "@dbName TELEFONE1@@",
+        "telefone2": "@dbName TELEFONE2@@"
+      }
     }
   }
 }

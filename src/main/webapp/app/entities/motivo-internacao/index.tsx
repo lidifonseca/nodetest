@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import MotivoInternacao from './motivo-internacao';
 import MotivoInternacaoDetail from './motivo-internacao-detail';
+import MotivoInternacaoRelatorioCSV from './relatorio/motivo-internacao.csv';
 import MotivoInternacaoUpdate from './motivo-internacao-update';
 import MotivoInternacaoDeleteDialog from './motivo-internacao-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={MotivoInternacaoRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={MotivoInternacaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={MotivoInternacaoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={MotivoInternacaoDetail} />

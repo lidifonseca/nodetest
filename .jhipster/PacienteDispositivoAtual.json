@@ -168,17 +168,10 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503000300",
+    "changelogDate": "20200507113600",
     "entityTableName": "paciente_dispositivo_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

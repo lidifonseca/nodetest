@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './diario-tags.reducer';
+import {
+  IDiarioTagsUpdateState,
+  getEntity,
+  getDiarioTagsState,
+  IDiarioTagsBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './diario-tags.reducer';
 import { IDiarioTags } from 'app/shared/model/diario-tags.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IDiarioTagsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IDiarioTagsUpdateState {
-  isNew: boolean;
-}
-
 export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, IDiarioTagsUpdateState> {
   constructor(props: Readonly<IDiarioTagsUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getDiarioTagsState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,22 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['nome'] ? '&nome=' + fieldsBase['nome'] : '') +
+      (fieldsBase['idPai'] ? '&idPai=' + fieldsBase['idPai'] : '') +
+      (fieldsBase['nomeId'] ? '&nomeId=' + fieldsBase['nomeId'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { diarioTagsEntity } = this.props;
@@ -57,13 +79,14 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
   };
 
   handleClose = () => {
-    this.props.history.push('/diario-tags');
+    this.props.history.push('/diario-tags?' + this.getFiltersURL());
   };
 
   render() {
     const { diarioTagsEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +119,14 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/diario-tags" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/diario-tags?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +141,7 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,82 +157,84 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="diario-tags-nome">
+                                    <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nomeLabel" for="diario-tags-nome">
-                                <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="diario-tags-nome"
-                                type="text"
-                                name="nome"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="diario-tags-idPai">
+                                    <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPaiLabel" for="diario-tags-idPai">
-                                <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="diario-tags-idPai" type="string" className="form-control" name="idPai" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'nomeId' ? (
+                          <Col md="nomeId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeIdLabel" for="diario-tags-nomeId">
+                                    <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-nomeId" type="text" name="nomeId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nomeId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nomeIdLabel" for="diario-tags-nomeId">
-                                <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="diario-tags-nomeId"
-                                type="text"
-                                name="nomeId"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="diario-tags-ativo">
-                                <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="diario-tags-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="diario-tags-ativo">
+                                    <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

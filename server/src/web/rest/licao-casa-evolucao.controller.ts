@@ -68,7 +68,9 @@ export class LicaoCasaEvolucaoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() licaoCasaEvolucao: LicaoCasaEvolucao): Promise<LicaoCasaEvolucao> {
+    console.info(licaoCasaEvolucao);
     const created = await this.licaoCasaEvolucaoService.save(licaoCasaEvolucao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'LicaoCasaEvolucao', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class LicaoCasaEvolucaoController {
   })
   async put(@Req() req: Request, @Body() licaoCasaEvolucao: LicaoCasaEvolucao): Promise<LicaoCasaEvolucao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'LicaoCasaEvolucao', licaoCasaEvolucao.id);
+
     return await this.licaoCasaEvolucaoService.update(licaoCasaEvolucao);
   }
 

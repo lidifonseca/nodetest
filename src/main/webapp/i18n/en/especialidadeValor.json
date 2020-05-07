@@ -3,23 +3,22 @@
     "especialidadeValor": {
       "home": {
         "title": "Especialidade Valors",
-        "createLabel": "Criar novo Especialidade Valor",
-        "createOrEditLabel": "Criar ou editar Especialidade Valor",
-        "notFound": "Nenhum Especialidade Valor encontrado"
+        "createLabel": "Create a new Especialidade Valor",
+        "createOrEditLabel": "Create or edit a Especialidade Valor",
+        "notFound": "No Especialidade Valors found"
       },
-      "created": "Um novo Especialidade Valor foi criado com o identificador {{ param }}",
-      "updated": "Um Especialidade Valor foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Especialidade Valor foi excluído com o identificador {{ param }}",
+      "created": "A new Especialidade Valor is created with identifier {{ param }}",
+      "updated": "A Especialidade Valor is updated with identifier {{ param }}",
+      "deleted": "A Especialidade Valor is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Especialidade Valor {{ id }}?"
+        "question": "Are you sure you want to delete Especialidade Valor {{ id }}?"
       },
       "detail": {
         "title": "Especialidade Valor"
       },
       "idFranquia": "Id Franquia",
       "valor": "Valor",
-      "ativo": "Ativo",
-      "idEspecialidade": "Id Especialidade"
+      "ativo": "Ativo"
     }
   }
 }

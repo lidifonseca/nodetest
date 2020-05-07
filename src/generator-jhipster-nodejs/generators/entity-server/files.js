@@ -50,8 +50,9 @@ function writeFiles() {
     return {
         customEntityServerFiles() {
             if (this.skipServer) return;
+            generator = utils.analizeJavadoc(this);
 
-            this.writeFilesToDisk(serverFiles, this, false);
+            this.writeFilesToDisk(serverFiles, generator, false);
 
             this.fields.forEach(field => {
                 if (field.fieldIsEnum === true) {

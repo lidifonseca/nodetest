@@ -32,8 +32,14 @@ const initialState = {
 export type StatusAtualState = Readonly<typeof initialState>;
 
 export interface IStatusAtualBaseState {
+  baseFilters: any;
   statusAtual: any;
   styleLabel: any;
+}
+
+export interface IStatusAtualUpdateState {
+  fieldsBase: IStatusAtualBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -188,10 +194,12 @@ export const reset = () => ({
 
 export const getStatusAtualState = (location): IStatusAtualBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const statusAtual = url.searchParams.get('statusAtual') || '';
   const styleLabel = url.searchParams.get('styleLabel') || '';
 
   return {
+    baseFilters,
     statusAtual,
     styleLabel
   };

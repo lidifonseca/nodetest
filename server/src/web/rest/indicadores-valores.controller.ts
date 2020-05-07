@@ -68,7 +68,9 @@ export class IndicadoresValoresController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() indicadoresValores: IndicadoresValores): Promise<IndicadoresValores> {
+    console.info(indicadoresValores);
     const created = await this.indicadoresValoresService.save(indicadoresValores);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'IndicadoresValores', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class IndicadoresValoresController {
   })
   async put(@Req() req: Request, @Body() indicadoresValores: IndicadoresValores): Promise<IndicadoresValores> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'IndicadoresValores', indicadoresValores.id);
+
     return await this.indicadoresValoresService.update(indicadoresValores);
   }
 

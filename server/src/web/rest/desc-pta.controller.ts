@@ -68,7 +68,9 @@ export class DescPtaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() descPta: DescPta): Promise<DescPta> {
+    console.info(descPta);
     const created = await this.descPtaService.save(descPta);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'DescPta', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class DescPtaController {
   })
   async put(@Req() req: Request, @Body() descPta: DescPta): Promise<DescPta> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'DescPta', descPta.id);
+
     return await this.descPtaService.update(descPta);
   }
 

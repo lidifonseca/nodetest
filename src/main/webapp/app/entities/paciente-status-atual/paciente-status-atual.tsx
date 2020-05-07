@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -70,7 +69,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
         dataStatus: '',
         observacao: '',
         ativo: '',
-        idUsuario: '',
         paciente: '',
         status: ''
       },
@@ -128,9 +126,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'paciente=' +
       this.state.paciente +
       '&' +
@@ -144,8 +139,8 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataStatus, observacao, ativo, idUsuario, paciente, status, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(dataStatus, observacao, ativo, idUsuario, paciente, status, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { dataStatus, observacao, ativo, paciente, status, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(dataStatus, observacao, ativo, paciente, status, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -213,18 +208,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                               <Translate contentKey="generadorApp.pacienteStatusAtual.ativo">Ativo</Translate>
                             </Label>
                             <AvInput type="string" name="ativo" id="paciente-status-atual-ativo" value={this.state.ativo} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'idUsuario' ? (
-                        <Col md="3">
-                          <Row>
-                            <Label id="idUsuarioLabel" for="paciente-status-atual-idUsuario">
-                              <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
-                            </Label>
-
-                            <AvInput type="text" name="idUsuario" id="paciente-status-atual-idUsuario" value={this.state.idUsuario} />
                           </Row>
                         </Col>
                       ) : null}
@@ -317,12 +300,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'idUsuario' ? (
-                        <th className="hand" onClick={this.sort('idUsuario')}>
-                          <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
 
                       {this.state.baseFilters !== 'paciente' ? (
                         <th>
@@ -362,8 +339,6 @@ export class PacienteStatusAtual extends React.Component<IPacienteStatusAtualPro
                         ) : null}
 
                         {this.state.baseFilters !== 'ativo' ? <td>{pacienteStatusAtual.ativo}</td> : null}
-
-                        {this.state.baseFilters !== 'idUsuario' ? <td>{pacienteStatusAtual.idUsuario}</td> : null}
 
                         {this.state.baseFilters !== 'paciente' ? (
                           <td>

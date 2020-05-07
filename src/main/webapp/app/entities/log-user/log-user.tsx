@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -35,11 +26,6 @@ import { getLogUserState, ILogUserBaseState, getEntities } from './log-user.redu
 import { ILogUser } from 'app/shared/model/log-user.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-
-import { IAcao } from 'app/shared/model/acao.model';
-import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-import { ITela } from 'app/shared/model/tela.model';
-import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
 
 export interface ILogUserProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -58,18 +44,12 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getAcaos();
-    this.props.getTelas();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUsuario: '',
-        descricao: '',
-        idAcao: '',
-        idTela: ''
+        descricao: ''
       },
       () => this.sortEntities()
     );
@@ -102,7 +82,9 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -114,17 +96,8 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
       ',' +
       this.state.order +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'descricao=' +
       this.state.descricao +
-      '&' +
-      'idAcao=' +
-      this.state.idAcao +
-      '&' +
-      'idTela=' +
-      this.state.idTela +
       '&' +
       ''
     );
@@ -133,12 +106,12 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, descricao, idAcao, idTela, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idUsuario, descricao, idAcao, idTela, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descricao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { acaos, telas, logUserList, match, totalItems } = this.props;
+    const { logUserList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -156,7 +129,11 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.logUser.home.createLabel">Create a new Log User</Translate>
@@ -169,63 +146,16 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="log-user-idUsuario">
-                            <Translate contentKey="generadorApp.logUser.idUsuario">Id Usuario</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUsuario" id="log-user-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="descricaoLabel" for="log-user-descricao">
-                            <Translate contentKey="generadorApp.logUser.descricao">Descricao</Translate>
-                          </Label>
-                          <AvInput id="log-user-descricao" type="textarea" name="descricao" />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="log-user-idAcao">
-                              <Translate contentKey="generadorApp.logUser.idAcao">Id Acao</Translate>
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="descricaoLabel" for="log-user-descricao">
+                              <Translate contentKey="generadorApp.logUser.descricao">Descricao</Translate>
                             </Label>
-                            <AvInput id="log-user-idAcao" type="select" className="form-control" name="idAcaoId">
-                              <option value="" key="0" />
-                              {acaos
-                                ? acaos.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="log-user-idTela">
-                              <Translate contentKey="generadorApp.logUser.idTela">Id Tela</Translate>
-                            </Label>
-                            <AvInput id="log-user-idTela" type="select" className="form-control" name="idTelaId">
-                              <option value="" key="0" />
-                              {telas
-                                ? telas.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput id="log-user-descricao" type="textarea" name="descricao" />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -253,22 +183,12 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.logUser.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('descricao')}>
-                        <Translate contentKey="generadorApp.logUser.descricao">Descricao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.logUser.idAcao">Id Acao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.logUser.idTela">Id Tela</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'descricao' ? (
+                        <th className="hand" onClick={this.sort('descricao')}>
+                          <Translate contentKey="generadorApp.logUser.descricao">Descricao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -283,14 +203,31 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
                           </Button>
                         </td>
 
-                        <td>{logUser.idUsuario}</td>
-
-                        <td>{logUser.descricao}</td>
-                        <td>{logUser.idAcao ? <Link to={`acao/${logUser.idAcao.id}`}>{logUser.idAcao.id}</Link> : ''}</td>
-                        <td>{logUser.idTela ? <Link to={`tela/${logUser.idTela.id}`}>{logUser.idTela.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'descricao' ? (
+                          <td>{logUser.descricao ? Buffer.from(logUser.descricao).toString() : null}</td>
+                        ) : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${logUser.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${logUser.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button tag={Link} to={`${match.url}/${logUser.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -326,15 +263,11 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 }
 
 const mapStateToProps = ({ logUser, ...storeState }: IRootState) => ({
-  acaos: storeState.acao.entities,
-  telas: storeState.tela.entities,
   logUserList: logUser.entities,
   totalItems: logUser.totalItems
 });
 
 const mapDispatchToProps = {
-  getAcaos,
-  getTelas,
   getEntities
 };
 

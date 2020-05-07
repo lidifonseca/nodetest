@@ -3,15 +3,15 @@
     "padMatMed": {
       "home": {
         "title": "Pad Mat Meds",
-        "createLabel": "Criar novo Pad Mat Med",
-        "createOrEditLabel": "Criar ou editar Pad Mat Med",
-        "notFound": "Nenhum Pad Mat Med encontrado"
+        "createLabel": "Create a new Pad Mat Med",
+        "createOrEditLabel": "Create or edit a Pad Mat Med",
+        "notFound": "No Pad Mat Meds found"
       },
-      "created": "Um novo Pad Mat Med foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Mat Med foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Mat Med foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Mat Med is created with identifier {{ param }}",
+      "updated": "A Pad Mat Med is updated with identifier {{ param }}",
+      "deleted": "A Pad Mat Med is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Mat Med {{ id }}?"
+        "question": "Are you sure you want to delete Pad Mat Med {{ id }}?"
       },
       "detail": {
         "title": "Pad Mat Med"
@@ -19,7 +19,6 @@
       "idPad": "Id Pad",
       "idMatMed": "Id Mat Med",
       "qtd": "Qtd",
-      "idUsuario": "Id Usuario",
       "ativo": "Ativo"
     }
   }

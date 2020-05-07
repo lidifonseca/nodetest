@@ -7,18 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A GeoPanico.
  */
-@Entity('geo_panico')
+@Entity('tb_geo_panico')
 export default class GeoPanico extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_panico', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PANICO', nullable: false })
   idPanico: number;
 
-  @Column({ type: 'integer', name: 'id_paciente', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE', nullable: false })
   idPaciente: number;
 
-  @Column({ name: 'latitude', length: 300 })
+  @Column({ name: 'LATITUDE', length: 300 })
   latitude: string;
 
-  @Column({ name: 'longitude', length: 300 })
+  @Column({ name: 'LONGITUDE', length: 300 })
   longitude: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

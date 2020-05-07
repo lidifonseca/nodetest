@@ -14,14 +14,10 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer"
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502230800",
+    "changelogDate": "20200507104100",
     "entityTableName": "atendimento_status_financeiro",
     "dto": "mapstruct",
     "pagination": "pagination",

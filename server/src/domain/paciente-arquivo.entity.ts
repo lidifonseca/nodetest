@@ -7,17 +7,18 @@ import Paciente from './paciente.entity';
 /**
  * A PacienteArquivo.
  */
-@Entity('paciente_arquivo')
+@Entity('tb_paciente_arquivo')
 export default class PacienteArquivo extends BaseEntity {
-  @Column({ name: 'arquivo' })
+  @Column({ name: 'ARQUIVO' })
   arquivo: string;
 
-  @Column({ name: 'arquivo_content_type' })
+  @Column({ name: 'ARQUIVO_CONTENT_TYPE' })
   arquivoContentType: string;
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   @ManyToOne(type => Paciente)
+  @JoinColumn({ name: 'ID_PACIENTE', referencedColumnName: 'id' })
   paciente: Paciente;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

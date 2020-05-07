@@ -18,9 +18,7 @@
       },
       "resposta": "Resposta",
       "pontuacao": "Pontuacao",
-      "respostaAtiva": "Resposta Ativa",
-      "acoesRespostas": "Acoes Respostas",
-      "perguntasQuestionarioId": "Perguntas Questionario Id"
+      "respostaAtiva": "Resposta Ativa"
     }
   }
 }

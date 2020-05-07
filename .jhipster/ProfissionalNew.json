@@ -87,6 +87,7 @@
         },
         {
             "fieldName": "telefone1",
+            "javadoc": "@dbName TELEFONE1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -95,6 +96,7 @@
         },
         {
             "fieldName": "telefone2",
+            "javadoc": "@dbName TELEFONE2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -103,6 +105,7 @@
         },
         {
             "fieldName": "celular1",
+            "javadoc": "@dbName CELULAR1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -111,6 +114,7 @@
         },
         {
             "fieldName": "celular2",
+            "javadoc": "@dbName CELULAR2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -240,7 +244,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200503004600",
+    "changelogDate": "20200507121900",
     "entityTableName": "profissional_new",
     "dto": "mapstruct",
     "pagination": "pagination",

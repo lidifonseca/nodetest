@@ -3,23 +3,21 @@
     "padItemAtividade": {
       "home": {
         "title": "Pad Item Atividades",
-        "createLabel": "Criar novo Pad Item Atividade",
-        "createOrEditLabel": "Criar ou editar Pad Item Atividade",
-        "notFound": "Nenhum Pad Item Atividade encontrado"
+        "createLabel": "Create a new Pad Item Atividade",
+        "createOrEditLabel": "Create or edit a Pad Item Atividade",
+        "notFound": "No Pad Item Atividades found"
       },
-      "created": "Um novo Pad Item Atividade foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Atividade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Atividade foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Atividade is created with identifier {{ param }}",
+      "updated": "A Pad Item Atividade is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Atividade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Atividade {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Atividade {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Atividade"
       },
       "dataInicio": "Data Inicio",
-      "dataFim": "Data Fim",
-      "idAtividade": "Id Atividade",
-      "idPadItem": "Id Pad Item"
+      "dataFim": "Data Fim"
     }
   }
 }

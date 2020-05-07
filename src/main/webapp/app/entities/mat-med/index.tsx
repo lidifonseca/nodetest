@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import MatMed from './mat-med';
 import MatMedDetail from './mat-med-detail';
+import MatMedRelatorioCSV from './relatorio/mat-med.csv';
 import MatMedUpdate from './mat-med-update';
 import MatMedDeleteDialog from './mat-med-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={MatMedRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={MatMedUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={MatMedUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={MatMedDetail} />

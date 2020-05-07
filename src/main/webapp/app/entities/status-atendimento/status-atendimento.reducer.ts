@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IStatusAtendimento, defaultValue } from 'app/shared/model/status-atendimento.model';
 
 export const ACTION_TYPES = {
+  FETCH_STATUSATENDIMENTO_LIST_EXPORT: 'statusAtendimento/FETCH_STATUSATENDIMENTO_LIST_EXPORT',
   FETCH_STATUSATENDIMENTO_LIST: 'statusAtendimento/FETCH_STATUSATENDIMENTO_LIST',
   FETCH_STATUSATENDIMENTO: 'statusAtendimento/FETCH_STATUSATENDIMENTO',
   CREATE_STATUSATENDIMENTO: 'statusAtendimento/CREATE_STATUSATENDIMENTO',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type StatusAtendimentoState = Readonly<typeof initialState>;
 
+export interface IStatusAtendimentoBaseState {
+  baseFilters: any;
+  statusAtendimento: any;
+  styleLabel: any;
+  ordenacao: any;
+  ativo: any;
+}
+
+export interface IStatusAtendimentoUpdateState {
+  fieldsBase: IStatusAtendimentoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: StatusAtendimentoState = initialState, action): StatusAtendimentoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_STATUSATENDIMENTO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATENDIMENTO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATENDIMENTO):
       return {
@@ -51,6 +66,7 @@ export default (state: StatusAtendimentoState = initialState, action): StatusAte
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_STATUSATENDIMENTO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATENDIMENTO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATENDIMENTO):
     case FAILURE(ACTION_TYPES.CREATE_STATUSATENDIMENTO):
@@ -110,7 +126,6 @@ export type ICrudGetAllActionStatusAtendimento<T> = (
   styleLabel?: any,
   ordenacao?: any,
   ativo?: any,
-  atendimento?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -121,7 +136,6 @@ export const getEntities: ICrudGetAllActionStatusAtendimento<IStatusAtendimento>
   styleLabel,
   ordenacao,
   ativo,
-  atendimento,
   page,
   size,
   sort
@@ -130,13 +144,12 @@ export const getEntities: ICrudGetAllActionStatusAtendimento<IStatusAtendimento>
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
   const ordenacaoRequest = ordenacao ? `ordenacao.contains=${ordenacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_STATUSATENDIMENTO_LIST,
     payload: axios.get<IStatusAtendimento>(
-      `${requestUrl}${statusAtendimentoRequest}${styleLabelRequest}${ordenacaoRequest}${ativoRequest}${atendimentoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${statusAtendimentoRequest}${styleLabelRequest}${ordenacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -145,6 +158,29 @@ export const getEntity: ICrudGetAction<IStatusAtendimento> = id => {
   return {
     type: ACTION_TYPES.FETCH_STATUSATENDIMENTO,
     payload: axios.get<IStatusAtendimento>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionStatusAtendimento<IStatusAtendimento> = (
+  statusAtendimento,
+  styleLabel,
+  ordenacao,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const statusAtendimentoRequest = statusAtendimento ? `statusAtendimento.contains=${statusAtendimento}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+  const ordenacaoRequest = ordenacao ? `ordenacao.contains=${ordenacao}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_STATUSATENDIMENTO_LIST,
+    payload: axios.get<IStatusAtendimento>(
+      `${requestUrl}${statusAtendimentoRequest}${styleLabelRequest}${ordenacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -183,3 +219,20 @@ export const deleteEntity: ICrudDeleteAction<IStatusAtendimento> = id => async d
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getStatusAtendimentoState = (location): IStatusAtendimentoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const statusAtendimento = url.searchParams.get('statusAtendimento') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+  const ordenacao = url.searchParams.get('ordenacao') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    statusAtendimento,
+    styleLabel,
+    ordenacao,
+    ativo
+  };
+};

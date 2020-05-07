@@ -16,11 +16,8 @@
       "detail": {
         "title": "Usuario Acao"
       },
-      "idUsuario": "Id Usuario",
       "idAtendimento": "Id Atendimento",
-      "descricao": "Descricao",
-      "idTela": "Id Tela",
-      "idAcao": "Id Acao"
+      "descricao": "Descricao"
     }
   }
 }

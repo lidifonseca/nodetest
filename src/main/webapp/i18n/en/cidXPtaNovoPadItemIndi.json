@@ -3,15 +3,15 @@
     "cidXPtaNovoPadItemIndi": {
       "home": {
         "title": "Cid X Pta Novo Pad Item Indis",
-        "createLabel": "Criar novo Cid X Pta Novo Pad Item Indi",
-        "createOrEditLabel": "Criar ou editar Cid X Pta Novo Pad Item Indi",
-        "notFound": "Nenhum Cid X Pta Novo Pad Item Indi encontrado"
+        "createLabel": "Create a new Cid X Pta Novo Pad Item Indi",
+        "createOrEditLabel": "Create or edit a Cid X Pta Novo Pad Item Indi",
+        "notFound": "No Cid X Pta Novo Pad Item Indis found"
       },
-      "created": "Um novo Cid X Pta Novo Pad Item Indi foi criado com o identificador {{ param }}",
-      "updated": "Um Cid X Pta Novo Pad Item Indi foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Cid X Pta Novo Pad Item Indi foi excluído com o identificador {{ param }}",
+      "created": "A new Cid X Pta Novo Pad Item Indi is created with identifier {{ param }}",
+      "updated": "A Cid X Pta Novo Pad Item Indi is updated with identifier {{ param }}",
+      "deleted": "A Cid X Pta Novo Pad Item Indi is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Cid X Pta Novo Pad Item Indi {{ id }}?"
+        "question": "Are you sure you want to delete Cid X Pta Novo Pad Item Indi {{ id }}?"
       },
       "detail": {
         "title": "Cid X Pta Novo Pad Item Indi"
@@ -21,11 +21,7 @@
       "minimo": "Minimo",
       "unidadeMedidaExtra": "Unidade Medida Extra",
       "unidadeMedidaId": "Unidade Medida Id",
-      "score": "Score",
-      "alertasIndicadores": "Alertas Indicadores",
-      "padItemIndicadoresId": "Pad Item Indicadores Id",
-      "categoriasId": "Categorias Id",
-      "cidXPtaNovoId": "Cid X Pta Novo Id"
+      "score": "Score"
     }
   }
 }

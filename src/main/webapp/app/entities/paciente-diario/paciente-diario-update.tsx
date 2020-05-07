@@ -4,15 +4,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { IUsuario } from 'app/shared/model/usuario.model';
-import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
 import {
+  IPacienteDiarioUpdateState,
   getEntity,
   getPacienteDiarioState,
   IPacienteDiarioBaseState,
@@ -27,20 +24,16 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteDiarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteDiarioUpdateState {
-  fieldsBase: IPacienteDiarioBaseState;
-  isNew: boolean;
-  idPacienteId: string;
-  idUsuarioId: string;
-}
-
 export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateProps, IPacienteDiarioUpdateState> {
+  historicoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IPacienteDiarioUpdateProps>) {
     super(props);
+
+    this.historicoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getPacienteDiarioState(this.props.location),
-      idPacienteId: '0',
-      idUsuarioId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -56,19 +49,31 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPacientes();
-    this.props.getUsuarios();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idOperadora'] ? '&idOperadora=' + fieldsBase['idOperadora'] : '') +
+      (fieldsBase['historico'] ? '&historico=' + fieldsBase['historico'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteDiarioEntity } = this.props;
@@ -86,15 +91,15 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-diario');
+    this.props.history.push('/paciente-diario?' + this.getFiltersURL());
   };
 
   render() {
-    const { pacienteDiarioEntity, pacientes, usuarios, loading, updating } = this.props;
+    const { pacienteDiarioEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { historico } = pacienteDiarioEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -110,9 +115,7 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
             isNew
               ? {}
               : {
-                  ...pacienteDiarioEntity,
-                  idPaciente: pacienteDiarioEntity.idPaciente ? pacienteDiarioEntity.idPaciente.id : null,
-                  idUsuario: pacienteDiarioEntity.idUsuario ? pacienteDiarioEntity.idUsuario.id : null
+                  ...pacienteDiarioEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -129,7 +132,14 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/paciente-diario" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente-diario?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -161,7 +171,7 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idOperadora ? (
+                        {baseFilters !== 'idOperadora' ? (
                           <Col md="idOperadora">
                             <AvGroup>
                               <Row>
@@ -177,10 +187,10 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idOperadora" value={this.state.fieldsBase.idOperadora} />
+                          <AvInput type="hidden" name="idOperadora" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.historico ? (
+                        {baseFilters !== 'historico' ? (
                           <Col md="historico">
                             <AvGroup>
                               <Row>
@@ -196,10 +206,10 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="historico" value={this.state.fieldsBase.historico} />
+                          <AvInput type="hidden" name="historico" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -215,65 +225,7 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
-                        )}
-                        {!this.state.fieldsBase.idPaciente ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="paciente-diario-idPaciente">
-                                    <Translate contentKey="generadorApp.pacienteDiario.idPaciente">Id Paciente</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="paciente-diario-idPaciente" type="select" className="form-control" name="idPaciente">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.pacienteDiario.idPaciente.empty')}
-                                    </option>
-                                    {pacientes
-                                      ? pacientes.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase.idPaciente} />
-                        )}
-                        {!this.state.fieldsBase.idUsuario ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="paciente-diario-idUsuario">
-                                    <Translate contentKey="generadorApp.pacienteDiario.idUsuario">Id Usuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="paciente-diario-idUsuario" type="select" className="form-control" name="idUsuario">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.pacienteDiario.idUsuario.empty')}
-                                    </option>
-                                    {usuarios
-                                      ? usuarios.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>
@@ -289,8 +241,6 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  pacientes: storeState.paciente.entities,
-  usuarios: storeState.usuario.entities,
   pacienteDiarioEntity: storeState.pacienteDiario.entity,
   loading: storeState.pacienteDiario.loading,
   updating: storeState.pacienteDiario.updating,
@@ -298,8 +248,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPacientes,
-  getUsuarios,
   getEntity,
   updateEntity,
   setBlob,

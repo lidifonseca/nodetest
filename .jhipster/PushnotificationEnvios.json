@@ -16,7 +16,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503005500",
+    "changelogDate": "20200507122800",
     "entityTableName": "pushnotification_envios",
     "dto": "mapstruct",
     "pagination": "pagination",

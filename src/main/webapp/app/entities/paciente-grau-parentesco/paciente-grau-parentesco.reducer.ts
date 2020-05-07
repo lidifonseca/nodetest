@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteGrauParentesco, defaultValue } from 'app/shared/model/paciente-grau-parentesco.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEGRAUPARENTESCO_LIST_EXPORT: 'pacienteGrauParentesco/FETCH_PACIENTEGRAUPARENTESCO_LIST_EXPORT',
   FETCH_PACIENTEGRAUPARENTESCO_LIST: 'pacienteGrauParentesco/FETCH_PACIENTEGRAUPARENTESCO_LIST',
   FETCH_PACIENTEGRAUPARENTESCO: 'pacienteGrauParentesco/FETCH_PACIENTEGRAUPARENTESCO',
   CREATE_PACIENTEGRAUPARENTESCO: 'pacienteGrauParentesco/CREATE_PACIENTEGRAUPARENTESCO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PacienteGrauParentescoState = Readonly<typeof initialState>;
 
+export interface IPacienteGrauParentescoBaseState {
+  baseFilters: any;
+  grauParentesco: any;
+  ativo: any;
+}
+
+export interface IPacienteGrauParentescoUpdateState {
+  fieldsBase: IPacienteGrauParentescoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteGrauParentescoState = initialState, action): PacienteGrauParentescoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO):
       return {
@@ -51,6 +64,7 @@ export default (state: PacienteGrauParentescoState = initialState, action): Paci
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEGRAUPARENTESCO):
@@ -131,6 +145,23 @@ export const getEntity: ICrudGetAction<IPacienteGrauParentesco> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteGrauParentesco<IPacienteGrauParentesco> = (
+  grauParentesco,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const grauParentescoRequest = grauParentesco ? `grauParentesco.contains=${grauParentesco}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEGRAUPARENTESCO_LIST,
+    payload: axios.get<IPacienteGrauParentesco>(`${requestUrl}${grauParentescoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteGrauParentesco> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +197,16 @@ export const deleteEntity: ICrudDeleteAction<IPacienteGrauParentesco> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteGrauParentescoState = (location): IPacienteGrauParentescoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const grauParentesco = url.searchParams.get('grauParentesco') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    grauParentesco,
+    ativo
+  };
+};

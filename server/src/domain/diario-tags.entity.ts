@@ -7,18 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A DiarioTags.
  */
-@Entity('diario_tags')
+@Entity('tb_diario_tags')
 export default class DiarioTags extends BaseEntity {
-  @Column({ name: 'nome', length: 45, nullable: false })
+  @Column({ name: 'NOME', length: 45, nullable: false })
   nome: string;
 
-  @Column({ type: 'integer', name: 'id_pai' })
+  @Column({ type: 'integer', name: 'ID_PAI' })
   idPai: number;
 
-  @Column({ name: 'nome_id', length: 45 })
+  @Column({ name: 'NOME_ID', length: 45 })
   nomeId: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

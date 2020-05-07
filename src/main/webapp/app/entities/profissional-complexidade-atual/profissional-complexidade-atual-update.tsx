@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './profissional-complexidade-atual.reducer';
+import {
+  IProfissionalComplexidadeAtualUpdateState,
+  getEntity,
+  getProfissionalComplexidadeAtualState,
+  IProfissionalComplexidadeAtualBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './profissional-complexidade-atual.reducer';
 import { IProfissionalComplexidadeAtual } from 'app/shared/model/profissional-complexidade-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProfissionalComplexidadeAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IProfissionalComplexidadeAtualUpdateState {
-  isNew: boolean;
-}
 
 export class ProfissionalComplexidadeAtualUpdate extends React.Component<
   IProfissionalComplexidadeAtualUpdateProps,
@@ -25,7 +29,9 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
 > {
   constructor(props: Readonly<IProfissionalComplexidadeAtualUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProfissionalComplexidadeAtualState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,24 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
+      (fieldsBase['baixa'] ? '&baixa=' + fieldsBase['baixa'] : '') +
+      (fieldsBase['media'] ? '&media=' + fieldsBase['media'] : '') +
+      (fieldsBase['alta'] ? '&alta=' + fieldsBase['alta'] : '') +
+      (fieldsBase['ventilacaoMecanica'] ? '&ventilacaoMecanica=' + fieldsBase['ventilacaoMecanica'] : '') +
+      (fieldsBase['telemonitoramente'] ? '&telemonitoramente=' + fieldsBase['telemonitoramente'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalComplexidadeAtualEntity } = this.props;
@@ -60,13 +84,14 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-complexidade-atual');
+    this.props.history.push('/profissional-complexidade-atual?' + this.getFiltersURL());
   };
 
   render() {
     const { profissionalComplexidadeAtualEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +129,7 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/profissional-complexidade-atual"
+                  to={'/profissional-complexidade-atual?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +148,7 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,146 +171,151 @@ export class ProfissionalComplexidadeAtualUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-complexidade-atual-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalComplexidadeAtual.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-complexidade-atual-idProfissional"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProfissional"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idProfissionalLabel" for="profissional-complexidade-atual-idProfissional">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.idProfissional">
-                                  Id Profissional
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-complexidade-atual-idProfissional"
-                                type="string"
-                                className="form-control"
-                                name="idProfissional"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'baixa' ? (
+                          <Col md="baixa">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="baixaLabel" for="profissional-complexidade-atual-baixa">
+                                    <Translate contentKey="generadorApp.profissionalComplexidadeAtual.baixa">Baixa</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-complexidade-atual-baixa" type="string" className="form-control" name="baixa" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="baixa" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="baixaLabel" for="profissional-complexidade-atual-baixa">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.baixa">Baixa</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-complexidade-atual-baixa" type="string" className="form-control" name="baixa" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'media' ? (
+                          <Col md="media">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="mediaLabel" for="profissional-complexidade-atual-media">
+                                    <Translate contentKey="generadorApp.profissionalComplexidadeAtual.media">Media</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-complexidade-atual-media" type="string" className="form-control" name="media" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="media" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="mediaLabel" for="profissional-complexidade-atual-media">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.media">Media</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-complexidade-atual-media" type="string" className="form-control" name="media" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'alta' ? (
+                          <Col md="alta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="altaLabel" for="profissional-complexidade-atual-alta">
+                                    <Translate contentKey="generadorApp.profissionalComplexidadeAtual.alta">Alta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-complexidade-atual-alta" type="string" className="form-control" name="alta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="alta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="altaLabel" for="profissional-complexidade-atual-alta">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.alta">Alta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="profissional-complexidade-atual-alta" type="string" className="form-control" name="alta" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ventilacaoMecanica' ? (
+                          <Col md="ventilacaoMecanica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="ventilacaoMecanicaLabel"
+                                    for="profissional-complexidade-atual-ventilacaoMecanica"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalComplexidadeAtual.ventilacaoMecanica">
+                                      Ventilacao Mecanica
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-complexidade-atual-ventilacaoMecanica"
+                                    type="string"
+                                    className="form-control"
+                                    name="ventilacaoMecanica"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ventilacaoMecanica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ventilacaoMecanicaLabel" for="profissional-complexidade-atual-ventilacaoMecanica">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.ventilacaoMecanica">
-                                  Ventilacao Mecanica
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-complexidade-atual-ventilacaoMecanica"
-                                type="string"
-                                className="form-control"
-                                name="ventilacaoMecanica"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="telemonitoramenteLabel" for="profissional-complexidade-atual-telemonitoramente">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.telemonitoramente">
-                                  Telemonitoramente
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-complexidade-atual-telemonitoramente"
-                                type="string"
-                                className="form-control"
-                                name="telemonitoramente"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="profissional-complexidade-atual-idUsuario">
-                                <Translate contentKey="generadorApp.profissionalComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-complexidade-atual-idUsuario"
-                                type="string"
-                                className="form-control"
-                                name="idUsuario"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'telemonitoramente' ? (
+                          <Col md="telemonitoramente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="telemonitoramenteLabel"
+                                    for="profissional-complexidade-atual-telemonitoramente"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalComplexidadeAtual.telemonitoramente">
+                                      Telemonitoramente
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-complexidade-atual-telemonitoramente"
+                                    type="string"
+                                    className="form-control"
+                                    name="telemonitoramente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="telemonitoramente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

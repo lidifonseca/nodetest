@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITipoEspecialidade, defaultValue } from 'app/shared/model/tipo-especialidade.model';
 
 export const ACTION_TYPES = {
+  FETCH_TIPOESPECIALIDADE_LIST_EXPORT: 'tipoEspecialidade/FETCH_TIPOESPECIALIDADE_LIST_EXPORT',
   FETCH_TIPOESPECIALIDADE_LIST: 'tipoEspecialidade/FETCH_TIPOESPECIALIDADE_LIST',
   FETCH_TIPOESPECIALIDADE: 'tipoEspecialidade/FETCH_TIPOESPECIALIDADE',
   CREATE_TIPOESPECIALIDADE: 'tipoEspecialidade/CREATE_TIPOESPECIALIDADE',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type TipoEspecialidadeState = Readonly<typeof initialState>;
 
+export interface ITipoEspecialidadeBaseState {
+  baseFilters: any;
+  tipoEspecialidade: any;
+}
+
+export interface ITipoEspecialidadeUpdateState {
+  fieldsBase: ITipoEspecialidadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TipoEspecialidadeState = initialState, action): TipoEspecialidadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TIPOESPECIALIDADE):
       return {
@@ -51,6 +63,7 @@ export default (state: TipoEspecialidadeState = initialState, action): TipoEspec
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TIPOESPECIALIDADE):
     case FAILURE(ACTION_TYPES.CREATE_TIPOESPECIALIDADE):
@@ -107,22 +120,18 @@ const apiUrl = 'api/tipo-especialidades';
 // Actions
 export type ICrudGetAllActionTipoEspecialidade<T> = (
   tipoEspecialidade?: any,
-  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (tipoEspecialidade, especialidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (tipoEspecialidade, page, size, sort) => {
   const tipoEspecialidadeRequest = tipoEspecialidade ? `tipoEspecialidade.contains=${tipoEspecialidade}&` : '';
-  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST,
-    payload: axios.get<ITipoEspecialidade>(
-      `${requestUrl}${tipoEspecialidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ITipoEspecialidade>(`${requestUrl}${tipoEspecialidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITipoEspecialidade> = id => {
@@ -130,6 +139,16 @@ export const getEntity: ICrudGetAction<ITipoEspecialidade> = id => {
   return {
     type: ACTION_TYPES.FETCH_TIPOESPECIALIDADE,
     payload: axios.get<ITipoEspecialidade>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionTipoEspecialidade<ITipoEspecialidade> = (tipoEspecialidade, page, size, sort) => {
+  const tipoEspecialidadeRequest = tipoEspecialidade ? `tipoEspecialidade.contains=${tipoEspecialidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TIPOESPECIALIDADE_LIST,
+    payload: axios.get<ITipoEspecialidade>(`${requestUrl}${tipoEspecialidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -168,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<ITipoEspecialidade> = id => async d
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTipoEspecialidadeState = (location): ITipoEspecialidadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const tipoEspecialidade = url.searchParams.get('tipoEspecialidade') || '';
+
+  return {
+    baseFilters,
+    tipoEspecialidade
+  };
+};

@@ -22,36 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-dispositivo-atual.reducer';
+import {
+  getProfissionalDispositivoAtualState,
+  IProfissionalDispositivoAtualBaseState,
+  getEntities
+} from './profissional-dispositivo-atual.reducer';
 import { IProfissionalDispositivoAtual } from 'app/shared/model/profissional-dispositivo-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalDispositivoAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalDispositivoAtualBaseState {
-  idProfissional: any;
-  tqtTraqueostomia: any;
-  gttGastrostomia: any;
-  sneSondaNasoenteral: any;
-  svdSondaVesicalDeDemora: any;
-  svaSondaVesicalDeAlivio: any;
-  portACath: any;
-  piccAcessoVenosoCentral: any;
-  ventiladores: any;
-  uppUlceraPorPressao: any;
-  avpAcessoVenosoPeriferico: any;
-  uripen: any;
-  fraldaGeriatrica: any;
-  sngSondaNasogastrica: any;
-  bipap: any;
-  cpap: any;
-  cistostomia: any;
-  cateterNasalDeOxigenio: any;
-  mascaraDeVentilacao: any;
-  entubacaoOrotraqueal: any;
-  idUsuario: any;
-}
 export interface IProfissionalDispositivoAtualState extends IProfissionalDispositivoAtualBaseState, IPaginationBaseState {}
 
 export class ProfissionalDispositivoAtual extends React.Component<IProfissionalDispositivoAtualProps, IProfissionalDispositivoAtualState> {
@@ -61,58 +42,9 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalDispositivoAtualState(this.props.location)
+      ...getProfissionalDispositivoAtualState(this.props.location)
     };
   }
-
-  getProfissionalDispositivoAtualState = (location): IProfissionalDispositivoAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const tqtTraqueostomia = url.searchParams.get('tqtTraqueostomia') || '';
-    const gttGastrostomia = url.searchParams.get('gttGastrostomia') || '';
-    const sneSondaNasoenteral = url.searchParams.get('sneSondaNasoenteral') || '';
-    const svdSondaVesicalDeDemora = url.searchParams.get('svdSondaVesicalDeDemora') || '';
-    const svaSondaVesicalDeAlivio = url.searchParams.get('svaSondaVesicalDeAlivio') || '';
-    const portACath = url.searchParams.get('portACath') || '';
-    const piccAcessoVenosoCentral = url.searchParams.get('piccAcessoVenosoCentral') || '';
-    const ventiladores = url.searchParams.get('ventiladores') || '';
-    const uppUlceraPorPressao = url.searchParams.get('uppUlceraPorPressao') || '';
-    const avpAcessoVenosoPeriferico = url.searchParams.get('avpAcessoVenosoPeriferico') || '';
-    const uripen = url.searchParams.get('uripen') || '';
-    const fraldaGeriatrica = url.searchParams.get('fraldaGeriatrica') || '';
-    const sngSondaNasogastrica = url.searchParams.get('sngSondaNasogastrica') || '';
-    const bipap = url.searchParams.get('bipap') || '';
-    const cpap = url.searchParams.get('cpap') || '';
-    const cistostomia = url.searchParams.get('cistostomia') || '';
-    const cateterNasalDeOxigenio = url.searchParams.get('cateterNasalDeOxigenio') || '';
-    const mascaraDeVentilacao = url.searchParams.get('mascaraDeVentilacao') || '';
-    const entubacaoOrotraqueal = url.searchParams.get('entubacaoOrotraqueal') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idProfissional,
-      tqtTraqueostomia,
-      gttGastrostomia,
-      sneSondaNasoenteral,
-      svdSondaVesicalDeDemora,
-      svaSondaVesicalDeAlivio,
-      portACath,
-      piccAcessoVenosoCentral,
-      ventiladores,
-      uppUlceraPorPressao,
-      avpAcessoVenosoPeriferico,
-      uripen,
-      fraldaGeriatrica,
-      sngSondaNasogastrica,
-      bipap,
-      cpap,
-      cistostomia,
-      cateterNasalDeOxigenio,
-      mascaraDeVentilacao,
-      entubacaoOrotraqueal,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -140,8 +72,7 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
         cistostomia: '',
         cateterNasalDeOxigenio: '',
         mascaraDeVentilacao: '',
-        entubacaoOrotraqueal: '',
-        idUsuario: ''
+        entubacaoOrotraqueal: ''
       },
       () => this.sortEntities()
     );
@@ -174,7 +105,9 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -246,9 +179,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
       'entubacaoOrotraqueal=' +
       this.state.entubacaoOrotraqueal +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -277,7 +207,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
       cateterNasalDeOxigenio,
       mascaraDeVentilacao,
       entubacaoOrotraqueal,
-      idUsuario,
       activePage,
       itemsPerPage,
       sort,
@@ -304,7 +233,6 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
       cateterNasalDeOxigenio,
       mascaraDeVentilacao,
       entubacaoOrotraqueal,
-      idUsuario,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -330,7 +258,11 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalDispositivoAtual.home.createLabel">
@@ -345,284 +277,334 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-dispositivo-atual-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.idProfissional">Id Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idProfissional"
-                            id="profissional-dispositivo-atual-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tqtTraqueostomiaLabel" for="profissional-dispositivo-atual-tqtTraqueostomia">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.tqtTraqueostomia">Tqt Traqueostomia</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="tqtTraqueostomia"
-                            id="profissional-dispositivo-atual-tqtTraqueostomia"
-                            value={this.state.tqtTraqueostomia}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="gttGastrostomiaLabel" for="profissional-dispositivo-atual-gttGastrostomia">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.gttGastrostomia">Gtt Gastrostomia</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="gttGastrostomia"
-                            id="profissional-dispositivo-atual-gttGastrostomia"
-                            value={this.state.gttGastrostomia}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="sneSondaNasoenteralLabel" for="profissional-dispositivo-atual-sneSondaNasoenteral">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.sneSondaNasoenteral">
-                              Sne Sonda Nasoenteral
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="sneSondaNasoenteral"
-                            id="profissional-dispositivo-atual-sneSondaNasoenteral"
-                            value={this.state.sneSondaNasoenteral}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="svdSondaVesicalDeDemoraLabel" for="profissional-dispositivo-atual-svdSondaVesicalDeDemora">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.svdSondaVesicalDeDemora">
-                              Svd Sonda Vesical De Demora
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="svdSondaVesicalDeDemora"
-                            id="profissional-dispositivo-atual-svdSondaVesicalDeDemora"
-                            value={this.state.svdSondaVesicalDeDemora}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="svaSondaVesicalDeAlivioLabel" for="profissional-dispositivo-atual-svaSondaVesicalDeAlivio">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.svaSondaVesicalDeAlivio">
-                              Sva Sonda Vesical De Alivio
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="svaSondaVesicalDeAlivio"
-                            id="profissional-dispositivo-atual-svaSondaVesicalDeAlivio"
-                            value={this.state.svaSondaVesicalDeAlivio}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="portACathLabel" for="profissional-dispositivo-atual-portACath">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.portACath">Port A Cath</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="portACath"
-                            id="profissional-dispositivo-atual-portACath"
-                            value={this.state.portACath}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="piccAcessoVenosoCentralLabel" for="profissional-dispositivo-atual-piccAcessoVenosoCentral">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.piccAcessoVenosoCentral">
-                              Picc Acesso Venoso Central
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="piccAcessoVenosoCentral"
-                            id="profissional-dispositivo-atual-piccAcessoVenosoCentral"
-                            value={this.state.piccAcessoVenosoCentral}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ventiladoresLabel" for="profissional-dispositivo-atual-ventiladores">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.ventiladores">Ventiladores</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ventiladores"
-                            id="profissional-dispositivo-atual-ventiladores"
-                            value={this.state.ventiladores}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="uppUlceraPorPressaoLabel" for="profissional-dispositivo-atual-uppUlceraPorPressao">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.uppUlceraPorPressao">
-                              Upp Ulcera Por Pressao
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="uppUlceraPorPressao"
-                            id="profissional-dispositivo-atual-uppUlceraPorPressao"
-                            value={this.state.uppUlceraPorPressao}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="avpAcessoVenosoPerifericoLabel" for="profissional-dispositivo-atual-avpAcessoVenosoPeriferico">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.avpAcessoVenosoPeriferico">
-                              Avp Acesso Venoso Periferico
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="avpAcessoVenosoPeriferico"
-                            id="profissional-dispositivo-atual-avpAcessoVenosoPeriferico"
-                            value={this.state.avpAcessoVenosoPeriferico}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="uripenLabel" for="profissional-dispositivo-atual-uripen">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.uripen">Uripen</Translate>
-                          </Label>
-                          <AvInput type="string" name="uripen" id="profissional-dispositivo-atual-uripen" value={this.state.uripen} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="fraldaGeriatricaLabel" for="profissional-dispositivo-atual-fraldaGeriatrica">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.fraldaGeriatrica">Fralda Geriatrica</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="fraldaGeriatrica"
-                            id="profissional-dispositivo-atual-fraldaGeriatrica"
-                            value={this.state.fraldaGeriatrica}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="sngSondaNasogastricaLabel" for="profissional-dispositivo-atual-sngSondaNasogastrica">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.sngSondaNasogastrica">
-                              Sng Sonda Nasogastrica
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="sngSondaNasogastrica"
-                            id="profissional-dispositivo-atual-sngSondaNasogastrica"
-                            value={this.state.sngSondaNasogastrica}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="bipapLabel" for="profissional-dispositivo-atual-bipap">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.bipap">Bipap</Translate>
-                          </Label>
-                          <AvInput type="string" name="bipap" id="profissional-dispositivo-atual-bipap" value={this.state.bipap} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cpapLabel" for="profissional-dispositivo-atual-cpap">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.cpap">Cpap</Translate>
-                          </Label>
-                          <AvInput type="string" name="cpap" id="profissional-dispositivo-atual-cpap" value={this.state.cpap} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cistostomiaLabel" for="profissional-dispositivo-atual-cistostomia">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.cistostomia">Cistostomia</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="cistostomia"
-                            id="profissional-dispositivo-atual-cistostomia"
-                            value={this.state.cistostomia}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cateterNasalDeOxigenioLabel" for="profissional-dispositivo-atual-cateterNasalDeOxigenio">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.cateterNasalDeOxigenio">
-                              Cateter Nasal De Oxigenio
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="cateterNasalDeOxigenio"
-                            id="profissional-dispositivo-atual-cateterNasalDeOxigenio"
-                            value={this.state.cateterNasalDeOxigenio}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="mascaraDeVentilacaoLabel" for="profissional-dispositivo-atual-mascaraDeVentilacao">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.mascaraDeVentilacao">
-                              Mascara De Ventilacao
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="mascaraDeVentilacao"
-                            id="profissional-dispositivo-atual-mascaraDeVentilacao"
-                            value={this.state.mascaraDeVentilacao}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="entubacaoOrotraquealLabel" for="profissional-dispositivo-atual-entubacaoOrotraqueal">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.entubacaoOrotraqueal">
-                              Entubacao Orotraqueal
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="entubacaoOrotraqueal"
-                            id="profissional-dispositivo-atual-entubacaoOrotraqueal"
-                            value={this.state.entubacaoOrotraqueal}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="profissional-dispositivo-atual-idUsuario">
-                            <Translate contentKey="generadorApp.profissionalDispositivoAtual.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="profissional-dispositivo-atual-idUsuario"
-                            value={this.state.idUsuario}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-dispositivo-atual-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.idProfissional">Id Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idProfissional"
+                              id="profissional-dispositivo-atual-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tqtTraqueostomia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tqtTraqueostomiaLabel" for="profissional-dispositivo-atual-tqtTraqueostomia">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.tqtTraqueostomia">
+                                Tqt Traqueostomia
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="tqtTraqueostomia"
+                              id="profissional-dispositivo-atual-tqtTraqueostomia"
+                              value={this.state.tqtTraqueostomia}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'gttGastrostomia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="gttGastrostomiaLabel" for="profissional-dispositivo-atual-gttGastrostomia">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.gttGastrostomia">Gtt Gastrostomia</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="gttGastrostomia"
+                              id="profissional-dispositivo-atual-gttGastrostomia"
+                              value={this.state.gttGastrostomia}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'sneSondaNasoenteral' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="sneSondaNasoenteralLabel" for="profissional-dispositivo-atual-sneSondaNasoenteral">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.sneSondaNasoenteral">
+                                Sne Sonda Nasoenteral
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="sneSondaNasoenteral"
+                              id="profissional-dispositivo-atual-sneSondaNasoenteral"
+                              value={this.state.sneSondaNasoenteral}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'svdSondaVesicalDeDemora' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="svdSondaVesicalDeDemoraLabel" for="profissional-dispositivo-atual-svdSondaVesicalDeDemora">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.svdSondaVesicalDeDemora">
+                                Svd Sonda Vesical De Demora
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="svdSondaVesicalDeDemora"
+                              id="profissional-dispositivo-atual-svdSondaVesicalDeDemora"
+                              value={this.state.svdSondaVesicalDeDemora}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'svaSondaVesicalDeAlivio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="svaSondaVesicalDeAlivioLabel" for="profissional-dispositivo-atual-svaSondaVesicalDeAlivio">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.svaSondaVesicalDeAlivio">
+                                Sva Sonda Vesical De Alivio
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="svaSondaVesicalDeAlivio"
+                              id="profissional-dispositivo-atual-svaSondaVesicalDeAlivio"
+                              value={this.state.svaSondaVesicalDeAlivio}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'portACath' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="portACathLabel" for="profissional-dispositivo-atual-portACath">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.portACath">Port A Cath</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="portACath"
+                              id="profissional-dispositivo-atual-portACath"
+                              value={this.state.portACath}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'piccAcessoVenosoCentral' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="piccAcessoVenosoCentralLabel" for="profissional-dispositivo-atual-piccAcessoVenosoCentral">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.piccAcessoVenosoCentral">
+                                Picc Acesso Venoso Central
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="piccAcessoVenosoCentral"
+                              id="profissional-dispositivo-atual-piccAcessoVenosoCentral"
+                              value={this.state.piccAcessoVenosoCentral}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ventiladores' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ventiladoresLabel" for="profissional-dispositivo-atual-ventiladores">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.ventiladores">Ventiladores</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="ventiladores"
+                              id="profissional-dispositivo-atual-ventiladores"
+                              value={this.state.ventiladores}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'uppUlceraPorPressao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="uppUlceraPorPressaoLabel" for="profissional-dispositivo-atual-uppUlceraPorPressao">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.uppUlceraPorPressao">
+                                Upp Ulcera Por Pressao
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="uppUlceraPorPressao"
+                              id="profissional-dispositivo-atual-uppUlceraPorPressao"
+                              value={this.state.uppUlceraPorPressao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'avpAcessoVenosoPeriferico' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="avpAcessoVenosoPerifericoLabel" for="profissional-dispositivo-atual-avpAcessoVenosoPeriferico">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.avpAcessoVenosoPeriferico">
+                                Avp Acesso Venoso Periferico
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="avpAcessoVenosoPeriferico"
+                              id="profissional-dispositivo-atual-avpAcessoVenosoPeriferico"
+                              value={this.state.avpAcessoVenosoPeriferico}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'uripen' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="uripenLabel" for="profissional-dispositivo-atual-uripen">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.uripen">Uripen</Translate>
+                            </Label>
+                            <AvInput type="string" name="uripen" id="profissional-dispositivo-atual-uripen" value={this.state.uripen} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'fraldaGeriatrica' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="fraldaGeriatricaLabel" for="profissional-dispositivo-atual-fraldaGeriatrica">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.fraldaGeriatrica">
+                                Fralda Geriatrica
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="fraldaGeriatrica"
+                              id="profissional-dispositivo-atual-fraldaGeriatrica"
+                              value={this.state.fraldaGeriatrica}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'sngSondaNasogastrica' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="sngSondaNasogastricaLabel" for="profissional-dispositivo-atual-sngSondaNasogastrica">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.sngSondaNasogastrica">
+                                Sng Sonda Nasogastrica
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="sngSondaNasogastrica"
+                              id="profissional-dispositivo-atual-sngSondaNasogastrica"
+                              value={this.state.sngSondaNasogastrica}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'bipap' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="bipapLabel" for="profissional-dispositivo-atual-bipap">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.bipap">Bipap</Translate>
+                            </Label>
+                            <AvInput type="string" name="bipap" id="profissional-dispositivo-atual-bipap" value={this.state.bipap} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cpap' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cpapLabel" for="profissional-dispositivo-atual-cpap">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.cpap">Cpap</Translate>
+                            </Label>
+                            <AvInput type="string" name="cpap" id="profissional-dispositivo-atual-cpap" value={this.state.cpap} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cistostomia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cistostomiaLabel" for="profissional-dispositivo-atual-cistostomia">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.cistostomia">Cistostomia</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="cistostomia"
+                              id="profissional-dispositivo-atual-cistostomia"
+                              value={this.state.cistostomia}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cateterNasalDeOxigenio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cateterNasalDeOxigenioLabel" for="profissional-dispositivo-atual-cateterNasalDeOxigenio">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.cateterNasalDeOxigenio">
+                                Cateter Nasal De Oxigenio
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="cateterNasalDeOxigenio"
+                              id="profissional-dispositivo-atual-cateterNasalDeOxigenio"
+                              value={this.state.cateterNasalDeOxigenio}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'mascaraDeVentilacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="mascaraDeVentilacaoLabel" for="profissional-dispositivo-atual-mascaraDeVentilacao">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.mascaraDeVentilacao">
+                                Mascara De Ventilacao
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="mascaraDeVentilacao"
+                              id="profissional-dispositivo-atual-mascaraDeVentilacao"
+                              value={this.state.mascaraDeVentilacao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'entubacaoOrotraqueal' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="entubacaoOrotraquealLabel" for="profissional-dispositivo-atual-entubacaoOrotraqueal">
+                              <Translate contentKey="generadorApp.profissionalDispositivoAtual.entubacaoOrotraqueal">
+                                Entubacao Orotraqueal
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="entubacaoOrotraqueal"
+                              id="profissional-dispositivo-atual-entubacaoOrotraqueal"
+                              value={this.state.entubacaoOrotraqueal}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -650,110 +632,146 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tqtTraqueostomia')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.tqtTraqueostomia">Tqt Traqueostomia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('gttGastrostomia')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.gttGastrostomia">Gtt Gastrostomia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('sneSondaNasoenteral')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.sneSondaNasoenteral">
-                          Sne Sonda Nasoenteral
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('svdSondaVesicalDeDemora')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.svdSondaVesicalDeDemora">
-                          Svd Sonda Vesical De Demora
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('svaSondaVesicalDeAlivio')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.svaSondaVesicalDeAlivio">
-                          Sva Sonda Vesical De Alivio
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('portACath')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.portACath">Port A Cath</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('piccAcessoVenosoCentral')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.piccAcessoVenosoCentral">
-                          Picc Acesso Venoso Central
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ventiladores')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.ventiladores">Ventiladores</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('uppUlceraPorPressao')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.uppUlceraPorPressao">
-                          Upp Ulcera Por Pressao
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('avpAcessoVenosoPeriferico')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.avpAcessoVenosoPeriferico">
-                          Avp Acesso Venoso Periferico
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('uripen')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.uripen">Uripen</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('fraldaGeriatrica')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.fraldaGeriatrica">Fralda Geriatrica</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('sngSondaNasogastrica')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.sngSondaNasogastrica">
-                          Sng Sonda Nasogastrica
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('bipap')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.bipap">Bipap</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cpap')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.cpap">Cpap</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cistostomia')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.cistostomia">Cistostomia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cateterNasalDeOxigenio')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.cateterNasalDeOxigenio">
-                          Cateter Nasal De Oxigenio
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('mascaraDeVentilacao')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.mascaraDeVentilacao">
-                          Mascara De Ventilacao
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('entubacaoOrotraqueal')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.entubacaoOrotraqueal">
-                          Entubacao Orotraqueal
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoAtual.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tqtTraqueostomia' ? (
+                        <th className="hand" onClick={this.sort('tqtTraqueostomia')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.tqtTraqueostomia">Tqt Traqueostomia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'gttGastrostomia' ? (
+                        <th className="hand" onClick={this.sort('gttGastrostomia')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.gttGastrostomia">Gtt Gastrostomia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'sneSondaNasoenteral' ? (
+                        <th className="hand" onClick={this.sort('sneSondaNasoenteral')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.sneSondaNasoenteral">
+                            Sne Sonda Nasoenteral
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'svdSondaVesicalDeDemora' ? (
+                        <th className="hand" onClick={this.sort('svdSondaVesicalDeDemora')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.svdSondaVesicalDeDemora">
+                            Svd Sonda Vesical De Demora
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'svaSondaVesicalDeAlivio' ? (
+                        <th className="hand" onClick={this.sort('svaSondaVesicalDeAlivio')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.svaSondaVesicalDeAlivio">
+                            Sva Sonda Vesical De Alivio
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'portACath' ? (
+                        <th className="hand" onClick={this.sort('portACath')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.portACath">Port A Cath</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'piccAcessoVenosoCentral' ? (
+                        <th className="hand" onClick={this.sort('piccAcessoVenosoCentral')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.piccAcessoVenosoCentral">
+                            Picc Acesso Venoso Central
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ventiladores' ? (
+                        <th className="hand" onClick={this.sort('ventiladores')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.ventiladores">Ventiladores</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'uppUlceraPorPressao' ? (
+                        <th className="hand" onClick={this.sort('uppUlceraPorPressao')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.uppUlceraPorPressao">
+                            Upp Ulcera Por Pressao
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'avpAcessoVenosoPeriferico' ? (
+                        <th className="hand" onClick={this.sort('avpAcessoVenosoPeriferico')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.avpAcessoVenosoPeriferico">
+                            Avp Acesso Venoso Periferico
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'uripen' ? (
+                        <th className="hand" onClick={this.sort('uripen')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.uripen">Uripen</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'fraldaGeriatrica' ? (
+                        <th className="hand" onClick={this.sort('fraldaGeriatrica')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.fraldaGeriatrica">Fralda Geriatrica</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'sngSondaNasogastrica' ? (
+                        <th className="hand" onClick={this.sort('sngSondaNasogastrica')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.sngSondaNasogastrica">
+                            Sng Sonda Nasogastrica
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'bipap' ? (
+                        <th className="hand" onClick={this.sort('bipap')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.bipap">Bipap</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cpap' ? (
+                        <th className="hand" onClick={this.sort('cpap')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.cpap">Cpap</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cistostomia' ? (
+                        <th className="hand" onClick={this.sort('cistostomia')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.cistostomia">Cistostomia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cateterNasalDeOxigenio' ? (
+                        <th className="hand" onClick={this.sort('cateterNasalDeOxigenio')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.cateterNasalDeOxigenio">
+                            Cateter Nasal De Oxigenio
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'mascaraDeVentilacao' ? (
+                        <th className="hand" onClick={this.sort('mascaraDeVentilacao')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.mascaraDeVentilacao">
+                            Mascara De Ventilacao
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'entubacaoOrotraqueal' ? (
+                        <th className="hand" onClick={this.sort('entubacaoOrotraqueal')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoAtual.entubacaoOrotraqueal">
+                            Entubacao Orotraqueal
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -768,63 +786,96 @@ export class ProfissionalDispositivoAtual extends React.Component<IProfissionalD
                           </Button>
                         </td>
 
-                        <td>{profissionalDispositivoAtual.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalDispositivoAtual.idProfissional}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.tqtTraqueostomia}</td>
+                        {this.state.baseFilters !== 'tqtTraqueostomia' ? <td>{profissionalDispositivoAtual.tqtTraqueostomia}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.gttGastrostomia}</td>
+                        {this.state.baseFilters !== 'gttGastrostomia' ? <td>{profissionalDispositivoAtual.gttGastrostomia}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.sneSondaNasoenteral}</td>
+                        {this.state.baseFilters !== 'sneSondaNasoenteral' ? (
+                          <td>{profissionalDispositivoAtual.sneSondaNasoenteral}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.svdSondaVesicalDeDemora}</td>
+                        {this.state.baseFilters !== 'svdSondaVesicalDeDemora' ? (
+                          <td>{profissionalDispositivoAtual.svdSondaVesicalDeDemora}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.svaSondaVesicalDeAlivio}</td>
+                        {this.state.baseFilters !== 'svaSondaVesicalDeAlivio' ? (
+                          <td>{profissionalDispositivoAtual.svaSondaVesicalDeAlivio}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.portACath}</td>
+                        {this.state.baseFilters !== 'portACath' ? <td>{profissionalDispositivoAtual.portACath}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.piccAcessoVenosoCentral}</td>
+                        {this.state.baseFilters !== 'piccAcessoVenosoCentral' ? (
+                          <td>{profissionalDispositivoAtual.piccAcessoVenosoCentral}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.ventiladores}</td>
+                        {this.state.baseFilters !== 'ventiladores' ? <td>{profissionalDispositivoAtual.ventiladores}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.uppUlceraPorPressao}</td>
+                        {this.state.baseFilters !== 'uppUlceraPorPressao' ? (
+                          <td>{profissionalDispositivoAtual.uppUlceraPorPressao}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.avpAcessoVenosoPeriferico}</td>
+                        {this.state.baseFilters !== 'avpAcessoVenosoPeriferico' ? (
+                          <td>{profissionalDispositivoAtual.avpAcessoVenosoPeriferico}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.uripen}</td>
+                        {this.state.baseFilters !== 'uripen' ? <td>{profissionalDispositivoAtual.uripen}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.fraldaGeriatrica}</td>
+                        {this.state.baseFilters !== 'fraldaGeriatrica' ? <td>{profissionalDispositivoAtual.fraldaGeriatrica}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.sngSondaNasogastrica}</td>
+                        {this.state.baseFilters !== 'sngSondaNasogastrica' ? (
+                          <td>{profissionalDispositivoAtual.sngSondaNasogastrica}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.bipap}</td>
+                        {this.state.baseFilters !== 'bipap' ? <td>{profissionalDispositivoAtual.bipap}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.cpap}</td>
+                        {this.state.baseFilters !== 'cpap' ? <td>{profissionalDispositivoAtual.cpap}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.cistostomia}</td>
+                        {this.state.baseFilters !== 'cistostomia' ? <td>{profissionalDispositivoAtual.cistostomia}</td> : null}
 
-                        <td>{profissionalDispositivoAtual.cateterNasalDeOxigenio}</td>
+                        {this.state.baseFilters !== 'cateterNasalDeOxigenio' ? (
+                          <td>{profissionalDispositivoAtual.cateterNasalDeOxigenio}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.mascaraDeVentilacao}</td>
+                        {this.state.baseFilters !== 'mascaraDeVentilacao' ? (
+                          <td>{profissionalDispositivoAtual.mascaraDeVentilacao}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoAtual.entubacaoOrotraqueal}</td>
-
-                        <td>{profissionalDispositivoAtual.idUsuario}</td>
+                        {this.state.baseFilters !== 'entubacaoOrotraqueal' ? (
+                          <td>{profissionalDispositivoAtual.entubacaoOrotraqueal}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalDispositivoAtual.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalDispositivoAtual.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalDispositivoAtual.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalDispositivoAtual.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalDispositivoAtual.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalDispositivoAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

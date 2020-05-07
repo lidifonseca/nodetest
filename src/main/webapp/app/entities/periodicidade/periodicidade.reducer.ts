@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPeriodicidade, defaultValue } from 'app/shared/model/periodicidade.model';
 
 export const ACTION_TYPES = {
+  FETCH_PERIODICIDADE_LIST_EXPORT: 'periodicidade/FETCH_PERIODICIDADE_LIST_EXPORT',
   FETCH_PERIODICIDADE_LIST: 'periodicidade/FETCH_PERIODICIDADE_LIST',
   FETCH_PERIODICIDADE: 'periodicidade/FETCH_PERIODICIDADE',
   CREATE_PERIODICIDADE: 'periodicidade/CREATE_PERIODICIDADE',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PeriodicidadeState = Readonly<typeof initialState>;
 
+export interface IPeriodicidadeBaseState {
+  baseFilters: any;
+  periodicidade: any;
+  ativo: any;
+}
+
+export interface IPeriodicidadeUpdateState {
+  fieldsBase: IPeriodicidadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PeriodicidadeState = initialState, action): PeriodicidadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PERIODICIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PERIODICIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PERIODICIDADE):
       return {
@@ -51,6 +64,7 @@ export default (state: PeriodicidadeState = initialState, action): Periodicidade
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PERIODICIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PERIODICIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PERIODICIDADE):
     case FAILURE(ACTION_TYPES.CREATE_PERIODICIDADE):
@@ -108,23 +122,19 @@ const apiUrl = 'api/periodicidades';
 export type ICrudGetAllActionPeriodicidade<T> = (
   periodicidade?: any,
   ativo?: any,
-  padItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, padItem, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, page, size, sort) => {
   const periodicidadeRequest = periodicidade ? `periodicidade.contains=${periodicidade}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERIODICIDADE_LIST,
-    payload: axios.get<IPeriodicidade>(
-      `${requestUrl}${periodicidadeRequest}${ativoRequest}${padItemRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPeriodicidade>(`${requestUrl}${periodicidadeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPeriodicidade> = id => {
@@ -132,6 +142,17 @@ export const getEntity: ICrudGetAction<IPeriodicidade> = id => {
   return {
     type: ACTION_TYPES.FETCH_PERIODICIDADE,
     payload: axios.get<IPeriodicidade>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPeriodicidade<IPeriodicidade> = (periodicidade, ativo, page, size, sort) => {
+  const periodicidadeRequest = periodicidade ? `periodicidade.contains=${periodicidade}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PERIODICIDADE_LIST,
+    payload: axios.get<IPeriodicidade>(`${requestUrl}${periodicidadeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -170,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IPeriodicidade> = id => async dispa
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPeriodicidadeState = (location): IPeriodicidadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const periodicidade = url.searchParams.get('periodicidade') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    periodicidade,
+    ativo
+  };
+};

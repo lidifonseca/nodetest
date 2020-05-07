@@ -33,12 +33,12 @@ const initialState = {
 export type PacienteProntuarioState = Readonly<typeof initialState>;
 
 export interface IPacienteProntuarioBaseState {
+  baseFilters: any;
   idPaciente: any;
   idTipoProntuario: any;
   oQue: any;
   resultado: any;
   ativo: any;
-  idUsuario: any;
   idEspecialidade: any;
   dataConsulta: any;
   idExame: any;
@@ -50,6 +50,11 @@ export interface IPacienteProntuarioBaseState {
   dataOcorrencia: any;
   idOcorrenciaProntuario: any;
   dataManifestacao: any;
+}
+
+export interface IPacienteProntuarioUpdateState {
+  fieldsBase: IPacienteProntuarioBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -95,6 +100,10 @@ export default (state: PacienteProntuarioState = initialState, action): Paciente
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PACIENTEPRONTUARIO):
+      action.payload.data.oQue = action.payload.data.oQue ? Buffer.from(action.payload.data.oQue).toString() : action.payload.data.oQue;
+      action.payload.data.resultado = action.payload.data.resultado
+        ? Buffer.from(action.payload.data.resultado).toString()
+        : action.payload.data.resultado;
       return {
         ...state,
         loading: false,
@@ -116,13 +125,14 @@ export default (state: PacienteProntuarioState = initialState, action): Paciente
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -146,7 +156,6 @@ export type ICrudGetAllActionPacienteProntuario<T> = (
   oQue?: any,
   resultado?: any,
   ativo?: any,
-  idUsuario?: any,
   idEspecialidade?: any,
   dataConsulta?: any,
   idExame?: any,
@@ -169,7 +178,6 @@ export const getEntities: ICrudGetAllActionPacienteProntuario<IPacienteProntuari
   oQue,
   resultado,
   ativo,
-  idUsuario,
   idEspecialidade,
   dataConsulta,
   idExame,
@@ -190,7 +198,6 @@ export const getEntities: ICrudGetAllActionPacienteProntuario<IPacienteProntuari
   const oQueRequest = oQue ? `oQue.contains=${oQue}&` : '';
   const resultadoRequest = resultado ? `resultado.contains=${resultado}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.contains=${idEspecialidade}&` : '';
   const dataConsultaRequest = dataConsulta ? `dataConsulta.contains=${dataConsulta}&` : '';
   const idExameRequest = idExame ? `idExame.contains=${idExame}&` : '';
@@ -207,7 +214,7 @@ export const getEntities: ICrudGetAllActionPacienteProntuario<IPacienteProntuari
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPRONTUARIO_LIST,
     payload: axios.get<IPacienteProntuario>(
-      `${requestUrl}${idPacienteRequest}${idTipoProntuarioRequest}${oQueRequest}${resultadoRequest}${ativoRequest}${idUsuarioRequest}${idEspecialidadeRequest}${dataConsultaRequest}${idExameRequest}${idTipoExameRequest}${dataExameRequest}${dataInternacaoRequest}${dataAltaRequest}${dataPsRequest}${dataOcorrenciaRequest}${idOcorrenciaProntuarioRequest}${dataManifestacaoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idTipoProntuarioRequest}${oQueRequest}${resultadoRequest}${ativoRequest}${idEspecialidadeRequest}${dataConsultaRequest}${idExameRequest}${idTipoExameRequest}${dataExameRequest}${dataInternacaoRequest}${dataAltaRequest}${dataPsRequest}${dataOcorrenciaRequest}${idOcorrenciaProntuarioRequest}${dataManifestacaoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -225,7 +232,6 @@ export const getEntitiesExport: ICrudGetAllActionPacienteProntuario<IPacientePro
   oQue,
   resultado,
   ativo,
-  idUsuario,
   idEspecialidade,
   dataConsulta,
   idExame,
@@ -246,7 +252,6 @@ export const getEntitiesExport: ICrudGetAllActionPacienteProntuario<IPacientePro
   const oQueRequest = oQue ? `oQue.contains=${oQue}&` : '';
   const resultadoRequest = resultado ? `resultado.contains=${resultado}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.contains=${idEspecialidade}&` : '';
   const dataConsultaRequest = dataConsulta ? `dataConsulta.contains=${dataConsulta}&` : '';
   const idExameRequest = idExame ? `idExame.contains=${idExame}&` : '';
@@ -263,7 +268,7 @@ export const getEntitiesExport: ICrudGetAllActionPacienteProntuario<IPacientePro
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPRONTUARIO_LIST,
     payload: axios.get<IPacienteProntuario>(
-      `${requestUrl}${idPacienteRequest}${idTipoProntuarioRequest}${oQueRequest}${resultadoRequest}${ativoRequest}${idUsuarioRequest}${idEspecialidadeRequest}${dataConsultaRequest}${idExameRequest}${idTipoExameRequest}${dataExameRequest}${dataInternacaoRequest}${dataAltaRequest}${dataPsRequest}${dataOcorrenciaRequest}${idOcorrenciaProntuarioRequest}${dataManifestacaoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idTipoProntuarioRequest}${oQueRequest}${resultadoRequest}${ativoRequest}${idEspecialidadeRequest}${dataConsultaRequest}${idExameRequest}${idTipoExameRequest}${dataExameRequest}${dataInternacaoRequest}${dataAltaRequest}${dataPsRequest}${dataOcorrenciaRequest}${idOcorrenciaProntuarioRequest}${dataManifestacaoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -300,12 +305,13 @@ export const deleteEntity: ICrudDeleteAction<IPacienteProntuario> = id => async 
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -315,12 +321,12 @@ export const reset = () => ({
 
 export const getPacienteProntuarioState = (location): IPacienteProntuarioBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idPaciente = url.searchParams.get('idPaciente') || '';
   const idTipoProntuario = url.searchParams.get('idTipoProntuario') || '';
   const oQue = url.searchParams.get('oQue') || '';
   const resultado = url.searchParams.get('resultado') || '';
   const ativo = url.searchParams.get('ativo') || '';
-  const idUsuario = url.searchParams.get('idUsuario') || '';
   const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
   const dataConsulta = url.searchParams.get('dataConsulta') || '';
   const idExame = url.searchParams.get('idExame') || '';
@@ -334,12 +340,12 @@ export const getPacienteProntuarioState = (location): IPacienteProntuarioBaseSta
   const dataManifestacao = url.searchParams.get('dataManifestacao') || '';
 
   return {
+    baseFilters,
     idPaciente,
     idTipoProntuario,
     oQue,
     resultado,
     ativo,
-    idUsuario,
     idEspecialidade,
     dataConsulta,
     idExame,

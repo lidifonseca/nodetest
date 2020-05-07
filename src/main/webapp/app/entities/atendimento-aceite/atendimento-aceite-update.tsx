@@ -8,29 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IProfissional } from 'app/shared/model/profissional.model';
-import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
-import { IAtendimento } from 'app/shared/model/atendimento.model';
-import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './atendimento-aceite.reducer';
+import {
+  IAtendimentoAceiteUpdateState,
+  getEntity,
+  getAtendimentoAceiteState,
+  IAtendimentoAceiteBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './atendimento-aceite.reducer';
 import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAtendimentoAceiteUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IAtendimentoAceiteUpdateState {
-  isNew: boolean;
-  idProfissionalId: string;
-  idAtendimentoId: string;
-}
-
 export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteUpdateProps, IAtendimentoAceiteUpdateState> {
   constructor(props: Readonly<IAtendimentoAceiteUpdateProps>) {
     super(props);
+
     this.state = {
-      idProfissionalId: '0',
-      idAtendimentoId: '0',
+      fieldsBase: getAtendimentoAceiteState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,11 +44,21 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getProfissionals();
-    this.props.getAtendimentos();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['msgPush'] ? '&msgPush=' + fieldsBase['msgPush'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { atendimentoAceiteEntity } = this.props;
@@ -68,13 +76,14 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
   };
 
   handleClose = () => {
-    this.props.history.push('/atendimento-aceite');
+    this.props.history.push('/atendimento-aceite?' + this.getFiltersURL());
   };
 
   render() {
-    const { atendimentoAceiteEntity, profissionals, atendimentos, loading, updating } = this.props;
+    const { atendimentoAceiteEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -90,9 +99,7 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
             isNew
               ? {}
               : {
-                  ...atendimentoAceiteEntity,
-                  idProfissional: atendimentoAceiteEntity.idProfissional ? atendimentoAceiteEntity.idProfissional.id : null,
-                  idAtendimento: atendimentoAceiteEntity.idAtendimento ? atendimentoAceiteEntity.idAtendimento.id : null
+                  ...atendimentoAceiteEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -111,7 +118,14 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/atendimento-aceite" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/atendimento-aceite?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -126,7 +140,7 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -142,80 +156,27 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="msgPushLabel" for="atendimento-aceite-msgPush">
-                                <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-aceite-msgPush"
-                                type="text"
-                                name="msgPush"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-aceite-idProfissional">
-                                <Translate contentKey="generadorApp.atendimentoAceite.idProfissional">Id Profissional</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="atendimento-aceite-idProfissional" type="select" className="form-control" name="idProfissional">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoAceite.idProfissional.empty')}
-                                </option>
-                                {profissionals
-                                  ? profissionals.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-aceite-idAtendimento">
-                                <Translate contentKey="generadorApp.atendimentoAceite.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="atendimento-aceite-idAtendimento" type="select" className="form-control" name="idAtendimento">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoAceite.idAtendimento.empty')}
-                                </option>
-                                {atendimentos
-                                  ? atendimentos.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'msgPush' ? (
+                          <Col md="msgPush">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="msgPushLabel" for="atendimento-aceite-msgPush">
+                                    <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-aceite-msgPush" type="text" name="msgPush" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="msgPush" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -228,8 +189,6 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  profissionals: storeState.profissional.entities,
-  atendimentos: storeState.atendimento.entities,
   atendimentoAceiteEntity: storeState.atendimentoAceite.entity,
   loading: storeState.atendimentoAceite.loading,
   updating: storeState.atendimentoAceite.updating,
@@ -237,8 +196,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getProfissionals,
-  getAtendimentos,
   getEntity,
   updateEntity,
   createEntity,

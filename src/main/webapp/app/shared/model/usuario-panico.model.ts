@@ -1,7 +1,6 @@
 export interface IUsuarioPanico {
   id?: string;
   idPaciente?: number;
-  idUsuario?: number;
   idProfissional?: number;
   observacao?: string;
   resolvido?: number;

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './franquia-status-atual.reducer';
+import { getEntity, IFranquiaStatusAtualBaseState, getFranquiaStatusAtualState } from './franquia-status-atual.reducer';
 import { IFranquiaStatusAtual } from 'app/shared/model/franquia-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IFranquiaStatusAtualState {
+  fieldsBase: IFranquiaStatusAtualBaseState;
+}
+
 export interface IFranquiaStatusAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class FranquiaStatusAtualDetail extends React.Component<IFranquiaStatusAtualDetailProps> {
+export class FranquiaStatusAtualDetail extends React.Component<IFranquiaStatusAtualDetailProps, IFranquiaStatusAtualState> {
   constructor(props: Readonly<IFranquiaStatusAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getFranquiaStatusAtualState(this.props.location)
     };
   }
 
@@ -92,19 +97,6 @@ export class FranquiaStatusAtualDetail extends React.Component<IFranquiaStatusAt
                       </Col>
                       <Col md="9">
                         <dd>{franquiaStatusAtualEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.franquiaStatusAtual.idFranquia">Id Franquia</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{franquiaStatusAtualEntity.idFranquia ? franquiaStatusAtualEntity.idFranquia.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

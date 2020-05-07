@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IFranquiaAreaAtuacao, defaultValue } from 'app/shared/model/franquia-area-atuacao.model';
 
 export const ACTION_TYPES = {
+  FETCH_FRANQUIAAREAATUACAO_LIST_EXPORT: 'franquiaAreaAtuacao/FETCH_FRANQUIAAREAATUACAO_LIST_EXPORT',
   FETCH_FRANQUIAAREAATUACAO_LIST: 'franquiaAreaAtuacao/FETCH_FRANQUIAAREAATUACAO_LIST',
   FETCH_FRANQUIAAREAATUACAO: 'franquiaAreaAtuacao/FETCH_FRANQUIAAREAATUACAO',
   CREATE_FRANQUIAAREAATUACAO: 'franquiaAreaAtuacao/CREATE_FRANQUIAAREAATUACAO',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type FranquiaAreaAtuacaoState = Readonly<typeof initialState>;
 
+export interface IFranquiaAreaAtuacaoBaseState {
+  baseFilters: any;
+  cepIni: any;
+  cepFim: any;
+  ativo: any;
+}
+
+export interface IFranquiaAreaAtuacaoUpdateState {
+  fieldsBase: IFranquiaAreaAtuacaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: FranquiaAreaAtuacaoState = initialState, action): FranquiaAreaAtuacaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO):
       return {
@@ -51,6 +65,7 @@ export default (state: FranquiaAreaAtuacaoState = initialState, action): Franqui
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO):
     case FAILURE(ACTION_TYPES.CREATE_FRANQUIAAREAATUACAO):
@@ -109,31 +124,21 @@ export type ICrudGetAllActionFranquiaAreaAtuacao<T> = (
   cepIni?: any,
   cepFim?: any,
   ativo?: any,
-  idFranquia?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtuacao> = (
-  cepIni,
-  cepFim,
-  ativo,
-  idFranquia,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtuacao> = (cepIni, cepFim, ativo, page, size, sort) => {
   const cepIniRequest = cepIni ? `cepIni.contains=${cepIni}&` : '';
   const cepFimRequest = cepFim ? `cepFim.contains=${cepFim}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idFranquiaRequest = idFranquia ? `idFranquia.equals=${idFranquia}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST,
     payload: axios.get<IFranquiaAreaAtuacao>(
-      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}${idFranquiaRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -145,10 +150,23 @@ export const getEntity: ICrudGetAction<IFranquiaAreaAtuacao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionFranquiaAreaAtuacao<IFranquiaAreaAtuacao> = (cepIni, cepFim, ativo, page, size, sort) => {
+  const cepIniRequest = cepIni ? `cepIni.contains=${cepIni}&` : '';
+  const cepFimRequest = cepFim ? `cepFim.contains=${cepFim}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_FRANQUIAAREAATUACAO_LIST,
+    payload: axios.get<IFranquiaAreaAtuacao>(
+      `${requestUrl}${cepIniRequest}${cepFimRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IFranquiaAreaAtuacao> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idFranquia: entity.idFranquia === 'null' ? null : entity.idFranquia
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_FRANQUIAAREAATUACAO,
@@ -159,7 +177,7 @@ export const createEntity: ICrudPutAction<IFranquiaAreaAtuacao> = entity => asyn
 };
 
 export const updateEntity: ICrudPutAction<IFranquiaAreaAtuacao> = entity => async dispatch => {
-  entity = { ...entity, idFranquia: entity.idFranquia === 'null' ? null : entity.idFranquia };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_FRANQUIAAREAATUACAO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -181,3 +199,18 @@ export const deleteEntity: ICrudDeleteAction<IFranquiaAreaAtuacao> = id => async
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getFranquiaAreaAtuacaoState = (location): IFranquiaAreaAtuacaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const cepIni = url.searchParams.get('cepIni') || '';
+  const cepFim = url.searchParams.get('cepFim') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    cepIni,
+    cepFim,
+    ativo
+  };
+};

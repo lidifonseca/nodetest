@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICidPta, defaultValue } from 'app/shared/model/cid-pta.model';
 
 export const ACTION_TYPES = {
+  FETCH_CIDPTA_LIST_EXPORT: 'cidPta/FETCH_CIDPTA_LIST_EXPORT',
   FETCH_CIDPTA_LIST: 'cidPta/FETCH_CIDPTA_LIST',
   FETCH_CIDPTA: 'cidPta/FETCH_CIDPTA',
   CREATE_CIDPTA: 'cidPta/CREATE_CIDPTA',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type CidPtaState = Readonly<typeof initialState>;
 
+export interface ICidPtaBaseState {
+  baseFilters: any;
+  idDescPta: any;
+  idCid: any;
+  idAtividade: any;
+  ativo: any;
+}
+
+export interface ICidPtaUpdateState {
+  fieldsBase: ICidPtaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CidPtaState = initialState, action): CidPtaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CIDPTA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CIDPTA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CIDPTA):
       return {
@@ -51,6 +66,7 @@ export default (state: CidPtaState = initialState, action): CidPtaState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CIDPTA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CIDPTA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CIDPTA):
     case FAILURE(ACTION_TYPES.CREATE_CIDPTA):
@@ -137,6 +153,21 @@ export const getEntity: ICrudGetAction<ICidPta> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCidPta<ICidPta> = (idDescPta, idCid, idAtividade, ativo, page, size, sort) => {
+  const idDescPtaRequest = idDescPta ? `idDescPta.contains=${idDescPta}&` : '';
+  const idCidRequest = idCid ? `idCid.contains=${idCid}&` : '';
+  const idAtividadeRequest = idAtividade ? `idAtividade.contains=${idAtividade}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CIDPTA_LIST,
+    payload: axios.get<ICidPta>(
+      `${requestUrl}${idDescPtaRequest}${idCidRequest}${idAtividadeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ICidPta> = entity => async dispatch => {
   entity = {
     ...entity
@@ -172,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<ICidPta> = id => async dispatch => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCidPtaState = (location): ICidPtaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idDescPta = url.searchParams.get('idDescPta') || '';
+  const idCid = url.searchParams.get('idCid') || '';
+  const idAtividade = url.searchParams.get('idAtividade') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idDescPta,
+    idCid,
+    idAtividade,
+    ativo
+  };
+};

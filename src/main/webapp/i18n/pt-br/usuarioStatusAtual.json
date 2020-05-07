@@ -16,7 +16,6 @@
       "detail": {
         "title": "Usuario Status Atual"
       },
-      "idUsuario": "Id Usuario",
       "statusAtual": "Status Atual",
       "obs": "Obs",
       "ativo": "Ativo"

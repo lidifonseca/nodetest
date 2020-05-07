@@ -46,23 +46,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "operadora",
-            "otherEntityRelationshipName": "especialidadeOperadora",
-            "relationshipName": "idOperadora",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "especialidade",
-            "otherEntityRelationshipName": "especialidadeOperadora",
-            "relationshipName": "idEspecialidade",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502232500",
+    "relationships": [],
+    "changelogDate": "20200507105800",
     "entityTableName": "especialidade_operadora",
     "dto": "mapstruct",
     "pagination": "pagination",

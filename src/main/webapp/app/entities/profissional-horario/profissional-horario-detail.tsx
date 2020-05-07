@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-horario.reducer';
+import { getEntity, IProfissionalHorarioBaseState, getProfissionalHorarioState } from './profissional-horario.reducer';
 import { IProfissionalHorario } from 'app/shared/model/profissional-horario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalHorarioState {
+  fieldsBase: IProfissionalHorarioBaseState;
+}
+
 export interface IProfissionalHorarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalHorarioDetail extends React.Component<IProfissionalHorarioDetailProps> {
+export class ProfissionalHorarioDetail extends React.Component<IProfissionalHorarioDetailProps, IProfissionalHorarioState> {
   constructor(props: Readonly<IProfissionalHorarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalHorarioState(this.props.location)
     };
   }
 

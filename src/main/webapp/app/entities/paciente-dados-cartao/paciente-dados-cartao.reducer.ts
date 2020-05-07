@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteDadosCartao, defaultValue } from 'app/shared/model/paciente-dados-cartao.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEDADOSCARTAO_LIST_EXPORT: 'pacienteDadosCartao/FETCH_PACIENTEDADOSCARTAO_LIST_EXPORT',
   FETCH_PACIENTEDADOSCARTAO_LIST: 'pacienteDadosCartao/FETCH_PACIENTEDADOSCARTAO_LIST',
   FETCH_PACIENTEDADOSCARTAO: 'pacienteDadosCartao/FETCH_PACIENTEDADOSCARTAO',
   CREATE_PACIENTEDADOSCARTAO: 'pacienteDadosCartao/CREATE_PACIENTEDADOSCARTAO',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type PacienteDadosCartaoState = Readonly<typeof initialState>;
 
+export interface IPacienteDadosCartaoBaseState {
+  baseFilters: any;
+  bandeira: any;
+  numeroCartao: any;
+  validade: any;
+  codAtivacao: any;
+  ativo: any;
+}
+
+export interface IPacienteDadosCartaoUpdateState {
+  fieldsBase: IPacienteDadosCartaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteDadosCartaoState = initialState, action): PacienteDadosCartaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO):
       return {
@@ -51,6 +67,7 @@ export default (state: PacienteDadosCartaoState = initialState, action): Pacient
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEDADOSCARTAO):
@@ -111,8 +128,6 @@ export type ICrudGetAllActionPacienteDadosCartao<T> = (
   validade?: any,
   codAtivacao?: any,
   ativo?: any,
-  pacientePedido?: any,
-  idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -124,8 +139,6 @@ export const getEntities: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCar
   validade,
   codAtivacao,
   ativo,
-  pacientePedido,
-  idPaciente,
   page,
   size,
   sort
@@ -135,14 +148,12 @@ export const getEntities: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCar
   const validadeRequest = validade ? `validade.equals=${validade}&` : '';
   const codAtivacaoRequest = codAtivacao ? `codAtivacao.contains=${codAtivacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST,
     payload: axios.get<IPacienteDadosCartao>(
-      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}${pacientePedidoRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,10 +165,34 @@ export const getEntity: ICrudGetAction<IPacienteDadosCartao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteDadosCartao<IPacienteDadosCartao> = (
+  bandeira,
+  numeroCartao,
+  validade,
+  codAtivacao,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const bandeiraRequest = bandeira ? `bandeira.contains=${bandeira}&` : '';
+  const numeroCartaoRequest = numeroCartao ? `numeroCartao.contains=${numeroCartao}&` : '';
+  const validadeRequest = validade ? `validade.equals=${validade}&` : '';
+  const codAtivacaoRequest = codAtivacao ? `codAtivacao.contains=${codAtivacao}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEDADOSCARTAO_LIST,
+    payload: axios.get<IPacienteDadosCartao>(
+      `${requestUrl}${bandeiraRequest}${numeroCartaoRequest}${validadeRequest}${codAtivacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteDadosCartao> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEDADOSCARTAO,
@@ -168,7 +203,7 @@ export const createEntity: ICrudPutAction<IPacienteDadosCartao> = entity => asyn
 };
 
 export const updateEntity: ICrudPutAction<IPacienteDadosCartao> = entity => async dispatch => {
-  entity = { ...entity, idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEDADOSCARTAO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -190,3 +225,22 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDadosCartao> = id => async
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteDadosCartaoState = (location): IPacienteDadosCartaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const bandeira = url.searchParams.get('bandeira') || '';
+  const numeroCartao = url.searchParams.get('numeroCartao') || '';
+  const validade = url.searchParams.get('validade') || '';
+  const codAtivacao = url.searchParams.get('codAtivacao') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    bandeira,
+    numeroCartao,
+    validade,
+    codAtivacao,
+    ativo
+  };
+};

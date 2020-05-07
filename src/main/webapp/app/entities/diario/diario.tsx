@@ -22,24 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './diario.reducer';
+import { getDiarioState, IDiarioBaseState, getEntities } from './diario.reducer';
 import { IDiario } from 'app/shared/model/diario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IUsuario } from 'app/shared/model/usuario.model';
-import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-
 export interface IDiarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IDiarioBaseState {
-  historico: any;
-  gerarPdf: any;
-  idUsuario: any;
-  idPaciente: any;
-}
 export interface IDiarioState extends IDiarioBaseState, IPaginationBaseState {}
 
 export class Diario extends React.Component<IDiarioProps, IDiarioState> {
@@ -49,40 +38,19 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getDiarioState(this.props.location)
+      ...getDiarioState(this.props.location)
     };
   }
 
-  getDiarioState = (location): IDiarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const historico = url.searchParams.get('historico') || '';
-    const gerarPdf = url.searchParams.get('gerarPdf') || '';
-
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-
-    return {
-      historico,
-      gerarPdf,
-      idUsuario,
-      idPaciente
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getUsuarios();
-    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         historico: '',
-        gerarPdf: '',
-        idUsuario: '',
-        idPaciente: ''
+        gerarPdf: ''
       },
       () => this.sortEntities()
     );
@@ -115,7 +83,9 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -133,12 +103,6 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
       'gerarPdf=' +
       this.state.gerarPdf +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
       ''
     );
   };
@@ -146,12 +110,12 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { historico, gerarPdf, idUsuario, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(historico, gerarPdf, idUsuario, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { historico, gerarPdf, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(historico, gerarPdf, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { usuarios, pacientes, diarioList, match, totalItems } = this.props;
+    const { diarioList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -169,7 +133,11 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.diario.home.createLabel">Create a new Diario</Translate>
@@ -182,63 +150,28 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="historicoLabel" for="diario-historico">
-                            <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="historico" id="diario-historico" value={this.state.historico} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="gerarPdfLabel" for="diario-gerarPdf">
-                            <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
-                          </Label>
-                          <AvInput type="string" name="gerarPdf" id="diario-gerarPdf" value={this.state.gerarPdf} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="diario-idUsuario">
-                              <Translate contentKey="generadorApp.diario.idUsuario">Id Usuario</Translate>
+                      {this.state.baseFilters !== 'historico' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="historicoLabel" for="diario-historico">
+                              <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
                             </Label>
-                            <AvInput id="diario-idUsuario" type="select" className="form-control" name="idUsuarioId">
-                              <option value="" key="0" />
-                              {usuarios
-                                ? usuarios.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="diario-idPaciente">
-                              <Translate contentKey="generadorApp.diario.idPaciente">Id Paciente</Translate>
+                            <AvInput type="text" name="historico" id="diario-historico" value={this.state.historico} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'gerarPdf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="gerarPdfLabel" for="diario-gerarPdf">
+                              <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
                             </Label>
-                            <AvInput id="diario-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="gerarPdf" id="diario-gerarPdf" value={this.state.gerarPdf} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -266,22 +199,18 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('historico')}>
-                        <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('gerarPdf')}>
-                        <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.diario.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.diario.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'historico' ? (
+                        <th className="hand" onClick={this.sort('historico')}>
+                          <Translate contentKey="generadorApp.diario.historico">Historico</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'gerarPdf' ? (
+                        <th className="hand" onClick={this.sort('gerarPdf')}>
+                          <Translate contentKey="generadorApp.diario.gerarPdf">Gerar Pdf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -296,27 +225,25 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
                           </Button>
                         </td>
 
-                        <td>{diario.historico}</td>
+                        {this.state.baseFilters !== 'historico' ? <td>{diario.historico}</td> : null}
 
-                        <td>{diario.gerarPdf}</td>
-                        <td>{diario.idUsuario ? <Link to={`usuario/${diario.idUsuario.id}`}>{diario.idUsuario.id}</Link> : ''}</td>
-                        <td>{diario.idPaciente ? <Link to={`paciente/${diario.idPaciente.id}`}>{diario.idPaciente.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'gerarPdf' ? <td>{diario.gerarPdf}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${diario.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${diario.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${diario.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${diario.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${diario.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${diario.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -358,15 +285,11 @@ export class Diario extends React.Component<IDiarioProps, IDiarioState> {
 }
 
 const mapStateToProps = ({ diario, ...storeState }: IRootState) => ({
-  usuarios: storeState.usuario.entities,
-  pacientes: storeState.paciente.entities,
   diarioList: diario.entities,
   totalItems: diario.totalItems
 });
 
 const mapDispatchToProps = {
-  getUsuarios,
-  getPacientes,
   getEntities
 };
 

@@ -71,7 +71,9 @@ export class ProntuarioMotivoInternacaoPsController {
     @Req() req: Request,
     @Body() prontuarioMotivoInternacaoPs: ProntuarioMotivoInternacaoPs
   ): Promise<ProntuarioMotivoInternacaoPs> {
+    console.info(prontuarioMotivoInternacaoPs);
     const created = await this.prontuarioMotivoInternacaoPsService.save(prontuarioMotivoInternacaoPs);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProntuarioMotivoInternacaoPs', created.id);
     return created;
   }
@@ -89,6 +91,7 @@ export class ProntuarioMotivoInternacaoPsController {
     @Body() prontuarioMotivoInternacaoPs: ProntuarioMotivoInternacaoPs
   ): Promise<ProntuarioMotivoInternacaoPs> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProntuarioMotivoInternacaoPs', prontuarioMotivoInternacaoPs.id);
+
     return await this.prontuarioMotivoInternacaoPsService.update(prontuarioMotivoInternacaoPs);
   }
 

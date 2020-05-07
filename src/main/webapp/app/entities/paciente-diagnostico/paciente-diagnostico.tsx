@@ -22,27 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-diagnostico.reducer';
+import { getPacienteDiagnosticoState, IPacienteDiagnosticoBaseState, getEntities } from './paciente-diagnostico.reducer';
 import { IPacienteDiagnostico } from 'app/shared/model/paciente-diagnostico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { ICid } from 'app/shared/model/cid.model';
-import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
-
 export interface IPacienteDiagnosticoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteDiagnosticoBaseState {
-  observacao: any;
-  ativo: any;
-  cidPrimario: any;
-  complexidade: any;
-  cidComAlta: any;
-  idPaciente: any;
-  idCid: any;
-}
 export interface IPacienteDiagnosticoState extends IPacienteDiagnosticoBaseState, IPaginationBaseState {}
 
 export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoProps, IPacienteDiagnosticoState> {
@@ -52,37 +38,12 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteDiagnosticoState(this.props.location)
+      ...getPacienteDiagnosticoState(this.props.location)
     };
   }
 
-  getPacienteDiagnosticoState = (location): IPacienteDiagnosticoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const observacao = url.searchParams.get('observacao') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const cidPrimario = url.searchParams.get('cidPrimario') || '';
-    const complexidade = url.searchParams.get('complexidade') || '';
-    const cidComAlta = url.searchParams.get('cidComAlta') || '';
-
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idCid = url.searchParams.get('idCid') || '';
-
-    return {
-      observacao,
-      ativo,
-      cidPrimario,
-      complexidade,
-      cidComAlta,
-      idPaciente,
-      idCid
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPacientes();
-    this.props.getCids();
   }
 
   cancelCourse = () => {
@@ -92,9 +53,7 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
         ativo: '',
         cidPrimario: '',
         complexidade: '',
-        cidComAlta: '',
-        idPaciente: '',
-        idCid: ''
+        cidComAlta: ''
       },
       () => this.sortEntities()
     );
@@ -127,7 +86,9 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -154,12 +115,6 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
       'cidComAlta=' +
       this.state.cidComAlta +
       '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
-      'idCid=' +
-      this.state.idCid +
-      '&' +
       ''
     );
   };
@@ -167,35 +122,12 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      observacao,
-      ativo,
-      cidPrimario,
-      complexidade,
-      cidComAlta,
-      idPaciente,
-      idCid,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      observacao,
-      ativo,
-      cidPrimario,
-      complexidade,
-      cidComAlta,
-      idPaciente,
-      idCid,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { observacao, ativo, cidPrimario, complexidade, cidComAlta, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(observacao, ativo, cidPrimario, complexidade, cidComAlta, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacientes, cids, pacienteDiagnosticoList, match, totalItems } = this.props;
+    const { pacienteDiagnosticoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -213,7 +145,11 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteDiagnostico.home.createLabel">Create a new Paciente Diagnostico</Translate>
@@ -226,88 +162,67 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacaoLabel" for="paciente-diagnostico-observacao">
-                            <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="observacao" id="paciente-diagnostico-observacao" value={this.state.observacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-diagnostico-ativo">
-                            <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-diagnostico-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidPrimarioLabel" check>
-                            <AvInput id="paciente-diagnostico-cidPrimario" type="checkbox" className="form-control" name="cidPrimario" />
-                            <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="complexidadeLabel" for="paciente-diagnostico-complexidade">
-                            <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="complexidade" id="paciente-diagnostico-complexidade" value={this.state.complexidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidComAltaLabel" check>
-                            <AvInput id="paciente-diagnostico-cidComAlta" type="checkbox" className="form-control" name="cidComAlta" />
-                            <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-diagnostico-idPaciente">
-                              <Translate contentKey="generadorApp.pacienteDiagnostico.idPaciente">Id Paciente</Translate>
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacaoLabel" for="paciente-diagnostico-observacao">
+                              <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
                             </Label>
-                            <AvInput id="paciente-diagnostico-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-diagnostico-idCid">
-                              <Translate contentKey="generadorApp.pacienteDiagnostico.idCid">Id Cid</Translate>
+                            <AvInput type="text" name="observacao" id="paciente-diagnostico-observacao" value={this.state.observacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-diagnostico-ativo">
+                              <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput id="paciente-diagnostico-idCid" type="select" className="form-control" name="idCidId">
-                              <option value="" key="0" />
-                              {cids
-                                ? cids.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="ativo" id="paciente-diagnostico-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidPrimario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidPrimarioLabel" check>
+                              <AvInput id="paciente-diagnostico-cidPrimario" type="checkbox" className="form-control" name="cidPrimario" />
+                              <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'complexidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="complexidadeLabel" for="paciente-diagnostico-complexidade">
+                              <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="complexidade"
+                              id="paciente-diagnostico-complexidade"
+                              value={this.state.complexidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidComAlta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidComAltaLabel" check>
+                              <AvInput id="paciente-diagnostico-cidComAlta" type="checkbox" className="form-control" name="cidComAlta" />
+                              <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -335,34 +250,36 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('observacao')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidPrimario')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('complexidade')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidComAlta')}>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteDiagnostico.idCid">Id Cid</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <th className="hand" onClick={this.sort('observacao')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidPrimario' ? (
+                        <th className="hand" onClick={this.sort('cidPrimario')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'complexidade' ? (
+                        <th className="hand" onClick={this.sort('complexidade')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidComAlta' ? (
+                        <th className="hand" onClick={this.sort('cidComAlta')}>
+                          <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -377,45 +294,41 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
                           </Button>
                         </td>
 
-                        <td>{pacienteDiagnostico.observacao}</td>
+                        {this.state.baseFilters !== 'observacao' ? <td>{pacienteDiagnostico.observacao}</td> : null}
 
-                        <td>{pacienteDiagnostico.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDiagnostico.ativo}</td> : null}
 
-                        <td>{pacienteDiagnostico.cidPrimario ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'cidPrimario' ? <td>{pacienteDiagnostico.cidPrimario ? 'true' : 'false'}</td> : null}
 
-                        <td>{pacienteDiagnostico.complexidade}</td>
+                        {this.state.baseFilters !== 'complexidade' ? <td>{pacienteDiagnostico.complexidade}</td> : null}
 
-                        <td>{pacienteDiagnostico.cidComAlta ? 'true' : 'false'}</td>
-                        <td>
-                          {pacienteDiagnostico.idPaciente ? (
-                            <Link to={`paciente/${pacienteDiagnostico.idPaciente.id}`}>{pacienteDiagnostico.idPaciente.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {pacienteDiagnostico.idCid ? (
-                            <Link to={`cid/${pacienteDiagnostico.idCid.id}`}>{pacienteDiagnostico.idCid.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'cidComAlta' ? <td>{pacienteDiagnostico.cidComAlta ? 'true' : 'false'}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteDiagnostico.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pacienteDiagnostico.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDiagnostico.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDiagnostico.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDiagnostico.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDiagnostico.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -457,15 +370,11 @@ export class PacienteDiagnostico extends React.Component<IPacienteDiagnosticoPro
 }
 
 const mapStateToProps = ({ pacienteDiagnostico, ...storeState }: IRootState) => ({
-  pacientes: storeState.paciente.entities,
-  cids: storeState.cid.entities,
   pacienteDiagnosticoList: pacienteDiagnostico.entities,
   totalItems: pacienteDiagnostico.totalItems
 });
 
 const mapDispatchToProps = {
-  getPacientes,
-  getCids,
   getEntities
 };
 

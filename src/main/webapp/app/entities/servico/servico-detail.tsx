@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './servico.reducer';
+import { getEntity, IServicoBaseState, getServicoState } from './servico.reducer';
 import { IServico } from 'app/shared/model/servico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IServicoState {
+  fieldsBase: IServicoBaseState;
+}
+
 export interface IServicoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ServicoDetail extends React.Component<IServicoDetailProps> {
+export class ServicoDetail extends React.Component<IServicoDetailProps, IServicoState> {
   constructor(props: Readonly<IServicoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getServicoState(this.props.location)
     };
   }
 

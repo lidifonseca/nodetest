@@ -68,7 +68,9 @@ export class TipoExameController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() tipoExame: TipoExame): Promise<TipoExame> {
+    console.info(tipoExame);
     const created = await this.tipoExameService.save(tipoExame);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TipoExame', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class TipoExameController {
   })
   async put(@Req() req: Request, @Body() tipoExame: TipoExame): Promise<TipoExame> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TipoExame', tipoExame.id);
+
     return await this.tipoExameService.update(tipoExame);
   }
 

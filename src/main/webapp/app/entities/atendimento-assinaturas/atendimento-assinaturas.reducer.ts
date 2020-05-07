@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAtendimentoAssinaturas, defaultValue } from 'app/shared/model/atendimento-assinaturas.model';
 
 export const ACTION_TYPES = {
+  FETCH_ATENDIMENTOASSINATURAS_LIST_EXPORT: 'atendimentoAssinaturas/FETCH_ATENDIMENTOASSINATURAS_LIST_EXPORT',
   FETCH_ATENDIMENTOASSINATURAS_LIST: 'atendimentoAssinaturas/FETCH_ATENDIMENTOASSINATURAS_LIST',
   FETCH_ATENDIMENTOASSINATURAS: 'atendimentoAssinaturas/FETCH_ATENDIMENTOASSINATURAS',
   CREATE_ATENDIMENTOASSINATURAS: 'atendimentoAssinaturas/CREATE_ATENDIMENTOASSINATURAS',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type AtendimentoAssinaturasState = Readonly<typeof initialState>;
 
+export interface IAtendimentoAssinaturasBaseState {
+  baseFilters: any;
+  arquivoAssinatura: any;
+}
+
+export interface IAtendimentoAssinaturasUpdateState {
+  fieldsBase: IAtendimentoAssinaturasBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: AtendimentoAssinaturasState = initialState, action): AtendimentoAssinaturasState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS):
       return {
@@ -51,6 +63,7 @@ export default (state: AtendimentoAssinaturasState = initialState, action): Aten
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS):
     case FAILURE(ACTION_TYPES.CREATE_ATENDIMENTOASSINATURAS):
@@ -107,34 +120,18 @@ const apiUrl = 'api/atendimento-assinaturas';
 // Actions
 export type ICrudGetAllActionAtendimentoAssinaturas<T> = (
   arquivoAssinatura?: any,
-  idAtendimento?: any,
-  idProfissional?: any,
-  idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAssinaturas> = (
-  arquivoAssinatura,
-  idAtendimento,
-  idProfissional,
-  idPaciente,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAssinaturas> = (arquivoAssinatura, page, size, sort) => {
   const arquivoAssinaturaRequest = arquivoAssinatura ? `arquivoAssinatura.contains=${arquivoAssinatura}&` : '';
-  const idAtendimentoRequest = idAtendimento ? `idAtendimento.equals=${idAtendimento}&` : '';
-  const idProfissionalRequest = idProfissional ? `idProfissional.equals=${idProfissional}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST,
-    payload: axios.get<IAtendimentoAssinaturas>(
-      `${requestUrl}${arquivoAssinaturaRequest}${idAtendimentoRequest}${idProfissionalRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IAtendimentoAssinaturas>(`${requestUrl}${arquivoAssinaturaRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IAtendimentoAssinaturas> = id => {
@@ -145,12 +142,24 @@ export const getEntity: ICrudGetAction<IAtendimentoAssinaturas> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionAtendimentoAssinaturas<IAtendimentoAssinaturas> = (
+  arquivoAssinatura,
+  page,
+  size,
+  sort
+) => {
+  const arquivoAssinaturaRequest = arquivoAssinatura ? `arquivoAssinatura.contains=${arquivoAssinatura}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ATENDIMENTOASSINATURAS_LIST,
+    payload: axios.get<IAtendimentoAssinaturas>(`${requestUrl}${arquivoAssinaturaRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IAtendimentoAssinaturas> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idAtendimento: entity.idAtendimento === 'null' ? null : entity.idAtendimento,
-    idProfissional: entity.idProfissional === 'null' ? null : entity.idProfissional,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ATENDIMENTOASSINATURAS,
@@ -161,12 +170,7 @@ export const createEntity: ICrudPutAction<IAtendimentoAssinaturas> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IAtendimentoAssinaturas> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idAtendimento: entity.idAtendimento === 'null' ? null : entity.idAtendimento,
-    idProfissional: entity.idProfissional === 'null' ? null : entity.idProfissional,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ATENDIMENTOASSINATURAS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -188,3 +192,14 @@ export const deleteEntity: ICrudDeleteAction<IAtendimentoAssinaturas> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAtendimentoAssinaturasState = (location): IAtendimentoAssinaturasBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const arquivoAssinatura = url.searchParams.get('arquivoAssinatura') || '';
+
+  return {
+    baseFilters,
+    arquivoAssinatura
+  };
+};

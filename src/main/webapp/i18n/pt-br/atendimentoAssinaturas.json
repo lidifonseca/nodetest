@@ -16,10 +16,7 @@
       "detail": {
         "title": "Atendimento Assinaturas"
       },
-      "arquivoAssinatura": "Arquivo Assinatura",
-      "idAtendimento": "Id Atendimento",
-      "idProfissional": "Id Profissional",
-      "idPaciente": "Id Paciente"
+      "arquivoAssinatura": "Arquivo Assinatura"
     }
   }
 }

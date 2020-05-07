@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './diario-tags.reducer';
+import { getEntity, IDiarioTagsBaseState, getDiarioTagsState } from './diario-tags.reducer';
 import { IDiarioTags } from 'app/shared/model/diario-tags.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IDiarioTagsState {
+  fieldsBase: IDiarioTagsBaseState;
+}
+
 export interface IDiarioTagsDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class DiarioTagsDetail extends React.Component<IDiarioTagsDetailProps> {
+export class DiarioTagsDetail extends React.Component<IDiarioTagsDetailProps, IDiarioTagsState> {
   constructor(props: Readonly<IDiarioTagsDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getDiarioTagsState(this.props.location)
     };
   }
 

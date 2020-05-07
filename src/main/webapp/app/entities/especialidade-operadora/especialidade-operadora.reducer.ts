@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IEspecialidadeOperadora, defaultValue } from 'app/shared/model/especialidade-operadora.model';
 
 export const ACTION_TYPES = {
+  FETCH_ESPECIALIDADEOPERADORA_LIST_EXPORT: 'especialidadeOperadora/FETCH_ESPECIALIDADEOPERADORA_LIST_EXPORT',
   FETCH_ESPECIALIDADEOPERADORA_LIST: 'especialidadeOperadora/FETCH_ESPECIALIDADEOPERADORA_LIST',
   FETCH_ESPECIALIDADEOPERADORA: 'especialidadeOperadora/FETCH_ESPECIALIDADEOPERADORA',
   CREATE_ESPECIALIDADEOPERADORA: 'especialidadeOperadora/CREATE_ESPECIALIDADEOPERADORA',
@@ -30,10 +31,28 @@ const initialState = {
 
 export type EspecialidadeOperadoraState = Readonly<typeof initialState>;
 
+export interface IEspecialidadeOperadoraBaseState {
+  baseFilters: any;
+  codTuss: any;
+  codDespesa: any;
+  codTabela: any;
+  valorCusto: any;
+  valorVenda: any;
+  descontoCusto: any;
+  descontoVenda: any;
+  ativo: any;
+}
+
+export interface IEspecialidadeOperadoraUpdateState {
+  fieldsBase: IEspecialidadeOperadoraBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: EspecialidadeOperadoraState = initialState, action): EspecialidadeOperadoraState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA):
       return {
@@ -51,6 +70,7 @@ export default (state: EspecialidadeOperadoraState = initialState, action): Espe
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA):
     case FAILURE(ACTION_TYPES.CREATE_ESPECIALIDADEOPERADORA):
@@ -114,8 +134,6 @@ export type ICrudGetAllActionEspecialidadeOperadora<T> = (
   descontoCusto?: any,
   descontoVenda?: any,
   ativo?: any,
-  idOperadora?: any,
-  idEspecialidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -130,8 +148,6 @@ export const getEntities: ICrudGetAllActionEspecialidadeOperadora<IEspecialidade
   descontoCusto,
   descontoVenda,
   ativo,
-  idOperadora,
-  idEspecialidade,
   page,
   size,
   sort
@@ -144,14 +160,12 @@ export const getEntities: ICrudGetAllActionEspecialidadeOperadora<IEspecialidade
   const descontoCustoRequest = descontoCusto ? `descontoCusto.contains=${descontoCusto}&` : '';
   const descontoVendaRequest = descontoVenda ? `descontoVenda.contains=${descontoVenda}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idOperadoraRequest = idOperadora ? `idOperadora.equals=${idOperadora}&` : '';
-  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST,
     payload: axios.get<IEspecialidadeOperadora>(
-      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}${idOperadoraRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -163,11 +177,40 @@ export const getEntity: ICrudGetAction<IEspecialidadeOperadora> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionEspecialidadeOperadora<IEspecialidadeOperadora> = (
+  codTuss,
+  codDespesa,
+  codTabela,
+  valorCusto,
+  valorVenda,
+  descontoCusto,
+  descontoVenda,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const codTussRequest = codTuss ? `codTuss.contains=${codTuss}&` : '';
+  const codDespesaRequest = codDespesa ? `codDespesa.contains=${codDespesa}&` : '';
+  const codTabelaRequest = codTabela ? `codTabela.contains=${codTabela}&` : '';
+  const valorCustoRequest = valorCusto ? `valorCusto.contains=${valorCusto}&` : '';
+  const valorVendaRequest = valorVenda ? `valorVenda.contains=${valorVenda}&` : '';
+  const descontoCustoRequest = descontoCusto ? `descontoCusto.contains=${descontoCusto}&` : '';
+  const descontoVendaRequest = descontoVenda ? `descontoVenda.contains=${descontoVenda}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ESPECIALIDADEOPERADORA_LIST,
+    payload: axios.get<IEspecialidadeOperadora>(
+      `${requestUrl}${codTussRequest}${codDespesaRequest}${codTabelaRequest}${valorCustoRequest}${valorVendaRequest}${descontoCustoRequest}${descontoVendaRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IEspecialidadeOperadora> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idOperadora: entity.idOperadora === 'null' ? null : entity.idOperadora,
-    idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ESPECIALIDADEOPERADORA,
@@ -178,11 +221,7 @@ export const createEntity: ICrudPutAction<IEspecialidadeOperadora> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<IEspecialidadeOperadora> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idOperadora: entity.idOperadora === 'null' ? null : entity.idOperadora,
-    idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ESPECIALIDADEOPERADORA,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -204,3 +243,28 @@ export const deleteEntity: ICrudDeleteAction<IEspecialidadeOperadora> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getEspecialidadeOperadoraState = (location): IEspecialidadeOperadoraBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const codTuss = url.searchParams.get('codTuss') || '';
+  const codDespesa = url.searchParams.get('codDespesa') || '';
+  const codTabela = url.searchParams.get('codTabela') || '';
+  const valorCusto = url.searchParams.get('valorCusto') || '';
+  const valorVenda = url.searchParams.get('valorVenda') || '';
+  const descontoCusto = url.searchParams.get('descontoCusto') || '';
+  const descontoVenda = url.searchParams.get('descontoVenda') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    codTuss,
+    codDespesa,
+    codTabela,
+    valorCusto,
+    valorVenda,
+    descontoCusto,
+    descontoVenda,
+    ativo
+  };
+};

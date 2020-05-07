@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPerguntasQuestionario, defaultValue } from 'app/shared/model/perguntas-questionario.model';
 
 export const ACTION_TYPES = {
+  FETCH_PERGUNTASQUESTIONARIO_LIST_EXPORT: 'perguntasQuestionario/FETCH_PERGUNTASQUESTIONARIO_LIST_EXPORT',
   FETCH_PERGUNTASQUESTIONARIO_LIST: 'perguntasQuestionario/FETCH_PERGUNTASQUESTIONARIO_LIST',
   FETCH_PERGUNTASQUESTIONARIO: 'perguntasQuestionario/FETCH_PERGUNTASQUESTIONARIO',
   CREATE_PERGUNTASQUESTIONARIO: 'perguntasQuestionario/CREATE_PERGUNTASQUESTIONARIO',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type PerguntasQuestionarioState = Readonly<typeof initialState>;
 
+export interface IPerguntasQuestionarioBaseState {
+  baseFilters: any;
+  pergunta: any;
+  tipoResposta: any;
+  obrigatorio: any;
+  tipoCampo: any;
+}
+
+export interface IPerguntasQuestionarioUpdateState {
+  fieldsBase: IPerguntasQuestionarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PerguntasQuestionarioState = initialState, action): PerguntasQuestionarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO):
       return {
@@ -51,6 +66,7 @@ export default (state: PerguntasQuestionarioState = initialState, action): Pergu
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO):
     case FAILURE(ACTION_TYPES.CREATE_PERGUNTASQUESTIONARIO):
@@ -110,9 +126,6 @@ export type ICrudGetAllActionPerguntasQuestionario<T> = (
   tipoResposta?: any,
   obrigatorio?: any,
   tipoCampo?: any,
-  acoesRespostas?: any,
-  respostas?: any,
-  segmentosPerguntasId?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -123,9 +136,6 @@ export const getEntities: ICrudGetAllActionPerguntasQuestionario<IPerguntasQuest
   tipoResposta,
   obrigatorio,
   tipoCampo,
-  acoesRespostas,
-  respostas,
-  segmentosPerguntasId,
   page,
   size,
   sort
@@ -134,15 +144,12 @@ export const getEntities: ICrudGetAllActionPerguntasQuestionario<IPerguntasQuest
   const tipoRespostaRequest = tipoResposta ? `tipoResposta.contains=${tipoResposta}&` : '';
   const obrigatorioRequest = obrigatorio ? `obrigatorio.contains=${obrigatorio}&` : '';
   const tipoCampoRequest = tipoCampo ? `tipoCampo.contains=${tipoCampo}&` : '';
-  const acoesRespostasRequest = acoesRespostas ? `acoesRespostas.equals=${acoesRespostas}&` : '';
-  const respostasRequest = respostas ? `respostas.equals=${respostas}&` : '';
-  const segmentosPerguntasIdRequest = segmentosPerguntasId ? `segmentosPerguntasId.equals=${segmentosPerguntasId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST,
     payload: axios.get<IPerguntasQuestionario>(
-      `${requestUrl}${perguntaRequest}${tipoRespostaRequest}${obrigatorioRequest}${tipoCampoRequest}${acoesRespostasRequest}${respostasRequest}${segmentosPerguntasIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${perguntaRequest}${tipoRespostaRequest}${obrigatorioRequest}${tipoCampoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,10 +161,32 @@ export const getEntity: ICrudGetAction<IPerguntasQuestionario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPerguntasQuestionario<IPerguntasQuestionario> = (
+  pergunta,
+  tipoResposta,
+  obrigatorio,
+  tipoCampo,
+  page,
+  size,
+  sort
+) => {
+  const perguntaRequest = pergunta ? `pergunta.contains=${pergunta}&` : '';
+  const tipoRespostaRequest = tipoResposta ? `tipoResposta.contains=${tipoResposta}&` : '';
+  const obrigatorioRequest = obrigatorio ? `obrigatorio.contains=${obrigatorio}&` : '';
+  const tipoCampoRequest = tipoCampo ? `tipoCampo.contains=${tipoCampo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PERGUNTASQUESTIONARIO_LIST,
+    payload: axios.get<IPerguntasQuestionario>(
+      `${requestUrl}${perguntaRequest}${tipoRespostaRequest}${obrigatorioRequest}${tipoCampoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPerguntasQuestionario> = entity => async dispatch => {
   entity = {
-    ...entity,
-    segmentosPerguntasId: entity.segmentosPerguntasId === 'null' ? null : entity.segmentosPerguntasId
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PERGUNTASQUESTIONARIO,
@@ -168,7 +197,7 @@ export const createEntity: ICrudPutAction<IPerguntasQuestionario> = entity => as
 };
 
 export const updateEntity: ICrudPutAction<IPerguntasQuestionario> = entity => async dispatch => {
-  entity = { ...entity, segmentosPerguntasId: entity.segmentosPerguntasId === 'null' ? null : entity.segmentosPerguntasId };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PERGUNTASQUESTIONARIO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -190,3 +219,20 @@ export const deleteEntity: ICrudDeleteAction<IPerguntasQuestionario> = id => asy
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPerguntasQuestionarioState = (location): IPerguntasQuestionarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const pergunta = url.searchParams.get('pergunta') || '';
+  const tipoResposta = url.searchParams.get('tipoResposta') || '';
+  const obrigatorio = url.searchParams.get('obrigatorio') || '';
+  const tipoCampo = url.searchParams.get('tipoCampo') || '';
+
+  return {
+    baseFilters,
+    pergunta,
+    tipoResposta,
+    obrigatorio,
+    tipoCampo
+  };
+};

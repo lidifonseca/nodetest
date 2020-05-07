@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './respostas.reducer';
+import { getEntity, IRespostasBaseState, getRespostasState } from './respostas.reducer';
 import { IRespostas } from 'app/shared/model/respostas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IRespostasState {
+  fieldsBase: IRespostasBaseState;
+}
+
 export interface IRespostasDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class RespostasDetail extends React.Component<IRespostasDetailProps> {
+export class RespostasDetail extends React.Component<IRespostasDetailProps, IRespostasState> {
   constructor(props: Readonly<IRespostasDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getRespostasState(this.props.location)
     };
   }
 
@@ -91,19 +96,6 @@ export class RespostasDetail extends React.Component<IRespostasDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{respostasEntity.respostaAtiva ? 'true' : 'false'}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.respostas.perguntasQuestionarioId">Perguntas Questionario Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{respostasEntity.perguntasQuestionarioId ? respostasEntity.perguntasQuestionarioId.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

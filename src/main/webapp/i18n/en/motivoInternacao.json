@@ -3,15 +3,15 @@
     "motivoInternacao": {
       "home": {
         "title": "Motivo Internacaos",
-        "createLabel": "Criar novo Motivo Internacao",
-        "createOrEditLabel": "Criar ou editar Motivo Internacao",
-        "notFound": "Nenhum Motivo Internacao encontrado"
+        "createLabel": "Create a new Motivo Internacao",
+        "createOrEditLabel": "Create or edit a Motivo Internacao",
+        "notFound": "No Motivo Internacaos found"
       },
-      "created": "Um novo Motivo Internacao foi criado com o identificador {{ param }}",
-      "updated": "Um Motivo Internacao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Motivo Internacao foi excluído com o identificador {{ param }}",
+      "created": "A new Motivo Internacao is created with identifier {{ param }}",
+      "updated": "A Motivo Internacao is updated with identifier {{ param }}",
+      "deleted": "A Motivo Internacao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Motivo Internacao {{ id }}?"
+        "question": "Are you sure you want to delete Motivo Internacao {{ id }}?"
       },
       "detail": {
         "title": "Motivo Internacao"

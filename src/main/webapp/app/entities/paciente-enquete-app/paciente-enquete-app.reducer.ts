@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteEnqueteApp, defaultValue } from 'app/shared/model/paciente-enquete-app.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEENQUETEAPP_LIST_EXPORT: 'pacienteEnqueteApp/FETCH_PACIENTEENQUETEAPP_LIST_EXPORT',
   FETCH_PACIENTEENQUETEAPP_LIST: 'pacienteEnqueteApp/FETCH_PACIENTEENQUETEAPP_LIST',
   FETCH_PACIENTEENQUETEAPP: 'pacienteEnqueteApp/FETCH_PACIENTEENQUETEAPP',
   CREATE_PACIENTEENQUETEAPP: 'pacienteEnqueteApp/CREATE_PACIENTEENQUETEAPP',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type PacienteEnqueteAppState = Readonly<typeof initialState>;
 
+export interface IPacienteEnqueteAppBaseState {
+  baseFilters: any;
+  votacao: any;
+}
+
+export interface IPacienteEnqueteAppUpdateState {
+  fieldsBase: IPacienteEnqueteAppBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteEnqueteAppState = initialState, action): PacienteEnqueteAppState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEENQUETEAPP):
       return {
@@ -51,6 +63,7 @@ export default (state: PacienteEnqueteAppState = initialState, action): Paciente
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEENQUETEAPP):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEENQUETEAPP):
@@ -107,20 +120,18 @@ const apiUrl = 'api/paciente-enquete-apps';
 // Actions
 export type ICrudGetAllActionPacienteEnqueteApp<T> = (
   votacao?: any,
-  idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, idPaciente, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, page, size, sort) => {
   const votacaoRequest = votacao ? `votacao.contains=${votacao}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST,
-    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPacienteEnqueteApp> = id => {
@@ -131,10 +142,19 @@ export const getEntity: ICrudGetAction<IPacienteEnqueteApp> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteEnqueteApp<IPacienteEnqueteApp> = (votacao, page, size, sort) => {
+  const votacaoRequest = votacao ? `votacao.contains=${votacao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEENQUETEAPP_LIST,
+    payload: axios.get<IPacienteEnqueteApp>(`${requestUrl}${votacaoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteEnqueteApp> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEENQUETEAPP,
@@ -145,7 +165,7 @@ export const createEntity: ICrudPutAction<IPacienteEnqueteApp> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<IPacienteEnqueteApp> = entity => async dispatch => {
-  entity = { ...entity, idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEENQUETEAPP,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -167,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<IPacienteEnqueteApp> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteEnqueteAppState = (location): IPacienteEnqueteAppBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const votacao = url.searchParams.get('votacao') || '';
+
+  return {
+    baseFilters,
+    votacao
+  };
+};

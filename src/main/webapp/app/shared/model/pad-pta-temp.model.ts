@@ -3,7 +3,6 @@ export interface IPadPtaTemp {
   sessionId?: string;
   idPta?: number;
   idCid?: number;
-  idUsuario?: number;
   cidXPtaNovoId?: number;
 }
 

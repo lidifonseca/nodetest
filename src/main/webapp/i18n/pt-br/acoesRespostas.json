@@ -20,9 +20,7 @@
       "condicaoSexo": "Condicao Sexo",
       "observacoes": "Observacoes",
       "tipoCampo1": "Tipo Campo 1",
-      "tipoCampo2": "Tipo Campo 2",
-      "respostasId": "Respostas Id",
-      "perguntasQuestionarioId": "Perguntas Questionario Id"
+      "tipoCampo2": "Tipo Campo 2"
     }
   }
 }

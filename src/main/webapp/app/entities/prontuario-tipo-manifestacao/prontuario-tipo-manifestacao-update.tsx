@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './prontuario-tipo-manifestacao.reducer';
+import {
+  IProntuarioTipoManifestacaoUpdateState,
+  getEntity,
+  getProntuarioTipoManifestacaoState,
+  IProntuarioTipoManifestacaoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './prontuario-tipo-manifestacao.reducer';
 import { IProntuarioTipoManifestacao } from 'app/shared/model/prontuario-tipo-manifestacao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProntuarioTipoManifestacaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IProntuarioTipoManifestacaoUpdateState {
-  isNew: boolean;
-}
 
 export class ProntuarioTipoManifestacaoUpdate extends React.Component<
   IProntuarioTipoManifestacaoUpdateProps,
@@ -25,7 +29,9 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
 > {
   constructor(props: Readonly<IProntuarioTipoManifestacaoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProntuarioTipoManifestacaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,21 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['nome'] ? '&nome=' + fieldsBase['nome'] : '') +
+      (fieldsBase['idPai'] ? '&idPai=' + fieldsBase['idPai'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { prontuarioTipoManifestacaoEntity } = this.props;
@@ -60,13 +81,14 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/prontuario-tipo-manifestacao');
+    this.props.history.push('/prontuario-tipo-manifestacao?' + this.getFiltersURL());
   };
 
   render() {
     const { prontuarioTipoManifestacaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +126,7 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/prontuario-tipo-manifestacao"
+                  to={'/prontuario-tipo-manifestacao?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +145,7 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,59 +168,65 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-manifestacao-nome">
+                                    <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-manifestacao-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-manifestacao-nome">
-                                <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="prontuario-tipo-manifestacao-nome"
-                                type="text"
-                                name="nome"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-manifestacao-idPai">
+                                    <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-manifestacao-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-manifestacao-idPai">
-                                <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="prontuario-tipo-manifestacao-idPai" type="string" className="form-control" name="idPai" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
-                                <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="prontuario-tipo-manifestacao-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
+                                    <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-manifestacao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

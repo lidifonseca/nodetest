@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITipoProntuario, defaultValue } from 'app/shared/model/tipo-prontuario.model';
 
 export const ACTION_TYPES = {
+  FETCH_TIPOPRONTUARIO_LIST_EXPORT: 'tipoProntuario/FETCH_TIPOPRONTUARIO_LIST_EXPORT',
   FETCH_TIPOPRONTUARIO_LIST: 'tipoProntuario/FETCH_TIPOPRONTUARIO_LIST',
   FETCH_TIPOPRONTUARIO: 'tipoProntuario/FETCH_TIPOPRONTUARIO',
   CREATE_TIPOPRONTUARIO: 'tipoProntuario/CREATE_TIPOPRONTUARIO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type TipoProntuarioState = Readonly<typeof initialState>;
 
+export interface ITipoProntuarioBaseState {
+  baseFilters: any;
+  prontuario: any;
+  ativo: any;
+}
+
+export interface ITipoProntuarioUpdateState {
+  fieldsBase: ITipoProntuarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TipoProntuarioState = initialState, action): TipoProntuarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TIPOPRONTUARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TIPOPRONTUARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TIPOPRONTUARIO):
       return {
@@ -51,6 +64,7 @@ export default (state: TipoProntuarioState = initialState, action): TipoProntuar
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TIPOPRONTUARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TIPOPRONTUARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TIPOPRONTUARIO):
     case FAILURE(ACTION_TYPES.CREATE_TIPOPRONTUARIO):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<ITipoProntuario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTipoProntuario<ITipoProntuario> = (prontuario, ativo, page, size, sort) => {
+  const prontuarioRequest = prontuario ? `prontuario.contains=${prontuario}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TIPOPRONTUARIO_LIST,
+    payload: axios.get<ITipoProntuario>(`${requestUrl}${prontuarioRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ITipoProntuario> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<ITipoProntuario> = id => async disp
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTipoProntuarioState = (location): ITipoProntuarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const prontuario = url.searchParams.get('prontuario') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    prontuario,
+    ativo
+  };
+};

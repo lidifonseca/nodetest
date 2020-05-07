@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IReportEmailAtendimento, defaultValue } from 'app/shared/model/report-email-atendimento.model';
 
 export const ACTION_TYPES = {
+  FETCH_REPORTEMAILATENDIMENTO_LIST_EXPORT: 'reportEmailAtendimento/FETCH_REPORTEMAILATENDIMENTO_LIST_EXPORT',
   FETCH_REPORTEMAILATENDIMENTO_LIST: 'reportEmailAtendimento/FETCH_REPORTEMAILATENDIMENTO_LIST',
   FETCH_REPORTEMAILATENDIMENTO: 'reportEmailAtendimento/FETCH_REPORTEMAILATENDIMENTO',
   CREATE_REPORTEMAILATENDIMENTO: 'reportEmailAtendimento/CREATE_REPORTEMAILATENDIMENTO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type ReportEmailAtendimentoState = Readonly<typeof initialState>;
 
+export interface IReportEmailAtendimentoBaseState {
+  baseFilters: any;
+  idAtendimento: any;
+  tipoReport: any;
+}
+
+export interface IReportEmailAtendimentoUpdateState {
+  fieldsBase: IReportEmailAtendimentoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ReportEmailAtendimentoState = initialState, action): ReportEmailAtendimentoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO):
       return {
@@ -51,6 +64,7 @@ export default (state: ReportEmailAtendimentoState = initialState, action): Repo
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO):
     case FAILURE(ACTION_TYPES.CREATE_REPORTEMAILATENDIMENTO):
@@ -139,6 +153,25 @@ export const getEntity: ICrudGetAction<IReportEmailAtendimento> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionReportEmailAtendimento<IReportEmailAtendimento> = (
+  idAtendimento,
+  tipoReport,
+  page,
+  size,
+  sort
+) => {
+  const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
+  const tipoReportRequest = tipoReport ? `tipoReport.contains=${tipoReport}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_REPORTEMAILATENDIMENTO_LIST,
+    payload: axios.get<IReportEmailAtendimento>(
+      `${requestUrl}${idAtendimentoRequest}${tipoReportRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IReportEmailAtendimento> = entity => async dispatch => {
   entity = {
     ...entity
@@ -174,3 +207,16 @@ export const deleteEntity: ICrudDeleteAction<IReportEmailAtendimento> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getReportEmailAtendimentoState = (location): IReportEmailAtendimentoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idAtendimento = url.searchParams.get('idAtendimento') || '';
+  const tipoReport = url.searchParams.get('tipoReport') || '';
+
+  return {
+    baseFilters,
+    idAtendimento,
+    tipoReport
+  };
+};

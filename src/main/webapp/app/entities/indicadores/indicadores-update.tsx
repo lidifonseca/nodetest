@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './indicadores.reducer';
+import {
+  IIndicadoresUpdateState,
+  getEntity,
+  getIndicadoresState,
+  IIndicadoresBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './indicadores.reducer';
 import { IIndicadores } from 'app/shared/model/indicadores.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IIndicadoresUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IIndicadoresUpdateState {
-  isNew: boolean;
-}
-
 export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, IIndicadoresUpdateState> {
   constructor(props: Readonly<IIndicadoresUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getIndicadoresState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,19 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['titulo'] ? '&titulo=' + fieldsBase['titulo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { indicadoresEntity } = this.props;
@@ -57,13 +76,14 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/indicadores');
+    this.props.history.push('/indicadores?' + this.getFiltersURL());
   };
 
   render() {
     const { indicadoresEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +116,14 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/indicadores" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/indicadores?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +138,7 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,29 +154,27 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tituloLabel" for="indicadores-titulo">
-                                <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="indicadores-titulo"
-                                type="text"
-                                name="titulo"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'titulo' ? (
+                          <Col md="titulo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tituloLabel" for="indicadores-titulo">
+                                    <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-titulo" type="text" name="titulo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

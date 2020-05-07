@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento-acompanhamento-push.reducer';
+import {
+  getEntity,
+  IAtendimentoAcompanhamentoPushBaseState,
+  getAtendimentoAcompanhamentoPushState
+} from './atendimento-acompanhamento-push.reducer';
 import { IAtendimentoAcompanhamentoPush } from 'app/shared/model/atendimento-acompanhamento-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoAcompanhamentoPushState {
+  fieldsBase: IAtendimentoAcompanhamentoPushBaseState;
+}
+
 export interface IAtendimentoAcompanhamentoPushDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoAcompanhamentoPushDetail extends React.Component<IAtendimentoAcompanhamentoPushDetailProps> {
+export class AtendimentoAcompanhamentoPushDetail extends React.Component<
+  IAtendimentoAcompanhamentoPushDetailProps,
+  IAtendimentoAcompanhamentoPushState
+> {
   constructor(props: Readonly<IAtendimentoAcompanhamentoPushDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoAcompanhamentoPushState(this.props.location)
     };
   }
 

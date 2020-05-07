@@ -37,17 +37,13 @@
             "fieldTypeBlobContent": "text"
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer"
-        },
-        {
             "fieldName": "informacaoAdicional",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503005100",
+    "changelogDate": "20200507122400",
     "entityTableName": "prontuario_motivo_manifestacao",
     "dto": "mapstruct",
     "pagination": "pagination",

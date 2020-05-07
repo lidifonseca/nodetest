@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadCid, defaultValue } from 'app/shared/model/pad-cid.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADCID_LIST_EXPORT: 'padCid/FETCH_PADCID_LIST_EXPORT',
   FETCH_PADCID_LIST: 'padCid/FETCH_PADCID_LIST',
   FETCH_PADCID: 'padCid/FETCH_PADCID',
   CREATE_PADCID: 'padCid/CREATE_PADCID',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PadCidState = Readonly<typeof initialState>;
 
+export interface IPadCidBaseState {
+  baseFilters: any;
+  observacao: any;
+  ativo: any;
+}
+
+export interface IPadCidUpdateState {
+  fieldsBase: IPadCidBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PadCidState = initialState, action): PadCidState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADCID_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADCID_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADCID):
       return {
@@ -51,6 +64,7 @@ export default (state: PadCidState = initialState, action): PadCidState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADCID_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADCID_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADCID):
     case FAILURE(ACTION_TYPES.CREATE_PADCID):
@@ -108,25 +122,19 @@ const apiUrl = 'api/pad-cids';
 export type ICrudGetAllActionPadCid<T> = (
   observacao?: any,
   ativo?: any,
-  idPad?: any,
-  idCid?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, idPad, idCid, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, page, size, sort) => {
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idPadRequest = idPad ? `idPad.equals=${idPad}&` : '';
-  const idCidRequest = idCid ? `idCid.equals=${idCid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADCID_LIST,
-    payload: axios.get<IPadCid>(
-      `${requestUrl}${observacaoRequest}${ativoRequest}${idPadRequest}${idCidRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPadCid>(`${requestUrl}${observacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPadCid> = id => {
@@ -137,11 +145,20 @@ export const getEntity: ICrudGetAction<IPadCid> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPadCid<IPadCid> = (observacao, ativo, page, size, sort) => {
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADCID_LIST,
+    payload: axios.get<IPadCid>(`${requestUrl}${observacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IPadCid> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idPad: entity.idPad === 'null' ? null : entity.idPad,
-    idCid: entity.idCid === 'null' ? null : entity.idCid
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PADCID,
@@ -152,7 +169,7 @@ export const createEntity: ICrudPutAction<IPadCid> = entity => async dispatch =>
 };
 
 export const updateEntity: ICrudPutAction<IPadCid> = entity => async dispatch => {
-  entity = { ...entity, idPad: entity.idPad === 'null' ? null : entity.idPad, idCid: entity.idCid === 'null' ? null : entity.idCid };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PADCID,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -174,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IPadCid> = id => async dispatch => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadCidState = (location): IPadCidBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    observacao,
+    ativo
+  };
+};

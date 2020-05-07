@@ -22,16 +22,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "franquia",
-            "otherEntityRelationshipName": "franquiaAreaAtuacao",
-            "relationshipName": "idFranquia",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502233000",
+    "relationships": [],
+    "changelogDate": "20200507110300",
     "entityTableName": "franquia_area_atuacao",
     "dto": "mapstruct",
     "pagination": "pagination",

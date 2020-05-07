@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ISegmentosPerguntas, defaultValue } from 'app/shared/model/segmentos-perguntas.model';
 
 export const ACTION_TYPES = {
+  FETCH_SEGMENTOSPERGUNTAS_LIST_EXPORT: 'segmentosPerguntas/FETCH_SEGMENTOSPERGUNTAS_LIST_EXPORT',
   FETCH_SEGMENTOSPERGUNTAS_LIST: 'segmentosPerguntas/FETCH_SEGMENTOSPERGUNTAS_LIST',
   FETCH_SEGMENTOSPERGUNTAS: 'segmentosPerguntas/FETCH_SEGMENTOSPERGUNTAS',
   CREATE_SEGMENTOSPERGUNTAS: 'segmentosPerguntas/CREATE_SEGMENTOSPERGUNTAS',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type SegmentosPerguntasState = Readonly<typeof initialState>;
 
+export interface ISegmentosPerguntasBaseState {
+  baseFilters: any;
+  segmento: any;
+}
+
+export interface ISegmentosPerguntasUpdateState {
+  fieldsBase: ISegmentosPerguntasBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: SegmentosPerguntasState = initialState, action): SegmentosPerguntasState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS):
       return {
@@ -51,6 +63,7 @@ export default (state: SegmentosPerguntasState = initialState, action): Segmento
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS):
     case FAILURE(ACTION_TYPES.CREATE_SEGMENTOSPERGUNTAS):
@@ -107,28 +120,18 @@ const apiUrl = 'api/segmentos-perguntas';
 // Actions
 export type ICrudGetAllActionSegmentosPerguntas<T> = (
   segmento?: any,
-  perguntasQuestionario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionSegmentosPerguntas<ISegmentosPerguntas> = (
-  segmento,
-  perguntasQuestionario,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionSegmentosPerguntas<ISegmentosPerguntas> = (segmento, page, size, sort) => {
   const segmentoRequest = segmento ? `segmento.contains=${segmento}&` : '';
-  const perguntasQuestionarioRequest = perguntasQuestionario ? `perguntasQuestionario.equals=${perguntasQuestionario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST,
-    payload: axios.get<ISegmentosPerguntas>(
-      `${requestUrl}${segmentoRequest}${perguntasQuestionarioRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ISegmentosPerguntas>(`${requestUrl}${segmentoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ISegmentosPerguntas> = id => {
@@ -136,6 +139,16 @@ export const getEntity: ICrudGetAction<ISegmentosPerguntas> = id => {
   return {
     type: ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS,
     payload: axios.get<ISegmentosPerguntas>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionSegmentosPerguntas<ISegmentosPerguntas> = (segmento, page, size, sort) => {
+  const segmentoRequest = segmento ? `segmento.contains=${segmento}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_SEGMENTOSPERGUNTAS_LIST,
+    payload: axios.get<ISegmentosPerguntas>(`${requestUrl}${segmentoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -174,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<ISegmentosPerguntas> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getSegmentosPerguntasState = (location): ISegmentosPerguntasBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const segmento = url.searchParams.get('segmento') || '';
+
+  return {
+    baseFilters,
+    segmento
+  };
+};

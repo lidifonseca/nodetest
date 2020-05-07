@@ -3,15 +3,15 @@
     "franquia": {
       "home": {
         "title": "Franquias",
-        "createLabel": "Criar novo Franquia",
-        "createOrEditLabel": "Criar ou editar Franquia",
-        "notFound": "Nenhum Franquia encontrado"
+        "createLabel": "Create a new Franquia",
+        "createOrEditLabel": "Create or edit a Franquia",
+        "notFound": "No Franquias found"
       },
-      "created": "Um novo Franquia foi criado com o identificador {{ param }}",
-      "updated": "Um Franquia foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Franquia foi excluído com o identificador {{ param }}",
+      "created": "A new Franquia is created with identifier {{ param }}",
+      "updated": "A Franquia is updated with identifier {{ param }}",
+      "deleted": "A Franquia is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Franquia {{ id }}?"
+        "question": "Are you sure you want to delete Franquia {{ id }}?"
       },
       "detail": {
         "title": "Franquia"
@@ -34,9 +34,10 @@
       "uf": "Uf",
       "observacao": "Observacao",
       "ativo": "Ativo",
-      "franquiaAreaAtuacao": "Franquia Area Atuacao",
-      "franquiaStatusAtual": "Franquia Status Atual",
-      "franquiaUsuario": "Franquia Usuario"
+      "help": {
+        "telefone1": "@dbName TELEFONE1@@",
+        "telefone2": "@dbName TELEFONE2@@"
+      }
     }
   }
 }

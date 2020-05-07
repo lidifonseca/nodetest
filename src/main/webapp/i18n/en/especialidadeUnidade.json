@@ -3,15 +3,15 @@
     "especialidadeUnidade": {
       "home": {
         "title": "Especialidade Unidades",
-        "createLabel": "Criar novo Especialidade Unidade",
-        "createOrEditLabel": "Criar ou editar Especialidade Unidade",
-        "notFound": "Nenhum Especialidade Unidade encontrado"
+        "createLabel": "Create a new Especialidade Unidade",
+        "createOrEditLabel": "Create or edit a Especialidade Unidade",
+        "notFound": "No Especialidade Unidades found"
       },
-      "created": "Um novo Especialidade Unidade foi criado com o identificador {{ param }}",
-      "updated": "Um Especialidade Unidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Especialidade Unidade foi excluído com o identificador {{ param }}",
+      "created": "A new Especialidade Unidade is created with identifier {{ param }}",
+      "updated": "A Especialidade Unidade is updated with identifier {{ param }}",
+      "deleted": "A Especialidade Unidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Especialidade Unidade {{ id }}?"
+        "question": "Are you sure you want to delete Especialidade Unidade {{ id }}?"
       },
       "detail": {
         "title": "Especialidade Unidade"
@@ -21,8 +21,7 @@
       "valorPagar": "Valor Pagar",
       "publicar": "Publicar",
       "comentarioPreco": "Comentario Preco",
-      "unidade": "Unidade",
-      "idEspecialidade": "Id Especialidade"
+      "unidade": "Unidade"
     }
   }
 }

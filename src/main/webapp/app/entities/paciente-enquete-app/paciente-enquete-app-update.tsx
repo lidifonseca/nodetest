@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './paciente-enquete-app.reducer';
+import {
+  IPacienteEnqueteAppUpdateState,
+  getEntity,
+  getPacienteEnqueteAppState,
+  IPacienteEnqueteAppBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-enquete-app.reducer';
 import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteEnqueteAppUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteEnqueteAppUpdateState {
-  isNew: boolean;
-  idPacienteId: string;
-}
-
 export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAppUpdateProps, IPacienteEnqueteAppUpdateState> {
   constructor(props: Readonly<IPacienteEnqueteAppUpdateProps>) {
     super(props);
+
     this.state = {
-      idPacienteId: '0',
+      fieldsBase: getPacienteEnqueteAppState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,21 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPacientes();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['votacao'] ? '&votacao=' + fieldsBase['votacao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteEnqueteAppEntity } = this.props;
@@ -63,13 +76,14 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-enquete-app');
+    this.props.history.push('/paciente-enquete-app?' + this.getFiltersURL());
   };
 
   render() {
-    const { pacienteEnqueteAppEntity, pacientes, loading, updating } = this.props;
+    const { pacienteEnqueteAppEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +99,7 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
             isNew
               ? {}
               : {
-                  ...pacienteEnqueteAppEntity,
-                  idPaciente: pacienteEnqueteAppEntity.idPaciente ? pacienteEnqueteAppEntity.idPaciente.id : null
+                  ...pacienteEnqueteAppEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -108,7 +121,7 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-enquete-app"
+                  to={'/paciente-enquete-app?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -127,7 +140,7 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,47 +156,27 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="votacaoLabel" for="paciente-enquete-app-votacao">
-                                <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-enquete-app-votacao" type="string" className="form-control" name="votacao" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-enquete-app-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteEnqueteApp.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-enquete-app-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacienteEnqueteApp.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'votacao' ? (
+                          <Col md="votacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="votacaoLabel" for="paciente-enquete-app-votacao">
+                                    <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-enquete-app-votacao" type="string" className="form-control" name="votacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="votacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -196,7 +189,6 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  pacientes: storeState.paciente.entities,
   pacienteEnqueteAppEntity: storeState.pacienteEnqueteApp.entity,
   loading: storeState.pacienteEnqueteApp.loading,
   updating: storeState.pacienteEnqueteApp.updating,
@@ -204,7 +196,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPacientes,
   getEntity,
   updateEntity,
   createEntity,

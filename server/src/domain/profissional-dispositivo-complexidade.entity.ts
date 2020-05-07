@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProfissionalDispositivoComplexidade.
  */
-@Entity('profissional_dispositivo_complexidade')
+@Entity('tb_profissional_dispositivo_complexidade')
 export default class ProfissionalDispositivoComplexidade extends BaseEntity {
-  @Column({ name: 'caracteristica', length: 100, nullable: false })
+  @Column({ name: 'CARACTERISTICA', length: 100, nullable: false })
   caracteristica: string;
 
-  @Column({ type: 'integer', name: 'ativo', nullable: false })
+  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
   ativo: number;
 
-  @Column({ name: 'tipo', length: 1, nullable: false })
+  @Column({ name: 'TIPO', length: 1, nullable: false })
   tipo: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

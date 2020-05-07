@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacientePush, defaultValue } from 'app/shared/model/paciente-push.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEPUSH_LIST_EXPORT: 'pacientePush/FETCH_PACIENTEPUSH_LIST_EXPORT',
   FETCH_PACIENTEPUSH_LIST: 'pacientePush/FETCH_PACIENTEPUSH_LIST',
   FETCH_PACIENTEPUSH: 'pacientePush/FETCH_PACIENTEPUSH',
   CREATE_PACIENTEPUSH: 'pacientePush/CREATE_PACIENTEPUSH',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type PacientePushState = Readonly<typeof initialState>;
 
+export interface IPacientePushBaseState {
+  baseFilters: any;
+  idFranquia: any;
+  mensagem: any;
+  ativo: any;
+}
+
+export interface IPacientePushUpdateState {
+  fieldsBase: IPacientePushBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacientePushState = initialState, action): PacientePushState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEPUSH_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEPUSH_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEPUSH):
       return {
@@ -51,6 +65,7 @@ export default (state: PacientePushState = initialState, action): PacientePushSt
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEPUSH_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEPUSH_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEPUSH):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEPUSH):
@@ -109,23 +124,21 @@ export type ICrudGetAllActionPacientePush<T> = (
   idFranquia?: any,
   mensagem?: any,
   ativo?: any,
-  idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacientePush<IPacientePush> = (idFranquia, mensagem, ativo, idPaciente, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPacientePush<IPacientePush> = (idFranquia, mensagem, ativo, page, size, sort) => {
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEPUSH_LIST,
     payload: axios.get<IPacientePush>(
-      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -137,10 +150,23 @@ export const getEntity: ICrudGetAction<IPacientePush> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacientePush<IPacientePush> = (idFranquia, mensagem, ativo, page, size, sort) => {
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+  const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEPUSH_LIST,
+    payload: axios.get<IPacientePush>(
+      `${requestUrl}${idFranquiaRequest}${mensagemRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacientePush> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEPUSH,
@@ -151,7 +177,7 @@ export const createEntity: ICrudPutAction<IPacientePush> = entity => async dispa
 };
 
 export const updateEntity: ICrudPutAction<IPacientePush> = entity => async dispatch => {
-  entity = { ...entity, idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEPUSH,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -173,3 +199,18 @@ export const deleteEntity: ICrudDeleteAction<IPacientePush> = id => async dispat
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacientePushState = (location): IPacientePushBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idFranquia = url.searchParams.get('idFranquia') || '';
+  const mensagem = url.searchParams.get('mensagem') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idFranquia,
+    mensagem,
+    ativo
+  };
+};

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-franquia.reducer';
+import { getEntity, IProfissionalFranquiaBaseState, getProfissionalFranquiaState } from './profissional-franquia.reducer';
 import { IProfissionalFranquia } from 'app/shared/model/profissional-franquia.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalFranquiaState {
+  fieldsBase: IProfissionalFranquiaBaseState;
+}
+
 export interface IProfissionalFranquiaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalFranquiaDetail extends React.Component<IProfissionalFranquiaDetailProps> {
+export class ProfissionalFranquiaDetail extends React.Component<IProfissionalFranquiaDetailProps, IProfissionalFranquiaState> {
   constructor(props: Readonly<IProfissionalFranquiaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalFranquiaState(this.props.location)
     };
   }
 

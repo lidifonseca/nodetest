@@ -7,27 +7,27 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A AtendimentoAcompanhamentoPush.
  */
-@Entity('atendimento_acompanhamento_push')
+@Entity('tb_atendimento_acompanhamento_push')
 export default class AtendimentoAcompanhamentoPush extends BaseEntity {
-  @Column({ type: 'integer', name: 'atendimento_id', nullable: false })
+  @Column({ type: 'integer', name: 'ATENDIMENTO_ID', nullable: false })
   atendimentoId: number;
 
-  @Column({ type: 'integer', name: 'paciente_id', nullable: false })
+  @Column({ type: 'integer', name: 'PACIENTE_ID', nullable: false })
   pacienteId: number;
 
-  @Column({ type: 'integer', name: 'profissional_id', nullable: false })
+  @Column({ type: 'integer', name: 'PROFISSIONAL_ID', nullable: false })
   profissionalId: number;
 
-  @Column({ type: 'timestamp', name: 'timestamp_atendimento' })
+  @Column({ type: 'timestamp', name: 'TIMESTAMP_ATENDIMENTO' })
   timestampAtendimento: any;
 
-  @Column({ name: 'nome_paciente', length: 60 })
+  @Column({ name: 'NOME_PACIENTE', length: 60 })
   nomePaciente: string;
 
-  @Column({ name: 'nome_profissioinal', length: 60 })
+  @Column({ name: 'NOME_PROFISSIOINAL', length: 60 })
   nomeProfissioinal: string;
 
-  @Column({ type: 'timestamp', name: 'timestamp_confirmacao' })
+  @Column({ type: 'timestamp', name: 'TIMESTAMP_CONFIRMACAO' })
   timestampConfirmacao: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

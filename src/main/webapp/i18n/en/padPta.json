@@ -3,15 +3,15 @@
     "padPta": {
       "home": {
         "title": "Pad Ptas",
-        "createLabel": "Criar novo Pad Pta",
-        "createOrEditLabel": "Criar ou editar Pad Pta",
-        "notFound": "Nenhum Pad Pta encontrado"
+        "createLabel": "Create a new Pad Pta",
+        "createOrEditLabel": "Create or edit a Pad Pta",
+        "notFound": "No Pad Ptas found"
       },
-      "created": "Um novo Pad Pta foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Pta foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Pta foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Pta is created with identifier {{ param }}",
+      "updated": "A Pad Pta is updated with identifier {{ param }}",
+      "deleted": "A Pad Pta is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Pta {{ id }}?"
+        "question": "Are you sure you want to delete Pad Pta {{ id }}?"
       },
       "detail": {
         "title": "Pad Pta"
@@ -19,7 +19,6 @@
       "idPad": "Id Pad",
       "idDescPta": "Id Desc Pta",
       "idCid": "Id Cid",
-      "idUsuario": "Id Usuario",
       "idCidXPtaNovo": "Id Cid X Pta Novo"
     }
   }

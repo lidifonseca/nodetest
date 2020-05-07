@@ -33,16 +33,9 @@
             "otherEntityRelationshipName": "especialidadeUnidade",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "especialidade",
-            "otherEntityRelationshipName": "especialidadeUnidade",
-            "relationshipName": "idEspecialidade",
-            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200502232600",
+    "changelogDate": "20200507105900",
     "entityTableName": "especialidade_unidade",
     "dto": "mapstruct",
     "pagination": "pagination",

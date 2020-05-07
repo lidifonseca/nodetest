@@ -68,7 +68,9 @@ export class MaioController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() maio: Maio): Promise<Maio> {
+    console.info(maio);
     const created = await this.maioService.save(maio);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Maio', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class MaioController {
   })
   async put(@Req() req: Request, @Body() maio: Maio): Promise<Maio> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Maio', maio.id);
+
     return await this.maioService.update(maio);
   }
 

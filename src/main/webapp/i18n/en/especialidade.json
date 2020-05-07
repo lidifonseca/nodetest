@@ -22,16 +22,7 @@
       "duracao": "Duracao",
       "importante": "Importante",
       "ativo": "Ativo",
-      "atendimento": "Atendimento",
-      "especialidadeOperadora": "Especialidade Operadora",
-      "especialidadeUnidade": "Especialidade Unidade",
-      "especialidadeValor": "Especialidade Valor",
-      "pacientePedido": "Paciente Pedido",
-      "padItem": "Pad Item",
-      "unidade": "Unidade",
-      "idCategoria": "Id Categoria",
-      "idTipoEspecialidade": "Id Tipo Especialidade",
-      "idTipoUnidade": "Id Tipo Unidade"
+      "unidade": "Unidade"
     }
   }
 }

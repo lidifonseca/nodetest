@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tempo-experiencia.reducer';
+import { getEntity, ITempoExperienciaBaseState, getTempoExperienciaState } from './tempo-experiencia.reducer';
 import { ITempoExperiencia } from 'app/shared/model/tempo-experiencia.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITempoExperienciaState {
+  fieldsBase: ITempoExperienciaBaseState;
+}
+
 export interface ITempoExperienciaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TempoExperienciaDetail extends React.Component<ITempoExperienciaDetailProps> {
+export class TempoExperienciaDetail extends React.Component<ITempoExperienciaDetailProps, ITempoExperienciaState> {
   constructor(props: Readonly<ITempoExperienciaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTempoExperienciaState(this.props.location)
     };
   }
 

@@ -33,10 +33,6 @@
             ]
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "idEspecialidade",
             "fieldType": "Integer"
         },
@@ -82,7 +78,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503001100",
+    "changelogDate": "20200507114400",
     "entityTableName": "paciente_prontuario",
     "dto": "mapstruct",
     "pagination": "pagination",

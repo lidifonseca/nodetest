@@ -2,24 +2,19 @@
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './base/base.entity';
 
-import Especialidade from './especialidade.entity';
-
 /**
  * A EspecialidadeValor.
  */
-@Entity('especialidade_valor')
+@Entity('tb_especialidade_valor')
 export default class EspecialidadeValor extends BaseEntity {
-  @Column({ name: 'id_franquia' })
+  @Column({ name: 'ID_FRANQUIA' })
   idFranquia: string;
 
-  @Column({ type: 'float', name: 'valor' })
+  @Column({ type: 'float', name: 'VALOR' })
   valor: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
-
-  @ManyToOne(type => Especialidade)
-  idEspecialidade: Especialidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

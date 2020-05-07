@@ -55,7 +55,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502234000",
+    "changelogDate": "20200507111300",
     "entityTableName": "licao_casa_evolucao",
     "dto": "mapstruct",
     "pagination": "pagination",

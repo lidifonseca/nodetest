@@ -3,15 +3,15 @@
     "maio": {
       "home": {
         "title": "Maios",
-        "createLabel": "Criar novo Maio",
-        "createOrEditLabel": "Criar ou editar Maio",
-        "notFound": "Nenhum Maio encontrado"
+        "createLabel": "Create a new Maio",
+        "createOrEditLabel": "Create or edit a Maio",
+        "notFound": "No Maios found"
       },
-      "created": "Um novo Maio foi criado com o identificador {{ param }}",
-      "updated": "Um Maio foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Maio foi excluído com o identificador {{ param }}",
+      "created": "A new Maio is created with identifier {{ param }}",
+      "updated": "A Maio is updated with identifier {{ param }}",
+      "deleted": "A Maio is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Maio {{ id }}?"
+        "question": "Are you sure you want to delete Maio {{ id }}?"
       },
       "detail": {
         "title": "Maio"

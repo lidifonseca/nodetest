@@ -68,7 +68,9 @@ export class UnidadeMedidaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() unidadeMedida: UnidadeMedida): Promise<UnidadeMedida> {
+    console.info(unidadeMedida);
     const created = await this.unidadeMedidaService.save(unidadeMedida);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UnidadeMedida', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class UnidadeMedidaController {
   })
   async put(@Req() req: Request, @Body() unidadeMedida: UnidadeMedida): Promise<UnidadeMedida> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UnidadeMedida', unidadeMedida.id);
+
     return await this.unidadeMedidaService.update(unidadeMedida);
   }
 

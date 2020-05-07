@@ -3,21 +3,20 @@
     "segmentosPerguntas": {
       "home": {
         "title": "Segmentos Perguntas",
-        "createLabel": "Criar novo Segmentos Perguntas",
-        "createOrEditLabel": "Criar ou editar Segmentos Perguntas",
-        "notFound": "Nenhum Segmentos Perguntas encontrado"
+        "createLabel": "Create a new Segmentos Perguntas",
+        "createOrEditLabel": "Create or edit a Segmentos Perguntas",
+        "notFound": "No Segmentos Perguntas found"
       },
-      "created": "Um novo Segmentos Perguntas foi criado com o identificador {{ param }}",
-      "updated": "Um Segmentos Perguntas foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Segmentos Perguntas foi excluído com o identificador {{ param }}",
+      "created": "A new Segmentos Perguntas is created with identifier {{ param }}",
+      "updated": "A Segmentos Perguntas is updated with identifier {{ param }}",
+      "deleted": "A Segmentos Perguntas is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Segmentos Perguntas {{ id }}?"
+        "question": "Are you sure you want to delete Segmentos Perguntas {{ id }}?"
       },
       "detail": {
         "title": "Segmentos Perguntas"
       },
-      "segmento": "Segmento",
-      "perguntasQuestionario": "Perguntas Questionario"
+      "segmento": "Segmento"
     }
   }
 }

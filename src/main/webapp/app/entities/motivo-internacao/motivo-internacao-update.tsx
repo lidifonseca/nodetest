@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './motivo-internacao.reducer';
+import {
+  IMotivoInternacaoUpdateState,
+  getEntity,
+  getMotivoInternacaoState,
+  IMotivoInternacaoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './motivo-internacao.reducer';
 import { IMotivoInternacao } from 'app/shared/model/motivo-internacao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IMotivoInternacaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IMotivoInternacaoUpdateState {
-  isNew: boolean;
-}
-
 export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpdateProps, IMotivoInternacaoUpdateState> {
   constructor(props: Readonly<IMotivoInternacaoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getMotivoInternacaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,23 @@ export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpd
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['nome'] ? '&nome=' + fieldsBase['nome'] : '') +
+      (fieldsBase['idPai'] ? '&idPai=' + fieldsBase['idPai'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['classe'] ? '&classe=' + fieldsBase['classe'] : '') +
+      (fieldsBase['name'] ? '&name=' + fieldsBase['name'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { motivoInternacaoEntity } = this.props;
@@ -57,13 +80,14 @@ export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/motivo-internacao');
+    this.props.history.push('/motivo-internacao?' + this.getFiltersURL());
   };
 
   render() {
     const { motivoInternacaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +120,14 @@ export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/motivo-internacao" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/motivo-internacao?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +142,7 @@ export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,103 +158,103 @@ export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpd
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="motivo-internacao-nome">
+                                    <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nomeLabel" for="motivo-internacao-nome">
-                                <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="motivo-internacao-nome"
-                                type="text"
-                                name="nome"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="motivo-internacao-idPai">
+                                    <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPaiLabel" for="motivo-internacao-idPai">
-                                <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="motivo-internacao-idPai" type="string" className="form-control" name="idPai" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="motivo-internacao-ativo">
+                                    <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="motivo-internacao-ativo">
-                                <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="motivo-internacao-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'classe' ? (
+                          <Col md="classe">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="classeLabel" for="motivo-internacao-classe">
+                                    <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-classe" type="text" name="classe" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="classe" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="classeLabel" for="motivo-internacao-classe">
-                                <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="motivo-internacao-classe"
-                                type="text"
-                                name="classe"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nameLabel" for="motivo-internacao-name">
-                                <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="motivo-internacao-name"
-                                type="text"
-                                name="name"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'name' ? (
+                          <Col md="name">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nameLabel" for="motivo-internacao-name">
+                                    <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-name" type="text" name="name" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="name" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

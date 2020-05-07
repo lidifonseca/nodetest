@@ -33,11 +33,15 @@ const initialState = {
 export type PacienteDiarioState = Readonly<typeof initialState>;
 
 export interface IPacienteDiarioBaseState {
+  baseFilters: any;
   idOperadora: any;
   historico: any;
   ativo: any;
-  idPaciente: any;
-  idUsuario: any;
+}
+
+export interface IPacienteDiarioUpdateState {
+  fieldsBase: IPacienteDiarioBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -83,6 +87,9 @@ export default (state: PacienteDiarioState = initialState, action): PacienteDiar
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PACIENTEDIARIO):
+      action.payload.data.historico = action.payload.data.historico
+        ? Buffer.from(action.payload.data.historico).toString()
+        : action.payload.data.historico;
       return {
         ...state,
         loading: false,
@@ -104,13 +111,14 @@ export default (state: PacienteDiarioState = initialState, action): PacienteDiar
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -132,34 +140,21 @@ export type ICrudGetAllActionPacienteDiario<T> = (
   idOperadora?: any,
   historico?: any,
   ativo?: any,
-  idPaciente?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
-  idOperadora,
-  historico,
-  ativo,
-  idPaciente,
-  idUsuario,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (idOperadora, historico, ativo, page, size, sort) => {
   const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
   const historicoRequest = historico ? `historico.contains=${historico}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST,
     payload: axios.get<IPacienteDiario>(
-      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}${idPacienteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -171,36 +166,23 @@ export const getEntity: ICrudGetAction<IPacienteDiario> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (
-  idOperadora,
-  historico,
-  ativo,
-  idPaciente,
-  idUsuario,
-  page,
-  size,
-  sort
-) => {
+export const getEntitiesExport: ICrudGetAllActionPacienteDiario<IPacienteDiario> = (idOperadora, historico, ativo, page, size, sort) => {
   const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
   const historicoRequest = historico ? `historico.contains=${historico}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIARIO_LIST,
     payload: axios.get<IPacienteDiario>(
-      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}${idPacienteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${historicoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IPacienteDiario> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idUsuario: entity.idUsuario === 'null' ? null : entity.idUsuario
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEDIARIO,
@@ -211,11 +193,7 @@ export const createEntity: ICrudPutAction<IPacienteDiario> = entity => async dis
 };
 
 export const updateEntity: ICrudPutAction<IPacienteDiario> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idUsuario: entity.idUsuario === 'null' ? null : entity.idUsuario
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEDIARIO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -234,12 +212,13 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDiario> = id => async disp
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -249,18 +228,15 @@ export const reset = () => ({
 
 export const getPacienteDiarioState = (location): IPacienteDiarioBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idOperadora = url.searchParams.get('idOperadora') || '';
   const historico = url.searchParams.get('historico') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
-  const idPaciente = url.searchParams.get('idPaciente') || '';
-  const idUsuario = url.searchParams.get('idUsuario') || '';
-
   return {
+    baseFilters,
     idOperadora,
     historico,
-    ativo,
-    idPaciente,
-    idUsuario
+    ativo
   };
 };

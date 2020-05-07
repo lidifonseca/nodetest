@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IMigracao, defaultValue } from 'app/shared/model/migracao.model';
 
 export const ACTION_TYPES = {
+  FETCH_MIGRACAO_LIST_EXPORT: 'migracao/FETCH_MIGRACAO_LIST_EXPORT',
   FETCH_MIGRACAO_LIST: 'migracao/FETCH_MIGRACAO_LIST',
   FETCH_MIGRACAO: 'migracao/FETCH_MIGRACAO',
   CREATE_MIGRACAO: 'migracao/CREATE_MIGRACAO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type MigracaoState = Readonly<typeof initialState>;
 
+export interface IMigracaoBaseState {
+  baseFilters: any;
+  idPad: any;
+  dataHoraMigracao: any;
+}
+
+export interface IMigracaoUpdateState {
+  fieldsBase: IMigracaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: MigracaoState = initialState, action): MigracaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_MIGRACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_MIGRACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_MIGRACAO):
       return {
@@ -51,6 +64,7 @@ export default (state: MigracaoState = initialState, action): MigracaoState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_MIGRACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_MIGRACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_MIGRACAO):
     case FAILURE(ACTION_TYPES.CREATE_MIGRACAO):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IMigracao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionMigracao<IMigracao> = (idPad, dataHoraMigracao, page, size, sort) => {
+  const idPadRequest = idPad ? `idPad.contains=${idPad}&` : '';
+  const dataHoraMigracaoRequest = dataHoraMigracao ? `dataHoraMigracao.contains=${dataHoraMigracao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_MIGRACAO_LIST,
+    payload: axios.get<IMigracao>(`${requestUrl}${idPadRequest}${dataHoraMigracaoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IMigracao> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IMigracao> = id => async dispatch =
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getMigracaoState = (location): IMigracaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPad = url.searchParams.get('idPad') || '';
+  const dataHoraMigracao = url.searchParams.get('dataHoraMigracao') || '';
+
+  return {
+    baseFilters,
+    idPad,
+    dataHoraMigracao
+  };
+};

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IGrupoRisco, defaultValue } from 'app/shared/model/grupo-risco.model';
 
 export const ACTION_TYPES = {
+  FETCH_GRUPORISCO_LIST_EXPORT: 'grupoRisco/FETCH_GRUPORISCO_LIST_EXPORT',
   FETCH_GRUPORISCO_LIST: 'grupoRisco/FETCH_GRUPORISCO_LIST',
   FETCH_GRUPORISCO: 'grupoRisco/FETCH_GRUPORISCO',
   CREATE_GRUPORISCO: 'grupoRisco/CREATE_GRUPORISCO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type GrupoRiscoState = Readonly<typeof initialState>;
 
+export interface IGrupoRiscoBaseState {
+  baseFilters: any;
+  grupoRisco: any;
+  styleLabel: any;
+}
+
+export interface IGrupoRiscoUpdateState {
+  fieldsBase: IGrupoRiscoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: GrupoRiscoState = initialState, action): GrupoRiscoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_GRUPORISCO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_GRUPORISCO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_GRUPORISCO):
       return {
@@ -51,6 +64,7 @@ export default (state: GrupoRiscoState = initialState, action): GrupoRiscoState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_GRUPORISCO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_GRUPORISCO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_GRUPORISCO):
     case FAILURE(ACTION_TYPES.CREATE_GRUPORISCO):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IGrupoRisco> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionGrupoRisco<IGrupoRisco> = (grupoRisco, styleLabel, page, size, sort) => {
+  const grupoRiscoRequest = grupoRisco ? `grupoRisco.contains=${grupoRisco}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_GRUPORISCO_LIST,
+    payload: axios.get<IGrupoRisco>(`${requestUrl}${grupoRiscoRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IGrupoRisco> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IGrupoRisco> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getGrupoRiscoState = (location): IGrupoRiscoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const grupoRisco = url.searchParams.get('grupoRisco') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+
+  return {
+    baseFilters,
+    grupoRisco,
+    styleLabel
+  };
+};

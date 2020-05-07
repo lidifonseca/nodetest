@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './protocolos.reducer';
+import {
+  IProtocolosUpdateState,
+  getEntity,
+  getProtocolosState,
+  IProtocolosBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './protocolos.reducer';
 import { IProtocolos } from 'app/shared/model/protocolos.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProtocolosUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IProtocolosUpdateState {
-  isNew: boolean;
-}
-
 export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IProtocolosUpdateState> {
   constructor(props: Readonly<IProtocolosUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProtocolosState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,19 @@ export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IP
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['protocolo'] ? '&protocolo=' + fieldsBase['protocolo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { protocolosEntity } = this.props;
@@ -57,13 +76,14 @@ export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IP
   };
 
   handleClose = () => {
-    this.props.history.push('/protocolos');
+    this.props.history.push('/protocolos?' + this.getFiltersURL());
   };
 
   render() {
     const { protocolosEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +116,14 @@ export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IP
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/protocolos" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/protocolos?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +138,7 @@ export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IP
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,31 +154,27 @@ export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IP
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="protocoloLabel" for="protocolos-protocolo">
-                                <Translate contentKey="generadorApp.protocolos.protocolo">Protocolo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="protocolos-protocolo"
-                                type="string"
-                                className="form-control"
-                                name="protocolo"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'protocolo' ? (
+                          <Col md="protocolo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="protocoloLabel" for="protocolos-protocolo">
+                                    <Translate contentKey="generadorApp.protocolos.protocolo">Protocolo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="protocolos-protocolo" type="string" className="form-control" name="protocolo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="protocolo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

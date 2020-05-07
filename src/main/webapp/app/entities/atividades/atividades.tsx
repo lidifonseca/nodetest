@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atividades.reducer';
+import { getAtividadesState, IAtividadesBaseState, getEntities } from './atividades.reducer';
 import { IAtividades } from 'app/shared/model/atividades.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IAtividadesProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtividadesBaseState {
-  atividade: any;
-  ativo: any;
-}
 export interface IAtividadesState extends IAtividadesBaseState, IPaginationBaseState {}
 
 export class Atividades extends React.Component<IAtividadesProps, IAtividadesState> {
@@ -42,20 +38,9 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtividadesState(this.props.location)
+      ...getAtividadesState(this.props.location)
     };
   }
-
-  getAtividadesState = (location): IAtividadesBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const atividade = url.searchParams.get('atividade') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      atividade,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +83,9 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +133,11 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atividades.home.createLabel">Create a new Atividades</Translate>
@@ -159,31 +150,28 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="atividadeLabel" for="atividades-atividade">
-                            <Translate contentKey="generadorApp.atividades.atividade">Atividade</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="atividadeLabel" for="atividades-atividade">
+                              <Translate contentKey="generadorApp.atividades.atividade">Atividade</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="atividade"
-                            id="atividades-atividade"
-                            value={this.state.atividade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="atividades-ativo">
-                            <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="atividades-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="atividade" id="atividades-atividade" value={this.state.atividade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="atividades-ativo">
+                              <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="atividades-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -211,14 +199,18 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('atividade')}>
-                        <Translate contentKey="generadorApp.atividades.atividade">Atividade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'atividade' ? (
+                        <th className="hand" onClick={this.sort('atividade')}>
+                          <Translate contentKey="generadorApp.atividades.atividade">Atividade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -233,25 +225,25 @@ export class Atividades extends React.Component<IAtividadesProps, IAtividadesSta
                           </Button>
                         </td>
 
-                        <td>{atividades.atividade}</td>
+                        {this.state.baseFilters !== 'atividade' ? <td>{atividades.atividade}</td> : null}
 
-                        <td>{atividades.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{atividades.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atividades.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${atividades.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atividades.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${atividades.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atividades.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${atividades.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

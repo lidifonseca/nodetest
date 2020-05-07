@@ -22,22 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './especialidade-valor.reducer';
+import { getEspecialidadeValorState, IEspecialidadeValorBaseState, getEntities } from './especialidade-valor.reducer';
 import { IEspecialidadeValor } from 'app/shared/model/especialidade-valor.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-
 export interface IEspecialidadeValorProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IEspecialidadeValorBaseState {
-  idFranquia: any;
-  valor: any;
-  ativo: any;
-  idEspecialidade: any;
-}
 export interface IEspecialidadeValorState extends IEspecialidadeValorBaseState, IPaginationBaseState {}
 
 export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps, IEspecialidadeValorState> {
@@ -47,30 +38,12 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getEspecialidadeValorState(this.props.location)
+      ...getEspecialidadeValorState(this.props.location)
     };
   }
 
-  getEspecialidadeValorState = (location): IEspecialidadeValorBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-    const valor = url.searchParams.get('valor') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-
-    return {
-      idFranquia,
-      valor,
-      ativo,
-      idEspecialidade
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getEspecialidades();
   }
 
   cancelCourse = () => {
@@ -78,8 +51,7 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       {
         idFranquia: '',
         valor: '',
-        ativo: '',
-        idEspecialidade: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -112,7 +84,9 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -133,9 +107,6 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idEspecialidade=' +
-      this.state.idEspecialidade +
-      '&' +
       ''
     );
   };
@@ -143,12 +114,12 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, valor, ativo, idEspecialidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idFranquia, valor, ativo, idEspecialidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, valor, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idFranquia, valor, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { especialidades, especialidadeValorList, match, totalItems } = this.props;
+    const { especialidadeValorList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -166,7 +137,11 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.especialidadeValor.home.createLabel">Create a new Especialidade Valor</Translate>
@@ -179,56 +154,39 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idFranquiaLabel" for="especialidade-valor-idFranquia">
-                            <Translate contentKey="generadorApp.especialidadeValor.idFranquia">Id Franquia</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idFranquia" id="especialidade-valor-idFranquia" value={this.state.idFranquia} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorLabel" for="especialidade-valor-valor">
-                            <Translate contentKey="generadorApp.especialidadeValor.valor">Valor</Translate>
-                          </Label>
-                          <AvInput type="string" name="valor" id="especialidade-valor-valor" value={this.state.valor} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="especialidade-valor-ativo">
-                            <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="especialidade-valor-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="especialidade-valor-idEspecialidade">
-                              <Translate contentKey="generadorApp.especialidadeValor.idEspecialidade">Id Especialidade</Translate>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idFranquiaLabel" for="especialidade-valor-idFranquia">
+                              <Translate contentKey="generadorApp.especialidadeValor.idFranquia">Id Franquia</Translate>
                             </Label>
-                            <AvInput
-                              id="especialidade-valor-idEspecialidade"
-                              type="select"
-                              className="form-control"
-                              name="idEspecialidadeId"
-                            >
-                              <option value="" key="0" />
-                              {especialidades
-                                ? especialidades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="idFranquia" id="especialidade-valor-idFranquia" value={this.state.idFranquia} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'valor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorLabel" for="especialidade-valor-valor">
+                              <Translate contentKey="generadorApp.especialidadeValor.valor">Valor</Translate>
+                            </Label>
+                            <AvInput type="string" name="valor" id="especialidade-valor-valor" value={this.state.valor} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="especialidade-valor-ativo">
+                              <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="especialidade-valor-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -256,22 +214,24 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idFranquia')}>
-                        <Translate contentKey="generadorApp.especialidadeValor.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('valor')}>
-                        <Translate contentKey="generadorApp.especialidadeValor.valor">Valor</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.especialidadeValor.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <th className="hand" onClick={this.sort('idFranquia')}>
+                          <Translate contentKey="generadorApp.especialidadeValor.idFranquia">Id Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'valor' ? (
+                        <th className="hand" onClick={this.sort('valor')}>
+                          <Translate contentKey="generadorApp.especialidadeValor.valor">Valor</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -286,36 +246,37 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
                           </Button>
                         </td>
 
-                        <td>{especialidadeValor.idFranquia}</td>
+                        {this.state.baseFilters !== 'idFranquia' ? <td>{especialidadeValor.idFranquia}</td> : null}
 
-                        <td>{especialidadeValor.valor}</td>
+                        {this.state.baseFilters !== 'valor' ? <td>{especialidadeValor.valor}</td> : null}
 
-                        <td>{especialidadeValor.ativo}</td>
-                        <td>
-                          {especialidadeValor.idEspecialidade ? (
-                            <Link to={`especialidade/${especialidadeValor.idEspecialidade.id}`}>
-                              {especialidadeValor.idEspecialidade.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{especialidadeValor.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${especialidadeValor.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${especialidadeValor.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidadeValor.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeValor.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${especialidadeValor.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${especialidadeValor.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -357,13 +318,11 @@ export class EspecialidadeValor extends React.Component<IEspecialidadeValorProps
 }
 
 const mapStateToProps = ({ especialidadeValor, ...storeState }: IRootState) => ({
-  especialidades: storeState.especialidade.entities,
   especialidadeValorList: especialidadeValor.entities,
   totalItems: especialidadeValor.totalItems
 });
 
 const mapDispatchToProps = {
-  getEspecialidades,
   getEntities
 };
 

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITipoUnidade, defaultValue } from 'app/shared/model/tipo-unidade.model';
 
 export const ACTION_TYPES = {
+  FETCH_TIPOUNIDADE_LIST_EXPORT: 'tipoUnidade/FETCH_TIPOUNIDADE_LIST_EXPORT',
   FETCH_TIPOUNIDADE_LIST: 'tipoUnidade/FETCH_TIPOUNIDADE_LIST',
   FETCH_TIPOUNIDADE: 'tipoUnidade/FETCH_TIPOUNIDADE',
   CREATE_TIPOUNIDADE: 'tipoUnidade/CREATE_TIPOUNIDADE',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type TipoUnidadeState = Readonly<typeof initialState>;
 
+export interface ITipoUnidadeBaseState {
+  baseFilters: any;
+  tipoUnidade: any;
+}
+
+export interface ITipoUnidadeUpdateState {
+  fieldsBase: ITipoUnidadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TipoUnidadeState = initialState, action): TipoUnidadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TIPOUNIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TIPOUNIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TIPOUNIDADE):
       return {
@@ -51,6 +63,7 @@ export default (state: TipoUnidadeState = initialState, action): TipoUnidadeStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TIPOUNIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TIPOUNIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TIPOUNIDADE):
     case FAILURE(ACTION_TYPES.CREATE_TIPOUNIDADE):
@@ -107,20 +120,18 @@ const apiUrl = 'api/tipo-unidades';
 // Actions
 export type ICrudGetAllActionTipoUnidade<T> = (
   tipoUnidade?: any,
-  especialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, especialidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, page, size, sort) => {
   const tipoUnidadeRequest = tipoUnidade ? `tipoUnidade.contains=${tipoUnidade}&` : '';
-  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TIPOUNIDADE_LIST,
-    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`)
+    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITipoUnidade> = id => {
@@ -128,6 +139,16 @@ export const getEntity: ICrudGetAction<ITipoUnidade> = id => {
   return {
     type: ACTION_TYPES.FETCH_TIPOUNIDADE,
     payload: axios.get<ITipoUnidade>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionTipoUnidade<ITipoUnidade> = (tipoUnidade, page, size, sort) => {
+  const tipoUnidadeRequest = tipoUnidade ? `tipoUnidade.contains=${tipoUnidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TIPOUNIDADE_LIST,
+    payload: axios.get<ITipoUnidade>(`${requestUrl}${tipoUnidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -166,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<ITipoUnidade> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTipoUnidadeState = (location): ITipoUnidadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const tipoUnidade = url.searchParams.get('tipoUnidade') || '';
+
+  return {
+    baseFilters,
+    tipoUnidade
+  };
+};

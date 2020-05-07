@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './acao.reducer';
+import { getEntity, IAcaoBaseState, getAcaoState } from './acao.reducer';
 import { IAcao } from 'app/shared/model/acao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAcaoState {
+  fieldsBase: IAcaoBaseState;
+}
+
 export interface IAcaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AcaoDetail extends React.Component<IAcaoDetailProps> {
+export class AcaoDetail extends React.Component<IAcaoDetailProps, IAcaoState> {
   constructor(props: Readonly<IAcaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAcaoState(this.props.location)
     };
   }
 

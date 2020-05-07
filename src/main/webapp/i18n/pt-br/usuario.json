@@ -139,11 +139,7 @@
       "envioAnaliseResultadoEsperado": "Envio Analise Resultado Esperado",
       "envioDescumprimento": "Envio Descumprimento",
       "envioMelhoraTempo": "Envio Melhora Tempo",
-      "senhaChat": "Senha Chat",
-      "diario": "Diario",
-      "pacienteDiario": "Paciente Diario",
-      "unidade": "Unidade",
-      "idTipoUsuario": "Id Tipo Usuario"
+      "unidade": "Unidade"
     }
   }
 }

@@ -4,11 +4,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label, UncontrolledTooltip } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import {
+  INotificacaoConfigUpdateState,
   getEntity,
   getNotificacaoConfigState,
   INotificacaoConfigBaseState,
@@ -23,14 +24,14 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface INotificacaoConfigUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface INotificacaoConfigUpdateState {
-  fieldsBase: INotificacaoConfigBaseState;
-  isNew: boolean;
-}
-
 export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigUpdateProps, INotificacaoConfigUpdateState> {
+  descricaoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<INotificacaoConfigUpdateProps>) {
     super(props);
+
+    this.descricaoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getNotificacaoConfigState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -50,14 +51,34 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
     }
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['criadoEm'] ? '&criadoEm=' + fieldsBase['criadoEm'] : '') +
+      (fieldsBase['titulo'] ? '&titulo=' + fieldsBase['titulo'] : '') +
+      (fieldsBase['referencia'] ? '&referencia=' + fieldsBase['referencia'] : '') +
+      (fieldsBase['descricao'] ? '&descricao=' + fieldsBase['descricao'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['envioObrigatorio'] ? '&envioObrigatorio=' + fieldsBase['envioObrigatorio'] : '') +
+      (fieldsBase['serveProfissional'] ? '&serveProfissional=' + fieldsBase['serveProfissional'] : '') +
+      (fieldsBase['servePaciente'] ? '&servePaciente=' + fieldsBase['servePaciente'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.criadoEm = convertDateTimeToServer(values.criadoEm);
 
@@ -77,7 +98,7 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
   };
 
   handleClose = () => {
-    this.props.history.push('/notificacao-config');
+    this.props.history.push('/notificacao-config?' + this.getFiltersURL());
   };
 
   render() {
@@ -85,7 +106,7 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
     const { isNew } = this.state;
 
     const { descricao } = notificacaoConfigEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -120,7 +141,14 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/notificacao-config" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/notificacao-config?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -152,7 +180,7 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.criadoEm ? (
+                        {baseFilters !== 'criadoEm' ? (
                           <Col md="criadoEm">
                             <AvGroup>
                               <Row>
@@ -178,10 +206,10 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase.criadoEm} />
+                          <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.titulo ? (
+                        {baseFilters !== 'titulo' ? (
                           <Col md="titulo">
                             <AvGroup>
                               <Row>
@@ -197,10 +225,10 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="titulo" value={this.state.fieldsBase.titulo} />
+                          <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.referencia ? (
+                        {baseFilters !== 'referencia' ? (
                           <Col md="referencia">
                             <AvGroup>
                               <Row>
@@ -219,10 +247,10 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="referencia" value={this.state.fieldsBase.referencia} />
+                          <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.descricao ? (
+                        {baseFilters !== 'descricao' ? (
                           <Col md="descricao">
                             <AvGroup>
                               <Row>
@@ -238,10 +266,10 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase.descricao} />
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -258,10 +286,10 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.envioObrigatorio ? (
+                        {baseFilters !== 'envioObrigatorio' ? (
                           <Col md="envioObrigatorio">
                             <AvGroup>
                               <Row>
@@ -283,10 +311,10 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="envioObrigatorio" value={this.state.fieldsBase.envioObrigatorio} />
+                          <AvInput type="hidden" name="envioObrigatorio" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.serveProfissional ? (
+                        {baseFilters !== 'serveProfissional' ? (
                           <Col md="serveProfissional">
                             <AvGroup>
                               <Row>
@@ -305,10 +333,10 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="serveProfissional" value={this.state.fieldsBase.serveProfissional} />
+                          <AvInput type="hidden" name="serveProfissional" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.servePaciente ? (
+                        {baseFilters !== 'servePaciente' ? (
                           <Col md="servePaciente">
                             <AvGroup>
                               <Row>
@@ -327,7 +355,7 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="servePaciente" value={this.state.fieldsBase.servePaciente} />
+                          <AvInput type="hidden" name="servePaciente" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

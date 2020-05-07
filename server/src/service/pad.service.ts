@@ -6,7 +6,6 @@ import { PadRepository } from '../repository/pad.repository';
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
-relationshipNames.push('idPaciente');
 
 @Injectable()
 export class PadService {

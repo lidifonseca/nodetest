@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './controle-disparo-aviso.reducer';
+import {
+  IControleDisparoAvisoUpdateState,
+  getEntity,
+  getControleDisparoAvisoState,
+  IControleDisparoAvisoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './controle-disparo-aviso.reducer';
 import { IControleDisparoAviso } from 'app/shared/model/controle-disparo-aviso.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IControleDisparoAvisoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IControleDisparoAvisoUpdateState {
-  isNew: boolean;
-}
-
 export class ControleDisparoAvisoUpdate extends React.Component<IControleDisparoAvisoUpdateProps, IControleDisparoAvisoUpdateState> {
   constructor(props: Readonly<IControleDisparoAvisoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getControleDisparoAvisoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,21 @@ export class ControleDisparoAvisoUpdate extends React.Component<IControleDisparo
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idAtendimento'] ? '&idAtendimento=' + fieldsBase['idAtendimento'] : '') +
+      (fieldsBase['qtdDisparo'] ? '&qtdDisparo=' + fieldsBase['qtdDisparo'] : '') +
+      (fieldsBase['avisopush'] ? '&avisopush=' + fieldsBase['avisopush'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { controleDisparoAvisoEntity } = this.props;
@@ -57,13 +78,14 @@ export class ControleDisparoAvisoUpdate extends React.Component<IControleDisparo
   };
 
   handleClose = () => {
-    this.props.history.push('/controle-disparo-aviso');
+    this.props.history.push('/controle-disparo-aviso?' + this.getFiltersURL());
   };
 
   render() {
     const { controleDisparoAvisoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -101,7 +123,7 @@ export class ControleDisparoAvisoUpdate extends React.Component<IControleDisparo
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/controle-disparo-aviso"
+                  to={'/controle-disparo-aviso?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -120,7 +142,7 @@ export class ControleDisparoAvisoUpdate extends React.Component<IControleDisparo
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -136,61 +158,75 @@ export class ControleDisparoAvisoUpdate extends React.Component<IControleDisparo
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="controle-disparo-aviso-idAtendimento">
+                                    <Translate contentKey="generadorApp.controleDisparoAviso.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="controle-disparo-aviso-idAtendimento"
+                                    type="string"
+                                    className="form-control"
+                                    name="idAtendimento"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idAtendimentoLabel" for="controle-disparo-aviso-idAtendimento">
-                                <Translate contentKey="generadorApp.controleDisparoAviso.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="controle-disparo-aviso-idAtendimento"
-                                type="string"
-                                className="form-control"
-                                name="idAtendimento"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'qtdDisparo' ? (
+                          <Col md="qtdDisparo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="qtdDisparoLabel" for="controle-disparo-aviso-qtdDisparo">
+                                    <Translate contentKey="generadorApp.controleDisparoAviso.qtdDisparo">Qtd Disparo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="controle-disparo-aviso-qtdDisparo"
+                                    type="string"
+                                    className="form-control"
+                                    name="qtdDisparo"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="qtdDisparo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="qtdDisparoLabel" for="controle-disparo-aviso-qtdDisparo">
-                                <Translate contentKey="generadorApp.controleDisparoAviso.qtdDisparo">Qtd Disparo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="controle-disparo-aviso-qtdDisparo" type="string" className="form-control" name="qtdDisparo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="avisopushLabel" for="controle-disparo-aviso-avisopush">
-                                <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="controle-disparo-aviso-avisopush" type="string" className="form-control" name="avisopush" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'avisopush' ? (
+                          <Col md="avisopush">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="avisopushLabel" for="controle-disparo-aviso-avisopush">
+                                    <Translate contentKey="generadorApp.controleDisparoAviso.avisopush">Avisopush</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="controle-disparo-aviso-avisopush" type="string" className="form-control" name="avisopush" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="avisopush" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

@@ -22,26 +22,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './categoria.reducer';
+import { getCategoriaState, ICategoriaBaseState, getEntities } from './categoria.reducer';
 import { ICategoria } from 'app/shared/model/categoria.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
+import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
+
 export interface ICategoriaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICategoriaBaseState {
-  categoria: any;
-  styleCategoria: any;
-  icon: any;
-  publicar: any;
-  ordem: any;
-  publicarSite: any;
-  categoriaAtividade: any;
-  categoriaContrato: any;
-  categoriaUnidade: any;
-  cidXPtaNovoPadItemIndi: any;
-  especialidade: any;
-}
 export interface ICategoriaState extends ICategoriaBaseState, IPaginationBaseState {}
 
 export class Categoria extends React.Component<ICategoriaProps, ICategoriaState> {
@@ -51,42 +41,14 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCategoriaState(this.props.location)
+      ...getCategoriaState(this.props.location)
     };
   }
 
-  getCategoriaState = (location): ICategoriaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const categoria = url.searchParams.get('categoria') || '';
-    const styleCategoria = url.searchParams.get('styleCategoria') || '';
-    const icon = url.searchParams.get('icon') || '';
-    const publicar = url.searchParams.get('publicar') || '';
-    const ordem = url.searchParams.get('ordem') || '';
-    const publicarSite = url.searchParams.get('publicarSite') || '';
-
-    const categoriaAtividade = url.searchParams.get('categoriaAtividade') || '';
-    const categoriaContrato = url.searchParams.get('categoriaContrato') || '';
-    const categoriaUnidade = url.searchParams.get('categoriaUnidade') || '';
-    const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
-    const especialidade = url.searchParams.get('especialidade') || '';
-
-    return {
-      categoria,
-      styleCategoria,
-      icon,
-      publicar,
-      ordem,
-      publicarSite,
-      categoriaAtividade,
-      categoriaContrato,
-      categoriaUnidade,
-      cidXPtaNovoPadItemIndi,
-      especialidade
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
+
+    this.props.getUnidadeEasies();
   }
 
   cancelCourse = () => {
@@ -98,11 +60,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
         publicar: '',
         ordem: '',
         publicarSite: '',
-        categoriaAtividade: '',
-        categoriaContrato: '',
-        categoriaUnidade: '',
-        cidXPtaNovoPadItemIndi: '',
-        especialidade: ''
+        unidade: ''
       },
       () => this.sortEntities()
     );
@@ -135,7 +93,9 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -165,20 +125,8 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       'publicarSite=' +
       this.state.publicarSite +
       '&' +
-      'categoriaAtividade=' +
-      this.state.categoriaAtividade +
-      '&' +
-      'categoriaContrato=' +
-      this.state.categoriaContrato +
-      '&' +
-      'categoriaUnidade=' +
-      this.state.categoriaUnidade +
-      '&' +
-      'cidXPtaNovoPadItemIndi=' +
-      this.state.cidXPtaNovoPadItemIndi +
-      '&' +
-      'especialidade=' +
-      this.state.especialidade +
+      'unidade=' +
+      this.state.unidade +
       '&' +
       ''
     );
@@ -187,23 +135,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      categoria,
-      styleCategoria,
-      icon,
-      publicar,
-      ordem,
-      publicarSite,
-      categoriaAtividade,
-      categoriaContrato,
-      categoriaUnidade,
-      cidXPtaNovoPadItemIndi,
-      especialidade,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { categoria, styleCategoria, icon, publicar, ordem, publicarSite, unidade, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       categoria,
       styleCategoria,
@@ -211,11 +143,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
       publicar,
       ordem,
       publicarSite,
-      categoriaAtividade,
-      categoriaContrato,
-      categoriaUnidade,
-      cidXPtaNovoPadItemIndi,
-      especialidade,
+      unidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -223,7 +151,7 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
   };
 
   render() {
-    const { categoriaList, match, totalItems } = this.props;
+    const { unidadeEasies, categoriaList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -241,7 +169,11 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.categoria.home.createLabel">Create a new Categoria</Translate>
@@ -254,77 +186,103 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="categoriaLabel" for="categoria-categoria">
-                            <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'categoria' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="categoriaLabel" for="categoria-categoria">
+                              <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="categoria" id="categoria-categoria" value={this.state.categoria} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="styleCategoriaLabel" for="categoria-styleCategoria">
-                            <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
-                          </Label>
+                            <AvInput type="text" name="categoria" id="categoria-categoria" value={this.state.categoria} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="styleCategoria" id="categoria-styleCategoria" value={this.state.styleCategoria} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="iconLabel" for="categoria-icon">
-                            <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'styleCategoria' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="styleCategoriaLabel" for="categoria-styleCategoria">
+                              <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="icon" id="categoria-icon" value={this.state.icon} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="publicarLabel" for="categoria-publicar">
-                            <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
-                          </Label>
-                          <AvInput type="string" name="publicar" id="categoria-publicar" value={this.state.publicar} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ordemLabel" for="categoria-ordem">
-                            <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
-                          </Label>
-                          <AvInput type="string" name="ordem" id="categoria-ordem" value={this.state.ordem} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="publicarSiteLabel" for="categoria-publicarSite">
-                            <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
-                          </Label>
-                          <AvInput type="string" name="publicarSite" id="categoria-publicarSite" value={this.state.publicarSite} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="styleCategoria" id="categoria-styleCategoria" value={this.state.styleCategoria} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'icon' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="iconLabel" for="categoria-icon">
+                              <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
+                            </Label>
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="icon" id="categoria-icon" value={this.state.icon} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'publicar' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="publicarLabel" for="categoria-publicar">
+                              <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
+                            </Label>
+                            <AvInput type="string" name="publicar" id="categoria-publicar" value={this.state.publicar} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ordem' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ordemLabel" for="categoria-ordem">
+                              <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
+                            </Label>
+                            <AvInput type="string" name="ordem" id="categoria-ordem" value={this.state.ordem} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'publicarSite' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="publicarSiteLabel" for="categoria-publicarSite">
+                              <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
+                            </Label>
+                            <AvInput type="string" name="publicarSite" id="categoria-publicarSite" value={this.state.publicarSite} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="categoria-unidade">
+                                <Translate contentKey="generadorApp.categoria.unidade">Unidade</Translate>
+                              </Label>
+                              <AvInput
+                                id="categoria-unidade"
+                                type="select"
+                                multiple
+                                className="form-control"
+                                name="unidades"
+                                value={categoriaEntity.unidades && categoriaEntity.unidades.map(e => e.id)}
+                              >
+                                <option value="" key="0" />
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -352,30 +310,42 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('categoria')}>
-                        <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('styleCategoria')}>
-                        <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('icon')}>
-                        <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('publicar')}>
-                        <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ordem')}>
-                        <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('publicarSite')}>
-                        <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'categoria' ? (
+                        <th className="hand" onClick={this.sort('categoria')}>
+                          <Translate contentKey="generadorApp.categoria.categoria">Categoria</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'styleCategoria' ? (
+                        <th className="hand" onClick={this.sort('styleCategoria')}>
+                          <Translate contentKey="generadorApp.categoria.styleCategoria">Style Categoria</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'icon' ? (
+                        <th className="hand" onClick={this.sort('icon')}>
+                          <Translate contentKey="generadorApp.categoria.icon">Icon</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'publicar' ? (
+                        <th className="hand" onClick={this.sort('publicar')}>
+                          <Translate contentKey="generadorApp.categoria.publicar">Publicar</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ordem' ? (
+                        <th className="hand" onClick={this.sort('ordem')}>
+                          <Translate contentKey="generadorApp.categoria.ordem">Ordem</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'publicarSite' ? (
+                        <th className="hand" onClick={this.sort('publicarSite')}>
+                          <Translate contentKey="generadorApp.categoria.publicarSite">Publicar Site</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -390,33 +360,33 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
                           </Button>
                         </td>
 
-                        <td>{categoria.categoria}</td>
+                        {this.state.baseFilters !== 'categoria' ? <td>{categoria.categoria}</td> : null}
 
-                        <td>{categoria.styleCategoria}</td>
+                        {this.state.baseFilters !== 'styleCategoria' ? <td>{categoria.styleCategoria}</td> : null}
 
-                        <td>{categoria.icon}</td>
+                        {this.state.baseFilters !== 'icon' ? <td>{categoria.icon}</td> : null}
 
-                        <td>{categoria.publicar}</td>
+                        {this.state.baseFilters !== 'publicar' ? <td>{categoria.publicar}</td> : null}
 
-                        <td>{categoria.ordem}</td>
+                        {this.state.baseFilters !== 'ordem' ? <td>{categoria.ordem}</td> : null}
 
-                        <td>{categoria.publicarSite}</td>
+                        {this.state.baseFilters !== 'publicarSite' ? <td>{categoria.publicarSite}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${categoria.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${categoria.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${categoria.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${categoria.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${categoria.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${categoria.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -458,11 +428,13 @@ export class Categoria extends React.Component<ICategoriaProps, ICategoriaState>
 }
 
 const mapStateToProps = ({ categoria, ...storeState }: IRootState) => ({
+  unidadeEasies: storeState.unidadeEasy.entities,
   categoriaList: categoria.entities,
   totalItems: categoria.totalItems
 });
 
 const mapDispatchToProps = {
+  getUnidadeEasies,
   getEntities
 };
 

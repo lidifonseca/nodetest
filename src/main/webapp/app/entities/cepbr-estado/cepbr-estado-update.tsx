@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './cepbr-estado.reducer';
+import {
+  ICepbrEstadoUpdateState,
+  getEntity,
+  getCepbrEstadoState,
+  ICepbrEstadoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './cepbr-estado.reducer';
 import { ICepbrEstado } from 'app/shared/model/cepbr-estado.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ICepbrEstadoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ICepbrEstadoUpdateState {
-  isNew: boolean;
-}
-
 export class CepbrEstadoUpdate extends React.Component<ICepbrEstadoUpdateProps, ICepbrEstadoUpdateState> {
   constructor(props: Readonly<ICepbrEstadoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getCepbrEstadoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,21 @@ export class CepbrEstadoUpdate extends React.Component<ICepbrEstadoUpdateProps, 
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['uf'] ? '&uf=' + fieldsBase['uf'] : '') +
+      (fieldsBase['estado'] ? '&estado=' + fieldsBase['estado'] : '') +
+      (fieldsBase['codIbge'] ? '&codIbge=' + fieldsBase['codIbge'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { cepbrEstadoEntity } = this.props;
@@ -57,13 +78,14 @@ export class CepbrEstadoUpdate extends React.Component<ICepbrEstadoUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/cepbr-estado');
+    this.props.history.push('/cepbr-estado?' + this.getFiltersURL());
   };
 
   render() {
     const { cepbrEstadoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +118,14 @@ export class CepbrEstadoUpdate extends React.Component<ICepbrEstadoUpdateProps, 
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/cepbr-estado" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/cepbr-estado?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +140,7 @@ export class CepbrEstadoUpdate extends React.Component<ICepbrEstadoUpdateProps, 
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,75 +156,65 @@ export class CepbrEstadoUpdate extends React.Component<ICepbrEstadoUpdateProps, 
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'uf' ? (
+                          <Col md="uf">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ufLabel" for="cepbr-estado-uf">
+                                    <Translate contentKey="generadorApp.cepbrEstado.uf">Uf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cepbr-estado-uf" type="text" name="uf" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="uf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ufLabel" for="cepbr-estado-uf">
-                                <Translate contentKey="generadorApp.cepbrEstado.uf">Uf</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cepbr-estado-uf"
-                                type="text"
-                                name="uf"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 2, errorMessage: translate('entity.validation.maxlength', { max: 2 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'estado' ? (
+                          <Col md="estado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="estadoLabel" for="cepbr-estado-estado">
+                                    <Translate contentKey="generadorApp.cepbrEstado.estado">Estado</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cepbr-estado-estado" type="text" name="estado" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="estado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="estadoLabel" for="cepbr-estado-estado">
-                                <Translate contentKey="generadorApp.cepbrEstado.estado">Estado</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cepbr-estado-estado"
-                                type="text"
-                                name="estado"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="codIbgeLabel" for="cepbr-estado-codIbge">
-                                <Translate contentKey="generadorApp.cepbrEstado.codIbge">Cod Ibge</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cepbr-estado-codIbge"
-                                type="text"
-                                name="codIbge"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'codIbge' ? (
+                          <Col md="codIbge">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codIbgeLabel" for="cepbr-estado-codIbge">
+                                    <Translate contentKey="generadorApp.cepbrEstado.codIbge">Cod Ibge</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cepbr-estado-codIbge" type="text" name="codIbge" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codIbge" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

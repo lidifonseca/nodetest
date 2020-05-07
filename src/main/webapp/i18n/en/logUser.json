@@ -16,10 +16,7 @@
       "detail": {
         "title": "Log User"
       },
-      "idUsuario": "Id Usuario",
-      "descricao": "Descricao",
-      "idAcao": "Id Acao",
-      "idTela": "Id Tela"
+      "descricao": "Descricao"
     }
   }
 }

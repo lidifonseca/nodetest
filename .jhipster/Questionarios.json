@@ -24,12 +24,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "respostasQuestionarios",
-            "otherEntityRelationshipName": "questionariosId",
-            "relationshipName": "respostasQuestionarios"
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "paciente",
             "otherEntityRelationshipName": "questionarios",
@@ -37,7 +31,7 @@
             "otherEntityField": "nome"
         }
     ],
-    "changelogDate": "20200503005600",
+    "changelogDate": "20200507122900",
     "entityTableName": "questionarios",
     "dto": "mapstruct",
     "pagination": "pagination",

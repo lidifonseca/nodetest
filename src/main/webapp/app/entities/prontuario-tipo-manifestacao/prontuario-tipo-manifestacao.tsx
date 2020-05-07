@@ -22,18 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './prontuario-tipo-manifestacao.reducer';
+import {
+  getProntuarioTipoManifestacaoState,
+  IProntuarioTipoManifestacaoBaseState,
+  getEntities
+} from './prontuario-tipo-manifestacao.reducer';
 import { IProntuarioTipoManifestacao } from 'app/shared/model/prontuario-tipo-manifestacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProntuarioTipoManifestacaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProntuarioTipoManifestacaoBaseState {
-  nome: any;
-  idPai: any;
-  ativo: any;
-}
 export interface IProntuarioTipoManifestacaoState extends IProntuarioTipoManifestacaoBaseState, IPaginationBaseState {}
 
 export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoManifestacaoProps, IProntuarioTipoManifestacaoState> {
@@ -43,22 +42,9 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProntuarioTipoManifestacaoState(this.props.location)
+      ...getProntuarioTipoManifestacaoState(this.props.location)
     };
   }
-
-  getProntuarioTipoManifestacaoState = (location): IProntuarioTipoManifestacaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nome = url.searchParams.get('nome') || '';
-    const idPai = url.searchParams.get('idPai') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      nome,
-      idPai,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -102,7 +88,9 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -153,7 +141,11 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.prontuarioTipoManifestacao.home.createLabel">
@@ -168,39 +160,39 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="prontuario-tipo-manifestacao-nome">
-                            <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="prontuario-tipo-manifestacao-nome">
+                              <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="prontuario-tipo-manifestacao-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPaiLabel" for="prontuario-tipo-manifestacao-idPai">
-                            <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPai" id="prontuario-tipo-manifestacao-idPai" value={this.state.idPai} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
-                            <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="prontuario-tipo-manifestacao-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="nome" id="prontuario-tipo-manifestacao-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPaiLabel" for="prontuario-tipo-manifestacao-idPai">
+                              <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPai" id="prontuario-tipo-manifestacao-idPai" value={this.state.idPai} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
+                              <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="prontuario-tipo-manifestacao-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -228,18 +220,24 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPai')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <th className="hand" onClick={this.sort('idPai')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -254,27 +252,42 @@ export class ProntuarioTipoManifestacao extends React.Component<IProntuarioTipoM
                           </Button>
                         </td>
 
-                        <td>{prontuarioTipoManifestacao.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{prontuarioTipoManifestacao.nome}</td> : null}
 
-                        <td>{prontuarioTipoManifestacao.idPai}</td>
+                        {this.state.baseFilters !== 'idPai' ? <td>{prontuarioTipoManifestacao.idPai}</td> : null}
 
-                        <td>{prontuarioTipoManifestacao.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{prontuarioTipoManifestacao.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${prontuarioTipoManifestacao.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioTipoManifestacao.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioTipoManifestacao.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioTipoManifestacao.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioTipoManifestacao.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioTipoManifestacao.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

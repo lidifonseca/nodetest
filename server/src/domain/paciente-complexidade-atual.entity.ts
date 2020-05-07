@@ -5,31 +5,28 @@ import { BaseEntity } from './base/base.entity';
 /**
  * A PacienteComplexidadeAtual.
  */
-@Entity('paciente_complexidade_atual')
+@Entity('tb_paciente_complexidade_atual')
 export default class PacienteComplexidadeAtual extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_paciente' })
+  @Column({ type: 'integer', name: 'ID_PACIENTE' })
   idPaciente: number;
 
-  @Column({ type: 'integer', name: 'id_paciente_complexidade' })
+  @Column({ type: 'integer', name: 'ID_PACIENTE_COMPLEXIDADE' })
   idPacienteComplexidade: number;
 
-  @Column({ type: 'integer', name: 'baixa' })
+  @Column({ type: 'integer', name: 'BAIXA' })
   baixa: number;
 
-  @Column({ type: 'integer', name: 'media' })
+  @Column({ type: 'integer', name: 'MEDIA' })
   media: number;
 
-  @Column({ type: 'integer', name: 'alta' })
+  @Column({ type: 'integer', name: 'ALTA' })
   alta: number;
 
-  @Column({ type: 'integer', name: 'ventilacao_mecanica' })
+  @Column({ type: 'integer', name: 'VENTILACAO_MECANICA' })
   ventilacaoMecanica: number;
 
-  @Column({ type: 'integer', name: 'telemonitoramente' })
+  @Column({ type: 'integer', name: 'TELEMONITORAMENTE' })
   telemonitoramente: number;
-
-  @Column({ type: 'integer', name: 'id_usuario' })
-  idUsuario: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

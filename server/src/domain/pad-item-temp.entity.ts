@@ -7,39 +7,39 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A PadItemTemp.
  */
-@Entity('pad_item_temp')
+@Entity('tb_pad_item_temp')
 export default class PadItemTemp extends BaseEntity {
-  @Column({ name: 'session_id', length: 100 })
+  @Column({ name: 'SESSION_ID', length: 100 })
   sessionId: string;
 
-  @Column({ type: 'integer', name: 'id_especialidade' })
+  @Column({ type: 'integer', name: 'ID_ESPECIALIDADE' })
   idEspecialidade: number;
 
-  @Column({ type: 'integer', name: 'id_periodicidade' })
+  @Column({ type: 'integer', name: 'ID_PERIODICIDADE' })
   idPeriodicidade: number;
 
-  @Column({ type: 'integer', name: 'id_periodo' })
+  @Column({ type: 'integer', name: 'ID_PERIODO' })
   idPeriodo: number;
 
-  @Column({ type: 'date', name: 'data_inicio' })
+  @Column({ type: 'date', name: 'DATA_INICIO' })
   dataInicio: any;
 
-  @Column({ type: 'date', name: 'data_fim' })
+  @Column({ type: 'date', name: 'DATA_FIM' })
   dataFim: any;
 
-  @Column({ type: 'integer', name: 'qtd_sessoes' })
+  @Column({ type: 'integer', name: 'QTD_SESSOES' })
   qtdSessoes: number;
 
-  @Column({ name: 'observacao', length: 255 })
+  @Column({ name: 'OBSERVACAO', length: 255 })
   observacao: string;
 
-  @Column({ type: 'integer', name: 'cid_x_pta_novo_id' })
+  @Column({ type: 'integer', name: 'CID_X_PTA_NOVO_ID' })
   cidXPtaNovoId: number;
 
-  @Column({ type: 'integer', name: 'categoria_id' })
+  @Column({ type: 'integer', name: 'CATEGORIA_ID' })
   categoriaId: number;
 
-  @Column({ name: 'num_ghc', length: 40 })
+  @Column({ name: 'NUM_GHC', length: 40 })
   numGhc: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

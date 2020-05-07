@@ -28,18 +28,7 @@
       "numGhc": "Num Ghc",
       "cidXPtaNovo": "Cid X Pta Novo",
       "categoriaId": "Categoria Id",
-      "score": "Score",
-      "atendimento": "Atendimento",
-      "atendimentoCepRecusado": "Atendimento Cep Recusado",
-      "atendimentoSorteioFeito": "Atendimento Sorteio Feito",
-      "padItemAtividade": "Pad Item Atividade",
-      "padItemCepRecusado": "Pad Item Cep Recusado",
-      "padItemResultado": "Pad Item Resultado",
-      "padItemSorteioFeito": "Pad Item Sorteio Feito",
-      "idPad": "Id Pad",
-      "idEspecialidade": "Id Especialidade",
-      "idPeriodicidade": "Id Periodicidade",
-      "idPeriodo": "Id Periodo"
+      "score": "Score"
     }
   }
 }

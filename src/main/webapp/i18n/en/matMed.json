@@ -3,15 +3,15 @@
     "matMed": {
       "home": {
         "title": "Mat Meds",
-        "createLabel": "Criar novo Mat Med",
-        "createOrEditLabel": "Criar ou editar Mat Med",
-        "notFound": "Nenhum Mat Med encontrado"
+        "createLabel": "Create a new Mat Med",
+        "createOrEditLabel": "Create or edit a Mat Med",
+        "notFound": "No Mat Meds found"
       },
-      "created": "Um novo Mat Med foi criado com o identificador {{ param }}",
-      "updated": "Um Mat Med foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Mat Med foi excluído com o identificador {{ param }}",
+      "created": "A new Mat Med is created with identifier {{ param }}",
+      "updated": "A Mat Med is updated with identifier {{ param }}",
+      "deleted": "A Mat Med is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Mat Med {{ id }}?"
+        "question": "Are you sure you want to delete Mat Med {{ id }}?"
       },
       "detail": {
         "title": "Mat Med"

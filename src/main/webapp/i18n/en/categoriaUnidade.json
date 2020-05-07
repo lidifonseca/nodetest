@@ -3,15 +3,15 @@
     "categoriaUnidade": {
       "home": {
         "title": "Categoria Unidades",
-        "createLabel": "Criar novo Categoria Unidade",
-        "createOrEditLabel": "Criar ou editar Categoria Unidade",
-        "notFound": "Nenhum Categoria Unidade encontrado"
+        "createLabel": "Create a new Categoria Unidade",
+        "createOrEditLabel": "Create or edit a Categoria Unidade",
+        "notFound": "No Categoria Unidades found"
       },
-      "created": "Um novo Categoria Unidade foi criado com o identificador {{ param }}",
-      "updated": "Um Categoria Unidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Categoria Unidade foi excluído com o identificador {{ param }}",
+      "created": "A new Categoria Unidade is created with identifier {{ param }}",
+      "updated": "A Categoria Unidade is updated with identifier {{ param }}",
+      "deleted": "A Categoria Unidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Categoria Unidade {{ id }}?"
+        "question": "Are you sure you want to delete Categoria Unidade {{ id }}?"
       },
       "detail": {
         "title": "Categoria Unidade"

@@ -1,6 +1,3 @@
-import { IAtendimento } from 'app/shared/model/atendimento.model';
-import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operadora.model';
-import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 
@@ -21,9 +18,6 @@ export interface IOperadora {
   nomeContatoFinanceiro?: string;
   contatoFinanceiro?: string;
   emailFinanceiro?: string;
-  atendimentos?: IAtendimento[];
-  especialidadeOperadoras?: IEspecialidadeOperadora[];
-  pacienteOperadoras?: IPacienteOperadora[];
   unidadeRazaoSocial?: string;
   unidade?: string | any;
   tipoOperadoraTipo?: string;

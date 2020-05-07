@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './segmentos-perguntas.reducer';
+import { getSegmentosPerguntasState, ISegmentosPerguntasBaseState, getEntities } from './segmentos-perguntas.reducer';
 import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ISegmentosPerguntasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ISegmentosPerguntasBaseState {
-  segmento: any;
-  perguntasQuestionario: any;
-}
 export interface ISegmentosPerguntasState extends ISegmentosPerguntasBaseState, IPaginationBaseState {}
 
 export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps, ISegmentosPerguntasState> {
@@ -42,21 +38,9 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getSegmentosPerguntasState(this.props.location)
+      ...getSegmentosPerguntasState(this.props.location)
     };
   }
-
-  getSegmentosPerguntasState = (location): ISegmentosPerguntasBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const segmento = url.searchParams.get('segmento') || '';
-
-    const perguntasQuestionario = url.searchParams.get('perguntasQuestionario') || '';
-
-    return {
-      segmento,
-      perguntasQuestionario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -65,8 +49,7 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
   cancelCourse = () => {
     this.setState(
       {
-        segmento: '',
-        perguntasQuestionario: ''
+        segmento: ''
       },
       () => this.sortEntities()
     );
@@ -99,7 +82,9 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -114,9 +99,6 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
       'segmento=' +
       this.state.segmento +
       '&' +
-      'perguntasQuestionario=' +
-      this.state.perguntasQuestionario +
-      '&' +
       ''
     );
   };
@@ -124,8 +106,8 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { segmento, perguntasQuestionario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(segmento, perguntasQuestionario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { segmento, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(segmento, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -147,7 +129,11 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.segmentosPerguntas.home.createLabel">Create a new Segmentos Perguntas</Translate>
@@ -160,19 +146,17 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="segmentoLabel" for="segmentos-perguntas-segmento">
-                            <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'segmento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="segmentoLabel" for="segmentos-perguntas-segmento">
+                              <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="segmento" id="segmentos-perguntas-segmento" value={this.state.segmento} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="segmento" id="segmentos-perguntas-segmento" value={this.state.segmento} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -200,10 +184,12 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('segmento')}>
-                        <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'segmento' ? (
+                        <th className="hand" onClick={this.sort('segmento')}>
+                          <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -218,23 +204,33 @@ export class SegmentosPerguntas extends React.Component<ISegmentosPerguntasProps
                           </Button>
                         </td>
 
-                        <td>{segmentosPerguntas.segmento}</td>
+                        {this.state.baseFilters !== 'segmento' ? <td>{segmentosPerguntas.segmento}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${segmentosPerguntas.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${segmentosPerguntas.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${segmentosPerguntas.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${segmentosPerguntas.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${segmentosPerguntas.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${segmentosPerguntas.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

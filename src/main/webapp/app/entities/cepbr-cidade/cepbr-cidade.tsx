@@ -22,25 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './cepbr-cidade.reducer';
+import { getCepbrCidadeState, ICepbrCidadeBaseState, getEntities } from './cepbr-cidade.reducer';
 import { ICepbrCidade } from 'app/shared/model/cepbr-cidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ICepbrEstado } from 'app/shared/model/cepbr-estado.model';
-import { getEntities as getCepbrEstados } from 'app/entities/cepbr-estado/cepbr-estado.reducer';
-
 export interface ICepbrCidadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICepbrCidadeBaseState {
-  idCidade: any;
-  cidade: any;
-  codIbge: any;
-  area: any;
-  cepbrBairro: any;
-  cepbrEndereco: any;
-  uf: any;
-}
 export interface ICepbrCidadeState extends ICepbrCidadeBaseState, IPaginationBaseState {}
 
 export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidadeState> {
@@ -50,36 +38,12 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCepbrCidadeState(this.props.location)
+      ...getCepbrCidadeState(this.props.location)
     };
   }
 
-  getCepbrCidadeState = (location): ICepbrCidadeBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idCidade = url.searchParams.get('idCidade') || '';
-    const cidade = url.searchParams.get('cidade') || '';
-    const codIbge = url.searchParams.get('codIbge') || '';
-    const area = url.searchParams.get('area') || '';
-
-    const cepbrBairro = url.searchParams.get('cepbrBairro') || '';
-    const cepbrEndereco = url.searchParams.get('cepbrEndereco') || '';
-    const uf = url.searchParams.get('uf') || '';
-
-    return {
-      idCidade,
-      cidade,
-      codIbge,
-      area,
-      cepbrBairro,
-      cepbrEndereco,
-      uf
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getCepbrEstados();
   }
 
   cancelCourse = () => {
@@ -88,10 +52,7 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
         idCidade: '',
         cidade: '',
         codIbge: '',
-        area: '',
-        cepbrBairro: '',
-        cepbrEndereco: '',
-        uf: ''
+        area: ''
       },
       () => this.sortEntities()
     );
@@ -124,7 +85,9 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -148,15 +111,6 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
       'area=' +
       this.state.area +
       '&' +
-      'cepbrBairro=' +
-      this.state.cepbrBairro +
-      '&' +
-      'cepbrEndereco=' +
-      this.state.cepbrEndereco +
-      '&' +
-      'uf=' +
-      this.state.uf +
-      '&' +
       ''
     );
   };
@@ -164,23 +118,12 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idCidade, cidade, codIbge, area, cepbrBairro, cepbrEndereco, uf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      idCidade,
-      cidade,
-      codIbge,
-      area,
-      cepbrBairro,
-      cepbrEndereco,
-      uf,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idCidade, cidade, codIbge, area, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idCidade, cidade, codIbge, area, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { cepbrEstados, cepbrCidadeList, match, totalItems } = this.props;
+    const { cepbrCidadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -198,7 +141,11 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.cepbrCidade.home.createLabel">Create a new Cepbr Cidade</Translate>
@@ -211,103 +158,51 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idCidadeLabel" for="cepbr-cidade-idCidade">
-                            <Translate contentKey="generadorApp.cepbrCidade.idCidade">Id Cidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idCidade"
-                            id="cepbr-cidade-idCidade"
-                            value={this.state.idCidade}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidadeLabel" for="cepbr-cidade-cidade">
-                            <Translate contentKey="generadorApp.cepbrCidade.cidade">Cidade</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="cidade"
-                            id="cepbr-cidade-cidade"
-                            value={this.state.cidade}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="codIbgeLabel" for="cepbr-cidade-codIbge">
-                            <Translate contentKey="generadorApp.cepbrCidade.codIbge">Cod Ibge</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="codIbge"
-                            id="cepbr-cidade-codIbge"
-                            value={this.state.codIbge}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="areaLabel" for="cepbr-cidade-area">
-                            <Translate contentKey="generadorApp.cepbrCidade.area">Area</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="area"
-                            id="cepbr-cidade-area"
-                            value={this.state.area}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cepbr-cidade-uf">
-                              <Translate contentKey="generadorApp.cepbrCidade.uf">Uf</Translate>
+                      {this.state.baseFilters !== 'idCidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idCidadeLabel" for="cepbr-cidade-idCidade">
+                              <Translate contentKey="generadorApp.cepbrCidade.idCidade">Id Cidade</Translate>
                             </Label>
-                            <AvInput id="cepbr-cidade-uf" type="select" className="form-control" name="ufId">
-                              <option value="" key="0" />
-                              {cepbrEstados
-                                ? cepbrEstados.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="idCidade" id="cepbr-cidade-idCidade" value={this.state.idCidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidadeLabel" for="cepbr-cidade-cidade">
+                              <Translate contentKey="generadorApp.cepbrCidade.cidade">Cidade</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cidade" id="cepbr-cidade-cidade" value={this.state.cidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'codIbge' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codIbgeLabel" for="cepbr-cidade-codIbge">
+                              <Translate contentKey="generadorApp.cepbrCidade.codIbge">Cod Ibge</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="codIbge" id="cepbr-cidade-codIbge" value={this.state.codIbge} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'area' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="areaLabel" for="cepbr-cidade-area">
+                              <Translate contentKey="generadorApp.cepbrCidade.area">Area</Translate>
+                            </Label>
+                            <AvInput type="string" name="area" id="cepbr-cidade-area" value={this.state.area} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -335,26 +230,30 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idCidade')}>
-                        <Translate contentKey="generadorApp.cepbrCidade.idCidade">Id Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidade')}>
-                        <Translate contentKey="generadorApp.cepbrCidade.cidade">Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('codIbge')}>
-                        <Translate contentKey="generadorApp.cepbrCidade.codIbge">Cod Ibge</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('area')}>
-                        <Translate contentKey="generadorApp.cepbrCidade.area">Area</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cepbrCidade.uf">Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idCidade' ? (
+                        <th className="hand" onClick={this.sort('idCidade')}>
+                          <Translate contentKey="generadorApp.cepbrCidade.idCidade">Id Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <th className="hand" onClick={this.sort('cidade')}>
+                          <Translate contentKey="generadorApp.cepbrCidade.cidade">Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'codIbge' ? (
+                        <th className="hand" onClick={this.sort('codIbge')}>
+                          <Translate contentKey="generadorApp.cepbrCidade.codIbge">Cod Ibge</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'area' ? (
+                        <th className="hand" onClick={this.sort('area')}>
+                          <Translate contentKey="generadorApp.cepbrCidade.area">Area</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -369,30 +268,34 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
                           </Button>
                         </td>
 
-                        <td>{cepbrCidade.idCidade}</td>
+                        {this.state.baseFilters !== 'idCidade' ? <td>{cepbrCidade.idCidade}</td> : null}
 
-                        <td>{cepbrCidade.cidade}</td>
+                        {this.state.baseFilters !== 'cidade' ? <td>{cepbrCidade.cidade}</td> : null}
 
-                        <td>{cepbrCidade.codIbge}</td>
+                        {this.state.baseFilters !== 'codIbge' ? <td>{cepbrCidade.codIbge}</td> : null}
 
-                        <td>{cepbrCidade.area}</td>
-                        <td>{cepbrCidade.uf ? <Link to={`cepbr-estado/${cepbrCidade.uf.id}`}>{cepbrCidade.uf.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'area' ? <td>{cepbrCidade.area}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${cepbrCidade.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cepbrCidade.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cepbrCidade.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cepbrCidade.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cepbrCidade.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cepbrCidade.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -434,13 +337,11 @@ export class CepbrCidade extends React.Component<ICepbrCidadeProps, ICepbrCidade
 }
 
 const mapStateToProps = ({ cepbrCidade, ...storeState }: IRootState) => ({
-  cepbrEstados: storeState.cepbrEstado.entities,
   cepbrCidadeList: cepbrCidade.entities,
   totalItems: cepbrCidade.totalItems
 });
 
 const mapDispatchToProps = {
-  getCepbrEstados,
   getEntities
 };
 

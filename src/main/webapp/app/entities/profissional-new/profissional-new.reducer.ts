@@ -33,6 +33,7 @@ const initialState = {
 export type ProfissionalNewState = Readonly<typeof initialState>;
 
 export interface IProfissionalNewBaseState {
+  baseFilters: any;
   idCidade: any;
   idTempoExperiencia: any;
   idBanco: any;
@@ -67,6 +68,12 @@ export interface IProfissionalNewBaseState {
   chavePrivada: any;
   ativo: any;
   unidade: any;
+}
+
+export interface IProfissionalNewUpdateState {
+  fieldsBase: IProfissionalNewBaseState;
+  isNew: boolean;
+  unidadeId: string;
 }
 
 // Reducer
@@ -112,6 +119,7 @@ export default (state: ProfissionalNewState = initialState, action): Profissiona
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PROFISSIONALNEW):
+      action.payload.data.obs = action.payload.data.obs ? Buffer.from(action.payload.data.obs).toString() : action.payload.data.obs;
       return {
         ...state,
         loading: false,
@@ -133,13 +141,14 @@ export default (state: ProfissionalNewState = initialState, action): Profissiona
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -403,12 +412,13 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalNew> = id => async dis
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -418,6 +428,7 @@ export const reset = () => ({
 
 export const getProfissionalNewState = (location): IProfissionalNewBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idCidade = url.searchParams.get('idCidade') || '';
   const idTempoExperiencia = url.searchParams.get('idTempoExperiencia') || '';
   const idBanco = url.searchParams.get('idBanco') || '';
@@ -455,6 +466,7 @@ export const getProfissionalNewState = (location): IProfissionalNewBaseState => 
   const unidade = url.searchParams.get('unidade') || '';
 
   return {
+    baseFilters,
     idCidade,
     idTempoExperiencia,
     idBanco,

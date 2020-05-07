@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A TipoMatMed.
  */
-@Entity('tipo_mat_med')
+@Entity('tb_tipo_mat_med')
 export default class TipoMatMed extends BaseEntity {
-  @Column({ name: 'tipo', length: 45, nullable: false })
+  @Column({ name: 'TIPO', length: 45, nullable: false })
   tipo: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

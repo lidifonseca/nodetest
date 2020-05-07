@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -97,32 +97,6 @@ export class PacienteDiarioDetail extends React.Component<IPacienteDiarioDetailP
                       </Col>
                       <Col md="9">
                         <dd>{pacienteDiarioEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteDiario.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteDiarioEntity.idPaciente ? pacienteDiarioEntity.idPaciente.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteDiario.idUsuario">Id Usuario</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteDiarioEntity.idUsuario ? pacienteDiarioEntity.idUsuario.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

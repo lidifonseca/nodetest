@@ -38,23 +38,8 @@
             "fieldValidateRulesMaxlength": "45"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "respostas",
-            "otherEntityRelationshipName": "acoesRespostas",
-            "relationshipName": "respostasId",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "perguntasQuestionario",
-            "otherEntityRelationshipName": "acoesRespostas",
-            "relationshipName": "perguntasQuestionarioId",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502225300",
+    "relationships": [],
+    "changelogDate": "20200507102600",
     "entityTableName": "acoes_respostas",
     "dto": "mapstruct",
     "pagination": "pagination",

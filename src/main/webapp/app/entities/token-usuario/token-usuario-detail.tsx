@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './token-usuario.reducer';
+import { getEntity, ITokenUsuarioBaseState, getTokenUsuarioState } from './token-usuario.reducer';
 import { ITokenUsuario } from 'app/shared/model/token-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITokenUsuarioState {
+  fieldsBase: ITokenUsuarioBaseState;
+}
+
 export interface ITokenUsuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TokenUsuarioDetail extends React.Component<ITokenUsuarioDetailProps> {
+export class TokenUsuarioDetail extends React.Component<ITokenUsuarioDetailProps, ITokenUsuarioState> {
   constructor(props: Readonly<ITokenUsuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTokenUsuarioState(this.props.location)
     };
   }
 

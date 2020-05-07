@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-diario-tags.reducer';
+import { getEntity, IPacienteDiarioTagsBaseState, getPacienteDiarioTagsState } from './paciente-diario-tags.reducer';
 import { IPacienteDiarioTags } from 'app/shared/model/paciente-diario-tags.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteDiarioTagsState {
+  fieldsBase: IPacienteDiarioTagsBaseState;
+}
+
 export interface IPacienteDiarioTagsDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteDiarioTagsDetail extends React.Component<IPacienteDiarioTagsDetailProps> {
+export class PacienteDiarioTagsDetail extends React.Component<IPacienteDiarioTagsDetailProps, IPacienteDiarioTagsState> {
   constructor(props: Readonly<IPacienteDiarioTagsDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteDiarioTagsState(this.props.location)
     };
   }
 

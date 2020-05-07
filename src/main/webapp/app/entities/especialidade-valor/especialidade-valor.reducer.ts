@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IEspecialidadeValor, defaultValue } from 'app/shared/model/especialidade-valor.model';
 
 export const ACTION_TYPES = {
+  FETCH_ESPECIALIDADEVALOR_LIST_EXPORT: 'especialidadeValor/FETCH_ESPECIALIDADEVALOR_LIST_EXPORT',
   FETCH_ESPECIALIDADEVALOR_LIST: 'especialidadeValor/FETCH_ESPECIALIDADEVALOR_LIST',
   FETCH_ESPECIALIDADEVALOR: 'especialidadeValor/FETCH_ESPECIALIDADEVALOR',
   CREATE_ESPECIALIDADEVALOR: 'especialidadeValor/CREATE_ESPECIALIDADEVALOR',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type EspecialidadeValorState = Readonly<typeof initialState>;
 
+export interface IEspecialidadeValorBaseState {
+  baseFilters: any;
+  idFranquia: any;
+  valor: any;
+  ativo: any;
+}
+
+export interface IEspecialidadeValorUpdateState {
+  fieldsBase: IEspecialidadeValorBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: EspecialidadeValorState = initialState, action): EspecialidadeValorState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ESPECIALIDADEVALOR):
       return {
@@ -51,6 +65,7 @@ export default (state: EspecialidadeValorState = initialState, action): Especial
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ESPECIALIDADEVALOR):
     case FAILURE(ACTION_TYPES.CREATE_ESPECIALIDADEVALOR):
@@ -109,31 +124,21 @@ export type ICrudGetAllActionEspecialidadeValor<T> = (
   idFranquia?: any,
   valor?: any,
   ativo?: any,
-  idEspecialidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValor> = (
-  idFranquia,
-  valor,
-  ativo,
-  idEspecialidade,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValor> = (idFranquia, valor, ativo, page, size, sort) => {
   const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.equals=${idEspecialidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST,
     payload: axios.get<IEspecialidadeValor>(
-      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}${idEspecialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -145,10 +150,23 @@ export const getEntity: ICrudGetAction<IEspecialidadeValor> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionEspecialidadeValor<IEspecialidadeValor> = (idFranquia, valor, ativo, page, size, sort) => {
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+  const valorRequest = valor ? `valor.contains=${valor}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ESPECIALIDADEVALOR_LIST,
+    payload: axios.get<IEspecialidadeValor>(
+      `${requestUrl}${idFranquiaRequest}${valorRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IEspecialidadeValor> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ESPECIALIDADEVALOR,
@@ -159,7 +177,7 @@ export const createEntity: ICrudPutAction<IEspecialidadeValor> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<IEspecialidadeValor> = entity => async dispatch => {
-  entity = { ...entity, idEspecialidade: entity.idEspecialidade === 'null' ? null : entity.idEspecialidade };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ESPECIALIDADEVALOR,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -181,3 +199,18 @@ export const deleteEntity: ICrudDeleteAction<IEspecialidadeValor> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getEspecialidadeValorState = (location): IEspecialidadeValorBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idFranquia = url.searchParams.get('idFranquia') || '';
+  const valor = url.searchParams.get('valor') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idFranquia,
+    valor,
+    ativo
+  };
+};

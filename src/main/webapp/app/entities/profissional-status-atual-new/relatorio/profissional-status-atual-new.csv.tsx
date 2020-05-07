@@ -75,8 +75,7 @@ export class ProfissionalStatusAtualNew extends React.Component<IProfissionalSta
         idProfissional: '',
         idStatusAtualProf: '',
         obs: '',
-        ativo: '',
-        idUsuario: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -133,9 +132,6 @@ export class ProfissionalStatusAtualNew extends React.Component<IProfissionalSta
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -143,26 +139,18 @@ export class ProfissionalStatusAtualNew extends React.Component<IProfissionalSta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, idStatusAtualProf, obs, ativo, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(
-      idProfissional,
-      idStatusAtualProf,
-      obs,
-      ativo,
-      idUsuario,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idProfissional, idStatusAtualProf, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(idProfissional, idStatusAtualProf, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IDiario, defaultValue } from 'app/shared/model/diario.model';
 
 export const ACTION_TYPES = {
+  FETCH_DIARIO_LIST_EXPORT: 'diario/FETCH_DIARIO_LIST_EXPORT',
   FETCH_DIARIO_LIST: 'diario/FETCH_DIARIO_LIST',
   FETCH_DIARIO: 'diario/FETCH_DIARIO',
   CREATE_DIARIO: 'diario/CREATE_DIARIO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type DiarioState = Readonly<typeof initialState>;
 
+export interface IDiarioBaseState {
+  baseFilters: any;
+  historico: any;
+  gerarPdf: any;
+}
+
+export interface IDiarioUpdateState {
+  fieldsBase: IDiarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: DiarioState = initialState, action): DiarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_DIARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_DIARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_DIARIO):
       return {
@@ -51,6 +64,7 @@ export default (state: DiarioState = initialState, action): DiarioState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_DIARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_DIARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_DIARIO):
     case FAILURE(ACTION_TYPES.CREATE_DIARIO):
@@ -108,25 +122,19 @@ const apiUrl = 'api/diarios';
 export type ICrudGetAllActionDiario<T> = (
   historico?: any,
   gerarPdf?: any,
-  idUsuario?: any,
-  idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionDiario<IDiario> = (historico, gerarPdf, idUsuario, idPaciente, page, size, sort) => {
+export const getEntities: ICrudGetAllActionDiario<IDiario> = (historico, gerarPdf, page, size, sort) => {
   const historicoRequest = historico ? `historico.contains=${historico}&` : '';
   const gerarPdfRequest = gerarPdf ? `gerarPdf.contains=${gerarPdf}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.equals=${idUsuario}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_DIARIO_LIST,
-    payload: axios.get<IDiario>(
-      `${requestUrl}${historicoRequest}${gerarPdfRequest}${idUsuarioRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IDiario>(`${requestUrl}${historicoRequest}${gerarPdfRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IDiario> = id => {
@@ -137,11 +145,20 @@ export const getEntity: ICrudGetAction<IDiario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionDiario<IDiario> = (historico, gerarPdf, page, size, sort) => {
+  const historicoRequest = historico ? `historico.contains=${historico}&` : '';
+  const gerarPdfRequest = gerarPdf ? `gerarPdf.contains=${gerarPdf}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_DIARIO_LIST,
+    payload: axios.get<IDiario>(`${requestUrl}${historicoRequest}${gerarPdfRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IDiario> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idUsuario: entity.idUsuario === 'null' ? null : entity.idUsuario,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_DIARIO,
@@ -152,11 +169,7 @@ export const createEntity: ICrudPutAction<IDiario> = entity => async dispatch =>
 };
 
 export const updateEntity: ICrudPutAction<IDiario> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idUsuario: entity.idUsuario === 'null' ? null : entity.idUsuario,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_DIARIO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -178,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IDiario> = id => async dispatch => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getDiarioState = (location): IDiarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const historico = url.searchParams.get('historico') || '';
+  const gerarPdf = url.searchParams.get('gerarPdf') || '';
+
+  return {
+    baseFilters,
+    historico,
+    gerarPdf
+  };
+};

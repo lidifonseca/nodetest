@@ -7,20 +7,32 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-dispositivo-complexidade-atual.reducer';
+import {
+  getEntity,
+  IProfissionalDispositivoComplexidadeAtualBaseState,
+  getProfissionalDispositivoComplexidadeAtualState
+} from './profissional-dispositivo-complexidade-atual.reducer';
 import { IProfissionalDispositivoComplexidadeAtual } from 'app/shared/model/profissional-dispositivo-complexidade-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+
+export interface IProfissionalDispositivoComplexidadeAtualState {
+  fieldsBase: IProfissionalDispositivoComplexidadeAtualBaseState;
+}
 
 export interface IProfissionalDispositivoComplexidadeAtualDetailProps
   extends StateProps,
     DispatchProps,
     RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalDispositivoComplexidadeAtualDetail extends React.Component<IProfissionalDispositivoComplexidadeAtualDetailProps> {
+export class ProfissionalDispositivoComplexidadeAtualDetail extends React.Component<
+  IProfissionalDispositivoComplexidadeAtualDetailProps,
+  IProfissionalDispositivoComplexidadeAtualState
+> {
   constructor(props: Readonly<IProfissionalDispositivoComplexidadeAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalDispositivoComplexidadeAtualState(this.props.location)
     };
   }
 
@@ -86,21 +98,6 @@ export class ProfissionalDispositivoComplexidadeAtualDetail extends React.Compon
                       </Col>
                       <Col md="9">
                         <dd>{profissionalDispositivoComplexidadeAtualEntity.idProfissionalDispositivoComplexidade}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{profissionalDispositivoComplexidadeAtualEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

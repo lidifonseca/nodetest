@@ -4,115 +4,49 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Atendimento from './atendimento.entity';
-import AtendimentoCepRecusado from './atendimento-cep-recusado.entity';
-import AtendimentoSorteioFeito from './atendimento-sorteio-feito.entity';
-import PadItemAtividade from './pad-item-atividade.entity';
-import PadItemCepRecusado from './pad-item-cep-recusado.entity';
-import PadItemResultado from './pad-item-resultado.entity';
-import PadItemSorteioFeito from './pad-item-sorteio-feito.entity';
-import Pad from './pad.entity';
-import Especialidade from './especialidade.entity';
-import Periodicidade from './periodicidade.entity';
-import Periodo from './periodo.entity';
-
 /**
  * A PadItem.
  */
-@Entity('pad_item')
+@Entity('tb_pad_item')
 export default class PadItem extends BaseEntity {
-  @Column({ name: 'id_pedido' })
+  @Column({ name: 'ID_PEDIDO' })
   idPedido: string;
 
-  @Column({ type: 'date', name: 'data_inicio' })
+  @Column({ type: 'date', name: 'DATA_INICIO' })
   dataInicio: any;
 
-  @Column({ type: 'date', name: 'data_fim' })
+  @Column({ type: 'date', name: 'DATA_FIM' })
   dataFim: any;
 
-  @Column({ type: 'integer', name: 'qtd_sessoes' })
+  @Column({ type: 'integer', name: 'QTD_SESSOES' })
   qtdSessoes: number;
 
-  @Column({ type: 'blob', name: 'observacao' })
-  observacao: any;
+  @Column({ name: 'OBSERVACAO' })
+  observacao: string;
 
-  @Column({ type: 'integer', name: 'sub' })
+  @Column({ type: 'integer', name: 'SUB' })
   sub: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_pad_item_incompleto' })
+  @Column({ type: 'timestamp', name: 'DATA_PAD_ITEM_INCOMPLETO' })
   dataPadItemIncompleto: any;
 
-  @Column({ type: 'timestamp', name: 'data_pad_item_completo' })
+  @Column({ type: 'timestamp', name: 'DATA_PAD_ITEM_COMPLETO' })
   dataPadItemCompleto: any;
 
-  @Column({ name: 'num_ghc', length: 40 })
+  @Column({ name: 'NUM_GHC', length: 40 })
   numGhc: string;
 
-  @Column({ type: 'integer', name: 'cid_x_pta_novo' })
+  @Column({ type: 'integer', name: 'CID_X_PTA_NOVO' })
   cidXPtaNovo: number;
 
-  @Column({ type: 'integer', name: 'categoria_id' })
+  @Column({ type: 'integer', name: 'CATEGORIA_ID' })
   categoriaId: number;
 
-  @Column({ type: 'double', name: 'score' })
+  @Column({ type: 'double', name: 'SCORE' })
   score: number;
-
-  @OneToMany(
-    type => Atendimento,
-    other => other.idPadItem
-  )
-  atendimentos: Atendimento[];
-
-  @OneToMany(
-    type => AtendimentoCepRecusado,
-    other => other.idPadItem
-  )
-  atendimentoCepRecusados: AtendimentoCepRecusado[];
-
-  @OneToMany(
-    type => AtendimentoSorteioFeito,
-    other => other.idPadItem
-  )
-  atendimentoSorteioFeitos: AtendimentoSorteioFeito[];
-
-  @OneToMany(
-    type => PadItemAtividade,
-    other => other.idPadItem
-  )
-  padItemAtividades: PadItemAtividade[];
-
-  @OneToMany(
-    type => PadItemCepRecusado,
-    other => other.idPadItem
-  )
-  padItemCepRecusados: PadItemCepRecusado[];
-
-  @OneToMany(
-    type => PadItemResultado,
-    other => other.idPadItem
-  )
-  padItemResultados: PadItemResultado[];
-
-  @OneToMany(
-    type => PadItemSorteioFeito,
-    other => other.idPadItem
-  )
-  padItemSorteioFeitos: PadItemSorteioFeito[];
-
-  @ManyToOne(type => Pad)
-  idPad: Pad;
-
-  @ManyToOne(type => Especialidade)
-  idEspecialidade: Especialidade;
-
-  @ManyToOne(type => Periodicidade)
-  idPeriodicidade: Periodicidade;
-
-  @ManyToOne(type => Periodo)
-  idPeriodo: Periodo;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

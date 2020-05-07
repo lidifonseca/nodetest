@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './migracao.reducer';
+import { getEntity, IMigracaoBaseState, getMigracaoState } from './migracao.reducer';
 import { IMigracao } from 'app/shared/model/migracao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IMigracaoState {
+  fieldsBase: IMigracaoBaseState;
+}
+
 export interface IMigracaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class MigracaoDetail extends React.Component<IMigracaoDetailProps> {
+export class MigracaoDetail extends React.Component<IMigracaoDetailProps, IMigracaoState> {
   constructor(props: Readonly<IMigracaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getMigracaoState(this.props.location)
     };
   }
 

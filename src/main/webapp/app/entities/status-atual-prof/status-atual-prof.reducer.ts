@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IStatusAtualProf, defaultValue } from 'app/shared/model/status-atual-prof.model';
 
 export const ACTION_TYPES = {
+  FETCH_STATUSATUALPROF_LIST_EXPORT: 'statusAtualProf/FETCH_STATUSATUALPROF_LIST_EXPORT',
   FETCH_STATUSATUALPROF_LIST: 'statusAtualProf/FETCH_STATUSATUALPROF_LIST',
   FETCH_STATUSATUALPROF: 'statusAtualProf/FETCH_STATUSATUALPROF',
   CREATE_STATUSATUALPROF: 'statusAtualProf/CREATE_STATUSATUALPROF',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type StatusAtualProfState = Readonly<typeof initialState>;
 
+export interface IStatusAtualProfBaseState {
+  baseFilters: any;
+  statusAtualProf: any;
+  styleLabel: any;
+}
+
+export interface IStatusAtualProfUpdateState {
+  fieldsBase: IStatusAtualProfBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: StatusAtualProfState = initialState, action): StatusAtualProfState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_STATUSATUALPROF_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATUALPROF_LIST):
     case REQUEST(ACTION_TYPES.FETCH_STATUSATUALPROF):
       return {
@@ -51,6 +64,7 @@ export default (state: StatusAtualProfState = initialState, action): StatusAtual
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_STATUSATUALPROF_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATUALPROF_LIST):
     case FAILURE(ACTION_TYPES.FETCH_STATUSATUALPROF):
     case FAILURE(ACTION_TYPES.CREATE_STATUSATUALPROF):
@@ -108,30 +122,19 @@ const apiUrl = 'api/status-atual-profs';
 export type ICrudGetAllActionStatusAtualProf<T> = (
   statusAtualProf?: any,
   styleLabel?: any,
-  profissionalStatusAtual?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionStatusAtualProf<IStatusAtualProf> = (
-  statusAtualProf,
-  styleLabel,
-  profissionalStatusAtual,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionStatusAtualProf<IStatusAtualProf> = (statusAtualProf, styleLabel, page, size, sort) => {
   const statusAtualProfRequest = statusAtualProf ? `statusAtualProf.contains=${statusAtualProf}&` : '';
   const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
-  const profissionalStatusAtualRequest = profissionalStatusAtual ? `profissionalStatusAtual.equals=${profissionalStatusAtual}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_STATUSATUALPROF_LIST,
-    payload: axios.get<IStatusAtualProf>(
-      `${requestUrl}${statusAtualProfRequest}${styleLabelRequest}${profissionalStatusAtualRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IStatusAtualProf>(`${requestUrl}${statusAtualProfRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IStatusAtualProf> = id => {
@@ -139,6 +142,17 @@ export const getEntity: ICrudGetAction<IStatusAtualProf> = id => {
   return {
     type: ACTION_TYPES.FETCH_STATUSATUALPROF,
     payload: axios.get<IStatusAtualProf>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionStatusAtualProf<IStatusAtualProf> = (statusAtualProf, styleLabel, page, size, sort) => {
+  const statusAtualProfRequest = statusAtualProf ? `statusAtualProf.contains=${statusAtualProf}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_STATUSATUALPROF_LIST,
+    payload: axios.get<IStatusAtualProf>(`${requestUrl}${statusAtualProfRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -177,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IStatusAtualProf> = id => async dis
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getStatusAtualProfState = (location): IStatusAtualProfBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const statusAtualProf = url.searchParams.get('statusAtualProf') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+
+  return {
+    baseFilters,
+    statusAtualProf,
+    styleLabel
+  };
+};

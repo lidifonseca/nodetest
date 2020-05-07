@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-motivo-internacao.reducer';
+import { getEntity, IPacienteMotivoInternacaoBaseState, getPacienteMotivoInternacaoState } from './paciente-motivo-internacao.reducer';
 import { IPacienteMotivoInternacao } from 'app/shared/model/paciente-motivo-internacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteMotivoInternacaoState {
+  fieldsBase: IPacienteMotivoInternacaoBaseState;
+}
+
 export interface IPacienteMotivoInternacaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteMotivoInternacaoDetail extends React.Component<IPacienteMotivoInternacaoDetailProps> {
+export class PacienteMotivoInternacaoDetail extends React.Component<IPacienteMotivoInternacaoDetailProps, IPacienteMotivoInternacaoState> {
   constructor(props: Readonly<IPacienteMotivoInternacaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteMotivoInternacaoState(this.props.location)
     };
   }
 
@@ -79,21 +84,6 @@ export class PacienteMotivoInternacaoDetail extends React.Component<IPacienteMot
                       </Col>
                       <Col md="9">
                         <dd>{pacienteMotivoInternacaoEntity.idMotivoInternacao}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.pacienteMotivoInternacao.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteMotivoInternacaoEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

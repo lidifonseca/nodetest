@@ -4,11 +4,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import {
+  IProntuarioMotivoManifestacaoUpdateState,
   getEntity,
   getProntuarioMotivoManifestacaoState,
   IProntuarioMotivoManifestacaoBaseState,
@@ -23,17 +24,21 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProntuarioMotivoManifestacaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IProntuarioMotivoManifestacaoUpdateState {
-  fieldsBase: IProntuarioMotivoManifestacaoBaseState;
-  isNew: boolean;
-}
-
 export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
   IProntuarioMotivoManifestacaoUpdateProps,
   IProntuarioMotivoManifestacaoUpdateState
 > {
+  sugestaoFileInput: React.RefObject<HTMLInputElement>;
+
+  informacaoAdicionalFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IProntuarioMotivoManifestacaoUpdateProps>) {
     super(props);
+
+    this.sugestaoFileInput = React.createRef();
+
+    this.informacaoAdicionalFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getProntuarioMotivoManifestacaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -53,14 +58,34 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
     }
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idProntuario'] ? '&idProntuario=' + fieldsBase['idProntuario'] : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['idMotivo'] ? '&idMotivo=' + fieldsBase['idMotivo'] : '') +
+      (fieldsBase['idMotivoFilho'] ? '&idMotivoFilho=' + fieldsBase['idMotivoFilho'] : '') +
+      (fieldsBase['idManifestacao'] ? '&idManifestacao=' + fieldsBase['idManifestacao'] : '') +
+      (fieldsBase['idManifestacaoFilho'] ? '&idManifestacaoFilho=' + fieldsBase['idManifestacaoFilho'] : '') +
+      (fieldsBase['sugestao'] ? '&sugestao=' + fieldsBase['sugestao'] : '') +
+      (fieldsBase['informacaoAdicional'] ? '&informacaoAdicional=' + fieldsBase['informacaoAdicional'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { prontuarioMotivoManifestacaoEntity } = this.props;
@@ -78,7 +103,7 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/prontuario-motivo-manifestacao');
+    this.props.history.push('/prontuario-motivo-manifestacao?' + this.getFiltersURL());
   };
 
   render() {
@@ -86,7 +111,7 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
     const { isNew } = this.state;
 
     const { sugestao, informacaoAdicional } = prontuarioMotivoManifestacaoEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -124,7 +149,7 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/prontuario-motivo-manifestacao"
+                  to={'/prontuario-motivo-manifestacao?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -167,7 +192,7 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idProntuario ? (
+                        {baseFilters !== 'idProntuario' ? (
                           <Col md="idProntuario">
                             <AvGroup>
                               <Row>
@@ -188,10 +213,10 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase.idProntuario} />
+                          <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idPaciente ? (
+                        {baseFilters !== 'idPaciente' ? (
                           <Col md="idPaciente">
                             <AvGroup>
                               <Row>
@@ -212,10 +237,10 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase.idPaciente} />
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idMotivo ? (
+                        {baseFilters !== 'idMotivo' ? (
                           <Col md="idMotivo">
                             <AvGroup>
                               <Row>
@@ -236,10 +261,10 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idMotivo" value={this.state.fieldsBase.idMotivo} />
+                          <AvInput type="hidden" name="idMotivo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idMotivoFilho ? (
+                        {baseFilters !== 'idMotivoFilho' ? (
                           <Col md="idMotivoFilho">
                             <AvGroup>
                               <Row>
@@ -262,10 +287,10 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idMotivoFilho" value={this.state.fieldsBase.idMotivoFilho} />
+                          <AvInput type="hidden" name="idMotivoFilho" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idManifestacao ? (
+                        {baseFilters !== 'idManifestacao' ? (
                           <Col md="idManifestacao">
                             <AvGroup>
                               <Row>
@@ -288,10 +313,10 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idManifestacao" value={this.state.fieldsBase.idManifestacao} />
+                          <AvInput type="hidden" name="idManifestacao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idManifestacaoFilho ? (
+                        {baseFilters !== 'idManifestacaoFilho' ? (
                           <Col md="idManifestacaoFilho">
                             <AvGroup>
                               <Row>
@@ -318,10 +343,10 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idManifestacaoFilho" value={this.state.fieldsBase.idManifestacaoFilho} />
+                          <AvInput type="hidden" name="idManifestacaoFilho" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.sugestao ? (
+                        {baseFilters !== 'sugestao' ? (
                           <Col md="sugestao">
                             <AvGroup>
                               <Row>
@@ -337,34 +362,10 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="sugestao" value={this.state.fieldsBase.sugestao} />
+                          <AvInput type="hidden" name="sugestao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idUsuario ? (
-                          <Col md="idUsuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idUsuarioLabel" for="prontuario-motivo-manifestacao-idUsuario">
-                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idUsuario">Id Usuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField
-                                    id="prontuario-motivo-manifestacao-idUsuario"
-                                    type="string"
-                                    className="form-control"
-                                    name="idUsuario"
-                                  />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
-                        )}
-
-                        {!this.state.fieldsBase.informacaoAdicional ? (
+                        {baseFilters !== 'informacaoAdicional' ? (
                           <Col md="informacaoAdicional">
                             <AvGroup>
                               <Row>
@@ -390,7 +391,7 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="informacaoAdicional" value={this.state.fieldsBase.informacaoAdicional} />
+                          <AvInput type="hidden" name="informacaoAdicional" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

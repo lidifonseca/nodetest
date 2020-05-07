@@ -124,10 +124,6 @@
             "fieldValidateRulesMaxlength": "20"
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer"
-        },
-        {
             "fieldName": "score",
             "fieldType": "Double"
         },
@@ -137,7 +133,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503002300",
+    "changelogDate": "20200507115600",
     "entityTableName": "pad_item_meta",
     "dto": "mapstruct",
     "pagination": "pagination",

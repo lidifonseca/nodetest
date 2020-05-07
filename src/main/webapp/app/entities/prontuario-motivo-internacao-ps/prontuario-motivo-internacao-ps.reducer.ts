@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProntuarioMotivoInternacaoPs, defaultValue } from 'app/shared/model/prontuario-motivo-internacao-ps.model';
 
 export const ACTION_TYPES = {
+  FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST_EXPORT: 'prontuarioMotivoInternacaoPs/FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST_EXPORT',
   FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST: 'prontuarioMotivoInternacaoPs/FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST',
   FETCH_PRONTUARIOMOTIVOINTERNACAOPS: 'prontuarioMotivoInternacaoPs/FETCH_PRONTUARIOMOTIVOINTERNACAOPS',
   CREATE_PRONTUARIOMOTIVOINTERNACAOPS: 'prontuarioMotivoInternacaoPs/CREATE_PRONTUARIOMOTIVOINTERNACAOPS',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type ProntuarioMotivoInternacaoPsState = Readonly<typeof initialState>;
 
+export interface IProntuarioMotivoInternacaoPsBaseState {
+  baseFilters: any;
+  idProntuario: any;
+  idPaciente: any;
+  idMotivo: any;
+}
+
+export interface IProntuarioMotivoInternacaoPsUpdateState {
+  fieldsBase: IProntuarioMotivoInternacaoPsBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProntuarioMotivoInternacaoPsState = initialState, action): ProntuarioMotivoInternacaoPsState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS):
       return {
@@ -51,6 +65,7 @@ export default (state: ProntuarioMotivoInternacaoPsState = initialState, action)
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS):
     case FAILURE(ACTION_TYPES.CREATE_PRONTUARIOMOTIVOINTERNACAOPS):
@@ -109,7 +124,6 @@ export type ICrudGetAllActionProntuarioMotivoInternacaoPs<T> = (
   idProntuario?: any,
   idPaciente?: any,
   idMotivo?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -119,7 +133,6 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoInternacaoPs<IProntua
   idProntuario,
   idPaciente,
   idMotivo,
-  idUsuario,
   page,
   size,
   sort
@@ -127,13 +140,12 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoInternacaoPs<IProntua
   const idProntuarioRequest = idProntuario ? `idProntuario.contains=${idProntuario}&` : '';
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const idMotivoRequest = idMotivo ? `idMotivo.contains=${idMotivo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST,
     payload: axios.get<IProntuarioMotivoInternacaoPs>(
-      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -142,6 +154,27 @@ export const getEntity: ICrudGetAction<IProntuarioMotivoInternacaoPs> = id => {
   return {
     type: ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS,
     payload: axios.get<IProntuarioMotivoInternacaoPs>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionProntuarioMotivoInternacaoPs<IProntuarioMotivoInternacaoPs> = (
+  idProntuario,
+  idPaciente,
+  idMotivo,
+  page,
+  size,
+  sort
+) => {
+  const idProntuarioRequest = idProntuario ? `idProntuario.contains=${idProntuario}&` : '';
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const idMotivoRequest = idMotivo ? `idMotivo.contains=${idMotivo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PRONTUARIOMOTIVOINTERNACAOPS_LIST,
+    payload: axios.get<IProntuarioMotivoInternacaoPs>(
+      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -180,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IProntuarioMotivoInternacaoPs> = id
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProntuarioMotivoInternacaoPsState = (location): IProntuarioMotivoInternacaoPsBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProntuario = url.searchParams.get('idProntuario') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idMotivo = url.searchParams.get('idMotivo') || '';
+
+  return {
+    baseFilters,
+    idProntuario,
+    idPaciente,
+    idMotivo
+  };
+};

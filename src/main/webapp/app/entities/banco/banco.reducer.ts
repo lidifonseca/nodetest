@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IBanco, defaultValue } from 'app/shared/model/banco.model';
 
 export const ACTION_TYPES = {
+  FETCH_BANCO_LIST_EXPORT: 'banco/FETCH_BANCO_LIST_EXPORT',
   FETCH_BANCO_LIST: 'banco/FETCH_BANCO_LIST',
   FETCH_BANCO: 'banco/FETCH_BANCO',
   CREATE_BANCO: 'banco/CREATE_BANCO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type BancoState = Readonly<typeof initialState>;
 
+export interface IBancoBaseState {
+  baseFilters: any;
+  codBanco: any;
+  banco: any;
+}
+
+export interface IBancoUpdateState {
+  fieldsBase: IBancoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: BancoState = initialState, action): BancoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_BANCO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_BANCO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_BANCO):
       return {
@@ -51,6 +64,7 @@ export default (state: BancoState = initialState, action): BancoState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_BANCO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_BANCO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_BANCO):
     case FAILURE(ACTION_TYPES.CREATE_BANCO):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IBanco> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionBanco<IBanco> = (codBanco, banco, page, size, sort) => {
+  const codBancoRequest = codBanco ? `codBanco.contains=${codBanco}&` : '';
+  const bancoRequest = banco ? `banco.contains=${banco}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_BANCO_LIST,
+    payload: axios.get<IBanco>(`${requestUrl}${codBancoRequest}${bancoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IBanco> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IBanco> = id => async dispatch => {
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getBancoState = (location): IBancoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const codBanco = url.searchParams.get('codBanco') || '';
+  const banco = url.searchParams.get('banco') || '';
+
+  return {
+    baseFilters,
+    codBanco,
+    banco
+  };
+};

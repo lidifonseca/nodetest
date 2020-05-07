@@ -22,23 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atendimento-aceite.reducer';
+import { getAtendimentoAceiteState, IAtendimentoAceiteBaseState, getEntities } from './atendimento-aceite.reducer';
 import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IProfissional } from 'app/shared/model/profissional.model';
-import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
-import { IAtendimento } from 'app/shared/model/atendimento.model';
-import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
-
 export interface IAtendimentoAceiteProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtendimentoAceiteBaseState {
-  msgPush: any;
-  idProfissional: any;
-  idAtendimento: any;
-}
 export interface IAtendimentoAceiteState extends IAtendimentoAceiteBaseState, IPaginationBaseState {}
 
 export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, IAtendimentoAceiteState> {
@@ -48,37 +38,18 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtendimentoAceiteState(this.props.location)
+      ...getAtendimentoAceiteState(this.props.location)
     };
   }
 
-  getAtendimentoAceiteState = (location): IAtendimentoAceiteBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const msgPush = url.searchParams.get('msgPush') || '';
-
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const idAtendimento = url.searchParams.get('idAtendimento') || '';
-
-    return {
-      msgPush,
-      idProfissional,
-      idAtendimento
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getProfissionals();
-    this.props.getAtendimentos();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        msgPush: '',
-        idProfissional: '',
-        idAtendimento: ''
+        msgPush: ''
       },
       () => this.sortEntities()
     );
@@ -111,7 +82,9 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -126,12 +99,6 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
       'msgPush=' +
       this.state.msgPush +
       '&' +
-      'idProfissional=' +
-      this.state.idProfissional +
-      '&' +
-      'idAtendimento=' +
-      this.state.idAtendimento +
-      '&' +
       ''
     );
   };
@@ -139,12 +106,12 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { msgPush, idProfissional, idAtendimento, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(msgPush, idProfissional, idAtendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { msgPush, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(msgPush, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { profissionals, atendimentos, atendimentoAceiteList, match, totalItems } = this.props;
+    const { atendimentoAceiteList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -162,7 +129,11 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atendimentoAceite.home.createLabel">Create a new Atendimento Aceite</Translate>
@@ -175,55 +146,17 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="msgPushLabel" for="atendimento-aceite-msgPush">
-                            <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="msgPush" id="atendimento-aceite-msgPush" value={this.state.msgPush} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="atendimento-aceite-idProfissional">
-                              <Translate contentKey="generadorApp.atendimentoAceite.idProfissional">Id Profissional</Translate>
+                      {this.state.baseFilters !== 'msgPush' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="msgPushLabel" for="atendimento-aceite-msgPush">
+                              <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
                             </Label>
-                            <AvInput id="atendimento-aceite-idProfissional" type="select" className="form-control" name="idProfissionalId">
-                              <option value="" key="0" />
-                              {profissionals
-                                ? profissionals.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="atendimento-aceite-idAtendimento">
-                              <Translate contentKey="generadorApp.atendimentoAceite.idAtendimento">Id Atendimento</Translate>
-                            </Label>
-                            <AvInput id="atendimento-aceite-idAtendimento" type="select" className="form-control" name="idAtendimentoId">
-                              <option value="" key="0" />
-                              {atendimentos
-                                ? atendimentos.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="msgPush" id="atendimento-aceite-msgPush" value={this.state.msgPush} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -251,18 +184,12 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('msgPush')}>
-                        <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.atendimentoAceite.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.atendimentoAceite.idAtendimento">Id Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'msgPush' ? (
+                        <th className="hand" onClick={this.sort('msgPush')}>
+                          <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -277,37 +204,33 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
                           </Button>
                         </td>
 
-                        <td>{atendimentoAceite.msgPush}</td>
-                        <td>
-                          {atendimentoAceite.idProfissional ? (
-                            <Link to={`profissional/${atendimentoAceite.idProfissional.id}`}>{atendimentoAceite.idProfissional.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {atendimentoAceite.idAtendimento ? (
-                            <Link to={`atendimento/${atendimentoAceite.idAtendimento.id}`}>{atendimentoAceite.idAtendimento.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'msgPush' ? <td>{atendimentoAceite.msgPush}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atendimentoAceite.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${atendimentoAceite.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoAceite.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoAceite.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoAceite.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoAceite.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -349,15 +272,11 @@ export class AtendimentoAceite extends React.Component<IAtendimentoAceiteProps, 
 }
 
 const mapStateToProps = ({ atendimentoAceite, ...storeState }: IRootState) => ({
-  profissionals: storeState.profissional.entities,
-  atendimentos: storeState.atendimento.entities,
   atendimentoAceiteList: atendimentoAceite.entities,
   totalItems: atendimentoAceite.totalItems
 });
 
 const mapDispatchToProps = {
-  getProfissionals,
-  getAtendimentos,
   getEntities
 };
 

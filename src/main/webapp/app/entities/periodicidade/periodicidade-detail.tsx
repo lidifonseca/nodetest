@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './periodicidade.reducer';
+import { getEntity, IPeriodicidadeBaseState, getPeriodicidadeState } from './periodicidade.reducer';
 import { IPeriodicidade } from 'app/shared/model/periodicidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPeriodicidadeState {
+  fieldsBase: IPeriodicidadeBaseState;
+}
+
 export interface IPeriodicidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PeriodicidadeDetail extends React.Component<IPeriodicidadeDetailProps> {
+export class PeriodicidadeDetail extends React.Component<IPeriodicidadeDetailProps, IPeriodicidadeState> {
   constructor(props: Readonly<IPeriodicidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPeriodicidadeState(this.props.location)
     };
   }
 

@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './alertas-resultados-esperados.reducer';
+import {
+  getEntity,
+  IAlertasResultadosEsperadosBaseState,
+  getAlertasResultadosEsperadosState
+} from './alertas-resultados-esperados.reducer';
 import { IAlertasResultadosEsperados } from 'app/shared/model/alertas-resultados-esperados.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAlertasResultadosEsperadosState {
+  fieldsBase: IAlertasResultadosEsperadosBaseState;
+}
+
 export interface IAlertasResultadosEsperadosDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AlertasResultadosEsperadosDetail extends React.Component<IAlertasResultadosEsperadosDetailProps> {
+export class AlertasResultadosEsperadosDetail extends React.Component<
+  IAlertasResultadosEsperadosDetailProps,
+  IAlertasResultadosEsperadosState
+> {
   constructor(props: Readonly<IAlertasResultadosEsperadosDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAlertasResultadosEsperadosState(this.props.location)
     };
   }
 
@@ -122,19 +134,6 @@ export class AlertasResultadosEsperadosDetail extends React.Component<IAlertasRe
                       </Col>
                       <Col md="9">
                         <dd>{alertasResultadosEsperadosEntity.valor}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.alertasResultadosEsperados.resultadosId">Resultados Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{alertasResultadosEsperadosEntity.resultadosId ? alertasResultadosEsperadosEntity.resultadosId.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

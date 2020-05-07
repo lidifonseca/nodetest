@@ -31,17 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './migracao.reducer';
+import { getMigracaoState, IMigracaoBaseState, getEntities } from './migracao.reducer';
 import { IMigracao } from 'app/shared/model/migracao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IMigracaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IMigracaoBaseState {
-  idPad: any;
-  dataHoraMigracao: any;
-}
 export interface IMigracaoState extends IMigracaoBaseState, IPaginationBaseState {}
 
 export class Migracao extends React.Component<IMigracaoProps, IMigracaoState> {
@@ -51,20 +47,9 @@ export class Migracao extends React.Component<IMigracaoProps, IMigracaoState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getMigracaoState(this.props.location)
+      ...getMigracaoState(this.props.location)
     };
   }
-
-  getMigracaoState = (location): IMigracaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPad = url.searchParams.get('idPad') || '';
-    const dataHoraMigracao = url.searchParams.get('dataHoraMigracao') || '';
-
-    return {
-      idPad,
-      dataHoraMigracao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -107,7 +92,9 @@ export class Migracao extends React.Component<IMigracaoProps, IMigracaoState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -155,7 +142,11 @@ export class Migracao extends React.Component<IMigracaoProps, IMigracaoState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.migracao.home.createLabel">Create a new Migracao</Translate>
@@ -168,29 +159,34 @@ export class Migracao extends React.Component<IMigracaoProps, IMigracaoState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPadLabel" for="migracao-idPad">
-                            <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPad" id="migracao-idPad" value={this.state.idPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataHoraMigracaoLabel" for="migracao-dataHoraMigracao">
-                            <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
-                          </Label>
-                          <AvInput
-                            id="migracao-dataHoraMigracao"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataHoraMigracao"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataHoraMigracao ? convertDateTimeFromServer(this.state.dataHoraMigracao) : null}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPadLabel" for="migracao-idPad">
+                              <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPad" id="migracao-idPad" value={this.state.idPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataHoraMigracao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataHoraMigracaoLabel" for="migracao-dataHoraMigracao">
+                              <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
+                            </Label>
+                            <AvInput
+                              id="migracao-dataHoraMigracao"
+                              type="datetime-local"
+                              className="form-control"
+                              name="dataHoraMigracao"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.dataHoraMigracao ? convertDateTimeFromServer(this.state.dataHoraMigracao) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -218,14 +214,18 @@ export class Migracao extends React.Component<IMigracaoProps, IMigracaoState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPad')}>
-                        <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataHoraMigracao')}>
-                        <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPad' ? (
+                        <th className="hand" onClick={this.sort('idPad')}>
+                          <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataHoraMigracao' ? (
+                        <th className="hand" onClick={this.sort('dataHoraMigracao')}>
+                          <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -240,27 +240,29 @@ export class Migracao extends React.Component<IMigracaoProps, IMigracaoState> {
                           </Button>
                         </td>
 
-                        <td>{migracao.idPad}</td>
+                        {this.state.baseFilters !== 'idPad' ? <td>{migracao.idPad}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={migracao.dataHoraMigracao} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataHoraMigracao' ? (
+                          <td>
+                            <TextFormat type="date" value={migracao.dataHoraMigracao} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${migracao.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${migracao.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${migracao.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${migracao.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${migracao.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${migracao.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-alerta.reducer';
+import { getEntity, IPadItemAlertaBaseState, getPadItemAlertaState } from './pad-item-alerta.reducer';
 import { IPadItemAlerta } from 'app/shared/model/pad-item-alerta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemAlertaState {
+  fieldsBase: IPadItemAlertaBaseState;
+}
+
 export interface IPadItemAlertaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemAlertaDetail extends React.Component<IPadItemAlertaDetailProps> {
+export class PadItemAlertaDetail extends React.Component<IPadItemAlertaDetailProps, IPadItemAlertaState> {
   constructor(props: Readonly<IPadItemAlertaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemAlertaState(this.props.location)
     };
   }
 

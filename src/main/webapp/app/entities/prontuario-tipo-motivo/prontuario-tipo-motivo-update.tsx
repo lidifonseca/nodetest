@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './prontuario-tipo-motivo.reducer';
+import {
+  IProntuarioTipoMotivoUpdateState,
+  getEntity,
+  getProntuarioTipoMotivoState,
+  IProntuarioTipoMotivoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './prontuario-tipo-motivo.reducer';
 import { IProntuarioTipoMotivo } from 'app/shared/model/prontuario-tipo-motivo.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProntuarioTipoMotivoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IProntuarioTipoMotivoUpdateState {
-  isNew: boolean;
-}
-
 export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoMotivoUpdateProps, IProntuarioTipoMotivoUpdateState> {
   constructor(props: Readonly<IProntuarioTipoMotivoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProntuarioTipoMotivoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,24 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['nome'] ? '&nome=' + fieldsBase['nome'] : '') +
+      (fieldsBase['idPai'] ? '&idPai=' + fieldsBase['idPai'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['classe'] ? '&classe=' + fieldsBase['classe'] : '') +
+      (fieldsBase['name'] ? '&name=' + fieldsBase['name'] : '') +
+      (fieldsBase['idTipoProntuario'] ? '&idTipoProntuario=' + fieldsBase['idTipoProntuario'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { prontuarioTipoMotivoEntity } = this.props;
@@ -57,13 +81,14 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
   };
 
   handleClose = () => {
-    this.props.history.push('/prontuario-tipo-motivo');
+    this.props.history.push('/prontuario-tipo-motivo?' + this.getFiltersURL());
   };
 
   render() {
     const { prontuarioTipoMotivoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -101,7 +126,7 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/prontuario-tipo-motivo"
+                  to={'/prontuario-tipo-motivo?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -120,7 +145,7 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -136,123 +161,129 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-motivo-nome">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-motivo-nome">
-                                <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="prontuario-tipo-motivo-nome"
-                                type="text"
-                                name="nome"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-motivo-idPai">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-motivo-idPai">
-                                <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="prontuario-tipo-motivo-idPai" type="string" className="form-control" name="idPai" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-motivo-ativo">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-motivo-ativo">
-                                <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="prontuario-tipo-motivo-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'classe' ? (
+                          <Col md="classe">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="classeLabel" for="prontuario-tipo-motivo-classe">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-classe" type="text" name="classe" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="classe" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="classeLabel" for="prontuario-tipo-motivo-classe">
-                                <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="prontuario-tipo-motivo-classe"
-                                type="text"
-                                name="classe"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'name' ? (
+                          <Col md="name">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nameLabel" for="prontuario-tipo-motivo-name">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-name" type="text" name="name" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="name" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nameLabel" for="prontuario-tipo-motivo-name">
-                                <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="prontuario-tipo-motivo-name"
-                                type="text"
-                                name="name"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idTipoProntuarioLabel" for="prontuario-tipo-motivo-idTipoProntuario">
-                                <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">Id Tipo Prontuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="prontuario-tipo-motivo-idTipoProntuario"
-                                type="string"
-                                className="form-control"
-                                name="idTipoProntuario"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'idTipoProntuario' ? (
+                          <Col md="idTipoProntuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idTipoProntuarioLabel" for="prontuario-tipo-motivo-idTipoProntuario">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">
+                                      Id Tipo Prontuario
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-tipo-motivo-idTipoProntuario"
+                                    type="string"
+                                    className="form-control"
+                                    name="idTipoProntuario"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idTipoProntuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

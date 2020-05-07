@@ -79,7 +79,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
         idManifestacao: '',
         idManifestacaoFilho: '',
         sugestao: '',
-        idUsuario: '',
         informacaoAdicional: ''
       },
       () => this.sortEntities()
@@ -146,9 +145,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
       'sugestao=' +
       this.state.sugestao +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'informacaoAdicional=' +
       this.state.informacaoAdicional +
       '&' +
@@ -167,7 +163,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
       idManifestacao,
       idManifestacaoFilho,
       sugestao,
-      idUsuario,
       informacaoAdicional,
       activePage,
       itemsPerPage,
@@ -182,7 +177,6 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
       idManifestacao,
       idManifestacaoFilho,
       sugestao,
-      idUsuario,
       informacaoAdicional,
       activePage - 1,
       itemsPerPage,
@@ -190,13 +184,14 @@ export class ProntuarioMotivoManifestacao extends React.Component<IProntuarioMot
     );
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();

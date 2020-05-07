@@ -3,15 +3,15 @@
     "tempoExperiencia": {
       "home": {
         "title": "Tempo Experiencias",
-        "createLabel": "Criar novo Tempo Experiencia",
-        "createOrEditLabel": "Criar ou editar Tempo Experiencia",
-        "notFound": "Nenhum Tempo Experiencia encontrado"
+        "createLabel": "Create a new Tempo Experiencia",
+        "createOrEditLabel": "Create or edit a Tempo Experiencia",
+        "notFound": "No Tempo Experiencias found"
       },
-      "created": "Um novo Tempo Experiencia foi criado com o identificador {{ param }}",
-      "updated": "Um Tempo Experiencia foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tempo Experiencia foi excluído com o identificador {{ param }}",
+      "created": "A new Tempo Experiencia is created with identifier {{ param }}",
+      "updated": "A Tempo Experiencia is updated with identifier {{ param }}",
+      "deleted": "A Tempo Experiencia is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tempo Experiencia {{ id }}?"
+        "question": "Are you sure you want to delete Tempo Experiencia {{ id }}?"
       },
       "detail": {
         "title": "Tempo Experiencia"

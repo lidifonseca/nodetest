@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IOperadora, defaultValue } from 'app/shared/model/operadora.model';
 
 export const ACTION_TYPES = {
+  FETCH_OPERADORA_LIST_EXPORT: 'operadora/FETCH_OPERADORA_LIST_EXPORT',
   FETCH_OPERADORA_LIST: 'operadora/FETCH_OPERADORA_LIST',
   FETCH_OPERADORA: 'operadora/FETCH_OPERADORA',
   CREATE_OPERADORA: 'operadora/CREATE_OPERADORA',
@@ -30,10 +31,39 @@ const initialState = {
 
 export type OperadoraState = Readonly<typeof initialState>;
 
+export interface IOperadoraBaseState {
+  baseFilters: any;
+  nomeFantasia: any;
+  razaoSocial: any;
+  cnpj: any;
+  ie: any;
+  site: any;
+  ativo: any;
+  endereco: any;
+  contatoCentralAtendimento: any;
+  emailCentralAtendimento: any;
+  nomeContatoComercial: any;
+  contatoComercial: any;
+  emailComercial: any;
+  nomeContatoFinanceiro: any;
+  contatoFinanceiro: any;
+  emailFinanceiro: any;
+  unidade: any;
+  tipoOperadora: any;
+}
+
+export interface IOperadoraUpdateState {
+  fieldsBase: IOperadoraBaseState;
+  isNew: boolean;
+  unidadeId: string;
+  tipoOperadoraId: string;
+}
+
 // Reducer
 
 export default (state: OperadoraState = initialState, action): OperadoraState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_OPERADORA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_OPERADORA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_OPERADORA):
       return {
@@ -51,6 +81,7 @@ export default (state: OperadoraState = initialState, action): OperadoraState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_OPERADORA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_OPERADORA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_OPERADORA):
     case FAILURE(ACTION_TYPES.CREATE_OPERADORA):
@@ -121,9 +152,6 @@ export type ICrudGetAllActionOperadora<T> = (
   nomeContatoFinanceiro?: any,
   contatoFinanceiro?: any,
   emailFinanceiro?: any,
-  atendimento?: any,
-  especialidadeOperadora?: any,
-  pacienteOperadora?: any,
   unidade?: any,
   tipoOperadora?: any,
   page?: number,
@@ -147,9 +175,6 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   nomeContatoFinanceiro,
   contatoFinanceiro,
   emailFinanceiro,
-  atendimento,
-  especialidadeOperadora,
-  pacienteOperadora,
   unidade,
   tipoOperadora,
   page,
@@ -173,9 +198,6 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   const nomeContatoFinanceiroRequest = nomeContatoFinanceiro ? `nomeContatoFinanceiro.contains=${nomeContatoFinanceiro}&` : '';
   const contatoFinanceiroRequest = contatoFinanceiro ? `contatoFinanceiro.contains=${contatoFinanceiro}&` : '';
   const emailFinanceiroRequest = emailFinanceiro ? `emailFinanceiro.contains=${emailFinanceiro}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
-  const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
-  const pacienteOperadoraRequest = pacienteOperadora ? `pacienteOperadora.equals=${pacienteOperadora}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
   const tipoOperadoraRequest = tipoOperadora ? `tipoOperadora.equals=${tipoOperadora}&` : '';
 
@@ -183,7 +205,7 @@ export const getEntities: ICrudGetAllActionOperadora<IOperadora> = (
   return {
     type: ACTION_TYPES.FETCH_OPERADORA_LIST,
     payload: axios.get<IOperadora>(
-      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${pacienteOperadoraRequest}${unidadeRequest}${tipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${unidadeRequest}${tipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -192,6 +214,57 @@ export const getEntity: ICrudGetAction<IOperadora> = id => {
   return {
     type: ACTION_TYPES.FETCH_OPERADORA,
     payload: axios.get<IOperadora>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionOperadora<IOperadora> = (
+  nomeFantasia,
+  razaoSocial,
+  cnpj,
+  ie,
+  site,
+  ativo,
+  endereco,
+  contatoCentralAtendimento,
+  emailCentralAtendimento,
+  nomeContatoComercial,
+  contatoComercial,
+  emailComercial,
+  nomeContatoFinanceiro,
+  contatoFinanceiro,
+  emailFinanceiro,
+  unidade,
+  tipoOperadora,
+  page,
+  size,
+  sort
+) => {
+  const nomeFantasiaRequest = nomeFantasia ? `nomeFantasia.contains=${nomeFantasia}&` : '';
+  const razaoSocialRequest = razaoSocial ? `razaoSocial.contains=${razaoSocial}&` : '';
+  const cnpjRequest = cnpj ? `cnpj.contains=${cnpj}&` : '';
+  const ieRequest = ie ? `ie.contains=${ie}&` : '';
+  const siteRequest = site ? `site.contains=${site}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const enderecoRequest = endereco ? `endereco.contains=${endereco}&` : '';
+  const contatoCentralAtendimentoRequest = contatoCentralAtendimento
+    ? `contatoCentralAtendimento.contains=${contatoCentralAtendimento}&`
+    : '';
+  const emailCentralAtendimentoRequest = emailCentralAtendimento ? `emailCentralAtendimento.contains=${emailCentralAtendimento}&` : '';
+  const nomeContatoComercialRequest = nomeContatoComercial ? `nomeContatoComercial.contains=${nomeContatoComercial}&` : '';
+  const contatoComercialRequest = contatoComercial ? `contatoComercial.contains=${contatoComercial}&` : '';
+  const emailComercialRequest = emailComercial ? `emailComercial.contains=${emailComercial}&` : '';
+  const nomeContatoFinanceiroRequest = nomeContatoFinanceiro ? `nomeContatoFinanceiro.contains=${nomeContatoFinanceiro}&` : '';
+  const contatoFinanceiroRequest = contatoFinanceiro ? `contatoFinanceiro.contains=${contatoFinanceiro}&` : '';
+  const emailFinanceiroRequest = emailFinanceiro ? `emailFinanceiro.contains=${emailFinanceiro}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+  const tipoOperadoraRequest = tipoOperadora ? `tipoOperadora.equals=${tipoOperadora}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_OPERADORA_LIST,
+    payload: axios.get<IOperadora>(
+      `${requestUrl}${nomeFantasiaRequest}${razaoSocialRequest}${cnpjRequest}${ieRequest}${siteRequest}${ativoRequest}${enderecoRequest}${contatoCentralAtendimentoRequest}${emailCentralAtendimentoRequest}${nomeContatoComercialRequest}${contatoComercialRequest}${emailComercialRequest}${nomeContatoFinanceiroRequest}${contatoFinanceiroRequest}${emailFinanceiroRequest}${unidadeRequest}${tipoOperadoraRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -236,3 +309,47 @@ export const deleteEntity: ICrudDeleteAction<IOperadora> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getOperadoraState = (location): IOperadoraBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nomeFantasia = url.searchParams.get('nomeFantasia') || '';
+  const razaoSocial = url.searchParams.get('razaoSocial') || '';
+  const cnpj = url.searchParams.get('cnpj') || '';
+  const ie = url.searchParams.get('ie') || '';
+  const site = url.searchParams.get('site') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const endereco = url.searchParams.get('endereco') || '';
+  const contatoCentralAtendimento = url.searchParams.get('contatoCentralAtendimento') || '';
+  const emailCentralAtendimento = url.searchParams.get('emailCentralAtendimento') || '';
+  const nomeContatoComercial = url.searchParams.get('nomeContatoComercial') || '';
+  const contatoComercial = url.searchParams.get('contatoComercial') || '';
+  const emailComercial = url.searchParams.get('emailComercial') || '';
+  const nomeContatoFinanceiro = url.searchParams.get('nomeContatoFinanceiro') || '';
+  const contatoFinanceiro = url.searchParams.get('contatoFinanceiro') || '';
+  const emailFinanceiro = url.searchParams.get('emailFinanceiro') || '';
+
+  const unidade = url.searchParams.get('unidade') || '';
+  const tipoOperadora = url.searchParams.get('tipoOperadora') || '';
+
+  return {
+    baseFilters,
+    nomeFantasia,
+    razaoSocial,
+    cnpj,
+    ie,
+    site,
+    ativo,
+    endereco,
+    contatoCentralAtendimento,
+    emailCentralAtendimento,
+    nomeContatoComercial,
+    contatoComercial,
+    emailComercial,
+    nomeContatoFinanceiro,
+    contatoFinanceiro,
+    emailFinanceiro,
+    unidade,
+    tipoOperadora
+  };
+};

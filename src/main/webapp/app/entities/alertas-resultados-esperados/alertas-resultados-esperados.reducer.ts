@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAlertasResultadosEsperados, defaultValue } from 'app/shared/model/alertas-resultados-esperados.model';
 
 export const ACTION_TYPES = {
+  FETCH_ALERTASRESULTADOSESPERADOS_LIST_EXPORT: 'alertasResultadosEsperados/FETCH_ALERTASRESULTADOSESPERADOS_LIST_EXPORT',
   FETCH_ALERTASRESULTADOSESPERADOS_LIST: 'alertasResultadosEsperados/FETCH_ALERTASRESULTADOSESPERADOS_LIST',
   FETCH_ALERTASRESULTADOSESPERADOS: 'alertasResultadosEsperados/FETCH_ALERTASRESULTADOSESPERADOS',
   CREATE_ALERTASRESULTADOSESPERADOS: 'alertasResultadosEsperados/CREATE_ALERTASRESULTADOSESPERADOS',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type AlertasResultadosEsperadosState = Readonly<typeof initialState>;
 
+export interface IAlertasResultadosEsperadosBaseState {
+  baseFilters: any;
+  pontuacao: any;
+  alteracaoEsperada: any;
+  observacoes: any;
+  usuarioId: any;
+  valor: any;
+}
+
+export interface IAlertasResultadosEsperadosUpdateState {
+  fieldsBase: IAlertasResultadosEsperadosBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: AlertasResultadosEsperadosState = initialState, action): AlertasResultadosEsperadosState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS):
       return {
@@ -51,6 +67,7 @@ export default (state: AlertasResultadosEsperadosState = initialState, action): 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS):
     case FAILURE(ACTION_TYPES.CREATE_ALERTASRESULTADOSESPERADOS):
@@ -111,7 +128,6 @@ export type ICrudGetAllActionAlertasResultadosEsperados<T> = (
   observacoes?: any,
   usuarioId?: any,
   valor?: any,
-  resultadosId?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -123,7 +139,6 @@ export const getEntities: ICrudGetAllActionAlertasResultadosEsperados<IAlertasRe
   observacoes,
   usuarioId,
   valor,
-  resultadosId,
   page,
   size,
   sort
@@ -133,13 +148,12 @@ export const getEntities: ICrudGetAllActionAlertasResultadosEsperados<IAlertasRe
   const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
   const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
   const valorRequest = valor ? `valor.contains=${valor}&` : '';
-  const resultadosIdRequest = resultadosId ? `resultadosId.equals=${resultadosId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST,
     payload: axios.get<IAlertasResultadosEsperados>(
-      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${valorRequest}${resultadosIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${valorRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -151,10 +165,34 @@ export const getEntity: ICrudGetAction<IAlertasResultadosEsperados> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionAlertasResultadosEsperados<IAlertasResultadosEsperados> = (
+  pontuacao,
+  alteracaoEsperada,
+  observacoes,
+  usuarioId,
+  valor,
+  page,
+  size,
+  sort
+) => {
+  const pontuacaoRequest = pontuacao ? `pontuacao.contains=${pontuacao}&` : '';
+  const alteracaoEsperadaRequest = alteracaoEsperada ? `alteracaoEsperada.contains=${alteracaoEsperada}&` : '';
+  const observacoesRequest = observacoes ? `observacoes.contains=${observacoes}&` : '';
+  const usuarioIdRequest = usuarioId ? `usuarioId.contains=${usuarioId}&` : '';
+  const valorRequest = valor ? `valor.contains=${valor}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ALERTASRESULTADOSESPERADOS_LIST,
+    payload: axios.get<IAlertasResultadosEsperados>(
+      `${requestUrl}${pontuacaoRequest}${alteracaoEsperadaRequest}${observacoesRequest}${usuarioIdRequest}${valorRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IAlertasResultadosEsperados> = entity => async dispatch => {
   entity = {
-    ...entity,
-    resultadosId: entity.resultadosId === 'null' ? null : entity.resultadosId
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ALERTASRESULTADOSESPERADOS,
@@ -165,7 +203,7 @@ export const createEntity: ICrudPutAction<IAlertasResultadosEsperados> = entity 
 };
 
 export const updateEntity: ICrudPutAction<IAlertasResultadosEsperados> = entity => async dispatch => {
-  entity = { ...entity, resultadosId: entity.resultadosId === 'null' ? null : entity.resultadosId };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ALERTASRESULTADOSESPERADOS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -187,3 +225,22 @@ export const deleteEntity: ICrudDeleteAction<IAlertasResultadosEsperados> = id =
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAlertasResultadosEsperadosState = (location): IAlertasResultadosEsperadosBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const pontuacao = url.searchParams.get('pontuacao') || '';
+  const alteracaoEsperada = url.searchParams.get('alteracaoEsperada') || '';
+  const observacoes = url.searchParams.get('observacoes') || '';
+  const usuarioId = url.searchParams.get('usuarioId') || '';
+  const valor = url.searchParams.get('valor') || '';
+
+  return {
+    baseFilters,
+    pontuacao,
+    alteracaoEsperada,
+    observacoes,
+    usuarioId,
+    valor
+  };
+};

@@ -3,22 +3,21 @@
     "pacienteMotivoInternacao": {
       "home": {
         "title": "Paciente Motivo Internacaos",
-        "createLabel": "Criar novo Paciente Motivo Internacao",
-        "createOrEditLabel": "Criar ou editar Paciente Motivo Internacao",
-        "notFound": "Nenhum Paciente Motivo Internacao encontrado"
+        "createLabel": "Create a new Paciente Motivo Internacao",
+        "createOrEditLabel": "Create or edit a Paciente Motivo Internacao",
+        "notFound": "No Paciente Motivo Internacaos found"
       },
-      "created": "Um novo Paciente Motivo Internacao foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Motivo Internacao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Motivo Internacao foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Motivo Internacao is created with identifier {{ param }}",
+      "updated": "A Paciente Motivo Internacao is updated with identifier {{ param }}",
+      "deleted": "A Paciente Motivo Internacao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Motivo Internacao {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Motivo Internacao {{ id }}?"
       },
       "detail": {
         "title": "Paciente Motivo Internacao"
       },
       "idPaciente": "Id Paciente",
-      "idMotivoInternacao": "Id Motivo Internacao",
-      "idUsuario": "Id Usuario"
+      "idMotivoInternacao": "Id Motivo Internacao"
     }
   }
 }

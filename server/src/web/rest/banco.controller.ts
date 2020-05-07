@@ -68,7 +68,9 @@ export class BancoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() banco: Banco): Promise<Banco> {
+    console.info(banco);
     const created = await this.bancoService.save(banco);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Banco', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class BancoController {
   })
   async put(@Req() req: Request, @Body() banco: Banco): Promise<Banco> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Banco', banco.id);
+
     return await this.bancoService.update(banco);
   }
 

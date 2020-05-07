@@ -2,17 +2,14 @@ import { ObjectIdColumn, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export abstract class BaseEntity {
-  @ObjectIdColumn()
-  @PrimaryGeneratedColumn('uuid')
-  @ApiModelProperty({ example: '66ed8031-d40e-4f30-8ae4-8bf5c2ca87ff', description: 'Entity id' })
-  id?: string;
-
-  @Column({ nullable: true })
+  @PrimaryGeneratedColumn({ name: 'ID' })
+  id?: number;
+  @Column({ name: 'ID_USUARIO',  nullable: true })
   createdBy?: string;
-  @Column({ nullable: true })
+  @Column({ name: 'DATA_POST', nullable: true })
   createdDate?: Date;
-  @Column({ nullable: true })
+  @Column({ name: 'ID_LAST_USUARIO', nullable: true })
   lastModifiedBy?: string;
-  @Column({ nullable: true })
+  @Column({ name: 'LAST_DATA_MODIFICADO',  nullable: true })
   lastModifiedDate?: Date;
 }

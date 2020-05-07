@@ -22,25 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './perguntas-questionario.reducer';
+import { getPerguntasQuestionarioState, IPerguntasQuestionarioBaseState, getEntities } from './perguntas-questionario.reducer';
 import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
-import { getEntities as getSegmentosPerguntas } from 'app/entities/segmentos-perguntas/segmentos-perguntas.reducer';
-
 export interface IPerguntasQuestionarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPerguntasQuestionarioBaseState {
-  pergunta: any;
-  tipoResposta: any;
-  obrigatorio: any;
-  tipoCampo: any;
-  acoesRespostas: any;
-  respostas: any;
-  segmentosPerguntasId: any;
-}
 export interface IPerguntasQuestionarioState extends IPerguntasQuestionarioBaseState, IPaginationBaseState {}
 
 export class PerguntasQuestionario extends React.Component<IPerguntasQuestionarioProps, IPerguntasQuestionarioState> {
@@ -50,36 +38,12 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPerguntasQuestionarioState(this.props.location)
+      ...getPerguntasQuestionarioState(this.props.location)
     };
   }
 
-  getPerguntasQuestionarioState = (location): IPerguntasQuestionarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const pergunta = url.searchParams.get('pergunta') || '';
-    const tipoResposta = url.searchParams.get('tipoResposta') || '';
-    const obrigatorio = url.searchParams.get('obrigatorio') || '';
-    const tipoCampo = url.searchParams.get('tipoCampo') || '';
-
-    const acoesRespostas = url.searchParams.get('acoesRespostas') || '';
-    const respostas = url.searchParams.get('respostas') || '';
-    const segmentosPerguntasId = url.searchParams.get('segmentosPerguntasId') || '';
-
-    return {
-      pergunta,
-      tipoResposta,
-      obrigatorio,
-      tipoCampo,
-      acoesRespostas,
-      respostas,
-      segmentosPerguntasId
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getSegmentosPerguntas();
   }
 
   cancelCourse = () => {
@@ -88,10 +52,7 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
         pergunta: '',
         tipoResposta: '',
         obrigatorio: '',
-        tipoCampo: '',
-        acoesRespostas: '',
-        respostas: '',
-        segmentosPerguntasId: ''
+        tipoCampo: ''
       },
       () => this.sortEntities()
     );
@@ -124,7 +85,9 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -148,15 +111,6 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
       'tipoCampo=' +
       this.state.tipoCampo +
       '&' +
-      'acoesRespostas=' +
-      this.state.acoesRespostas +
-      '&' +
-      'respostas=' +
-      this.state.respostas +
-      '&' +
-      'segmentosPerguntasId=' +
-      this.state.segmentosPerguntasId +
-      '&' +
       ''
     );
   };
@@ -164,35 +118,12 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      pergunta,
-      tipoResposta,
-      obrigatorio,
-      tipoCampo,
-      acoesRespostas,
-      respostas,
-      segmentosPerguntasId,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      pergunta,
-      tipoResposta,
-      obrigatorio,
-      tipoCampo,
-      acoesRespostas,
-      respostas,
-      segmentosPerguntasId,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { pergunta, tipoResposta, obrigatorio, tipoCampo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(pergunta, tipoResposta, obrigatorio, tipoCampo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { segmentosPerguntas, perguntasQuestionarioList, match, totalItems } = this.props;
+    const { perguntasQuestionarioList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -210,7 +141,11 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.perguntasQuestionario.home.createLabel">Create a new Perguntas Questionario</Translate>
@@ -223,81 +158,62 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="perguntaLabel" for="perguntas-questionario-pergunta">
-                            <Translate contentKey="generadorApp.perguntasQuestionario.pergunta">Pergunta</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="pergunta" id="perguntas-questionario-pergunta" value={this.state.pergunta} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoRespostaLabel" for="perguntas-questionario-tipoResposta">
-                            <Translate contentKey="generadorApp.perguntasQuestionario.tipoResposta">Tipo Resposta</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="tipoResposta"
-                            id="perguntas-questionario-tipoResposta"
-                            value={this.state.tipoResposta}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="obrigatorioLabel" check>
-                            <AvInput id="perguntas-questionario-obrigatorio" type="checkbox" className="form-control" name="obrigatorio" />
-                            <Translate contentKey="generadorApp.perguntasQuestionario.obrigatorio">Obrigatorio</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoCampoLabel" for="perguntas-questionario-tipoCampo">
-                            <Translate contentKey="generadorApp.perguntasQuestionario.tipoCampo">Tipo Campo</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="tipoCampo" id="perguntas-questionario-tipoCampo" value={this.state.tipoCampo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="perguntas-questionario-segmentosPerguntasId">
-                              <Translate contentKey="generadorApp.perguntasQuestionario.segmentosPerguntasId">
-                                Segmentos Perguntas Id
-                              </Translate>
+                      {this.state.baseFilters !== 'pergunta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="perguntaLabel" for="perguntas-questionario-pergunta">
+                              <Translate contentKey="generadorApp.perguntasQuestionario.pergunta">Pergunta</Translate>
                             </Label>
+
+                            <AvInput type="text" name="pergunta" id="perguntas-questionario-pergunta" value={this.state.pergunta} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipoResposta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoRespostaLabel" for="perguntas-questionario-tipoResposta">
+                              <Translate contentKey="generadorApp.perguntasQuestionario.tipoResposta">Tipo Resposta</Translate>
+                            </Label>
+
                             <AvInput
-                              id="perguntas-questionario-segmentosPerguntasId"
-                              type="select"
-                              className="form-control"
-                              name="segmentosPerguntasIdId"
-                            >
-                              <option value="" key="0" />
-                              {segmentosPerguntas
-                                ? segmentosPerguntas.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                              type="text"
+                              name="tipoResposta"
+                              id="perguntas-questionario-tipoResposta"
+                              value={this.state.tipoResposta}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'obrigatorio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="obrigatorioLabel" check>
+                              <AvInput
+                                id="perguntas-questionario-obrigatorio"
+                                type="checkbox"
+                                className="form-control"
+                                name="obrigatorio"
+                              />
+                              <Translate contentKey="generadorApp.perguntasQuestionario.obrigatorio">Obrigatorio</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipoCampo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoCampoLabel" for="perguntas-questionario-tipoCampo">
+                              <Translate contentKey="generadorApp.perguntasQuestionario.tipoCampo">Tipo Campo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tipoCampo" id="perguntas-questionario-tipoCampo" value={this.state.tipoCampo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -325,26 +241,30 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('pergunta')}>
-                        <Translate contentKey="generadorApp.perguntasQuestionario.pergunta">Pergunta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipoResposta')}>
-                        <Translate contentKey="generadorApp.perguntasQuestionario.tipoResposta">Tipo Resposta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('obrigatorio')}>
-                        <Translate contentKey="generadorApp.perguntasQuestionario.obrigatorio">Obrigatorio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipoCampo')}>
-                        <Translate contentKey="generadorApp.perguntasQuestionario.tipoCampo">Tipo Campo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.perguntasQuestionario.segmentosPerguntasId">Segmentos Perguntas Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'pergunta' ? (
+                        <th className="hand" onClick={this.sort('pergunta')}>
+                          <Translate contentKey="generadorApp.perguntasQuestionario.pergunta">Pergunta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipoResposta' ? (
+                        <th className="hand" onClick={this.sort('tipoResposta')}>
+                          <Translate contentKey="generadorApp.perguntasQuestionario.tipoResposta">Tipo Resposta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'obrigatorio' ? (
+                        <th className="hand" onClick={this.sort('obrigatorio')}>
+                          <Translate contentKey="generadorApp.perguntasQuestionario.obrigatorio">Obrigatorio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipoCampo' ? (
+                        <th className="hand" onClick={this.sort('tipoCampo')}>
+                          <Translate contentKey="generadorApp.perguntasQuestionario.tipoCampo">Tipo Campo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -359,38 +279,44 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
                           </Button>
                         </td>
 
-                        <td>{perguntasQuestionario.pergunta}</td>
+                        {this.state.baseFilters !== 'pergunta' ? <td>{perguntasQuestionario.pergunta}</td> : null}
 
-                        <td>{perguntasQuestionario.tipoResposta}</td>
+                        {this.state.baseFilters !== 'tipoResposta' ? <td>{perguntasQuestionario.tipoResposta}</td> : null}
 
-                        <td>{perguntasQuestionario.obrigatorio ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'obrigatorio' ? <td>{perguntasQuestionario.obrigatorio ? 'true' : 'false'}</td> : null}
 
-                        <td>{perguntasQuestionario.tipoCampo}</td>
-                        <td>
-                          {perguntasQuestionario.segmentosPerguntasId ? (
-                            <Link to={`segmentos-perguntas/${perguntasQuestionario.segmentosPerguntasId.id}`}>
-                              {perguntasQuestionario.segmentosPerguntasId.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'tipoCampo' ? <td>{perguntasQuestionario.tipoCampo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${perguntasQuestionario.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${perguntasQuestionario.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${perguntasQuestionario.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${perguntasQuestionario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${perguntasQuestionario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${perguntasQuestionario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -432,13 +358,11 @@ export class PerguntasQuestionario extends React.Component<IPerguntasQuestionari
 }
 
 const mapStateToProps = ({ perguntasQuestionario, ...storeState }: IRootState) => ({
-  segmentosPerguntas: storeState.segmentosPerguntas.entities,
   perguntasQuestionarioList: perguntasQuestionario.entities,
   totalItems: perguntasQuestionario.totalItems
 });
 
 const mapDispatchToProps = {
-  getSegmentosPerguntas,
   getEntities
 };
 

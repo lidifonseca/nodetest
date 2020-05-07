@@ -3,23 +3,21 @@
     "cepbrBairro": {
       "home": {
         "title": "Cepbr Bairros",
-        "createLabel": "Criar novo Cepbr Bairro",
-        "createOrEditLabel": "Criar ou editar Cepbr Bairro",
-        "notFound": "Nenhum Cepbr Bairro encontrado"
+        "createLabel": "Create a new Cepbr Bairro",
+        "createOrEditLabel": "Create or edit a Cepbr Bairro",
+        "notFound": "No Cepbr Bairros found"
       },
-      "created": "Um novo Cepbr Bairro foi criado com o identificador {{ param }}",
-      "updated": "Um Cepbr Bairro foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Cepbr Bairro foi excluído com o identificador {{ param }}",
+      "created": "A new Cepbr Bairro is created with identifier {{ param }}",
+      "updated": "A Cepbr Bairro is updated with identifier {{ param }}",
+      "deleted": "A Cepbr Bairro is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Cepbr Bairro {{ id }}?"
+        "question": "Are you sure you want to delete Cepbr Bairro {{ id }}?"
       },
       "detail": {
         "title": "Cepbr Bairro"
       },
       "idBairro": "Id Bairro",
-      "bairro": "Bairro",
-      "cepbrEndereco": "Cepbr Endereco",
-      "idCidade": "Id Cidade"
+      "bairro": "Bairro"
     }
   }
 }

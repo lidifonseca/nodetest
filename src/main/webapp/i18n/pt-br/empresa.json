@@ -35,7 +35,7 @@
       "cidade": "Cidade",
       "uf": "Uf",
       "tipo": "Tipo",
-      "idCidade": "Id Cidade"
+      "help": {}
     }
   }
 }

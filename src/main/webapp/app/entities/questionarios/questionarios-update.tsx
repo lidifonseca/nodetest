@@ -28,6 +28,7 @@ export interface IQuestionariosUpdateProps extends StateProps, DispatchProps, Ro
 export class QuestionariosUpdate extends React.Component<IQuestionariosUpdateProps, IQuestionariosUpdateState> {
   constructor(props: Readonly<IQuestionariosUpdateProps>) {
     super(props);
+
     this.state = {
       fieldsBase: getQuestionariosState(this.props.location),
       pacienteId: '0',
@@ -63,7 +64,6 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
       (fieldsBase['etapaAtual'] ? '&etapaAtual=' + fieldsBase['etapaAtual'] : '') +
       (fieldsBase['finalizado'] ? '&finalizado=' + fieldsBase['finalizado'] : '') +
       (fieldsBase['ultimaPerguntaRespondida'] ? '&ultimaPerguntaRespondida=' + fieldsBase['ultimaPerguntaRespondida'] : '') +
-      (fieldsBase['respostasQuestionarios'] ? '&respostasQuestionarios=' + fieldsBase['respostasQuestionarios'] : '') +
       (fieldsBase['paciente'] ? '&paciente=' + fieldsBase['paciente'] : '') +
       ''
     );
@@ -190,7 +190,7 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataCadastro" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="dataCadastro" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
                         {baseFilters !== 'etapaAtual' ? (
@@ -209,7 +209,7 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="etapaAtual" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="etapaAtual" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
                         {baseFilters !== 'finalizado' ? (
@@ -226,7 +226,7 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="finalizado" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="finalizado" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
                         {baseFilters !== 'ultimaPerguntaRespondida' ? (
@@ -252,12 +252,7 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ultimaPerguntaRespondida" value={this.state[baseFilters]} />
-                        )}
-                        {baseFilters !== 'respostasQuestionarios' ? (
-                          <Col md="12"></Col>
-                        ) : (
-                          <AvInput type="hidden" name="respostasQuestionarios" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="ultimaPerguntaRespondida" value={this.state.fieldsBase[baseFilters]} />
                         )}
                         {baseFilters !== 'paciente' ? (
                           <Col md="12">
@@ -286,7 +281,7 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="paciente" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

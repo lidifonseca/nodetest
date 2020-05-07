@@ -33,11 +33,16 @@ const initialState = {
 export type ProfissionalStatusAtualNewState = Readonly<typeof initialState>;
 
 export interface IProfissionalStatusAtualNewBaseState {
+  baseFilters: any;
   idProfissional: any;
   idStatusAtualProf: any;
   obs: any;
   ativo: any;
-  idUsuario: any;
+}
+
+export interface IProfissionalStatusAtualNewUpdateState {
+  fieldsBase: IProfissionalStatusAtualNewBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -83,6 +88,7 @@ export default (state: ProfissionalStatusAtualNewState = initialState, action): 
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW):
+      action.payload.data.obs = action.payload.data.obs ? Buffer.from(action.payload.data.obs).toString() : action.payload.data.obs;
       return {
         ...state,
         loading: false,
@@ -104,13 +110,14 @@ export default (state: ProfissionalStatusAtualNewState = initialState, action): 
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -133,7 +140,6 @@ export type ICrudGetAllActionProfissionalStatusAtualNew<T> = (
   idStatusAtualProf?: any,
   obs?: any,
   ativo?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -144,7 +150,6 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtualNew<IProfissio
   idStatusAtualProf,
   obs,
   ativo,
-  idUsuario,
   page,
   size,
   sort
@@ -153,13 +158,12 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtualNew<IProfissio
   const idStatusAtualProfRequest = idStatusAtualProf ? `idStatusAtualProf.contains=${idStatusAtualProf}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST,
     payload: axios.get<IProfissionalStatusAtualNew>(
-      `${requestUrl}${idProfissionalRequest}${idStatusAtualProfRequest}${obsRequest}${ativoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idStatusAtualProfRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -176,7 +180,6 @@ export const getEntitiesExport: ICrudGetAllActionProfissionalStatusAtualNew<IPro
   idStatusAtualProf,
   obs,
   ativo,
-  idUsuario,
   page,
   size,
   sort
@@ -185,13 +188,12 @@ export const getEntitiesExport: ICrudGetAllActionProfissionalStatusAtualNew<IPro
   const idStatusAtualProfRequest = idStatusAtualProf ? `idStatusAtualProf.contains=${idStatusAtualProf}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUALNEW_LIST,
     payload: axios.get<IProfissionalStatusAtualNew>(
-      `${requestUrl}${idProfissionalRequest}${idStatusAtualProfRequest}${obsRequest}${ativoRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${idStatusAtualProfRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -228,12 +230,13 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalStatusAtualNew> = id =
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -243,17 +246,17 @@ export const reset = () => ({
 
 export const getProfissionalStatusAtualNewState = (location): IProfissionalStatusAtualNewBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idProfissional = url.searchParams.get('idProfissional') || '';
   const idStatusAtualProf = url.searchParams.get('idStatusAtualProf') || '';
   const obs = url.searchParams.get('obs') || '';
   const ativo = url.searchParams.get('ativo') || '';
-  const idUsuario = url.searchParams.get('idUsuario') || '';
 
   return {
+    baseFilters,
     idProfissional,
     idStatusAtualProf,
     obs,
-    ativo,
-    idUsuario
+    ativo
   };
 };

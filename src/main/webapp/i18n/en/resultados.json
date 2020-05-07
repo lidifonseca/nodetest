@@ -3,15 +3,15 @@
     "resultados": {
       "home": {
         "title": "Resultados",
-        "createLabel": "Criar novo Resultados",
-        "createOrEditLabel": "Criar ou editar Resultados",
-        "notFound": "Nenhum Resultados encontrado"
+        "createLabel": "Create a new Resultados",
+        "createOrEditLabel": "Create or edit a Resultados",
+        "notFound": "No Resultados found"
       },
-      "created": "Um novo Resultados foi criado com o identificador {{ param }}",
-      "updated": "Um Resultados foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Resultados foi excluído com o identificador {{ param }}",
+      "created": "A new Resultados is created with identifier {{ param }}",
+      "updated": "A Resultados is updated with identifier {{ param }}",
+      "deleted": "A Resultados is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Resultados {{ id }}?"
+        "question": "Are you sure you want to delete Resultados {{ id }}?"
       },
       "detail": {
         "title": "Resultados"
@@ -21,8 +21,7 @@
       "prazo": "Prazo",
       "complemento": "Complemento",
       "dataCadastro": "Data Cadastro",
-      "dataVencimentoPrazo": "Data Vencimento Prazo",
-      "alertasResultadosEsperados": "Alertas Resultados Esperados"
+      "dataVencimentoPrazo": "Data Vencimento Prazo"
     }
   }
 }

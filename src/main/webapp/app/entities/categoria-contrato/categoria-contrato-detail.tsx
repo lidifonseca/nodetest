@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, openFile, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction, openFile } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -69,12 +69,16 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                         <dd>
                           {categoriaContratoEntity.contrato ? (
                             <div>
-                              <a onClick={openFile(categoriaContratoEntity.contratoContentType, categoriaContratoEntity.contrato)}>
+                              <a rel="noopener noreferrer" target={'_blank'} href={`${categoriaContratoEntity.contrato}`}>
                                 <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
                               </a>
-                              <span>
-                                {categoriaContratoEntity.contratoContentType}, {byteSize(categoriaContratoEntity.contrato)}
-                              </span>
+                              <a rel="noopener noreferrer" target={'_blank'} href={`${categoriaContratoEntity.contrato}`}>
+                                {categoriaContratoEntity.contratoContentType.indexOf('image/') !== -1 ? (
+                                  <img src={`${categoriaContratoEntity.contrato}`} style={{ maxHeight: '30px' }} />
+                                ) : (
+                                  <Translate contentKey="entity.action.open">Open</Translate>
+                                )}
+                              </a>
                             </div>
                           ) : null}
                         </dd>
@@ -93,19 +97,6 @@ export class CategoriaContratoDetail extends React.Component<ICategoriaContratoD
                       </Col>
                       <Col md="9">
                         <dd>{categoriaContratoEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.categoriaContrato.idCategoria">Id Categoria</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{categoriaContratoEntity.idCategoria ? categoriaContratoEntity.idCategoria.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

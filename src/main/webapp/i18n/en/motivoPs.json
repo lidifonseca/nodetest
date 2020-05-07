@@ -3,15 +3,15 @@
     "motivoPs": {
       "home": {
         "title": "Motivo Ps",
-        "createLabel": "Criar novo Motivo Ps",
-        "createOrEditLabel": "Criar ou editar Motivo Ps",
-        "notFound": "Nenhum Motivo Ps encontrado"
+        "createLabel": "Create a new Motivo Ps",
+        "createOrEditLabel": "Create or edit a Motivo Ps",
+        "notFound": "No Motivo Ps found"
       },
-      "created": "Um novo Motivo Ps foi criado com o identificador {{ param }}",
-      "updated": "Um Motivo Ps foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Motivo Ps foi excluído com o identificador {{ param }}",
+      "created": "A new Motivo Ps is created with identifier {{ param }}",
+      "updated": "A Motivo Ps is updated with identifier {{ param }}",
+      "deleted": "A Motivo Ps is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Motivo Ps {{ id }}?"
+        "question": "Are you sure you want to delete Motivo Ps {{ id }}?"
       },
       "detail": {
         "title": "Motivo Ps"

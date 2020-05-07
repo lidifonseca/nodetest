@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A DescPta.
  */
-@Entity('desc_pta')
+@Entity('tb_desc_pta')
 export default class DescPta extends BaseEntity {
-  @Column({ name: 'nome', length: 45 })
+  @Column({ name: 'NOME', length: 45 })
   nome: string;
 
-  @Column({ name: 'resultado_esperado', length: 255 })
+  @Column({ name: 'RESULTADO_ESPERADO', length: 255 })
   resultadoEsperado: string;
 
-  @Column({ type: 'integer', name: 'ativo', nullable: false })
+  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -31,9 +31,6 @@
       "nomeContatoFinanceiro": "Nome Contato Financeiro",
       "contatoFinanceiro": "Contato Financeiro",
       "emailFinanceiro": "Email Financeiro",
-      "atendimento": "Atendimento",
-      "especialidadeOperadora": "Especialidade Operadora",
-      "pacienteOperadora": "Paciente Operadora",
       "unidade": "Unidade",
       "tipoOperadora": "Tipo Operadora"
     }

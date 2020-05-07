@@ -3,20 +3,19 @@
     "usuarioPainelGerencial": {
       "home": {
         "title": "Usuario Painel Gerencials",
-        "createLabel": "Criar novo Usuario Painel Gerencial",
-        "createOrEditLabel": "Criar ou editar Usuario Painel Gerencial",
-        "notFound": "Nenhum Usuario Painel Gerencial encontrado"
+        "createLabel": "Create a new Usuario Painel Gerencial",
+        "createOrEditLabel": "Create or edit a Usuario Painel Gerencial",
+        "notFound": "No Usuario Painel Gerencials found"
       },
-      "created": "Um novo Usuario Painel Gerencial foi criado com o identificador {{ param }}",
-      "updated": "Um Usuario Painel Gerencial foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Usuario Painel Gerencial foi excluído com o identificador {{ param }}",
+      "created": "A new Usuario Painel Gerencial is created with identifier {{ param }}",
+      "updated": "A Usuario Painel Gerencial is updated with identifier {{ param }}",
+      "deleted": "A Usuario Painel Gerencial is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Usuario Painel Gerencial {{ id }}?"
+        "question": "Are you sure you want to delete Usuario Painel Gerencial {{ id }}?"
       },
       "detail": {
         "title": "Usuario Painel Gerencial"
       },
-      "idUsuario": "Id Usuario",
       "verCronicos": "Ver Cronicos",
       "verPacientesAtivosCr": "Ver Pacientes Ativos Cr",
       "filtroPacientesAtivosCr": "Filtro Pacientes Ativos Cr",

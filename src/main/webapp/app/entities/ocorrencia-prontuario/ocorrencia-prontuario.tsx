@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './ocorrencia-prontuario.reducer';
+import { getOcorrenciaProntuarioState, IOcorrenciaProntuarioBaseState, getEntities } from './ocorrencia-prontuario.reducer';
 import { IOcorrenciaProntuario } from 'app/shared/model/ocorrencia-prontuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IOcorrenciaProntuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IOcorrenciaProntuarioBaseState {
-  nome: any;
-  ativo: any;
-}
 export interface IOcorrenciaProntuarioState extends IOcorrenciaProntuarioBaseState, IPaginationBaseState {}
 
 export class OcorrenciaProntuario extends React.Component<IOcorrenciaProntuarioProps, IOcorrenciaProntuarioState> {
@@ -42,20 +38,9 @@ export class OcorrenciaProntuario extends React.Component<IOcorrenciaProntuarioP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getOcorrenciaProntuarioState(this.props.location)
+      ...getOcorrenciaProntuarioState(this.props.location)
     };
   }
-
-  getOcorrenciaProntuarioState = (location): IOcorrenciaProntuarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nome = url.searchParams.get('nome') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      nome,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +83,9 @@ export class OcorrenciaProntuario extends React.Component<IOcorrenciaProntuarioP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +133,11 @@ export class OcorrenciaProntuario extends React.Component<IOcorrenciaProntuarioP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.ocorrenciaProntuario.home.createLabel">Create a new Ocorrencia Prontuario</Translate>
@@ -159,24 +150,29 @@ export class OcorrenciaProntuario extends React.Component<IOcorrenciaProntuarioP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="ocorrencia-prontuario-nome">
-                            <Translate contentKey="generadorApp.ocorrenciaProntuario.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="ocorrencia-prontuario-nome">
+                              <Translate contentKey="generadorApp.ocorrenciaProntuario.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="nome" id="ocorrencia-prontuario-nome" value={this.state.nome} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="ocorrencia-prontuario-ativo">
-                            <Translate contentKey="generadorApp.ocorrenciaProntuario.ativo">Ativo</Translate>
-                          </Label>
+                            <AvInput type="text" name="nome" id="ocorrencia-prontuario-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="ativo" id="ocorrencia-prontuario-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="ocorrencia-prontuario-ativo">
+                              <Translate contentKey="generadorApp.ocorrenciaProntuario.ativo">Ativo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="ativo" id="ocorrencia-prontuario-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -204,14 +200,18 @@ export class OcorrenciaProntuario extends React.Component<IOcorrenciaProntuarioP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.ocorrenciaProntuario.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.ocorrenciaProntuario.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.ocorrenciaProntuario.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.ocorrenciaProntuario.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -226,25 +226,40 @@ export class OcorrenciaProntuario extends React.Component<IOcorrenciaProntuarioP
                           </Button>
                         </td>
 
-                        <td>{ocorrenciaProntuario.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{ocorrenciaProntuario.nome}</td> : null}
 
-                        <td>{ocorrenciaProntuario.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{ocorrenciaProntuario.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${ocorrenciaProntuario.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${ocorrenciaProntuario.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${ocorrenciaProntuario.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${ocorrenciaProntuario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${ocorrenciaProntuario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${ocorrenciaProntuario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

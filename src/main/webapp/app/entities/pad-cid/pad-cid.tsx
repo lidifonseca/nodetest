@@ -22,24 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-cid.reducer';
+import { getPadCidState, IPadCidBaseState, getEntities } from './pad-cid.reducer';
 import { IPadCid } from 'app/shared/model/pad-cid.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPad } from 'app/shared/model/pad.model';
-import { getEntities as getPads } from 'app/entities/pad/pad.reducer';
-import { ICid } from 'app/shared/model/cid.model';
-import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
-
 export interface IPadCidProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadCidBaseState {
-  observacao: any;
-  ativo: any;
-  idPad: any;
-  idCid: any;
-}
 export interface IPadCidState extends IPadCidBaseState, IPaginationBaseState {}
 
 export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
@@ -49,40 +38,19 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadCidState(this.props.location)
+      ...getPadCidState(this.props.location)
     };
   }
 
-  getPadCidState = (location): IPadCidBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const observacao = url.searchParams.get('observacao') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idPad = url.searchParams.get('idPad') || '';
-    const idCid = url.searchParams.get('idCid') || '';
-
-    return {
-      observacao,
-      ativo,
-      idPad,
-      idCid
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPads();
-    this.props.getCids();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         observacao: '',
-        ativo: '',
-        idPad: '',
-        idCid: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -115,7 +83,9 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -133,12 +103,6 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idPad=' +
-      this.state.idPad +
-      '&' +
-      'idCid=' +
-      this.state.idCid +
-      '&' +
       ''
     );
   };
@@ -146,12 +110,12 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { observacao, ativo, idPad, idCid, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(observacao, ativo, idPad, idCid, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { observacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(observacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pads, cids, padCidList, match, totalItems } = this.props;
+    const { padCidList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -169,7 +133,11 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padCid.home.createLabel">Create a new Pad Cid</Translate>
@@ -182,63 +150,28 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacaoLabel" for="pad-cid-observacao">
-                            <Translate contentKey="generadorApp.padCid.observacao">Observacao</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="observacao" id="pad-cid-observacao" value={this.state.observacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="pad-cid-ativo">
-                            <Translate contentKey="generadorApp.padCid.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="pad-cid-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="pad-cid-idPad">
-                              <Translate contentKey="generadorApp.padCid.idPad">Id Pad</Translate>
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacaoLabel" for="pad-cid-observacao">
+                              <Translate contentKey="generadorApp.padCid.observacao">Observacao</Translate>
                             </Label>
-                            <AvInput id="pad-cid-idPad" type="select" className="form-control" name="idPadId">
-                              <option value="" key="0" />
-                              {pads
-                                ? pads.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="pad-cid-idCid">
-                              <Translate contentKey="generadorApp.padCid.idCid">Id Cid</Translate>
+                            <AvInput type="text" name="observacao" id="pad-cid-observacao" value={this.state.observacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="pad-cid-ativo">
+                              <Translate contentKey="generadorApp.padCid.ativo">Ativo</Translate>
                             </Label>
-                            <AvInput id="pad-cid-idCid" type="select" className="form-control" name="idCidId">
-                              <option value="" key="0" />
-                              {cids
-                                ? cids.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="ativo" id="pad-cid-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -266,22 +199,18 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('observacao')}>
-                        <Translate contentKey="generadorApp.padCid.observacao">Observacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.padCid.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.padCid.idPad">Id Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.padCid.idCid">Id Cid</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <th className="hand" onClick={this.sort('observacao')}>
+                          <Translate contentKey="generadorApp.padCid.observacao">Observacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.padCid.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -296,27 +225,25 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
                           </Button>
                         </td>
 
-                        <td>{padCid.observacao}</td>
+                        {this.state.baseFilters !== 'observacao' ? <td>{padCid.observacao}</td> : null}
 
-                        <td>{padCid.ativo}</td>
-                        <td>{padCid.idPad ? <Link to={`pad/${padCid.idPad.id}`}>{padCid.idPad.id}</Link> : ''}</td>
-                        <td>{padCid.idCid ? <Link to={`cid/${padCid.idCid.id}`}>{padCid.idCid.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{padCid.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padCid.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padCid.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padCid.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padCid.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padCid.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padCid.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -358,15 +285,11 @@ export class PadCid extends React.Component<IPadCidProps, IPadCidState> {
 }
 
 const mapStateToProps = ({ padCid, ...storeState }: IRootState) => ({
-  pads: storeState.pad.entities,
-  cids: storeState.cid.entities,
   padCidList: padCid.entities,
   totalItems: padCid.totalItems
 });
 
 const mapDispatchToProps = {
-  getPads,
-  getCids,
   getEntities
 };
 

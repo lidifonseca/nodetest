@@ -22,17 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-especialidade-new.reducer';
+import {
+  getProfissionalEspecialidadeNewState,
+  IProfissionalEspecialidadeNewBaseState,
+  getEntities
+} from './profissional-especialidade-new.reducer';
 import { IProfissionalEspecialidadeNew } from 'app/shared/model/profissional-especialidade-new.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalEspecialidadeNewProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalEspecialidadeNewBaseState {
-  idEspecialidade: any;
-  idProfissional: any;
-}
 export interface IProfissionalEspecialidadeNewState extends IProfissionalEspecialidadeNewBaseState, IPaginationBaseState {}
 
 export class ProfissionalEspecialidadeNew extends React.Component<IProfissionalEspecialidadeNewProps, IProfissionalEspecialidadeNewState> {
@@ -42,20 +42,9 @@ export class ProfissionalEspecialidadeNew extends React.Component<IProfissionalE
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalEspecialidadeNewState(this.props.location)
+      ...getProfissionalEspecialidadeNewState(this.props.location)
     };
   }
-
-  getProfissionalEspecialidadeNewState = (location): IProfissionalEspecialidadeNewBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-
-    return {
-      idEspecialidade,
-      idProfissional
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +87,9 @@ export class ProfissionalEspecialidadeNew extends React.Component<IProfissionalE
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +137,11 @@ export class ProfissionalEspecialidadeNew extends React.Component<IProfissionalE
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalEspecialidadeNew.home.createLabel">
@@ -161,33 +156,38 @@ export class ProfissionalEspecialidadeNew extends React.Component<IProfissionalE
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idEspecialidadeLabel" for="profissional-especialidade-new-idEspecialidade">
-                            <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">Id Especialidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idEspecialidade"
-                            id="profissional-especialidade-new-idEspecialidade"
-                            value={this.state.idEspecialidade}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-especialidade-new-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">Id Profissional</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idEspecialidadeLabel" for="profissional-especialidade-new-idEspecialidade">
+                              <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">Id Especialidade</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idEspecialidade"
+                              id="profissional-especialidade-new-idEspecialidade"
+                              value={this.state.idEspecialidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="idProfissional"
-                            id="profissional-especialidade-new-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-especialidade-new-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">Id Profissional</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="idProfissional"
+                              id="profissional-especialidade-new-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -215,14 +215,18 @@ export class ProfissionalEspecialidadeNew extends React.Component<IProfissionalE
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idEspecialidade')}>
-                        <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <th className="hand" onClick={this.sort('idEspecialidade')}>
+                          <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">Id Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -237,25 +241,40 @@ export class ProfissionalEspecialidadeNew extends React.Component<IProfissionalE
                           </Button>
                         </td>
 
-                        <td>{profissionalEspecialidadeNew.idEspecialidade}</td>
+                        {this.state.baseFilters !== 'idEspecialidade' ? <td>{profissionalEspecialidadeNew.idEspecialidade}</td> : null}
 
-                        <td>{profissionalEspecialidadeNew.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalEspecialidadeNew.idProfissional}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalEspecialidadeNew.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalEspecialidadeNew.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalEspecialidadeNew.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalEspecialidadeNew.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalEspecialidadeNew.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalEspecialidadeNew.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

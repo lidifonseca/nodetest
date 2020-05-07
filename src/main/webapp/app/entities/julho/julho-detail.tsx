@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './julho.reducer';
+import { getEntity, IJulhoBaseState, getJulhoState } from './julho.reducer';
 import { IJulho } from 'app/shared/model/julho.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IJulhoState {
+  fieldsBase: IJulhoBaseState;
+}
+
 export interface IJulhoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class JulhoDetail extends React.Component<IJulhoDetailProps> {
+export class JulhoDetail extends React.Component<IJulhoDetailProps, IJulhoState> {
   constructor(props: Readonly<IJulhoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getJulhoState(this.props.location)
     };
   }
 

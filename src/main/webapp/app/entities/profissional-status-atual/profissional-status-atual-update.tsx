@@ -4,13 +4,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
-import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-prof/status-atual-prof.reducer';
 import {
+  IProfissionalStatusAtualUpdateState,
   getEntity,
   getProfissionalStatusAtualState,
   IProfissionalStatusAtualBaseState,
@@ -25,21 +24,19 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProfissionalStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IProfissionalStatusAtualUpdateState {
-  fieldsBase: IProfissionalStatusAtualBaseState;
-  isNew: boolean;
-  idStatusAtualProfId: string;
-}
-
 export class ProfissionalStatusAtualUpdate extends React.Component<
   IProfissionalStatusAtualUpdateProps,
   IProfissionalStatusAtualUpdateState
 > {
+  obsFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IProfissionalStatusAtualUpdateProps>) {
     super(props);
+
+    this.obsFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getProfissionalStatusAtualState(this.props.location),
-      idStatusAtualProfId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -55,18 +52,31 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getStatusAtualProfs();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
+      (fieldsBase['obs'] ? '&obs=' + fieldsBase['obs'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalStatusAtualEntity } = this.props;
@@ -84,15 +94,15 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-status-atual');
+    this.props.history.push('/profissional-status-atual?' + this.getFiltersURL());
   };
 
   render() {
-    const { profissionalStatusAtualEntity, statusAtualProfs, loading, updating } = this.props;
+    const { profissionalStatusAtualEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { obs } = profissionalStatusAtualEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -108,10 +118,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
             isNew
               ? {}
               : {
-                  ...profissionalStatusAtualEntity,
-                  idStatusAtualProf: profissionalStatusAtualEntity.idStatusAtualProf
-                    ? profissionalStatusAtualEntity.idStatusAtualProf.id
-                    : null
+                  ...profissionalStatusAtualEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -133,7 +140,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/profissional-status-atual"
+                  to={'/profissional-status-atual?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -176,7 +183,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idProfissional ? (
+                        {baseFilters !== 'idProfissional' ? (
                           <Col md="idProfissional">
                             <AvGroup>
                               <Row>
@@ -192,10 +199,10 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase.idProfissional} />
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.obs ? (
+                        {baseFilters !== 'obs' ? (
                           <Col md="obs">
                             <AvGroup>
                               <Row>
@@ -211,10 +218,10 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase.obs} />
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -230,62 +237,7 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
-                        )}
-
-                        {!this.state.fieldsBase.idUsuario ? (
-                          <Col md="idUsuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idUsuarioLabel" for="profissional-status-atual-idUsuario">
-                                    <Translate contentKey="generadorApp.profissionalStatusAtual.idUsuario">Id Usuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="profissional-status-atual-idUsuario" type="text" name="idUsuario" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
-                        )}
-                        {!this.state.fieldsBase.idStatusAtualProf ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="profissional-status-atual-idStatusAtualProf">
-                                    <Translate contentKey="generadorApp.profissionalStatusAtual.idStatusAtualProf">
-                                      Id Status Atual Prof
-                                    </Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput
-                                    id="profissional-status-atual-idStatusAtualProf"
-                                    type="select"
-                                    className="form-control"
-                                    name="idStatusAtualProf"
-                                  >
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.profissionalStatusAtual.idStatusAtualProf.empty')}
-                                    </option>
-                                    {statusAtualProfs
-                                      ? statusAtualProfs.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idStatusAtualProf" value={this.state.fieldsBase.idStatusAtualProf} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>
@@ -301,7 +253,6 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  statusAtualProfs: storeState.statusAtualProf.entities,
   profissionalStatusAtualEntity: storeState.profissionalStatusAtual.entity,
   loading: storeState.profissionalStatusAtual.loading,
   updating: storeState.profissionalStatusAtual.updating,
@@ -309,7 +260,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getStatusAtualProfs,
   getEntity,
   updateEntity,
   setBlob,

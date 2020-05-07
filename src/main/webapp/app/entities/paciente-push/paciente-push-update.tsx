@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './paciente-push.reducer';
+import {
+  IPacientePushUpdateState,
+  getEntity,
+  getPacientePushState,
+  IPacientePushBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-push.reducer';
 import { IPacientePush } from 'app/shared/model/paciente-push.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacientePushUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacientePushUpdateState {
-  isNew: boolean;
-  idPacienteId: string;
-}
-
 export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps, IPacientePushUpdateState> {
   constructor(props: Readonly<IPacientePushUpdateProps>) {
     super(props);
+
     this.state = {
-      idPacienteId: '0',
+      fieldsBase: getPacientePushState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,23 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPacientes();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idFranquia'] ? '&idFranquia=' + fieldsBase['idFranquia'] : '') +
+      (fieldsBase['mensagem'] ? '&mensagem=' + fieldsBase['mensagem'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacientePushEntity } = this.props;
@@ -63,13 +78,14 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-push');
+    this.props.history.push('/paciente-push?' + this.getFiltersURL());
   };
 
   render() {
-    const { pacientePushEntity, pacientes, loading, updating } = this.props;
+    const { pacientePushEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +101,7 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
             isNew
               ? {}
               : {
-                  ...pacientePushEntity,
-                  idPaciente: pacientePushEntity.idPaciente ? pacientePushEntity.idPaciente.id : null
+                  ...pacientePushEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -103,7 +118,14 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/paciente-push" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente-push?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -118,7 +140,7 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -134,84 +156,65 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idFranquia' ? (
+                          <Col md="idFranquia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idFranquiaLabel" for="paciente-push-idFranquia">
+                                    <Translate contentKey="generadorApp.pacientePush.idFranquia">Id Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-push-idFranquia" type="text" name="idFranquia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idFranquiaLabel" for="paciente-push-idFranquia">
-                                <Translate contentKey="generadorApp.pacientePush.idFranquia">Id Franquia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-push-idFranquia" type="text" name="idFranquia" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'mensagem' ? (
+                          <Col md="mensagem">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="mensagemLabel" for="paciente-push-mensagem">
+                                    <Translate contentKey="generadorApp.pacientePush.mensagem">Mensagem</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-push-mensagem" type="text" name="mensagem" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="mensagem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="mensagemLabel" for="paciente-push-mensagem">
-                                <Translate contentKey="generadorApp.pacientePush.mensagem">Mensagem</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-push-mensagem"
-                                type="text"
-                                name="mensagem"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="paciente-push-ativo">
-                                <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-push-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-push-idPaciente">
-                                <Translate contentKey="generadorApp.pacientePush.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-push-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacientePush.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-push-ativo">
+                                    <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-push-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -224,7 +227,6 @@ export class PacientePushUpdate extends React.Component<IPacientePushUpdateProps
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  pacientes: storeState.paciente.entities,
   pacientePushEntity: storeState.pacientePush.entity,
   loading: storeState.pacientePush.loading,
   updating: storeState.pacientePush.updating,
@@ -232,7 +234,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPacientes,
   getEntity,
   updateEntity,
   createEntity,

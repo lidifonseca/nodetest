@@ -3,22 +3,20 @@
     "atendimentoAtividades": {
       "home": {
         "title": "Atendimento Atividades",
-        "createLabel": "Criar novo Atendimento Atividades",
-        "createOrEditLabel": "Criar ou editar Atendimento Atividades",
-        "notFound": "Nenhum Atendimento Atividades encontrado"
+        "createLabel": "Create a new Atendimento Atividades",
+        "createOrEditLabel": "Create or edit a Atendimento Atividades",
+        "notFound": "No Atendimento Atividades found"
       },
-      "created": "Um novo Atendimento Atividades foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento Atividades foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento Atividades foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento Atividades is created with identifier {{ param }}",
+      "updated": "A Atendimento Atividades is updated with identifier {{ param }}",
+      "deleted": "A Atendimento Atividades is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento Atividades {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento Atividades {{ id }}?"
       },
       "detail": {
         "title": "Atendimento Atividades"
       },
-      "feito": "Feito",
-      "idAtividade": "Id Atividade",
-      "idAtendimento": "Id Atendimento"
+      "feito": "Feito"
     }
   }
 }

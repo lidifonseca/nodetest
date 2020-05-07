@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import CepbrEndereco from './cepbr-endereco';
 import CepbrEnderecoDetail from './cepbr-endereco-detail';
+import CepbrEnderecoRelatorioCSV from './relatorio/cepbr-endereco.csv';
 import CepbrEnderecoUpdate from './cepbr-endereco-update';
 import CepbrEnderecoDeleteDialog from './cepbr-endereco-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={CepbrEnderecoRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={CepbrEnderecoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={CepbrEnderecoUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={CepbrEnderecoDetail} />

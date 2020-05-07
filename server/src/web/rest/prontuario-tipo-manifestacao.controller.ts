@@ -68,7 +68,9 @@ export class ProntuarioTipoManifestacaoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() prontuarioTipoManifestacao: ProntuarioTipoManifestacao): Promise<ProntuarioTipoManifestacao> {
+    console.info(prontuarioTipoManifestacao);
     const created = await this.prontuarioTipoManifestacaoService.save(prontuarioTipoManifestacao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProntuarioTipoManifestacao', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ProntuarioTipoManifestacaoController {
   })
   async put(@Req() req: Request, @Body() prontuarioTipoManifestacao: ProntuarioTipoManifestacao): Promise<ProntuarioTipoManifestacao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProntuarioTipoManifestacao', prontuarioTipoManifestacao.id);
+
     return await this.prontuarioTipoManifestacaoService.update(prontuarioTipoManifestacao);
   }
 

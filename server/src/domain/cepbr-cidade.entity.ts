@@ -4,10 +4,6 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import CepbrBairro from './cepbr-bairro.entity';
-import CepbrEndereco from './cepbr-endereco.entity';
-import CepbrEstado from './cepbr-estado.entity';
-
 /**
  * A CepbrCidade.
  */
@@ -24,21 +20,6 @@ export default class CepbrCidade extends BaseEntity {
 
   @Column({ type: 'float', name: 'area', nullable: false })
   area: number;
-
-  @OneToMany(
-    type => CepbrBairro,
-    other => other.idCidade
-  )
-  cepbrBairros: CepbrBairro[];
-
-  @OneToMany(
-    type => CepbrEndereco,
-    other => other.idCidade
-  )
-  cepbrEnderecos: CepbrEndereco[];
-
-  @ManyToOne(type => CepbrEstado)
-  uf: CepbrEstado;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

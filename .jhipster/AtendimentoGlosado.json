@@ -15,14 +15,10 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "1"
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer"
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502230500",
+    "changelogDate": "20200507103800",
     "entityTableName": "atendimento_glosado",
     "dto": "mapstruct",
     "pagination": "pagination",

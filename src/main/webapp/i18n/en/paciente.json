@@ -71,25 +71,19 @@
       "detalhes": "Detalhes",
       "liminar": "Liminar",
       "expoToken": "Expo Token",
-      "senhaChat": "Senha Chat",
-      "atendimento": "Atendimento",
-      "atendimentoAssinaturas": "Atendimento Assinaturas",
-      "diario": "Diario",
-      "pacienteDadosCartao": "Paciente Dados Cartao",
-      "pacienteDiagnostico": "Paciente Diagnostico",
-      "pacienteDiario": "Paciente Diario",
-      "pacienteEnqueteApp": "Paciente Enquete App",
-      "pacienteOperadora": "Paciente Operadora",
-      "pacientePedido": "Paciente Pedido",
-      "pacientePush": "Paciente Push",
-      "pad": "Pad",
       "unidade": "Unidade",
       "franquia": "Franquia",
       "cidade": "Cidade",
       "cidadeFamiliar": "Cidade Familiar",
       "grauParentesco": "Grau Parentesco",
       "profissionalPref": "Profissional Pref",
-      "tipohospital": "Tipohospital"
+      "tipohospital": "Tipohospital",
+      "help": {
+        "telefone2": "@dbName TELEFONE2@@",
+        "celular1": "@dbName CELULAR1@@",
+        "telefone2Familiar": "@dbName TELEFONE2_FAMILIAR@@",
+        "celular2Familiar": "@dbName CELULAR2_FAMILIAR@@"
+      }
     }
   }
 }

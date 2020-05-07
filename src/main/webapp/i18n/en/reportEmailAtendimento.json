@@ -3,15 +3,15 @@
     "reportEmailAtendimento": {
       "home": {
         "title": "Report Email Atendimentos",
-        "createLabel": "Criar novo Report Email Atendimento",
-        "createOrEditLabel": "Criar ou editar Report Email Atendimento",
-        "notFound": "Nenhum Report Email Atendimento encontrado"
+        "createLabel": "Create a new Report Email Atendimento",
+        "createOrEditLabel": "Create or edit a Report Email Atendimento",
+        "notFound": "No Report Email Atendimentos found"
       },
-      "created": "Um novo Report Email Atendimento foi criado com o identificador {{ param }}",
-      "updated": "Um Report Email Atendimento foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Report Email Atendimento foi excluído com o identificador {{ param }}",
+      "created": "A new Report Email Atendimento is created with identifier {{ param }}",
+      "updated": "A Report Email Atendimento is updated with identifier {{ param }}",
+      "deleted": "A Report Email Atendimento is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Report Email Atendimento {{ id }}?"
+        "question": "Are you sure you want to delete Report Email Atendimento {{ id }}?"
       },
       "detail": {
         "title": "Report Email Atendimento"

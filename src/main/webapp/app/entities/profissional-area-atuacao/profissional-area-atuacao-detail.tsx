@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-area-atuacao.reducer';
+import { getEntity, IProfissionalAreaAtuacaoBaseState, getProfissionalAreaAtuacaoState } from './profissional-area-atuacao.reducer';
 import { IProfissionalAreaAtuacao } from 'app/shared/model/profissional-area-atuacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalAreaAtuacaoState {
+  fieldsBase: IProfissionalAreaAtuacaoBaseState;
+}
+
 export interface IProfissionalAreaAtuacaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalAreaAtuacaoDetail extends React.Component<IProfissionalAreaAtuacaoDetailProps> {
+export class ProfissionalAreaAtuacaoDetail extends React.Component<IProfissionalAreaAtuacaoDetailProps, IProfissionalAreaAtuacaoState> {
   constructor(props: Readonly<IProfissionalAreaAtuacaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalAreaAtuacaoState(this.props.location)
     };
   }
 

@@ -4,405 +4,385 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Diario from './diario.entity';
-import PacienteDiario from './paciente-diario.entity';
 import UnidadeEasy from './unidade-easy.entity';
-import TipoUsuario from './tipo-usuario.entity';
 
 /**
  * A Usuario.
  */
-@Entity('usuario')
+@Entity('tb_usuario')
 export default class Usuario extends BaseEntity {
-  @Column({ name: 'id_operadora', length: 1000 })
+  @Column({ name: 'ID_OPERADORA', length: 1000 })
   idOperadora: string;
 
-  @Column({ name: 'senha', length: 100 })
+  @Column({ name: 'SENHA', length: 100 })
   senha: string;
 
-  @Column({ name: 'nome', length: 60 })
+  @Column({ name: 'NOME', length: 60 })
   nome: string;
 
-  @Column({ name: 'email', length: 100 })
+  @Column({ name: 'EMAIL', length: 100 })
   email: string;
 
-  @Column({ name: 'telefone', length: 20 })
+  @Column({ name: 'TELEFONE', length: 20 })
   telefone: string;
 
-  @Column({ name: 'celular', length: 20 })
+  @Column({ name: 'CELULAR', length: 20 })
   celular: string;
 
-  @Column({ name: 'cpf', length: 20 })
+  @Column({ name: 'CPF', length: 20 })
   cpf: string;
 
-  @Column({ name: 'rg', length: 30 })
+  @Column({ name: 'RG', length: 30 })
   rg: string;
 
-  @Column({ type: 'integer', name: 'sexo' })
+  @Column({ type: 'integer', name: 'SEXO' })
   sexo: number;
 
-  @Column({ type: 'date', name: 'nascimento' })
+  @Column({ type: 'date', name: 'NASCIMENTO' })
   nascimento: any;
 
-  @Column({ type: 'integer', name: 'ver_atendimento' })
+  @Column({ type: 'integer', name: 'VER_ATENDIMENTO' })
   verAtendimento: number;
 
-  @Column({ type: 'integer', name: 'cad_atendimento' })
+  @Column({ type: 'integer', name: 'CAD_ATENDIMENTO' })
   cadAtendimento: number;
 
-  @Column({ type: 'integer', name: 'edi_atendimento' })
+  @Column({ type: 'integer', name: 'EDI_ATENDIMENTO' })
   ediAtendimento: number;
 
-  @Column({ type: 'integer', name: 'baixa_manual_atendimento' })
+  @Column({ type: 'integer', name: 'BAIXA_MANUAL_ATENDIMENTO' })
   baixaManualAtendimento: number;
 
-  @Column({ type: 'integer', name: 'del_atendimento' })
+  @Column({ type: 'integer', name: 'DEL_ATENDIMENTO' })
   delAtendimento: number;
 
-  @Column({ type: 'integer', name: 'rel_atendimento' })
+  @Column({ type: 'integer', name: 'REL_ATENDIMENTO' })
   relAtendimento: number;
 
-  @Column({ type: 'integer', name: 'ver_pad' })
+  @Column({ type: 'integer', name: 'VER_PAD' })
   verPad: number;
 
-  @Column({ type: 'integer', name: 'cad_pad' })
+  @Column({ type: 'integer', name: 'CAD_PAD' })
   cadPad: number;
 
-  @Column({ type: 'integer', name: 'edi_pad' })
+  @Column({ type: 'integer', name: 'EDI_PAD' })
   ediPad: number;
 
-  @Column({ type: 'integer', name: 'del_pad' })
+  @Column({ type: 'integer', name: 'DEL_PAD' })
   delPad: number;
 
-  @Column({ type: 'integer', name: 'rel_pad' })
+  @Column({ type: 'integer', name: 'REL_PAD' })
   relPad: number;
 
-  @Column({ type: 'integer', name: 'ver_diario' })
+  @Column({ type: 'integer', name: 'VER_DIARIO' })
   verDiario: number;
 
-  @Column({ type: 'integer', name: 'cad_diario' })
+  @Column({ type: 'integer', name: 'CAD_DIARIO' })
   cadDiario: number;
 
-  @Column({ type: 'integer', name: 'edi_diario' })
+  @Column({ type: 'integer', name: 'EDI_DIARIO' })
   ediDiario: number;
 
-  @Column({ type: 'integer', name: 'del_diario' })
+  @Column({ type: 'integer', name: 'DEL_DIARIO' })
   delDiario: number;
 
-  @Column({ type: 'integer', name: 'rel_diario' })
+  @Column({ type: 'integer', name: 'REL_DIARIO' })
   relDiario: number;
 
-  @Column({ type: 'integer', name: 'ver_categoria' })
+  @Column({ type: 'integer', name: 'VER_CATEGORIA' })
   verCategoria: number;
 
-  @Column({ type: 'integer', name: 'cad_categoria' })
+  @Column({ type: 'integer', name: 'CAD_CATEGORIA' })
   cadCategoria: number;
 
-  @Column({ type: 'integer', name: 'edi_categoria' })
+  @Column({ type: 'integer', name: 'EDI_CATEGORIA' })
   ediCategoria: number;
 
-  @Column({ type: 'integer', name: 'del_categoria' })
+  @Column({ type: 'integer', name: 'DEL_CATEGORIA' })
   delCategoria: number;
 
-  @Column({ type: 'integer', name: 'ver_especialidade' })
+  @Column({ type: 'integer', name: 'VER_ESPECIALIDADE' })
   verEspecialidade: number;
 
-  @Column({ type: 'integer', name: 'cad_especialidade' })
+  @Column({ type: 'integer', name: 'CAD_ESPECIALIDADE' })
   cadEspecialidade: number;
 
-  @Column({ type: 'integer', name: 'edi_especialidade' })
+  @Column({ type: 'integer', name: 'EDI_ESPECIALIDADE' })
   ediEspecialidade: number;
 
-  @Column({ type: 'integer', name: 'del_especialidade' })
+  @Column({ type: 'integer', name: 'DEL_ESPECIALIDADE' })
   delEspecialidade: number;
 
-  @Column({ type: 'integer', name: 'rel_especialidade' })
+  @Column({ type: 'integer', name: 'REL_ESPECIALIDADE' })
   relEspecialidade: number;
 
-  @Column({ type: 'integer', name: 'ver_especialidade_valor' })
+  @Column({ type: 'integer', name: 'VER_ESPECIALIDADE_VALOR' })
   verEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'cad_especialidade_valor' })
+  @Column({ type: 'integer', name: 'CAD_ESPECIALIDADE_VALOR' })
   cadEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'edi_especialidade_valor' })
+  @Column({ type: 'integer', name: 'EDI_ESPECIALIDADE_VALOR' })
   ediEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'del_especialidade_valor' })
+  @Column({ type: 'integer', name: 'DEL_ESPECIALIDADE_VALOR' })
   delEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'rel_especialidade_valor' })
+  @Column({ type: 'integer', name: 'REL_ESPECIALIDADE_VALOR' })
   relEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'ver_operadora' })
+  @Column({ type: 'integer', name: 'VER_OPERADORA' })
   verOperadora: number;
 
-  @Column({ type: 'integer', name: 'cad_operadora' })
+  @Column({ type: 'integer', name: 'CAD_OPERADORA' })
   cadOperadora: number;
 
-  @Column({ type: 'integer', name: 'edi_operadora' })
+  @Column({ type: 'integer', name: 'EDI_OPERADORA' })
   ediOperadora: number;
 
-  @Column({ type: 'integer', name: 'del_operadora' })
+  @Column({ type: 'integer', name: 'DEL_OPERADORA' })
   delOperadora: number;
 
-  @Column({ type: 'integer', name: 'ver_paciente' })
+  @Column({ type: 'integer', name: 'VER_PACIENTE' })
   verPaciente: number;
 
-  @Column({ type: 'integer', name: 'cad_paciente' })
+  @Column({ type: 'integer', name: 'CAD_PACIENTE' })
   cadPaciente: number;
 
-  @Column({ type: 'integer', name: 'edi_paciente' })
+  @Column({ type: 'integer', name: 'EDI_PACIENTE' })
   ediPaciente: number;
 
-  @Column({ type: 'integer', name: 'del_paciente' })
+  @Column({ type: 'integer', name: 'DEL_PACIENTE' })
   delPaciente: number;
 
-  @Column({ type: 'integer', name: 'rel_paciente' })
+  @Column({ type: 'integer', name: 'REL_PACIENTE' })
   relPaciente: number;
 
-  @Column({ type: 'integer', name: 'ver_profissional' })
+  @Column({ type: 'integer', name: 'VER_PROFISSIONAL' })
   verProfissional: number;
 
-  @Column({ type: 'integer', name: 'cad_profissional' })
+  @Column({ type: 'integer', name: 'CAD_PROFISSIONAL' })
   cadProfissional: number;
 
-  @Column({ type: 'integer', name: 'edi_profissional' })
+  @Column({ type: 'integer', name: 'EDI_PROFISSIONAL' })
   ediProfissional: number;
 
-  @Column({ type: 'integer', name: 'del_profissional' })
+  @Column({ type: 'integer', name: 'DEL_PROFISSIONAL' })
   delProfissional: number;
 
-  @Column({ type: 'integer', name: 'ativ_profissional' })
+  @Column({ type: 'integer', name: 'ATIV_PROFISSIONAL' })
   ativProfissional: number;
 
-  @Column({ type: 'integer', name: 'rel_profissional' })
+  @Column({ type: 'integer', name: 'REL_PROFISSIONAL' })
   relProfissional: number;
 
-  @Column({ type: 'integer', name: 'ver_push' })
+  @Column({ type: 'integer', name: 'VER_PUSH' })
   verPush: number;
 
-  @Column({ type: 'integer', name: 'cad_push_paciente' })
+  @Column({ type: 'integer', name: 'CAD_PUSH_PACIENTE' })
   cadPushPaciente: number;
 
-  @Column({ type: 'integer', name: 'cad_push_profissional' })
+  @Column({ type: 'integer', name: 'CAD_PUSH_PROFISSIONAL' })
   cadPushProfissional: number;
 
-  @Column({ type: 'integer', name: 'ver_termo_paciente' })
+  @Column({ type: 'integer', name: 'VER_TERMO_PACIENTE' })
   verTermoPaciente: number;
 
-  @Column({ type: 'integer', name: 'edi_termo_paciente' })
+  @Column({ type: 'integer', name: 'EDI_TERMO_PACIENTE' })
   ediTermoPaciente: number;
 
-  @Column({ type: 'integer', name: 'ver_termo_profissional' })
+  @Column({ type: 'integer', name: 'VER_TERMO_PROFISSIONAL' })
   verTermoProfissional: number;
 
-  @Column({ type: 'integer', name: 'edi_termo_profissional' })
+  @Column({ type: 'integer', name: 'EDI_TERMO_PROFISSIONAL' })
   ediTermoProfissional: number;
 
-  @Column({ type: 'integer', name: 'ver_outros' })
+  @Column({ type: 'integer', name: 'VER_OUTROS' })
   verOutros: number;
 
-  @Column({ type: 'integer', name: 'cad_outros' })
+  @Column({ type: 'integer', name: 'CAD_OUTROS' })
   cadOutros: number;
 
-  @Column({ type: 'integer', name: 'edi_outros' })
+  @Column({ type: 'integer', name: 'EDI_OUTROS' })
   ediOutros: number;
 
-  @Column({ type: 'integer', name: 'del_outros' })
+  @Column({ type: 'integer', name: 'DEL_OUTROS' })
   delOutros: number;
 
-  @Column({ type: 'integer', name: 'rel_outros' })
+  @Column({ type: 'integer', name: 'REL_OUTROS' })
   relOutros: number;
 
-  @Column({ type: 'integer', name: 'ver_unidade_easy' })
+  @Column({ type: 'integer', name: 'VER_UNIDADE_EASY' })
   verUnidadeEasy: number;
 
-  @Column({ type: 'integer', name: 'cad_unidade_easy' })
+  @Column({ type: 'integer', name: 'CAD_UNIDADE_EASY' })
   cadUnidadeEasy: number;
 
-  @Column({ type: 'integer', name: 'edi_unidade_easy' })
+  @Column({ type: 'integer', name: 'EDI_UNIDADE_EASY' })
   ediUnidadeEasy: number;
 
-  @Column({ type: 'integer', name: 'del_unidade_easy' })
+  @Column({ type: 'integer', name: 'DEL_UNIDADE_EASY' })
   delUnidadeEasy: number;
 
-  @Column({ type: 'integer', name: 'ver_usuario' })
+  @Column({ type: 'integer', name: 'VER_USUARIO' })
   verUsuario: number;
 
-  @Column({ type: 'integer', name: 'cad_usuario' })
+  @Column({ type: 'integer', name: 'CAD_USUARIO' })
   cadUsuario: number;
 
-  @Column({ type: 'integer', name: 'edi_usuario' })
+  @Column({ type: 'integer', name: 'EDI_USUARIO' })
   ediUsuario: number;
 
-  @Column({ type: 'integer', name: 'del_usuario' })
+  @Column({ type: 'integer', name: 'DEL_USUARIO' })
   delUsuario: number;
 
-  @Column({ type: 'integer', name: 'ver_pta_resultado' })
+  @Column({ type: 'integer', name: 'VER_PTA_RESULTADO' })
   verPtaResultado: number;
 
-  @Column({ type: 'integer', name: 'cad_pta_resultado' })
+  @Column({ type: 'integer', name: 'CAD_PTA_RESULTADO' })
   cadPtaResultado: number;
 
-  @Column({ type: 'integer', name: 'del_pta_resultado' })
+  @Column({ type: 'integer', name: 'DEL_PTA_RESULTADO' })
   delPtaResultado: number;
 
-  @Column({ type: 'integer', name: 'ver_pta_atividade' })
+  @Column({ type: 'integer', name: 'VER_PTA_ATIVIDADE' })
   verPtaAtividade: number;
 
-  @Column({ type: 'integer', name: 'cad_pta_atividade' })
+  @Column({ type: 'integer', name: 'CAD_PTA_ATIVIDADE' })
   cadPtaAtividade: number;
 
-  @Column({ type: 'integer', name: 'del_pta_atividade' })
+  @Column({ type: 'integer', name: 'DEL_PTA_ATIVIDADE' })
   delPtaAtividade: number;
 
-  @Column({ type: 'integer', name: 'permissao_usuario' })
+  @Column({ type: 'integer', name: 'PERMISSAO_USUARIO' })
   permissaoUsuario: number;
 
-  @Column({ type: 'integer', name: 'ver_prontuario' })
+  @Column({ type: 'integer', name: 'VER_PRONTUARIO' })
   verProntuario: number;
 
-  @Column({ type: 'integer', name: 'cad_prontuario' })
+  @Column({ type: 'integer', name: 'CAD_PRONTUARIO' })
   cadProntuario: number;
 
-  @Column({ type: 'integer', name: 'edi_prontuario' })
+  @Column({ type: 'integer', name: 'EDI_PRONTUARIO' })
   ediProntuario: number;
 
-  @Column({ type: 'integer', name: 'del_prontuario' })
+  @Column({ type: 'integer', name: 'DEL_PRONTUARIO' })
   delProntuario: number;
 
-  @Column({ type: 'integer', name: 'del_prontuario_foto' })
+  @Column({ type: 'integer', name: 'DEL_PRONTUARIO_FOTO' })
   delProntuarioFoto: number;
 
-  @Column({ type: 'integer', name: 'valores_financeiro' })
+  @Column({ type: 'integer', name: 'VALORES_FINANCEIRO' })
   valoresFinanceiro: number;
 
-  @Column({ type: 'integer', name: 'autorizacao_valor_financeiro' })
+  @Column({ type: 'integer', name: 'AUTORIZACAO_VALOR_FINANCEIRO' })
   autorizacaoValorFinanceiro: number;
 
-  @Column({ type: 'integer', name: 'confirmar_pagamento_financeiro' })
+  @Column({ type: 'integer', name: 'CONFIRMAR_PAGAMENTO_FINANCEIRO' })
   confirmarPagamentoFinanceiro: number;
 
-  @Column({ type: 'integer', name: 'gerenciar_sorteios' })
+  @Column({ type: 'integer', name: 'GERENCIAR_SORTEIOS' })
   gerenciarSorteios: number;
 
-  @Column({ type: 'integer', name: 'envio_recusa' })
+  @Column({ type: 'integer', name: 'ENVIO_RECUSA' })
   envioRecusa: number;
 
-  @Column({ type: 'integer', name: 'envio_intercorrencia' })
+  @Column({ type: 'integer', name: 'ENVIO_INTERCORRENCIA' })
   envioIntercorrencia: number;
 
-  @Column({ type: 'integer', name: 'envio_cancelamento' })
+  @Column({ type: 'integer', name: 'ENVIO_CANCELAMENTO' })
   envioCancelamento: number;
 
-  @Column({ type: 'integer', name: 'envio_avaliacao' })
+  @Column({ type: 'integer', name: 'ENVIO_AVALIACAO' })
   envioAvaliacao: number;
 
-  @Column({ type: 'integer', name: 'envio_pedido' })
+  @Column({ type: 'integer', name: 'ENVIO_PEDIDO' })
   envioPedido: number;
 
-  @Column({ type: 'integer', name: 'alerta_atendimento' })
+  @Column({ type: 'integer', name: 'ALERTA_ATENDIMENTO' })
   alertaAtendimento: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @Column({ type: 'integer', name: 'envio_glosado' })
+  @Column({ type: 'integer', name: 'ENVIO_GLOSADO' })
   envioGlosado: number;
 
-  @Column({ type: 'integer', name: 'emergencia' })
+  @Column({ type: 'integer', name: 'EMERGENCIA' })
   emergencia: number;
 
-  @Column({ type: 'integer', name: 'token' })
+  @Column({ type: 'integer', name: 'TOKEN' })
   token: number;
 
-  @Column({ type: 'integer', name: 'edit_atendimento' })
+  @Column({ type: 'integer', name: 'EDIT_ATENDIMENTO' })
   editAtendimento: number;
 
-  @Column({ type: 'integer', name: 'ouvir_ligacao', nullable: false })
+  @Column({ type: 'integer', name: 'OUVIR_LIGACAO', nullable: false })
   ouvirLigacao: number;
 
-  @Column({ type: 'integer', name: 'ver_painel_indicadores' })
+  @Column({ type: 'integer', name: 'VER_PAINEL_INDICADORES' })
   verPainelIndicadores: number;
 
-  @Column({ type: 'integer', name: 'prorrogar_pad' })
+  @Column({ type: 'integer', name: 'PRORROGAR_PAD' })
   prorrogarPad: number;
 
-  @Column({ type: 'integer', name: 'cancelar_atend_massa' })
+  @Column({ type: 'integer', name: 'CANCELAR_ATEND_MASSA' })
   cancelarAtendMassa: number;
 
-  @Column({ type: 'integer', name: 'cad_mat_med' })
+  @Column({ type: 'integer', name: 'CAD_MAT_MED' })
   cadMatMed: number;
 
-  @Column({ type: 'integer', name: 'edi_mat_med' })
+  @Column({ type: 'integer', name: 'EDI_MAT_MED' })
   ediMatMed: number;
 
-  @Column({ type: 'integer', name: 'del_mat_med' })
+  @Column({ type: 'integer', name: 'DEL_MAT_MED' })
   delMatMed: number;
 
-  @Column({ type: 'integer', name: 'ver_col_pta' })
+  @Column({ type: 'integer', name: 'VER_COL_PTA' })
   verColPta: number;
 
-  @Column({ type: 'integer', name: 'ver_col_foto' })
+  @Column({ type: 'integer', name: 'VER_COL_FOTO' })
   verColFoto: number;
 
-  @Column({ type: 'integer', name: 'ver_col_lc' })
+  @Column({ type: 'integer', name: 'VER_COL_LC' })
   verColLc: number;
 
-  @Column({ type: 'integer', name: 'ver_atend_cancelado' })
+  @Column({ type: 'integer', name: 'VER_ATEND_CANCELADO' })
   verAtendCancelado: number;
 
-  @Column({ type: 'integer', name: 'ver_atend_ag_confirmacao' })
+  @Column({ type: 'integer', name: 'VER_ATEND_AG_CONFIRMACAO' })
   verAtendAgConfirmacao: number;
 
-  @Column({ type: 'integer', name: 'edi_geo_localizacao_atendimento' })
+  @Column({ type: 'integer', name: 'EDI_GEO_LOCALIZACAO_ATENDIMENTO' })
   ediGeoLocalizacaoAtendimento: number;
 
-  @Column({ type: 'integer', name: 'copiar_evolucao' })
+  @Column({ type: 'integer', name: 'COPIAR_EVOLUCAO' })
   copiarEvolucao: number;
 
-  @Column({ type: 'integer', name: 'copiar_nome_prof' })
+  @Column({ type: 'integer', name: 'COPIAR_NOME_PROF' })
   copiarNomeProf: number;
 
-  @Column({ type: 'integer', name: 'copiar_registro_prof' })
+  @Column({ type: 'integer', name: 'COPIAR_REGISTRO_PROF' })
   copiarRegistroProf: number;
 
-  @Column({ name: 'id_area_atuacao', length: 100 })
+  @Column({ name: 'ID_AREA_ATUACAO', length: 100 })
   idAreaAtuacao: string;
 
-  @Column({ type: 'integer', name: 'envio_cid_sem_pta' })
+  @Column({ type: 'integer', name: 'ENVIO_CID_SEM_PTA' })
   envioCidSemPta: number;
 
-  @Column({ type: 'integer', name: 'envio_analise_resultado_esperado' })
+  @Column({ type: 'integer', name: 'ENVIO_ANALISE_RESULTADO_ESPERADO' })
   envioAnaliseResultadoEsperado: number;
 
-  @Column({ type: 'integer', name: 'envio_descumprimento' })
+  @Column({ type: 'integer', name: 'ENVIO_DESCUMPRIMENTO' })
   envioDescumprimento: number;
 
-  @Column({ type: 'boolean', name: 'envio_melhora_tempo' })
+  @Column({ type: 'boolean', name: 'ENVIO_MELHORA_TEMPO' })
   envioMelhoraTempo: boolean;
 
-  @Column({ name: 'senha_chat', length: 45 })
-  senhaChat: string;
-
-  @OneToMany(
-    type => Diario,
-    other => other.idUsuario
-  )
-  diarios: Diario[];
-
-  @OneToMany(
-    type => PacienteDiario,
-    other => other.idUsuario
-  )
-  pacienteDiarios: PacienteDiario[];
-
   @ManyToOne(type => UnidadeEasy)
+  @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
-
-  @ManyToOne(type => TipoUsuario)
-  idTipoUsuario: TipoUsuario;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

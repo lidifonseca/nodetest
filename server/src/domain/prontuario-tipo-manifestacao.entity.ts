@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProntuarioTipoManifestacao.
  */
-@Entity('prontuario_tipo_manifestacao')
+@Entity('tb_prontuario_tipo_manifestacao')
 export default class ProntuarioTipoManifestacao extends BaseEntity {
-  @Column({ name: 'nome', length: 45 })
+  @Column({ name: 'NOME', length: 45 })
   nome: string;
 
-  @Column({ type: 'integer', name: 'id_pai' })
+  @Column({ type: 'integer', name: 'ID_PAI' })
   idPai: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

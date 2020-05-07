@@ -6,7 +6,6 @@ import { CategoriaAtividadeRepository } from '../repository/categoria-atividade.
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
-relationshipNames.push('idCategoria');
 
 @Injectable()
 export class CategoriaAtividadeService {

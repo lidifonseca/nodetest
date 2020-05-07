@@ -68,7 +68,9 @@ export class TipoMatMedController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() tipoMatMed: TipoMatMed): Promise<TipoMatMed> {
+    console.info(tipoMatMed);
     const created = await this.tipoMatMedService.save(tipoMatMed);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TipoMatMed', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class TipoMatMedController {
   })
   async put(@Req() req: Request, @Body() tipoMatMed: TipoMatMed): Promise<TipoMatMed> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'TipoMatMed', tipoMatMed.id);
+
     return await this.tipoMatMedService.update(tipoMatMed);
   }
 

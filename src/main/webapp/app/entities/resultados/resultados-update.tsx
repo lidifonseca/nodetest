@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './resultados.reducer';
+import {
+  IResultadosUpdateState,
+  getEntity,
+  getResultadosState,
+  IResultadosBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './resultados.reducer';
 import { IResultados } from 'app/shared/model/resultados.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IResultadosUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IResultadosUpdateState {
-  isNew: boolean;
-}
-
 export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IResultadosUpdateState> {
   constructor(props: Readonly<IResultadosUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getResultadosState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,24 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['objetivo'] ? '&objetivo=' + fieldsBase['objetivo'] : '') +
+      (fieldsBase['valor'] ? '&valor=' + fieldsBase['valor'] : '') +
+      (fieldsBase['prazo'] ? '&prazo=' + fieldsBase['prazo'] : '') +
+      (fieldsBase['complemento'] ? '&complemento=' + fieldsBase['complemento'] : '') +
+      (fieldsBase['dataCadastro'] ? '&dataCadastro=' + fieldsBase['dataCadastro'] : '') +
+      (fieldsBase['dataVencimentoPrazo'] ? '&dataVencimentoPrazo=' + fieldsBase['dataVencimentoPrazo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataCadastro = convertDateTimeToServer(values.dataCadastro);
 
@@ -59,13 +83,14 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
   };
 
   handleClose = () => {
-    this.props.history.push('/resultados');
+    this.props.history.push('/resultados?' + this.getFiltersURL());
   };
 
   render() {
     const { resultadosEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -98,7 +123,14 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/resultados" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/resultados?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -113,7 +145,7 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -129,137 +161,134 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'objetivo' ? (
+                          <Col md="objetivo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="objetivoLabel" for="resultados-objetivo">
+                                    <Translate contentKey="generadorApp.resultados.objetivo">Objetivo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-objetivo" type="text" name="objetivo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="objetivo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="objetivoLabel" for="resultados-objetivo">
-                                <Translate contentKey="generadorApp.resultados.objetivo">Objetivo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="resultados-objetivo"
-                                type="text"
-                                name="objetivo"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'valor' ? (
+                          <Col md="valor">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorLabel" for="resultados-valor">
+                                    <Translate contentKey="generadorApp.resultados.valor">Valor</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-valor" type="text" name="valor" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="valorLabel" for="resultados-valor">
-                                <Translate contentKey="generadorApp.resultados.valor">Valor</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="resultados-valor"
-                                type="text"
-                                name="valor"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'prazo' ? (
+                          <Col md="prazo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="prazoLabel" for="resultados-prazo">
+                                    <Translate contentKey="generadorApp.resultados.prazo">Prazo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-prazo" type="text" name="prazo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="prazo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="prazoLabel" for="resultados-prazo">
-                                <Translate contentKey="generadorApp.resultados.prazo">Prazo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="resultados-prazo"
-                                type="text"
-                                name="prazo"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'complemento' ? (
+                          <Col md="complemento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="complementoLabel" for="resultados-complemento">
+                                    <Translate contentKey="generadorApp.resultados.complemento">Complemento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-complemento" type="text" name="complemento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="complemento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="complementoLabel" for="resultados-complemento">
-                                <Translate contentKey="generadorApp.resultados.complemento">Complemento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="resultados-complemento"
-                                type="text"
-                                name="complemento"
-                                validate={{
-                                  maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataCadastro' ? (
+                          <Col md="dataCadastro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataCadastroLabel" for="resultados-dataCadastro">
+                                    <Translate contentKey="generadorApp.resultados.dataCadastro">Data Cadastro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="resultados-dataCadastro"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataCadastro"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.resultadosEntity.dataCadastro)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataCadastro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataCadastroLabel" for="resultados-dataCadastro">
-                                <Translate contentKey="generadorApp.resultados.dataCadastro">Data Cadastro</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="resultados-dataCadastro"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataCadastro"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.resultadosEntity.dataCadastro)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataVencimentoPrazoLabel" for="resultados-dataVencimentoPrazo">
-                                <Translate contentKey="generadorApp.resultados.dataVencimentoPrazo">Data Vencimento Prazo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="resultados-dataVencimentoPrazo"
-                                type="date"
-                                className="form-control"
-                                name="dataVencimentoPrazo"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'dataVencimentoPrazo' ? (
+                          <Col md="dataVencimentoPrazo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataVencimentoPrazoLabel" for="resultados-dataVencimentoPrazo">
+                                    <Translate contentKey="generadorApp.resultados.dataVencimentoPrazo">Data Vencimento Prazo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="resultados-dataVencimentoPrazo"
+                                    type="date"
+                                    className="form-control"
+                                    name="dataVencimentoPrazo"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataVencimentoPrazo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

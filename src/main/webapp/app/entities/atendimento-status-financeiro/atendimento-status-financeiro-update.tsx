@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './atendimento-status-financeiro.reducer';
+import {
+  IAtendimentoStatusFinanceiroUpdateState,
+  getEntity,
+  getAtendimentoStatusFinanceiroState,
+  IAtendimentoStatusFinanceiroBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './atendimento-status-financeiro.reducer';
 import { IAtendimentoStatusFinanceiro } from 'app/shared/model/atendimento-status-financeiro.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAtendimentoStatusFinanceiroUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IAtendimentoStatusFinanceiroUpdateState {
-  isNew: boolean;
-}
 
 export class AtendimentoStatusFinanceiroUpdate extends React.Component<
   IAtendimentoStatusFinanceiroUpdateProps,
@@ -25,7 +29,9 @@ export class AtendimentoStatusFinanceiroUpdate extends React.Component<
 > {
   constructor(props: Readonly<IAtendimentoStatusFinanceiroUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getAtendimentoStatusFinanceiroState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,20 @@ export class AtendimentoStatusFinanceiroUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idAtendimento'] ? '&idAtendimento=' + fieldsBase['idAtendimento'] : '') +
+      (fieldsBase['idStatusFinanceiro'] ? '&idStatusFinanceiro=' + fieldsBase['idStatusFinanceiro'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { atendimentoStatusFinanceiroEntity } = this.props;
@@ -60,13 +80,14 @@ export class AtendimentoStatusFinanceiroUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/atendimento-status-financeiro');
+    this.props.history.push('/atendimento-status-financeiro?' + this.getFiltersURL());
   };
 
   render() {
     const { atendimentoStatusFinanceiroEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +125,7 @@ export class AtendimentoStatusFinanceiroUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/atendimento-status-financeiro"
+                  to={'/atendimento-status-financeiro?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +144,7 @@ export class AtendimentoStatusFinanceiroUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,77 +167,64 @@ export class AtendimentoStatusFinanceiroUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="atendimento-status-financeiro-idAtendimento">
+                                    <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idAtendimento">
+                                      Id Atendimento
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="atendimento-status-financeiro-idAtendimento"
+                                    type="string"
+                                    className="form-control"
+                                    name="idAtendimento"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idAtendimentoLabel" for="atendimento-status-financeiro-idAtendimento">
-                                <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-status-financeiro-idAtendimento"
-                                type="string"
-                                className="form-control"
-                                name="idAtendimento"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idStatusFinanceiroLabel" for="atendimento-status-financeiro-idStatusFinanceiro">
-                                <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idStatusFinanceiro">
-                                  Id Status Financeiro
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-status-financeiro-idStatusFinanceiro"
-                                type="string"
-                                className="form-control"
-                                name="idStatusFinanceiro"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="atendimento-status-financeiro-idUsuario">
-                                <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-status-financeiro-idUsuario"
-                                type="string"
-                                className="form-control"
-                                name="idUsuario"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'idStatusFinanceiro' ? (
+                          <Col md="idStatusFinanceiro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idStatusFinanceiroLabel"
+                                    for="atendimento-status-financeiro-idStatusFinanceiro"
+                                  >
+                                    <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idStatusFinanceiro">
+                                      Id Status Financeiro
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="atendimento-status-financeiro-idStatusFinanceiro"
+                                    type="string"
+                                    className="form-control"
+                                    name="idStatusFinanceiro"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idStatusFinanceiro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

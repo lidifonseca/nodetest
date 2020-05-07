@@ -22,36 +22,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './unidade-easy.reducer';
+import { getUnidadeEasyState, IUnidadeEasyBaseState, getEntities } from './unidade-easy.reducer';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
+import { ICategoria } from 'app/shared/model/categoria.model';
+import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
+
 export interface IUnidadeEasyProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IUnidadeEasyBaseState {
-  razaoSocial: any;
-  nomeFantasia: any;
-  cnpj: any;
-  ie: any;
-  telefone1: any;
-  telefone2: any;
-  endereco: any;
-  numero: any;
-  complemento: any;
-  bairro: any;
-  cidade: any;
-  uf: any;
-  cep: any;
-  regans: any;
-  regcnes: any;
-  tissresponsavel: any;
-  tissconselho: any;
-  tissinscricao: any;
-  tisscbo: any;
-  tisscoduf: any;
-  ativo: any;
-}
 export interface IUnidadeEasyState extends IUnidadeEasyBaseState, IPaginationBaseState {}
 
 export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasyState> {
@@ -61,61 +41,14 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getUnidadeEasyState(this.props.location)
+      ...getUnidadeEasyState(this.props.location)
     };
   }
 
-  getUnidadeEasyState = (location): IUnidadeEasyBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const razaoSocial = url.searchParams.get('razaoSocial') || '';
-    const nomeFantasia = url.searchParams.get('nomeFantasia') || '';
-    const cnpj = url.searchParams.get('cnpj') || '';
-    const ie = url.searchParams.get('ie') || '';
-    const telefone1 = url.searchParams.get('telefone1') || '';
-    const telefone2 = url.searchParams.get('telefone2') || '';
-    const endereco = url.searchParams.get('endereco') || '';
-    const numero = url.searchParams.get('numero') || '';
-    const complemento = url.searchParams.get('complemento') || '';
-    const bairro = url.searchParams.get('bairro') || '';
-    const cidade = url.searchParams.get('cidade') || '';
-    const uf = url.searchParams.get('uf') || '';
-    const cep = url.searchParams.get('cep') || '';
-    const regans = url.searchParams.get('regans') || '';
-    const regcnes = url.searchParams.get('regcnes') || '';
-    const tissresponsavel = url.searchParams.get('tissresponsavel') || '';
-    const tissconselho = url.searchParams.get('tissconselho') || '';
-    const tissinscricao = url.searchParams.get('tissinscricao') || '';
-    const tisscbo = url.searchParams.get('tisscbo') || '';
-    const tisscoduf = url.searchParams.get('tisscoduf') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      razaoSocial,
-      nomeFantasia,
-      cnpj,
-      ie,
-      telefone1,
-      telefone2,
-      endereco,
-      numero,
-      complemento,
-      bairro,
-      cidade,
-      uf,
-      cep,
-      regans,
-      regcnes,
-      tissresponsavel,
-      tissconselho,
-      tissinscricao,
-      tisscbo,
-      tisscoduf,
-      ativo
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
+
+    this.props.getCategorias();
   }
 
   cancelCourse = () => {
@@ -141,7 +74,8 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
         tissinscricao: '',
         tisscbo: '',
         tisscoduf: '',
-        ativo: ''
+        ativo: '',
+        categoria: ''
       },
       () => this.sortEntities()
     );
@@ -174,7 +108,9 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -249,6 +185,9 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       'ativo=' +
       this.state.ativo +
       '&' +
+      'categoria=' +
+      this.state.categoria +
+      '&' +
       ''
     );
   };
@@ -278,6 +217,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tisscbo,
       tisscoduf,
       ativo,
+      categoria,
       activePage,
       itemsPerPage,
       sort,
@@ -305,6 +245,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
       tisscbo,
       tisscoduf,
       ativo,
+      categoria,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -312,7 +253,7 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
   };
 
   render() {
-    const { unidadeEasyList, match, totalItems } = this.props;
+    const { categorias, unidadeEasyList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -330,7 +271,11 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.unidadeEasy.home.createLabel">Create a new Unidade Easy</Translate>
@@ -343,199 +288,267 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="razaoSocialLabel" for="unidade-easy-razaoSocial">
-                            <Translate contentKey="generadorApp.unidadeEasy.razaoSocial">Razao Social</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'razaoSocial' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="razaoSocialLabel" for="unidade-easy-razaoSocial">
+                              <Translate contentKey="generadorApp.unidadeEasy.razaoSocial">Razao Social</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="razaoSocial" id="unidade-easy-razaoSocial" value={this.state.razaoSocial} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeFantasiaLabel" for="unidade-easy-nomeFantasia">
-                            <Translate contentKey="generadorApp.unidadeEasy.nomeFantasia">Nome Fantasia</Translate>
-                          </Label>
+                            <AvInput type="text" name="razaoSocial" id="unidade-easy-razaoSocial" value={this.state.razaoSocial} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="nomeFantasia" id="unidade-easy-nomeFantasia" value={this.state.nomeFantasia} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cnpjLabel" for="unidade-easy-cnpj">
-                            <Translate contentKey="generadorApp.unidadeEasy.cnpj">Cnpj</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nomeFantasia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeFantasiaLabel" for="unidade-easy-nomeFantasia">
+                              <Translate contentKey="generadorApp.unidadeEasy.nomeFantasia">Nome Fantasia</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="cnpj" id="unidade-easy-cnpj" value={this.state.cnpj} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ieLabel" for="unidade-easy-ie">
-                            <Translate contentKey="generadorApp.unidadeEasy.ie">Ie</Translate>
-                          </Label>
+                            <AvInput type="text" name="nomeFantasia" id="unidade-easy-nomeFantasia" value={this.state.nomeFantasia} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="ie" id="unidade-easy-ie" value={this.state.ie} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="telefone1Label" for="unidade-easy-telefone1">
-                            <Translate contentKey="generadorApp.unidadeEasy.telefone1">Telefone 1</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'cnpj' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cnpjLabel" for="unidade-easy-cnpj">
+                              <Translate contentKey="generadorApp.unidadeEasy.cnpj">Cnpj</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="telefone1" id="unidade-easy-telefone1" value={this.state.telefone1} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="telefone2Label" for="unidade-easy-telefone2">
-                            <Translate contentKey="generadorApp.unidadeEasy.telefone2">Telefone 2</Translate>
-                          </Label>
+                            <AvInput type="text" name="cnpj" id="unidade-easy-cnpj" value={this.state.cnpj} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="telefone2" id="unidade-easy-telefone2" value={this.state.telefone2} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="enderecoLabel" for="unidade-easy-endereco">
-                            <Translate contentKey="generadorApp.unidadeEasy.endereco">Endereco</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'ie' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ieLabel" for="unidade-easy-ie">
+                              <Translate contentKey="generadorApp.unidadeEasy.ie">Ie</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="endereco" id="unidade-easy-endereco" value={this.state.endereco} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="numeroLabel" for="unidade-easy-numero">
-                            <Translate contentKey="generadorApp.unidadeEasy.numero">Numero</Translate>
-                          </Label>
+                            <AvInput type="text" name="ie" id="unidade-easy-ie" value={this.state.ie} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="numero" id="unidade-easy-numero" value={this.state.numero} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="complementoLabel" for="unidade-easy-complemento">
-                            <Translate contentKey="generadorApp.unidadeEasy.complemento">Complemento</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'telefone1' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="telefone1Label" for="unidade-easy-telefone1">
+                              <Translate contentKey="generadorApp.unidadeEasy.telefone1">Telefone 1</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="complemento" id="unidade-easy-complemento" value={this.state.complemento} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="bairroLabel" for="unidade-easy-bairro">
-                            <Translate contentKey="generadorApp.unidadeEasy.bairro">Bairro</Translate>
-                          </Label>
+                            <AvInput type="text" name="telefone1" id="unidade-easy-telefone1" value={this.state.telefone1} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="bairro" id="unidade-easy-bairro" value={this.state.bairro} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidadeLabel" for="unidade-easy-cidade">
-                            <Translate contentKey="generadorApp.unidadeEasy.cidade">Cidade</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'telefone2' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="telefone2Label" for="unidade-easy-telefone2">
+                              <Translate contentKey="generadorApp.unidadeEasy.telefone2">Telefone 2</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="cidade" id="unidade-easy-cidade" value={this.state.cidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ufLabel" for="unidade-easy-uf">
-                            <Translate contentKey="generadorApp.unidadeEasy.uf">Uf</Translate>
-                          </Label>
+                            <AvInput type="text" name="telefone2" id="unidade-easy-telefone2" value={this.state.telefone2} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="uf" id="unidade-easy-uf" value={this.state.uf} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepLabel" for="unidade-easy-cep">
-                            <Translate contentKey="generadorApp.unidadeEasy.cep">Cep</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'endereco' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="enderecoLabel" for="unidade-easy-endereco">
+                              <Translate contentKey="generadorApp.unidadeEasy.endereco">Endereco</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="cep" id="unidade-easy-cep" value={this.state.cep} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="regansLabel" for="unidade-easy-regans">
-                            <Translate contentKey="generadorApp.unidadeEasy.regans">Regans</Translate>
-                          </Label>
+                            <AvInput type="text" name="endereco" id="unidade-easy-endereco" value={this.state.endereco} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="regans" id="unidade-easy-regans" value={this.state.regans} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="regcnesLabel" for="unidade-easy-regcnes">
-                            <Translate contentKey="generadorApp.unidadeEasy.regcnes">Regcnes</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'numero' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="numeroLabel" for="unidade-easy-numero">
+                              <Translate contentKey="generadorApp.unidadeEasy.numero">Numero</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="regcnes" id="unidade-easy-regcnes" value={this.state.regcnes} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tissresponsavelLabel" for="unidade-easy-tissresponsavel">
-                            <Translate contentKey="generadorApp.unidadeEasy.tissresponsavel">Tissresponsavel</Translate>
-                          </Label>
+                            <AvInput type="text" name="numero" id="unidade-easy-numero" value={this.state.numero} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="tissresponsavel"
-                            id="unidade-easy-tissresponsavel"
-                            value={this.state.tissresponsavel}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tissconselhoLabel" for="unidade-easy-tissconselho">
-                            <Translate contentKey="generadorApp.unidadeEasy.tissconselho">Tissconselho</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="complementoLabel" for="unidade-easy-complemento">
+                              <Translate contentKey="generadorApp.unidadeEasy.complemento">Complemento</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="tissconselho" id="unidade-easy-tissconselho" value={this.state.tissconselho} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tissinscricaoLabel" for="unidade-easy-tissinscricao">
-                            <Translate contentKey="generadorApp.unidadeEasy.tissinscricao">Tissinscricao</Translate>
-                          </Label>
+                            <AvInput type="text" name="complemento" id="unidade-easy-complemento" value={this.state.complemento} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="tissinscricao" id="unidade-easy-tissinscricao" value={this.state.tissinscricao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tisscboLabel" for="unidade-easy-tisscbo">
-                            <Translate contentKey="generadorApp.unidadeEasy.tisscbo">Tisscbo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'bairro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="bairroLabel" for="unidade-easy-bairro">
+                              <Translate contentKey="generadorApp.unidadeEasy.bairro">Bairro</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="tisscbo" id="unidade-easy-tisscbo" value={this.state.tisscbo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tisscodufLabel" for="unidade-easy-tisscoduf">
-                            <Translate contentKey="generadorApp.unidadeEasy.tisscoduf">Tisscoduf</Translate>
-                          </Label>
+                            <AvInput type="text" name="bairro" id="unidade-easy-bairro" value={this.state.bairro} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="tisscoduf" id="unidade-easy-tisscoduf" value={this.state.tisscoduf} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="unidade-easy-ativo">
-                            <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="unidade-easy-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidadeLabel" for="unidade-easy-cidade">
+                              <Translate contentKey="generadorApp.unidadeEasy.cidade">Cidade</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cidade" id="unidade-easy-cidade" value={this.state.cidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'uf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ufLabel" for="unidade-easy-uf">
+                              <Translate contentKey="generadorApp.unidadeEasy.uf">Uf</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="uf" id="unidade-easy-uf" value={this.state.uf} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cep' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepLabel" for="unidade-easy-cep">
+                              <Translate contentKey="generadorApp.unidadeEasy.cep">Cep</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cep" id="unidade-easy-cep" value={this.state.cep} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'regans' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="regansLabel" for="unidade-easy-regans">
+                              <Translate contentKey="generadorApp.unidadeEasy.regans">Regans</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="regans" id="unidade-easy-regans" value={this.state.regans} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'regcnes' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="regcnesLabel" for="unidade-easy-regcnes">
+                              <Translate contentKey="generadorApp.unidadeEasy.regcnes">Regcnes</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="regcnes" id="unidade-easy-regcnes" value={this.state.regcnes} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tissresponsavel' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tissresponsavelLabel" for="unidade-easy-tissresponsavel">
+                              <Translate contentKey="generadorApp.unidadeEasy.tissresponsavel">Tissresponsavel</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="tissresponsavel"
+                              id="unidade-easy-tissresponsavel"
+                              value={this.state.tissresponsavel}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tissconselho' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tissconselhoLabel" for="unidade-easy-tissconselho">
+                              <Translate contentKey="generadorApp.unidadeEasy.tissconselho">Tissconselho</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tissconselho" id="unidade-easy-tissconselho" value={this.state.tissconselho} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tissinscricao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tissinscricaoLabel" for="unidade-easy-tissinscricao">
+                              <Translate contentKey="generadorApp.unidadeEasy.tissinscricao">Tissinscricao</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tissinscricao" id="unidade-easy-tissinscricao" value={this.state.tissinscricao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tisscbo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tisscboLabel" for="unidade-easy-tisscbo">
+                              <Translate contentKey="generadorApp.unidadeEasy.tisscbo">Tisscbo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tisscbo" id="unidade-easy-tisscbo" value={this.state.tisscbo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tisscoduf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tisscodufLabel" for="unidade-easy-tisscoduf">
+                              <Translate contentKey="generadorApp.unidadeEasy.tisscoduf">Tisscoduf</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tisscoduf" id="unidade-easy-tisscoduf" value={this.state.tisscoduf} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="unidade-easy-ativo">
+                              <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="unidade-easy-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'categoria' ? (
+                        <Col md="3">
+                          <Row></Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -563,90 +576,132 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('razaoSocial')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.razaoSocial">Razao Social</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nomeFantasia')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.nomeFantasia">Nome Fantasia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cnpj')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.cnpj">Cnpj</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ie')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.ie">Ie</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('telefone1')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.telefone1">Telefone 1</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('telefone2')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.telefone2">Telefone 2</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('endereco')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.endereco">Endereco</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('numero')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.numero">Numero</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('complemento')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.complemento">Complemento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('bairro')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.bairro">Bairro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidade')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.cidade">Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('uf')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.uf">Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cep')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.cep">Cep</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('regans')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.regans">Regans</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('regcnes')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.regcnes">Regcnes</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tissresponsavel')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.tissresponsavel">Tissresponsavel</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tissconselho')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.tissconselho">Tissconselho</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tissinscricao')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.tissinscricao">Tissinscricao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tisscbo')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.tisscbo">Tisscbo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tisscoduf')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.tisscoduf">Tisscoduf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'razaoSocial' ? (
+                        <th className="hand" onClick={this.sort('razaoSocial')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.razaoSocial">Razao Social</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nomeFantasia' ? (
+                        <th className="hand" onClick={this.sort('nomeFantasia')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.nomeFantasia">Nome Fantasia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cnpj' ? (
+                        <th className="hand" onClick={this.sort('cnpj')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.cnpj">Cnpj</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ie' ? (
+                        <th className="hand" onClick={this.sort('ie')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.ie">Ie</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'telefone1' ? (
+                        <th className="hand" onClick={this.sort('telefone1')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.telefone1">Telefone 1</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'telefone2' ? (
+                        <th className="hand" onClick={this.sort('telefone2')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.telefone2">Telefone 2</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'endereco' ? (
+                        <th className="hand" onClick={this.sort('endereco')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.endereco">Endereco</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'numero' ? (
+                        <th className="hand" onClick={this.sort('numero')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.numero">Numero</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <th className="hand" onClick={this.sort('complemento')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.complemento">Complemento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'bairro' ? (
+                        <th className="hand" onClick={this.sort('bairro')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.bairro">Bairro</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <th className="hand" onClick={this.sort('cidade')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.cidade">Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'uf' ? (
+                        <th className="hand" onClick={this.sort('uf')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.uf">Uf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cep' ? (
+                        <th className="hand" onClick={this.sort('cep')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.cep">Cep</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'regans' ? (
+                        <th className="hand" onClick={this.sort('regans')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.regans">Regans</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'regcnes' ? (
+                        <th className="hand" onClick={this.sort('regcnes')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.regcnes">Regcnes</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tissresponsavel' ? (
+                        <th className="hand" onClick={this.sort('tissresponsavel')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.tissresponsavel">Tissresponsavel</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tissconselho' ? (
+                        <th className="hand" onClick={this.sort('tissconselho')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.tissconselho">Tissconselho</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tissinscricao' ? (
+                        <th className="hand" onClick={this.sort('tissinscricao')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.tissinscricao">Tissinscricao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tisscbo' ? (
+                        <th className="hand" onClick={this.sort('tisscbo')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.tisscbo">Tisscbo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tisscoduf' ? (
+                        <th className="hand" onClick={this.sort('tisscoduf')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.tisscoduf">Tisscoduf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.unidadeEasy.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -661,63 +716,68 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
                           </Button>
                         </td>
 
-                        <td>{unidadeEasy.razaoSocial}</td>
+                        {this.state.baseFilters !== 'razaoSocial' ? <td>{unidadeEasy.razaoSocial}</td> : null}
 
-                        <td>{unidadeEasy.nomeFantasia}</td>
+                        {this.state.baseFilters !== 'nomeFantasia' ? <td>{unidadeEasy.nomeFantasia}</td> : null}
 
-                        <td>{unidadeEasy.cnpj}</td>
+                        {this.state.baseFilters !== 'cnpj' ? <td>{unidadeEasy.cnpj}</td> : null}
 
-                        <td>{unidadeEasy.ie}</td>
+                        {this.state.baseFilters !== 'ie' ? <td>{unidadeEasy.ie}</td> : null}
 
-                        <td>{unidadeEasy.telefone1}</td>
+                        {this.state.baseFilters !== 'telefone1' ? <td>{unidadeEasy.telefone1}</td> : null}
 
-                        <td>{unidadeEasy.telefone2}</td>
+                        {this.state.baseFilters !== 'telefone2' ? <td>{unidadeEasy.telefone2}</td> : null}
 
-                        <td>{unidadeEasy.endereco}</td>
+                        {this.state.baseFilters !== 'endereco' ? <td>{unidadeEasy.endereco}</td> : null}
 
-                        <td>{unidadeEasy.numero}</td>
+                        {this.state.baseFilters !== 'numero' ? <td>{unidadeEasy.numero}</td> : null}
 
-                        <td>{unidadeEasy.complemento}</td>
+                        {this.state.baseFilters !== 'complemento' ? <td>{unidadeEasy.complemento}</td> : null}
 
-                        <td>{unidadeEasy.bairro}</td>
+                        {this.state.baseFilters !== 'bairro' ? <td>{unidadeEasy.bairro}</td> : null}
 
-                        <td>{unidadeEasy.cidade}</td>
+                        {this.state.baseFilters !== 'cidade' ? <td>{unidadeEasy.cidade}</td> : null}
 
-                        <td>{unidadeEasy.uf}</td>
+                        {this.state.baseFilters !== 'uf' ? <td>{unidadeEasy.uf}</td> : null}
 
-                        <td>{unidadeEasy.cep}</td>
+                        {this.state.baseFilters !== 'cep' ? <td>{unidadeEasy.cep}</td> : null}
 
-                        <td>{unidadeEasy.regans}</td>
+                        {this.state.baseFilters !== 'regans' ? <td>{unidadeEasy.regans}</td> : null}
 
-                        <td>{unidadeEasy.regcnes}</td>
+                        {this.state.baseFilters !== 'regcnes' ? <td>{unidadeEasy.regcnes}</td> : null}
 
-                        <td>{unidadeEasy.tissresponsavel}</td>
+                        {this.state.baseFilters !== 'tissresponsavel' ? <td>{unidadeEasy.tissresponsavel}</td> : null}
 
-                        <td>{unidadeEasy.tissconselho}</td>
+                        {this.state.baseFilters !== 'tissconselho' ? <td>{unidadeEasy.tissconselho}</td> : null}
 
-                        <td>{unidadeEasy.tissinscricao}</td>
+                        {this.state.baseFilters !== 'tissinscricao' ? <td>{unidadeEasy.tissinscricao}</td> : null}
 
-                        <td>{unidadeEasy.tisscbo}</td>
+                        {this.state.baseFilters !== 'tisscbo' ? <td>{unidadeEasy.tisscbo}</td> : null}
 
-                        <td>{unidadeEasy.tisscoduf}</td>
+                        {this.state.baseFilters !== 'tisscoduf' ? <td>{unidadeEasy.tisscoduf}</td> : null}
 
-                        <td>{unidadeEasy.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{unidadeEasy.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${unidadeEasy.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${unidadeEasy.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${unidadeEasy.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${unidadeEasy.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${unidadeEasy.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${unidadeEasy.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -759,11 +819,13 @@ export class UnidadeEasy extends React.Component<IUnidadeEasyProps, IUnidadeEasy
 }
 
 const mapStateToProps = ({ unidadeEasy, ...storeState }: IRootState) => ({
+  categorias: storeState.categoria.entities,
   unidadeEasyList: unidadeEasy.entities,
   totalItems: unidadeEasy.totalItems
 });
 
 const mapDispatchToProps = {
+  getCategorias,
   getEntities
 };
 

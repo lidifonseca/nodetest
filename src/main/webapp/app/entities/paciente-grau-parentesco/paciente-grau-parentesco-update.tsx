@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './paciente-grau-parentesco.reducer';
+import {
+  IPacienteGrauParentescoUpdateState,
+  getEntity,
+  getPacienteGrauParentescoState,
+  IPacienteGrauParentescoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-grau-parentesco.reducer';
 import { IPacienteGrauParentesco } from 'app/shared/model/paciente-grau-parentesco.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteGrauParentescoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteGrauParentescoUpdateState {
-  isNew: boolean;
-}
-
 export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauParentescoUpdateProps, IPacienteGrauParentescoUpdateState> {
   constructor(props: Readonly<IPacienteGrauParentescoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPacienteGrauParentescoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['grauParentesco'] ? '&grauParentesco=' + fieldsBase['grauParentesco'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteGrauParentescoEntity } = this.props;
@@ -57,13 +77,14 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-grau-parentesco');
+    this.props.history.push('/paciente-grau-parentesco?' + this.getFiltersURL());
   };
 
   render() {
     const { pacienteGrauParentescoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -101,7 +122,7 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-grau-parentesco"
+                  to={'/paciente-grau-parentesco?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -120,7 +141,7 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,44 +164,46 @@ export class PacienteGrauParentescoUpdate extends React.Component<IPacienteGrauP
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'grauParentesco' ? (
+                          <Col md="grauParentesco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="grauParentescoLabel" for="paciente-grau-parentesco-grauParentesco">
+                                    <Translate contentKey="generadorApp.pacienteGrauParentesco.grauParentesco">Grau Parentesco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-grau-parentesco-grauParentesco" type="text" name="grauParentesco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="grauParentesco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="grauParentescoLabel" for="paciente-grau-parentesco-grauParentesco">
-                                <Translate contentKey="generadorApp.pacienteGrauParentesco.grauParentesco">Grau Parentesco</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-grau-parentesco-grauParentesco"
-                                type="text"
-                                name="grauParentesco"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="paciente-grau-parentesco-ativo">
-                                <Translate contentKey="generadorApp.pacienteGrauParentesco.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-grau-parentesco-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-grau-parentesco-ativo">
+                                    <Translate contentKey="generadorApp.pacienteGrauParentesco.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-grau-parentesco-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

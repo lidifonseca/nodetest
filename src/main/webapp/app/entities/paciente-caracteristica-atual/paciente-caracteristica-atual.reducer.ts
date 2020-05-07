@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteCaracteristicaAtual, defaultValue } from 'app/shared/model/paciente-caracteristica-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTECARACTERISTICAATUAL_LIST_EXPORT: 'pacienteCaracteristicaAtual/FETCH_PACIENTECARACTERISTICAATUAL_LIST_EXPORT',
   FETCH_PACIENTECARACTERISTICAATUAL_LIST: 'pacienteCaracteristicaAtual/FETCH_PACIENTECARACTERISTICAATUAL_LIST',
   FETCH_PACIENTECARACTERISTICAATUAL: 'pacienteCaracteristicaAtual/FETCH_PACIENTECARACTERISTICAATUAL',
   CREATE_PACIENTECARACTERISTICAATUAL: 'pacienteCaracteristicaAtual/CREATE_PACIENTECARACTERISTICAATUAL',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PacienteCaracteristicaAtualState = Readonly<typeof initialState>;
 
+export interface IPacienteCaracteristicaAtualBaseState {
+  baseFilters: any;
+  idPaciente: any;
+  idPacienteCaracteristica: any;
+}
+
+export interface IPacienteCaracteristicaAtualUpdateState {
+  fieldsBase: IPacienteCaracteristicaAtualBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteCaracteristicaAtualState = initialState, action): PacienteCaracteristicaAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL):
       return {
@@ -51,6 +64,7 @@ export default (state: PacienteCaracteristicaAtualState = initialState, action):
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTECARACTERISTICAATUAL):
@@ -108,7 +122,6 @@ const apiUrl = 'api/paciente-caracteristica-atuals';
 export type ICrudGetAllActionPacienteCaracteristicaAtual<T> = (
   idPaciente?: any,
   idPacienteCaracteristica?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -117,20 +130,18 @@ export type ICrudGetAllActionPacienteCaracteristicaAtual<T> = (
 export const getEntities: ICrudGetAllActionPacienteCaracteristicaAtual<IPacienteCaracteristicaAtual> = (
   idPaciente,
   idPacienteCaracteristica,
-  idUsuario,
   page,
   size,
   sort
 ) => {
   const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
   const idPacienteCaracteristicaRequest = idPacienteCaracteristica ? `idPacienteCaracteristica.contains=${idPacienteCaracteristica}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL_LIST,
     payload: axios.get<IPacienteCaracteristicaAtual>(
-      `${requestUrl}${idPacienteRequest}${idPacienteCaracteristicaRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idPacienteCaracteristicaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -139,6 +150,25 @@ export const getEntity: ICrudGetAction<IPacienteCaracteristicaAtual> = id => {
   return {
     type: ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL,
     payload: axios.get<IPacienteCaracteristicaAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPacienteCaracteristicaAtual<IPacienteCaracteristicaAtual> = (
+  idPaciente,
+  idPacienteCaracteristica,
+  page,
+  size,
+  sort
+) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const idPacienteCaracteristicaRequest = idPacienteCaracteristica ? `idPacienteCaracteristica.contains=${idPacienteCaracteristica}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTECARACTERISTICAATUAL_LIST,
+    payload: axios.get<IPacienteCaracteristicaAtual>(
+      `${requestUrl}${idPacienteRequest}${idPacienteCaracteristicaRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -177,3 +207,16 @@ export const deleteEntity: ICrudDeleteAction<IPacienteCaracteristicaAtual> = id 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteCaracteristicaAtualState = (location): IPacienteCaracteristicaAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idPacienteCaracteristica = url.searchParams.get('idPacienteCaracteristica') || '';
+
+  return {
+    baseFilters,
+    idPaciente,
+    idPacienteCaracteristica
+  };
+};

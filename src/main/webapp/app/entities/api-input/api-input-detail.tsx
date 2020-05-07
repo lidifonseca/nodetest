@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './api-input.reducer';
+import { getEntity, IApiInputBaseState, getApiInputState } from './api-input.reducer';
 import { IApiInput } from 'app/shared/model/api-input.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IApiInputState {
+  fieldsBase: IApiInputBaseState;
+}
+
 export interface IApiInputDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ApiInputDetail extends React.Component<IApiInputDetailProps> {
+export class ApiInputDetail extends React.Component<IApiInputDetailProps, IApiInputState> {
   constructor(props: Readonly<IApiInputDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getApiInputState(this.props.location)
     };
   }
 

@@ -22,23 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-complexidade-atual.reducer';
+import { getPacienteComplexidadeAtualState, IPacienteComplexidadeAtualBaseState, getEntities } from './paciente-complexidade-atual.reducer';
 import { IPacienteComplexidadeAtual } from 'app/shared/model/paciente-complexidade-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPacienteComplexidadeAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteComplexidadeAtualBaseState {
-  idPaciente: any;
-  idPacienteComplexidade: any;
-  baixa: any;
-  media: any;
-  alta: any;
-  ventilacaoMecanica: any;
-  telemonitoramente: any;
-  idUsuario: any;
-}
 export interface IPacienteComplexidadeAtualState extends IPacienteComplexidadeAtualBaseState, IPaginationBaseState {}
 
 export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexidadeAtualProps, IPacienteComplexidadeAtualState> {
@@ -48,32 +38,9 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteComplexidadeAtualState(this.props.location)
+      ...getPacienteComplexidadeAtualState(this.props.location)
     };
   }
-
-  getPacienteComplexidadeAtualState = (location): IPacienteComplexidadeAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idPacienteComplexidade = url.searchParams.get('idPacienteComplexidade') || '';
-    const baixa = url.searchParams.get('baixa') || '';
-    const media = url.searchParams.get('media') || '';
-    const alta = url.searchParams.get('alta') || '';
-    const ventilacaoMecanica = url.searchParams.get('ventilacaoMecanica') || '';
-    const telemonitoramente = url.searchParams.get('telemonitoramente') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idPaciente,
-      idPacienteComplexidade,
-      baixa,
-      media,
-      alta,
-      ventilacaoMecanica,
-      telemonitoramente,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -88,8 +55,7 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
         media: '',
         alta: '',
         ventilacaoMecanica: '',
-        telemonitoramente: '',
-        idUsuario: ''
+        telemonitoramente: ''
       },
       () => this.sortEntities()
     );
@@ -122,7 +88,9 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -155,9 +123,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
       'telemonitoramente=' +
       this.state.telemonitoramente +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -173,7 +138,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
       alta,
       ventilacaoMecanica,
       telemonitoramente,
-      idUsuario,
       activePage,
       itemsPerPage,
       sort,
@@ -187,7 +151,6 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
       alta,
       ventilacaoMecanica,
       telemonitoramente,
-      idUsuario,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -213,7 +176,11 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteComplexidadeAtual.home.createLabel">
@@ -228,94 +195,106 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="paciente-complexidade-atual-idPaciente">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="paciente-complexidade-atual-idPaciente"
-                            value={this.state.idPaciente}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteComplexidadeLabel" for="paciente-complexidade-atual-idPacienteComplexidade">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPacienteComplexidade">
-                              Id Paciente Complexidade
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPacienteComplexidade"
-                            id="paciente-complexidade-atual-idPacienteComplexidade"
-                            value={this.state.idPacienteComplexidade}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="baixaLabel" for="paciente-complexidade-atual-baixa">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.baixa">Baixa</Translate>
-                          </Label>
-                          <AvInput type="string" name="baixa" id="paciente-complexidade-atual-baixa" value={this.state.baixa} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="mediaLabel" for="paciente-complexidade-atual-media">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.media">Media</Translate>
-                          </Label>
-                          <AvInput type="string" name="media" id="paciente-complexidade-atual-media" value={this.state.media} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="altaLabel" for="paciente-complexidade-atual-alta">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.alta">Alta</Translate>
-                          </Label>
-                          <AvInput type="string" name="alta" id="paciente-complexidade-atual-alta" value={this.state.alta} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ventilacaoMecanicaLabel" for="paciente-complexidade-atual-ventilacaoMecanica">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.ventilacaoMecanica">
-                              Ventilacao Mecanica
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ventilacaoMecanica"
-                            id="paciente-complexidade-atual-ventilacaoMecanica"
-                            value={this.state.ventilacaoMecanica}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="telemonitoramenteLabel" for="paciente-complexidade-atual-telemonitoramente">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.telemonitoramente">Telemonitoramente</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="telemonitoramente"
-                            id="paciente-complexidade-atual-telemonitoramente"
-                            value={this.state.telemonitoramente}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="paciente-complexidade-atual-idUsuario">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="idUsuario" id="paciente-complexidade-atual-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="paciente-complexidade-atual-idPaciente">
+                              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPaciente"
+                              id="paciente-complexidade-atual-idPaciente"
+                              value={this.state.idPaciente}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPacienteComplexidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteComplexidadeLabel" for="paciente-complexidade-atual-idPacienteComplexidade">
+                              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPacienteComplexidade">
+                                Id Paciente Complexidade
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPacienteComplexidade"
+                              id="paciente-complexidade-atual-idPacienteComplexidade"
+                              value={this.state.idPacienteComplexidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'baixa' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="baixaLabel" for="paciente-complexidade-atual-baixa">
+                              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.baixa">Baixa</Translate>
+                            </Label>
+                            <AvInput type="string" name="baixa" id="paciente-complexidade-atual-baixa" value={this.state.baixa} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'media' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="mediaLabel" for="paciente-complexidade-atual-media">
+                              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.media">Media</Translate>
+                            </Label>
+                            <AvInput type="string" name="media" id="paciente-complexidade-atual-media" value={this.state.media} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'alta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="altaLabel" for="paciente-complexidade-atual-alta">
+                              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.alta">Alta</Translate>
+                            </Label>
+                            <AvInput type="string" name="alta" id="paciente-complexidade-atual-alta" value={this.state.alta} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ventilacaoMecanica' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ventilacaoMecanicaLabel" for="paciente-complexidade-atual-ventilacaoMecanica">
+                              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.ventilacaoMecanica">
+                                Ventilacao Mecanica
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="ventilacaoMecanica"
+                              id="paciente-complexidade-atual-ventilacaoMecanica"
+                              value={this.state.ventilacaoMecanica}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'telemonitoramente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="telemonitoramenteLabel" for="paciente-complexidade-atual-telemonitoramente">
+                              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.telemonitoramente">Telemonitoramente</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="telemonitoramente"
+                              id="paciente-complexidade-atual-telemonitoramente"
+                              value={this.state.telemonitoramente}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -343,40 +322,50 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPacienteComplexidade')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPacienteComplexidade">
-                          Id Paciente Complexidade
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('baixa')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.baixa">Baixa</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('media')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.media">Media</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('alta')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.alta">Alta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ventilacaoMecanica')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.ventilacaoMecanica">Ventilacao Mecanica</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('telemonitoramente')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.telemonitoramente">Telemonitoramente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPacienteComplexidade' ? (
+                        <th className="hand" onClick={this.sort('idPacienteComplexidade')}>
+                          <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPacienteComplexidade">
+                            Id Paciente Complexidade
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'baixa' ? (
+                        <th className="hand" onClick={this.sort('baixa')}>
+                          <Translate contentKey="generadorApp.pacienteComplexidadeAtual.baixa">Baixa</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'media' ? (
+                        <th className="hand" onClick={this.sort('media')}>
+                          <Translate contentKey="generadorApp.pacienteComplexidadeAtual.media">Media</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'alta' ? (
+                        <th className="hand" onClick={this.sort('alta')}>
+                          <Translate contentKey="generadorApp.pacienteComplexidadeAtual.alta">Alta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ventilacaoMecanica' ? (
+                        <th className="hand" onClick={this.sort('ventilacaoMecanica')}>
+                          <Translate contentKey="generadorApp.pacienteComplexidadeAtual.ventilacaoMecanica">Ventilacao Mecanica</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'telemonitoramente' ? (
+                        <th className="hand" onClick={this.sort('telemonitoramente')}>
+                          <Translate contentKey="generadorApp.pacienteComplexidadeAtual.telemonitoramente">Telemonitoramente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -391,37 +380,52 @@ export class PacienteComplexidadeAtual extends React.Component<IPacienteComplexi
                           </Button>
                         </td>
 
-                        <td>{pacienteComplexidadeAtual.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{pacienteComplexidadeAtual.idPaciente}</td> : null}
 
-                        <td>{pacienteComplexidadeAtual.idPacienteComplexidade}</td>
+                        {this.state.baseFilters !== 'idPacienteComplexidade' ? (
+                          <td>{pacienteComplexidadeAtual.idPacienteComplexidade}</td>
+                        ) : null}
 
-                        <td>{pacienteComplexidadeAtual.baixa}</td>
+                        {this.state.baseFilters !== 'baixa' ? <td>{pacienteComplexidadeAtual.baixa}</td> : null}
 
-                        <td>{pacienteComplexidadeAtual.media}</td>
+                        {this.state.baseFilters !== 'media' ? <td>{pacienteComplexidadeAtual.media}</td> : null}
 
-                        <td>{pacienteComplexidadeAtual.alta}</td>
+                        {this.state.baseFilters !== 'alta' ? <td>{pacienteComplexidadeAtual.alta}</td> : null}
 
-                        <td>{pacienteComplexidadeAtual.ventilacaoMecanica}</td>
+                        {this.state.baseFilters !== 'ventilacaoMecanica' ? <td>{pacienteComplexidadeAtual.ventilacaoMecanica}</td> : null}
 
-                        <td>{pacienteComplexidadeAtual.telemonitoramente}</td>
-
-                        <td>{pacienteComplexidadeAtual.idUsuario}</td>
+                        {this.state.baseFilters !== 'telemonitoramente' ? <td>{pacienteComplexidadeAtual.telemonitoramente}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteComplexidadeAtual.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteComplexidadeAtual.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteComplexidadeAtual.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteComplexidadeAtual.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteComplexidadeAtual.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteComplexidadeAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

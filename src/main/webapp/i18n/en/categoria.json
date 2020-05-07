@@ -3,15 +3,15 @@
     "categoria": {
       "home": {
         "title": "Categorias",
-        "createLabel": "Criar novo Categoria",
-        "createOrEditLabel": "Criar ou editar Categoria",
-        "notFound": "Nenhum Categoria encontrado"
+        "createLabel": "Create a new Categoria",
+        "createOrEditLabel": "Create or edit a Categoria",
+        "notFound": "No Categorias found"
       },
-      "created": "Um novo Categoria foi criado com o identificador {{ param }}",
-      "updated": "Um Categoria foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Categoria foi excluído com o identificador {{ param }}",
+      "created": "A new Categoria is created with identifier {{ param }}",
+      "updated": "A Categoria is updated with identifier {{ param }}",
+      "deleted": "A Categoria is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Categoria {{ id }}?"
+        "question": "Are you sure you want to delete Categoria {{ id }}?"
       },
       "detail": {
         "title": "Categoria"
@@ -22,11 +22,7 @@
       "publicar": "Publicar",
       "ordem": "Ordem",
       "publicarSite": "Publicar Site",
-      "categoriaAtividade": "Categoria Atividade",
-      "categoriaContrato": "Categoria Contrato",
-      "categoriaUnidade": "Categoria Unidade",
-      "cidXPtaNovoPadItemIndi": "Cid X Pta Novo Pad Item Indi",
-      "especialidade": "Especialidade"
+      "unidade": "Unidade"
     }
   }
 }

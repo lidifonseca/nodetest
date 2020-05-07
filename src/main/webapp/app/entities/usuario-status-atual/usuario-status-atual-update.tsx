@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './usuario-status-atual.reducer';
+import {
+  IUsuarioStatusAtualUpdateState,
+  getEntity,
+  getUsuarioStatusAtualState,
+  IUsuarioStatusAtualBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './usuario-status-atual.reducer';
 import { IUsuarioStatusAtual } from 'app/shared/model/usuario-status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IUsuarioStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IUsuarioStatusAtualUpdateState {
-  isNew: boolean;
-}
-
 export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtualUpdateProps, IUsuarioStatusAtualUpdateState> {
   constructor(props: Readonly<IUsuarioStatusAtualUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getUsuarioStatusAtualState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,21 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['statusAtual'] ? '&statusAtual=' + fieldsBase['statusAtual'] : '') +
+      (fieldsBase['obs'] ? '&obs=' + fieldsBase['obs'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { usuarioStatusAtualEntity } = this.props;
@@ -57,13 +78,14 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
   };
 
   handleClose = () => {
-    this.props.history.push('/usuario-status-atual');
+    this.props.history.push('/usuario-status-atual?' + this.getFiltersURL());
   };
 
   render() {
     const { usuarioStatusAtualEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -101,7 +123,7 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/usuario-status-atual"
+                  to={'/usuario-status-atual?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -120,7 +142,7 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -136,74 +158,70 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'statusAtual' ? (
+                          <Col md="statusAtual">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusAtualLabel" for="usuario-status-atual-statusAtual">
+                                    <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="usuario-status-atual-statusAtual"
+                                    type="string"
+                                    className="form-control"
+                                    name="statusAtual"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtual" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="usuario-status-atual-idUsuario">
-                                <Translate contentKey="generadorApp.usuarioStatusAtual.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="usuario-status-atual-idUsuario" type="text" name="idUsuario" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'obs' ? (
+                          <Col md="obs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="obsLabel" for="usuario-status-atual-obs">
+                                    <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-status-atual-obs" type="text" name="obs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="statusAtualLabel" for="usuario-status-atual-statusAtual">
-                                <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="usuario-status-atual-statusAtual" type="string" className="form-control" name="statusAtual" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="obsLabel" for="usuario-status-atual-obs">
-                                <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="usuario-status-atual-obs"
-                                type="text"
-                                name="obs"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="usuario-status-atual-ativo">
-                                <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="usuario-status-atual-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="usuario-status-atual-ativo">
+                                    <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-status-atual-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

@@ -3,23 +3,20 @@
     "atendimentoAssinaturas": {
       "home": {
         "title": "Atendimento Assinaturas",
-        "createLabel": "Criar novo Atendimento Assinaturas",
-        "createOrEditLabel": "Criar ou editar Atendimento Assinaturas",
-        "notFound": "Nenhum Atendimento Assinaturas encontrado"
+        "createLabel": "Create a new Atendimento Assinaturas",
+        "createOrEditLabel": "Create or edit a Atendimento Assinaturas",
+        "notFound": "No Atendimento Assinaturas found"
       },
-      "created": "Um novo Atendimento Assinaturas foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento Assinaturas foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento Assinaturas foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento Assinaturas is created with identifier {{ param }}",
+      "updated": "A Atendimento Assinaturas is updated with identifier {{ param }}",
+      "deleted": "A Atendimento Assinaturas is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento Assinaturas {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento Assinaturas {{ id }}?"
       },
       "detail": {
         "title": "Atendimento Assinaturas"
       },
-      "arquivoAssinatura": "Arquivo Assinatura",
-      "idAtendimento": "Id Atendimento",
-      "idProfissional": "Id Profissional",
-      "idPaciente": "Id Paciente"
+      "arquivoAssinatura": "Arquivo Assinatura"
     }
   }
 }

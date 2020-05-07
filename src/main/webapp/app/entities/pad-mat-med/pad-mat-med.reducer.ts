@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadMatMed, defaultValue } from 'app/shared/model/pad-mat-med.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADMATMED_LIST_EXPORT: 'padMatMed/FETCH_PADMATMED_LIST_EXPORT',
   FETCH_PADMATMED_LIST: 'padMatMed/FETCH_PADMATMED_LIST',
   FETCH_PADMATMED: 'padMatMed/FETCH_PADMATMED',
   CREATE_PADMATMED: 'padMatMed/CREATE_PADMATMED',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type PadMatMedState = Readonly<typeof initialState>;
 
+export interface IPadMatMedBaseState {
+  baseFilters: any;
+  idPad: any;
+  idMatMed: any;
+  qtd: any;
+  ativo: any;
+}
+
+export interface IPadMatMedUpdateState {
+  fieldsBase: IPadMatMedBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PadMatMedState = initialState, action): PadMatMedState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADMATMED_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADMATMED_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADMATMED):
       return {
@@ -51,6 +66,7 @@ export default (state: PadMatMedState = initialState, action): PadMatMedState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADMATMED_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADMATMED_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADMATMED):
     case FAILURE(ACTION_TYPES.CREATE_PADMATMED):
@@ -109,25 +125,23 @@ export type ICrudGetAllActionPadMatMed<T> = (
   idPad?: any,
   idMatMed?: any,
   qtd?: any,
-  idUsuario?: any,
   ativo?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadMatMed<IPadMatMed> = (idPad, idMatMed, qtd, idUsuario, ativo, page, size, sort) => {
+export const getEntities: ICrudGetAllActionPadMatMed<IPadMatMed> = (idPad, idMatMed, qtd, ativo, page, size, sort) => {
   const idPadRequest = idPad ? `idPad.contains=${idPad}&` : '';
   const idMatMedRequest = idMatMed ? `idMatMed.contains=${idMatMed}&` : '';
   const qtdRequest = qtd ? `qtd.contains=${qtd}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADMATMED_LIST,
     payload: axios.get<IPadMatMed>(
-      `${requestUrl}${idPadRequest}${idMatMedRequest}${qtdRequest}${idUsuarioRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPadRequest}${idMatMedRequest}${qtdRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -136,6 +150,21 @@ export const getEntity: ICrudGetAction<IPadMatMed> = id => {
   return {
     type: ACTION_TYPES.FETCH_PADMATMED,
     payload: axios.get<IPadMatMed>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPadMatMed<IPadMatMed> = (idPad, idMatMed, qtd, ativo, page, size, sort) => {
+  const idPadRequest = idPad ? `idPad.contains=${idPad}&` : '';
+  const idMatMedRequest = idMatMed ? `idMatMed.contains=${idMatMed}&` : '';
+  const qtdRequest = qtd ? `qtd.contains=${qtd}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADMATMED_LIST,
+    payload: axios.get<IPadMatMed>(
+      `${requestUrl}${idPadRequest}${idMatMedRequest}${qtdRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -174,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<IPadMatMed> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadMatMedState = (location): IPadMatMedBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPad = url.searchParams.get('idPad') || '';
+  const idMatMed = url.searchParams.get('idMatMed') || '';
+  const qtd = url.searchParams.get('qtd') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idPad,
+    idMatMed,
+    qtd,
+    ativo
+  };
+};

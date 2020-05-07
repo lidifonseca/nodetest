@@ -3,15 +3,15 @@
     "indicadoresValores": {
       "home": {
         "title": "Indicadores Valores",
-        "createLabel": "Criar novo Indicadores Valores",
-        "createOrEditLabel": "Criar ou editar Indicadores Valores",
-        "notFound": "Nenhum Indicadores Valores encontrado"
+        "createLabel": "Create a new Indicadores Valores",
+        "createOrEditLabel": "Create or edit a Indicadores Valores",
+        "notFound": "No Indicadores Valores found"
       },
-      "created": "Um novo Indicadores Valores foi criado com o identificador {{ param }}",
-      "updated": "Um Indicadores Valores foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Indicadores Valores foi excluído com o identificador {{ param }}",
+      "created": "A new Indicadores Valores is created with identifier {{ param }}",
+      "updated": "A Indicadores Valores is updated with identifier {{ param }}",
+      "deleted": "A Indicadores Valores is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Indicadores Valores {{ id }}?"
+        "question": "Are you sure you want to delete Indicadores Valores {{ id }}?"
       },
       "detail": {
         "title": "Indicadores Valores"
@@ -21,8 +21,7 @@
       "vlMaximo": "Vl Maximo",
       "unidadeMedida": "Unidade Medida",
       "idadeMinima": "Idade Minima",
-      "idadeMaxima": "Idade Maxima",
-      "indicadoresId": "Indicadores Id"
+      "idadeMaxima": "Idade Maxima"
     }
   }
 }

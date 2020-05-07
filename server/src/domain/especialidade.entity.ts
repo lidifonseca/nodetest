@@ -4,87 +4,34 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Atendimento from './atendimento.entity';
-import EspecialidadeOperadora from './especialidade-operadora.entity';
-import EspecialidadeUnidade from './especialidade-unidade.entity';
-import EspecialidadeValor from './especialidade-valor.entity';
-import PacientePedido from './paciente-pedido.entity';
-import PadItem from './pad-item.entity';
 import UnidadeEasy from './unidade-easy.entity';
-import Categoria from './categoria.entity';
-import TipoEspecialidade from './tipo-especialidade.entity';
-import TipoUnidade from './tipo-unidade.entity';
 
 /**
  * A Especialidade.
  */
-@Entity('especialidade')
+@Entity('tb_especialidade')
 export default class Especialidade extends BaseEntity {
-  @Column({ name: 'icon', length: 100 })
+  @Column({ name: 'ICON', length: 100 })
   icon: string;
 
-  @Column({ name: 'especialidade', length: 150 })
+  @Column({ name: 'ESPECIALIDADE', length: 150 })
   especialidade: string;
 
-  @Column({ type: 'blob', name: 'descricao' })
-  descricao: any;
+  @Column({ name: 'DESCRICAO' })
+  descricao: string;
 
-  @Column({ type: 'integer', name: 'duracao' })
+  @Column({ type: 'integer', name: 'DURACAO' })
   duracao: number;
 
-  @Column({ name: 'importante', length: 255 })
+  @Column({ name: 'IMPORTANTE', length: 255 })
   importante: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @OneToMany(
-    type => Atendimento,
-    other => other.idEspecialidade
-  )
-  atendimentos: Atendimento[];
-
-  @OneToMany(
-    type => EspecialidadeOperadora,
-    other => other.idEspecialidade
-  )
-  especialidadeOperadoras: EspecialidadeOperadora[];
-
-  @OneToMany(
-    type => EspecialidadeUnidade,
-    other => other.idEspecialidade
-  )
-  especialidadeUnidades: EspecialidadeUnidade[];
-
-  @OneToMany(
-    type => EspecialidadeValor,
-    other => other.idEspecialidade
-  )
-  especialidadeValors: EspecialidadeValor[];
-
-  @OneToMany(
-    type => PacientePedido,
-    other => other.idEspecialidade
-  )
-  pacientePedidos: PacientePedido[];
-
-  @OneToMany(
-    type => PadItem,
-    other => other.idEspecialidade
-  )
-  padItems: PadItem[];
-
   @ManyToOne(type => UnidadeEasy)
+  @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
-
-  @ManyToOne(type => Categoria)
-  idCategoria: Categoria;
-
-  @ManyToOne(type => TipoEspecialidade)
-  idTipoEspecialidade: TipoEspecialidade;
-
-  @ManyToOne(type => TipoUnidade)
-  idTipoUnidade: TipoUnidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

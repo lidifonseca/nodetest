@@ -87,6 +87,7 @@
         },
         {
             "fieldName": "telefone1",
+            "javadoc": "@dbName TELEFONE1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -95,6 +96,7 @@
         },
         {
             "fieldName": "telefone2",
+            "javadoc": "@dbName TELEFONE2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -103,6 +105,7 @@
         },
         {
             "fieldName": "celular1",
+            "javadoc": "@dbName CELULAR1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -111,6 +114,7 @@
         },
         {
             "fieldName": "celular2",
+            "javadoc": "@dbName CELULAR2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -253,29 +257,9 @@
         {
             "fieldName": "preferenciaAtendimento",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "senhaChat",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "45"
         }
     ],
     "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimentoAceite",
-            "otherEntityRelationshipName": "idProfissional",
-            "relationshipName": "atendimentoAceite"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimentoAssinaturas",
-            "otherEntityRelationshipName": "idProfissional",
-            "relationshipName": "atendimentoAssinaturas"
-        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
@@ -284,7 +268,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200503003300",
+    "changelogDate": "20200507120600",
     "entityTableName": "profissional",
     "dto": "mapstruct",
     "pagination": "pagination",

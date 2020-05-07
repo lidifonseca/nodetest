@@ -8,7 +8,15 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './profissional-dispositivo-complexidade-atual.reducer';
+import {
+  IProfissionalDispositivoComplexidadeAtualUpdateState,
+  getEntity,
+  getProfissionalDispositivoComplexidadeAtualState,
+  IProfissionalDispositivoComplexidadeAtualBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './profissional-dispositivo-complexidade-atual.reducer';
 import { IProfissionalDispositivoComplexidadeAtual } from 'app/shared/model/profissional-dispositivo-complexidade-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -18,17 +26,15 @@ export interface IProfissionalDispositivoComplexidadeAtualUpdateProps
     DispatchProps,
     RouteComponentProps<{ id: string }> {}
 
-export interface IProfissionalDispositivoComplexidadeAtualUpdateState {
-  isNew: boolean;
-}
-
 export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Component<
   IProfissionalDispositivoComplexidadeAtualUpdateProps,
   IProfissionalDispositivoComplexidadeAtualUpdateState
 > {
   constructor(props: Readonly<IProfissionalDispositivoComplexidadeAtualUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProfissionalDispositivoComplexidadeAtualState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,6 +52,22 @@ export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Compon
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idProfissional'] ? '&idProfissional=' + fieldsBase['idProfissional'] : '') +
+      (fieldsBase['idProfissionalDispositivoComplexidade']
+        ? '&idProfissionalDispositivoComplexidade=' + fieldsBase['idProfissionalDispositivoComplexidade']
+        : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalDispositivoComplexidadeAtualEntity } = this.props;
@@ -63,13 +85,14 @@ export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Compon
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-dispositivo-complexidade-atual');
+    this.props.history.push('/profissional-dispositivo-complexidade-atual?' + this.getFiltersURL());
   };
 
   render() {
     const { profissionalDispositivoComplexidadeAtualEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -107,7 +130,7 @@ export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Compon
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/profissional-dispositivo-complexidade-atual"
+                  to={'/profissional-dispositivo-complexidade-atual?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -126,7 +149,7 @@ export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Compon
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -149,93 +172,68 @@ export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Compon
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idProfissionalLabel"
+                                    for="profissional-dispositivo-complexidade-atual-idProfissional"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-dispositivo-complexidade-atual-idProfissional"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProfissional"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="idProfissionalLabel"
-                                for="profissional-dispositivo-complexidade-atual-idProfissional"
-                              >
-                                <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">
-                                  Id Profissional
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-dispositivo-complexidade-atual-idProfissional"
-                                type="string"
-                                className="form-control"
-                                name="idProfissional"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="idProfissionalDispositivoComplexidadeLabel"
-                                for="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
-                              >
-                                <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
-                                  Id Profissional Dispositivo Complexidade
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
-                                type="string"
-                                className="form-control"
-                                name="idProfissionalDispositivoComplexidade"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="profissional-dispositivo-complexidade-atual-idUsuario">
-                                <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idUsuario">
-                                  Id Usuario
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-dispositivo-complexidade-atual-idUsuario"
-                                type="string"
-                                className="form-control"
-                                name="idUsuario"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'idProfissionalDispositivoComplexidade' ? (
+                          <Col md="idProfissionalDispositivoComplexidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idProfissionalDispositivoComplexidadeLabel"
+                                    for="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
+                                      Id Profissional Dispositivo Complexidade
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProfissionalDispositivoComplexidade"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissionalDispositivoComplexidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

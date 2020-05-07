@@ -7,34 +7,31 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProntuarioMotivoManifestacao.
  */
-@Entity('prontuario_motivo_manifestacao')
+@Entity('tb_prontuario_motivo_manifestacao')
 export default class ProntuarioMotivoManifestacao extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_prontuario', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PRONTUARIO', nullable: false })
   idProntuario: number;
 
-  @Column({ type: 'integer', name: 'id_paciente', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE', nullable: false })
   idPaciente: number;
 
-  @Column({ type: 'integer', name: 'id_motivo' })
+  @Column({ type: 'integer', name: 'ID_MOTIVO' })
   idMotivo: number;
 
-  @Column({ type: 'integer', name: 'id_motivo_filho' })
+  @Column({ type: 'integer', name: 'ID_MOTIVO_FILHO' })
   idMotivoFilho: number;
 
-  @Column({ type: 'integer', name: 'id_manifestacao' })
+  @Column({ type: 'integer', name: 'ID_MANIFESTACAO' })
   idManifestacao: number;
 
-  @Column({ type: 'integer', name: 'id_manifestacao_filho' })
+  @Column({ type: 'integer', name: 'ID_MANIFESTACAO_FILHO' })
   idManifestacaoFilho: number;
 
-  @Column({ type: 'blob', name: 'sugestao' })
-  sugestao: any;
+  @Column({ name: 'SUGESTAO' })
+  sugestao: string;
 
-  @Column({ type: 'integer', name: 'id_usuario' })
-  idUsuario: number;
-
-  @Column({ type: 'blob', name: 'informacao_adicional' })
-  informacaoAdicional: any;
+  @Column({ name: 'INFORMACAO_ADICIONAL' })
+  informacaoAdicional: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

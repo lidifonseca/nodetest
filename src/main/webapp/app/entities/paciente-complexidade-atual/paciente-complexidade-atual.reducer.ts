@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteComplexidadeAtual, defaultValue } from 'app/shared/model/paciente-complexidade-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTECOMPLEXIDADEATUAL_LIST_EXPORT: 'pacienteComplexidadeAtual/FETCH_PACIENTECOMPLEXIDADEATUAL_LIST_EXPORT',
   FETCH_PACIENTECOMPLEXIDADEATUAL_LIST: 'pacienteComplexidadeAtual/FETCH_PACIENTECOMPLEXIDADEATUAL_LIST',
   FETCH_PACIENTECOMPLEXIDADEATUAL: 'pacienteComplexidadeAtual/FETCH_PACIENTECOMPLEXIDADEATUAL',
   CREATE_PACIENTECOMPLEXIDADEATUAL: 'pacienteComplexidadeAtual/CREATE_PACIENTECOMPLEXIDADEATUAL',
@@ -30,10 +31,27 @@ const initialState = {
 
 export type PacienteComplexidadeAtualState = Readonly<typeof initialState>;
 
+export interface IPacienteComplexidadeAtualBaseState {
+  baseFilters: any;
+  idPaciente: any;
+  idPacienteComplexidade: any;
+  baixa: any;
+  media: any;
+  alta: any;
+  ventilacaoMecanica: any;
+  telemonitoramente: any;
+}
+
+export interface IPacienteComplexidadeAtualUpdateState {
+  fieldsBase: IPacienteComplexidadeAtualBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteComplexidadeAtualState = initialState, action): PacienteComplexidadeAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL):
       return {
@@ -51,6 +69,7 @@ export default (state: PacienteComplexidadeAtualState = initialState, action): P
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTECOMPLEXIDADEATUAL):
@@ -113,7 +132,6 @@ export type ICrudGetAllActionPacienteComplexidadeAtual<T> = (
   alta?: any,
   ventilacaoMecanica?: any,
   telemonitoramente?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -127,7 +145,6 @@ export const getEntities: ICrudGetAllActionPacienteComplexidadeAtual<IPacienteCo
   alta,
   ventilacaoMecanica,
   telemonitoramente,
-  idUsuario,
   page,
   size,
   sort
@@ -139,13 +156,12 @@ export const getEntities: ICrudGetAllActionPacienteComplexidadeAtual<IPacienteCo
   const altaRequest = alta ? `alta.contains=${alta}&` : '';
   const ventilacaoMecanicaRequest = ventilacaoMecanica ? `ventilacaoMecanica.contains=${ventilacaoMecanica}&` : '';
   const telemonitoramenteRequest = telemonitoramente ? `telemonitoramente.contains=${telemonitoramente}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL_LIST,
     payload: axios.get<IPacienteComplexidadeAtual>(
-      `${requestUrl}${idPacienteRequest}${idPacienteComplexidadeRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idPacienteRequest}${idPacienteComplexidadeRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,6 +170,35 @@ export const getEntity: ICrudGetAction<IPacienteComplexidadeAtual> = id => {
   return {
     type: ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL,
     payload: axios.get<IPacienteComplexidadeAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionPacienteComplexidadeAtual<IPacienteComplexidadeAtual> = (
+  idPaciente,
+  idPacienteComplexidade,
+  baixa,
+  media,
+  alta,
+  ventilacaoMecanica,
+  telemonitoramente,
+  page,
+  size,
+  sort
+) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const idPacienteComplexidadeRequest = idPacienteComplexidade ? `idPacienteComplexidade.contains=${idPacienteComplexidade}&` : '';
+  const baixaRequest = baixa ? `baixa.contains=${baixa}&` : '';
+  const mediaRequest = media ? `media.contains=${media}&` : '';
+  const altaRequest = alta ? `alta.contains=${alta}&` : '';
+  const ventilacaoMecanicaRequest = ventilacaoMecanica ? `ventilacaoMecanica.contains=${ventilacaoMecanica}&` : '';
+  const telemonitoramenteRequest = telemonitoramente ? `telemonitoramente.contains=${telemonitoramente}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTECOMPLEXIDADEATUAL_LIST,
+    payload: axios.get<IPacienteComplexidadeAtual>(
+      `${requestUrl}${idPacienteRequest}${idPacienteComplexidadeRequest}${baixaRequest}${mediaRequest}${altaRequest}${ventilacaoMecanicaRequest}${telemonitoramenteRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -192,3 +237,26 @@ export const deleteEntity: ICrudDeleteAction<IPacienteComplexidadeAtual> = id =>
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteComplexidadeAtualState = (location): IPacienteComplexidadeAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const idPacienteComplexidade = url.searchParams.get('idPacienteComplexidade') || '';
+  const baixa = url.searchParams.get('baixa') || '';
+  const media = url.searchParams.get('media') || '';
+  const alta = url.searchParams.get('alta') || '';
+  const ventilacaoMecanica = url.searchParams.get('ventilacaoMecanica') || '';
+  const telemonitoramente = url.searchParams.get('telemonitoramente') || '';
+
+  return {
+    baseFilters,
+    idPaciente,
+    idPacienteComplexidade,
+    baixa,
+    media,
+    alta,
+    ventilacaoMecanica,
+    telemonitoramente
+  };
+};

@@ -3,21 +3,20 @@
     "tipoUnidade": {
       "home": {
         "title": "Tipo Unidades",
-        "createLabel": "Criar novo Tipo Unidade",
-        "createOrEditLabel": "Criar ou editar Tipo Unidade",
-        "notFound": "Nenhum Tipo Unidade encontrado"
+        "createLabel": "Create a new Tipo Unidade",
+        "createOrEditLabel": "Create or edit a Tipo Unidade",
+        "notFound": "No Tipo Unidades found"
       },
-      "created": "Um novo Tipo Unidade foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Unidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Unidade foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Unidade is created with identifier {{ param }}",
+      "updated": "A Tipo Unidade is updated with identifier {{ param }}",
+      "deleted": "A Tipo Unidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Unidade {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Unidade {{ id }}?"
       },
       "detail": {
         "title": "Tipo Unidade"
       },
-      "tipoUnidade": "Tipo Unidade",
-      "especialidade": "Especialidade"
+      "tipoUnidade": "Tipo Unidade"
     }
   }
 }

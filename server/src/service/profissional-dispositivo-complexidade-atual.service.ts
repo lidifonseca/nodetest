@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Like, Equal } from 'typeorm';
 import ProfissionalDispositivoComplexidadeAtual from '../domain/profissional-dispositivo-complexidade-atual.entity';
 import { ProfissionalDispositivoComplexidadeAtualRepository } from '../repository/profissional-dispositivo-complexidade-atual.repository';
 
@@ -31,20 +31,14 @@ export class ProfissionalDispositivoComplexidadeAtualService {
     filters?: Array<{ column: string; value: string; operation: string }>[]
   ): Promise<[ProfissionalDispositivoComplexidadeAtual[], number]> {
     options.relations = relationshipNames;
-    let where = '';
-    let first = true;
+    let where = {};
     for (const i in filters) {
       if (filters.hasOwnProperty(i)) {
         const element = filters[i];
-        if (!first) {
-          where += 'and';
-        } else {
-          first = false;
-        }
         if (element['operation'] === 'contains') {
-          where += ' `ProfissionalDispositivoComplexidadeAtual`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+          where[element['column']] = Like('%' + element['value'] + '%');
         } else if (element['operation'] === 'equals') {
-          where += ' `ProfissionalDispositivoComplexidadeAtual`.`' + element['column'] + '` = "' + element['value'] + '" ';
+          where[element['column']] = Equal(element['value']);
         }
       }
     }

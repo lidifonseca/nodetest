@@ -33,6 +33,7 @@ const initialState = {
 export type ProntuarioMotivoManifestacaoState = Readonly<typeof initialState>;
 
 export interface IProntuarioMotivoManifestacaoBaseState {
+  baseFilters: any;
   idProntuario: any;
   idPaciente: any;
   idMotivo: any;
@@ -40,8 +41,12 @@ export interface IProntuarioMotivoManifestacaoBaseState {
   idManifestacao: any;
   idManifestacaoFilho: any;
   sugestao: any;
-  idUsuario: any;
   informacaoAdicional: any;
+}
+
+export interface IProntuarioMotivoManifestacaoUpdateState {
+  fieldsBase: IProntuarioMotivoManifestacaoBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -87,6 +92,12 @@ export default (state: ProntuarioMotivoManifestacaoState = initialState, action)
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PRONTUARIOMOTIVOMANIFESTACAO):
+      action.payload.data.sugestao = action.payload.data.sugestao
+        ? Buffer.from(action.payload.data.sugestao).toString()
+        : action.payload.data.sugestao;
+      action.payload.data.informacaoAdicional = action.payload.data.informacaoAdicional
+        ? Buffer.from(action.payload.data.informacaoAdicional).toString()
+        : action.payload.data.informacaoAdicional;
       return {
         ...state,
         loading: false,
@@ -108,13 +119,14 @@ export default (state: ProntuarioMotivoManifestacaoState = initialState, action)
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -140,7 +152,6 @@ export type ICrudGetAllActionProntuarioMotivoManifestacao<T> = (
   idManifestacao?: any,
   idManifestacaoFilho?: any,
   sugestao?: any,
-  idUsuario?: any,
   informacaoAdicional?: any,
   page?: number,
   size?: number,
@@ -155,7 +166,6 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoManifestacao<IProntua
   idManifestacao,
   idManifestacaoFilho,
   sugestao,
-  idUsuario,
   informacaoAdicional,
   page,
   size,
@@ -168,14 +178,13 @@ export const getEntities: ICrudGetAllActionProntuarioMotivoManifestacao<IProntua
   const idManifestacaoRequest = idManifestacao ? `idManifestacao.contains=${idManifestacao}&` : '';
   const idManifestacaoFilhoRequest = idManifestacaoFilho ? `idManifestacaoFilho.contains=${idManifestacaoFilho}&` : '';
   const sugestaoRequest = sugestao ? `sugestao.contains=${sugestao}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const informacaoAdicionalRequest = informacaoAdicional ? `informacaoAdicional.contains=${informacaoAdicional}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PRONTUARIOMOTIVOMANIFESTACAO_LIST,
     payload: axios.get<IProntuarioMotivoManifestacao>(
-      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idMotivoFilhoRequest}${idManifestacaoRequest}${idManifestacaoFilhoRequest}${sugestaoRequest}${idUsuarioRequest}${informacaoAdicionalRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idMotivoFilhoRequest}${idManifestacaoRequest}${idManifestacaoFilhoRequest}${sugestaoRequest}${informacaoAdicionalRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -195,7 +204,6 @@ export const getEntitiesExport: ICrudGetAllActionProntuarioMotivoManifestacao<IP
   idManifestacao,
   idManifestacaoFilho,
   sugestao,
-  idUsuario,
   informacaoAdicional,
   page,
   size,
@@ -208,14 +216,13 @@ export const getEntitiesExport: ICrudGetAllActionProntuarioMotivoManifestacao<IP
   const idManifestacaoRequest = idManifestacao ? `idManifestacao.contains=${idManifestacao}&` : '';
   const idManifestacaoFilhoRequest = idManifestacaoFilho ? `idManifestacaoFilho.contains=${idManifestacaoFilho}&` : '';
   const sugestaoRequest = sugestao ? `sugestao.contains=${sugestao}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const informacaoAdicionalRequest = informacaoAdicional ? `informacaoAdicional.contains=${informacaoAdicional}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PRONTUARIOMOTIVOMANIFESTACAO_LIST,
     payload: axios.get<IProntuarioMotivoManifestacao>(
-      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idMotivoFilhoRequest}${idManifestacaoRequest}${idManifestacaoFilhoRequest}${sugestaoRequest}${idUsuarioRequest}${informacaoAdicionalRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProntuarioRequest}${idPacienteRequest}${idMotivoRequest}${idMotivoFilhoRequest}${idManifestacaoRequest}${idManifestacaoFilhoRequest}${sugestaoRequest}${informacaoAdicionalRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -252,12 +259,13 @@ export const deleteEntity: ICrudDeleteAction<IProntuarioMotivoManifestacao> = id
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -267,6 +275,7 @@ export const reset = () => ({
 
 export const getProntuarioMotivoManifestacaoState = (location): IProntuarioMotivoManifestacaoBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idProntuario = url.searchParams.get('idProntuario') || '';
   const idPaciente = url.searchParams.get('idPaciente') || '';
   const idMotivo = url.searchParams.get('idMotivo') || '';
@@ -274,10 +283,10 @@ export const getProntuarioMotivoManifestacaoState = (location): IProntuarioMotiv
   const idManifestacao = url.searchParams.get('idManifestacao') || '';
   const idManifestacaoFilho = url.searchParams.get('idManifestacaoFilho') || '';
   const sugestao = url.searchParams.get('sugestao') || '';
-  const idUsuario = url.searchParams.get('idUsuario') || '';
   const informacaoAdicional = url.searchParams.get('informacaoAdicional') || '';
 
   return {
+    baseFilters,
     idProntuario,
     idPaciente,
     idMotivo,
@@ -285,7 +294,6 @@ export const getProntuarioMotivoManifestacaoState = (location): IProntuarioMotiv
     idManifestacao,
     idManifestacaoFilho,
     sugestao,
-    idUsuario,
     informacaoAdicional
   };
 };

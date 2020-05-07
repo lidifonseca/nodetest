@@ -3,15 +3,15 @@
     "pacienteDispositivoAtual": {
       "home": {
         "title": "Paciente Dispositivo Atuals",
-        "createLabel": "Criar novo Paciente Dispositivo Atual",
-        "createOrEditLabel": "Criar ou editar Paciente Dispositivo Atual",
-        "notFound": "Nenhum Paciente Dispositivo Atual encontrado"
+        "createLabel": "Create a new Paciente Dispositivo Atual",
+        "createOrEditLabel": "Create or edit a Paciente Dispositivo Atual",
+        "notFound": "No Paciente Dispositivo Atuals found"
       },
-      "created": "Um novo Paciente Dispositivo Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Dispositivo Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Dispositivo Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Dispositivo Atual is created with identifier {{ param }}",
+      "updated": "A Paciente Dispositivo Atual is updated with identifier {{ param }}",
+      "deleted": "A Paciente Dispositivo Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Dispositivo Atual {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Dispositivo Atual {{ id }}?"
       },
       "detail": {
         "title": "Paciente Dispositivo Atual"
@@ -39,8 +39,7 @@
       "entubacaoOrotraqueal": "Entubacao Orotraqueal",
       "ileostomia": "Ileostomia",
       "jejunostomia": "Jejunostomia",
-      "colostomia": "Colostomia",
-      "idUsuario": "Id Usuario"
+      "colostomia": "Colostomia"
     }
   }
 }

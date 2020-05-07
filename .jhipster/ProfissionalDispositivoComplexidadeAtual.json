@@ -14,17 +14,10 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503004100",
+    "changelogDate": "20200507121400",
     "entityTableName": "profissional_dispositivo_complexidade_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

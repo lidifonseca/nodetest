@@ -22,18 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atendimento-status-financeiro.reducer';
+import {
+  getAtendimentoStatusFinanceiroState,
+  IAtendimentoStatusFinanceiroBaseState,
+  getEntities
+} from './atendimento-status-financeiro.reducer';
 import { IAtendimentoStatusFinanceiro } from 'app/shared/model/atendimento-status-financeiro.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IAtendimentoStatusFinanceiroProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtendimentoStatusFinanceiroBaseState {
-  idAtendimento: any;
-  idStatusFinanceiro: any;
-  idUsuario: any;
-}
 export interface IAtendimentoStatusFinanceiroState extends IAtendimentoStatusFinanceiroBaseState, IPaginationBaseState {}
 
 export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoStatusFinanceiroProps, IAtendimentoStatusFinanceiroState> {
@@ -43,22 +42,9 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtendimentoStatusFinanceiroState(this.props.location)
+      ...getAtendimentoStatusFinanceiroState(this.props.location)
     };
   }
-
-  getAtendimentoStatusFinanceiroState = (location): IAtendimentoStatusFinanceiroBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idAtendimento = url.searchParams.get('idAtendimento') || '';
-    const idStatusFinanceiro = url.searchParams.get('idStatusFinanceiro') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idAtendimento,
-      idStatusFinanceiro,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -68,8 +54,7 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
     this.setState(
       {
         idAtendimento: '',
-        idStatusFinanceiro: '',
-        idUsuario: ''
+        idStatusFinanceiro: ''
       },
       () => this.sortEntities()
     );
@@ -102,7 +87,9 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -120,9 +107,6 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
       'idStatusFinanceiro=' +
       this.state.idStatusFinanceiro +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -130,8 +114,8 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idAtendimento, idStatusFinanceiro, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idAtendimento, idStatusFinanceiro, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idAtendimento, idStatusFinanceiro, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idAtendimento, idStatusFinanceiro, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -153,7 +137,11 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.home.createLabel">
@@ -168,47 +156,39 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idAtendimentoLabel" for="atendimento-status-financeiro-idAtendimento">
-                            <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idAtendimento">Id Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idAtendimento"
-                            id="atendimento-status-financeiro-idAtendimento"
-                            value={this.state.idAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idStatusFinanceiroLabel" for="atendimento-status-financeiro-idStatusFinanceiro">
-                            <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idStatusFinanceiro">
-                              Id Status Financeiro
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idStatusFinanceiro"
-                            id="atendimento-status-financeiro-idStatusFinanceiro"
-                            value={this.state.idStatusFinanceiro}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="atendimento-status-financeiro-idUsuario">
-                            <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="atendimento-status-financeiro-idUsuario"
-                            value={this.state.idUsuario}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idAtendimentoLabel" for="atendimento-status-financeiro-idAtendimento">
+                              <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idAtendimento">Id Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idAtendimento"
+                              id="atendimento-status-financeiro-idAtendimento"
+                              value={this.state.idAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idStatusFinanceiro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idStatusFinanceiroLabel" for="atendimento-status-financeiro-idStatusFinanceiro">
+                              <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idStatusFinanceiro">
+                                Id Status Financeiro
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idStatusFinanceiro"
+                              id="atendimento-status-financeiro-idStatusFinanceiro"
+                              value={this.state.idStatusFinanceiro}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -236,18 +216,20 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idAtendimento')}>
-                        <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idAtendimento">Id Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idStatusFinanceiro')}>
-                        <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idStatusFinanceiro">Id Status Financeiro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idAtendimento' ? (
+                        <th className="hand" onClick={this.sort('idAtendimento')}>
+                          <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idAtendimento">Id Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idStatusFinanceiro' ? (
+                        <th className="hand" onClick={this.sort('idStatusFinanceiro')}>
+                          <Translate contentKey="generadorApp.atendimentoStatusFinanceiro.idStatusFinanceiro">
+                            Id Status Financeiro
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -262,27 +244,40 @@ export class AtendimentoStatusFinanceiro extends React.Component<IAtendimentoSta
                           </Button>
                         </td>
 
-                        <td>{atendimentoStatusFinanceiro.idAtendimento}</td>
+                        {this.state.baseFilters !== 'idAtendimento' ? <td>{atendimentoStatusFinanceiro.idAtendimento}</td> : null}
 
-                        <td>{atendimentoStatusFinanceiro.idStatusFinanceiro}</td>
-
-                        <td>{atendimentoStatusFinanceiro.idUsuario}</td>
+                        {this.state.baseFilters !== 'idStatusFinanceiro' ? <td>{atendimentoStatusFinanceiro.idStatusFinanceiro}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atendimentoStatusFinanceiro.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoStatusFinanceiro.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoStatusFinanceiro.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoStatusFinanceiro.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoStatusFinanceiro.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoStatusFinanceiro.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

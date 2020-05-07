@@ -2,27 +2,33 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Button, Row, Col, Label } from 'reactstrap';
+import { Button, Row, Col, Label, UncontrolledTooltip } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
 import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './franquia.reducer';
+import {
+  IFranquiaUpdateState,
+  getEntity,
+  getFranquiaState,
+  IFranquiaBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './franquia.reducer';
 import { IFranquia } from 'app/shared/model/franquia.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IFranquiaUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IFranquiaUpdateState {
-  isNew: boolean;
-}
-
 export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranquiaUpdateState> {
   constructor(props: Readonly<IFranquiaUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getFranquiaState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,36 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idCidade'] ? '&idCidade=' + fieldsBase['idCidade'] : '') +
+      (fieldsBase['nomeFantasia'] ? '&nomeFantasia=' + fieldsBase['nomeFantasia'] : '') +
+      (fieldsBase['razaoSocial'] ? '&razaoSocial=' + fieldsBase['razaoSocial'] : '') +
+      (fieldsBase['cnpj'] ? '&cnpj=' + fieldsBase['cnpj'] : '') +
+      (fieldsBase['ie'] ? '&ie=' + fieldsBase['ie'] : '') +
+      (fieldsBase['site'] ? '&site=' + fieldsBase['site'] : '') +
+      (fieldsBase['telefone1'] ? '&telefone1=' + fieldsBase['telefone1'] : '') +
+      (fieldsBase['telefone2'] ? '&telefone2=' + fieldsBase['telefone2'] : '') +
+      (fieldsBase['celular'] ? '&celular=' + fieldsBase['celular'] : '') +
+      (fieldsBase['cep'] ? '&cep=' + fieldsBase['cep'] : '') +
+      (fieldsBase['endereco'] ? '&endereco=' + fieldsBase['endereco'] : '') +
+      (fieldsBase['numero'] ? '&numero=' + fieldsBase['numero'] : '') +
+      (fieldsBase['complemento'] ? '&complemento=' + fieldsBase['complemento'] : '') +
+      (fieldsBase['bairro'] ? '&bairro=' + fieldsBase['bairro'] : '') +
+      (fieldsBase['cidade'] ? '&cidade=' + fieldsBase['cidade'] : '') +
+      (fieldsBase['uf'] ? '&uf=' + fieldsBase['uf'] : '') +
+      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { franquiaEntity } = this.props;
@@ -57,13 +93,14 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
   };
 
   handleClose = () => {
-    this.props.history.push('/franquia');
+    this.props.history.push('/franquia?' + this.getFiltersURL());
   };
 
   render() {
     const { franquiaEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +133,14 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/franquia" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/franquia?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +155,7 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,389 +171,356 @@ export class FranquiaUpdate extends React.Component<IFranquiaUpdateProps, IFranq
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idCidade' ? (
+                          <Col md="idCidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idCidadeLabel" for="franquia-idCidade">
+                                    <Translate contentKey="generadorApp.franquia.idCidade">Id Cidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-idCidade" type="text" name="idCidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idCidadeLabel" for="franquia-idCidade">
-                                <Translate contentKey="generadorApp.franquia.idCidade">Id Cidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="franquia-idCidade" type="text" name="idCidade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'nomeFantasia' ? (
+                          <Col md="nomeFantasia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeFantasiaLabel" for="franquia-nomeFantasia">
+                                    <Translate contentKey="generadorApp.franquia.nomeFantasia">Nome Fantasia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-nomeFantasia" type="text" name="nomeFantasia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nomeFantasia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nomeFantasiaLabel" for="franquia-nomeFantasia">
-                                <Translate contentKey="generadorApp.franquia.nomeFantasia">Nome Fantasia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-nomeFantasia"
-                                type="text"
-                                name="nomeFantasia"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'razaoSocial' ? (
+                          <Col md="razaoSocial">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="razaoSocialLabel" for="franquia-razaoSocial">
+                                    <Translate contentKey="generadorApp.franquia.razaoSocial">Razao Social</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-razaoSocial" type="text" name="razaoSocial" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="razaoSocial" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="razaoSocialLabel" for="franquia-razaoSocial">
-                                <Translate contentKey="generadorApp.franquia.razaoSocial">Razao Social</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-razaoSocial"
-                                type="text"
-                                name="razaoSocial"
-                                validate={{
-                                  maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cnpj' ? (
+                          <Col md="cnpj">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cnpjLabel" for="franquia-cnpj">
+                                    <Translate contentKey="generadorApp.franquia.cnpj">Cnpj</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-cnpj" type="text" name="cnpj" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cnpj" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cnpjLabel" for="franquia-cnpj">
-                                <Translate contentKey="generadorApp.franquia.cnpj">Cnpj</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-cnpj"
-                                type="text"
-                                name="cnpj"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ie' ? (
+                          <Col md="ie">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ieLabel" for="franquia-ie">
+                                    <Translate contentKey="generadorApp.franquia.ie">Ie</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-ie" type="text" name="ie" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ie" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ieLabel" for="franquia-ie">
-                                <Translate contentKey="generadorApp.franquia.ie">Ie</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-ie"
-                                type="text"
-                                name="ie"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'site' ? (
+                          <Col md="site">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="siteLabel" for="franquia-site">
+                                    <Translate contentKey="generadorApp.franquia.site">Site</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-site" type="text" name="site" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="site" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="siteLabel" for="franquia-site">
-                                <Translate contentKey="generadorApp.franquia.site">Site</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-site"
-                                type="text"
-                                name="site"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'telefone1' ? (
+                          <Col md="telefone1">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="telefone1Label" for="franquia-telefone1">
+                                    <Translate contentKey="generadorApp.franquia.telefone1">Telefone 1</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-telefone1" type="text" name="telefone1" />
+                                </Col>
+                                <UncontrolledTooltip target="telefone1Label">
+                                  <Translate contentKey="generadorApp.franquia.help.telefone1" />
+                                </UncontrolledTooltip>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="telefone1" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="telefone1Label" for="franquia-telefone1">
-                                <Translate contentKey="generadorApp.franquia.telefone1">Telefone 1</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-telefone1"
-                                type="text"
-                                name="telefone1"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'telefone2' ? (
+                          <Col md="telefone2">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="telefone2Label" for="franquia-telefone2">
+                                    <Translate contentKey="generadorApp.franquia.telefone2">Telefone 2</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-telefone2" type="text" name="telefone2" />
+                                </Col>
+                                <UncontrolledTooltip target="telefone2Label">
+                                  <Translate contentKey="generadorApp.franquia.help.telefone2" />
+                                </UncontrolledTooltip>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="telefone2" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="telefone2Label" for="franquia-telefone2">
-                                <Translate contentKey="generadorApp.franquia.telefone2">Telefone 2</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-telefone2"
-                                type="text"
-                                name="telefone2"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'celular' ? (
+                          <Col md="celular">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="celularLabel" for="franquia-celular">
+                                    <Translate contentKey="generadorApp.franquia.celular">Celular</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-celular" type="text" name="celular" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="celular" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="celularLabel" for="franquia-celular">
-                                <Translate contentKey="generadorApp.franquia.celular">Celular</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-celular"
-                                type="text"
-                                name="celular"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cep' ? (
+                          <Col md="cep">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepLabel" for="franquia-cep">
+                                    <Translate contentKey="generadorApp.franquia.cep">Cep</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-cep" type="text" name="cep" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cep" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cepLabel" for="franquia-cep">
-                                <Translate contentKey="generadorApp.franquia.cep">Cep</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-cep"
-                                type="text"
-                                name="cep"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'endereco' ? (
+                          <Col md="endereco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="enderecoLabel" for="franquia-endereco">
+                                    <Translate contentKey="generadorApp.franquia.endereco">Endereco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-endereco" type="text" name="endereco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="endereco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="enderecoLabel" for="franquia-endereco">
-                                <Translate contentKey="generadorApp.franquia.endereco">Endereco</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-endereco"
-                                type="text"
-                                name="endereco"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'numero' ? (
+                          <Col md="numero">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="numeroLabel" for="franquia-numero">
+                                    <Translate contentKey="generadorApp.franquia.numero">Numero</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-numero" type="text" name="numero" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="numero" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="numeroLabel" for="franquia-numero">
-                                <Translate contentKey="generadorApp.franquia.numero">Numero</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-numero"
-                                type="text"
-                                name="numero"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'complemento' ? (
+                          <Col md="complemento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="complementoLabel" for="franquia-complemento">
+                                    <Translate contentKey="generadorApp.franquia.complemento">Complemento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-complemento" type="text" name="complemento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="complemento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="complementoLabel" for="franquia-complemento">
-                                <Translate contentKey="generadorApp.franquia.complemento">Complemento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-complemento"
-                                type="text"
-                                name="complemento"
-                                validate={{
-                                  maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'bairro' ? (
+                          <Col md="bairro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="bairroLabel" for="franquia-bairro">
+                                    <Translate contentKey="generadorApp.franquia.bairro">Bairro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-bairro" type="text" name="bairro" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="bairro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="bairroLabel" for="franquia-bairro">
-                                <Translate contentKey="generadorApp.franquia.bairro">Bairro</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-bairro"
-                                type="text"
-                                name="bairro"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cidade' ? (
+                          <Col md="cidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cidadeLabel" for="franquia-cidade">
+                                    <Translate contentKey="generadorApp.franquia.cidade">Cidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-cidade" type="text" name="cidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cidadeLabel" for="franquia-cidade">
-                                <Translate contentKey="generadorApp.franquia.cidade">Cidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-cidade"
-                                type="text"
-                                name="cidade"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'uf' ? (
+                          <Col md="uf">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ufLabel" for="franquia-uf">
+                                    <Translate contentKey="generadorApp.franquia.uf">Uf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-uf" type="text" name="uf" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="uf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ufLabel" for="franquia-uf">
-                                <Translate contentKey="generadorApp.franquia.uf">Uf</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-uf"
-                                type="text"
-                                name="uf"
-                                validate={{
-                                  maxLength: { value: 5, errorMessage: translate('entity.validation.maxlength', { max: 5 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'observacao' ? (
+                          <Col md="observacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacaoLabel" for="franquia-observacao">
+                                    <Translate contentKey="generadorApp.franquia.observacao">Observacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-observacao" type="text" name="observacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="observacaoLabel" for="franquia-observacao">
-                                <Translate contentKey="generadorApp.franquia.observacao">Observacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="franquia-observacao"
-                                type="text"
-                                name="observacao"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="franquia-ativo">
-                                <Translate contentKey="generadorApp.franquia.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="franquia-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="franquia-ativo">
+                                    <Translate contentKey="generadorApp.franquia.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="franquia-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

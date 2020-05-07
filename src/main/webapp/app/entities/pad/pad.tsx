@@ -31,36 +31,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad.reducer';
+import { getPadState, IPadBaseState, getEntities } from './pad.reducer';
 import { IPad } from 'app/shared/model/pad.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
 
 export interface IPadProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadBaseState {
-  idOperadora: any;
-  idFranquia: any;
-  nroPad: any;
-  dataInicio: any;
-  dataFim: any;
-  dataConferido: any;
-  ativo: any;
-  idUsuario: any;
-  statusPad: any;
-  novoModelo: any;
-  imagePath: any;
-  score: any;
-  padCid: any;
-  padItem: any;
-  unidade: any;
-  idPaciente: any;
-}
 export interface IPadState extends IPadBaseState, IPaginationBaseState {}
 
 export class Pad extends React.Component<IPadProps, IPadState> {
@@ -70,55 +50,14 @@ export class Pad extends React.Component<IPadProps, IPadState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadState(this.props.location)
+      ...getPadState(this.props.location)
     };
   }
-
-  getPadState = (location): IPadBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idOperadora = url.searchParams.get('idOperadora') || '';
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-    const nroPad = url.searchParams.get('nroPad') || '';
-    const dataInicio = url.searchParams.get('dataInicio') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-    const dataConferido = url.searchParams.get('dataConferido') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const statusPad = url.searchParams.get('statusPad') || '';
-    const novoModelo = url.searchParams.get('novoModelo') || '';
-    const imagePath = url.searchParams.get('imagePath') || '';
-    const score = url.searchParams.get('score') || '';
-
-    const padCid = url.searchParams.get('padCid') || '';
-    const padItem = url.searchParams.get('padItem') || '';
-    const unidade = url.searchParams.get('unidade') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-
-    return {
-      idOperadora,
-      idFranquia,
-      nroPad,
-      dataInicio,
-      dataFim,
-      dataConferido,
-      ativo,
-      idUsuario,
-      statusPad,
-      novoModelo,
-      imagePath,
-      score,
-      padCid,
-      padItem,
-      unidade,
-      idPaciente
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
 
     this.props.getUnidadeEasies();
-    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -131,15 +70,11 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         dataFim: '',
         dataConferido: '',
         ativo: '',
-        idUsuario: '',
         statusPad: '',
         novoModelo: '',
         imagePath: '',
         score: '',
-        padCid: '',
-        padItem: '',
-        unidade: '',
-        idPaciente: ''
+        unidade: ''
       },
       () => this.sortEntities()
     );
@@ -172,7 +107,9 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -205,9 +142,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'statusPad=' +
       this.state.statusPad +
       '&' +
@@ -220,17 +154,8 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'score=' +
       this.state.score +
       '&' +
-      'padCid=' +
-      this.state.padCid +
-      '&' +
-      'padItem=' +
-      this.state.padItem +
-      '&' +
       'unidade=' +
       this.state.unidade +
-      '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
       '&' +
       ''
     );
@@ -247,15 +172,11 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataFim,
       dataConferido,
       ativo,
-      idUsuario,
       statusPad,
       novoModelo,
       imagePath,
       score,
-      padCid,
-      padItem,
       unidade,
-      idPaciente,
       activePage,
       itemsPerPage,
       sort,
@@ -269,15 +190,11 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataFim,
       dataConferido,
       ativo,
-      idUsuario,
       statusPad,
       novoModelo,
       imagePath,
       score,
-      padCid,
-      padItem,
       unidade,
-      idPaciente,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -285,7 +202,7 @@ export class Pad extends React.Component<IPadProps, IPadState> {
   };
 
   render() {
-    const { unidadeEasies, pacientes, padList, match, totalItems } = this.props;
+    const { unidadeEasies, padList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -303,7 +220,11 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pad.home.createLabel">Create a new Pad</Translate>
@@ -316,153 +237,151 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idOperadoraLabel" for="pad-idOperadora">
-                            <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
-                          </Label>
-                          <AvInput type="string" name="idOperadora" id="pad-idOperadora" value={this.state.idOperadora} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idFranquiaLabel" for="pad-idFranquia">
-                            <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idFranquia" id="pad-idFranquia" value={this.state.idFranquia} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nroPadLabel" for="pad-nroPad">
-                            <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="nroPad" id="pad-nroPad" value={this.state.nroPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataInicioLabel" for="pad-dataInicio">
-                            <Translate contentKey="generadorApp.pad.dataInicio">Data Inicio</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataInicio" id="pad-dataInicio" value={this.state.dataInicio} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataFimLabel" for="pad-dataFim">
-                            <Translate contentKey="generadorApp.pad.dataFim">Data Fim</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataFim" id="pad-dataFim" value={this.state.dataFim} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataConferidoLabel" for="pad-dataConferido">
-                            <Translate contentKey="generadorApp.pad.dataConferido">Data Conferido</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataConferido" id="pad-dataConferido" value={this.state.dataConferido} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="pad-ativo">
-                            <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="pad-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="pad-idUsuario">
-                            <Translate contentKey="generadorApp.pad.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="idUsuario" id="pad-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="statusPadLabel" for="pad-statusPad">
-                            <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="statusPad" id="pad-statusPad" value={this.state.statusPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="novoModeloLabel" check>
-                            <AvInput id="pad-novoModelo" type="checkbox" className="form-control" name="novoModelo" />
-                            <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="imagePathLabel" for="pad-imagePath">
-                            <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="imagePath" id="pad-imagePath" value={this.state.imagePath} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="scoreLabel" for="pad-score">
-                            <Translate contentKey="generadorApp.pad.score">Score</Translate>
-                          </Label>
-                          <AvInput type="string" name="score" id="pad-score" value={this.state.score} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="pad-unidade">
-                              <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                      {this.state.baseFilters !== 'idOperadora' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idOperadoraLabel" for="pad-idOperadora">
+                              <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
                             </Label>
-                            <AvInput id="pad-unidade" type="select" className="form-control" name="unidadeId">
-                              <option value="" key="0" />
-                              {unidadeEasies
-                                ? unidadeEasies.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.razaoSocial}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="idOperadora" id="pad-idOperadora" value={this.state.idOperadora} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="pad-idPaciente">
-                              <Translate contentKey="generadorApp.pad.idPaciente">Id Paciente</Translate>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idFranquiaLabel" for="pad-idFranquia">
+                              <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
                             </Label>
-                            <AvInput id="pad-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="idFranquia" id="pad-idFranquia" value={this.state.idFranquia} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'nroPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nroPadLabel" for="pad-nroPad">
+                              <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="nroPad" id="pad-nroPad" value={this.state.nroPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataInicioLabel" for="pad-dataInicio">
+                              <Translate contentKey="generadorApp.pad.dataInicio">Data Inicio</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataInicio" id="pad-dataInicio" value={this.state.dataInicio} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataFimLabel" for="pad-dataFim">
+                              <Translate contentKey="generadorApp.pad.dataFim">Data Fim</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataFim" id="pad-dataFim" value={this.state.dataFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataConferido' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataConferidoLabel" for="pad-dataConferido">
+                              <Translate contentKey="generadorApp.pad.dataConferido">Data Conferido</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataConferido" id="pad-dataConferido" value={this.state.dataConferido} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="pad-ativo">
+                              <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="pad-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'statusPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="statusPadLabel" for="pad-statusPad">
+                              <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="statusPad" id="pad-statusPad" value={this.state.statusPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'novoModelo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="novoModeloLabel" check>
+                              <AvInput id="pad-novoModelo" type="checkbox" className="form-control" name="novoModelo" />
+                              <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'imagePath' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="imagePathLabel" for="pad-imagePath">
+                              <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="imagePath" id="pad-imagePath" value={this.state.imagePath} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'score' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="scoreLabel" for="pad-score">
+                              <Translate contentKey="generadorApp.pad.score">Score</Translate>
+                            </Label>
+                            <AvInput type="string" name="score" id="pad-score" value={this.state.score} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <div>
+                              <Label for="pad-unidade">
+                                <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                              </Label>
+                              <AvInput id="pad-unidade" type="select" className="form-control" name="unidadeId">
+                                <option value="" key="0" />
+                                {unidadeEasies
+                                  ? unidadeEasies.map(otherEntity => (
+                                      <option value={otherEntity.id} key={otherEntity.id}>
+                                        {otherEntity.razaoSocial}
+                                      </option>
+                                    ))
+                                  : null}
+                              </AvInput>
+                            </div>
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -490,62 +409,79 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idOperadora')}>
-                        <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idFranquia')}>
-                        <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nroPad')}>
-                        <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataInicio')}>
-                        <Translate contentKey="generadorApp.pad.dataInicio">Data Inicio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataFim')}>
-                        <Translate contentKey="generadorApp.pad.dataFim">Data Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataConferido')}>
-                        <Translate contentKey="generadorApp.pad.dataConferido">Data Conferido</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.pad.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('statusPad')}>
-                        <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('novoModelo')}>
-                        <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('imagePath')}>
-                        <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('score')}>
-                        <Translate contentKey="generadorApp.pad.score">Score</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pad.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idOperadora' ? (
+                        <th className="hand" onClick={this.sort('idOperadora')}>
+                          <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <th className="hand" onClick={this.sort('idFranquia')}>
+                          <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nroPad' ? (
+                        <th className="hand" onClick={this.sort('nroPad')}>
+                          <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <th className="hand" onClick={this.sort('dataInicio')}>
+                          <Translate contentKey="generadorApp.pad.dataInicio">Data Inicio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <th className="hand" onClick={this.sort('dataFim')}>
+                          <Translate contentKey="generadorApp.pad.dataFim">Data Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataConferido' ? (
+                        <th className="hand" onClick={this.sort('dataConferido')}>
+                          <Translate contentKey="generadorApp.pad.dataConferido">Data Conferido</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'statusPad' ? (
+                        <th className="hand" onClick={this.sort('statusPad')}>
+                          <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'novoModelo' ? (
+                        <th className="hand" onClick={this.sort('novoModelo')}>
+                          <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'imagePath' ? (
+                        <th className="hand" onClick={this.sort('imagePath')}>
+                          <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'score' ? (
+                        <th className="hand" onClick={this.sort('score')}>
+                          <Translate contentKey="generadorApp.pad.score">Score</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidade' ? (
+                        <th>
+                          <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -560,53 +496,59 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                           </Button>
                         </td>
 
-                        <td>{pad.idOperadora}</td>
+                        {this.state.baseFilters !== 'idOperadora' ? <td>{pad.idOperadora}</td> : null}
 
-                        <td>{pad.idFranquia}</td>
+                        {this.state.baseFilters !== 'idFranquia' ? <td>{pad.idFranquia}</td> : null}
 
-                        <td>{pad.nroPad}</td>
+                        {this.state.baseFilters !== 'nroPad' ? <td>{pad.nroPad}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={pad.dataInicio} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataInicio' ? (
+                          <td>
+                            <TextFormat type="date" value={pad.dataInicio} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pad.dataFim} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataFim' ? (
+                          <td>
+                            <TextFormat type="date" value={pad.dataFim} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pad.dataConferido} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataConferido' ? (
+                          <td>
+                            <TextFormat type="date" value={pad.dataConferido} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{pad.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pad.ativo}</td> : null}
 
-                        <td>{pad.idUsuario}</td>
+                        {this.state.baseFilters !== 'statusPad' ? <td>{pad.statusPad}</td> : null}
 
-                        <td>{pad.statusPad}</td>
+                        {this.state.baseFilters !== 'novoModelo' ? <td>{pad.novoModelo ? 'true' : 'false'}</td> : null}
 
-                        <td>{pad.novoModelo ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'imagePath' ? <td>{pad.imagePath}</td> : null}
 
-                        <td>{pad.imagePath}</td>
+                        {this.state.baseFilters !== 'score' ? <td>{pad.score}</td> : null}
 
-                        <td>{pad.score}</td>
-                        <td>{pad.unidade ? <Link to={`unidade-easy/${pad.unidade.id}`}>{pad.unidade.id}</Link> : ''}</td>
-                        <td>{pad.idPaciente ? <Link to={`paciente/${pad.idPaciente.id}`}>{pad.idPaciente.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'unidade' ? (
+                          <td>{pad.unidade ? <Link to={`unidade-easy/${pad.unidade.id}`}>{pad.unidade.id}</Link> : ''}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pad.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pad.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pad.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pad.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pad.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pad.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -649,14 +591,12 @@ export class Pad extends React.Component<IPadProps, IPadState> {
 
 const mapStateToProps = ({ pad, ...storeState }: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  pacientes: storeState.paciente.entities,
   padList: pad.entities,
   totalItems: pad.totalItems
 });
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getPacientes,
   getEntities
 };
 

@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-dispositivo-complexidade.reducer';
+import {
+  getEntity,
+  IPacienteDispositivoComplexidadeBaseState,
+  getPacienteDispositivoComplexidadeState
+} from './paciente-dispositivo-complexidade.reducer';
 import { IPacienteDispositivoComplexidade } from 'app/shared/model/paciente-dispositivo-complexidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteDispositivoComplexidadeState {
+  fieldsBase: IPacienteDispositivoComplexidadeBaseState;
+}
+
 export interface IPacienteDispositivoComplexidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteDispositivoComplexidadeDetail extends React.Component<IPacienteDispositivoComplexidadeDetailProps> {
+export class PacienteDispositivoComplexidadeDetail extends React.Component<
+  IPacienteDispositivoComplexidadeDetailProps,
+  IPacienteDispositivoComplexidadeState
+> {
   constructor(props: Readonly<IPacienteDispositivoComplexidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteDispositivoComplexidadeState(this.props.location)
     };
   }
 

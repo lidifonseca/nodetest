@@ -35,6 +35,7 @@
         },
         {
             "fieldName": "telefone1",
+            "javadoc": "@dbName TELEFONE1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -43,6 +44,7 @@
         },
         {
             "fieldName": "telefone2",
+            "javadoc": "@dbName TELEFONE2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -166,8 +168,17 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [],
-    "changelogDate": "20200503012200",
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "categoria",
+            "otherEntityRelationshipName": "unidade",
+            "relationshipName": "categoria",
+            "otherEntityField": "categoria",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200507125500",
     "entityTableName": "unidade_easy",
     "dto": "mapstruct",
     "pagination": "pagination",

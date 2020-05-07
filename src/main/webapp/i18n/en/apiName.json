@@ -3,15 +3,15 @@
     "apiName": {
       "home": {
         "title": "Api Names",
-        "createLabel": "Criar novo Api Name",
-        "createOrEditLabel": "Criar ou editar Api Name",
-        "notFound": "Nenhum Api Name encontrado"
+        "createLabel": "Create a new Api Name",
+        "createOrEditLabel": "Create or edit a Api Name",
+        "notFound": "No Api Names found"
       },
-      "created": "Um novo Api Name foi criado com o identificador {{ param }}",
-      "updated": "Um Api Name foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Api Name foi excluído com o identificador {{ param }}",
+      "created": "A new Api Name is created with identifier {{ param }}",
+      "updated": "A Api Name is updated with identifier {{ param }}",
+      "deleted": "A Api Name is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Api Name {{ id }}?"
+        "question": "Are you sure you want to delete Api Name {{ id }}?"
       },
       "detail": {
         "title": "Api Name"

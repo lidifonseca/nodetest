@@ -8,21 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './pad-csv.reducer';
+import { IPadCsvUpdateState, getEntity, getPadCsvState, IPadCsvBaseState, updateEntity, createEntity, reset } from './pad-csv.reducer';
 import { IPadCsv } from 'app/shared/model/pad-csv.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadCsvUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadCsvUpdateState {
-  isNew: boolean;
-}
-
 export class PadCsvUpdate extends React.Component<IPadCsvUpdateProps, IPadCsvUpdateState> {
   constructor(props: Readonly<IPadCsvUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPadCsvState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +38,27 @@ export class PadCsvUpdate extends React.Component<IPadCsvUpdateProps, IPadCsvUpd
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idFranquia'] ? '&idFranquia=' + fieldsBase['idFranquia'] : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['nroPad'] ? '&nroPad=' + fieldsBase['nroPad'] : '') +
+      (fieldsBase['dataInicio'] ? '&dataInicio=' + fieldsBase['dataInicio'] : '') +
+      (fieldsBase['dataFim'] ? '&dataFim=' + fieldsBase['dataFim'] : '') +
+      (fieldsBase['idEspecialidade'] ? '&idEspecialidade=' + fieldsBase['idEspecialidade'] : '') +
+      (fieldsBase['idPeriodicidade'] ? '&idPeriodicidade=' + fieldsBase['idPeriodicidade'] : '') +
+      (fieldsBase['idPeriodo'] ? '&idPeriodo=' + fieldsBase['idPeriodo'] : '') +
+      (fieldsBase['qtdSessoes'] ? '&qtdSessoes=' + fieldsBase['qtdSessoes'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padCsvEntity } = this.props;
@@ -57,13 +76,14 @@ export class PadCsvUpdate extends React.Component<IPadCsvUpdateProps, IPadCsvUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-csv');
+    this.props.history.push('/pad-csv?' + this.getFiltersURL());
   };
 
   render() {
     const { padCsvEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +116,14 @@ export class PadCsvUpdate extends React.Component<IPadCsvUpdateProps, IPadCsvUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/pad-csv" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/pad-csv?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +138,7 @@ export class PadCsvUpdate extends React.Component<IPadCsvUpdateProps, IPadCsvUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,163 +154,179 @@ export class PadCsvUpdate extends React.Component<IPadCsvUpdateProps, IPadCsvUpd
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idFranquia' ? (
+                          <Col md="idFranquia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idFranquiaLabel" for="pad-csv-idFranquia">
+                                    <Translate contentKey="generadorApp.padCsv.idFranquia">Id Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-idFranquia" type="string" className="form-control" name="idFranquia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idFranquiaLabel" for="pad-csv-idFranquia">
-                                <Translate contentKey="generadorApp.padCsv.idFranquia">Id Franquia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-csv-idFranquia" type="string" className="form-control" name="idFranquia" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="pad-csv-idPaciente">
+                                    <Translate contentKey="generadorApp.padCsv.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-idPaciente" type="string" className="form-control" name="idPaciente" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="pad-csv-idPaciente">
-                                <Translate contentKey="generadorApp.padCsv.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-csv-idPaciente" type="string" className="form-control" name="idPaciente" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'nroPad' ? (
+                          <Col md="nroPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nroPadLabel" for="pad-csv-nroPad">
+                                    <Translate contentKey="generadorApp.padCsv.nroPad">Nro Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-nroPad" type="text" name="nroPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nroPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nroPadLabel" for="pad-csv-nroPad">
-                                <Translate contentKey="generadorApp.padCsv.nroPad">Nro Pad</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-csv-nroPad"
-                                type="text"
-                                name="nroPad"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataInicio' ? (
+                          <Col md="dataInicio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataInicioLabel" for="pad-csv-dataInicio">
+                                    <Translate contentKey="generadorApp.padCsv.dataInicio">Data Inicio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-dataInicio" type="text" name="dataInicio" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataInicioLabel" for="pad-csv-dataInicio">
-                                <Translate contentKey="generadorApp.padCsv.dataInicio">Data Inicio</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-csv-dataInicio"
-                                type="text"
-                                name="dataInicio"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataFim' ? (
+                          <Col md="dataFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataFimLabel" for="pad-csv-dataFim">
+                                    <Translate contentKey="generadorApp.padCsv.dataFim">Data Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-dataFim" type="text" name="dataFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataFimLabel" for="pad-csv-dataFim">
-                                <Translate contentKey="generadorApp.padCsv.dataFim">Data Fim</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-csv-dataFim"
-                                type="text"
-                                name="dataFim"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idEspecialidade' ? (
+                          <Col md="idEspecialidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idEspecialidadeLabel" for="pad-csv-idEspecialidade">
+                                    <Translate contentKey="generadorApp.padCsv.idEspecialidade">Id Especialidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-idEspecialidade" type="string" className="form-control" name="idEspecialidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idEspecialidadeLabel" for="pad-csv-idEspecialidade">
-                                <Translate contentKey="generadorApp.padCsv.idEspecialidade">Id Especialidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-csv-idEspecialidade" type="string" className="form-control" name="idEspecialidade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPeriodicidade' ? (
+                          <Col md="idPeriodicidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPeriodicidadeLabel" for="pad-csv-idPeriodicidade">
+                                    <Translate contentKey="generadorApp.padCsv.idPeriodicidade">Id Periodicidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-idPeriodicidade" type="string" className="form-control" name="idPeriodicidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPeriodicidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPeriodicidadeLabel" for="pad-csv-idPeriodicidade">
-                                <Translate contentKey="generadorApp.padCsv.idPeriodicidade">Id Periodicidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-csv-idPeriodicidade" type="string" className="form-control" name="idPeriodicidade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPeriodo' ? (
+                          <Col md="idPeriodo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPeriodoLabel" for="pad-csv-idPeriodo">
+                                    <Translate contentKey="generadorApp.padCsv.idPeriodo">Id Periodo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-idPeriodo" type="string" className="form-control" name="idPeriodo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPeriodo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPeriodoLabel" for="pad-csv-idPeriodo">
-                                <Translate contentKey="generadorApp.padCsv.idPeriodo">Id Periodo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-csv-idPeriodo" type="string" className="form-control" name="idPeriodo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="qtdSessoesLabel" for="pad-csv-qtdSessoes">
-                                <Translate contentKey="generadorApp.padCsv.qtdSessoes">Qtd Sessoes</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-csv-qtdSessoes" type="string" className="form-control" name="qtdSessoes" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'qtdSessoes' ? (
+                          <Col md="qtdSessoes">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="qtdSessoesLabel" for="pad-csv-qtdSessoes">
+                                    <Translate contentKey="generadorApp.padCsv.qtdSessoes">Qtd Sessoes</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-csv-qtdSessoes" type="string" className="form-control" name="qtdSessoes" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="qtdSessoes" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

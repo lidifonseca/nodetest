@@ -3,15 +3,15 @@
     "pacienteDiagnosticoTemp": {
       "home": {
         "title": "Paciente Diagnostico Temps",
-        "createLabel": "Criar novo Paciente Diagnostico Temp",
-        "createOrEditLabel": "Criar ou editar Paciente Diagnostico Temp",
-        "notFound": "Nenhum Paciente Diagnostico Temp encontrado"
+        "createLabel": "Create a new Paciente Diagnostico Temp",
+        "createOrEditLabel": "Create or edit a Paciente Diagnostico Temp",
+        "notFound": "No Paciente Diagnostico Temps found"
       },
-      "created": "Um novo Paciente Diagnostico Temp foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Diagnostico Temp foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Diagnostico Temp foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Diagnostico Temp is created with identifier {{ param }}",
+      "updated": "A Paciente Diagnostico Temp is updated with identifier {{ param }}",
+      "deleted": "A Paciente Diagnostico Temp is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Diagnostico Temp {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Diagnostico Temp {{ id }}?"
       },
       "detail": {
         "title": "Paciente Diagnostico Temp"

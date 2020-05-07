@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A StatusAtual.
  */
-@Entity('status_atual')
+@Entity('tb_status_atual')
 export default class StatusAtual extends BaseEntity {
-  @Column({ name: 'status_atual', length: 50 })
+  @Column({ name: 'STATUS_ATUAL', length: 50 })
   statusAtual: string;
 
-  @Column({ name: 'style_label', length: 40 })
+  @Column({ name: 'STYLE_LABEL', length: 40 })
   styleLabel: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

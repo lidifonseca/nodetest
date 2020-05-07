@@ -18,16 +18,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "franquia",
-            "otherEntityRelationshipName": "franquiaStatusAtual",
-            "relationshipName": "idFranquia",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502233100",
+    "relationships": [],
+    "changelogDate": "20200507110400",
     "entityTableName": "franquia_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

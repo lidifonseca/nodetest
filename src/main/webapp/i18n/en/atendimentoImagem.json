@@ -3,15 +3,15 @@
     "atendimentoImagem": {
       "home": {
         "title": "Atendimento Imagems",
-        "createLabel": "Criar novo Atendimento Imagem",
-        "createOrEditLabel": "Criar ou editar Atendimento Imagem",
-        "notFound": "Nenhum Atendimento Imagem encontrado"
+        "createLabel": "Create a new Atendimento Imagem",
+        "createOrEditLabel": "Create or edit a Atendimento Imagem",
+        "notFound": "No Atendimento Imagems found"
       },
-      "created": "Um novo Atendimento Imagem foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento Imagem foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento Imagem foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento Imagem is created with identifier {{ param }}",
+      "updated": "A Atendimento Imagem is updated with identifier {{ param }}",
+      "deleted": "A Atendimento Imagem is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento Imagem {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento Imagem {{ id }}?"
       },
       "detail": {
         "title": "Atendimento Imagem"

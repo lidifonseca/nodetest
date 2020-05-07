@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502231000",
+    "changelogDate": "20200507104300",
     "entityTableName": "banco",
     "dto": "mapstruct",
     "pagination": "pagination",

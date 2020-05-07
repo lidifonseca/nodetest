@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ILicaoCasa, defaultValue } from 'app/shared/model/licao-casa.model';
 
 export const ACTION_TYPES = {
+  FETCH_LICAOCASA_LIST_EXPORT: 'licaoCasa/FETCH_LICAOCASA_LIST_EXPORT',
   FETCH_LICAOCASA_LIST: 'licaoCasa/FETCH_LICAOCASA_LIST',
   FETCH_LICAOCASA: 'licaoCasa/FETCH_LICAOCASA',
   CREATE_LICAOCASA: 'licaoCasa/CREATE_LICAOCASA',
@@ -30,10 +31,36 @@ const initialState = {
 
 export type LicaoCasaState = Readonly<typeof initialState>;
 
+export interface ILicaoCasaBaseState {
+  baseFilters: any;
+  atendimentoId: any;
+  pacienteId: any;
+  profissionalId: any;
+  atividade: any;
+  horaInicio: any;
+  repeticaoHoras: any;
+  qtdDias: any;
+  intervaloDias: any;
+  criadoEm: any;
+  concluidaEm: any;
+  ativo: any;
+  ativ: any;
+  forma: any;
+  enviarPara: any;
+  notificarFamiliar: any;
+  replicarAtividade: any;
+}
+
+export interface ILicaoCasaUpdateState {
+  fieldsBase: ILicaoCasaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: LicaoCasaState = initialState, action): LicaoCasaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_LICAOCASA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_LICAOCASA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_LICAOCASA):
       return {
@@ -51,6 +78,7 @@ export default (state: LicaoCasaState = initialState, action): LicaoCasaState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_LICAOCASA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_LICAOCASA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_LICAOCASA):
     case FAILURE(ACTION_TYPES.CREATE_LICAOCASA):
@@ -181,6 +209,53 @@ export const getEntity: ICrudGetAction<ILicaoCasa> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionLicaoCasa<ILicaoCasa> = (
+  atendimentoId,
+  pacienteId,
+  profissionalId,
+  atividade,
+  horaInicio,
+  repeticaoHoras,
+  qtdDias,
+  intervaloDias,
+  criadoEm,
+  concluidaEm,
+  ativo,
+  ativ,
+  forma,
+  enviarPara,
+  notificarFamiliar,
+  replicarAtividade,
+  page,
+  size,
+  sort
+) => {
+  const atendimentoIdRequest = atendimentoId ? `atendimentoId.contains=${atendimentoId}&` : '';
+  const pacienteIdRequest = pacienteId ? `pacienteId.contains=${pacienteId}&` : '';
+  const profissionalIdRequest = profissionalId ? `profissionalId.contains=${profissionalId}&` : '';
+  const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
+  const horaInicioRequest = horaInicio ? `horaInicio.contains=${horaInicio}&` : '';
+  const repeticaoHorasRequest = repeticaoHoras ? `repeticaoHoras.contains=${repeticaoHoras}&` : '';
+  const qtdDiasRequest = qtdDias ? `qtdDias.contains=${qtdDias}&` : '';
+  const intervaloDiasRequest = intervaloDias ? `intervaloDias.contains=${intervaloDias}&` : '';
+  const criadoEmRequest = criadoEm ? `criadoEm.contains=${criadoEm}&` : '';
+  const concluidaEmRequest = concluidaEm ? `concluidaEm.contains=${concluidaEm}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const ativRequest = ativ ? `ativ.contains=${ativ}&` : '';
+  const formaRequest = forma ? `forma.contains=${forma}&` : '';
+  const enviarParaRequest = enviarPara ? `enviarPara.contains=${enviarPara}&` : '';
+  const notificarFamiliarRequest = notificarFamiliar ? `notificarFamiliar.contains=${notificarFamiliar}&` : '';
+  const replicarAtividadeRequest = replicarAtividade ? `replicarAtividade.contains=${replicarAtividade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_LICAOCASA_LIST,
+    payload: axios.get<ILicaoCasa>(
+      `${requestUrl}${atendimentoIdRequest}${pacienteIdRequest}${profissionalIdRequest}${atividadeRequest}${horaInicioRequest}${repeticaoHorasRequest}${qtdDiasRequest}${intervaloDiasRequest}${criadoEmRequest}${concluidaEmRequest}${ativoRequest}${ativRequest}${formaRequest}${enviarParaRequest}${notificarFamiliarRequest}${replicarAtividadeRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ILicaoCasa> = entity => async dispatch => {
   entity = {
     ...entity
@@ -216,3 +291,44 @@ export const deleteEntity: ICrudDeleteAction<ILicaoCasa> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getLicaoCasaState = (location): ILicaoCasaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const atendimentoId = url.searchParams.get('atendimentoId') || '';
+  const pacienteId = url.searchParams.get('pacienteId') || '';
+  const profissionalId = url.searchParams.get('profissionalId') || '';
+  const atividade = url.searchParams.get('atividade') || '';
+  const horaInicio = url.searchParams.get('horaInicio') || '';
+  const repeticaoHoras = url.searchParams.get('repeticaoHoras') || '';
+  const qtdDias = url.searchParams.get('qtdDias') || '';
+  const intervaloDias = url.searchParams.get('intervaloDias') || '';
+  const criadoEm = url.searchParams.get('criadoEm') || '';
+  const concluidaEm = url.searchParams.get('concluidaEm') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const ativ = url.searchParams.get('ativ') || '';
+  const forma = url.searchParams.get('forma') || '';
+  const enviarPara = url.searchParams.get('enviarPara') || '';
+  const notificarFamiliar = url.searchParams.get('notificarFamiliar') || '';
+  const replicarAtividade = url.searchParams.get('replicarAtividade') || '';
+
+  return {
+    baseFilters,
+    atendimentoId,
+    pacienteId,
+    profissionalId,
+    atividade,
+    horaInicio,
+    repeticaoHoras,
+    qtdDias,
+    intervaloDias,
+    criadoEm,
+    concluidaEm,
+    ativo,
+    ativ,
+    forma,
+    enviarPara,
+    notificarFamiliar,
+    replicarAtividade
+  };
+};

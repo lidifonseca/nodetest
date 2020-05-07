@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A PushnotificationEnvios.
  */
-@Entity('pushnotification_envios')
+@Entity('tb_pushnotification_envios')
 export default class PushnotificationEnvios extends BaseEntity {
-  @Column({ name: 'referencia', length: 50, nullable: false })
+  @Column({ name: 'REFERENCIA', length: 50, nullable: false })
   referencia: string;
 
-  @Column({ type: 'timestamp', name: 'ultimo_envio' })
+  @Column({ type: 'timestamp', name: 'ULTIMO_ENVIO' })
   ultimoEnvio: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

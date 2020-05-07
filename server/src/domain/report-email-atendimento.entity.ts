@@ -5,12 +5,12 @@ import { BaseEntity } from './base/base.entity';
 /**
  * A ReportEmailAtendimento.
  */
-@Entity('report_email_atendimento')
+@Entity('tb_report_email_atendimento')
 export default class ReportEmailAtendimento extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_atendimento' })
+  @Column({ type: 'integer', name: 'ID_ATENDIMENTO' })
   idAtendimento: number;
 
-  @Column({ type: 'integer', name: 'tipo_report' })
+  @Column({ type: 'integer', name: 'TIPO_REPORT' })
   tipoReport: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

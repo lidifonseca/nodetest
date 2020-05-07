@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import MotivoPs from './motivo-ps';
 import MotivoPsDetail from './motivo-ps-detail';
+import MotivoPsRelatorioCSV from './relatorio/motivo-ps.csv';
 import MotivoPsUpdate from './motivo-ps-update';
 import MotivoPsDeleteDialog from './motivo-ps-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={MotivoPsRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={MotivoPsUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={MotivoPsUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={MotivoPsDetail} />

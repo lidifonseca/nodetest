@@ -7,9 +7,9 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A Protocolos.
  */
-@Entity('protocolos')
+@Entity('tb_protocolos')
 export default class Protocolos extends BaseEntity {
-  @Column({ type: 'integer', name: 'protocolo', nullable: false })
+  @Column({ type: 'integer', name: 'PROTOCOLO', nullable: false })
   protocolo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

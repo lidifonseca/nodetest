@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -35,9 +26,6 @@ import { getProfissionalStatusAtualState, IProfissionalStatusAtualBaseState, get
 import { IProfissionalStatusAtual } from 'app/shared/model/profissional-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-
-import { IStatusAtualProf } from 'app/shared/model/status-atual-prof.model';
-import { getEntities as getStatusAtualProfs } from 'app/entities/status-atual-prof/status-atual-prof.reducer';
 
 export interface IProfissionalStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -56,8 +44,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getStatusAtualProfs();
   }
 
   cancelCourse = () => {
@@ -65,9 +51,7 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       {
         idProfissional: '',
         obs: '',
-        ativo: '',
-        idUsuario: '',
-        idStatusAtualProf: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -100,7 +84,9 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -121,12 +107,6 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
-      'idStatusAtualProf=' +
-      this.state.idStatusAtualProf +
-      '&' +
       ''
     );
   };
@@ -134,12 +114,12 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, obs, ativo, idUsuario, idStatusAtualProf, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idProfissional, obs, ativo, idUsuario, idStatusAtualProf, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idProfissional, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { statusAtualProfs, profissionalStatusAtualList, match, totalItems } = this.props;
+    const { profissionalStatusAtualList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -157,7 +137,11 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalStatusAtual.home.createLabel">
@@ -172,72 +156,44 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="idProfissional"
-                            id="profissional-status-atual-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="obsLabel" for="profissional-status-atual-obs">
-                            <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
-                          </Label>
-                          <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="profissional-status-atual-ativo">
-                            <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="profissional-status-atual-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="profissional-status-atual-idUsuario">
-                            <Translate contentKey="generadorApp.profissionalStatusAtual.idUsuario">Id Usuario</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idUsuario" id="profissional-status-atual-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="profissional-status-atual-idStatusAtualProf">
-                              <Translate contentKey="generadorApp.profissionalStatusAtual.idStatusAtualProf">
-                                Id Status Atual Prof
-                              </Translate>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
                             </Label>
+
                             <AvInput
-                              id="profissional-status-atual-idStatusAtualProf"
-                              type="select"
-                              className="form-control"
-                              name="idStatusAtualProfId"
-                            >
-                              <option value="" key="0" />
-                              {statusAtualProfs
-                                ? statusAtualProfs.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                              type="text"
+                              name="idProfissional"
+                              id="profissional-status-atual-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'obs' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="obsLabel" for="profissional-status-atual-obs">
+                              <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
+                            </Label>
+                            <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="profissional-status-atual-ativo">
+                              <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="profissional-status-atual-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -265,26 +221,24 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('obs')}>
-                        <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.profissionalStatusAtual.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.profissionalStatusAtual.idStatusAtualProf">Id Status Atual Prof</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'obs' ? (
+                        <th className="hand" onClick={this.sort('obs')}>
+                          <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -299,25 +253,50 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
                           </Button>
                         </td>
 
-                        <td>{profissionalStatusAtual.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalStatusAtual.idProfissional}</td> : null}
 
-                        <td>{profissionalStatusAtual.obs}</td>
+                        {this.state.baseFilters !== 'obs' ? (
+                          <td>{profissionalStatusAtual.obs ? Buffer.from(profissionalStatusAtual.obs).toString() : null}</td>
+                        ) : null}
 
-                        <td>{profissionalStatusAtual.ativo}</td>
-
-                        <td>{profissionalStatusAtual.idUsuario}</td>
-                        <td>
-                          {profissionalStatusAtual.idStatusAtualProf ? (
-                            <Link to={`status-atual-prof/${profissionalStatusAtual.idStatusAtualProf.id}`}>
-                              {profissionalStatusAtual.idStatusAtualProf.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalStatusAtual.ativo}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalStatusAtual.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalStatusAtual.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalStatusAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -353,13 +332,11 @@ export class ProfissionalStatusAtual extends React.Component<IProfissionalStatus
 }
 
 const mapStateToProps = ({ profissionalStatusAtual, ...storeState }: IRootState) => ({
-  statusAtualProfs: storeState.statusAtualProf.entities,
   profissionalStatusAtualList: profissionalStatusAtual.entities,
   totalItems: profissionalStatusAtual.totalItems
 });
 
 const mapDispatchToProps = {
-  getStatusAtualProfs,
   getEntities
 };
 

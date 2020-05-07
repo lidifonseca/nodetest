@@ -36,7 +36,7 @@ import { User } from './user.entity';
 <%_ } else { _%>
 <%- formatAsClassJavadoc(javadoc) %>
 <%_ } _%>
-@Entity('<%= entityTableName %>')
+@Entity('tb_<%= entityTableName %>')
 export default class <%= asEntity(entityClass) %> extends BaseEntity  {
 
 <%_ for (idx in fields) {
@@ -54,6 +54,9 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     const fieldColumnType=addDbType(fieldType);
+    if(fields[idx].dbName){
+        console.info(entityTableName + "." +fieldNameAsDatabaseColumn +"=>" +fields[idx].dbName);
+    }
     if (fieldValidate === true) {
         if (fieldValidateRules.includes('required')) {
             required = true;
@@ -63,17 +66,17 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
         } _%>
     <%- include ../common/field_validators -%>
     <%_ } _%>
-    <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
-    @ApiModelProperty({type: '', description: '<%- formatAsApiDescription(fields[idx].javadoc) %>'<% if (required) { %>, required: true<% } %>})
+    <%_ if (!hasDto && typeof fields[idx].clean_javadoc != 'undefined') { _%>
+    @ApiModelProperty({type: '', description: '<%- formatAsApiDescription(fields[idx].clean_javadoc) %>'<% if (required) { %>, required: true<% } %>})
     <%_ } _%>
         <%_ if (fields[idx].fieldIsEnum) { _%>
-    @Column({type: 'enum', name: '<%-fieldNameAsDatabaseColumn %>', enum: <%= fieldType %>})
+    @Column({type: 'enum', name: '<%- fields[idx].dbName ? fields[idx].dbName : fieldNameAsDatabaseColumn.toUpperCase() %>', enum: <%= fieldType %>})
         <%_ } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
-    @Column({<%_ if(fieldColumnType) { _%> type: '<%-fieldColumnType%>' ,<%_ }_%> name: "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable: false<% } %><% if (unique) { %>, unique: true<% } %>})
+    @Column({<%_ if(fieldColumnType) { _%> type: '<%-fieldColumnType%>' ,<%_ }_%> name: "<%- fields[idx].dbName ? fields[idx].dbName : fieldNameAsDatabaseColumn.toUpperCase() %>"<% if (required) { %>, nullable: false<% } %><% if (unique) { %>, unique: true<% } %>})
         <%_ } else if (fieldType === 'BigDecimal') { _%>
-    @Column({<%_ if(fieldColumnType) { _%> type: '<%-fieldColumnType%>' ,<%_ }_%> name: "<%-fieldNameAsDatabaseColumn %>", precision : 10, scale : 2<% if (required) { %>, nullable: false<% } %><% if (unique) { %>, unique: true<% } %>})
+    @Column({<%_ if(fieldColumnType) { _%> type: '<%-fieldColumnType%>' ,<%_ }_%> name: "<%- fields[idx].dbName ? fields[idx].dbName : fieldNameAsDatabaseColumn.toUpperCase() %>", precision : 10, scale : 2<% if (required) { %>, nullable: false<% } %><% if (unique) { %>, unique: true<% } %>})
         <%_ } else { _%>
-    @Column({<%_ if(fieldColumnType) { _%> type: '<%-fieldColumnType%>' ,<%_ }_%>  name: "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length: <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable: false<% } %><% if (unique) { %>, unique: true<% } %><% } %>})
+    @Column({<%_ if(fieldColumnType) { _%> type: '<%-fieldColumnType%>' ,<%_ }_%>  name: "<%- fields[idx].dbName ? fields[idx].dbName : fieldNameAsDatabaseColumn.toUpperCase() %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length: <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable: false<% } %><% if (unique) { %>, unique: true<% } %><% } %>})
         <%_ } _%>
         <%_ if (fields[idx].fieldIsEnum) { _%>
     <%= fieldName %>: <%= fieldType %>;
@@ -82,7 +85,7 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
         <%_ } _%>
 
     <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
-    @Column({name: '<%-fieldNameAsDatabaseColumn %>_content_type'})
+    @Column({name: '<%- fields[idx].dbName ? fields[idx].dbName : fieldNameAsDatabaseColumn.toUpperCase() %>_CONTENT_TYPE'})
     <%= fieldName %>ContentType: string;
     <%_ }
     } _%>
@@ -114,15 +117,16 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
 
     <%_ } else if (relationshipType === 'many-to-one') { _%>
     @ManyToOne(type => <%= relationship.otherEntityAngularName %> <%_ if (ownerSide === true && isUserRelationship === false ) { _%>, other => other.<%= otherEntityRelationshipNamePlural %>  <%_ } _%>)
+    @JoinColumn({name: 'ID_<%= getColumnName(relationship.relationshipName).toUpperCase() %>', referencedColumnName: 'id'})
     <%= relationshipFieldName %>: <%= relationship.otherEntityAngularName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') { _%>
     @ManyToMany(type => <%= relationship.otherEntityAngularName %> )
         <%_ if (ownerSide === true) { _%>
     @JoinTable({
-        name: '<%= joinTableName %>',
-        joinColumn: { name: '<%= getColumnName(name) %>_id', referencedColumnName: "id" },
-        inverseJoinColumn: { name: '<%= getColumnName(relationship.relationshipName) %>_id', referencedColumnName: "id" }
+        name: 'tb_<%= joinTableName%>',
+        joinColumn: { name: 'ID_<%= getColumnName(name).toUpperCase() %>', referencedColumnName: "id" },
+        inverseJoinColumn: { name: 'ID_<%= getColumnName(relationship.relationshipName).toUpperCase() %>', referencedColumnName: "id" }
     })
         <%_ } _%>
     <%= relationshipFieldNamePlural %>: <%= relationship.otherEntityAngularName %>[];

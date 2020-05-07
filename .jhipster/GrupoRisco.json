@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502233500",
+    "changelogDate": "20200507110800",
     "entityTableName": "grupo_risco",
     "dto": "mapstruct",
     "pagination": "pagination",

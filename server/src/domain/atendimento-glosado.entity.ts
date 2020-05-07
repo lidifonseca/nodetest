@@ -7,16 +7,13 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A AtendimentoGlosado.
  */
-@Entity('atendimento_glosado')
+@Entity('tb_atendimento_glosado')
 export default class AtendimentoGlosado extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_atendimento', nullable: false })
+  @Column({ type: 'integer', name: 'ID_ATENDIMENTO', nullable: false })
   idAtendimento: number;
 
-  @Column({ name: 'glosado', length: 1 })
+  @Column({ name: 'GLOSADO', length: 1 })
   glosado: string;
-
-  @Column({ type: 'integer', name: 'id_usuario' })
-  idUsuario: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

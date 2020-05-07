@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IControleDisparoAviso, defaultValue } from 'app/shared/model/controle-disparo-aviso.model';
 
 export const ACTION_TYPES = {
+  FETCH_CONTROLEDISPAROAVISO_LIST_EXPORT: 'controleDisparoAviso/FETCH_CONTROLEDISPAROAVISO_LIST_EXPORT',
   FETCH_CONTROLEDISPAROAVISO_LIST: 'controleDisparoAviso/FETCH_CONTROLEDISPAROAVISO_LIST',
   FETCH_CONTROLEDISPAROAVISO: 'controleDisparoAviso/FETCH_CONTROLEDISPAROAVISO',
   CREATE_CONTROLEDISPAROAVISO: 'controleDisparoAviso/CREATE_CONTROLEDISPAROAVISO',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type ControleDisparoAvisoState = Readonly<typeof initialState>;
 
+export interface IControleDisparoAvisoBaseState {
+  baseFilters: any;
+  idAtendimento: any;
+  qtdDisparo: any;
+  avisopush: any;
+}
+
+export interface IControleDisparoAvisoUpdateState {
+  fieldsBase: IControleDisparoAvisoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ControleDisparoAvisoState = initialState, action): ControleDisparoAvisoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO):
       return {
@@ -51,6 +65,7 @@ export default (state: ControleDisparoAvisoState = initialState, action): Contro
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO):
     case FAILURE(ACTION_TYPES.CREATE_CONTROLEDISPAROAVISO):
@@ -142,6 +157,27 @@ export const getEntity: ICrudGetAction<IControleDisparoAviso> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionControleDisparoAviso<IControleDisparoAviso> = (
+  idAtendimento,
+  qtdDisparo,
+  avisopush,
+  page,
+  size,
+  sort
+) => {
+  const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
+  const qtdDisparoRequest = qtdDisparo ? `qtdDisparo.contains=${qtdDisparo}&` : '';
+  const avisopushRequest = avisopush ? `avisopush.contains=${avisopush}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CONTROLEDISPAROAVISO_LIST,
+    payload: axios.get<IControleDisparoAviso>(
+      `${requestUrl}${idAtendimentoRequest}${qtdDisparoRequest}${avisopushRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IControleDisparoAviso> = entity => async dispatch => {
   entity = {
     ...entity
@@ -177,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IControleDisparoAviso> = id => asyn
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getControleDisparoAvisoState = (location): IControleDisparoAvisoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idAtendimento = url.searchParams.get('idAtendimento') || '';
+  const qtdDisparo = url.searchParams.get('qtdDisparo') || '';
+  const avisopush = url.searchParams.get('avisopush') || '';
+
+  return {
+    baseFilters,
+    idAtendimento,
+    qtdDisparo,
+    avisopush
+  };
+};

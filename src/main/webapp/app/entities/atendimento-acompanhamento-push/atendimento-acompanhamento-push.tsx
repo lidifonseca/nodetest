@@ -31,22 +31,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atendimento-acompanhamento-push.reducer';
+import {
+  getAtendimentoAcompanhamentoPushState,
+  IAtendimentoAcompanhamentoPushBaseState,
+  getEntities
+} from './atendimento-acompanhamento-push.reducer';
 import { IAtendimentoAcompanhamentoPush } from 'app/shared/model/atendimento-acompanhamento-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IAtendimentoAcompanhamentoPushProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtendimentoAcompanhamentoPushBaseState {
-  atendimentoId: any;
-  pacienteId: any;
-  profissionalId: any;
-  timestampAtendimento: any;
-  nomePaciente: any;
-  nomeProfissioinal: any;
-  timestampConfirmacao: any;
-}
 export interface IAtendimentoAcompanhamentoPushState extends IAtendimentoAcompanhamentoPushBaseState, IPaginationBaseState {}
 
 export class AtendimentoAcompanhamentoPush extends React.Component<
@@ -59,30 +54,9 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtendimentoAcompanhamentoPushState(this.props.location)
+      ...getAtendimentoAcompanhamentoPushState(this.props.location)
     };
   }
-
-  getAtendimentoAcompanhamentoPushState = (location): IAtendimentoAcompanhamentoPushBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const atendimentoId = url.searchParams.get('atendimentoId') || '';
-    const pacienteId = url.searchParams.get('pacienteId') || '';
-    const profissionalId = url.searchParams.get('profissionalId') || '';
-    const timestampAtendimento = url.searchParams.get('timestampAtendimento') || '';
-    const nomePaciente = url.searchParams.get('nomePaciente') || '';
-    const nomeProfissioinal = url.searchParams.get('nomeProfissioinal') || '';
-    const timestampConfirmacao = url.searchParams.get('timestampConfirmacao') || '';
-
-    return {
-      atendimentoId,
-      pacienteId,
-      profissionalId,
-      timestampAtendimento,
-      nomePaciente,
-      nomeProfissioinal,
-      timestampConfirmacao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -130,7 +104,9 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -216,7 +192,11 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.home.createLabel">
@@ -231,109 +211,129 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="atendimentoIdLabel" for="atendimento-acompanhamento-push-atendimentoId">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.atendimentoId">Atendimento Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="atendimentoId"
-                            id="atendimento-acompanhamento-push-atendimentoId"
-                            value={this.state.atendimentoId}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="pacienteIdLabel" for="atendimento-acompanhamento-push-pacienteId">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.pacienteId">Paciente Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="pacienteId"
-                            id="atendimento-acompanhamento-push-pacienteId"
-                            value={this.state.pacienteId}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="profissionalIdLabel" for="atendimento-acompanhamento-push-profissionalId">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.profissionalId">Profissional Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="profissionalId"
-                            id="atendimento-acompanhamento-push-profissionalId"
-                            value={this.state.profissionalId}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="timestampAtendimentoLabel" for="atendimento-acompanhamento-push-timestampAtendimento">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampAtendimento">
-                              Timestamp Atendimento
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-acompanhamento-push-timestampAtendimento"
-                            type="datetime-local"
-                            className="form-control"
-                            name="timestampAtendimento"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.timestampAtendimento ? convertDateTimeFromServer(this.state.timestampAtendimento) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomePacienteLabel" for="atendimento-acompanhamento-push-nomePaciente">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomePaciente">Nome Paciente</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'atendimentoId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="atendimentoIdLabel" for="atendimento-acompanhamento-push-atendimentoId">
+                              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.atendimentoId">Atendimento Id</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="atendimentoId"
+                              id="atendimento-acompanhamento-push-atendimentoId"
+                              value={this.state.atendimentoId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="nomePaciente"
-                            id="atendimento-acompanhamento-push-nomePaciente"
-                            value={this.state.nomePaciente}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeProfissioinalLabel" for="atendimento-acompanhamento-push-nomeProfissioinal">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomeProfissioinal">
-                              Nome Profissioinal
-                            </Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'pacienteId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="pacienteIdLabel" for="atendimento-acompanhamento-push-pacienteId">
+                              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.pacienteId">Paciente Id</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="pacienteId"
+                              id="atendimento-acompanhamento-push-pacienteId"
+                              value={this.state.pacienteId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="nomeProfissioinal"
-                            id="atendimento-acompanhamento-push-nomeProfissioinal"
-                            value={this.state.nomeProfissioinal}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="timestampConfirmacaoLabel" for="atendimento-acompanhamento-push-timestampConfirmacao">
-                            <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampConfirmacao">
-                              Timestamp Confirmacao
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-acompanhamento-push-timestampConfirmacao"
-                            type="datetime-local"
-                            className="form-control"
-                            name="timestampConfirmacao"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.timestampConfirmacao ? convertDateTimeFromServer(this.state.timestampConfirmacao) : null}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'profissionalId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="profissionalIdLabel" for="atendimento-acompanhamento-push-profissionalId">
+                              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.profissionalId">Profissional Id</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="profissionalId"
+                              id="atendimento-acompanhamento-push-profissionalId"
+                              value={this.state.profissionalId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'timestampAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="timestampAtendimentoLabel" for="atendimento-acompanhamento-push-timestampAtendimento">
+                              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampAtendimento">
+                                Timestamp Atendimento
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              id="atendimento-acompanhamento-push-timestampAtendimento"
+                              type="datetime-local"
+                              className="form-control"
+                              name="timestampAtendimento"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.timestampAtendimento ? convertDateTimeFromServer(this.state.timestampAtendimento) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'nomePaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomePacienteLabel" for="atendimento-acompanhamento-push-nomePaciente">
+                              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomePaciente">Nome Paciente</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="nomePaciente"
+                              id="atendimento-acompanhamento-push-nomePaciente"
+                              value={this.state.nomePaciente}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'nomeProfissioinal' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeProfissioinalLabel" for="atendimento-acompanhamento-push-nomeProfissioinal">
+                              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomeProfissioinal">
+                                Nome Profissioinal
+                              </Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="nomeProfissioinal"
+                              id="atendimento-acompanhamento-push-nomeProfissioinal"
+                              value={this.state.nomeProfissioinal}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'timestampConfirmacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="timestampConfirmacaoLabel" for="atendimento-acompanhamento-push-timestampConfirmacao">
+                              <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampConfirmacao">
+                                Timestamp Confirmacao
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              id="atendimento-acompanhamento-push-timestampConfirmacao"
+                              type="datetime-local"
+                              className="form-control"
+                              name="timestampConfirmacao"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.timestampConfirmacao ? convertDateTimeFromServer(this.state.timestampConfirmacao) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -361,38 +361,54 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('atendimentoId')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.atendimentoId">Atendimento Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('pacienteId')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.pacienteId">Paciente Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('profissionalId')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.profissionalId">Profissional Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('timestampAtendimento')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampAtendimento">
-                          Timestamp Atendimento
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nomePaciente')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomePaciente">Nome Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nomeProfissioinal')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomeProfissioinal">Nome Profissioinal</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('timestampConfirmacao')}>
-                        <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampConfirmacao">
-                          Timestamp Confirmacao
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'atendimentoId' ? (
+                        <th className="hand" onClick={this.sort('atendimentoId')}>
+                          <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.atendimentoId">Atendimento Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'pacienteId' ? (
+                        <th className="hand" onClick={this.sort('pacienteId')}>
+                          <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.pacienteId">Paciente Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'profissionalId' ? (
+                        <th className="hand" onClick={this.sort('profissionalId')}>
+                          <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.profissionalId">Profissional Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'timestampAtendimento' ? (
+                        <th className="hand" onClick={this.sort('timestampAtendimento')}>
+                          <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampAtendimento">
+                            Timestamp Atendimento
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nomePaciente' ? (
+                        <th className="hand" onClick={this.sort('nomePaciente')}>
+                          <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomePaciente">Nome Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nomeProfissioinal' ? (
+                        <th className="hand" onClick={this.sort('nomeProfissioinal')}>
+                          <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.nomeProfissioinal">
+                            Nome Profissioinal
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'timestampConfirmacao' ? (
+                        <th className="hand" onClick={this.sort('timestampConfirmacao')}>
+                          <Translate contentKey="generadorApp.atendimentoAcompanhamentoPush.timestampConfirmacao">
+                            Timestamp Confirmacao
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -407,39 +423,58 @@ export class AtendimentoAcompanhamentoPush extends React.Component<
                           </Button>
                         </td>
 
-                        <td>{atendimentoAcompanhamentoPush.atendimentoId}</td>
+                        {this.state.baseFilters !== 'atendimentoId' ? <td>{atendimentoAcompanhamentoPush.atendimentoId}</td> : null}
 
-                        <td>{atendimentoAcompanhamentoPush.pacienteId}</td>
+                        {this.state.baseFilters !== 'pacienteId' ? <td>{atendimentoAcompanhamentoPush.pacienteId}</td> : null}
 
-                        <td>{atendimentoAcompanhamentoPush.profissionalId}</td>
+                        {this.state.baseFilters !== 'profissionalId' ? <td>{atendimentoAcompanhamentoPush.profissionalId}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={atendimentoAcompanhamentoPush.timestampAtendimento} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'timestampAtendimento' ? (
+                          <td>
+                            <TextFormat type="date" value={atendimentoAcompanhamentoPush.timestampAtendimento} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{atendimentoAcompanhamentoPush.nomePaciente}</td>
+                        {this.state.baseFilters !== 'nomePaciente' ? <td>{atendimentoAcompanhamentoPush.nomePaciente}</td> : null}
 
-                        <td>{atendimentoAcompanhamentoPush.nomeProfissioinal}</td>
+                        {this.state.baseFilters !== 'nomeProfissioinal' ? <td>{atendimentoAcompanhamentoPush.nomeProfissioinal}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={atendimentoAcompanhamentoPush.timestampConfirmacao} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'timestampConfirmacao' ? (
+                          <td>
+                            <TextFormat type="date" value={atendimentoAcompanhamentoPush.timestampConfirmacao} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atendimentoAcompanhamentoPush.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoAcompanhamentoPush.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoAcompanhamentoPush.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoAcompanhamentoPush.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoAcompanhamentoPush.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoAcompanhamentoPush.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

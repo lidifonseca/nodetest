@@ -3,15 +3,15 @@
     "padItemHistDataIncComp": {
       "home": {
         "title": "Pad Item Hist Data Inc Comps",
-        "createLabel": "Criar novo Pad Item Hist Data Inc Comp",
-        "createOrEditLabel": "Criar ou editar Pad Item Hist Data Inc Comp",
-        "notFound": "Nenhum Pad Item Hist Data Inc Comp encontrado"
+        "createLabel": "Create a new Pad Item Hist Data Inc Comp",
+        "createOrEditLabel": "Create or edit a Pad Item Hist Data Inc Comp",
+        "notFound": "No Pad Item Hist Data Inc Comps found"
       },
-      "created": "Um novo Pad Item Hist Data Inc Comp foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Hist Data Inc Comp foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Hist Data Inc Comp foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Hist Data Inc Comp is created with identifier {{ param }}",
+      "updated": "A Pad Item Hist Data Inc Comp is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Hist Data Inc Comp is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Hist Data Inc Comp {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Hist Data Inc Comp {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Hist Data Inc Comp"

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITipoExame, defaultValue } from 'app/shared/model/tipo-exame.model';
 
 export const ACTION_TYPES = {
+  FETCH_TIPOEXAME_LIST_EXPORT: 'tipoExame/FETCH_TIPOEXAME_LIST_EXPORT',
   FETCH_TIPOEXAME_LIST: 'tipoExame/FETCH_TIPOEXAME_LIST',
   FETCH_TIPOEXAME: 'tipoExame/FETCH_TIPOEXAME',
   CREATE_TIPOEXAME: 'tipoExame/CREATE_TIPOEXAME',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type TipoExameState = Readonly<typeof initialState>;
 
+export interface ITipoExameBaseState {
+  baseFilters: any;
+  exame: any;
+  idPai: any;
+  ativo: any;
+}
+
+export interface ITipoExameUpdateState {
+  fieldsBase: ITipoExameBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TipoExameState = initialState, action): TipoExameState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TIPOEXAME_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TIPOEXAME_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TIPOEXAME):
       return {
@@ -51,6 +65,7 @@ export default (state: TipoExameState = initialState, action): TipoExameState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TIPOEXAME_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TIPOEXAME_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TIPOEXAME):
     case FAILURE(ACTION_TYPES.CREATE_TIPOEXAME):
@@ -133,6 +148,18 @@ export const getEntity: ICrudGetAction<ITipoExame> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTipoExame<ITipoExame> = (exame, idPai, ativo, page, size, sort) => {
+  const exameRequest = exame ? `exame.contains=${exame}&` : '';
+  const idPaiRequest = idPai ? `idPai.contains=${idPai}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TIPOEXAME_LIST,
+    payload: axios.get<ITipoExame>(`${requestUrl}${exameRequest}${idPaiRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ITipoExame> = entity => async dispatch => {
   entity = {
     ...entity
@@ -168,3 +195,18 @@ export const deleteEntity: ICrudDeleteAction<ITipoExame> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTipoExameState = (location): ITipoExameBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const exame = url.searchParams.get('exame') || '';
+  const idPai = url.searchParams.get('idPai') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    exame,
+    idPai,
+    ativo
+  };
+};

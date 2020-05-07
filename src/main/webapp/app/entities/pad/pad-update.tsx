@@ -10,27 +10,20 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './pad.reducer';
+import { IPadUpdateState, getEntity, getPadState, IPadBaseState, updateEntity, createEntity, reset } from './pad.reducer';
 import { IPad } from 'app/shared/model/pad.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadUpdateState {
-  isNew: boolean;
-  unidadeId: string;
-  idPacienteId: string;
-}
-
 export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState> {
   constructor(props: Readonly<IPadUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPadState(this.props.location),
       unidadeId: '0',
-      idPacienteId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -48,9 +41,32 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
     }
 
     this.props.getUnidadeEasies();
-    this.props.getPacientes();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idOperadora'] ? '&idOperadora=' + fieldsBase['idOperadora'] : '') +
+      (fieldsBase['idFranquia'] ? '&idFranquia=' + fieldsBase['idFranquia'] : '') +
+      (fieldsBase['nroPad'] ? '&nroPad=' + fieldsBase['nroPad'] : '') +
+      (fieldsBase['dataInicio'] ? '&dataInicio=' + fieldsBase['dataInicio'] : '') +
+      (fieldsBase['dataFim'] ? '&dataFim=' + fieldsBase['dataFim'] : '') +
+      (fieldsBase['dataConferido'] ? '&dataConferido=' + fieldsBase['dataConferido'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['statusPad'] ? '&statusPad=' + fieldsBase['statusPad'] : '') +
+      (fieldsBase['novoModelo'] ? '&novoModelo=' + fieldsBase['novoModelo'] : '') +
+      (fieldsBase['imagePath'] ? '&imagePath=' + fieldsBase['imagePath'] : '') +
+      (fieldsBase['score'] ? '&score=' + fieldsBase['score'] : '') +
+      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padEntity } = this.props;
@@ -68,13 +84,14 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
   };
 
   handleClose = () => {
-    this.props.history.push('/pad');
+    this.props.history.push('/pad?' + this.getFiltersURL());
   };
 
   render() {
-    const { padEntity, unidadeEasies, pacientes, loading, updating } = this.props;
+    const { padEntity, unidadeEasies, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -91,8 +108,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
               ? {}
               : {
                   ...padEntity,
-                  unidade: padEntity.unidade ? padEntity.unidade.id : null,
-                  idPaciente: padEntity.idPaciente ? padEntity.idPaciente.id : null
+                  unidade: padEntity.unidade ? padEntity.unidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -109,7 +125,14 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/pad" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/pad?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -124,7 +147,7 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -140,236 +163,244 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idOperadora' ? (
+                          <Col md="idOperadora">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idOperadoraLabel" for="pad-idOperadora">
+                                    <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-idOperadora" type="string" className="form-control" name="idOperadora" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idOperadora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idOperadoraLabel" for="pad-idOperadora">
-                                <Translate contentKey="generadorApp.pad.idOperadora">Id Operadora</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-idOperadora" type="string" className="form-control" name="idOperadora" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idFranquia' ? (
+                          <Col md="idFranquia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idFranquiaLabel" for="pad-idFranquia">
+                                    <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-idFranquia" type="text" name="idFranquia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idFranquiaLabel" for="pad-idFranquia">
-                                <Translate contentKey="generadorApp.pad.idFranquia">Id Franquia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-idFranquia" type="text" name="idFranquia" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'nroPad' ? (
+                          <Col md="nroPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nroPadLabel" for="pad-nroPad">
+                                    <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-nroPad" type="text" name="nroPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nroPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="nroPadLabel" for="pad-nroPad">
-                                <Translate contentKey="generadorApp.pad.nroPad">Nro Pad</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-nroPad" type="text" name="nroPad" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataInicio' ? (
+                          <Col md="dataInicio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataInicioLabel" for="pad-dataInicio">
+                                    <Translate contentKey="generadorApp.pad.dataInicio">Data Inicio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-dataInicio" type="date" className="form-control" name="dataInicio" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataInicioLabel" for="pad-dataInicio">
-                                <Translate contentKey="generadorApp.pad.dataInicio">Data Inicio</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-dataInicio" type="date" className="form-control" name="dataInicio" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataFim' ? (
+                          <Col md="dataFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataFimLabel" for="pad-dataFim">
+                                    <Translate contentKey="generadorApp.pad.dataFim">Data Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-dataFim" type="date" className="form-control" name="dataFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataFimLabel" for="pad-dataFim">
-                                <Translate contentKey="generadorApp.pad.dataFim">Data Fim</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-dataFim" type="date" className="form-control" name="dataFim" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataConferido' ? (
+                          <Col md="dataConferido">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataConferidoLabel" for="pad-dataConferido">
+                                    <Translate contentKey="generadorApp.pad.dataConferido">Data Conferido</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-dataConferido" type="date" className="form-control" name="dataConferido" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataConferido" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataConferidoLabel" for="pad-dataConferido">
-                                <Translate contentKey="generadorApp.pad.dataConferido">Data Conferido</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-dataConferido" type="date" className="form-control" name="dataConferido" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="pad-ativo">
+                                    <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="pad-ativo">
-                                <Translate contentKey="generadorApp.pad.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'statusPad' ? (
+                          <Col md="statusPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusPadLabel" for="pad-statusPad">
+                                    <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-statusPad" type="string" className="form-control" name="statusPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="pad-idUsuario">
-                                <Translate contentKey="generadorApp.pad.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-idUsuario" type="string" className="form-control" name="idUsuario" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'novoModelo' ? (
+                          <Col md="novoModelo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="novoModeloLabel" check>
+                                    <AvInput id="pad-novoModelo" type="checkbox" className="form-control" name="novoModelo" />
+                                    <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="novoModelo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="statusPadLabel" for="pad-statusPad">
-                                <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-statusPad" type="string" className="form-control" name="statusPad" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'imagePath' ? (
+                          <Col md="imagePath">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="imagePathLabel" for="pad-imagePath">
+                                    <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-imagePath" type="text" name="imagePath" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="imagePath" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="novoModeloLabel" check>
-                                <AvInput id="pad-novoModelo" type="checkbox" className="form-control" name="novoModelo" />
-                                <Translate contentKey="generadorApp.pad.novoModelo">Novo Modelo</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="imagePathLabel" for="pad-imagePath">
-                                <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-imagePath" type="text" name="imagePath" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="scoreLabel" for="pad-score">
-                                <Translate contentKey="generadorApp.pad.score">Score</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-score" type="string" className="form-control" name="score" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="pad-unidade">
-                                <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-unidade" type="select" className="form-control" name="unidade">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pad.unidade.empty')}
-                                </option>
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="pad-idPaciente">
-                                <Translate contentKey="generadorApp.pad.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="pad-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pad.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'score' ? (
+                          <Col md="score">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="scoreLabel" for="pad-score">
+                                    <Translate contentKey="generadorApp.pad.score">Score</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-score" type="string" className="form-control" name="score" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-unidade">
+                                    <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="pad-unidade" type="select" className="form-control" name="unidade">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.pad.unidade.empty')}
+                                    </option>
+                                    {unidadeEasies
+                                      ? unidadeEasies.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.razaoSocial}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -383,7 +414,6 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  pacientes: storeState.paciente.entities,
   padEntity: storeState.pad.entity,
   loading: storeState.pad.loading,
   updating: storeState.pad.updating,
@@ -392,7 +422,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getPacientes,
   getEntity,
   updateEntity,
   createEntity,

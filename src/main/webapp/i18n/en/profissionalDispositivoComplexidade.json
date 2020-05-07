@@ -3,15 +3,15 @@
     "profissionalDispositivoComplexidade": {
       "home": {
         "title": "Profissional Dispositivo Complexidades",
-        "createLabel": "Criar novo Profissional Dispositivo Complexidade",
-        "createOrEditLabel": "Criar ou editar Profissional Dispositivo Complexidade",
-        "notFound": "Nenhum Profissional Dispositivo Complexidade encontrado"
+        "createLabel": "Create a new Profissional Dispositivo Complexidade",
+        "createOrEditLabel": "Create or edit a Profissional Dispositivo Complexidade",
+        "notFound": "No Profissional Dispositivo Complexidades found"
       },
-      "created": "Um novo Profissional Dispositivo Complexidade foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Dispositivo Complexidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Dispositivo Complexidade foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Dispositivo Complexidade is created with identifier {{ param }}",
+      "updated": "A Profissional Dispositivo Complexidade is updated with identifier {{ param }}",
+      "deleted": "A Profissional Dispositivo Complexidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Dispositivo Complexidade {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Dispositivo Complexidade {{ id }}?"
       },
       "detail": {
         "title": "Profissional Dispositivo Complexidade"

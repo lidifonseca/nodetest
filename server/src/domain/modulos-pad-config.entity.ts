@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ModulosPadConfig.
  */
-@Entity('modulos_pad_config')
+@Entity('tb_modulos_pad_config')
 export default class ModulosPadConfig extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_modulos_pad', nullable: false })
+  @Column({ type: 'integer', name: 'ID_MODULOS_PAD', nullable: false })
   idModulosPad: number;
 
-  @Column({ type: 'integer', name: 'id_especialidade' })
+  @Column({ type: 'integer', name: 'ID_ESPECIALIDADE' })
   idEspecialidade: number;
 
-  @Column({ type: 'integer', name: 'id_periodicidade' })
+  @Column({ type: 'integer', name: 'ID_PERIODICIDADE' })
   idPeriodicidade: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

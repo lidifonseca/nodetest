@@ -10,28 +10,8 @@
             "fieldValidateRulesMaxlength": "255"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimento",
-            "otherEntityRelationshipName": "idCidade",
-            "relationshipName": "atendimento"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "empresa",
-            "otherEntityRelationshipName": "idCidade",
-            "relationshipName": "empresa"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "uf",
-            "otherEntityRelationshipName": "cidade",
-            "relationshipName": "idUf",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502231800",
+    "relationships": [],
+    "changelogDate": "20200507105100",
     "entityTableName": "cidade",
     "dto": "mapstruct",
     "pagination": "pagination",

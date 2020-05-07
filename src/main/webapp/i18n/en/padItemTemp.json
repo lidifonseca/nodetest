@@ -3,15 +3,15 @@
     "padItemTemp": {
       "home": {
         "title": "Pad Item Temps",
-        "createLabel": "Criar novo Pad Item Temp",
-        "createOrEditLabel": "Criar ou editar Pad Item Temp",
-        "notFound": "Nenhum Pad Item Temp encontrado"
+        "createLabel": "Create a new Pad Item Temp",
+        "createOrEditLabel": "Create or edit a Pad Item Temp",
+        "notFound": "No Pad Item Temps found"
       },
-      "created": "Um novo Pad Item Temp foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Temp foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Temp foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Temp is created with identifier {{ param }}",
+      "updated": "A Pad Item Temp is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Temp is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Temp {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Temp {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Temp"

@@ -7,30 +7,8 @@
             "fieldTypeBlobContent": "text"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "acao",
-            "otherEntityRelationshipName": "logUserFranquia",
-            "relationshipName": "idAcao",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "tela",
-            "otherEntityRelationshipName": "logUserFranquia",
-            "relationshipName": "idTela",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "franquiaUsuario",
-            "otherEntityRelationshipName": "logUserFranquia",
-            "relationshipName": "idUsuario",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502234300",
+    "relationships": [],
+    "changelogDate": "20200507111600",
     "entityTableName": "log_user_franquia",
     "dto": "mapstruct",
     "pagination": "pagination",

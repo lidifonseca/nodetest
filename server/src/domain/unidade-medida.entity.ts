@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A UnidadeMedida.
  */
-@Entity('unidade_medida')
+@Entity('tb_unidade_medida')
 export default class UnidadeMedida extends BaseEntity {
-  @Column({ name: 'unidade', length: 45, nullable: false })
+  @Column({ name: 'UNIDADE', length: 45, nullable: false })
   unidade: string;
 
-  @Column({ name: 'descricao', length: 45 })
+  @Column({ name: 'DESCRICAO', length: 45 })
   descricao: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './tempo-experiencia.reducer';
+import {
+  ITempoExperienciaUpdateState,
+  getEntity,
+  getTempoExperienciaState,
+  ITempoExperienciaBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './tempo-experiencia.reducer';
 import { ITempoExperiencia } from 'app/shared/model/tempo-experiencia.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITempoExperienciaUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ITempoExperienciaUpdateState {
-  isNew: boolean;
-}
-
 export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpdateProps, ITempoExperienciaUpdateState> {
   constructor(props: Readonly<ITempoExperienciaUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getTempoExperienciaState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,19 @@ export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpd
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['tempoExperiencia'] ? '&tempoExperiencia=' + fieldsBase['tempoExperiencia'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { tempoExperienciaEntity } = this.props;
@@ -57,13 +76,14 @@ export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/tempo-experiencia');
+    this.props.history.push('/tempo-experiencia?' + this.getFiltersURL());
   };
 
   render() {
     const { tempoExperienciaEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +116,14 @@ export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/tempo-experiencia" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/tempo-experiencia?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +138,7 @@ export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,29 +154,27 @@ export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpd
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tempoExperienciaLabel" for="tempo-experiencia-tempoExperiencia">
-                                <Translate contentKey="generadorApp.tempoExperiencia.tempoExperiencia">Tempo Experiencia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="tempo-experiencia-tempoExperiencia"
-                                type="text"
-                                name="tempoExperiencia"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'tempoExperiencia' ? (
+                          <Col md="tempoExperiencia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tempoExperienciaLabel" for="tempo-experiencia-tempoExperiencia">
+                                    <Translate contentKey="generadorApp.tempoExperiencia.tempoExperiencia">Tempo Experiencia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tempo-experiencia-tempoExperiencia" type="text" name="tempoExperiencia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tempoExperiencia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

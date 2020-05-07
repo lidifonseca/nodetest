@@ -31,23 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './notificacao-config-usuario.reducer';
+import { getNotificacaoConfigUsuarioState, INotificacaoConfigUsuarioBaseState, getEntities } from './notificacao-config-usuario.reducer';
 import { INotificacaoConfigUsuario } from 'app/shared/model/notificacao-config-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface INotificacaoConfigUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface INotificacaoConfigUsuarioBaseState {
-  notificacaoConfigId: any;
-  profissionalId: any;
-  pacienteId: any;
-  atualizadoEm: any;
-  atualizadoPor: any;
-  enviarPush: any;
-  enviarEmail: any;
-  observacao: any;
-}
 export interface INotificacaoConfigUsuarioState extends INotificacaoConfigUsuarioBaseState, IPaginationBaseState {}
 
 export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfigUsuarioProps, INotificacaoConfigUsuarioState> {
@@ -57,32 +47,9 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getNotificacaoConfigUsuarioState(this.props.location)
+      ...getNotificacaoConfigUsuarioState(this.props.location)
     };
   }
-
-  getNotificacaoConfigUsuarioState = (location): INotificacaoConfigUsuarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const notificacaoConfigId = url.searchParams.get('notificacaoConfigId') || '';
-    const profissionalId = url.searchParams.get('profissionalId') || '';
-    const pacienteId = url.searchParams.get('pacienteId') || '';
-    const atualizadoEm = url.searchParams.get('atualizadoEm') || '';
-    const atualizadoPor = url.searchParams.get('atualizadoPor') || '';
-    const enviarPush = url.searchParams.get('enviarPush') || '';
-    const enviarEmail = url.searchParams.get('enviarEmail') || '';
-    const observacao = url.searchParams.get('observacao') || '';
-
-    return {
-      notificacaoConfigId,
-      profissionalId,
-      pacienteId,
-      atualizadoEm,
-      atualizadoPor,
-      enviarPush,
-      enviarEmail,
-      observacao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -131,7 +98,9 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -222,7 +191,11 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.notificacaoConfigUsuario.home.createLabel">
@@ -237,125 +210,138 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="notificacaoConfigIdLabel" for="notificacao-config-usuario-notificacaoConfigId">
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.notificacaoConfigId">
-                              Notificacao Config Id
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="notificacaoConfigId"
-                            id="notificacao-config-usuario-notificacaoConfigId"
-                            value={this.state.notificacaoConfigId}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="profissionalIdLabel" for="notificacao-config-usuario-profissionalId">
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.profissionalId">Profissional Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="profissionalId"
-                            id="notificacao-config-usuario-profissionalId"
-                            value={this.state.profissionalId}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="pacienteIdLabel" for="notificacao-config-usuario-pacienteId">
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.pacienteId">Paciente Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="pacienteId"
-                            id="notificacao-config-usuario-pacienteId"
-                            value={this.state.pacienteId}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="atualizadoEmLabel" for="notificacao-config-usuario-atualizadoEm">
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoEm">Atualizado Em</Translate>
-                          </Label>
-                          <AvInput
-                            id="notificacao-config-usuario-atualizadoEm"
-                            type="datetime-local"
-                            className="form-control"
-                            name="atualizadoEm"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.atualizadoEm ? convertDateTimeFromServer(this.state.atualizadoEm) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="atualizadoPorLabel" for="notificacao-config-usuario-atualizadoPor">
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoPor">Atualizado Por</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="atualizadoPor"
-                            id="notificacao-config-usuario-atualizadoPor"
-                            value={this.state.atualizadoPor}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="enviarPushLabel" check>
+                      {this.state.baseFilters !== 'notificacaoConfigId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="notificacaoConfigIdLabel" for="notificacao-config-usuario-notificacaoConfigId">
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.notificacaoConfigId">
+                                Notificacao Config Id
+                              </Translate>
+                            </Label>
                             <AvInput
-                              id="notificacao-config-usuario-enviarPush"
-                              type="checkbox"
-                              className="form-control"
-                              name="enviarPush"
+                              type="string"
+                              name="notificacaoConfigId"
+                              id="notificacao-config-usuario-notificacaoConfigId"
+                              value={this.state.notificacaoConfigId}
                             />
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarPush">Enviar Push</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="enviarEmailLabel" check>
-                            <AvInput
-                              id="notificacao-config-usuario-enviarEmail"
-                              type="checkbox"
-                              className="form-control"
-                              name="enviarEmail"
-                            />
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarEmail">Enviar Email</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacaoLabel" for="notificacao-config-usuario-observacao">
-                            <Translate contentKey="generadorApp.notificacaoConfigUsuario.observacao">Observacao</Translate>
-                          </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="observacao"
-                            id="notificacao-config-usuario-observacao"
-                            value={this.state.observacao}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'profissionalId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="profissionalIdLabel" for="notificacao-config-usuario-profissionalId">
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.profissionalId">Profissional Id</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="profissionalId"
+                              id="notificacao-config-usuario-profissionalId"
+                              value={this.state.profissionalId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'pacienteId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="pacienteIdLabel" for="notificacao-config-usuario-pacienteId">
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.pacienteId">Paciente Id</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="pacienteId"
+                              id="notificacao-config-usuario-pacienteId"
+                              value={this.state.pacienteId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atualizadoEm' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="atualizadoEmLabel" for="notificacao-config-usuario-atualizadoEm">
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoEm">Atualizado Em</Translate>
+                            </Label>
+                            <AvInput
+                              id="notificacao-config-usuario-atualizadoEm"
+                              type="datetime-local"
+                              className="form-control"
+                              name="atualizadoEm"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.atualizadoEm ? convertDateTimeFromServer(this.state.atualizadoEm) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'atualizadoPor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="atualizadoPorLabel" for="notificacao-config-usuario-atualizadoPor">
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoPor">Atualizado Por</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="atualizadoPor"
+                              id="notificacao-config-usuario-atualizadoPor"
+                              value={this.state.atualizadoPor}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'enviarPush' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="enviarPushLabel" check>
+                              <AvInput
+                                id="notificacao-config-usuario-enviarPush"
+                                type="checkbox"
+                                className="form-control"
+                                name="enviarPush"
+                              />
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarPush">Enviar Push</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'enviarEmail' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="enviarEmailLabel" check>
+                              <AvInput
+                                id="notificacao-config-usuario-enviarEmail"
+                                type="checkbox"
+                                className="form-control"
+                                name="enviarEmail"
+                              />
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarEmail">Enviar Email</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacaoLabel" for="notificacao-config-usuario-observacao">
+                              <Translate contentKey="generadorApp.notificacaoConfigUsuario.observacao">Observacao</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="observacao"
+                              id="notificacao-config-usuario-observacao"
+                              value={this.state.observacao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -383,38 +369,56 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('notificacaoConfigId')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.notificacaoConfigId">Notificacao Config Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('profissionalId')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.profissionalId">Profissional Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('pacienteId')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.pacienteId">Paciente Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('atualizadoEm')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoEm">Atualizado Em</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('atualizadoPor')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoPor">Atualizado Por</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('enviarPush')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarPush">Enviar Push</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('enviarEmail')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarEmail">Enviar Email</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('observacao')}>
-                        <Translate contentKey="generadorApp.notificacaoConfigUsuario.observacao">Observacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'notificacaoConfigId' ? (
+                        <th className="hand" onClick={this.sort('notificacaoConfigId')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.notificacaoConfigId">
+                            Notificacao Config Id
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'profissionalId' ? (
+                        <th className="hand" onClick={this.sort('profissionalId')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.profissionalId">Profissional Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'pacienteId' ? (
+                        <th className="hand" onClick={this.sort('pacienteId')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.pacienteId">Paciente Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'atualizadoEm' ? (
+                        <th className="hand" onClick={this.sort('atualizadoEm')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoEm">Atualizado Em</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'atualizadoPor' ? (
+                        <th className="hand" onClick={this.sort('atualizadoPor')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.atualizadoPor">Atualizado Por</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'enviarPush' ? (
+                        <th className="hand" onClick={this.sort('enviarPush')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarPush">Enviar Push</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'enviarEmail' ? (
+                        <th className="hand" onClick={this.sort('enviarEmail')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.enviarEmail">Enviar Email</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'observacao' ? (
+                        <th className="hand" onClick={this.sort('observacao')}>
+                          <Translate contentKey="generadorApp.notificacaoConfigUsuario.observacao">Observacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -429,39 +433,58 @@ export class NotificacaoConfigUsuario extends React.Component<INotificacaoConfig
                           </Button>
                         </td>
 
-                        <td>{notificacaoConfigUsuario.notificacaoConfigId}</td>
+                        {this.state.baseFilters !== 'notificacaoConfigId' ? <td>{notificacaoConfigUsuario.notificacaoConfigId}</td> : null}
 
-                        <td>{notificacaoConfigUsuario.profissionalId}</td>
+                        {this.state.baseFilters !== 'profissionalId' ? <td>{notificacaoConfigUsuario.profissionalId}</td> : null}
 
-                        <td>{notificacaoConfigUsuario.pacienteId}</td>
+                        {this.state.baseFilters !== 'pacienteId' ? <td>{notificacaoConfigUsuario.pacienteId}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={notificacaoConfigUsuario.atualizadoEm} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'atualizadoEm' ? (
+                          <td>
+                            <TextFormat type="date" value={notificacaoConfigUsuario.atualizadoEm} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{notificacaoConfigUsuario.atualizadoPor}</td>
+                        {this.state.baseFilters !== 'atualizadoPor' ? <td>{notificacaoConfigUsuario.atualizadoPor}</td> : null}
 
-                        <td>{notificacaoConfigUsuario.enviarPush ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'enviarPush' ? <td>{notificacaoConfigUsuario.enviarPush ? 'true' : 'false'}</td> : null}
 
-                        <td>{notificacaoConfigUsuario.enviarEmail ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'enviarEmail' ? (
+                          <td>{notificacaoConfigUsuario.enviarEmail ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        <td>{notificacaoConfigUsuario.observacao}</td>
+                        {this.state.baseFilters !== 'observacao' ? <td>{notificacaoConfigUsuario.observacao}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${notificacaoConfigUsuario.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${notificacaoConfigUsuario.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${notificacaoConfigUsuario.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${notificacaoConfigUsuario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${notificacaoConfigUsuario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${notificacaoConfigUsuario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -42,15 +42,8 @@
             "fieldType": "LocalDate"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "alertasResultadosEsperados",
-            "otherEntityRelationshipName": "resultadosId",
-            "relationshipName": "alertasResultadosEsperados"
-        }
-    ],
-    "changelogDate": "20200503010000",
+    "relationships": [],
+    "changelogDate": "20200507123300",
     "entityTableName": "resultados",
     "dto": "mapstruct",
     "pagination": "pagination",

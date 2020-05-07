@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IMaio, defaultValue } from 'app/shared/model/maio.model';
 
 export const ACTION_TYPES = {
+  FETCH_MAIO_LIST_EXPORT: 'maio/FETCH_MAIO_LIST_EXPORT',
   FETCH_MAIO_LIST: 'maio/FETCH_MAIO_LIST',
   FETCH_MAIO: 'maio/FETCH_MAIO',
   CREATE_MAIO: 'maio/CREATE_MAIO',
@@ -30,10 +31,29 @@ const initialState = {
 
 export type MaioState = Readonly<typeof initialState>;
 
+export interface IMaioBaseState {
+  baseFilters: any;
+  idFranquia: any;
+  idPaciente: any;
+  nroPad: any;
+  dataInicio: any;
+  dataFim: any;
+  idEspecialidade: any;
+  idPeriodicidade: any;
+  idPeriodo: any;
+  qtdSessoes: any;
+}
+
+export interface IMaioUpdateState {
+  fieldsBase: IMaioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: MaioState = initialState, action): MaioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_MAIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_MAIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_MAIO):
       return {
@@ -51,6 +71,7 @@ export default (state: MaioState = initialState, action): MaioState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_MAIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_MAIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_MAIO):
     case FAILURE(ACTION_TYPES.CREATE_MAIO):
@@ -160,6 +181,39 @@ export const getEntity: ICrudGetAction<IMaio> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionMaio<IMaio> = (
+  idFranquia,
+  idPaciente,
+  nroPad,
+  dataInicio,
+  dataFim,
+  idEspecialidade,
+  idPeriodicidade,
+  idPeriodo,
+  qtdSessoes,
+  page,
+  size,
+  sort
+) => {
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const nroPadRequest = nroPad ? `nroPad.contains=${nroPad}&` : '';
+  const dataInicioRequest = dataInicio ? `dataInicio.contains=${dataInicio}&` : '';
+  const dataFimRequest = dataFim ? `dataFim.contains=${dataFim}&` : '';
+  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.contains=${idEspecialidade}&` : '';
+  const idPeriodicidadeRequest = idPeriodicidade ? `idPeriodicidade.contains=${idPeriodicidade}&` : '';
+  const idPeriodoRequest = idPeriodo ? `idPeriodo.contains=${idPeriodo}&` : '';
+  const qtdSessoesRequest = qtdSessoes ? `qtdSessoes.contains=${qtdSessoes}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_MAIO_LIST,
+    payload: axios.get<IMaio>(
+      `${requestUrl}${idFranquiaRequest}${idPacienteRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${idEspecialidadeRequest}${idPeriodicidadeRequest}${idPeriodoRequest}${qtdSessoesRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IMaio> = entity => async dispatch => {
   entity = {
     ...entity
@@ -195,3 +249,30 @@ export const deleteEntity: ICrudDeleteAction<IMaio> = id => async dispatch => {
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getMaioState = (location): IMaioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idFranquia = url.searchParams.get('idFranquia') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const nroPad = url.searchParams.get('nroPad') || '';
+  const dataInicio = url.searchParams.get('dataInicio') || '';
+  const dataFim = url.searchParams.get('dataFim') || '';
+  const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
+  const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
+  const idPeriodo = url.searchParams.get('idPeriodo') || '';
+  const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
+
+  return {
+    baseFilters,
+    idFranquia,
+    idPaciente,
+    nroPad,
+    dataInicio,
+    dataFim,
+    idEspecialidade,
+    idPeriodicidade,
+    idPeriodo,
+    qtdSessoes
+  };
+};

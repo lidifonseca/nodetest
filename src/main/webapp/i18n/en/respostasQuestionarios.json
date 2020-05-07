@@ -3,23 +3,22 @@
     "respostasQuestionarios": {
       "home": {
         "title": "Respostas Questionarios",
-        "createLabel": "Criar novo Respostas Questionarios",
-        "createOrEditLabel": "Criar ou editar Respostas Questionarios",
-        "notFound": "Nenhum Respostas Questionarios encontrado"
+        "createLabel": "Create a new Respostas Questionarios",
+        "createOrEditLabel": "Create or edit a Respostas Questionarios",
+        "notFound": "No Respostas Questionarios found"
       },
-      "created": "Um novo Respostas Questionarios foi criado com o identificador {{ param }}",
-      "updated": "Um Respostas Questionarios foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Respostas Questionarios foi excluído com o identificador {{ param }}",
+      "created": "A new Respostas Questionarios is created with identifier {{ param }}",
+      "updated": "A Respostas Questionarios is updated with identifier {{ param }}",
+      "deleted": "A Respostas Questionarios is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Respostas Questionarios {{ id }}?"
+        "question": "Are you sure you want to delete Respostas Questionarios {{ id }}?"
       },
       "detail": {
         "title": "Respostas Questionarios"
       },
       "dataResposta": "Data Resposta",
       "informacaoAdicional": "Informacao Adicional",
-      "questionarioId": "Questionario Id",
-      "questionariosId": "Questionarios Id"
+      "questionarioId": "Questionario Id"
     }
   }
 }

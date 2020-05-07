@@ -3,21 +3,20 @@
     "atendimentoSorteioFeito": {
       "home": {
         "title": "Atendimento Sorteio Feitos",
-        "createLabel": "Criar novo Atendimento Sorteio Feito",
-        "createOrEditLabel": "Criar ou editar Atendimento Sorteio Feito",
-        "notFound": "Nenhum Atendimento Sorteio Feito encontrado"
+        "createLabel": "Create a new Atendimento Sorteio Feito",
+        "createOrEditLabel": "Create or edit a Atendimento Sorteio Feito",
+        "notFound": "No Atendimento Sorteio Feitos found"
       },
-      "created": "Um novo Atendimento Sorteio Feito foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento Sorteio Feito foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento Sorteio Feito foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento Sorteio Feito is created with identifier {{ param }}",
+      "updated": "A Atendimento Sorteio Feito is updated with identifier {{ param }}",
+      "deleted": "A Atendimento Sorteio Feito is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento Sorteio Feito {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento Sorteio Feito {{ id }}?"
       },
       "detail": {
         "title": "Atendimento Sorteio Feito"
       },
-      "sorteioFeito": "Sorteio Feito",
-      "idPadItem": "Id Pad Item"
+      "sorteioFeito": "Sorteio Feito"
     }
   }
 }

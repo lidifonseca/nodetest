@@ -17,17 +17,10 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503004900",
+    "changelogDate": "20200507122200",
     "entityTableName": "profissional_status_atual_new",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -68,7 +68,9 @@ export class UnidadeEasyController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() unidadeEasy: UnidadeEasy): Promise<UnidadeEasy> {
+    console.info(unidadeEasy);
     const created = await this.unidadeEasyService.save(unidadeEasy);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UnidadeEasy', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class UnidadeEasyController {
   })
   async put(@Req() req: Request, @Body() unidadeEasy: UnidadeEasy): Promise<UnidadeEasy> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UnidadeEasy', unidadeEasy.id);
+
     return await this.unidadeEasyService.update(unidadeEasy);
   }
 

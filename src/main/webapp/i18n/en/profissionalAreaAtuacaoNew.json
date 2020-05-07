@@ -3,15 +3,15 @@
     "profissionalAreaAtuacaoNew": {
       "home": {
         "title": "Profissional Area Atuacao News",
-        "createLabel": "Criar novo Profissional Area Atuacao New",
-        "createOrEditLabel": "Criar ou editar Profissional Area Atuacao New",
-        "notFound": "Nenhum Profissional Area Atuacao New encontrado"
+        "createLabel": "Create a new Profissional Area Atuacao New",
+        "createOrEditLabel": "Create or edit a Profissional Area Atuacao New",
+        "notFound": "No Profissional Area Atuacao News found"
       },
-      "created": "Um novo Profissional Area Atuacao New foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Area Atuacao New foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Area Atuacao New foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Area Atuacao New is created with identifier {{ param }}",
+      "updated": "A Profissional Area Atuacao New is updated with identifier {{ param }}",
+      "deleted": "A Profissional Area Atuacao New is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Area Atuacao New {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Area Atuacao New {{ id }}?"
       },
       "detail": {
         "title": "Profissional Area Atuacao New"

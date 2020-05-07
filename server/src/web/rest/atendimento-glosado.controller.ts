@@ -68,7 +68,9 @@ export class AtendimentoGlosadoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() atendimentoGlosado: AtendimentoGlosado): Promise<AtendimentoGlosado> {
+    console.info(atendimentoGlosado);
     const created = await this.atendimentoGlosadoService.save(atendimentoGlosado);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'AtendimentoGlosado', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class AtendimentoGlosadoController {
   })
   async put(@Req() req: Request, @Body() atendimentoGlosado: AtendimentoGlosado): Promise<AtendimentoGlosado> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'AtendimentoGlosado', atendimentoGlosado.id);
+
     return await this.atendimentoGlosadoService.update(atendimentoGlosado);
   }
 

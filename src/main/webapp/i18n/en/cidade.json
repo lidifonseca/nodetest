@@ -3,23 +3,20 @@
     "cidade": {
       "home": {
         "title": "Cidades",
-        "createLabel": "Criar novo Cidade",
-        "createOrEditLabel": "Criar ou editar Cidade",
-        "notFound": "Nenhum Cidade encontrado"
+        "createLabel": "Create a new Cidade",
+        "createOrEditLabel": "Create or edit a Cidade",
+        "notFound": "No Cidades found"
       },
-      "created": "Um novo Cidade foi criado com o identificador {{ param }}",
-      "updated": "Um Cidade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Cidade foi excluído com o identificador {{ param }}",
+      "created": "A new Cidade is created with identifier {{ param }}",
+      "updated": "A Cidade is updated with identifier {{ param }}",
+      "deleted": "A Cidade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Cidade {{ id }}?"
+        "question": "Are you sure you want to delete Cidade {{ id }}?"
       },
       "detail": {
         "title": "Cidade"
       },
-      "descrCidade": "Descr Cidade",
-      "atendimento": "Atendimento",
-      "empresa": "Empresa",
-      "idUf": "Id Uf"
+      "descrCidade": "Descr Cidade"
     }
   }
 }

@@ -17,9 +17,7 @@
         "title": "Paciente Operadora"
       },
       "registro": "Registro",
-      "ativo": "Ativo",
-      "idPaciente": "Id Paciente",
-      "idOperadora": "Id Operadora"
+      "ativo": "Ativo"
     }
   }
 }

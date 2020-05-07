@@ -7,18 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A CidPta.
  */
-@Entity('cid_pta')
+@Entity('tb_cid_pta')
 export default class CidPta extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_desc_pta', nullable: false })
+  @Column({ type: 'integer', name: 'ID_DESC_PTA', nullable: false })
   idDescPta: number;
 
-  @Column({ type: 'integer', name: 'id_cid', nullable: false })
+  @Column({ type: 'integer', name: 'ID_CID', nullable: false })
   idCid: number;
 
-  @Column({ type: 'integer', name: 'id_atividade', nullable: false })
+  @Column({ type: 'integer', name: 'ID_ATIVIDADE', nullable: false })
   idAtividade: number;
 
-  @Column({ type: 'integer', name: 'ativo', nullable: false })
+  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IFilesPanico, defaultValue } from 'app/shared/model/files-panico.model';
 
 export const ACTION_TYPES = {
+  FETCH_FILESPANICO_LIST_EXPORT: 'filesPanico/FETCH_FILESPANICO_LIST_EXPORT',
   FETCH_FILESPANICO_LIST: 'filesPanico/FETCH_FILESPANICO_LIST',
   FETCH_FILESPANICO: 'filesPanico/FETCH_FILESPANICO',
   CREATE_FILESPANICO: 'filesPanico/CREATE_FILESPANICO',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type FilesPanicoState = Readonly<typeof initialState>;
 
+export interface IFilesPanicoBaseState {
+  baseFilters: any;
+  idPanico: any;
+  idPaciente: any;
+  tipo: any;
+  imagem: any;
+  criadoEm: any;
+}
+
+export interface IFilesPanicoUpdateState {
+  fieldsBase: IFilesPanicoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: FilesPanicoState = initialState, action): FilesPanicoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_FILESPANICO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_FILESPANICO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_FILESPANICO):
       return {
@@ -51,6 +67,7 @@ export default (state: FilesPanicoState = initialState, action): FilesPanicoStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_FILESPANICO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_FILESPANICO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_FILESPANICO):
     case FAILURE(ACTION_TYPES.CREATE_FILESPANICO):
@@ -139,6 +156,31 @@ export const getEntity: ICrudGetAction<IFilesPanico> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionFilesPanico<IFilesPanico> = (
+  idPanico,
+  idPaciente,
+  tipo,
+  imagem,
+  criadoEm,
+  page,
+  size,
+  sort
+) => {
+  const idPanicoRequest = idPanico ? `idPanico.contains=${idPanico}&` : '';
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+  const imagemRequest = imagem ? `imagem.contains=${imagem}&` : '';
+  const criadoEmRequest = criadoEm ? `criadoEm.contains=${criadoEm}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_FILESPANICO_LIST,
+    payload: axios.get<IFilesPanico>(
+      `${requestUrl}${idPanicoRequest}${idPacienteRequest}${tipoRequest}${imagemRequest}${criadoEmRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IFilesPanico> = entity => async dispatch => {
   entity = {
     ...entity
@@ -174,3 +216,22 @@ export const deleteEntity: ICrudDeleteAction<IFilesPanico> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getFilesPanicoState = (location): IFilesPanicoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPanico = url.searchParams.get('idPanico') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const tipo = url.searchParams.get('tipo') || '';
+  const imagem = url.searchParams.get('imagem') || '';
+  const criadoEm = url.searchParams.get('criadoEm') || '';
+
+  return {
+    baseFilters,
+    idPanico,
+    idPaciente,
+    tipo,
+    imagem,
+    criadoEm
+  };
+};

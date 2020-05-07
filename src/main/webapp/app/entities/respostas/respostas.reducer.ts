@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IRespostas, defaultValue } from 'app/shared/model/respostas.model';
 
 export const ACTION_TYPES = {
+  FETCH_RESPOSTAS_LIST_EXPORT: 'respostas/FETCH_RESPOSTAS_LIST_EXPORT',
   FETCH_RESPOSTAS_LIST: 'respostas/FETCH_RESPOSTAS_LIST',
   FETCH_RESPOSTAS: 'respostas/FETCH_RESPOSTAS',
   CREATE_RESPOSTAS: 'respostas/CREATE_RESPOSTAS',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type RespostasState = Readonly<typeof initialState>;
 
+export interface IRespostasBaseState {
+  baseFilters: any;
+  resposta: any;
+  pontuacao: any;
+  respostaAtiva: any;
+}
+
+export interface IRespostasUpdateState {
+  fieldsBase: IRespostasBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: RespostasState = initialState, action): RespostasState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_RESPOSTAS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_RESPOSTAS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_RESPOSTAS):
       return {
@@ -51,6 +65,7 @@ export default (state: RespostasState = initialState, action): RespostasState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_RESPOSTAS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_RESPOSTAS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_RESPOSTAS):
     case FAILURE(ACTION_TYPES.CREATE_RESPOSTAS):
@@ -109,34 +124,21 @@ export type ICrudGetAllActionRespostas<T> = (
   resposta?: any,
   pontuacao?: any,
   respostaAtiva?: any,
-  acoesRespostas?: any,
-  perguntasQuestionarioId?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionRespostas<IRespostas> = (
-  resposta,
-  pontuacao,
-  respostaAtiva,
-  acoesRespostas,
-  perguntasQuestionarioId,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionRespostas<IRespostas> = (resposta, pontuacao, respostaAtiva, page, size, sort) => {
   const respostaRequest = resposta ? `resposta.contains=${resposta}&` : '';
   const pontuacaoRequest = pontuacao ? `pontuacao.contains=${pontuacao}&` : '';
   const respostaAtivaRequest = respostaAtiva ? `respostaAtiva.contains=${respostaAtiva}&` : '';
-  const acoesRespostasRequest = acoesRespostas ? `acoesRespostas.equals=${acoesRespostas}&` : '';
-  const perguntasQuestionarioIdRequest = perguntasQuestionarioId ? `perguntasQuestionarioId.equals=${perguntasQuestionarioId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_RESPOSTAS_LIST,
     payload: axios.get<IRespostas>(
-      `${requestUrl}${respostaRequest}${pontuacaoRequest}${respostaAtivaRequest}${acoesRespostasRequest}${perguntasQuestionarioIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${respostaRequest}${pontuacaoRequest}${respostaAtivaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -148,10 +150,23 @@ export const getEntity: ICrudGetAction<IRespostas> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionRespostas<IRespostas> = (resposta, pontuacao, respostaAtiva, page, size, sort) => {
+  const respostaRequest = resposta ? `resposta.contains=${resposta}&` : '';
+  const pontuacaoRequest = pontuacao ? `pontuacao.contains=${pontuacao}&` : '';
+  const respostaAtivaRequest = respostaAtiva ? `respostaAtiva.contains=${respostaAtiva}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_RESPOSTAS_LIST,
+    payload: axios.get<IRespostas>(
+      `${requestUrl}${respostaRequest}${pontuacaoRequest}${respostaAtivaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IRespostas> = entity => async dispatch => {
   entity = {
-    ...entity,
-    perguntasQuestionarioId: entity.perguntasQuestionarioId === 'null' ? null : entity.perguntasQuestionarioId
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_RESPOSTAS,
@@ -162,7 +177,7 @@ export const createEntity: ICrudPutAction<IRespostas> = entity => async dispatch
 };
 
 export const updateEntity: ICrudPutAction<IRespostas> = entity => async dispatch => {
-  entity = { ...entity, perguntasQuestionarioId: entity.perguntasQuestionarioId === 'null' ? null : entity.perguntasQuestionarioId };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_RESPOSTAS,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -184,3 +199,18 @@ export const deleteEntity: ICrudDeleteAction<IRespostas> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getRespostasState = (location): IRespostasBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const resposta = url.searchParams.get('resposta') || '';
+  const pontuacao = url.searchParams.get('pontuacao') || '';
+  const respostaAtiva = url.searchParams.get('respostaAtiva') || '';
+
+  return {
+    baseFilters,
+    resposta,
+    pontuacao,
+    respostaAtiva
+  };
+};

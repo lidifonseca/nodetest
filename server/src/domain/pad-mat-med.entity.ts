@@ -7,21 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A PadMatMed.
  */
-@Entity('pad_mat_med')
+@Entity('tb_pad_mat_med')
 export default class PadMatMed extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_pad', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PAD', nullable: false })
   idPad: number;
 
-  @Column({ type: 'integer', name: 'id_mat_med', nullable: false })
+  @Column({ type: 'integer', name: 'ID_MAT_MED', nullable: false })
   idMatMed: number;
 
-  @Column({ type: 'integer', name: 'qtd', nullable: false })
+  @Column({ type: 'integer', name: 'QTD', nullable: false })
   qtd: number;
 
-  @Column({ type: 'integer', name: 'id_usuario', nullable: false })
-  idUsuario: number;
-
-  @Column({ type: 'integer', name: 'ativo', nullable: false })
+  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

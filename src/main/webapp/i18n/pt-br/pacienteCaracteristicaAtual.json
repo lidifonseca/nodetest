@@ -17,8 +17,7 @@
         "title": "Paciente Caracteristica Atual"
       },
       "idPaciente": "Id Paciente",
-      "idPacienteCaracteristica": "Id Paciente Caracteristica",
-      "idUsuario": "Id Usuario"
+      "idPacienteCaracteristica": "Id Paciente Caracteristica"
     }
   }
 }

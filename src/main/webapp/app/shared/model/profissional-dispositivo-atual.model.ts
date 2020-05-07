@@ -20,7 +20,6 @@ export interface IProfissionalDispositivoAtual {
   cateterNasalDeOxigenio?: number;
   mascaraDeVentilacao?: number;
   entubacaoOrotraqueal?: number;
-  idUsuario?: number;
 }
 
 export const defaultValue: Readonly<IProfissionalDispositivoAtual> = {};

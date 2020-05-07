@@ -17,9 +17,7 @@
         "title": "Pad Item Atividade"
       },
       "dataInicio": "Data Inicio",
-      "dataFim": "Data Fim",
-      "idAtividade": "Id Atividade",
-      "idPadItem": "Id Pad Item"
+      "dataFim": "Data Fim"
     }
   }
 }

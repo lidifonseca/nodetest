@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -35,11 +26,6 @@ import { getPacienteDiarioState, IPacienteDiarioBaseState, getEntities } from '.
 import { IPacienteDiario } from 'app/shared/model/paciente-diario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { IUsuario } from 'app/shared/model/usuario.model';
-import { getEntities as getUsuarios } from 'app/entities/usuario/usuario.reducer';
 
 export interface IPacienteDiarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
@@ -58,9 +44,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPacientes();
-    this.props.getUsuarios();
   }
 
   cancelCourse = () => {
@@ -68,9 +51,7 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
       {
         idOperadora: '',
         historico: '',
-        ativo: '',
-        idPaciente: '',
-        idUsuario: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -103,7 +84,9 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -124,12 +107,6 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -137,12 +114,12 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idOperadora, historico, ativo, idPaciente, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idOperadora, historico, ativo, idPaciente, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idOperadora, historico, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idOperadora, historico, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacientes, usuarios, pacienteDiarioList, match, totalItems } = this.props;
+    const { pacienteDiarioList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -160,7 +137,11 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteDiario.home.createLabel">Create a new Paciente Diario</Translate>
@@ -173,70 +154,38 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idOperadoraLabel" for="paciente-diario-idOperadora">
-                            <Translate contentKey="generadorApp.pacienteDiario.idOperadora">Id Operadora</Translate>
-                          </Label>
-                          <AvInput type="string" name="idOperadora" id="paciente-diario-idOperadora" value={this.state.idOperadora} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="historicoLabel" for="paciente-diario-historico">
-                            <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
-                          </Label>
-                          <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-diario-ativo">
-                            <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-diario-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-diario-idPaciente">
-                              <Translate contentKey="generadorApp.pacienteDiario.idPaciente">Id Paciente</Translate>
+                      {this.state.baseFilters !== 'idOperadora' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idOperadoraLabel" for="paciente-diario-idOperadora">
+                              <Translate contentKey="generadorApp.pacienteDiario.idOperadora">Id Operadora</Translate>
                             </Label>
-                            <AvInput id="paciente-diario-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="idOperadora" id="paciente-diario-idOperadora" value={this.state.idOperadora} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-diario-idUsuario">
-                              <Translate contentKey="generadorApp.pacienteDiario.idUsuario">Id Usuario</Translate>
+                      {this.state.baseFilters !== 'historico' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="historicoLabel" for="paciente-diario-historico">
+                              <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
                             </Label>
-                            <AvInput id="paciente-diario-idUsuario" type="select" className="form-control" name="idUsuarioId">
-                              <option value="" key="0" />
-                              {usuarios
-                                ? usuarios.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-diario-ativo">
+                              <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="paciente-diario-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -264,26 +213,24 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idOperadora')}>
-                        <Translate contentKey="generadorApp.pacienteDiario.idOperadora">Id Operadora</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('historico')}>
-                        <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteDiario.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteDiario.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idOperadora' ? (
+                        <th className="hand" onClick={this.sort('idOperadora')}>
+                          <Translate contentKey="generadorApp.pacienteDiario.idOperadora">Id Operadora</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'historico' ? (
+                        <th className="hand" onClick={this.sort('historico')}>
+                          <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -298,28 +245,45 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
                           </Button>
                         </td>
 
-                        <td>{pacienteDiario.idOperadora}</td>
+                        {this.state.baseFilters !== 'idOperadora' ? <td>{pacienteDiario.idOperadora}</td> : null}
 
-                        <td>{pacienteDiario.historico}</td>
+                        {this.state.baseFilters !== 'historico' ? (
+                          <td>{pacienteDiario.historico ? Buffer.from(pacienteDiario.historico).toString() : null}</td>
+                        ) : null}
 
-                        <td>{pacienteDiario.ativo}</td>
-                        <td>
-                          {pacienteDiario.idPaciente ? (
-                            <Link to={`paciente/${pacienteDiario.idPaciente.id}`}>{pacienteDiario.idPaciente.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {pacienteDiario.idUsuario ? (
-                            <Link to={`usuario/${pacienteDiario.idUsuario.id}`}>{pacienteDiario.idUsuario.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDiario.ativo}</td> : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${pacienteDiario.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDiario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDiario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -355,15 +319,11 @@ export class PacienteDiario extends React.Component<IPacienteDiarioProps, IPacie
 }
 
 const mapStateToProps = ({ pacienteDiario, ...storeState }: IRootState) => ({
-  pacientes: storeState.paciente.entities,
-  usuarios: storeState.usuario.entities,
   pacienteDiarioList: pacienteDiario.entities,
   totalItems: pacienteDiario.totalItems
 });
 
 const mapDispatchToProps = {
-  getPacientes,
-  getUsuarios,
   getEntities
 };
 

@@ -22,22 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './franquia-status-atual.reducer';
+import { getFranquiaStatusAtualState, IFranquiaStatusAtualBaseState, getEntities } from './franquia-status-atual.reducer';
 import { IFranquiaStatusAtual } from 'app/shared/model/franquia-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IFranquia } from 'app/shared/model/franquia.model';
-import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
-
 export interface IFranquiaStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IFranquiaStatusAtualBaseState {
-  statusAtual: any;
-  obs: any;
-  ativo: any;
-  idFranquia: any;
-}
 export interface IFranquiaStatusAtualState extends IFranquiaStatusAtualBaseState, IPaginationBaseState {}
 
 export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualProps, IFranquiaStatusAtualState> {
@@ -47,30 +38,12 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getFranquiaStatusAtualState(this.props.location)
+      ...getFranquiaStatusAtualState(this.props.location)
     };
   }
 
-  getFranquiaStatusAtualState = (location): IFranquiaStatusAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const statusAtual = url.searchParams.get('statusAtual') || '';
-    const obs = url.searchParams.get('obs') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-
-    return {
-      statusAtual,
-      obs,
-      ativo,
-      idFranquia
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getFranquias();
   }
 
   cancelCourse = () => {
@@ -78,8 +51,7 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
       {
         statusAtual: '',
         obs: '',
-        ativo: '',
-        idFranquia: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -112,7 +84,9 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -133,9 +107,6 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idFranquia=' +
-      this.state.idFranquia +
-      '&' +
       ''
     );
   };
@@ -143,12 +114,12 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtual, obs, ativo, idFranquia, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtual, obs, ativo, idFranquia, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtual, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtual, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { franquias, franquiaStatusAtualList, match, totalItems } = this.props;
+    const { franquiaStatusAtualList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -166,7 +137,11 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.franquiaStatusAtual.home.createLabel">Create a new Franquia Status Atual</Translate>
@@ -179,51 +154,44 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="statusAtualLabel" for="franquia-status-atual-statusAtual">
-                            <Translate contentKey="generadorApp.franquiaStatusAtual.statusAtual">Status Atual</Translate>
-                          </Label>
-                          <AvInput type="string" name="statusAtual" id="franquia-status-atual-statusAtual" value={this.state.statusAtual} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="obsLabel" for="franquia-status-atual-obs">
-                            <Translate contentKey="generadorApp.franquiaStatusAtual.obs">Obs</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="obs" id="franquia-status-atual-obs" value={this.state.obs} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="franquia-status-atual-ativo">
-                            <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="franquia-status-atual-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="franquia-status-atual-idFranquia">
-                              <Translate contentKey="generadorApp.franquiaStatusAtual.idFranquia">Id Franquia</Translate>
+                      {this.state.baseFilters !== 'statusAtual' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="statusAtualLabel" for="franquia-status-atual-statusAtual">
+                              <Translate contentKey="generadorApp.franquiaStatusAtual.statusAtual">Status Atual</Translate>
                             </Label>
-                            <AvInput id="franquia-status-atual-idFranquia" type="select" className="form-control" name="idFranquiaId">
-                              <option value="" key="0" />
-                              {franquias
-                                ? franquias.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput
+                              type="string"
+                              name="statusAtual"
+                              id="franquia-status-atual-statusAtual"
+                              value={this.state.statusAtual}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'obs' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="obsLabel" for="franquia-status-atual-obs">
+                              <Translate contentKey="generadorApp.franquiaStatusAtual.obs">Obs</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="obs" id="franquia-status-atual-obs" value={this.state.obs} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="franquia-status-atual-ativo">
+                              <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="franquia-status-atual-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -251,22 +219,24 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('statusAtual')}>
-                        <Translate contentKey="generadorApp.franquiaStatusAtual.statusAtual">Status Atual</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('obs')}>
-                        <Translate contentKey="generadorApp.franquiaStatusAtual.obs">Obs</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.franquiaStatusAtual.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'statusAtual' ? (
+                        <th className="hand" onClick={this.sort('statusAtual')}>
+                          <Translate contentKey="generadorApp.franquiaStatusAtual.statusAtual">Status Atual</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'obs' ? (
+                        <th className="hand" onClick={this.sort('obs')}>
+                          <Translate contentKey="generadorApp.franquiaStatusAtual.obs">Obs</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.franquiaStatusAtual.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -281,34 +251,37 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
                           </Button>
                         </td>
 
-                        <td>{franquiaStatusAtual.statusAtual}</td>
+                        {this.state.baseFilters !== 'statusAtual' ? <td>{franquiaStatusAtual.statusAtual}</td> : null}
 
-                        <td>{franquiaStatusAtual.obs}</td>
+                        {this.state.baseFilters !== 'obs' ? <td>{franquiaStatusAtual.obs}</td> : null}
 
-                        <td>{franquiaStatusAtual.ativo}</td>
-                        <td>
-                          {franquiaStatusAtual.idFranquia ? (
-                            <Link to={`franquia/${franquiaStatusAtual.idFranquia.id}`}>{franquiaStatusAtual.idFranquia.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{franquiaStatusAtual.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${franquiaStatusAtual.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${franquiaStatusAtual.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${franquiaStatusAtual.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${franquiaStatusAtual.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${franquiaStatusAtual.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${franquiaStatusAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -350,13 +323,11 @@ export class FranquiaStatusAtual extends React.Component<IFranquiaStatusAtualPro
 }
 
 const mapStateToProps = ({ franquiaStatusAtual, ...storeState }: IRootState) => ({
-  franquias: storeState.franquia.entities,
   franquiaStatusAtualList: franquiaStatusAtual.entities,
   totalItems: franquiaStatusAtual.totalItems
 });
 
 const mapDispatchToProps = {
-  getFranquias,
   getEntities
 };
 

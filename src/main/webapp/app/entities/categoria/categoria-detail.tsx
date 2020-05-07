@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './categoria.reducer';
+import { getEntity, ICategoriaBaseState, getCategoriaState } from './categoria.reducer';
 import { ICategoria } from 'app/shared/model/categoria.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICategoriaState {
+  fieldsBase: ICategoriaBaseState;
+}
+
 export interface ICategoriaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CategoriaDetail extends React.Component<ICategoriaDetailProps> {
+export class CategoriaDetail extends React.Component<ICategoriaDetailProps, ICategoriaState> {
   constructor(props: Readonly<ICategoriaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCategoriaState(this.props.location)
     };
   }
 
@@ -136,6 +141,28 @@ export class CategoriaDetail extends React.Component<ICategoriaDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{categoriaEntity.publicarSite}</dd>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md="12">
+                    <Row>
+                      <Col md="3">
+                        <dt>
+                          <Translate contentKey="generadorApp.categoria.unidade">Unidade</Translate>
+                        </dt>
+                      </Col>
+                      <Col md="9">
+                        <dd>
+                          {categoriaEntity.unidades
+                            ? categoriaEntity.unidades.map((val, i) => (
+                                <span key={val.id}>
+                                  <a>{val.razaoSocial}</a>
+                                  {i === categoriaEntity.unidades.length - 1 ? '' : ', '}
+                                </span>
+                              ))
+                            : null}
+                        </dd>
                       </Col>
                     </Row>
                   </Col>

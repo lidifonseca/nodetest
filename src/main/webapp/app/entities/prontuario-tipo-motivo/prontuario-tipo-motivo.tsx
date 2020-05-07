@@ -22,21 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './prontuario-tipo-motivo.reducer';
+import { getProntuarioTipoMotivoState, IProntuarioTipoMotivoBaseState, getEntities } from './prontuario-tipo-motivo.reducer';
 import { IProntuarioTipoMotivo } from 'app/shared/model/prontuario-tipo-motivo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProntuarioTipoMotivoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProntuarioTipoMotivoBaseState {
-  nome: any;
-  idPai: any;
-  ativo: any;
-  classe: any;
-  name: any;
-  idTipoProntuario: any;
-}
 export interface IProntuarioTipoMotivoState extends IProntuarioTipoMotivoBaseState, IPaginationBaseState {}
 
 export class ProntuarioTipoMotivo extends React.Component<IProntuarioTipoMotivoProps, IProntuarioTipoMotivoState> {
@@ -46,28 +38,9 @@ export class ProntuarioTipoMotivo extends React.Component<IProntuarioTipoMotivoP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProntuarioTipoMotivoState(this.props.location)
+      ...getProntuarioTipoMotivoState(this.props.location)
     };
   }
-
-  getProntuarioTipoMotivoState = (location): IProntuarioTipoMotivoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nome = url.searchParams.get('nome') || '';
-    const idPai = url.searchParams.get('idPai') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const classe = url.searchParams.get('classe') || '';
-    const name = url.searchParams.get('name') || '';
-    const idTipoProntuario = url.searchParams.get('idTipoProntuario') || '';
-
-    return {
-      nome,
-      idPai,
-      ativo,
-      classe,
-      name,
-      idTipoProntuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -114,7 +87,9 @@ export class ProntuarioTipoMotivo extends React.Component<IProntuarioTipoMotivoP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -174,7 +149,11 @@ export class ProntuarioTipoMotivo extends React.Component<IProntuarioTipoMotivoP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.prontuarioTipoMotivo.home.createLabel">Create a new Prontuario Tipo Motivo</Translate>
@@ -187,86 +166,79 @@ export class ProntuarioTipoMotivo extends React.Component<IProntuarioTipoMotivoP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="prontuario-tipo-motivo-nome">
-                            <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="prontuario-tipo-motivo-nome">
+                              <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="prontuario-tipo-motivo-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPaiLabel" for="prontuario-tipo-motivo-idPai">
-                            <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPai" id="prontuario-tipo-motivo-idPai" value={this.state.idPai} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="prontuario-tipo-motivo-ativo">
-                            <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="prontuario-tipo-motivo-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="classeLabel" for="prontuario-tipo-motivo-classe">
-                            <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
-                          </Label>
+                            <AvInput type="text" name="nome" id="prontuario-tipo-motivo-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="classe"
-                            id="prontuario-tipo-motivo-classe"
-                            value={this.state.classe}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nameLabel" for="prontuario-tipo-motivo-name">
-                            <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPaiLabel" for="prontuario-tipo-motivo-idPai">
+                              <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPai" id="prontuario-tipo-motivo-idPai" value={this.state.idPai} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="name"
-                            id="prontuario-tipo-motivo-name"
-                            value={this.state.name}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idTipoProntuarioLabel" for="prontuario-tipo-motivo-idTipoProntuario">
-                            <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">Id Tipo Prontuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idTipoProntuario"
-                            id="prontuario-tipo-motivo-idTipoProntuario"
-                            value={this.state.idTipoProntuario}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="prontuario-tipo-motivo-ativo">
+                              <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="prontuario-tipo-motivo-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'classe' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="classeLabel" for="prontuario-tipo-motivo-classe">
+                              <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="classe" id="prontuario-tipo-motivo-classe" value={this.state.classe} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'name' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nameLabel" for="prontuario-tipo-motivo-name">
+                              <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="name" id="prontuario-tipo-motivo-name" value={this.state.name} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idTipoProntuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idTipoProntuarioLabel" for="prontuario-tipo-motivo-idTipoProntuario">
+                              <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">Id Tipo Prontuario</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idTipoProntuario"
+                              id="prontuario-tipo-motivo-idTipoProntuario"
+                              value={this.state.idTipoProntuario}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -294,30 +266,42 @@ export class ProntuarioTipoMotivo extends React.Component<IProntuarioTipoMotivoP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPai')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('classe')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('name')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idTipoProntuario')}>
-                        <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">Id Tipo Prontuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <th className="hand" onClick={this.sort('idPai')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'classe' ? (
+                        <th className="hand" onClick={this.sort('classe')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'name' ? (
+                        <th className="hand" onClick={this.sort('name')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idTipoProntuario' ? (
+                        <th className="hand" onClick={this.sort('idTipoProntuario')}>
+                          <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">Id Tipo Prontuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -332,33 +316,48 @@ export class ProntuarioTipoMotivo extends React.Component<IProntuarioTipoMotivoP
                           </Button>
                         </td>
 
-                        <td>{prontuarioTipoMotivo.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{prontuarioTipoMotivo.nome}</td> : null}
 
-                        <td>{prontuarioTipoMotivo.idPai}</td>
+                        {this.state.baseFilters !== 'idPai' ? <td>{prontuarioTipoMotivo.idPai}</td> : null}
 
-                        <td>{prontuarioTipoMotivo.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{prontuarioTipoMotivo.ativo}</td> : null}
 
-                        <td>{prontuarioTipoMotivo.classe}</td>
+                        {this.state.baseFilters !== 'classe' ? <td>{prontuarioTipoMotivo.classe}</td> : null}
 
-                        <td>{prontuarioTipoMotivo.name}</td>
+                        {this.state.baseFilters !== 'name' ? <td>{prontuarioTipoMotivo.name}</td> : null}
 
-                        <td>{prontuarioTipoMotivo.idTipoProntuario}</td>
+                        {this.state.baseFilters !== 'idTipoProntuario' ? <td>{prontuarioTipoMotivo.idTipoProntuario}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${prontuarioTipoMotivo.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioTipoMotivo.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioTipoMotivo.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioTipoMotivo.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${prontuarioTipoMotivo.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${prontuarioTipoMotivo.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

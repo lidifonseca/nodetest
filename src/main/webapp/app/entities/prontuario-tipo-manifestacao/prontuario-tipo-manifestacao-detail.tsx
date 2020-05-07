@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './prontuario-tipo-manifestacao.reducer';
+import {
+  getEntity,
+  IProntuarioTipoManifestacaoBaseState,
+  getProntuarioTipoManifestacaoState
+} from './prontuario-tipo-manifestacao.reducer';
 import { IProntuarioTipoManifestacao } from 'app/shared/model/prontuario-tipo-manifestacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProntuarioTipoManifestacaoState {
+  fieldsBase: IProntuarioTipoManifestacaoBaseState;
+}
+
 export interface IProntuarioTipoManifestacaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProntuarioTipoManifestacaoDetail extends React.Component<IProntuarioTipoManifestacaoDetailProps> {
+export class ProntuarioTipoManifestacaoDetail extends React.Component<
+  IProntuarioTipoManifestacaoDetailProps,
+  IProntuarioTipoManifestacaoState
+> {
   constructor(props: Readonly<IProntuarioTipoManifestacaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProntuarioTipoManifestacaoState(this.props.location)
     };
   }
 

@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './diario-tags.reducer';
+import { getDiarioTagsState, IDiarioTagsBaseState, getEntities } from './diario-tags.reducer';
 import { IDiarioTags } from 'app/shared/model/diario-tags.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IDiarioTagsProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IDiarioTagsBaseState {
-  nome: any;
-  idPai: any;
-  nomeId: any;
-  ativo: any;
-}
 export interface IDiarioTagsState extends IDiarioTagsBaseState, IPaginationBaseState {}
 
 export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsState> {
@@ -44,24 +38,9 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getDiarioTagsState(this.props.location)
+      ...getDiarioTagsState(this.props.location)
     };
   }
-
-  getDiarioTagsState = (location): IDiarioTagsBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nome = url.searchParams.get('nome') || '';
-    const idPai = url.searchParams.get('idPai') || '';
-    const nomeId = url.searchParams.get('nomeId') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      nome,
-      idPai,
-      nomeId,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -106,7 +85,9 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -160,7 +141,11 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.diarioTags.home.createLabel">Create a new Diario Tags</Translate>
@@ -173,57 +158,51 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="diario-tags-nome">
-                            <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="diario-tags-nome">
+                              <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="diario-tags-nome"
-                            value={this.state.nome}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPaiLabel" for="diario-tags-idPai">
-                            <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPai" id="diario-tags-idPai" value={this.state.idPai} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeIdLabel" for="diario-tags-nomeId">
-                            <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
-                          </Label>
+                            <AvInput type="text" name="nome" id="diario-tags-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="nomeId"
-                            id="diario-tags-nomeId"
-                            value={this.state.nomeId}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="diario-tags-ativo">
-                            <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="diario-tags-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPaiLabel" for="diario-tags-idPai">
+                              <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPai" id="diario-tags-idPai" value={this.state.idPai} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'nomeId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeIdLabel" for="diario-tags-nomeId">
+                              <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="nomeId" id="diario-tags-nomeId" value={this.state.nomeId} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="diario-tags-ativo">
+                              <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="diario-tags-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -251,22 +230,30 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPai')}>
-                        <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nomeId')}>
-                        <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <th className="hand" onClick={this.sort('idPai')}>
+                          <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nomeId' ? (
+                        <th className="hand" onClick={this.sort('nomeId')}>
+                          <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -281,29 +268,29 @@ export class DiarioTags extends React.Component<IDiarioTagsProps, IDiarioTagsSta
                           </Button>
                         </td>
 
-                        <td>{diarioTags.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{diarioTags.nome}</td> : null}
 
-                        <td>{diarioTags.idPai}</td>
+                        {this.state.baseFilters !== 'idPai' ? <td>{diarioTags.idPai}</td> : null}
 
-                        <td>{diarioTags.nomeId}</td>
+                        {this.state.baseFilters !== 'nomeId' ? <td>{diarioTags.nomeId}</td> : null}
 
-                        <td>{diarioTags.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{diarioTags.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${diarioTags.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${diarioTags.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${diarioTags.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${diarioTags.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${diarioTags.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${diarioTags.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

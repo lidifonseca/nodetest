@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { INotificacaoConfigUsuario, defaultValue } from 'app/shared/model/notificacao-config-usuario.model';
 
 export const ACTION_TYPES = {
+  FETCH_NOTIFICACAOCONFIGUSUARIO_LIST_EXPORT: 'notificacaoConfigUsuario/FETCH_NOTIFICACAOCONFIGUSUARIO_LIST_EXPORT',
   FETCH_NOTIFICACAOCONFIGUSUARIO_LIST: 'notificacaoConfigUsuario/FETCH_NOTIFICACAOCONFIGUSUARIO_LIST',
   FETCH_NOTIFICACAOCONFIGUSUARIO: 'notificacaoConfigUsuario/FETCH_NOTIFICACAOCONFIGUSUARIO',
   CREATE_NOTIFICACAOCONFIGUSUARIO: 'notificacaoConfigUsuario/CREATE_NOTIFICACAOCONFIGUSUARIO',
@@ -30,10 +31,28 @@ const initialState = {
 
 export type NotificacaoConfigUsuarioState = Readonly<typeof initialState>;
 
+export interface INotificacaoConfigUsuarioBaseState {
+  baseFilters: any;
+  notificacaoConfigId: any;
+  profissionalId: any;
+  pacienteId: any;
+  atualizadoEm: any;
+  atualizadoPor: any;
+  enviarPush: any;
+  enviarEmail: any;
+  observacao: any;
+}
+
+export interface INotificacaoConfigUsuarioUpdateState {
+  fieldsBase: INotificacaoConfigUsuarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: NotificacaoConfigUsuarioState = initialState, action): NotificacaoConfigUsuarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_NOTIFICACAOCONFIGUSUARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_NOTIFICACAOCONFIGUSUARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_NOTIFICACAOCONFIGUSUARIO):
       return {
@@ -51,6 +70,7 @@ export default (state: NotificacaoConfigUsuarioState = initialState, action): No
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_NOTIFICACAOCONFIGUSUARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_NOTIFICACAOCONFIGUSUARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_NOTIFICACAOCONFIGUSUARIO):
     case FAILURE(ACTION_TYPES.CREATE_NOTIFICACAOCONFIGUSUARIO):
@@ -157,6 +177,37 @@ export const getEntity: ICrudGetAction<INotificacaoConfigUsuario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionNotificacaoConfigUsuario<INotificacaoConfigUsuario> = (
+  notificacaoConfigId,
+  profissionalId,
+  pacienteId,
+  atualizadoEm,
+  atualizadoPor,
+  enviarPush,
+  enviarEmail,
+  observacao,
+  page,
+  size,
+  sort
+) => {
+  const notificacaoConfigIdRequest = notificacaoConfigId ? `notificacaoConfigId.contains=${notificacaoConfigId}&` : '';
+  const profissionalIdRequest = profissionalId ? `profissionalId.contains=${profissionalId}&` : '';
+  const pacienteIdRequest = pacienteId ? `pacienteId.contains=${pacienteId}&` : '';
+  const atualizadoEmRequest = atualizadoEm ? `atualizadoEm.contains=${atualizadoEm}&` : '';
+  const atualizadoPorRequest = atualizadoPor ? `atualizadoPor.contains=${atualizadoPor}&` : '';
+  const enviarPushRequest = enviarPush ? `enviarPush.contains=${enviarPush}&` : '';
+  const enviarEmailRequest = enviarEmail ? `enviarEmail.contains=${enviarEmail}&` : '';
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_NOTIFICACAOCONFIGUSUARIO_LIST,
+    payload: axios.get<INotificacaoConfigUsuario>(
+      `${requestUrl}${notificacaoConfigIdRequest}${profissionalIdRequest}${pacienteIdRequest}${atualizadoEmRequest}${atualizadoPorRequest}${enviarPushRequest}${enviarEmailRequest}${observacaoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<INotificacaoConfigUsuario> = entity => async dispatch => {
   entity = {
     ...entity
@@ -192,3 +243,28 @@ export const deleteEntity: ICrudDeleteAction<INotificacaoConfigUsuario> = id => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getNotificacaoConfigUsuarioState = (location): INotificacaoConfigUsuarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const notificacaoConfigId = url.searchParams.get('notificacaoConfigId') || '';
+  const profissionalId = url.searchParams.get('profissionalId') || '';
+  const pacienteId = url.searchParams.get('pacienteId') || '';
+  const atualizadoEm = url.searchParams.get('atualizadoEm') || '';
+  const atualizadoPor = url.searchParams.get('atualizadoPor') || '';
+  const enviarPush = url.searchParams.get('enviarPush') || '';
+  const enviarEmail = url.searchParams.get('enviarEmail') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+
+  return {
+    baseFilters,
+    notificacaoConfigId,
+    profissionalId,
+    pacienteId,
+    atualizadoEm,
+    atualizadoPor,
+    enviarPush,
+    enviarEmail,
+    observacao
+  };
+};

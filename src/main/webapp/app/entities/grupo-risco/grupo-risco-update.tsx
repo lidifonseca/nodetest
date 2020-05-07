@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './grupo-risco.reducer';
+import {
+  IGrupoRiscoUpdateState,
+  getEntity,
+  getGrupoRiscoState,
+  IGrupoRiscoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './grupo-risco.reducer';
 import { IGrupoRisco } from 'app/shared/model/grupo-risco.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IGrupoRiscoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IGrupoRiscoUpdateState {
-  isNew: boolean;
-}
-
 export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IGrupoRiscoUpdateState> {
   constructor(props: Readonly<IGrupoRiscoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getGrupoRiscoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IG
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['grupoRisco'] ? '&grupoRisco=' + fieldsBase['grupoRisco'] : '') +
+      (fieldsBase['styleLabel'] ? '&styleLabel=' + fieldsBase['styleLabel'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { grupoRiscoEntity } = this.props;
@@ -57,13 +77,14 @@ export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IG
   };
 
   handleClose = () => {
-    this.props.history.push('/grupo-risco');
+    this.props.history.push('/grupo-risco?' + this.getFiltersURL());
   };
 
   render() {
     const { grupoRiscoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +117,14 @@ export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IG
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/grupo-risco" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/grupo-risco?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +139,7 @@ export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IG
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,51 +155,46 @@ export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IG
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'grupoRisco' ? (
+                          <Col md="grupoRisco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="grupoRiscoLabel" for="grupo-risco-grupoRisco">
+                                    <Translate contentKey="generadorApp.grupoRisco.grupoRisco">Grupo Risco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="grupo-risco-grupoRisco" type="text" name="grupoRisco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="grupoRisco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="grupoRiscoLabel" for="grupo-risco-grupoRisco">
-                                <Translate contentKey="generadorApp.grupoRisco.grupoRisco">Grupo Risco</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="grupo-risco-grupoRisco"
-                                type="text"
-                                name="grupoRisco"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="styleLabelLabel" for="grupo-risco-styleLabel">
-                                <Translate contentKey="generadorApp.grupoRisco.styleLabel">Style Label</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="grupo-risco-styleLabel"
-                                type="text"
-                                name="styleLabel"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="grupo-risco-styleLabel">
+                                    <Translate contentKey="generadorApp.grupoRisco.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="grupo-risco-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

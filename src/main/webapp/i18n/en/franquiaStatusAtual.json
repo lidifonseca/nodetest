@@ -3,23 +3,22 @@
     "franquiaStatusAtual": {
       "home": {
         "title": "Franquia Status Atuals",
-        "createLabel": "Criar novo Franquia Status Atual",
-        "createOrEditLabel": "Criar ou editar Franquia Status Atual",
-        "notFound": "Nenhum Franquia Status Atual encontrado"
+        "createLabel": "Create a new Franquia Status Atual",
+        "createOrEditLabel": "Create or edit a Franquia Status Atual",
+        "notFound": "No Franquia Status Atuals found"
       },
-      "created": "Um novo Franquia Status Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Franquia Status Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Franquia Status Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Franquia Status Atual is created with identifier {{ param }}",
+      "updated": "A Franquia Status Atual is updated with identifier {{ param }}",
+      "deleted": "A Franquia Status Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Franquia Status Atual {{ id }}?"
+        "question": "Are you sure you want to delete Franquia Status Atual {{ id }}?"
       },
       "detail": {
         "title": "Franquia Status Atual"
       },
       "statusAtual": "Status Atual",
       "obs": "Obs",
-      "ativo": "Ativo",
-      "idFranquia": "Id Franquia"
+      "ativo": "Ativo"
     }
   }
 }

@@ -8,21 +8,25 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, getStatusAtualState, IStatusAtualBaseState, updateEntity, createEntity, reset } from './status-atual.reducer';
+import {
+  IStatusAtualUpdateState,
+  getEntity,
+  getStatusAtualState,
+  IStatusAtualBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './status-atual.reducer';
 import { IStatusAtual } from 'app/shared/model/status-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IStatusAtualUpdateState {
-  fieldsBase: IStatusAtualBaseState;
-  isNew: boolean;
-}
-
 export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, IStatusAtualUpdateState> {
   constructor(props: Readonly<IStatusAtualUpdateProps>) {
     super(props);
+
     this.state = {
       fieldsBase: getStatusAtualState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -42,6 +46,20 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['statusAtual'] ? '&statusAtual=' + fieldsBase['statusAtual'] : '') +
+      (fieldsBase['styleLabel'] ? '&styleLabel=' + fieldsBase['styleLabel'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { statusAtualEntity } = this.props;
@@ -59,13 +77,14 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/status-atual');
+    this.props.history.push('/status-atual?' + this.getFiltersURL());
   };
 
   render() {
     const { statusAtualEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -98,7 +117,14 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/status-atual" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/status-atual?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -130,7 +156,7 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.statusAtual ? (
+                        {baseFilters !== 'statusAtual' ? (
                           <Col md="statusAtual">
                             <AvGroup>
                               <Row>
@@ -146,10 +172,10 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="statusAtual" value={this.state.fieldsBase.statusAtual} />
+                          <AvInput type="hidden" name="statusAtual" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.styleLabel ? (
+                        {baseFilters !== 'styleLabel' ? (
                           <Col md="styleLabel">
                             <AvGroup>
                               <Row>
@@ -165,7 +191,7 @@ export class StatusAtualUpdate extends React.Component<IStatusAtualUpdateProps, 
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase.styleLabel} />
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

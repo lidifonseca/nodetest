@@ -24,19 +24,12 @@
             ]
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "cidXPtaNovoId",
             "fieldType": "Integer"
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503002900",
+    "changelogDate": "20200507120200",
     "entityTableName": "pad_pta_temp",
     "dto": "mapstruct",
     "pagination": "pagination",

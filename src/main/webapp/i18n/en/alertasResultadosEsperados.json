@@ -3,15 +3,15 @@
     "alertasResultadosEsperados": {
       "home": {
         "title": "Alertas Resultados Esperados",
-        "createLabel": "Criar novo Alertas Resultados Esperados",
-        "createOrEditLabel": "Criar ou editar Alertas Resultados Esperados",
-        "notFound": "Nenhum Alertas Resultados Esperados encontrado"
+        "createLabel": "Create a new Alertas Resultados Esperados",
+        "createOrEditLabel": "Create or edit a Alertas Resultados Esperados",
+        "notFound": "No Alertas Resultados Esperados found"
       },
-      "created": "Um novo Alertas Resultados Esperados foi criado com o identificador {{ param }}",
-      "updated": "Um Alertas Resultados Esperados foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Alertas Resultados Esperados foi excluído com o identificador {{ param }}",
+      "created": "A new Alertas Resultados Esperados is created with identifier {{ param }}",
+      "updated": "A Alertas Resultados Esperados is updated with identifier {{ param }}",
+      "deleted": "A Alertas Resultados Esperados is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Alertas Resultados Esperados {{ id }}?"
+        "question": "Are you sure you want to delete Alertas Resultados Esperados {{ id }}?"
       },
       "detail": {
         "title": "Alertas Resultados Esperados"
@@ -20,8 +20,7 @@
       "alteracaoEsperada": "Alteracao Esperada",
       "observacoes": "Observacoes",
       "usuarioId": "Usuario Id",
-      "valor": "Valor",
-      "resultadosId": "Resultados Id"
+      "valor": "Valor"
     }
   }
 }

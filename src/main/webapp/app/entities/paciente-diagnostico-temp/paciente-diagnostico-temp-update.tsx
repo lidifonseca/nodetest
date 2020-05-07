@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './paciente-diagnostico-temp.reducer';
+import {
+  IPacienteDiagnosticoTempUpdateState,
+  getEntity,
+  getPacienteDiagnosticoTempState,
+  IPacienteDiagnosticoTempBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-diagnostico-temp.reducer';
 import { IPacienteDiagnosticoTemp } from 'app/shared/model/paciente-diagnostico-temp.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteDiagnosticoTempUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IPacienteDiagnosticoTempUpdateState {
-  isNew: boolean;
-}
 
 export class PacienteDiagnosticoTempUpdate extends React.Component<
   IPacienteDiagnosticoTempUpdateProps,
@@ -25,7 +29,9 @@ export class PacienteDiagnosticoTempUpdate extends React.Component<
 > {
   constructor(props: Readonly<IPacienteDiagnosticoTempUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPacienteDiagnosticoTempState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,24 @@ export class PacienteDiagnosticoTempUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idCid'] ? '&idCid=' + fieldsBase['idCid'] : '') +
+      (fieldsBase['cidPrimario'] ? '&cidPrimario=' + fieldsBase['cidPrimario'] : '') +
+      (fieldsBase['complexidade'] ? '&complexidade=' + fieldsBase['complexidade'] : '') +
+      (fieldsBase['createdAt'] ? '&createdAt=' + fieldsBase['createdAt'] : '') +
+      (fieldsBase['sessionId'] ? '&sessionId=' + fieldsBase['sessionId'] : '') +
+      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteDiagnosticoTempEntity } = this.props;
@@ -60,13 +84,14 @@ export class PacienteDiagnosticoTempUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-diagnostico-temp');
+    this.props.history.push('/paciente-diagnostico-temp?' + this.getFiltersURL());
   };
 
   render() {
     const { pacienteDiagnosticoTempEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +129,7 @@ export class PacienteDiagnosticoTempUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-diagnostico-temp"
+                  to={'/paciente-diagnostico-temp?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +148,7 @@ export class PacienteDiagnosticoTempUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,121 +171,125 @@ export class PacienteDiagnosticoTempUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idCid' ? (
+                          <Col md="idCid">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idCidLabel" for="paciente-diagnostico-temp-idCid">
+                                    <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.idCid">Id Cid</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-temp-idCid" type="string" className="form-control" name="idCid" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idCidLabel" for="paciente-diagnostico-temp-idCid">
-                                <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.idCid">Id Cid</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-diagnostico-temp-idCid" type="string" className="form-control" name="idCid" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cidPrimario' ? (
+                          <Col md="cidPrimario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="cidPrimarioLabel" check>
+                                    <AvInput
+                                      id="paciente-diagnostico-temp-cidPrimario"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="cidPrimario"
+                                    />
+                                    <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.cidPrimario">Cid Primario</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidPrimario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="cidPrimarioLabel" check>
-                                <AvInput
-                                  id="paciente-diagnostico-temp-cidPrimario"
-                                  type="checkbox"
-                                  className="form-control"
-                                  name="cidPrimario"
-                                />
-                                <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.cidPrimario">Cid Primario</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'complexidade' ? (
+                          <Col md="complexidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="complexidadeLabel" for="paciente-diagnostico-temp-complexidade">
+                                    <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.complexidade">Complexidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-temp-complexidade" type="text" name="complexidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="complexidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="complexidadeLabel" for="paciente-diagnostico-temp-complexidade">
-                                <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.complexidade">Complexidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-diagnostico-temp-complexidade"
-                                type="text"
-                                name="complexidade"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'createdAt' ? (
+                          <Col md="createdAt">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="createdAtLabel" for="paciente-diagnostico-temp-createdAt">
+                                    <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.createdAt">Created At</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-temp-createdAt" type="date" className="form-control" name="createdAt" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="createdAt" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="createdAtLabel" for="paciente-diagnostico-temp-createdAt">
-                                <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.createdAt">Created At</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-diagnostico-temp-createdAt" type="date" className="form-control" name="createdAt" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'sessionId' ? (
+                          <Col md="sessionId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sessionIdLabel" for="paciente-diagnostico-temp-sessionId">
+                                    <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.sessionId">Session Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-temp-sessionId" type="text" name="sessionId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sessionId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="sessionIdLabel" for="paciente-diagnostico-temp-sessionId">
-                                <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.sessionId">Session Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-diagnostico-temp-sessionId"
-                                type="text"
-                                name="sessionId"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="observacaoLabel" for="paciente-diagnostico-temp-observacao">
-                                <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.observacao">Observacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-diagnostico-temp-observacao"
-                                type="text"
-                                name="observacao"
-                                validate={{
-                                  maxLength: { value: 245, errorMessage: translate('entity.validation.maxlength', { max: 245 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'observacao' ? (
+                          <Col md="observacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacaoLabel" for="paciente-diagnostico-temp-observacao">
+                                    <Translate contentKey="generadorApp.pacienteDiagnosticoTemp.observacao">Observacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-temp-observacao" type="text" name="observacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A TipoExame.
  */
-@Entity('tipo_exame')
+@Entity('tb_tipo_exame')
 export default class TipoExame extends BaseEntity {
-  @Column({ name: 'exame', length: 45, nullable: false })
+  @Column({ name: 'EXAME', length: 45, nullable: false })
   exame: string;
 
-  @Column({ type: 'integer', name: 'id_pai' })
+  @Column({ type: 'integer', name: 'ID_PAI' })
   idPai: number;
 
-  @Column({ type: 'integer', name: 'ativo', nullable: false })
+  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

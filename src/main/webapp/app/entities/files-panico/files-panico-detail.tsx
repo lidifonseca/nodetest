@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './files-panico.reducer';
+import { getEntity, IFilesPanicoBaseState, getFilesPanicoState } from './files-panico.reducer';
 import { IFilesPanico } from 'app/shared/model/files-panico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IFilesPanicoState {
+  fieldsBase: IFilesPanicoBaseState;
+}
+
 export interface IFilesPanicoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class FilesPanicoDetail extends React.Component<IFilesPanicoDetailProps> {
+export class FilesPanicoDetail extends React.Component<IFilesPanicoDetailProps, IFilesPanicoState> {
   constructor(props: Readonly<IFilesPanicoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getFilesPanicoState(this.props.location)
     };
   }
 

@@ -16,16 +16,7 @@ import {
   UncontrolledAlert
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
-import {
-  byteSize,
-  Translate,
-  translate,
-  ICrudGetAllAction,
-  getSortState,
-  IPaginationBaseState,
-  JhiPagination,
-  JhiItemCount
-} from 'react-jhipster';
+import { Translate, translate, ICrudGetAllAction, getSortState, IPaginationBaseState, JhiPagination, JhiItemCount } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
@@ -95,7 +86,9 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -152,7 +145,11 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.logPacAcesso.home.createLabel">Create a new Log Pac Acesso</Translate>
@@ -165,49 +162,63 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="log-pac-acesso-idPaciente">
-                            <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPaciente" id="log-pac-acesso-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="profissionalLabel" for="log-pac-acesso-profissional">
-                            <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="log-pac-acesso-idPaciente">
+                              <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPaciente" id="log-pac-acesso-idPaciente" value={this.state.idPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="profissional" id="log-pac-acesso-profissional" value={this.state.profissional} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tokenLabel" for="log-pac-acesso-token">
-                            <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'profissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="profissionalLabel" for="log-pac-acesso-profissional">
+                              <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="token" id="log-pac-acesso-token" value={this.state.token} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ipLocalLabel" for="log-pac-acesso-ipLocal">
-                            <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
-                          </Label>
+                            <AvInput type="text" name="profissional" id="log-pac-acesso-profissional" value={this.state.profissional} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="ipLocal" id="log-pac-acesso-ipLocal" value={this.state.ipLocal} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
-                            <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
-                          </Label>
-                          <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'token' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tokenLabel" for="log-pac-acesso-token">
+                              <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="token" id="log-pac-acesso-token" value={this.state.token} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ipLocal' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ipLocalLabel" for="log-pac-acesso-ipLocal">
+                              <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="ipLocal" id="log-pac-acesso-ipLocal" value={this.state.ipLocal} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'inforAcesso' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
+                              <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
+                            </Label>
+                            <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -235,26 +246,36 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('profissional')}>
-                        <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('token')}>
-                        <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ipLocal')}>
-                        <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('inforAcesso')}>
-                        <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'profissional' ? (
+                        <th className="hand" onClick={this.sort('profissional')}>
+                          <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'token' ? (
+                        <th className="hand" onClick={this.sort('token')}>
+                          <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ipLocal' ? (
+                        <th className="hand" onClick={this.sort('ipLocal')}>
+                          <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'inforAcesso' ? (
+                        <th className="hand" onClick={this.sort('inforAcesso')}>
+                          <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -269,18 +290,49 @@ export class LogPacAcesso extends React.Component<ILogPacAcessoProps, ILogPacAce
                           </Button>
                         </td>
 
-                        <td>{logPacAcesso.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{logPacAcesso.idPaciente}</td> : null}
 
-                        <td>{logPacAcesso.profissional}</td>
+                        {this.state.baseFilters !== 'profissional' ? <td>{logPacAcesso.profissional}</td> : null}
 
-                        <td>{logPacAcesso.token}</td>
+                        {this.state.baseFilters !== 'token' ? <td>{logPacAcesso.token}</td> : null}
 
-                        <td>{logPacAcesso.ipLocal}</td>
+                        {this.state.baseFilters !== 'ipLocal' ? <td>{logPacAcesso.ipLocal}</td> : null}
 
-                        <td>{logPacAcesso.inforAcesso}</td>
+                        {this.state.baseFilters !== 'inforAcesso' ? (
+                          <td>{logPacAcesso.inforAcesso ? Buffer.from(logPacAcesso.inforAcesso).toString() : null}</td>
+                        ) : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${logPacAcesso.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${logPacAcesso.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${logPacAcesso.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

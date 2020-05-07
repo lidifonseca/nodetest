@@ -44,9 +44,6 @@ import { IPadItemResultado } from 'app/shared/model/pad-item-resultado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-
 export interface IPadItemResultadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface IPadItemResultadoState extends IPadItemResultadoBaseState, IPaginationBaseState {
@@ -67,8 +64,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPadItems();
   }
 
   cancelCourse = () => {
@@ -77,8 +72,7 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
         resultado: '',
         dataFim: '',
         resultadoAnalisado: '',
-        usuarioId: '',
-        idPadItem: ''
+        usuarioId: ''
       },
       () => this.sortEntities()
     );
@@ -135,9 +129,6 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
       'usuarioId=' +
       this.state.usuarioId +
       '&' +
-      'idPadItem=' +
-      this.state.idPadItem +
-      '&' +
       ''
     );
   };
@@ -145,26 +136,18 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { resultado, dataFim, resultadoAnalisado, usuarioId, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(
-      resultado,
-      dataFim,
-      resultadoAnalisado,
-      usuarioId,
-      idPadItem,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { resultado, dataFim, resultadoAnalisado, usuarioId, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(resultado, dataFim, resultadoAnalisado, usuarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();
@@ -203,13 +186,11 @@ export class PadItemResultado extends React.Component<IPadItemResultadoProps, IP
 }
 
 const mapStateToProps = ({ padItemResultado, ...storeState }: IRootState) => ({
-  padItems: storeState.padItem.entities,
   padItemResultadoList: padItemResultado.entities,
   totalItems: padItemResultado.totalItems
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntitiesExport
 };
 

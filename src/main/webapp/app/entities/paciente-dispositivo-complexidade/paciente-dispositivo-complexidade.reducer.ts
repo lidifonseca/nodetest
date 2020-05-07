@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteDispositivoComplexidade, defaultValue } from 'app/shared/model/paciente-dispositivo-complexidade.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT: 'pacienteDispositivoComplexidade/FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT',
   FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST: 'pacienteDispositivoComplexidade/FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST',
   FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE: 'pacienteDispositivoComplexidade/FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE',
   CREATE_PACIENTEDISPOSITIVOCOMPLEXIDADE: 'pacienteDispositivoComplexidade/CREATE_PACIENTEDISPOSITIVOCOMPLEXIDADE',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type PacienteDispositivoComplexidadeState = Readonly<typeof initialState>;
 
+export interface IPacienteDispositivoComplexidadeBaseState {
+  baseFilters: any;
+  caracteristica: any;
+  ativo: any;
+  tipo: any;
+}
+
+export interface IPacienteDispositivoComplexidadeUpdateState {
+  fieldsBase: IPacienteDispositivoComplexidadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteDispositivoComplexidadeState = initialState, action): PacienteDispositivoComplexidadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE):
       return {
@@ -51,6 +65,7 @@ export default (state: PacienteDispositivoComplexidadeState = initialState, acti
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEDISPOSITIVOCOMPLEXIDADE):
@@ -142,6 +157,27 @@ export const getEntity: ICrudGetAction<IPacienteDispositivoComplexidade> = id =>
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteDispositivoComplexidade<IPacienteDispositivoComplexidade> = (
+  caracteristica,
+  ativo,
+  tipo,
+  page,
+  size,
+  sort
+) => {
+  const caracteristicaRequest = caracteristica ? `caracteristica.contains=${caracteristica}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEDISPOSITIVOCOMPLEXIDADE_LIST,
+    payload: axios.get<IPacienteDispositivoComplexidade>(
+      `${requestUrl}${caracteristicaRequest}${ativoRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteDispositivoComplexidade> = entity => async dispatch => {
   entity = {
     ...entity
@@ -177,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDispositivoComplexidade> =
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteDispositivoComplexidadeState = (location): IPacienteDispositivoComplexidadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const caracteristica = url.searchParams.get('caracteristica') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const tipo = url.searchParams.get('tipo') || '';
+
+  return {
+    baseFilters,
+    caracteristica,
+    ativo,
+    tipo
+  };
+};

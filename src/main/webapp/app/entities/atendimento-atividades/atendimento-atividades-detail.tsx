@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento-atividades.reducer';
+import { getEntity, IAtendimentoAtividadesBaseState, getAtendimentoAtividadesState } from './atendimento-atividades.reducer';
 import { IAtendimentoAtividades } from 'app/shared/model/atendimento-atividades.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoAtividadesState {
+  fieldsBase: IAtendimentoAtividadesBaseState;
+}
+
 export interface IAtendimentoAtividadesDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoAtividadesDetail extends React.Component<IAtendimentoAtividadesDetailProps> {
+export class AtendimentoAtividadesDetail extends React.Component<IAtendimentoAtividadesDetailProps, IAtendimentoAtividadesState> {
   constructor(props: Readonly<IAtendimentoAtividadesDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoAtividadesState(this.props.location)
     };
   }
 
@@ -62,32 +67,6 @@ export class AtendimentoAtividadesDetail extends React.Component<IAtendimentoAti
                       </Col>
                       <Col md="9">
                         <dd>{atendimentoAtividadesEntity.feito}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimentoAtividades.idAtividade">Id Atividade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoAtividadesEntity.idAtividade ? atendimentoAtividadesEntity.idAtividade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimentoAtividades.idAtendimento">Id Atendimento</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoAtividadesEntity.idAtendimento ? atendimentoAtividadesEntity.idAtendimento.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

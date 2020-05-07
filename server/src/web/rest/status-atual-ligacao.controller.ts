@@ -68,7 +68,9 @@ export class StatusAtualLigacaoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() statusAtualLigacao: StatusAtualLigacao): Promise<StatusAtualLigacao> {
+    console.info(statusAtualLigacao);
     const created = await this.statusAtualLigacaoService.save(statusAtualLigacao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'StatusAtualLigacao', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class StatusAtualLigacaoController {
   })
   async put(@Req() req: Request, @Body() statusAtualLigacao: StatusAtualLigacao): Promise<StatusAtualLigacao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'StatusAtualLigacao', statusAtualLigacao.id);
+
     return await this.statusAtualLigacaoService.update(statusAtualLigacao);
   }
 

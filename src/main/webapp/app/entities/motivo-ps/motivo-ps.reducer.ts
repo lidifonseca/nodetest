@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IMotivoPs, defaultValue } from 'app/shared/model/motivo-ps.model';
 
 export const ACTION_TYPES = {
+  FETCH_MOTIVOPS_LIST_EXPORT: 'motivoPs/FETCH_MOTIVOPS_LIST_EXPORT',
   FETCH_MOTIVOPS_LIST: 'motivoPs/FETCH_MOTIVOPS_LIST',
   FETCH_MOTIVOPS: 'motivoPs/FETCH_MOTIVOPS',
   CREATE_MOTIVOPS: 'motivoPs/CREATE_MOTIVOPS',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type MotivoPsState = Readonly<typeof initialState>;
 
+export interface IMotivoPsBaseState {
+  baseFilters: any;
+  nome: any;
+  idPai: any;
+  ativo: any;
+  classe: any;
+  name: any;
+}
+
+export interface IMotivoPsUpdateState {
+  fieldsBase: IMotivoPsBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: MotivoPsState = initialState, action): MotivoPsState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_MOTIVOPS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_MOTIVOPS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_MOTIVOPS):
       return {
@@ -51,6 +67,7 @@ export default (state: MotivoPsState = initialState, action): MotivoPsState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_MOTIVOPS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_MOTIVOPS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_MOTIVOPS):
     case FAILURE(ACTION_TYPES.CREATE_MOTIVOPS):
@@ -139,6 +156,22 @@ export const getEntity: ICrudGetAction<IMotivoPs> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionMotivoPs<IMotivoPs> = (nome, idPai, ativo, classe, name, page, size, sort) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const idPaiRequest = idPai ? `idPai.contains=${idPai}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const classeRequest = classe ? `classe.contains=${classe}&` : '';
+  const nameRequest = name ? `name.contains=${name}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_MOTIVOPS_LIST,
+    payload: axios.get<IMotivoPs>(
+      `${requestUrl}${nomeRequest}${idPaiRequest}${ativoRequest}${classeRequest}${nameRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IMotivoPs> = entity => async dispatch => {
   entity = {
     ...entity
@@ -174,3 +207,22 @@ export const deleteEntity: ICrudDeleteAction<IMotivoPs> = id => async dispatch =
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getMotivoPsState = (location): IMotivoPsBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const idPai = url.searchParams.get('idPai') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const classe = url.searchParams.get('classe') || '';
+  const name = url.searchParams.get('name') || '';
+
+  return {
+    baseFilters,
+    nome,
+    idPai,
+    ativo,
+    classe,
+    name
+  };
+};

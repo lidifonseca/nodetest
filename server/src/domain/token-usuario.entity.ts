@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A TokenUsuario.
  */
-@Entity('token_usuario')
+@Entity('tb_token_usuario')
 export default class TokenUsuario extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_paciente', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE', nullable: false })
   idPaciente: number;
 
-  @Column({ name: 'token', length: 200 })
+  @Column({ name: 'TOKEN', length: 200 })
   token: string;
 
-  @Column({ type: 'timestamp', name: 'data_valida' })
+  @Column({ type: 'timestamp', name: 'DATA_VALIDA' })
   dataValida: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

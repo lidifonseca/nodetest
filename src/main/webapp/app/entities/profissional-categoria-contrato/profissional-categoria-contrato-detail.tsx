@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-categoria-contrato.reducer';
+import {
+  getEntity,
+  IProfissionalCategoriaContratoBaseState,
+  getProfissionalCategoriaContratoState
+} from './profissional-categoria-contrato.reducer';
 import { IProfissionalCategoriaContrato } from 'app/shared/model/profissional-categoria-contrato.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalCategoriaContratoState {
+  fieldsBase: IProfissionalCategoriaContratoBaseState;
+}
+
 export interface IProfissionalCategoriaContratoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalCategoriaContratoDetail extends React.Component<IProfissionalCategoriaContratoDetailProps> {
+export class ProfissionalCategoriaContratoDetail extends React.Component<
+  IProfissionalCategoriaContratoDetailProps,
+  IProfissionalCategoriaContratoState
+> {
   constructor(props: Readonly<IProfissionalCategoriaContratoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalCategoriaContratoState(this.props.location)
     };
   }
 

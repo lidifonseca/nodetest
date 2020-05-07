@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './especialidade-unidade.reducer';
+import { getEntity, IEspecialidadeUnidadeBaseState, getEspecialidadeUnidadeState } from './especialidade-unidade.reducer';
 import { IEspecialidadeUnidade } from 'app/shared/model/especialidade-unidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IEspecialidadeUnidadeState {
+  fieldsBase: IEspecialidadeUnidadeBaseState;
+}
+
 export interface IEspecialidadeUnidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class EspecialidadeUnidadeDetail extends React.Component<IEspecialidadeUnidadeDetailProps> {
+export class EspecialidadeUnidadeDetail extends React.Component<IEspecialidadeUnidadeDetailProps, IEspecialidadeUnidadeState> {
   constructor(props: Readonly<IEspecialidadeUnidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getEspecialidadeUnidadeState(this.props.location)
     };
   }
 
@@ -135,19 +140,6 @@ export class EspecialidadeUnidadeDetail extends React.Component<IEspecialidadeUn
                       </Col>
                       <Col md="9">
                         <dd>{especialidadeUnidadeEntity.unidade ? especialidadeUnidadeEntity.unidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.especialidadeUnidade.idEspecialidade">Id Especialidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{especialidadeUnidadeEntity.idEspecialidade ? especialidadeUnidadeEntity.idEspecialidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

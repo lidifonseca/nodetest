@@ -3,15 +3,15 @@
     "padItemMeta": {
       "home": {
         "title": "Pad Item Metas",
-        "createLabel": "Criar novo Pad Item Meta",
-        "createOrEditLabel": "Criar ou editar Pad Item Meta",
-        "notFound": "Nenhum Pad Item Meta encontrado"
+        "createLabel": "Create a new Pad Item Meta",
+        "createOrEditLabel": "Create or edit a Pad Item Meta",
+        "notFound": "No Pad Item Metas found"
       },
-      "created": "Um novo Pad Item Meta foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Meta foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Meta foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Meta is created with identifier {{ param }}",
+      "updated": "A Pad Item Meta is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Meta is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Meta {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Meta {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Meta"
@@ -35,7 +35,6 @@
       "maximoSistolica": "Maximo Sistolica",
       "minimoDiastolica": "Minimo Diastolica",
       "maximoDiastolica": "Maximo Diastolica",
-      "idUsuario": "Id Usuario",
       "score": "Score",
       "alteracaoEsperada": "Alteracao Esperada",
       "help": {

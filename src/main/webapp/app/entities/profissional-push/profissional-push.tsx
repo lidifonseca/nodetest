@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-push.reducer';
+import { getProfissionalPushState, IProfissionalPushBaseState, getEntities } from './profissional-push.reducer';
 import { IProfissionalPush } from 'app/shared/model/profissional-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalPushProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalPushBaseState {
-  idProfissional: any;
-  idFranquia: any;
-  mensagem: any;
-  ativo: any;
-}
 export interface IProfissionalPushState extends IProfissionalPushBaseState, IPaginationBaseState {}
 
 export class ProfissionalPush extends React.Component<IProfissionalPushProps, IProfissionalPushState> {
@@ -44,24 +38,9 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalPushState(this.props.location)
+      ...getProfissionalPushState(this.props.location)
     };
   }
-
-  getProfissionalPushState = (location): IProfissionalPushBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-    const mensagem = url.searchParams.get('mensagem') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      idProfissional,
-      idFranquia,
-      mensagem,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -106,7 +85,9 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -160,7 +141,11 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalPush.home.createLabel">Create a new Profissional Push</Translate>
@@ -173,46 +158,57 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-push-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-push-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idProfissional"
-                            id="profissional-push-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idFranquiaLabel" for="profissional-push-idFranquia">
-                            <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="idProfissional"
+                              id="profissional-push-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="idFranquia" id="profissional-push-idFranquia" value={this.state.idFranquia} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="mensagemLabel" for="profissional-push-mensagem">
-                            <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idFranquiaLabel" for="profissional-push-idFranquia">
+                              <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="mensagem" id="profissional-push-mensagem" value={this.state.mensagem} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="profissional-push-ativo">
-                            <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="profissional-push-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="idFranquia" id="profissional-push-idFranquia" value={this.state.idFranquia} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'mensagem' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="mensagemLabel" for="profissional-push-mensagem">
+                              <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="mensagem" id="profissional-push-mensagem" value={this.state.mensagem} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="profissional-push-ativo">
+                              <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="profissional-push-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -240,22 +236,30 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idFranquia')}>
-                        <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('mensagem')}>
-                        <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <th className="hand" onClick={this.sort('idFranquia')}>
+                          <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'mensagem' ? (
+                        <th className="hand" onClick={this.sort('mensagem')}>
+                          <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -270,29 +274,39 @@ export class ProfissionalPush extends React.Component<IProfissionalPushProps, IP
                           </Button>
                         </td>
 
-                        <td>{profissionalPush.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalPush.idProfissional}</td> : null}
 
-                        <td>{profissionalPush.idFranquia}</td>
+                        {this.state.baseFilters !== 'idFranquia' ? <td>{profissionalPush.idFranquia}</td> : null}
 
-                        <td>{profissionalPush.mensagem}</td>
+                        {this.state.baseFilters !== 'mensagem' ? <td>{profissionalPush.mensagem}</td> : null}
 
-                        <td>{profissionalPush.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalPush.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalPush.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${profissionalPush.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalPush.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalPush.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalPush.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalPush.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

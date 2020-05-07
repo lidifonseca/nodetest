@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAtendimentoAcompanhamentoPush, defaultValue } from 'app/shared/model/atendimento-acompanhamento-push.model';
 
 export const ACTION_TYPES = {
+  FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST_EXPORT: 'atendimentoAcompanhamentoPush/FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST_EXPORT',
   FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST: 'atendimentoAcompanhamentoPush/FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST',
   FETCH_ATENDIMENTOACOMPANHAMENTOPUSH: 'atendimentoAcompanhamentoPush/FETCH_ATENDIMENTOACOMPANHAMENTOPUSH',
   CREATE_ATENDIMENTOACOMPANHAMENTOPUSH: 'atendimentoAcompanhamentoPush/CREATE_ATENDIMENTOACOMPANHAMENTOPUSH',
@@ -30,10 +31,27 @@ const initialState = {
 
 export type AtendimentoAcompanhamentoPushState = Readonly<typeof initialState>;
 
+export interface IAtendimentoAcompanhamentoPushBaseState {
+  baseFilters: any;
+  atendimentoId: any;
+  pacienteId: any;
+  profissionalId: any;
+  timestampAtendimento: any;
+  nomePaciente: any;
+  nomeProfissioinal: any;
+  timestampConfirmacao: any;
+}
+
+export interface IAtendimentoAcompanhamentoPushUpdateState {
+  fieldsBase: IAtendimentoAcompanhamentoPushBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: AtendimentoAcompanhamentoPushState = initialState, action): AtendimentoAcompanhamentoPushState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH):
       return {
@@ -51,6 +69,7 @@ export default (state: AtendimentoAcompanhamentoPushState = initialState, action
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH):
     case FAILURE(ACTION_TYPES.CREATE_ATENDIMENTOACOMPANHAMENTOPUSH):
@@ -154,6 +173,35 @@ export const getEntity: ICrudGetAction<IAtendimentoAcompanhamentoPush> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionAtendimentoAcompanhamentoPush<IAtendimentoAcompanhamentoPush> = (
+  atendimentoId,
+  pacienteId,
+  profissionalId,
+  timestampAtendimento,
+  nomePaciente,
+  nomeProfissioinal,
+  timestampConfirmacao,
+  page,
+  size,
+  sort
+) => {
+  const atendimentoIdRequest = atendimentoId ? `atendimentoId.contains=${atendimentoId}&` : '';
+  const pacienteIdRequest = pacienteId ? `pacienteId.contains=${pacienteId}&` : '';
+  const profissionalIdRequest = profissionalId ? `profissionalId.contains=${profissionalId}&` : '';
+  const timestampAtendimentoRequest = timestampAtendimento ? `timestampAtendimento.contains=${timestampAtendimento}&` : '';
+  const nomePacienteRequest = nomePaciente ? `nomePaciente.contains=${nomePaciente}&` : '';
+  const nomeProfissioinalRequest = nomeProfissioinal ? `nomeProfissioinal.contains=${nomeProfissioinal}&` : '';
+  const timestampConfirmacaoRequest = timestampConfirmacao ? `timestampConfirmacao.contains=${timestampConfirmacao}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ATENDIMENTOACOMPANHAMENTOPUSH_LIST,
+    payload: axios.get<IAtendimentoAcompanhamentoPush>(
+      `${requestUrl}${atendimentoIdRequest}${pacienteIdRequest}${profissionalIdRequest}${timestampAtendimentoRequest}${nomePacienteRequest}${nomeProfissioinalRequest}${timestampConfirmacaoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IAtendimentoAcompanhamentoPush> = entity => async dispatch => {
   entity = {
     ...entity
@@ -189,3 +237,26 @@ export const deleteEntity: ICrudDeleteAction<IAtendimentoAcompanhamentoPush> = i
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAtendimentoAcompanhamentoPushState = (location): IAtendimentoAcompanhamentoPushBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const atendimentoId = url.searchParams.get('atendimentoId') || '';
+  const pacienteId = url.searchParams.get('pacienteId') || '';
+  const profissionalId = url.searchParams.get('profissionalId') || '';
+  const timestampAtendimento = url.searchParams.get('timestampAtendimento') || '';
+  const nomePaciente = url.searchParams.get('nomePaciente') || '';
+  const nomeProfissioinal = url.searchParams.get('nomeProfissioinal') || '';
+  const timestampConfirmacao = url.searchParams.get('timestampConfirmacao') || '';
+
+  return {
+    baseFilters,
+    atendimentoId,
+    pacienteId,
+    profissionalId,
+    timestampAtendimento,
+    nomePaciente,
+    nomeProfissioinal,
+    timestampConfirmacao
+  };
+};

@@ -22,18 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-arquivo.reducer';
+import { getProfissionalArquivoState, IProfissionalArquivoBaseState, getEntities } from './profissional-arquivo.reducer';
 import { IProfissionalArquivo } from 'app/shared/model/profissional-arquivo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalArquivoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalArquivoBaseState {
-  idProfissional: any;
-  arquivo: any;
-  ativo: any;
-}
 export interface IProfissionalArquivoState extends IProfissionalArquivoBaseState, IPaginationBaseState {}
 
 export class ProfissionalArquivo extends React.Component<IProfissionalArquivoProps, IProfissionalArquivoState> {
@@ -43,22 +38,9 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalArquivoState(this.props.location)
+      ...getProfissionalArquivoState(this.props.location)
     };
   }
-
-  getProfissionalArquivoState = (location): IProfissionalArquivoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const arquivo = url.searchParams.get('arquivo') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      idProfissional,
-      arquivo,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -102,7 +84,9 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -153,7 +137,11 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalArquivo.home.createLabel">Create a new Profissional Arquivo</Translate>
@@ -166,37 +154,45 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-arquivo-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalArquivo.idProfissional">Id Profissional</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-arquivo-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalArquivo.idProfissional">Id Profissional</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idProfissional"
-                            id="profissional-arquivo-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="arquivoLabel" for="profissional-arquivo-arquivo">
-                            <Translate contentKey="generadorApp.profissionalArquivo.arquivo">Arquivo</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="idProfissional"
+                              id="profissional-arquivo-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="arquivo" id="profissional-arquivo-arquivo" value={this.state.arquivo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="profissional-arquivo-ativo">
-                            <Translate contentKey="generadorApp.profissionalArquivo.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="profissional-arquivo-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'arquivo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="arquivoLabel" for="profissional-arquivo-arquivo">
+                              <Translate contentKey="generadorApp.profissionalArquivo.arquivo">Arquivo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="arquivo" id="profissional-arquivo-arquivo" value={this.state.arquivo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="profissional-arquivo-ativo">
+                              <Translate contentKey="generadorApp.profissionalArquivo.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="profissional-arquivo-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -224,18 +220,24 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalArquivo.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('arquivo')}>
-                        <Translate contentKey="generadorApp.profissionalArquivo.arquivo">Arquivo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.profissionalArquivo.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalArquivo.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'arquivo' ? (
+                        <th className="hand" onClick={this.sort('arquivo')}>
+                          <Translate contentKey="generadorApp.profissionalArquivo.arquivo">Arquivo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.profissionalArquivo.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -250,27 +252,37 @@ export class ProfissionalArquivo extends React.Component<IProfissionalArquivoPro
                           </Button>
                         </td>
 
-                        <td>{profissionalArquivo.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalArquivo.idProfissional}</td> : null}
 
-                        <td>{profissionalArquivo.arquivo}</td>
+                        {this.state.baseFilters !== 'arquivo' ? <td>{profissionalArquivo.arquivo}</td> : null}
 
-                        <td>{profissionalArquivo.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalArquivo.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalArquivo.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${profissionalArquivo.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalArquivo.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalArquivo.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalArquivo.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalArquivo.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

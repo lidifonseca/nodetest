@@ -8,21 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './julho.reducer';
+import { IJulhoUpdateState, getEntity, getJulhoState, IJulhoBaseState, updateEntity, createEntity, reset } from './julho.reducer';
 import { IJulho } from 'app/shared/model/julho.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IJulhoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IJulhoUpdateState {
-  isNew: boolean;
-}
-
 export class JulhoUpdate extends React.Component<IJulhoUpdateProps, IJulhoUpdateState> {
   constructor(props: Readonly<IJulhoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getJulhoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +38,24 @@ export class JulhoUpdate extends React.Component<IJulhoUpdateProps, IJulhoUpdate
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['dataInicio'] ? '&dataInicio=' + fieldsBase['dataInicio'] : '') +
+      (fieldsBase['dataFim'] ? '&dataFim=' + fieldsBase['dataFim'] : '') +
+      (fieldsBase['especialidade'] ? '&especialidade=' + fieldsBase['especialidade'] : '') +
+      (fieldsBase['periodicidade'] ? '&periodicidade=' + fieldsBase['periodicidade'] : '') +
+      (fieldsBase['periodo'] ? '&periodo=' + fieldsBase['periodo'] : '') +
+      (fieldsBase['qtd'] ? '&qtd=' + fieldsBase['qtd'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { julhoEntity } = this.props;
@@ -57,13 +73,14 @@ export class JulhoUpdate extends React.Component<IJulhoUpdateProps, IJulhoUpdate
   };
 
   handleClose = () => {
-    this.props.history.push('/julho');
+    this.props.history.push('/julho?' + this.getFiltersURL());
   };
 
   render() {
     const { julhoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +113,14 @@ export class JulhoUpdate extends React.Component<IJulhoUpdateProps, IJulhoUpdate
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/julho" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/julho?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +135,7 @@ export class JulhoUpdate extends React.Component<IJulhoUpdateProps, IJulhoUpdate
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,111 +151,122 @@ export class JulhoUpdate extends React.Component<IJulhoUpdateProps, IJulhoUpdate
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'dataInicio' ? (
+                          <Col md="dataInicio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataInicioLabel" for="julho-dataInicio">
+                                    <Translate contentKey="generadorApp.julho.dataInicio">Data Inicio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="julho-dataInicio" type="text" name="dataInicio" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataInicioLabel" for="julho-dataInicio">
-                                <Translate contentKey="generadorApp.julho.dataInicio">Data Inicio</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="julho-dataInicio"
-                                type="text"
-                                name="dataInicio"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataFim' ? (
+                          <Col md="dataFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataFimLabel" for="julho-dataFim">
+                                    <Translate contentKey="generadorApp.julho.dataFim">Data Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="julho-dataFim" type="text" name="dataFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataFimLabel" for="julho-dataFim">
-                                <Translate contentKey="generadorApp.julho.dataFim">Data Fim</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="julho-dataFim"
-                                type="text"
-                                name="dataFim"
-                                validate={{
-                                  maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'especialidade' ? (
+                          <Col md="especialidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="especialidadeLabel" for="julho-especialidade">
+                                    <Translate contentKey="generadorApp.julho.especialidade">Especialidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="julho-especialidade" type="string" className="form-control" name="especialidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="especialidadeLabel" for="julho-especialidade">
-                                <Translate contentKey="generadorApp.julho.especialidade">Especialidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="julho-especialidade" type="string" className="form-control" name="especialidade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'periodicidade' ? (
+                          <Col md="periodicidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="periodicidadeLabel" for="julho-periodicidade">
+                                    <Translate contentKey="generadorApp.julho.periodicidade">Periodicidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="julho-periodicidade" type="string" className="form-control" name="periodicidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="periodicidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="periodicidadeLabel" for="julho-periodicidade">
-                                <Translate contentKey="generadorApp.julho.periodicidade">Periodicidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="julho-periodicidade" type="string" className="form-control" name="periodicidade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'periodo' ? (
+                          <Col md="periodo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="periodoLabel" for="julho-periodo">
+                                    <Translate contentKey="generadorApp.julho.periodo">Periodo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="julho-periodo" type="string" className="form-control" name="periodo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="periodo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="periodoLabel" for="julho-periodo">
-                                <Translate contentKey="generadorApp.julho.periodo">Periodo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="julho-periodo" type="string" className="form-control" name="periodo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="qtdLabel" for="julho-qtd">
-                                <Translate contentKey="generadorApp.julho.qtd">Qtd</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="julho-qtd" type="string" className="form-control" name="qtd" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'qtd' ? (
+                          <Col md="qtd">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="qtdLabel" for="julho-qtd">
+                                    <Translate contentKey="generadorApp.julho.qtd">Qtd</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="julho-qtd" type="string" className="form-control" name="qtd" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="qtd" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

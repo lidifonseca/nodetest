@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-dispositivo-atual.reducer';
+import { getEntity, IPacienteDispositivoAtualBaseState, getPacienteDispositivoAtualState } from './paciente-dispositivo-atual.reducer';
 import { IPacienteDispositivoAtual } from 'app/shared/model/paciente-dispositivo-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteDispositivoAtualState {
+  fieldsBase: IPacienteDispositivoAtualBaseState;
+}
+
 export interface IPacienteDispositivoAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteDispositivoAtualDetail extends React.Component<IPacienteDispositivoAtualDetailProps> {
+export class PacienteDispositivoAtualDetail extends React.Component<IPacienteDispositivoAtualDetailProps, IPacienteDispositivoAtualState> {
   constructor(props: Readonly<IPacienteDispositivoAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteDispositivoAtualState(this.props.location)
     };
   }
 
@@ -429,21 +434,6 @@ export class PacienteDispositivoAtualDetail extends React.Component<IPacienteDis
                       </Col>
                       <Col md="9">
                         <dd>{pacienteDispositivoAtualEntity.colostomia}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.pacienteDispositivoAtual.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteDispositivoAtualEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

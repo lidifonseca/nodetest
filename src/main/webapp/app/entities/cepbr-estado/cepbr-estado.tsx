@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './cepbr-estado.reducer';
+import { getCepbrEstadoState, ICepbrEstadoBaseState, getEntities } from './cepbr-estado.reducer';
 import { ICepbrEstado } from 'app/shared/model/cepbr-estado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ICepbrEstadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICepbrEstadoBaseState {
-  uf: any;
-  estado: any;
-  codIbge: any;
-  cepbrCidade: any;
-}
 export interface ICepbrEstadoState extends ICepbrEstadoBaseState, IPaginationBaseState {}
 
 export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstadoState> {
@@ -44,25 +38,9 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCepbrEstadoState(this.props.location)
+      ...getCepbrEstadoState(this.props.location)
     };
   }
-
-  getCepbrEstadoState = (location): ICepbrEstadoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const uf = url.searchParams.get('uf') || '';
-    const estado = url.searchParams.get('estado') || '';
-    const codIbge = url.searchParams.get('codIbge') || '';
-
-    const cepbrCidade = url.searchParams.get('cepbrCidade') || '';
-
-    return {
-      uf,
-      estado,
-      codIbge,
-      cepbrCidade
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -73,8 +51,7 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
       {
         uf: '',
         estado: '',
-        codIbge: '',
-        cepbrCidade: ''
+        codIbge: ''
       },
       () => this.sortEntities()
     );
@@ -107,7 +84,9 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -128,9 +107,6 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
       'codIbge=' +
       this.state.codIbge +
       '&' +
-      'cepbrCidade=' +
-      this.state.cepbrCidade +
-      '&' +
       ''
     );
   };
@@ -138,8 +114,8 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { uf, estado, codIbge, cepbrCidade, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(uf, estado, codIbge, cepbrCidade, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { uf, estado, codIbge, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(uf, estado, codIbge, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -161,7 +137,11 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.cepbrEstado.home.createLabel">Create a new Cepbr Estado</Translate>
@@ -174,63 +154,41 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="ufLabel" for="cepbr-estado-uf">
-                            <Translate contentKey="generadorApp.cepbrEstado.uf">Uf</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'uf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ufLabel" for="cepbr-estado-uf">
+                              <Translate contentKey="generadorApp.cepbrEstado.uf">Uf</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="uf"
-                            id="cepbr-estado-uf"
-                            value={this.state.uf}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 2, errorMessage: translate('entity.validation.maxlength', { max: 2 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="estadoLabel" for="cepbr-estado-estado">
-                            <Translate contentKey="generadorApp.cepbrEstado.estado">Estado</Translate>
-                          </Label>
+                            <AvInput type="text" name="uf" id="cepbr-estado-uf" value={this.state.uf} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="estado"
-                            id="cepbr-estado-estado"
-                            value={this.state.estado}
-                            validate={{
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="codIbgeLabel" for="cepbr-estado-codIbge">
-                            <Translate contentKey="generadorApp.cepbrEstado.codIbge">Cod Ibge</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'estado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="estadoLabel" for="cepbr-estado-estado">
+                              <Translate contentKey="generadorApp.cepbrEstado.estado">Estado</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="codIbge"
-                            id="cepbr-estado-codIbge"
-                            value={this.state.codIbge}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="estado" id="cepbr-estado-estado" value={this.state.estado} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                      {this.state.baseFilters !== 'codIbge' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codIbgeLabel" for="cepbr-estado-codIbge">
+                              <Translate contentKey="generadorApp.cepbrEstado.codIbge">Cod Ibge</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="codIbge" id="cepbr-estado-codIbge" value={this.state.codIbge} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -258,18 +216,24 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('uf')}>
-                        <Translate contentKey="generadorApp.cepbrEstado.uf">Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('estado')}>
-                        <Translate contentKey="generadorApp.cepbrEstado.estado">Estado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('codIbge')}>
-                        <Translate contentKey="generadorApp.cepbrEstado.codIbge">Cod Ibge</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'uf' ? (
+                        <th className="hand" onClick={this.sort('uf')}>
+                          <Translate contentKey="generadorApp.cepbrEstado.uf">Uf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'estado' ? (
+                        <th className="hand" onClick={this.sort('estado')}>
+                          <Translate contentKey="generadorApp.cepbrEstado.estado">Estado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'codIbge' ? (
+                        <th className="hand" onClick={this.sort('codIbge')}>
+                          <Translate contentKey="generadorApp.cepbrEstado.codIbge">Cod Ibge</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -284,27 +248,32 @@ export class CepbrEstado extends React.Component<ICepbrEstadoProps, ICepbrEstado
                           </Button>
                         </td>
 
-                        <td>{cepbrEstado.uf}</td>
+                        {this.state.baseFilters !== 'uf' ? <td>{cepbrEstado.uf}</td> : null}
 
-                        <td>{cepbrEstado.estado}</td>
+                        {this.state.baseFilters !== 'estado' ? <td>{cepbrEstado.estado}</td> : null}
 
-                        <td>{cepbrEstado.codIbge}</td>
+                        {this.state.baseFilters !== 'codIbge' ? <td>{cepbrEstado.codIbge}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${cepbrEstado.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cepbrEstado.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cepbrEstado.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${cepbrEstado.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cepbrEstado.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cepbrEstado.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

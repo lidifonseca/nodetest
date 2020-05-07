@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './especialidade-valor.reducer';
+import {
+  IEspecialidadeValorUpdateState,
+  getEntity,
+  getEspecialidadeValorState,
+  IEspecialidadeValorBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './especialidade-valor.reducer';
 import { IEspecialidadeValor } from 'app/shared/model/especialidade-valor.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IEspecialidadeValorUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IEspecialidadeValorUpdateState {
-  isNew: boolean;
-  idEspecialidadeId: string;
-}
-
 export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValorUpdateProps, IEspecialidadeValorUpdateState> {
   constructor(props: Readonly<IEspecialidadeValorUpdateProps>) {
     super(props);
+
     this.state = {
-      idEspecialidadeId: '0',
+      fieldsBase: getEspecialidadeValorState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,23 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getEspecialidades();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idFranquia'] ? '&idFranquia=' + fieldsBase['idFranquia'] : '') +
+      (fieldsBase['valor'] ? '&valor=' + fieldsBase['valor'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { especialidadeValorEntity } = this.props;
@@ -63,13 +78,14 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
   };
 
   handleClose = () => {
-    this.props.history.push('/especialidade-valor');
+    this.props.history.push('/especialidade-valor?' + this.getFiltersURL());
   };
 
   render() {
-    const { especialidadeValorEntity, especialidades, loading, updating } = this.props;
+    const { especialidadeValorEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +101,7 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
             isNew
               ? {}
               : {
-                  ...especialidadeValorEntity,
-                  idEspecialidade: especialidadeValorEntity.idEspecialidade ? especialidadeValorEntity.idEspecialidade.id : null
+                  ...especialidadeValorEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -105,7 +120,14 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/especialidade-valor" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/especialidade-valor?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -120,7 +142,7 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -136,82 +158,65 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idFranquia' ? (
+                          <Col md="idFranquia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idFranquiaLabel" for="especialidade-valor-idFranquia">
+                                    <Translate contentKey="generadorApp.especialidadeValor.idFranquia">Id Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-valor-idFranquia" type="text" name="idFranquia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idFranquiaLabel" for="especialidade-valor-idFranquia">
-                                <Translate contentKey="generadorApp.especialidadeValor.idFranquia">Id Franquia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="especialidade-valor-idFranquia" type="text" name="idFranquia" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'valor' ? (
+                          <Col md="valor">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorLabel" for="especialidade-valor-valor">
+                                    <Translate contentKey="generadorApp.especialidadeValor.valor">Valor</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-valor-valor" type="string" className="form-control" name="valor" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="valorLabel" for="especialidade-valor-valor">
-                                <Translate contentKey="generadorApp.especialidadeValor.valor">Valor</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="especialidade-valor-valor" type="string" className="form-control" name="valor" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="especialidade-valor-ativo">
-                                <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="especialidade-valor-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="especialidade-valor-idEspecialidade">
-                                <Translate contentKey="generadorApp.especialidadeValor.idEspecialidade">Id Especialidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="especialidade-valor-idEspecialidade"
-                                type="select"
-                                className="form-control"
-                                name="idEspecialidade"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.especialidadeValor.idEspecialidade.empty')}
-                                </option>
-                                {especialidades
-                                  ? especialidades.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="especialidade-valor-ativo">
+                                    <Translate contentKey="generadorApp.especialidadeValor.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-valor-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -224,7 +229,6 @@ export class EspecialidadeValorUpdate extends React.Component<IEspecialidadeValo
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  especialidades: storeState.especialidade.entities,
   especialidadeValorEntity: storeState.especialidadeValor.entity,
   loading: storeState.especialidadeValor.loading,
   updating: storeState.especialidadeValor.updating,
@@ -232,7 +236,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getEspecialidades,
   getEntity,
   updateEntity,
   createEntity,

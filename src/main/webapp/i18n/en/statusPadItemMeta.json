@@ -3,15 +3,15 @@
     "statusPadItemMeta": {
       "home": {
         "title": "Status Pad Item Metas",
-        "createLabel": "Criar novo Status Pad Item Meta",
-        "createOrEditLabel": "Criar ou editar Status Pad Item Meta",
-        "notFound": "Nenhum Status Pad Item Meta encontrado"
+        "createLabel": "Create a new Status Pad Item Meta",
+        "createOrEditLabel": "Create or edit a Status Pad Item Meta",
+        "notFound": "No Status Pad Item Metas found"
       },
-      "created": "Um novo Status Pad Item Meta foi criado com o identificador {{ param }}",
-      "updated": "Um Status Pad Item Meta foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Status Pad Item Meta foi excluído com o identificador {{ param }}",
+      "created": "A new Status Pad Item Meta is created with identifier {{ param }}",
+      "updated": "A Status Pad Item Meta is updated with identifier {{ param }}",
+      "deleted": "A Status Pad Item Meta is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Status Pad Item Meta {{ id }}?"
+        "question": "Are you sure you want to delete Status Pad Item Meta {{ id }}?"
       },
       "detail": {
         "title": "Status Pad Item Meta"

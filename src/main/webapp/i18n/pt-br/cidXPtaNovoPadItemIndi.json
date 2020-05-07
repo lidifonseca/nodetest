@@ -21,11 +21,7 @@
       "minimo": "Minimo",
       "unidadeMedidaExtra": "Unidade Medida Extra",
       "unidadeMedidaId": "Unidade Medida Id",
-      "score": "Score",
-      "alertasIndicadores": "Alertas Indicadores",
-      "padItemIndicadoresId": "Pad Item Indicadores Id",
-      "categoriasId": "Categorias Id",
-      "cidXPtaNovoId": "Cid X Pta Novo Id"
+      "score": "Score"
     }
   }
 }

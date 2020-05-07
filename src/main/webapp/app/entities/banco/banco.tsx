@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './banco.reducer';
+import { getBancoState, IBancoBaseState, getEntities } from './banco.reducer';
 import { IBanco } from 'app/shared/model/banco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IBancoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IBancoBaseState {
-  codBanco: any;
-  banco: any;
-}
 export interface IBancoState extends IBancoBaseState, IPaginationBaseState {}
 
 export class Banco extends React.Component<IBancoProps, IBancoState> {
@@ -42,20 +38,9 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getBancoState(this.props.location)
+      ...getBancoState(this.props.location)
     };
   }
-
-  getBancoState = (location): IBancoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const codBanco = url.searchParams.get('codBanco') || '';
-    const banco = url.searchParams.get('banco') || '';
-
-    return {
-      codBanco,
-      banco
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +83,9 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +133,11 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.banco.home.createLabel">Create a new Banco</Translate>
@@ -159,24 +150,29 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="codBancoLabel" for="banco-codBanco">
-                            <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'codBanco' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codBancoLabel" for="banco-codBanco">
+                              <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="codBanco" id="banco-codBanco" value={this.state.codBanco} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="bancoLabel" for="banco-banco">
-                            <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
-                          </Label>
+                            <AvInput type="text" name="codBanco" id="banco-codBanco" value={this.state.codBanco} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="banco" id="banco-banco" value={this.state.banco} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'banco' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="bancoLabel" for="banco-banco">
+                              <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="banco" id="banco-banco" value={this.state.banco} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -204,14 +200,18 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('codBanco')}>
-                        <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('banco')}>
-                        <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'codBanco' ? (
+                        <th className="hand" onClick={this.sort('codBanco')}>
+                          <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'banco' ? (
+                        <th className="hand" onClick={this.sort('banco')}>
+                          <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -226,25 +226,25 @@ export class Banco extends React.Component<IBancoProps, IBancoState> {
                           </Button>
                         </td>
 
-                        <td>{banco.codBanco}</td>
+                        {this.state.baseFilters !== 'codBanco' ? <td>{banco.codBanco}</td> : null}
 
-                        <td>{banco.banco}</td>
+                        {this.state.baseFilters !== 'banco' ? <td>{banco.banco}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${banco.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${banco.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${banco.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${banco.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${banco.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${banco.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -1,6 +1,3 @@
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { ICid } from 'app/shared/model/cid.model';
-
 export interface IPacienteDiagnostico {
   id?: string;
   observacao?: string;
@@ -8,8 +5,6 @@ export interface IPacienteDiagnostico {
   cidPrimario?: boolean;
   complexidade?: string;
   cidComAlta?: boolean;
-  idPaciente?: string | any;
-  idCid?: string | any;
 }
 
 export const defaultValue: Readonly<IPacienteDiagnostico> = {

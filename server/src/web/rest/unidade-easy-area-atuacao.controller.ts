@@ -68,7 +68,9 @@ export class UnidadeEasyAreaAtuacaoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() unidadeEasyAreaAtuacao: UnidadeEasyAreaAtuacao): Promise<UnidadeEasyAreaAtuacao> {
+    console.info(unidadeEasyAreaAtuacao);
     const created = await this.unidadeEasyAreaAtuacaoService.save(unidadeEasyAreaAtuacao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UnidadeEasyAreaAtuacao', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class UnidadeEasyAreaAtuacaoController {
   })
   async put(@Req() req: Request, @Body() unidadeEasyAreaAtuacao: UnidadeEasyAreaAtuacao): Promise<UnidadeEasyAreaAtuacao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'UnidadeEasyAreaAtuacao', unidadeEasyAreaAtuacao.id);
+
     return await this.unidadeEasyAreaAtuacaoService.update(unidadeEasyAreaAtuacao);
   }
 

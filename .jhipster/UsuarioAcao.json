@@ -2,10 +2,6 @@
     "name": "UsuarioAcao",
     "fields": [
         {
-            "fieldName": "idUsuario",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "idAtendimento",
             "fieldType": "Integer"
         },
@@ -15,23 +11,8 @@
             "fieldTypeBlobContent": "text"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "tela",
-            "otherEntityRelationshipName": "usuarioAcao",
-            "relationshipName": "idTela",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "acao",
-            "otherEntityRelationshipName": "usuarioAcao",
-            "relationshipName": "idAcao",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200503012600",
+    "relationships": [],
+    "changelogDate": "20200507125900",
     "entityTableName": "usuario_acao",
     "dto": "mapstruct",
     "pagination": "pagination",

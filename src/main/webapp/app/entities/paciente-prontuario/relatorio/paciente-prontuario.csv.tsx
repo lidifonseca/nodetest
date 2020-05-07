@@ -74,7 +74,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
         oQue: '',
         resultado: '',
         ativo: '',
-        idUsuario: '',
         idEspecialidade: '',
         dataConsulta: '',
         idExame: '',
@@ -145,9 +144,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'idEspecialidade=' +
       this.state.idEspecialidade +
       '&' +
@@ -194,7 +190,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       oQue,
       resultado,
       ativo,
-      idUsuario,
       idEspecialidade,
       dataConsulta,
       idExame,
@@ -217,7 +212,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       oQue,
       resultado,
       ativo,
-      idUsuario,
       idEspecialidade,
       dataConsulta,
       idExame,
@@ -235,13 +229,14 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
     );
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();

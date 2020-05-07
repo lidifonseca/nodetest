@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './mat-med.reducer';
+import { getMatMedState, IMatMedBaseState, getEntities } from './mat-med.reducer';
 import { IMatMed } from 'app/shared/model/mat-med.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IMatMedProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IMatMedBaseState {
-  nome: any;
-  idTipoMatMed: any;
-  valor: any;
-  ativo: any;
-}
 export interface IMatMedState extends IMatMedBaseState, IPaginationBaseState {}
 
 export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
@@ -44,24 +38,9 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getMatMedState(this.props.location)
+      ...getMatMedState(this.props.location)
     };
   }
-
-  getMatMedState = (location): IMatMedBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nome = url.searchParams.get('nome') || '';
-    const idTipoMatMed = url.searchParams.get('idTipoMatMed') || '';
-    const valor = url.searchParams.get('valor') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      nome,
-      idTipoMatMed,
-      valor,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -106,7 +85,9 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -160,7 +141,11 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.matMed.home.createLabel">Create a new Mat Med</Translate>
@@ -173,43 +158,54 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="mat-med-nome">
-                            <Translate contentKey="generadorApp.matMed.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="mat-med-nome">
+                              <Translate contentKey="generadorApp.matMed.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="nome" id="mat-med-nome" value={this.state.nome} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idTipoMatMedLabel" for="mat-med-idTipoMatMed">
-                            <Translate contentKey="generadorApp.matMed.idTipoMatMed">Id Tipo Mat Med</Translate>
-                          </Label>
-                          <AvInput type="string" name="idTipoMatMed" id="mat-med-idTipoMatMed" value={this.state.idTipoMatMed} />
-                          <UncontrolledTooltip target="idTipoMatMedLabel">
-                            <Translate contentKey="generadorApp.matMed.help.idTipoMatMed" />
-                          </UncontrolledTooltip>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="valorLabel" for="mat-med-valor">
-                            <Translate contentKey="generadorApp.matMed.valor">Valor</Translate>
-                          </Label>
+                            <AvInput type="text" name="nome" id="mat-med-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="valor" id="mat-med-valor" value={this.state.valor} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="mat-med-ativo">
-                            <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="mat-med-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idTipoMatMed' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idTipoMatMedLabel" for="mat-med-idTipoMatMed">
+                              <Translate contentKey="generadorApp.matMed.idTipoMatMed">Id Tipo Mat Med</Translate>
+                            </Label>
+                            <AvInput type="string" name="idTipoMatMed" id="mat-med-idTipoMatMed" value={this.state.idTipoMatMed} />
+                            <UncontrolledTooltip target="idTipoMatMedLabel">
+                              <Translate contentKey="generadorApp.matMed.help.idTipoMatMed" />
+                            </UncontrolledTooltip>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'valor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="valorLabel" for="mat-med-valor">
+                              <Translate contentKey="generadorApp.matMed.valor">Valor</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="valor" id="mat-med-valor" value={this.state.valor} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="mat-med-ativo">
+                              <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="mat-med-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -237,22 +233,30 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.matMed.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idTipoMatMed')}>
-                        <Translate contentKey="generadorApp.matMed.idTipoMatMed">Id Tipo Mat Med</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('valor')}>
-                        <Translate contentKey="generadorApp.matMed.valor">Valor</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.matMed.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idTipoMatMed' ? (
+                        <th className="hand" onClick={this.sort('idTipoMatMed')}>
+                          <Translate contentKey="generadorApp.matMed.idTipoMatMed">Id Tipo Mat Med</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'valor' ? (
+                        <th className="hand" onClick={this.sort('valor')}>
+                          <Translate contentKey="generadorApp.matMed.valor">Valor</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.matMed.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -267,29 +271,29 @@ export class MatMed extends React.Component<IMatMedProps, IMatMedState> {
                           </Button>
                         </td>
 
-                        <td>{matMed.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{matMed.nome}</td> : null}
 
-                        <td>{matMed.idTipoMatMed}</td>
+                        {this.state.baseFilters !== 'idTipoMatMed' ? <td>{matMed.idTipoMatMed}</td> : null}
 
-                        <td>{matMed.valor}</td>
+                        {this.state.baseFilters !== 'valor' ? <td>{matMed.valor}</td> : null}
 
-                        <td>{matMed.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{matMed.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${matMed.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${matMed.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${matMed.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${matMed.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${matMed.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${matMed.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

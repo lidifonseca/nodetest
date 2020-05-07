@@ -68,7 +68,9 @@ export class PadItemAtividadeController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() padItemAtividade: PadItemAtividade): Promise<PadItemAtividade> {
+    console.info(padItemAtividade);
     const created = await this.padItemAtividadeService.save(padItemAtividade);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadItemAtividade', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PadItemAtividadeController {
   })
   async put(@Req() req: Request, @Body() padItemAtividade: PadItemAtividade): Promise<PadItemAtividade> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadItemAtividade', padItemAtividade.id);
+
     return await this.padItemAtividadeService.update(padItemAtividade);
   }
 

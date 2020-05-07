@@ -23,15 +23,11 @@
       "dataFim": "Data Fim",
       "dataConferido": "Data Conferido",
       "ativo": "Ativo",
-      "idUsuario": "Id Usuario",
       "statusPad": "Status Pad",
       "novoModelo": "Novo Modelo",
       "imagePath": "Image Path",
       "score": "Score",
-      "padCid": "Pad Cid",
-      "padItem": "Pad Item",
-      "unidade": "Unidade",
-      "idPaciente": "Id Paciente"
+      "unidade": "Unidade"
     }
   }
 }

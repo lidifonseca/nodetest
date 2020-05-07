@@ -18,7 +18,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502231900",
+    "changelogDate": "20200507105200",
     "entityTableName": "controle_disparo_aviso",
     "dto": "mapstruct",
     "pagination": "pagination",

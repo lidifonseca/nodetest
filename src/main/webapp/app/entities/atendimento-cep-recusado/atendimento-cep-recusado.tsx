@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atendimento-cep-recusado.reducer';
+import { getAtendimentoCepRecusadoState, IAtendimentoCepRecusadoBaseState, getEntities } from './atendimento-cep-recusado.reducer';
 import { IAtendimentoCepRecusado } from 'app/shared/model/atendimento-cep-recusado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-
 export interface IAtendimentoCepRecusadoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtendimentoCepRecusadoBaseState {
-  cep: any;
-  idPadItem: any;
-}
 export interface IAtendimentoCepRecusadoState extends IAtendimentoCepRecusadoBaseState, IPaginationBaseState {}
 
 export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecusadoProps, IAtendimentoCepRecusadoState> {
@@ -45,33 +38,18 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtendimentoCepRecusadoState(this.props.location)
+      ...getAtendimentoCepRecusadoState(this.props.location)
     };
   }
 
-  getAtendimentoCepRecusadoState = (location): IAtendimentoCepRecusadoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const cep = url.searchParams.get('cep') || '';
-
-    const idPadItem = url.searchParams.get('idPadItem') || '';
-
-    return {
-      cep,
-      idPadItem
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        cep: '',
-        idPadItem: ''
+        cep: ''
       },
       () => this.sortEntities()
     );
@@ -104,7 +82,9 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -119,9 +99,6 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
       'cep=' +
       this.state.cep +
       '&' +
-      'idPadItem=' +
-      this.state.idPadItem +
-      '&' +
       ''
     );
   };
@@ -129,12 +106,12 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cep, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cep, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cep, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cep, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { padItems, atendimentoCepRecusadoList, match, totalItems } = this.props;
+    const { atendimentoCepRecusadoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -152,7 +129,11 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atendimentoCepRecusado.home.createLabel">
@@ -167,35 +148,17 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepLabel" for="atendimento-cep-recusado-cep">
-                            <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cep" id="atendimento-cep-recusado-cep" value={this.state.cep} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="atendimento-cep-recusado-idPadItem">
-                              <Translate contentKey="generadorApp.atendimentoCepRecusado.idPadItem">Id Pad Item</Translate>
+                      {this.state.baseFilters !== 'cep' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepLabel" for="atendimento-cep-recusado-cep">
+                              <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
                             </Label>
-                            <AvInput id="atendimento-cep-recusado-idPadItem" type="select" className="form-control" name="idPadItemId">
-                              <option value="" key="0" />
-                              {padItems
-                                ? padItems.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="cep" id="atendimento-cep-recusado-cep" value={this.state.cep} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -223,14 +186,12 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('cep')}>
-                        <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.atendimentoCepRecusado.idPadItem">Id Pad Item</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'cep' ? (
+                        <th className="hand" onClick={this.sort('cep')}>
+                          <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -245,30 +206,38 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
                           </Button>
                         </td>
 
-                        <td>{atendimentoCepRecusado.cep}</td>
-                        <td>
-                          {atendimentoCepRecusado.idPadItem ? (
-                            <Link to={`pad-item/${atendimentoCepRecusado.idPadItem.id}`}>{atendimentoCepRecusado.idPadItem.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'cep' ? <td>{atendimentoCepRecusado.cep}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atendimentoCepRecusado.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoCepRecusado.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoCepRecusado.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoCepRecusado.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoCepRecusado.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoCepRecusado.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -310,13 +279,11 @@ export class AtendimentoCepRecusado extends React.Component<IAtendimentoCepRecus
 }
 
 const mapStateToProps = ({ atendimentoCepRecusado, ...storeState }: IRootState) => ({
-  padItems: storeState.padItem.entities,
   atendimentoCepRecusadoList: atendimentoCepRecusado.entities,
   totalItems: atendimentoCepRecusado.totalItems
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntities
 };
 

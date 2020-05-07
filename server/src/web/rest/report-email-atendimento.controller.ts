@@ -68,7 +68,9 @@ export class ReportEmailAtendimentoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() reportEmailAtendimento: ReportEmailAtendimento): Promise<ReportEmailAtendimento> {
+    console.info(reportEmailAtendimento);
     const created = await this.reportEmailAtendimentoService.save(reportEmailAtendimento);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ReportEmailAtendimento', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ReportEmailAtendimentoController {
   })
   async put(@Req() req: Request, @Body() reportEmailAtendimento: ReportEmailAtendimento): Promise<ReportEmailAtendimento> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ReportEmailAtendimento', reportEmailAtendimento.id);
+
     return await this.reportEmailAtendimentoService.update(reportEmailAtendimento);
   }
 

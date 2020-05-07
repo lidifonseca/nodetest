@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './cepbr-cidade.reducer';
+import { getEntity, ICepbrCidadeBaseState, getCepbrCidadeState } from './cepbr-cidade.reducer';
 import { ICepbrCidade } from 'app/shared/model/cepbr-cidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICepbrCidadeState {
+  fieldsBase: ICepbrCidadeBaseState;
+}
+
 export interface ICepbrCidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CepbrCidadeDetail extends React.Component<ICepbrCidadeDetailProps> {
+export class CepbrCidadeDetail extends React.Component<ICepbrCidadeDetailProps, ICepbrCidadeState> {
   constructor(props: Readonly<ICepbrCidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCepbrCidadeState(this.props.location)
     };
   }
 
@@ -106,19 +111,6 @@ export class CepbrCidadeDetail extends React.Component<ICepbrCidadeDetailProps> 
                       </Col>
                       <Col md="9">
                         <dd>{cepbrCidadeEntity.area}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cepbrCidade.uf">Uf</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cepbrCidadeEntity.uf ? cepbrCidadeEntity.uf.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

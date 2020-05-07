@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITipoMatMed, defaultValue } from 'app/shared/model/tipo-mat-med.model';
 
 export const ACTION_TYPES = {
+  FETCH_TIPOMATMED_LIST_EXPORT: 'tipoMatMed/FETCH_TIPOMATMED_LIST_EXPORT',
   FETCH_TIPOMATMED_LIST: 'tipoMatMed/FETCH_TIPOMATMED_LIST',
   FETCH_TIPOMATMED: 'tipoMatMed/FETCH_TIPOMATMED',
   CREATE_TIPOMATMED: 'tipoMatMed/CREATE_TIPOMATMED',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type TipoMatMedState = Readonly<typeof initialState>;
 
+export interface ITipoMatMedBaseState {
+  baseFilters: any;
+  tipo: any;
+  ativo: any;
+}
+
+export interface ITipoMatMedUpdateState {
+  fieldsBase: ITipoMatMedBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TipoMatMedState = initialState, action): TipoMatMedState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TIPOMATMED_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TIPOMATMED_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TIPOMATMED):
       return {
@@ -51,6 +64,7 @@ export default (state: TipoMatMedState = initialState, action): TipoMatMedState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TIPOMATMED_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TIPOMATMED_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TIPOMATMED):
     case FAILURE(ACTION_TYPES.CREATE_TIPOMATMED):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<ITipoMatMed> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTipoMatMed<ITipoMatMed> = (tipo, ativo, page, size, sort) => {
+  const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TIPOMATMED_LIST,
+    payload: axios.get<ITipoMatMed>(`${requestUrl}${tipoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ITipoMatMed> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<ITipoMatMed> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTipoMatMedState = (location): ITipoMatMedBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const tipo = url.searchParams.get('tipo') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    tipo,
+    ativo
+  };
+};

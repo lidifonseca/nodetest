@@ -3,15 +3,15 @@
     "atividades": {
       "home": {
         "title": "Atividades",
-        "createLabel": "Criar novo Atividades",
-        "createOrEditLabel": "Criar ou editar Atividades",
-        "notFound": "Nenhum Atividades encontrado"
+        "createLabel": "Create a new Atividades",
+        "createOrEditLabel": "Create or edit a Atividades",
+        "notFound": "No Atividades found"
       },
-      "created": "Um novo Atividades foi criado com o identificador {{ param }}",
-      "updated": "Um Atividades foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atividades foi excluído com o identificador {{ param }}",
+      "created": "A new Atividades is created with identifier {{ param }}",
+      "updated": "A Atividades is updated with identifier {{ param }}",
+      "deleted": "A Atividades is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atividades {{ id }}?"
+        "question": "Are you sure you want to delete Atividades {{ id }}?"
       },
       "detail": {
         "title": "Atividades"

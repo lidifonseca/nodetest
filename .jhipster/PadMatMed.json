@@ -23,13 +23,6 @@
             ]
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "ativo",
             "fieldType": "Integer",
             "fieldValidateRules": [
@@ -38,7 +31,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503002700",
+    "changelogDate": "20200507120000",
     "entityTableName": "pad_mat_med",
     "dto": "mapstruct",
     "pagination": "pagination",

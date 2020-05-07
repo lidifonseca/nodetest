@@ -3,24 +3,21 @@
     "categoriaAtividade": {
       "home": {
         "title": "Categoria Atividades",
-        "createLabel": "Criar novo Categoria Atividade",
-        "createOrEditLabel": "Criar ou editar Categoria Atividade",
-        "notFound": "Nenhum Categoria Atividade encontrado"
+        "createLabel": "Create a new Categoria Atividade",
+        "createOrEditLabel": "Create or edit a Categoria Atividade",
+        "notFound": "No Categoria Atividades found"
       },
-      "created": "Um novo Categoria Atividade foi criado com o identificador {{ param }}",
-      "updated": "Um Categoria Atividade foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Categoria Atividade foi excluído com o identificador {{ param }}",
+      "created": "A new Categoria Atividade is created with identifier {{ param }}",
+      "updated": "A Categoria Atividade is updated with identifier {{ param }}",
+      "deleted": "A Categoria Atividade is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Categoria Atividade {{ id }}?"
+        "question": "Are you sure you want to delete Categoria Atividade {{ id }}?"
       },
       "detail": {
         "title": "Categoria Atividade"
       },
       "atividade": "Atividade",
-      "atendimentoAtividades": "Atendimento Atividades",
-      "padItemAtividade": "Pad Item Atividade",
-      "unidade": "Unidade",
-      "idCategoria": "Id Categoria"
+      "unidade": "Unidade"
     }
   }
 }

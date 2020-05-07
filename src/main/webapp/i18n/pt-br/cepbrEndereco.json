@@ -20,9 +20,7 @@
       "logradouro": "Logradouro",
       "tipoLogradouro": "Tipo Logradouro",
       "complemento": "Complemento",
-      "local": "Local",
-      "idCidade": "Id Cidade",
-      "idBairro": "Id Bairro"
+      "local": "Local"
     }
   }
 }

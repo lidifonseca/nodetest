@@ -71,7 +71,9 @@ export class AtendimentoAcompanhamentoPushController {
     @Req() req: Request,
     @Body() atendimentoAcompanhamentoPush: AtendimentoAcompanhamentoPush
   ): Promise<AtendimentoAcompanhamentoPush> {
+    console.info(atendimentoAcompanhamentoPush);
     const created = await this.atendimentoAcompanhamentoPushService.save(atendimentoAcompanhamentoPush);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'AtendimentoAcompanhamentoPush', created.id);
     return created;
   }
@@ -89,6 +91,7 @@ export class AtendimentoAcompanhamentoPushController {
     @Body() atendimentoAcompanhamentoPush: AtendimentoAcompanhamentoPush
   ): Promise<AtendimentoAcompanhamentoPush> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'AtendimentoAcompanhamentoPush', atendimentoAcompanhamentoPush.id);
+
     return await this.atendimentoAcompanhamentoPushService.update(atendimentoAcompanhamentoPush);
   }
 

@@ -6,9 +6,6 @@ import { EspecialidadeRepository } from '../repository/especialidade.repository'
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
-relationshipNames.push('idCategoria');
-relationshipNames.push('idTipoEspecialidade');
-relationshipNames.push('idTipoUnidade');
 
 @Injectable()
 export class EspecialidadeService {

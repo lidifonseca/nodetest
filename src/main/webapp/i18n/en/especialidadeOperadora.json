@@ -3,15 +3,15 @@
     "especialidadeOperadora": {
       "home": {
         "title": "Especialidade Operadoras",
-        "createLabel": "Criar novo Especialidade Operadora",
-        "createOrEditLabel": "Criar ou editar Especialidade Operadora",
-        "notFound": "Nenhum Especialidade Operadora encontrado"
+        "createLabel": "Create a new Especialidade Operadora",
+        "createOrEditLabel": "Create or edit a Especialidade Operadora",
+        "notFound": "No Especialidade Operadoras found"
       },
-      "created": "Um novo Especialidade Operadora foi criado com o identificador {{ param }}",
-      "updated": "Um Especialidade Operadora foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Especialidade Operadora foi excluído com o identificador {{ param }}",
+      "created": "A new Especialidade Operadora is created with identifier {{ param }}",
+      "updated": "A Especialidade Operadora is updated with identifier {{ param }}",
+      "deleted": "A Especialidade Operadora is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Especialidade Operadora {{ id }}?"
+        "question": "Are you sure you want to delete Especialidade Operadora {{ id }}?"
       },
       "detail": {
         "title": "Especialidade Operadora"
@@ -23,9 +23,7 @@
       "valorVenda": "Valor Venda",
       "descontoCusto": "Desconto Custo",
       "descontoVenda": "Desconto Venda",
-      "ativo": "Ativo",
-      "idOperadora": "Id Operadora",
-      "idEspecialidade": "Id Especialidade"
+      "ativo": "Ativo"
     }
   }
 }

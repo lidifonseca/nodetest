@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import Periodicidade from './periodicidade';
 import PeriodicidadeDetail from './periodicidade-detail';
+import PeriodicidadeRelatorioCSV from './relatorio/periodicidade.csv';
 import PeriodicidadeUpdate from './periodicidade-update';
 import PeriodicidadeDeleteDialog from './periodicidade-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={PeriodicidadeRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={PeriodicidadeUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={PeriodicidadeUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={PeriodicidadeDetail} />

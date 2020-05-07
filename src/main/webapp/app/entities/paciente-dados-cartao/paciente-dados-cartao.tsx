@@ -31,25 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-dados-cartao.reducer';
+import { getPacienteDadosCartaoState, IPacienteDadosCartaoBaseState, getEntities } from './paciente-dados-cartao.reducer';
 import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-
 export interface IPacienteDadosCartaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteDadosCartaoBaseState {
-  bandeira: any;
-  numeroCartao: any;
-  validade: any;
-  codAtivacao: any;
-  ativo: any;
-  pacientePedido: any;
-  idPaciente: any;
-}
 export interface IPacienteDadosCartaoState extends IPacienteDadosCartaoBaseState, IPaginationBaseState {}
 
 export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoProps, IPacienteDadosCartaoState> {
@@ -59,36 +47,12 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteDadosCartaoState(this.props.location)
+      ...getPacienteDadosCartaoState(this.props.location)
     };
   }
 
-  getPacienteDadosCartaoState = (location): IPacienteDadosCartaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const bandeira = url.searchParams.get('bandeira') || '';
-    const numeroCartao = url.searchParams.get('numeroCartao') || '';
-    const validade = url.searchParams.get('validade') || '';
-    const codAtivacao = url.searchParams.get('codAtivacao') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const pacientePedido = url.searchParams.get('pacientePedido') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-
-    return {
-      bandeira,
-      numeroCartao,
-      validade,
-      codAtivacao,
-      ativo,
-      pacientePedido,
-      idPaciente
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -98,9 +62,7 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
         numeroCartao: '',
         validade: '',
         codAtivacao: '',
-        ativo: '',
-        pacientePedido: '',
-        idPaciente: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -133,7 +95,9 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -160,12 +124,6 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'pacientePedido=' +
-      this.state.pacientePedido +
-      '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
       ''
     );
   };
@@ -173,35 +131,12 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      bandeira,
-      numeroCartao,
-      validade,
-      codAtivacao,
-      ativo,
-      pacientePedido,
-      idPaciente,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      bandeira,
-      numeroCartao,
-      validade,
-      codAtivacao,
-      ativo,
-      pacientePedido,
-      idPaciente,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { bandeira, numeroCartao, validade, codAtivacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(bandeira, numeroCartao, validade, codAtivacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacientes, pacienteDadosCartaoList, match, totalItems } = this.props;
+    const { pacienteDadosCartaoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -219,7 +154,11 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteDadosCartao.home.createLabel">Create a new Paciente Dados Cartao</Translate>
@@ -232,77 +171,72 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="bandeiraLabel" for="paciente-dados-cartao-bandeira">
-                            <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="bandeira" id="paciente-dados-cartao-bandeira" value={this.state.bandeira} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="numeroCartaoLabel" for="paciente-dados-cartao-numeroCartao">
-                            <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="numeroCartao"
-                            id="paciente-dados-cartao-numeroCartao"
-                            value={this.state.numeroCartao}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="validadeLabel" for="paciente-dados-cartao-validade">
-                            <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
-                          </Label>
-                          <AvInput type="date" name="validade" id="paciente-dados-cartao-validade" value={this.state.validade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="codAtivacaoLabel" for="paciente-dados-cartao-codAtivacao">
-                            <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
-                          </Label>
-                          <AvInput type="string" name="codAtivacao" id="paciente-dados-cartao-codAtivacao" value={this.state.codAtivacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-dados-cartao-ativo">
-                            <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-dados-cartao-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-dados-cartao-idPaciente">
-                              <Translate contentKey="generadorApp.pacienteDadosCartao.idPaciente">Id Paciente</Translate>
+                      {this.state.baseFilters !== 'bandeira' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="bandeiraLabel" for="paciente-dados-cartao-bandeira">
+                              <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
                             </Label>
-                            <AvInput id="paciente-dados-cartao-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="bandeira" id="paciente-dados-cartao-bandeira" value={this.state.bandeira} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'numeroCartao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="numeroCartaoLabel" for="paciente-dados-cartao-numeroCartao">
+                              <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
+                            </Label>
+
+                            <AvInput
+                              type="text"
+                              name="numeroCartao"
+                              id="paciente-dados-cartao-numeroCartao"
+                              value={this.state.numeroCartao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'validade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="validadeLabel" for="paciente-dados-cartao-validade">
+                              <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
+                            </Label>
+                            <AvInput type="date" name="validade" id="paciente-dados-cartao-validade" value={this.state.validade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'codAtivacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="codAtivacaoLabel" for="paciente-dados-cartao-codAtivacao">
+                              <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="codAtivacao"
+                              id="paciente-dados-cartao-codAtivacao"
+                              value={this.state.codAtivacao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-dados-cartao-ativo">
+                              <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="paciente-dados-cartao-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -330,30 +264,36 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('bandeira')}>
-                        <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('numeroCartao')}>
-                        <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('validade')}>
-                        <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('codAtivacao')}>
-                        <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteDadosCartao.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'bandeira' ? (
+                        <th className="hand" onClick={this.sort('bandeira')}>
+                          <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'numeroCartao' ? (
+                        <th className="hand" onClick={this.sort('numeroCartao')}>
+                          <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'validade' ? (
+                        <th className="hand" onClick={this.sort('validade')}>
+                          <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'codAtivacao' ? (
+                        <th className="hand" onClick={this.sort('codAtivacao')}>
+                          <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -368,40 +308,45 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
                           </Button>
                         </td>
 
-                        <td>{pacienteDadosCartao.bandeira}</td>
+                        {this.state.baseFilters !== 'bandeira' ? <td>{pacienteDadosCartao.bandeira}</td> : null}
 
-                        <td>{pacienteDadosCartao.numeroCartao}</td>
+                        {this.state.baseFilters !== 'numeroCartao' ? <td>{pacienteDadosCartao.numeroCartao}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteDadosCartao.validade} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'validade' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteDadosCartao.validade} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{pacienteDadosCartao.codAtivacao}</td>
+                        {this.state.baseFilters !== 'codAtivacao' ? <td>{pacienteDadosCartao.codAtivacao}</td> : null}
 
-                        <td>{pacienteDadosCartao.ativo}</td>
-                        <td>
-                          {pacienteDadosCartao.idPaciente ? (
-                            <Link to={`paciente/${pacienteDadosCartao.idPaciente.id}`}>{pacienteDadosCartao.idPaciente.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteDadosCartao.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteDadosCartao.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pacienteDadosCartao.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDadosCartao.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDadosCartao.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteDadosCartao.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteDadosCartao.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -443,13 +388,11 @@ export class PacienteDadosCartao extends React.Component<IPacienteDadosCartaoPro
 }
 
 const mapStateToProps = ({ pacienteDadosCartao, ...storeState }: IRootState) => ({
-  pacientes: storeState.paciente.entities,
   pacienteDadosCartaoList: pacienteDadosCartao.entities,
   totalItems: pacienteDadosCartao.totalItems
 });
 
 const mapDispatchToProps = {
-  getPacientes,
   getEntities
 };
 

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-dados-cartao.reducer';
+import { getEntity, IPacienteDadosCartaoBaseState, getPacienteDadosCartaoState } from './paciente-dados-cartao.reducer';
 import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteDadosCartaoState {
+  fieldsBase: IPacienteDadosCartaoBaseState;
+}
+
 export interface IPacienteDadosCartaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteDadosCartaoDetail extends React.Component<IPacienteDadosCartaoDetailProps> {
+export class PacienteDadosCartaoDetail extends React.Component<IPacienteDadosCartaoDetailProps, IPacienteDadosCartaoState> {
   constructor(props: Readonly<IPacienteDadosCartaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteDadosCartaoState(this.props.location)
     };
   }
 
@@ -124,19 +129,6 @@ export class PacienteDadosCartaoDetail extends React.Component<IPacienteDadosCar
                       </Col>
                       <Col md="9">
                         <dd>{pacienteDadosCartaoEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteDadosCartao.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteDadosCartaoEntity.idPaciente ? pacienteDadosCartaoEntity.idPaciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

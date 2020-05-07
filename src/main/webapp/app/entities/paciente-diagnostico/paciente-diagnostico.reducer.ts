@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteDiagnostico, defaultValue } from 'app/shared/model/paciente-diagnostico.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEDIAGNOSTICO_LIST_EXPORT: 'pacienteDiagnostico/FETCH_PACIENTEDIAGNOSTICO_LIST_EXPORT',
   FETCH_PACIENTEDIAGNOSTICO_LIST: 'pacienteDiagnostico/FETCH_PACIENTEDIAGNOSTICO_LIST',
   FETCH_PACIENTEDIAGNOSTICO: 'pacienteDiagnostico/FETCH_PACIENTEDIAGNOSTICO',
   CREATE_PACIENTEDIAGNOSTICO: 'pacienteDiagnostico/CREATE_PACIENTEDIAGNOSTICO',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type PacienteDiagnosticoState = Readonly<typeof initialState>;
 
+export interface IPacienteDiagnosticoBaseState {
+  baseFilters: any;
+  observacao: any;
+  ativo: any;
+  cidPrimario: any;
+  complexidade: any;
+  cidComAlta: any;
+}
+
+export interface IPacienteDiagnosticoUpdateState {
+  fieldsBase: IPacienteDiagnosticoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteDiagnosticoState = initialState, action): PacienteDiagnosticoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO):
       return {
@@ -51,6 +67,7 @@ export default (state: PacienteDiagnosticoState = initialState, action): Pacient
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEDIAGNOSTICO):
@@ -111,8 +128,6 @@ export type ICrudGetAllActionPacienteDiagnostico<T> = (
   cidPrimario?: any,
   complexidade?: any,
   cidComAlta?: any,
-  idPaciente?: any,
-  idCid?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -124,8 +139,6 @@ export const getEntities: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnost
   cidPrimario,
   complexidade,
   cidComAlta,
-  idPaciente,
-  idCid,
   page,
   size,
   sort
@@ -135,14 +148,12 @@ export const getEntities: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnost
   const cidPrimarioRequest = cidPrimario ? `cidPrimario.contains=${cidPrimario}&` : '';
   const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
   const cidComAltaRequest = cidComAlta ? `cidComAlta.contains=${cidComAlta}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
-  const idCidRequest = idCid ? `idCid.equals=${idCid}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST,
     payload: axios.get<IPacienteDiagnostico>(
-      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}${idPacienteRequest}${idCidRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,11 +165,34 @@ export const getEntity: ICrudGetAction<IPacienteDiagnostico> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteDiagnostico<IPacienteDiagnostico> = (
+  observacao,
+  ativo,
+  cidPrimario,
+  complexidade,
+  cidComAlta,
+  page,
+  size,
+  sort
+) => {
+  const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const cidPrimarioRequest = cidPrimario ? `cidPrimario.contains=${cidPrimario}&` : '';
+  const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
+  const cidComAltaRequest = cidComAlta ? `cidComAlta.contains=${cidComAlta}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEDIAGNOSTICO_LIST,
+    payload: axios.get<IPacienteDiagnostico>(
+      `${requestUrl}${observacaoRequest}${ativoRequest}${cidPrimarioRequest}${complexidadeRequest}${cidComAltaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteDiagnostico> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idCid: entity.idCid === 'null' ? null : entity.idCid
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PACIENTEDIAGNOSTICO,
@@ -169,11 +203,7 @@ export const createEntity: ICrudPutAction<IPacienteDiagnostico> = entity => asyn
 };
 
 export const updateEntity: ICrudPutAction<IPacienteDiagnostico> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente,
-    idCid: entity.idCid === 'null' ? null : entity.idCid
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PACIENTEDIAGNOSTICO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -195,3 +225,22 @@ export const deleteEntity: ICrudDeleteAction<IPacienteDiagnostico> = id => async
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteDiagnosticoState = (location): IPacienteDiagnosticoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const observacao = url.searchParams.get('observacao') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const cidPrimario = url.searchParams.get('cidPrimario') || '';
+  const complexidade = url.searchParams.get('complexidade') || '';
+  const cidComAlta = url.searchParams.get('cidComAlta') || '';
+
+  return {
+    baseFilters,
+    observacao,
+    ativo,
+    cidPrimario,
+    complexidade,
+    cidComAlta
+  };
+};

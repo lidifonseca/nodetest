@@ -3,15 +3,15 @@
     "pacienteDiagnostico": {
       "home": {
         "title": "Paciente Diagnosticos",
-        "createLabel": "Criar novo Paciente Diagnostico",
-        "createOrEditLabel": "Criar ou editar Paciente Diagnostico",
-        "notFound": "Nenhum Paciente Diagnostico encontrado"
+        "createLabel": "Create a new Paciente Diagnostico",
+        "createOrEditLabel": "Create or edit a Paciente Diagnostico",
+        "notFound": "No Paciente Diagnosticos found"
       },
-      "created": "Um novo Paciente Diagnostico foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Diagnostico foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Diagnostico foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Diagnostico is created with identifier {{ param }}",
+      "updated": "A Paciente Diagnostico is updated with identifier {{ param }}",
+      "deleted": "A Paciente Diagnostico is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Diagnostico {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Diagnostico {{ id }}?"
       },
       "detail": {
         "title": "Paciente Diagnostico"
@@ -20,9 +20,7 @@
       "ativo": "Ativo",
       "cidPrimario": "Cid Primario",
       "complexidade": "Complexidade",
-      "cidComAlta": "Cid Com Alta",
-      "idPaciente": "Id Paciente",
-      "idCid": "Id Cid"
+      "cidComAlta": "Cid Com Alta"
     }
   }
 }

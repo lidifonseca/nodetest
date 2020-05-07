@@ -3,23 +3,21 @@
     "periodo": {
       "home": {
         "title": "Periodos",
-        "createLabel": "Criar novo Periodo",
-        "createOrEditLabel": "Criar ou editar Periodo",
-        "notFound": "Nenhum Periodo encontrado"
+        "createLabel": "Create a new Periodo",
+        "createOrEditLabel": "Create or edit a Periodo",
+        "notFound": "No Periodos found"
       },
-      "created": "Um novo Periodo foi criado com o identificador {{ param }}",
-      "updated": "Um Periodo foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Periodo foi excluído com o identificador {{ param }}",
+      "created": "A new Periodo is created with identifier {{ param }}",
+      "updated": "A Periodo is updated with identifier {{ param }}",
+      "deleted": "A Periodo is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Periodo {{ id }}?"
+        "question": "Are you sure you want to delete Periodo {{ id }}?"
       },
       "detail": {
         "title": "Periodo"
       },
       "periodo": "Periodo",
-      "ativo": "Ativo",
-      "atendimento": "Atendimento",
-      "padItem": "Pad Item"
+      "ativo": "Ativo"
     }
   }
 }

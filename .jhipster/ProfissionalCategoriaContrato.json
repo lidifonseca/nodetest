@@ -21,7 +21,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503003700",
+    "changelogDate": "20200507121000",
     "entityTableName": "profissional_categoria_contrato",
     "dto": "mapstruct",
     "pagination": "pagination",

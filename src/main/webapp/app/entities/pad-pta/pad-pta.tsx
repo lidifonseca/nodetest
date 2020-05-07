@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-pta.reducer';
+import { getPadPtaState, IPadPtaBaseState, getEntities } from './pad-pta.reducer';
 import { IPadPta } from 'app/shared/model/pad-pta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPadPtaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadPtaBaseState {
-  idPad: any;
-  idDescPta: any;
-  idCid: any;
-  idUsuario: any;
-  idCidXPtaNovo: any;
-}
 export interface IPadPtaState extends IPadPtaBaseState, IPaginationBaseState {}
 
 export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
@@ -45,26 +38,9 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadPtaState(this.props.location)
+      ...getPadPtaState(this.props.location)
     };
   }
-
-  getPadPtaState = (location): IPadPtaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPad = url.searchParams.get('idPad') || '';
-    const idDescPta = url.searchParams.get('idDescPta') || '';
-    const idCid = url.searchParams.get('idCid') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const idCidXPtaNovo = url.searchParams.get('idCidXPtaNovo') || '';
-
-    return {
-      idPad,
-      idDescPta,
-      idCid,
-      idUsuario,
-      idCidXPtaNovo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -76,7 +52,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
         idPad: '',
         idDescPta: '',
         idCid: '',
-        idUsuario: '',
         idCidXPtaNovo: ''
       },
       () => this.sortEntities()
@@ -110,7 +85,9 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -131,9 +108,6 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
       'idCid=' +
       this.state.idCid +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'idCidXPtaNovo=' +
       this.state.idCidXPtaNovo +
       '&' +
@@ -144,8 +118,8 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPad, idDescPta, idCid, idUsuario, idCidXPtaNovo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPad, idDescPta, idCid, idUsuario, idCidXPtaNovo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPad, idDescPta, idCid, idCidXPtaNovo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPad, idDescPta, idCid, idCidXPtaNovo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -167,7 +141,11 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padPta.home.createLabel">Create a new Pad Pta</Translate>
@@ -180,50 +158,52 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPadLabel" for="pad-pta-idPad">
-                            <Translate contentKey="generadorApp.padPta.idPad">Id Pad</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPadLabel" for="pad-pta-idPad">
+                              <Translate contentKey="generadorApp.padPta.idPad">Id Pad</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="idPad" id="pad-pta-idPad" value={this.state.idPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idDescPtaLabel" for="pad-pta-idDescPta">
-                            <Translate contentKey="generadorApp.padPta.idDescPta">Id Desc Pta</Translate>
-                          </Label>
+                            <AvInput type="text" name="idPad" id="pad-pta-idPad" value={this.state.idPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="idDescPta" id="pad-pta-idDescPta" value={this.state.idDescPta} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idCidLabel" for="pad-pta-idCid">
-                            <Translate contentKey="generadorApp.padPta.idCid">Id Cid</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idDescPta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idDescPtaLabel" for="pad-pta-idDescPta">
+                              <Translate contentKey="generadorApp.padPta.idDescPta">Id Desc Pta</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="idCid" id="pad-pta-idCid" value={this.state.idCid} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="pad-pta-idUsuario">
-                            <Translate contentKey="generadorApp.padPta.idUsuario">Id Usuario</Translate>
-                          </Label>
+                            <AvInput type="text" name="idDescPta" id="pad-pta-idDescPta" value={this.state.idDescPta} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="idUsuario" id="pad-pta-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idCidXPtaNovoLabel" for="pad-pta-idCidXPtaNovo">
-                            <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
-                          </Label>
-                          <AvInput type="string" name="idCidXPtaNovo" id="pad-pta-idCidXPtaNovo" value={this.state.idCidXPtaNovo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idCid' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idCidLabel" for="pad-pta-idCid">
+                              <Translate contentKey="generadorApp.padPta.idCid">Id Cid</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="idCid" id="pad-pta-idCid" value={this.state.idCid} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idCidXPtaNovo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idCidXPtaNovoLabel" for="pad-pta-idCidXPtaNovo">
+                              <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
+                            </Label>
+                            <AvInput type="string" name="idCidXPtaNovo" id="pad-pta-idCidXPtaNovo" value={this.state.idCidXPtaNovo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -251,26 +231,30 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPad')}>
-                        <Translate contentKey="generadorApp.padPta.idPad">Id Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idDescPta')}>
-                        <Translate contentKey="generadorApp.padPta.idDescPta">Id Desc Pta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idCid')}>
-                        <Translate contentKey="generadorApp.padPta.idCid">Id Cid</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.padPta.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idCidXPtaNovo')}>
-                        <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPad' ? (
+                        <th className="hand" onClick={this.sort('idPad')}>
+                          <Translate contentKey="generadorApp.padPta.idPad">Id Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idDescPta' ? (
+                        <th className="hand" onClick={this.sort('idDescPta')}>
+                          <Translate contentKey="generadorApp.padPta.idDescPta">Id Desc Pta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idCid' ? (
+                        <th className="hand" onClick={this.sort('idCid')}>
+                          <Translate contentKey="generadorApp.padPta.idCid">Id Cid</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idCidXPtaNovo' ? (
+                        <th className="hand" onClick={this.sort('idCidXPtaNovo')}>
+                          <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -285,31 +269,29 @@ export class PadPta extends React.Component<IPadPtaProps, IPadPtaState> {
                           </Button>
                         </td>
 
-                        <td>{padPta.idPad}</td>
+                        {this.state.baseFilters !== 'idPad' ? <td>{padPta.idPad}</td> : null}
 
-                        <td>{padPta.idDescPta}</td>
+                        {this.state.baseFilters !== 'idDescPta' ? <td>{padPta.idDescPta}</td> : null}
 
-                        <td>{padPta.idCid}</td>
+                        {this.state.baseFilters !== 'idCid' ? <td>{padPta.idCid}</td> : null}
 
-                        <td>{padPta.idUsuario}</td>
-
-                        <td>{padPta.idCidXPtaNovo}</td>
+                        {this.state.baseFilters !== 'idCidXPtaNovo' ? <td>{padPta.idCidXPtaNovo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padPta.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padPta.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padPta.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padPta.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padPta.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padPta.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

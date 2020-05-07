@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './cid.reducer';
+import { getEntity, ICidBaseState, getCidState } from './cid.reducer';
 import { ICid } from 'app/shared/model/cid.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICidState {
+  fieldsBase: ICidBaseState;
+}
+
 export interface ICidDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CidDetail extends React.Component<ICidDetailProps> {
+export class CidDetail extends React.Component<ICidDetailProps, ICidState> {
   constructor(props: Readonly<ICidDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCidState(this.props.location)
     };
   }
 

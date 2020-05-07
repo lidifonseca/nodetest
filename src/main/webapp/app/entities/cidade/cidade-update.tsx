@@ -8,25 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IUf } from 'app/shared/model/uf.model';
-import { getEntities as getUfs } from 'app/entities/uf/uf.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './cidade.reducer';
+import { ICidadeUpdateState, getEntity, getCidadeState, ICidadeBaseState, updateEntity, createEntity, reset } from './cidade.reducer';
 import { ICidade } from 'app/shared/model/cidade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ICidadeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ICidadeUpdateState {
-  isNew: boolean;
-  idUfId: string;
-}
-
 export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpdateState> {
   constructor(props: Readonly<ICidadeUpdateProps>) {
     super(props);
+
     this.state = {
-      idUfId: '0',
+      fieldsBase: getCidadeState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +36,21 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getUfs();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['descrCidade'] ? '&descrCidade=' + fieldsBase['descrCidade'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { cidadeEntity } = this.props;
@@ -63,13 +68,14 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
   };
 
   handleClose = () => {
-    this.props.history.push('/cidade');
+    this.props.history.push('/cidade?' + this.getFiltersURL());
   };
 
   render() {
-    const { cidadeEntity, ufs, loading, updating } = this.props;
+    const { cidadeEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +91,7 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
             isNew
               ? {}
               : {
-                  ...cidadeEntity,
-                  idUf: cidadeEntity.idUf ? cidadeEntity.idUf.id : null
+                  ...cidadeEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -103,7 +108,14 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/cidade" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/cidade?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -118,7 +130,7 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -134,54 +146,27 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="descrCidadeLabel" for="cidade-descrCidade">
-                                <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cidade-descrCidade"
-                                type="text"
-                                name="descrCidade"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="cidade-idUf">
-                                <Translate contentKey="generadorApp.cidade.idUf">Id Uf</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="cidade-idUf" type="select" className="form-control" name="idUf">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.cidade.idUf.empty')}
-                                </option>
-                                {ufs
-                                  ? ufs.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'descrCidade' ? (
+                          <Col md="descrCidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descrCidadeLabel" for="cidade-descrCidade">
+                                    <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cidade-descrCidade" type="text" name="descrCidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descrCidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -194,7 +179,6 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  ufs: storeState.uf.entities,
   cidadeEntity: storeState.cidade.entity,
   loading: storeState.cidade.loading,
   updating: storeState.cidade.updating,
@@ -202,7 +186,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getUfs,
   getEntity,
   updateEntity,
   createEntity,

@@ -8,29 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
-import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
-import { IAtendimento } from 'app/shared/model/atendimento.model';
-import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './atendimento-atividades.reducer';
+import {
+  IAtendimentoAtividadesUpdateState,
+  getEntity,
+  getAtendimentoAtividadesState,
+  IAtendimentoAtividadesBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './atendimento-atividades.reducer';
 import { IAtendimentoAtividades } from 'app/shared/model/atendimento-atividades.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAtendimentoAtividadesUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IAtendimentoAtividadesUpdateState {
-  isNew: boolean;
-  idAtividadeId: string;
-  idAtendimentoId: string;
-}
-
 export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAtividadesUpdateProps, IAtendimentoAtividadesUpdateState> {
   constructor(props: Readonly<IAtendimentoAtividadesUpdateProps>) {
     super(props);
+
     this.state = {
-      idAtividadeId: '0',
-      idAtendimentoId: '0',
+      fieldsBase: getAtendimentoAtividadesState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,11 +44,21 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getCategoriaAtividades();
-    this.props.getAtendimentos();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['feito'] ? '&feito=' + fieldsBase['feito'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { atendimentoAtividadesEntity } = this.props;
@@ -68,13 +76,14 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
   };
 
   handleClose = () => {
-    this.props.history.push('/atendimento-atividades');
+    this.props.history.push('/atendimento-atividades?' + this.getFiltersURL());
   };
 
   render() {
-    const { atendimentoAtividadesEntity, categoriaAtividades, atendimentos, loading, updating } = this.props;
+    const { atendimentoAtividadesEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -90,9 +99,7 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
             isNew
               ? {}
               : {
-                  ...atendimentoAtividadesEntity,
-                  idAtividade: atendimentoAtividadesEntity.idAtividade ? atendimentoAtividadesEntity.idAtividade.id : null,
-                  idAtendimento: atendimentoAtividadesEntity.idAtendimento ? atendimentoAtividadesEntity.idAtendimento.id : null
+                  ...atendimentoAtividadesEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -114,7 +121,7 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/atendimento-atividades"
+                  to={'/atendimento-atividades?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -133,7 +140,7 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -149,78 +156,27 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="feitoLabel" for="atendimento-atividades-feito">
-                                <Translate contentKey="generadorApp.atendimentoAtividades.feito">Feito</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="atendimento-atividades-feito" type="string" className="form-control" name="feito" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-atividades-idAtividade">
-                                <Translate contentKey="generadorApp.atendimentoAtividades.idAtividade">Id Atividade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="atendimento-atividades-idAtividade" type="select" className="form-control" name="idAtividade">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoAtividades.idAtividade.empty')}
-                                </option>
-                                {categoriaAtividades
-                                  ? categoriaAtividades.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-atividades-idAtendimento">
-                                <Translate contentKey="generadorApp.atendimentoAtividades.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="atendimento-atividades-idAtendimento"
-                                type="select"
-                                className="form-control"
-                                name="idAtendimento"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoAtividades.idAtendimento.empty')}
-                                </option>
-                                {atendimentos
-                                  ? atendimentos.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'feito' ? (
+                          <Col md="feito">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="feitoLabel" for="atendimento-atividades-feito">
+                                    <Translate contentKey="generadorApp.atendimentoAtividades.feito">Feito</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-atividades-feito" type="string" className="form-control" name="feito" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="feito" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -233,8 +189,6 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  categoriaAtividades: storeState.categoriaAtividade.entities,
-  atendimentos: storeState.atendimento.entities,
   atendimentoAtividadesEntity: storeState.atendimentoAtividades.entity,
   loading: storeState.atendimentoAtividades.loading,
   updating: storeState.atendimentoAtividades.updating,
@@ -242,8 +196,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getCategoriaAtividades,
-  getAtendimentos,
   getEntity,
   updateEntity,
   createEntity,

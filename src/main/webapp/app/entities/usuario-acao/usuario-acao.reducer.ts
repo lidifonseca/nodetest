@@ -33,11 +33,14 @@ const initialState = {
 export type UsuarioAcaoState = Readonly<typeof initialState>;
 
 export interface IUsuarioAcaoBaseState {
-  idUsuario: any;
+  baseFilters: any;
   idAtendimento: any;
   descricao: any;
-  idTela: any;
-  idAcao: any;
+}
+
+export interface IUsuarioAcaoUpdateState {
+  fieldsBase: IUsuarioAcaoBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -83,6 +86,9 @@ export default (state: UsuarioAcaoState = initialState, action): UsuarioAcaoStat
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_USUARIOACAO):
+      action.payload.data.descricao = action.payload.data.descricao
+        ? Buffer.from(action.payload.data.descricao).toString()
+        : action.payload.data.descricao;
       return {
         ...state,
         loading: false,
@@ -104,13 +110,14 @@ export default (state: UsuarioAcaoState = initialState, action): UsuarioAcaoStat
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -129,38 +136,21 @@ const apiUrl = 'api/usuario-acaos';
 
 // Actions
 export type ICrudGetAllActionUsuarioAcao<T> = (
-  idUsuario?: any,
   idAtendimento?: any,
   descricao?: any,
-  idTela?: any,
-  idAcao?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (
-  idUsuario,
-  idAtendimento,
-  descricao,
-  idTela,
-  idAcao,
-  page,
-  size,
-  sort
-) => {
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+export const getEntities: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (idAtendimento, descricao, page, size, sort) => {
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
-  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
-  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_USUARIOACAO_LIST,
-    payload: axios.get<IUsuarioAcao>(
-      `${requestUrl}${idUsuarioRequest}${idAtendimentoRequest}${descricaoRequest}${idTelaRequest}${idAcaoRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IUsuarioAcao>(`${requestUrl}${idAtendimentoRequest}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IUsuarioAcao> = id => {
@@ -171,36 +161,20 @@ export const getEntity: ICrudGetAction<IUsuarioAcao> = id => {
   };
 };
 
-export const getEntitiesExport: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (
-  idUsuario,
-  idAtendimento,
-  descricao,
-  idTela,
-  idAcao,
-  page,
-  size,
-  sort
-) => {
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
+export const getEntitiesExport: ICrudGetAllActionUsuarioAcao<IUsuarioAcao> = (idAtendimento, descricao, page, size, sort) => {
   const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
   const descricaoRequest = descricao ? `descricao.contains=${descricao}&` : '';
-  const idTelaRequest = idTela ? `idTela.equals=${idTela}&` : '';
-  const idAcaoRequest = idAcao ? `idAcao.equals=${idAcao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_USUARIOACAO_LIST,
-    payload: axios.get<IUsuarioAcao>(
-      `${requestUrl}${idUsuarioRequest}${idAtendimentoRequest}${descricaoRequest}${idTelaRequest}${idAcaoRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IUsuarioAcao>(`${requestUrl}${idAtendimentoRequest}${descricaoRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
 export const createEntity: ICrudPutAction<IUsuarioAcao> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idTela: entity.idTela === 'null' ? null : entity.idTela,
-    idAcao: entity.idAcao === 'null' ? null : entity.idAcao
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_USUARIOACAO,
@@ -211,7 +185,7 @@ export const createEntity: ICrudPutAction<IUsuarioAcao> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<IUsuarioAcao> = entity => async dispatch => {
-  entity = { ...entity, idTela: entity.idTela === 'null' ? null : entity.idTela, idAcao: entity.idAcao === 'null' ? null : entity.idAcao };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_USUARIOACAO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -230,12 +204,13 @@ export const deleteEntity: ICrudDeleteAction<IUsuarioAcao> = id => async dispatc
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -245,18 +220,13 @@ export const reset = () => ({
 
 export const getUsuarioAcaoState = (location): IUsuarioAcaoBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-  const idUsuario = url.searchParams.get('idUsuario') || '';
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idAtendimento = url.searchParams.get('idAtendimento') || '';
   const descricao = url.searchParams.get('descricao') || '';
 
-  const idTela = url.searchParams.get('idTela') || '';
-  const idAcao = url.searchParams.get('idAcao') || '';
-
   return {
-    idUsuario,
+    baseFilters,
     idAtendimento,
-    descricao,
-    idTela,
-    idAcao
+    descricao
   };
 };

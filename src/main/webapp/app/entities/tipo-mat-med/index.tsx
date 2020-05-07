@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import TipoMatMed from './tipo-mat-med';
 import TipoMatMedDetail from './tipo-mat-med-detail';
+import TipoMatMedRelatorioCSV from './relatorio/tipo-mat-med.csv';
 import TipoMatMedUpdate from './tipo-mat-med-update';
 import TipoMatMedDeleteDialog from './tipo-mat-med-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={TipoMatMedRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={TipoMatMedUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={TipoMatMedUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={TipoMatMedDetail} />

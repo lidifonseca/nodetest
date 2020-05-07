@@ -8,21 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './acao.reducer';
+import { IAcaoUpdateState, getEntity, getAcaoState, IAcaoBaseState, updateEntity, createEntity, reset } from './acao.reducer';
 import { IAcao } from 'app/shared/model/acao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAcaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IAcaoUpdateState {
-  isNew: boolean;
-}
-
 export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateState> {
   constructor(props: Readonly<IAcaoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getAcaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +38,19 @@ export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateSta
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['acao'] ? '&acao=' + fieldsBase['acao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { acaoEntity } = this.props;
@@ -57,13 +68,14 @@ export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateSta
   };
 
   handleClose = () => {
-    this.props.history.push('/acao');
+    this.props.history.push('/acao?' + this.getFiltersURL());
   };
 
   render() {
     const { acaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +108,14 @@ export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateSta
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/acao" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/acao?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +130,7 @@ export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateSta
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,29 +146,27 @@ export class AcaoUpdate extends React.Component<IAcaoUpdateProps, IAcaoUpdateSta
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="acaoLabel" for="acao-acao">
-                                <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="acao-acao"
-                                type="text"
-                                name="acao"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'acao' ? (
+                          <Col md="acao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="acaoLabel" for="acao-acao">
+                                    <Translate contentKey="generadorApp.acao.acao">Acao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acao-acao" type="text" name="acao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="acao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

@@ -1,82 +1,3 @@
-entity CepbrBairro {
-	idBairro Integer required,
-	bairro String maxlength(100)
-}
-
-entity CepbrCidade {
-	idCidade Integer required,
-	cidade String maxlength(100),
-	codIbge String required maxlength(10),
-	area Float required
-}
-
-entity CepbrEndereco {
-	cep String required maxlength(10),
-	logradouro String maxlength(200),
-	tipoLogradouro String maxlength(80),
-	complemento String maxlength(100),
-	local String maxlength(120)
-}
-
-entity CepbrEstado {
-	uf String required maxlength(2),
-	estado String maxlength(100),
-	codIbge String required maxlength(10)
-}
-
-entity Cid {
-	codigo String maxlength(5),
-	diagnostico String maxlength(264),
-	gr String maxlength(10),
-	temp String maxlength(10),
-	apelido String maxlength(16)
-}
-
-entity Julho {
-	dataInicio String maxlength(10),
-	dataFim String maxlength(10),
-	especialidade Integer,
-	periodicidade Integer,
-	periodo Integer,
-	qtd Integer
-}
-
-entity Junho {
-	idFranquia Integer,
-	idPaciente Integer,
-	nroPad String maxlength(10),
-	dataInicio String maxlength(10),
-	dataFim String maxlength(10),
-	idEspecialidade Integer,
-	idPeriodicidade Integer,
-	idPeriodo Integer,
-	qtdSessoes Integer
-}
-
-entity Maio {
-	idFranquia Integer,
-	idPaciente Integer,
-	nroPad Integer,
-	dataInicio String maxlength(10),
-	dataFim String maxlength(10),
-	idEspecialidade Integer,
-	idPeriodicidade Integer,
-	idPeriodo Integer,
-	qtdSessoes Integer
-}
-
-entity PadCsv {
-	idFranquia Integer,
-	idPaciente Integer,
-	nroPad String maxlength(10),
-	dataInicio String maxlength(10),
-	dataFim String maxlength(10),
-	idEspecialidade Integer,
-	idPeriodicidade Integer,
-	idPeriodo Integer,
-	qtdSessoes Integer
-}
-
 entity Acao {
 	acao String maxlength(100)
 }
@@ -193,8 +114,7 @@ entity AtendimentoCepRecusado {
 
 entity AtendimentoGlosado {
 	idAtendimento Integer required,
-	glosado String maxlength(1),
-	idUsuario Integer
+	glosado String maxlength(1)
 }
 
 entity AtendimentoImagem {
@@ -209,8 +129,7 @@ entity AtendimentoSorteioFeito {
 
 entity AtendimentoStatusFinanceiro {
 	idAtendimento Integer required,
-	idStatusFinanceiro Integer required,
-	idUsuario Integer
+	idStatusFinanceiro Integer required
 }
 
 entity Atividades {
@@ -239,10 +158,6 @@ entity CategoriaAtividade {
 entity CategoriaContrato {
 	contrato Blob,
 	ativo Integer
-}
-
-entity CategoriaUnidade {
-	dataPost Instant required
 }
 
 entity Cid {
@@ -312,9 +227,13 @@ entity Empresa {
 	rg String maxlength(30),
 	nascimento LocalDate,
 	sexo Integer,
+	/** @dbName TELEFONE1@@*/
 	telefone1 String maxlength(20),
+	/** @dbName TELEFONE2@@*/
 	telefone2 String maxlength(20),
+	/** @dbName CELULAR1@@*/
 	celular1 String maxlength(20),
+	/** @dbName CELULAR2@@*/
 	celular2 String maxlength(20),
 	cep String maxlength(10),
 	endereco String maxlength(100),
@@ -375,7 +294,9 @@ entity Franquia {
 	cnpj String maxlength(20),
 	ie String maxlength(30),
 	site String maxlength(100),
+	/** @dbName TELEFONE1@@*/
 	telefone1 String maxlength(20),
+	/** @dbName TELEFONE2@@*/
 	telefone2 String maxlength(20),
 	celular String maxlength(20),
 	cep String maxlength(10),
@@ -516,7 +437,6 @@ entity LogPacAcesso {
 }
 
 entity LogUser {
-	idUsuario String,
 	descricao TextBlob
 }
 
@@ -743,7 +663,6 @@ entity Operadora {
 		cadastroCompleto{Label:top,Size:12}
 		ativo{Label:top,Size:12}
 		expoToken{Label:top,Size:12}
-		senhaChat{Label:top,Size:12}
 	@@ 
 	@viewLayout 
 			cidade{Label:top,Size:6} 
@@ -764,8 +683,10 @@ entity Paciente {
 	nascimento LocalDate,
 	sexo Integer,
 	telefone String maxlength(20),
+	/** @dbName TELEFONE2@@*/
 	telefone2 String maxlength(20),
 	celular String maxlength(20),
+	/** @dbName CELULAR1@@*/
 	celular1 String maxlength(20),
 	cep String maxlength(10),
 	endereco String maxlength(100),
@@ -782,8 +703,10 @@ entity Paciente {
 	nascimentoFamiliar LocalDate,
 	sexoFamiliar Integer,
 	telefoneFamiliar String maxlength(20),
+	/** @dbName TELEFONE2_FAMILIAR@@*/
 	telefone2Familiar String maxlength(20),
 	celularFamiliar String maxlength(20),
+	/** @dbName CELULAR2_FAMILIAR@@*/
 	celular2Familiar String maxlength(20),
 	cepFamiliar String maxlength(10),
 	enderecoFamiliar String maxlength(100),
@@ -809,8 +732,7 @@ entity Paciente {
 	ativo Integer,
 	detalhes TextBlob,
 	liminar String maxlength(50),
-	expoToken String maxlength(255),
-	senhaChat String maxlength(45)
+	expoToken String maxlength(255)
 }
 
 entity PacienteArquivo {
@@ -820,8 +742,7 @@ entity PacienteArquivo {
 
 entity PacienteCaracteristicaAtual {
 	idPaciente Integer required,
-	idPacienteCaracteristica Integer required,
-	idUsuario Integer required
+	idPacienteCaracteristica Integer required required
 }
 
 entity PacienteComplexidadeAtual {
@@ -831,8 +752,7 @@ entity PacienteComplexidadeAtual {
 	media Integer,
 	alta Integer,
 	ventilacaoMecanica Integer,
-	telemonitoramente Integer,
-	idUsuario Integer
+	telemonitoramente Integer
 }
 
 entity PacienteDadosCartao {
@@ -967,8 +887,7 @@ entity PacienteDispositivoAtual {
 	entubacaoOrotraqueal Integer required,
 	ileostomia Integer required,
 	jejunostomia Integer required,
-	colostomia Integer required,
-	idUsuario Integer required
+	colostomia Integer required required
 }
 
 entity PacienteDispositivoComplexidade {
@@ -993,8 +912,7 @@ entity PacienteHospital {
 
 entity PacienteMotivoInternacao {
 	idPaciente Integer required,
-	idMotivoInternacao Integer required,
-	idUsuario Integer required
+	idMotivoInternacao Integer required required
 }
 
 entity PacienteOperadora {
@@ -1018,7 +936,6 @@ entity PacienteProntuario {
 	oQue TextBlob,
 	resultado TextBlob,
 	ativo Integer required,
-	idUsuario String,
 	idEspecialidade Integer,
 	dataConsulta Instant,
 	idExame Integer,
@@ -1046,8 +963,7 @@ entity PacienteServico {
 entity PacienteStatusAtual {
 	dataStatus LocalDate,
 	observacao TextBlob,
-	ativo Integer,
-	idUsuario String required
+	ativo Integer
 }
 
 entity Pad {
@@ -1058,7 +974,6 @@ entity Pad {
 	dataFim LocalDate,
 	dataConferido LocalDate,
 	ativo Integer,
-	idUsuario Integer,
 	statusPad Integer,
 	novoModelo Boolean,
 	imagePath String maxlength(250),
@@ -1140,7 +1055,6 @@ entity PadItemMeta {
 	maximoSistolica String maxlength(20),
 	minimoDiastolica String maxlength(20),
 	maximoDiastolica String maxlength(20),
-	idUsuario Integer,
 	score Double,
 	alteracaoEsperada Boolean
 }
@@ -1173,8 +1087,7 @@ entity PadItemTemp {
 entity PadMatMed {
 	idPad Integer required,
 	idMatMed Integer required,
-	qtd Integer required,
-	idUsuario Integer required,
+	qtd Integer required required,
 	ativo Integer required
 }
 
@@ -1182,15 +1095,13 @@ entity PadPta {
 	idPad String required,
 	idDescPta String,
 	idCid String required,
-	idUsuario String required,
 	idCidXPtaNovo Integer required
 }
 
 entity PadPtaTemp {
 	sessionId String maxlength(100),
 	idPta Integer required,
-	idCid Integer required,
-	idUsuario Integer required,
+	idCid Integer required required,
 	cidXPtaNovoId Integer
 }
 
@@ -1225,9 +1136,13 @@ entity Profissional {
 	registro String maxlength(50),
 	nascimento LocalDate,
 	sexo Integer,
+	/** @dbName TELEFONE1@@*/
 	telefone1 String maxlength(20),
+	/** @dbName TELEFONE2@@*/
 	telefone2 String maxlength(20),
+	/** @dbName CELULAR1@@*/
 	celular1 String maxlength(20),
+	/** @dbName CELULAR2@@*/
 	celular2 String maxlength(20),
 	cep String maxlength(10),
 	endereco String maxlength(100),
@@ -1248,8 +1163,7 @@ entity Profissional {
 	senhaOriginal String maxlength(100),
 	dataSenha Instant,
 	expoToken String maxlength(255),
-	preferenciaAtendimento Integer,
-	senhaChat String maxlength(45)
+	preferenciaAtendimento Integer
 }
 
 entity ProfissionalAreaAtuacao {
@@ -1286,8 +1200,7 @@ entity ProfissionalComplexidadeAtual {
 	media Integer,
 	alta Integer,
 	ventilacaoMecanica Integer,
-	telemonitoramente Integer required,
-	idUsuario Integer
+	telemonitoramente Integer required
 }
 
 entity ProfissionalDispositivoAtual {
@@ -1310,8 +1223,7 @@ entity ProfissionalDispositivoAtual {
 	cistostomia Integer,
 	cateterNasalDeOxigenio Integer,
 	mascaraDeVentilacao Integer,
-	entubacaoOrotraqueal Integer,
-	idUsuario Integer required
+	entubacaoOrotraqueal Integer required
 }
 
 entity ProfissionalDispositivoComplexidade {
@@ -1322,8 +1234,7 @@ entity ProfissionalDispositivoComplexidade {
 
 entity ProfissionalDispositivoComplexidadeAtual {
 	idProfissional Integer required,
-	idProfissionalDispositivoComplexidade Integer required,
-	idUsuario Integer required
+	idProfissionalDispositivoComplexidade Integer required required
 }
 
 entity ProfissionalEspecialidade {
@@ -1362,9 +1273,13 @@ entity ProfissionalNew {
 	registro String maxlength(50),
 	nascimento LocalDate,
 	sexo Integer,
+	/** @dbName TELEFONE1@@*/
 	telefone1 String maxlength(20),
+	/** @dbName TELEFONE2@@*/
 	telefone2 String maxlength(20),
+	/** @dbName CELULAR1@@*/
 	celular1 String maxlength(20),
+	/** @dbName CELULAR2@@*/
 	celular2 String maxlength(20),
 	cep String maxlength(10),
 	endereco String maxlength(100),
@@ -1394,23 +1309,20 @@ entity ProfissionalPush {
 entity ProfissionalStatusAtual {
 	idProfissional String,
 	obs TextBlob,
-	ativo Integer,
-	idUsuario String required
+	ativo Integer
 }
 
 entity ProfissionalStatusAtualNew {
 	idProfissional String,
 	idStatusAtualProf Integer,
 	obs TextBlob,
-	ativo Integer,
-	idUsuario String required
+	ativo Integer
 }
 
 entity ProntuarioMotivoInternacaoPs {
 	idProntuario Integer required,
 	idPaciente Integer required,
-	idMotivo Integer required,
-	idUsuario Integer required
+	idMotivo Integer required required
 }
 
 entity ProntuarioMotivoManifestacao {
@@ -1421,7 +1333,6 @@ entity ProntuarioMotivoManifestacao {
 	idManifestacao Integer,
 	idManifestacaoFilho Integer,
 	sugestao TextBlob,
-	idUsuario Integer,
 	informacaoAdicional TextBlob
 }
 
@@ -1593,7 +1504,9 @@ entity UnidadeEasy {
 	nomeFantasia String maxlength(150),
 	cnpj String maxlength(20),
 	ie String maxlength(20),
+	/** @dbName TELEFONE1@@*/
 	telefone1 String maxlength(20),
+	/** @dbName TELEFONE2@@*/
 	telefone2 String maxlength(20),
 	endereco String maxlength(100),
 	numero String maxlength(30),
@@ -1745,18 +1658,15 @@ entity Usuario {
 	envioCidSemPta Integer,
 	envioAnaliseResultadoEsperado Integer,
 	envioDescumprimento Integer,
-	envioMelhoraTempo Boolean,
-	senhaChat String maxlength(45)
+	envioMelhoraTempo Boolean
 }
 
 entity UsuarioAcao {
-	idUsuario String,
 	idAtendimento Integer,
 	descricao TextBlob
 }
 
 entity UsuarioPainelGerencial {
-	idUsuario Integer required,
 	verCronicos Integer,
 	verPacientesAtivosCr Integer,
 	filtroPacientesAtivosCr Integer,
@@ -1799,8 +1709,7 @@ entity UsuarioPainelGerencial {
 }
 
 entity UsuarioPanico {
-	idPaciente Integer required,
-	idUsuario Integer required,
+	idPaciente Integer required required,
 	idProfissional Integer required,
 	observacao String maxlength(255),
 	resolvido Integer,
@@ -1808,7 +1717,6 @@ entity UsuarioPanico {
 }
 
 entity UsuarioStatusAtual {
-	idUsuario String,
 	statusAtual Integer,
 	obs String maxlength(255),
 	ativo Integer
@@ -1873,109 +1781,110 @@ relationship ManyToOne {
 	 Operadora{tipoOperadora(tipo)} to TipoOperadora
 	 
 	 EspecialidadeUnidade{unidade(razaoSocial)} to UnidadeEasy
-	 CategoriaUnidade{unidade(razaoSocial)} to UnidadeEasy
 	 PacientePedido{unidade(razaoSocial)} to UnidadeEasy
 	 UnidadeEasyAreaAtuacao{unidade(razaoSocial)} to UnidadeEasy
-
-
-
-
-
-
 }
 
-relationship OneToMany {
-	 CepbrCidade{cepbrBairro} to CepbrBairro{idCidade}
-	 CepbrEstado{cepbrCidade} to CepbrCidade{uf}
-	 CepbrCidade{cepbrEndereco} to CepbrEndereco{idCidade}
-	 CepbrBairro{cepbrEndereco} to CepbrEndereco{idBairro}
-	 Respostas{acoesRespostas} to AcoesRespostas{respostasId}
-	 PerguntasQuestionario{acoesRespostas} to AcoesRespostas{perguntasQuestionarioId}
-	 CidXPtaNovoPadItemIndi{alertasIndicadores} to AlertasIndicadores{padItemIndicadoresId}
-	 Resultados{alertasResultadosEsperados} to AlertasResultadosEsperados{resultadosId}
-	 Paciente{atendimento} to Atendimento{idPaciente}
-	 Operadora{atendimento} to Atendimento{idOperadora}
-	 Especialidade{atendimento} to Atendimento{idEspecialidade}
-	 PadItem{atendimento} to Atendimento{idPadItem}
-	 StatusAtendimento{atendimento} to Atendimento{idStatusAtendimento}
-	 Periodo{atendimento} to Atendimento{idPeriodo}
-	 Cidade{atendimento} to Atendimento{idCidade}
-	 Profissional{atendimentoAceite} to AtendimentoAceite{idProfissional}
-	 Atendimento{atendimentoAceite} to AtendimentoAceite{idAtendimento}
-	 Atendimento{atendimentoAssinaturas} to AtendimentoAssinaturas{idAtendimento}
-	 Profissional{atendimentoAssinaturas} to AtendimentoAssinaturas{idProfissional}
-	 Paciente{atendimentoAssinaturas} to AtendimentoAssinaturas{idPaciente}
-	 CategoriaAtividade{atendimentoAtividades} to AtendimentoAtividades{idAtividade}
-	 Atendimento{atendimentoAtividades} to AtendimentoAtividades{idAtendimento}
-	 PadItem{atendimentoCepRecusado} to AtendimentoCepRecusado{idPadItem}
-	 PadItem{atendimentoSorteioFeito} to AtendimentoSorteioFeito{idPadItem}
-	 Categoria{categoriaAtividade} to CategoriaAtividade{idCategoria}
-	 Categoria{categoriaContrato} to CategoriaContrato{idCategoria}
-	 Categoria{categoriaUnidade} to CategoriaUnidade{idCategoria}
-	 Cid{cidXPtaNovo} to CidXPtaNovo{cidId}
-	 CidXPtaNovo{cidXPtaNovo} to CidXPtaNovo{cidXPtaNovoId}
-	 PadItemIndicadores{cidXPtaNovoPadItemIndi} to CidXPtaNovoPadItemIndi{padItemIndicadoresId}
-	 Categoria{cidXPtaNovoPadItemIndi} to CidXPtaNovoPadItemIndi{categoriasId}
-	 CidXPtaNovo{cidXPtaNovoPadItemIndi} to CidXPtaNovoPadItemIndi{cidXPtaNovoId}
-	 Uf{cidade} to Cidade{idUf}
-	 Usuario{diario} to Diario{idUsuario}
-	 Paciente{diario} to Diario{idPaciente}
-	 Cidade{empresa} to Empresa{idCidade}
-	 Categoria{especialidade} to Especialidade{idCategoria}
-	 TipoEspecialidade{especialidade} to Especialidade{idTipoEspecialidade}
-	 TipoUnidade{especialidade} to Especialidade{idTipoUnidade}
-	 Operadora{especialidadeOperadora} to EspecialidadeOperadora{idOperadora}
-	 Especialidade{especialidadeOperadora} to EspecialidadeOperadora{idEspecialidade}
-	 Especialidade{especialidadeUnidade} to EspecialidadeUnidade{idEspecialidade}
-	 Especialidade{especialidadeValor} to EspecialidadeValor{idEspecialidade}
-	 Franquia{franquiaAreaAtuacao} to FranquiaAreaAtuacao{idFranquia}
-	 Franquia{franquiaStatusAtual} to FranquiaStatusAtual{idFranquia}
-	 Franquia{franquiaUsuario} to FranquiaUsuario{idFranquia}
-	 Indicadores{indicadoresValores} to IndicadoresValores{indicadoresId}
-	 Acao{logUser} to LogUser{idAcao}
-	 Tela{logUser} to LogUser{idTela}
-	 Acao{logUserFranquia} to LogUserFranquia{idAcao}
-	 Tela{logUserFranquia} to LogUserFranquia{idTela}
-	 FranquiaUsuario{logUserFranquia} to LogUserFranquia{idUsuario}
-	 Paciente{pacienteDadosCartao} to PacienteDadosCartao{idPaciente}
-	 Paciente{pacienteDiagnostico} to PacienteDiagnostico{idPaciente}
-	 Cid{pacienteDiagnostico} to PacienteDiagnostico{idCid}
-	 Paciente{pacienteDiario} to PacienteDiario{idPaciente}
-	 Usuario{pacienteDiario} to PacienteDiario{idUsuario}
-	 Paciente{pacienteEnqueteApp} to PacienteEnqueteApp{idPaciente}
-	 Paciente{pacienteOperadora} to PacienteOperadora{idPaciente}
-	 Operadora{pacienteOperadora} to PacienteOperadora{idOperadora}
-	 Paciente{pacientePedido} to PacientePedido{idPaciente}
-	 PacienteDadosCartao{pacientePedido} to PacientePedido{idCartao}
-	 Especialidade{pacientePedido} to PacientePedido{idEspecialidade}
-	 Paciente{pacientePush} to PacientePush{idPaciente}
-	 Paciente{pad} to Pad{idPaciente}
-	 Pad{padCid} to PadCid{idPad}
-	 Cid{padCid} to PadCid{idCid}
-	 Pad{padItem} to PadItem{idPad}
-	 Especialidade{padItem} to PadItem{idEspecialidade}
-	 Periodicidade{padItem} to PadItem{idPeriodicidade}
-	 Periodo{padItem} to PadItem{idPeriodo}
-	 CategoriaAtividade{padItemAtividade} to PadItemAtividade{idAtividade}
-	 PadItem{padItemAtividade} to PadItemAtividade{idPadItem}
-	 PadItem{padItemCepRecusado} to PadItemCepRecusado{idPadItem}
-	 PadItem{padItemResultado} to PadItemResultado{idPadItem}
-	 PadItem{padItemSorteioFeito} to PadItemSorteioFeito{idPadItem}
-	 SegmentosPerguntas{perguntasQuestionario} to PerguntasQuestionario{segmentosPerguntasId}
-	 StatusAtualProf{profissionalStatusAtual} to ProfissionalStatusAtual{idStatusAtualProf}
-//	 Resultados{protocolos} to Protocolos{resultadosId}
-//	 Resultados{protocolos required} to Protocolos{cidXPtaNovoId}
-//	 Resultados{protocolos} to Protocolos{categoriasId}
-	 PerguntasQuestionario{respostas} to Respostas{perguntasQuestionarioId}
-	 Questionarios{respostasQuestionarios} to RespostasQuestionarios{questionariosId}
-//	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{respostasId}
-//	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{perguntasQuestionarioId}
-//	 CidXPtaNovoCategorias{resultados required} to Resultados{cidXPtaNovoId}
-//	 CidXPtaNovoCategorias{resultados required} to Resultados{categoriasId}
-	 TipoUsuario{usuario} to Usuario{idTipoUsuario}
-	 Tela{usuarioAcao} to UsuarioAcao{idTela}
-	 Acao{usuarioAcao} to UsuarioAcao{idAcao}
+
+relationship ManyToMany {
+	 Categoria{unidade(razaoSocial)} to UnidadeEasy{categoria(categoria)}
+	// CidXPtaNovoCategorias{cidXPtaNovoId required} to CidXPtaNovo{cidXPtaNovoCategorias}
+	// CidXPtaNovoCategorias{categoriasId required} to Categoria{cidXPtaNovoCategorias}
+	// QuestionariosSegmentosPerguntas{questionariosId required} to Questionarios{questionariosSegmentosPerguntas}
+	// QuestionariosSegmentosPerguntas{segmentosPerguntasId required} to SegmentosPerguntas{questionariosSegmentosPerguntas}
 }
+
+// relationship OneToMany {
+// 	 CepbrCidade{cepbrBairro} to CepbrBairro{cepbrBairro}
+// 	 CepbrEstado{cepbrCidade} to CepbrCidade{CepbrCidade}
+// 	 CepbrCidade{cepbrEndereco} to CepbrEndereco{cidade}
+// 	 CepbrBairro{cepbrEndereco} to CepbrEndereco{bairro}
+// 	 Respostas{acoesRespostas} to AcoesRespostas{respostasId}
+// 	 PerguntasQuestionario{acoesRespostas} to AcoesRespostas{perguntasQuestionarioId}
+// 	 CidXPtaNovoPadItemIndi{alertasIndicadores} to AlertasIndicadores{padItemIndicadoresId}
+// 	 Resultados{alertasResultadosEsperados} to AlertasResultadosEsperados{resultadosId}
+// 	 Paciente{atendimento} to Atendimento{paciente}
+// 	 Operadora{atendimento} to Atendimento{operadora}
+// 	 Especialidade{atendimento} to Atendimento{especialidade}
+// 	 PadItem{atendimento} to Atendimento{padItem}
+// 	 StatusAtendimento{atendimento} to Atendimento{statusAtendimento}
+// 	 Periodo{atendimento} to Atendimento{periodo}
+// 	 Cidade{atendimento} to Atendimento{cidade}
+// 	 Profissional{atendimentoAceite} to AtendimentoAceite{profissional}
+// 	 Atendimento{atendimentoAceite} to AtendimentoAceite{atendimento}
+// 	 Atendimento{atendimentoAssinaturas} to AtendimentoAssinaturas{atendimento}
+// 	 Profissional{atendimentoAssinaturas} to AtendimentoAssinaturas{profissional}
+// 	 Paciente{atendimentoAssinaturas} to AtendimentoAssinaturas{paciente}
+// 	 CategoriaAtividade{atendimentoAtividades} to AtendimentoAtividades{atividade}
+// 	 Atendimento{atendimentoAtividades} to AtendimentoAtividades{atendimento}
+// 	 PadItem{atendimentoCepRecusado} to AtendimentoCepRecusado{padItem}
+// 	 PadItem{atendimentoSorteioFeito} to AtendimentoSorteioFeito{padItem}
+// 	 Categoria{categoriaAtividade} to CategoriaAtividade{categoria}
+// 	 Categoria{categoriaContrato} to CategoriaContrato{categoria}
+// 	 Cid{cidXPtaNovo} to CidXPtaNovo{cidId}
+// 	 CidXPtaNovo{cidXPtaNovo} to CidXPtaNovo{cidXPtaNovoId}
+// 	 PadItemIndicadores{cidXPtaNovoPadItemIndi} to CidXPtaNovoPadItemIndi{padItemIndicadoresId}
+// 	 Categoria{cidXPtaNovoPadItemIndi} to CidXPtaNovoPadItemIndi{categoriasId}
+// 	 CidXPtaNovo{cidXPtaNovoPadItemIndi} to CidXPtaNovoPadItemIndi{cidXPtaNovoId}
+// 	 Uf{cidade} to Cidade{uf}
+// 	 Usuario{diario} to Diario{usuario}
+// 	 Paciente{diario} to Diario{paciente}
+// 	 Cidade{empresa} to Empresa{cidade}
+// 	 Categoria{especialidade} to Especialidade{categoria}
+// 	 TipoEspecialidade{especialidade} to Especialidade{tipoEspecialidade}
+// 	 TipoUnidade{especialidade} to Especialidade{tipoUnidade}
+// 	 Operadora{especialidadeOperadora} to EspecialidadeOperadora{operadora}
+// 	 Especialidade{especialidadeOperadora} to EspecialidadeOperadora{especialidade}
+// 	 Especialidade{especialidadeUnidade} to EspecialidadeUnidade{especialidade}
+// 	 Especialidade{especialidadeValor} to EspecialidadeValor{especialidade}
+// 	 Franquia{franquiaAreaAtuacao} to FranquiaAreaAtuacao{franquia}
+// 	 Franquia{franquiaStatusAtual} to FranquiaStatusAtual{franquia}
+// 	 Franquia{franquiaUsuario} to FranquiaUsuario{franquia}
+// 	 Indicadores{indicadoresValores} to IndicadoresValores{indicadoresId}
+// 	 Acao{logUser} to LogUser{acao}
+// 	 Tela{logUser} to LogUser{tela}
+// 	 Acao{logUserFranquia} to LogUserFranquia{acao}
+// 	 Tela{logUserFranquia} to LogUserFranquia{tela}
+// 	 FranquiaUsuario{logUserFranquia} to LogUserFranquia{usuario}
+// 	 Paciente{pacienteDadosCartao} to PacienteDadosCartao{paciente}
+// 	 Paciente{pacienteDiagnostico} to PacienteDiagnostico{paciente}
+// 	 Cid{pacienteDiagnostico} to PacienteDiagnostico{cid}
+// 	 Paciente{pacienteDiario} to PacienteDiario{paciente}
+// 	 Usuario{pacienteDiario} to PacienteDiario{usuario}
+// 	 Paciente{pacienteEnqueteApp} to PacienteEnqueteApp{paciente}
+// 	 Paciente{pacienteOperadora} to PacienteOperadora{paciente}
+// 	 Operadora{pacienteOperadora} to PacienteOperadora{operadora}
+// 	 Paciente{pacientePedido} to PacientePedido{paciente}
+// 	 PacienteDadosCartao{pacientePedido} to PacientePedido{cartao}
+// 	 Especialidade{pacientePedido} to PacientePedido{especialidade}
+// 	 Paciente{pacientePush} to PacientePush{paciente}
+// 	 Paciente{pad} to Pad{paciente}
+// 	 Pad{padCid} to PadCid{pad}
+// 	 Cid{padCid} to PadCid{cid}
+// 	 Pad{padItem} to PadItem{pad}
+// 	 Especialidade{padItem} to PadItem{especialidade}
+// 	 Periodicidade{padItem} to PadItem{periodicidade}
+// 	 Periodo{padItem} to PadItem{periodo}
+// 	 CategoriaAtividade{padItemAtividade} to PadItemAtividade{atividade}
+// 	 PadItem{padItemAtividade} to PadItemAtividade{padItem}
+// 	 PadItem{padItemCepRecusado} to PadItemCepRecusado{padItem}
+// 	 PadItem{padItemResultado} to PadItemResultado{padItem}
+// 	 PadItem{padItemSorteioFeito} to PadItemSorteioFeito{padItem}
+// 	 SegmentosPerguntas{perguntasQuestionario} to PerguntasQuestionario{segmentosPerguntasId}
+// 	 StatusAtualProf{profissionalStatusAtual} to ProfissionalStatusAtual{statusAtualProf}
+// //	 Resultados{protocolos} to Protocolos{resultadosId}
+// //	 Resultados{protocolos required} to Protocolos{cidXPtaNovoId}
+// //	 Resultados{protocolos} to Protocolos{categoriasId}
+// 	 PerguntasQuestionario{respostas} to Respostas{perguntasQuestionarioId}
+// 	 Questionarios{respostasQuestionarios} to RespostasQuestionarios{questionariosId}
+// //	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{respostasId}
+// //	 Respostas{respostasQuestionarios required} to RespostasQuestionarios{perguntasQuestionarioId}
+// //	 CidXPtaNovoCategorias{resultados required} to Resultados{cidXPtaNovoId}
+// //	 CidXPtaNovoCategorias{resultados required} to Resultados{categoriasId}
+// 	 TipoUsuario{usuario} to Usuario{tipoUsuario}
+// 	 Tela{usuarioAcao} to UsuarioAcao{tela}
+// 	 Acao{usuarioAcao} to UsuarioAcao{acao}
+// }
 
 // relationship ManyToMany {
 	// CidXPtaNovoCategorias{cidXPtaNovoId required} to CidXPtaNovo{cidXPtaNovoCategorias}

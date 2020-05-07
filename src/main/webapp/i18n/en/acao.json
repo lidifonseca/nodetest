@@ -3,23 +3,20 @@
     "acao": {
       "home": {
         "title": "Acaos",
-        "createLabel": "Criar novo Acao",
-        "createOrEditLabel": "Criar ou editar Acao",
-        "notFound": "Nenhum Acao encontrado"
+        "createLabel": "Create a new Acao",
+        "createOrEditLabel": "Create or edit a Acao",
+        "notFound": "No Acaos found"
       },
-      "created": "Um novo Acao foi criado com o identificador {{ param }}",
-      "updated": "Um Acao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Acao foi excluído com o identificador {{ param }}",
+      "created": "A new Acao is created with identifier {{ param }}",
+      "updated": "A Acao is updated with identifier {{ param }}",
+      "deleted": "A Acao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Acao {{ id }}?"
+        "question": "Are you sure you want to delete Acao {{ id }}?"
       },
       "detail": {
         "title": "Acao"
       },
-      "acao": "Acao",
-      "logUser": "Log User",
-      "logUserFranquia": "Log User Franquia",
-      "usuarioAcao": "Usuario Acao"
+      "acao": "Acao"
     }
   }
 }

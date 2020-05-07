@@ -3,15 +3,15 @@
     "protocolos": {
       "home": {
         "title": "Protocolos",
-        "createLabel": "Criar novo Protocolos",
-        "createOrEditLabel": "Criar ou editar Protocolos",
-        "notFound": "Nenhum Protocolos encontrado"
+        "createLabel": "Create a new Protocolos",
+        "createOrEditLabel": "Create or edit a Protocolos",
+        "notFound": "No Protocolos found"
       },
-      "created": "Um novo Protocolos foi criado com o identificador {{ param }}",
-      "updated": "Um Protocolos foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Protocolos foi excluído com o identificador {{ param }}",
+      "created": "A new Protocolos is created with identifier {{ param }}",
+      "updated": "A Protocolos is updated with identifier {{ param }}",
+      "deleted": "A Protocolos is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Protocolos {{ id }}?"
+        "question": "Are you sure you want to delete Protocolos {{ id }}?"
       },
       "detail": {
         "title": "Protocolos"

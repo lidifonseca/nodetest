@@ -18,8 +18,7 @@
       },
       "idFranquia": "Id Franquia",
       "valor": "Valor",
-      "ativo": "Ativo",
-      "idEspecialidade": "Id Especialidade"
+      "ativo": "Ativo"
     }
   }
 }

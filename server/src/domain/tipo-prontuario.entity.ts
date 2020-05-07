@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A TipoProntuario.
  */
-@Entity('tipo_prontuario')
+@Entity('tb_tipo_prontuario')
 export default class TipoProntuario extends BaseEntity {
-  @Column({ name: 'prontuario', length: 45, nullable: false })
+  @Column({ name: 'PRONTUARIO', length: 45, nullable: false })
   prontuario: string;
 
-  @Column({ type: 'integer', name: 'ativo', nullable: false })
+  @Column({ type: 'integer', name: 'ATIVO', nullable: false })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

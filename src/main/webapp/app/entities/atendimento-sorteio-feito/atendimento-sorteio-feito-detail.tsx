@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento-sorteio-feito.reducer';
+import { getEntity, IAtendimentoSorteioFeitoBaseState, getAtendimentoSorteioFeitoState } from './atendimento-sorteio-feito.reducer';
 import { IAtendimentoSorteioFeito } from 'app/shared/model/atendimento-sorteio-feito.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoSorteioFeitoState {
+  fieldsBase: IAtendimentoSorteioFeitoBaseState;
+}
+
 export interface IAtendimentoSorteioFeitoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoSorteioFeitoDetail extends React.Component<IAtendimentoSorteioFeitoDetailProps> {
+export class AtendimentoSorteioFeitoDetail extends React.Component<IAtendimentoSorteioFeitoDetailProps, IAtendimentoSorteioFeitoState> {
   constructor(props: Readonly<IAtendimentoSorteioFeitoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoSorteioFeitoState(this.props.location)
     };
   }
 
@@ -62,19 +67,6 @@ export class AtendimentoSorteioFeitoDetail extends React.Component<IAtendimentoS
                       </Col>
                       <Col md="9">
                         <dd>{atendimentoSorteioFeitoEntity.sorteioFeito}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimentoSorteioFeito.idPadItem">Id Pad Item</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoSorteioFeitoEntity.idPadItem ? atendimentoSorteioFeitoEntity.idPadItem.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

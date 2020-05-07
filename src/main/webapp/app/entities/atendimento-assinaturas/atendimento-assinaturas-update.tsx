@@ -8,33 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IAtendimento } from 'app/shared/model/atendimento.model';
-import { getEntities as getAtendimentos } from 'app/entities/atendimento/atendimento.reducer';
-import { IProfissional } from 'app/shared/model/profissional.model';
-import { getEntities as getProfissionals } from 'app/entities/profissional/profissional.reducer';
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './atendimento-assinaturas.reducer';
+import {
+  IAtendimentoAssinaturasUpdateState,
+  getEntity,
+  getAtendimentoAssinaturasState,
+  IAtendimentoAssinaturasBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './atendimento-assinaturas.reducer';
 import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAtendimentoAssinaturasUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IAtendimentoAssinaturasUpdateState {
-  isNew: boolean;
-  idAtendimentoId: string;
-  idProfissionalId: string;
-  idPacienteId: string;
-}
-
 export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAssinaturasUpdateProps, IAtendimentoAssinaturasUpdateState> {
   constructor(props: Readonly<IAtendimentoAssinaturasUpdateProps>) {
     super(props);
+
     this.state = {
-      idAtendimentoId: '0',
-      idProfissionalId: '0',
-      idPacienteId: '0',
+      fieldsBase: getAtendimentoAssinaturasState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -50,12 +44,21 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getAtendimentos();
-    this.props.getProfissionals();
-    this.props.getPacientes();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['arquivoAssinatura'] ? '&arquivoAssinatura=' + fieldsBase['arquivoAssinatura'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { atendimentoAssinaturasEntity } = this.props;
@@ -73,13 +76,14 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
   };
 
   handleClose = () => {
-    this.props.history.push('/atendimento-assinaturas');
+    this.props.history.push('/atendimento-assinaturas?' + this.getFiltersURL());
   };
 
   render() {
-    const { atendimentoAssinaturasEntity, atendimentos, profissionals, pacientes, loading, updating } = this.props;
+    const { atendimentoAssinaturasEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -95,10 +99,7 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
             isNew
               ? {}
               : {
-                  ...atendimentoAssinaturasEntity,
-                  idAtendimento: atendimentoAssinaturasEntity.idAtendimento ? atendimentoAssinaturasEntity.idAtendimento.id : null,
-                  idProfissional: atendimentoAssinaturasEntity.idProfissional ? atendimentoAssinaturasEntity.idProfissional.id : null,
-                  idPaciente: atendimentoAssinaturasEntity.idPaciente ? atendimentoAssinaturasEntity.idPaciente.id : null
+                  ...atendimentoAssinaturasEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -120,7 +121,7 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/atendimento-assinaturas"
+                  to={'/atendimento-assinaturas?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -139,7 +140,7 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -155,116 +156,29 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="arquivoAssinaturaLabel" for="atendimento-assinaturas-arquivoAssinatura">
-                                <Translate contentKey="generadorApp.atendimentoAssinaturas.arquivoAssinatura">Arquivo Assinatura</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="atendimento-assinaturas-arquivoAssinatura"
-                                type="text"
-                                name="arquivoAssinatura"
-                                validate={{
-                                  maxLength: { value: 150, errorMessage: translate('entity.validation.maxlength', { max: 150 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-assinaturas-idAtendimento">
-                                <Translate contentKey="generadorApp.atendimentoAssinaturas.idAtendimento">Id Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="atendimento-assinaturas-idAtendimento"
-                                type="select"
-                                className="form-control"
-                                name="idAtendimento"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoAssinaturas.idAtendimento.empty')}
-                                </option>
-                                {atendimentos
-                                  ? atendimentos.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-assinaturas-idProfissional">
-                                <Translate contentKey="generadorApp.atendimentoAssinaturas.idProfissional">Id Profissional</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="atendimento-assinaturas-idProfissional"
-                                type="select"
-                                className="form-control"
-                                name="idProfissional"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoAssinaturas.idProfissional.empty')}
-                                </option>
-                                {profissionals
-                                  ? profissionals.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="atendimento-assinaturas-idPaciente">
-                                <Translate contentKey="generadorApp.atendimentoAssinaturas.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="atendimento-assinaturas-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.atendimentoAssinaturas.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'arquivoAssinatura' ? (
+                          <Col md="arquivoAssinatura">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="arquivoAssinaturaLabel" for="atendimento-assinaturas-arquivoAssinatura">
+                                    <Translate contentKey="generadorApp.atendimentoAssinaturas.arquivoAssinatura">
+                                      Arquivo Assinatura
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-assinaturas-arquivoAssinatura" type="text" name="arquivoAssinatura" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="arquivoAssinatura" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -277,9 +191,6 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  atendimentos: storeState.atendimento.entities,
-  profissionals: storeState.profissional.entities,
-  pacientes: storeState.paciente.entities,
   atendimentoAssinaturasEntity: storeState.atendimentoAssinaturas.entity,
   loading: storeState.atendimentoAssinaturas.loading,
   updating: storeState.atendimentoAssinaturas.updating,
@@ -287,9 +198,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getAtendimentos,
-  getProfissionals,
-  getPacientes,
   getEntity,
   updateEntity,
   createEntity,

@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './profissional-dispositivo-complexidade.reducer';
+import {
+  IProfissionalDispositivoComplexidadeUpdateState,
+  getEntity,
+  getProfissionalDispositivoComplexidadeState,
+  IProfissionalDispositivoComplexidadeBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './profissional-dispositivo-complexidade.reducer';
 import { IProfissionalDispositivoComplexidade } from 'app/shared/model/profissional-dispositivo-complexidade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IProfissionalDispositivoComplexidadeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IProfissionalDispositivoComplexidadeUpdateState {
-  isNew: boolean;
-}
 
 export class ProfissionalDispositivoComplexidadeUpdate extends React.Component<
   IProfissionalDispositivoComplexidadeUpdateProps,
@@ -25,7 +29,9 @@ export class ProfissionalDispositivoComplexidadeUpdate extends React.Component<
 > {
   constructor(props: Readonly<IProfissionalDispositivoComplexidadeUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getProfissionalDispositivoComplexidadeState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,21 @@ export class ProfissionalDispositivoComplexidadeUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['caracteristica'] ? '&caracteristica=' + fieldsBase['caracteristica'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['tipo'] ? '&tipo=' + fieldsBase['tipo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { profissionalDispositivoComplexidadeEntity } = this.props;
@@ -60,13 +81,14 @@ export class ProfissionalDispositivoComplexidadeUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/profissional-dispositivo-complexidade');
+    this.props.history.push('/profissional-dispositivo-complexidade?' + this.getFiltersURL());
   };
 
   render() {
     const { profissionalDispositivoComplexidadeEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +126,7 @@ export class ProfissionalDispositivoComplexidadeUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/profissional-dispositivo-complexidade"
+                  to={'/profissional-dispositivo-complexidade?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +145,7 @@ export class ProfissionalDispositivoComplexidadeUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,79 +168,76 @@ export class ProfissionalDispositivoComplexidadeUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'caracteristica' ? (
+                          <Col md="caracteristica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="caracteristicaLabel"
+                                    for="profissional-dispositivo-complexidade-caracteristica"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalDispositivoComplexidade.caracteristica">
+                                      Caracteristica
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-dispositivo-complexidade-caracteristica" type="text" name="caracteristica" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="caracteristica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="caracteristicaLabel" for="profissional-dispositivo-complexidade-caracteristica">
-                                <Translate contentKey="generadorApp.profissionalDispositivoComplexidade.caracteristica">
-                                  Caracteristica
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-dispositivo-complexidade-caracteristica"
-                                type="text"
-                                name="caracteristica"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="profissional-dispositivo-complexidade-ativo">
+                                    <Translate contentKey="generadorApp.profissionalDispositivoComplexidade.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-dispositivo-complexidade-ativo"
+                                    type="string"
+                                    className="form-control"
+                                    name="ativo"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="profissional-dispositivo-complexidade-ativo">
-                                <Translate contentKey="generadorApp.profissionalDispositivoComplexidade.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-dispositivo-complexidade-ativo"
-                                type="string"
-                                className="form-control"
-                                name="ativo"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoLabel" for="profissional-dispositivo-complexidade-tipo">
-                                <Translate contentKey="generadorApp.profissionalDispositivoComplexidade.tipo">Tipo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="profissional-dispositivo-complexidade-tipo"
-                                type="text"
-                                name="tipo"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 1, errorMessage: translate('entity.validation.maxlength', { max: 1 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'tipo' ? (
+                          <Col md="tipo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoLabel" for="profissional-dispositivo-complexidade-tipo">
+                                    <Translate contentKey="generadorApp.profissionalDispositivoComplexidade.tipo">Tipo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-dispositivo-complexidade-tipo" type="text" name="tipo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

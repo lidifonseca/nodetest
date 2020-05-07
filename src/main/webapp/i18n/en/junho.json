@@ -3,15 +3,15 @@
     "junho": {
       "home": {
         "title": "Junhos",
-        "createLabel": "Criar novo Junho",
-        "createOrEditLabel": "Criar ou editar Junho",
-        "notFound": "Nenhum Junho encontrado"
+        "createLabel": "Create a new Junho",
+        "createOrEditLabel": "Create or edit a Junho",
+        "notFound": "No Junhos found"
       },
-      "created": "Um novo Junho foi criado com o identificador {{ param }}",
-      "updated": "Um Junho foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Junho foi excluído com o identificador {{ param }}",
+      "created": "A new Junho is created with identifier {{ param }}",
+      "updated": "A Junho is updated with identifier {{ param }}",
+      "deleted": "A Junho is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Junho {{ id }}?"
+        "question": "Are you sure you want to delete Junho {{ id }}?"
       },
       "detail": {
         "title": "Junho"

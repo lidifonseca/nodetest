@@ -68,7 +68,9 @@ export class VwApiAtendimentosAceiteController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() vwApiAtendimentosAceite: VwApiAtendimentosAceite): Promise<VwApiAtendimentosAceite> {
+    console.info(vwApiAtendimentosAceite);
     const created = await this.vwApiAtendimentosAceiteService.save(vwApiAtendimentosAceite);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'VwApiAtendimentosAceite', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class VwApiAtendimentosAceiteController {
   })
   async put(@Req() req: Request, @Body() vwApiAtendimentosAceite: VwApiAtendimentosAceite): Promise<VwApiAtendimentosAceite> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'VwApiAtendimentosAceite', vwApiAtendimentosAceite.id);
+
     return await this.vwApiAtendimentosAceiteService.update(vwApiAtendimentosAceite);
   }
 

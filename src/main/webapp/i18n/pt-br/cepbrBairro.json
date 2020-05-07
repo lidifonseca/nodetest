@@ -17,9 +17,7 @@
         "title": "Cepbr Bairro"
       },
       "idBairro": "Id Bairro",
-      "bairro": "Bairro",
-      "cepbrEndereco": "Cepbr Endereco",
-      "idCidade": "Id Cidade"
+      "bairro": "Bairro"
     }
   }
 }

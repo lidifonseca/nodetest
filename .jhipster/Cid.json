@@ -42,27 +42,8 @@
             "fieldValidateRulesMaxlength": "30"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "cidXPtaNovo",
-            "otherEntityRelationshipName": "cidId",
-            "relationshipName": "cidXPtaNovo"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "pacienteDiagnostico",
-            "otherEntityRelationshipName": "idCid",
-            "relationshipName": "pacienteDiagnostico"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padCid",
-            "otherEntityRelationshipName": "idCid",
-            "relationshipName": "padCid"
-        }
-    ],
-    "changelogDate": "20200502224600",
+    "relationships": [],
+    "changelogDate": "20200507104700",
     "entityTableName": "cid",
     "dto": "mapstruct",
     "pagination": "pagination",

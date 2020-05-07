@@ -3,15 +3,15 @@
     "tipoProntuario": {
       "home": {
         "title": "Tipo Prontuarios",
-        "createLabel": "Criar novo Tipo Prontuario",
-        "createOrEditLabel": "Criar ou editar Tipo Prontuario",
-        "notFound": "Nenhum Tipo Prontuario encontrado"
+        "createLabel": "Create a new Tipo Prontuario",
+        "createOrEditLabel": "Create or edit a Tipo Prontuario",
+        "notFound": "No Tipo Prontuarios found"
       },
-      "created": "Um novo Tipo Prontuario foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Prontuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Prontuario foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Prontuario is created with identifier {{ param }}",
+      "updated": "A Tipo Prontuario is updated with identifier {{ param }}",
+      "deleted": "A Tipo Prontuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Prontuario {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Prontuario {{ id }}?"
       },
       "detail": {
         "title": "Tipo Prontuario"

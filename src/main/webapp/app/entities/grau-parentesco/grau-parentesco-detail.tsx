@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './grau-parentesco.reducer';
+import { getEntity, IGrauParentescoBaseState, getGrauParentescoState } from './grau-parentesco.reducer';
 import { IGrauParentesco } from 'app/shared/model/grau-parentesco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IGrauParentescoState {
+  fieldsBase: IGrauParentescoBaseState;
+}
+
 export interface IGrauParentescoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class GrauParentescoDetail extends React.Component<IGrauParentescoDetailProps> {
+export class GrauParentescoDetail extends React.Component<IGrauParentescoDetailProps, IGrauParentescoState> {
   constructor(props: Readonly<IGrauParentescoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getGrauParentescoState(this.props.location)
     };
   }
 

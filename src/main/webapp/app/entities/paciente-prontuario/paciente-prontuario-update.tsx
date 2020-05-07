@@ -4,11 +4,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 import {
+  IPacienteProntuarioUpdateState,
   getEntity,
   getPacienteProntuarioState,
   IPacienteProntuarioBaseState,
@@ -23,14 +24,18 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteProntuarioUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteProntuarioUpdateState {
-  fieldsBase: IPacienteProntuarioBaseState;
-  isNew: boolean;
-}
-
 export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuarioUpdateProps, IPacienteProntuarioUpdateState> {
+  oQueFileInput: React.RefObject<HTMLInputElement>;
+
+  resultadoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IPacienteProntuarioUpdateProps>) {
     super(props);
+
+    this.oQueFileInput = React.createRef();
+
+    this.resultadoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getPacienteProntuarioState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -50,14 +55,42 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
     }
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['idTipoProntuario'] ? '&idTipoProntuario=' + fieldsBase['idTipoProntuario'] : '') +
+      (fieldsBase['oQue'] ? '&oQue=' + fieldsBase['oQue'] : '') +
+      (fieldsBase['resultado'] ? '&resultado=' + fieldsBase['resultado'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['idEspecialidade'] ? '&idEspecialidade=' + fieldsBase['idEspecialidade'] : '') +
+      (fieldsBase['dataConsulta'] ? '&dataConsulta=' + fieldsBase['dataConsulta'] : '') +
+      (fieldsBase['idExame'] ? '&idExame=' + fieldsBase['idExame'] : '') +
+      (fieldsBase['idTipoExame'] ? '&idTipoExame=' + fieldsBase['idTipoExame'] : '') +
+      (fieldsBase['dataExame'] ? '&dataExame=' + fieldsBase['dataExame'] : '') +
+      (fieldsBase['dataInternacao'] ? '&dataInternacao=' + fieldsBase['dataInternacao'] : '') +
+      (fieldsBase['dataAlta'] ? '&dataAlta=' + fieldsBase['dataAlta'] : '') +
+      (fieldsBase['dataPs'] ? '&dataPs=' + fieldsBase['dataPs'] : '') +
+      (fieldsBase['dataOcorrencia'] ? '&dataOcorrencia=' + fieldsBase['dataOcorrencia'] : '') +
+      (fieldsBase['idOcorrenciaProntuario'] ? '&idOcorrenciaProntuario=' + fieldsBase['idOcorrenciaProntuario'] : '') +
+      (fieldsBase['dataManifestacao'] ? '&dataManifestacao=' + fieldsBase['dataManifestacao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataConsulta = convertDateTimeToServer(values.dataConsulta);
 
@@ -77,7 +110,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-prontuario');
+    this.props.history.push('/paciente-prontuario?' + this.getFiltersURL());
   };
 
   render() {
@@ -85,7 +118,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
     const { isNew } = this.state;
 
     const { oQue, resultado } = pacienteProntuarioEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -120,7 +153,14 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/paciente-prontuario" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente-prontuario?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -152,7 +192,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idPaciente ? (
+                        {baseFilters !== 'idPaciente' ? (
                           <Col md="idPaciente">
                             <AvGroup>
                               <Row>
@@ -168,10 +208,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase.idPaciente} />
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idTipoProntuario ? (
+                        {baseFilters !== 'idTipoProntuario' ? (
                           <Col md="idTipoProntuario">
                             <AvGroup>
                               <Row>
@@ -192,10 +232,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idTipoProntuario" value={this.state.fieldsBase.idTipoProntuario} />
+                          <AvInput type="hidden" name="idTipoProntuario" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.oQue ? (
+                        {baseFilters !== 'oQue' ? (
                           <Col md="oQue">
                             <AvGroup>
                               <Row>
@@ -211,10 +251,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="oQue" value={this.state.fieldsBase.oQue} />
+                          <AvInput type="hidden" name="oQue" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.resultado ? (
+                        {baseFilters !== 'resultado' ? (
                           <Col md="resultado">
                             <AvGroup>
                               <Row>
@@ -230,10 +270,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="resultado" value={this.state.fieldsBase.resultado} />
+                          <AvInput type="hidden" name="resultado" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.ativo ? (
+                        {baseFilters !== 'ativo' ? (
                           <Col md="ativo">
                             <AvGroup>
                               <Row>
@@ -249,29 +289,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase.ativo} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idUsuario ? (
-                          <Col md="idUsuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idUsuarioLabel" for="paciente-prontuario-idUsuario">
-                                    <Translate contentKey="generadorApp.pacienteProntuario.idUsuario">Id Usuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-prontuario-idUsuario" type="text" name="idUsuario" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
-                        )}
-
-                        {!this.state.fieldsBase.idEspecialidade ? (
+                        {baseFilters !== 'idEspecialidade' ? (
                           <Col md="idEspecialidade">
                             <AvGroup>
                               <Row>
@@ -292,10 +313,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase.idEspecialidade} />
+                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataConsulta ? (
+                        {baseFilters !== 'dataConsulta' ? (
                           <Col md="dataConsulta">
                             <AvGroup>
                               <Row>
@@ -318,10 +339,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataConsulta" value={this.state.fieldsBase.dataConsulta} />
+                          <AvInput type="hidden" name="dataConsulta" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idExame ? (
+                        {baseFilters !== 'idExame' ? (
                           <Col md="idExame">
                             <AvGroup>
                               <Row>
@@ -337,10 +358,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idExame" value={this.state.fieldsBase.idExame} />
+                          <AvInput type="hidden" name="idExame" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idTipoExame ? (
+                        {baseFilters !== 'idTipoExame' ? (
                           <Col md="idTipoExame">
                             <AvGroup>
                               <Row>
@@ -356,10 +377,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idTipoExame" value={this.state.fieldsBase.idTipoExame} />
+                          <AvInput type="hidden" name="idTipoExame" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataExame ? (
+                        {baseFilters !== 'dataExame' ? (
                           <Col md="dataExame">
                             <AvGroup>
                               <Row>
@@ -375,10 +396,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataExame" value={this.state.fieldsBase.dataExame} />
+                          <AvInput type="hidden" name="dataExame" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataInternacao ? (
+                        {baseFilters !== 'dataInternacao' ? (
                           <Col md="dataInternacao">
                             <AvGroup>
                               <Row>
@@ -399,10 +420,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataInternacao" value={this.state.fieldsBase.dataInternacao} />
+                          <AvInput type="hidden" name="dataInternacao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataAlta ? (
+                        {baseFilters !== 'dataAlta' ? (
                           <Col md="dataAlta">
                             <AvGroup>
                               <Row>
@@ -418,10 +439,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataAlta" value={this.state.fieldsBase.dataAlta} />
+                          <AvInput type="hidden" name="dataAlta" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataPs ? (
+                        {baseFilters !== 'dataPs' ? (
                           <Col md="dataPs">
                             <AvGroup>
                               <Row>
@@ -437,10 +458,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataPs" value={this.state.fieldsBase.dataPs} />
+                          <AvInput type="hidden" name="dataPs" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataOcorrencia ? (
+                        {baseFilters !== 'dataOcorrencia' ? (
                           <Col md="dataOcorrencia">
                             <AvGroup>
                               <Row>
@@ -461,10 +482,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataOcorrencia" value={this.state.fieldsBase.dataOcorrencia} />
+                          <AvInput type="hidden" name="dataOcorrencia" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.idOcorrenciaProntuario ? (
+                        {baseFilters !== 'idOcorrenciaProntuario' ? (
                           <Col md="idOcorrenciaProntuario">
                             <AvGroup>
                               <Row>
@@ -487,10 +508,10 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="idOcorrenciaProntuario" value={this.state.fieldsBase.idOcorrenciaProntuario} />
+                          <AvInput type="hidden" name="idOcorrenciaProntuario" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.dataManifestacao ? (
+                        {baseFilters !== 'dataManifestacao' ? (
                           <Col md="dataManifestacao">
                             <AvGroup>
                               <Row>
@@ -511,7 +532,7 @@ export class PacienteProntuarioUpdate extends React.Component<IPacienteProntuari
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataManifestacao" value={this.state.fieldsBase.dataManifestacao} />
+                          <AvInput type="hidden" name="dataManifestacao" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

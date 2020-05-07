@@ -19,10 +19,7 @@
       "pergunta": "Pergunta",
       "tipoResposta": "Tipo Resposta",
       "obrigatorio": "Obrigatorio",
-      "tipoCampo": "Tipo Campo",
-      "acoesRespostas": "Acoes Respostas",
-      "respostas": "Respostas",
-      "segmentosPerguntasId": "Segmentos Perguntas Id"
+      "tipoCampo": "Tipo Campo"
     }
   }
 }

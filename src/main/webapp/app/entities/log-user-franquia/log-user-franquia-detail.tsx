@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -67,45 +67,6 @@ export class LogUserFranquiaDetail extends React.Component<ILogUserFranquiaDetai
                       </Col>
                       <Col md="9">
                         <dd>{logUserFranquiaEntity.descricao}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.logUserFranquia.idAcao">Id Acao</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{logUserFranquiaEntity.idAcao ? logUserFranquiaEntity.idAcao.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.logUserFranquia.idTela">Id Tela</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{logUserFranquiaEntity.idTela ? logUserFranquiaEntity.idTela.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.logUserFranquia.idUsuario">Id Usuario</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{logUserFranquiaEntity.idUsuario ? logUserFranquiaEntity.idUsuario.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

@@ -8,29 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { ICid } from 'app/shared/model/cid.model';
-import { getEntities as getCids } from 'app/entities/cid/cid.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './paciente-diagnostico.reducer';
+import {
+  IPacienteDiagnosticoUpdateState,
+  getEntity,
+  getPacienteDiagnosticoState,
+  IPacienteDiagnosticoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-diagnostico.reducer';
 import { IPacienteDiagnostico } from 'app/shared/model/paciente-diagnostico.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteDiagnosticoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteDiagnosticoUpdateState {
-  isNew: boolean;
-  idPacienteId: string;
-  idCidId: string;
-}
-
 export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnosticoUpdateProps, IPacienteDiagnosticoUpdateState> {
   constructor(props: Readonly<IPacienteDiagnosticoUpdateProps>) {
     super(props);
+
     this.state = {
-      idPacienteId: '0',
-      idCidId: '0',
+      fieldsBase: getPacienteDiagnosticoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,11 +44,25 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPacientes();
-    this.props.getCids();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      (fieldsBase['cidPrimario'] ? '&cidPrimario=' + fieldsBase['cidPrimario'] : '') +
+      (fieldsBase['complexidade'] ? '&complexidade=' + fieldsBase['complexidade'] : '') +
+      (fieldsBase['cidComAlta'] ? '&cidComAlta=' + fieldsBase['cidComAlta'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteDiagnosticoEntity } = this.props;
@@ -68,13 +80,14 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-diagnostico');
+    this.props.history.push('/paciente-diagnostico?' + this.getFiltersURL());
   };
 
   render() {
-    const { pacienteDiagnosticoEntity, pacientes, cids, loading, updating } = this.props;
+    const { pacienteDiagnosticoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -90,9 +103,7 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
             isNew
               ? {}
               : {
-                  ...pacienteDiagnosticoEntity,
-                  idPaciente: pacienteDiagnosticoEntity.idPaciente ? pacienteDiagnosticoEntity.idPaciente.id : null,
-                  idCid: pacienteDiagnosticoEntity.idCid ? pacienteDiagnosticoEntity.idCid.id : null
+                  ...pacienteDiagnosticoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -114,7 +125,7 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-diagnostico"
+                  to={'/paciente-diagnostico?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -133,7 +144,7 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -149,148 +160,109 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'observacao' ? (
+                          <Col md="observacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacaoLabel" for="paciente-diagnostico-observacao">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-observacao" type="text" name="observacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="observacaoLabel" for="paciente-diagnostico-observacao">
-                                <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-diagnostico-observacao"
-                                type="text"
-                                name="observacao"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-diagnostico-ativo">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="paciente-diagnostico-ativo">
-                                <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-diagnostico-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cidPrimario' ? (
+                          <Col md="cidPrimario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="cidPrimarioLabel" check>
+                                    <AvInput
+                                      id="paciente-diagnostico-cidPrimario"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="cidPrimario"
+                                    />
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidPrimario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="cidPrimarioLabel" check>
-                                <AvInput
-                                  id="paciente-diagnostico-cidPrimario"
-                                  type="checkbox"
-                                  className="form-control"
-                                  name="cidPrimario"
-                                />
-                                <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'complexidade' ? (
+                          <Col md="complexidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="complexidadeLabel" for="paciente-diagnostico-complexidade">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-complexidade" type="text" name="complexidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="complexidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="complexidadeLabel" for="paciente-diagnostico-complexidade">
-                                <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-diagnostico-complexidade"
-                                type="text"
-                                name="complexidade"
-                                validate={{
-                                  maxLength: { value: 80, errorMessage: translate('entity.validation.maxlength', { max: 80 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="cidComAltaLabel" check>
-                                <AvInput id="paciente-diagnostico-cidComAlta" type="checkbox" className="form-control" name="cidComAlta" />
-                                <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-diagnostico-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteDiagnostico.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-diagnostico-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacienteDiagnostico.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-diagnostico-idCid">
-                                <Translate contentKey="generadorApp.pacienteDiagnostico.idCid">Id Cid</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-diagnostico-idCid" type="select" className="form-control" name="idCid">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacienteDiagnostico.idCid.empty')}
-                                </option>
-                                {cids
-                                  ? cids.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'cidComAlta' ? (
+                          <Col md="cidComAlta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="cidComAltaLabel" check>
+                                    <AvInput
+                                      id="paciente-diagnostico-cidComAlta"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="cidComAlta"
+                                    />
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidComAlta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -303,8 +275,6 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  pacientes: storeState.paciente.entities,
-  cids: storeState.cid.entities,
   pacienteDiagnosticoEntity: storeState.pacienteDiagnostico.entity,
   loading: storeState.pacienteDiagnostico.loading,
   updating: storeState.pacienteDiagnostico.updating,
@@ -312,8 +282,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPacientes,
-  getCids,
   getEntity,
   updateEntity,
   createEntity,

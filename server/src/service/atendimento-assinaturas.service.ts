@@ -1,13 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Like, Equal } from 'typeorm';
 import AtendimentoAssinaturas from '../domain/atendimento-assinaturas.entity';
 import { AtendimentoAssinaturasRepository } from '../repository/atendimento-assinaturas.repository';
 
 const relationshipNames = [];
-relationshipNames.push('idAtendimento');
-relationshipNames.push('idProfissional');
-relationshipNames.push('idPaciente');
 
 @Injectable()
 export class AtendimentoAssinaturasService {
@@ -31,20 +28,14 @@ export class AtendimentoAssinaturasService {
     filters?: Array<{ column: string; value: string; operation: string }>[]
   ): Promise<[AtendimentoAssinaturas[], number]> {
     options.relations = relationshipNames;
-    let where = '';
-    let first = true;
+    let where = {};
     for (const i in filters) {
       if (filters.hasOwnProperty(i)) {
         const element = filters[i];
-        if (!first) {
-          where += 'and';
-        } else {
-          first = false;
-        }
         if (element['operation'] === 'contains') {
-          where += ' `AtendimentoAssinaturas`.`' + element['column'] + '` like "%' + element['value'] + '%" ';
+          where[element['column']] = Like('%' + element['value'] + '%');
         } else if (element['operation'] === 'equals') {
-          where += ' `AtendimentoAssinaturas`.`' + element['column'] + '` = "' + element['value'] + '" ';
+          where[element['column']] = Equal(element['value']);
         }
       }
     }

@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './status-atendimento.reducer';
+import { getStatusAtendimentoState, IStatusAtendimentoBaseState, getEntities } from './status-atendimento.reducer';
 import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IStatusAtendimentoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IStatusAtendimentoBaseState {
-  statusAtendimento: any;
-  styleLabel: any;
-  ordenacao: any;
-  ativo: any;
-  atendimento: any;
-}
 export interface IStatusAtendimentoState extends IStatusAtendimentoBaseState, IPaginationBaseState {}
 
 export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, IStatusAtendimentoState> {
@@ -45,27 +38,9 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getStatusAtendimentoState(this.props.location)
+      ...getStatusAtendimentoState(this.props.location)
     };
   }
-
-  getStatusAtendimentoState = (location): IStatusAtendimentoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const statusAtendimento = url.searchParams.get('statusAtendimento') || '';
-    const styleLabel = url.searchParams.get('styleLabel') || '';
-    const ordenacao = url.searchParams.get('ordenacao') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const atendimento = url.searchParams.get('atendimento') || '';
-
-    return {
-      statusAtendimento,
-      styleLabel,
-      ordenacao,
-      ativo,
-      atendimento
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -77,8 +52,7 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
         statusAtendimento: '',
         styleLabel: '',
         ordenacao: '',
-        ativo: '',
-        atendimento: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -111,7 +85,9 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -135,9 +111,6 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
       'ativo=' +
       this.state.ativo +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
       ''
     );
   };
@@ -145,8 +118,8 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { statusAtendimento, styleLabel, ordenacao, ativo, atendimento, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(statusAtendimento, styleLabel, ordenacao, ativo, atendimento, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtendimento, styleLabel, ordenacao, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtendimento, styleLabel, ordenacao, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -168,7 +141,11 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.statusAtendimento.home.createLabel">Create a new Status Atendimento</Translate>
@@ -181,49 +158,56 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="statusAtendimentoLabel" for="status-atendimento-statusAtendimento">
-                            <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'statusAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="statusAtendimentoLabel" for="status-atendimento-statusAtendimento">
+                              <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="statusAtendimento"
-                            id="status-atendimento-statusAtendimento"
-                            value={this.state.statusAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="styleLabelLabel" for="status-atendimento-styleLabel">
-                            <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="statusAtendimento"
+                              id="status-atendimento-statusAtendimento"
+                              value={this.state.statusAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="styleLabel" id="status-atendimento-styleLabel" value={this.state.styleLabel} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ordenacaoLabel" for="status-atendimento-ordenacao">
-                            <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
-                          </Label>
-                          <AvInput type="string" name="ordenacao" id="status-atendimento-ordenacao" value={this.state.ordenacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="status-atendimento-ativo">
-                            <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="status-atendimento-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="styleLabelLabel" for="status-atendimento-styleLabel">
+                              <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
+                            </Label>
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="styleLabel" id="status-atendimento-styleLabel" value={this.state.styleLabel} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ordenacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ordenacaoLabel" for="status-atendimento-ordenacao">
+                              <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
+                            </Label>
+                            <AvInput type="string" name="ordenacao" id="status-atendimento-ordenacao" value={this.state.ordenacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="status-atendimento-ativo">
+                              <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="status-atendimento-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -251,22 +235,30 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('statusAtendimento')}>
-                        <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('styleLabel')}>
-                        <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ordenacao')}>
-                        <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'statusAtendimento' ? (
+                        <th className="hand" onClick={this.sort('statusAtendimento')}>
+                          <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'styleLabel' ? (
+                        <th className="hand" onClick={this.sort('styleLabel')}>
+                          <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ordenacao' ? (
+                        <th className="hand" onClick={this.sort('ordenacao')}>
+                          <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -281,29 +273,39 @@ export class StatusAtendimento extends React.Component<IStatusAtendimentoProps, 
                           </Button>
                         </td>
 
-                        <td>{statusAtendimento.statusAtendimento}</td>
+                        {this.state.baseFilters !== 'statusAtendimento' ? <td>{statusAtendimento.statusAtendimento}</td> : null}
 
-                        <td>{statusAtendimento.styleLabel}</td>
+                        {this.state.baseFilters !== 'styleLabel' ? <td>{statusAtendimento.styleLabel}</td> : null}
 
-                        <td>{statusAtendimento.ordenacao}</td>
+                        {this.state.baseFilters !== 'ordenacao' ? <td>{statusAtendimento.ordenacao}</td> : null}
 
-                        <td>{statusAtendimento.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{statusAtendimento.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${statusAtendimento.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${statusAtendimento.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${statusAtendimento.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${statusAtendimento.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${statusAtendimento.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${statusAtendimento.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

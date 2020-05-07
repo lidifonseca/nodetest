@@ -68,7 +68,9 @@ export class ProfissionalHorarioController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() profissionalHorario: ProfissionalHorario): Promise<ProfissionalHorario> {
+    console.info(profissionalHorario);
     const created = await this.profissionalHorarioService.save(profissionalHorario);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalHorario', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ProfissionalHorarioController {
   })
   async put(@Req() req: Request, @Body() profissionalHorario: ProfissionalHorario): Promise<ProfissionalHorario> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ProfissionalHorario', profissionalHorario.id);
+
     return await this.profissionalHorarioService.update(profissionalHorario);
   }
 

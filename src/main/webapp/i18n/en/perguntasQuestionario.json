@@ -3,15 +3,15 @@
     "perguntasQuestionario": {
       "home": {
         "title": "Perguntas Questionarios",
-        "createLabel": "Criar novo Perguntas Questionario",
-        "createOrEditLabel": "Criar ou editar Perguntas Questionario",
-        "notFound": "Nenhum Perguntas Questionario encontrado"
+        "createLabel": "Create a new Perguntas Questionario",
+        "createOrEditLabel": "Create or edit a Perguntas Questionario",
+        "notFound": "No Perguntas Questionarios found"
       },
-      "created": "Um novo Perguntas Questionario foi criado com o identificador {{ param }}",
-      "updated": "Um Perguntas Questionario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Perguntas Questionario foi excluído com o identificador {{ param }}",
+      "created": "A new Perguntas Questionario is created with identifier {{ param }}",
+      "updated": "A Perguntas Questionario is updated with identifier {{ param }}",
+      "deleted": "A Perguntas Questionario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Perguntas Questionario {{ id }}?"
+        "question": "Are you sure you want to delete Perguntas Questionario {{ id }}?"
       },
       "detail": {
         "title": "Perguntas Questionario"
@@ -19,10 +19,7 @@
       "pergunta": "Pergunta",
       "tipoResposta": "Tipo Resposta",
       "obrigatorio": "Obrigatorio",
-      "tipoCampo": "Tipo Campo",
-      "acoesRespostas": "Acoes Respostas",
-      "respostas": "Respostas",
-      "segmentosPerguntasId": "Segmentos Perguntas Id"
+      "tipoCampo": "Tipo Campo"
     }
   }
 }

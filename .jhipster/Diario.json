@@ -14,23 +14,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "usuario",
-            "otherEntityRelationshipName": "diario",
-            "relationshipName": "idUsuario",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "paciente",
-            "otherEntityRelationshipName": "diario",
-            "relationshipName": "idPaciente",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502232100",
+    "relationships": [],
+    "changelogDate": "20200507105400",
     "entityTableName": "diario",
     "dto": "mapstruct",
     "pagination": "pagination",

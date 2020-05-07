@@ -17,8 +17,7 @@
         "title": "Atendimento Status Financeiro"
       },
       "idAtendimento": "Id Atendimento",
-      "idStatusFinanceiro": "Id Status Financeiro",
-      "idUsuario": "Id Usuario"
+      "idStatusFinanceiro": "Id Status Financeiro"
     }
   }
 }

@@ -4,33 +4,28 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Indicadores from './indicadores.entity';
-
 /**
  * A IndicadoresValores.
  */
-@Entity('indicadores_valores')
+@Entity('tb_indicadores_valores')
 export default class IndicadoresValores extends BaseEntity {
-  @Column({ name: 'sexo', length: 45 })
+  @Column({ name: 'SEXO', length: 45 })
   sexo: string;
 
-  @Column({ name: 'vl_minimo', length: 45 })
+  @Column({ name: 'VL_MINIMO', length: 45 })
   vlMinimo: string;
 
-  @Column({ name: 'vl_maximo', length: 45 })
+  @Column({ name: 'VL_MAXIMO', length: 45 })
   vlMaximo: string;
 
-  @Column({ name: 'unidade_medida', length: 45 })
+  @Column({ name: 'UNIDADE_MEDIDA', length: 45 })
   unidadeMedida: string;
 
-  @Column({ name: 'idade_minima', length: 45 })
+  @Column({ name: 'IDADE_MINIMA', length: 45 })
   idadeMinima: string;
 
-  @Column({ name: 'idade_maxima', length: 45 })
+  @Column({ name: 'IDADE_MAXIMA', length: 45 })
   idadeMaxima: string;
-
-  @ManyToOne(type => Indicadores)
-  indicadoresId: Indicadores;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

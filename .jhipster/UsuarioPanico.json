@@ -9,13 +9,6 @@
             ]
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "idProfissional",
             "fieldType": "Integer",
             "fieldValidateRules": [
@@ -40,7 +33,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503012800",
+    "changelogDate": "20200507130100",
     "entityTableName": "usuario_panico",
     "dto": "mapstruct",
     "pagination": "pagination",

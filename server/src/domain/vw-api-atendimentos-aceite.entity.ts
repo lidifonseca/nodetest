@@ -7,69 +7,69 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * VIEW
  */
-@Entity('vw_api_atendimentos_aceite')
+@Entity('tb_vw_api_atendimentos_aceite')
 export default class VwApiAtendimentosAceite extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_pad_item', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PAD_ITEM', nullable: false })
   idPadItem: number;
 
-  @Column({ type: 'integer', name: 'id_paciente', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE', nullable: false })
   idPaciente: number;
 
-  @Column({ type: 'integer', name: 'id_periodo', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PERIODO', nullable: false })
   idPeriodo: number;
 
-  @Column({ type: 'integer', name: 'id_periodicidade', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PERIODICIDADE', nullable: false })
   idPeriodicidade: number;
 
-  @Column({ type: 'integer', name: 'id_profissional', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PROFISSIONAL', nullable: false })
   idProfissional: number;
 
-  @Column({ type: 'integer', name: 'aceito', nullable: false })
+  @Column({ type: 'integer', name: 'ACEITO', nullable: false })
   aceito: number;
 
-  @Column({ type: 'integer', name: 'bairro', nullable: false })
+  @Column({ type: 'integer', name: 'BAIRRO', nullable: false })
   bairro: number;
 
-  @Column({ type: 'integer', name: 'cep', nullable: false })
+  @Column({ type: 'integer', name: 'CEP', nullable: false })
   cep: number;
 
-  @Column({ type: 'integer', name: 'cidade', nullable: false })
+  @Column({ type: 'integer', name: 'CIDADE', nullable: false })
   cidade: number;
 
-  @Column({ type: 'integer', name: 'complemento', nullable: false })
+  @Column({ type: 'integer', name: 'COMPLEMENTO', nullable: false })
   complemento: number;
 
-  @Column({ type: 'integer', name: 'endereco', nullable: false })
+  @Column({ type: 'integer', name: 'ENDERECO', nullable: false })
   endereco: number;
 
-  @Column({ type: 'integer', name: 'especialidade', nullable: false })
+  @Column({ type: 'integer', name: 'ESPECIALIDADE', nullable: false })
   especialidade: number;
 
-  @Column({ type: 'integer', name: 'latitude', nullable: false })
+  @Column({ type: 'integer', name: 'LATITUDE', nullable: false })
   latitude: number;
 
-  @Column({ type: 'integer', name: 'longitude', nullable: false })
+  @Column({ type: 'integer', name: 'LONGITUDE', nullable: false })
   longitude: number;
 
-  @Column({ type: 'integer', name: 'numero', nullable: false })
+  @Column({ type: 'integer', name: 'NUMERO', nullable: false })
   numero: number;
 
-  @Column({ type: 'integer', name: 'paciente', nullable: false })
+  @Column({ type: 'integer', name: 'PACIENTE', nullable: false })
   paciente: number;
 
-  @Column({ type: 'integer', name: 'periodo', nullable: false })
+  @Column({ type: 'integer', name: 'PERIODO', nullable: false })
   periodo: number;
 
-  @Column({ type: 'integer', name: 'periodicidade', nullable: false })
+  @Column({ type: 'integer', name: 'PERIODICIDADE', nullable: false })
   periodicidade: number;
 
-  @Column({ type: 'integer', name: 'qtd_sessoes', nullable: false })
+  @Column({ type: 'integer', name: 'QTD_SESSOES', nullable: false })
   qtdSessoes: number;
 
-  @Column({ type: 'integer', name: 'uf', nullable: false })
+  @Column({ type: 'integer', name: 'UF', nullable: false })
   uf: number;
 
-  @Column({ type: 'integer', name: 'valor', nullable: false })
+  @Column({ type: 'integer', name: 'VALOR', nullable: false })
   valor: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

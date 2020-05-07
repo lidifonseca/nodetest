@@ -3,22 +3,21 @@
     "tipoUsuario": {
       "home": {
         "title": "Tipo Usuarios",
-        "createLabel": "Criar novo Tipo Usuario",
-        "createOrEditLabel": "Criar ou editar Tipo Usuario",
-        "notFound": "Nenhum Tipo Usuario encontrado"
+        "createLabel": "Create a new Tipo Usuario",
+        "createOrEditLabel": "Create or edit a Tipo Usuario",
+        "notFound": "No Tipo Usuarios found"
       },
-      "created": "Um novo Tipo Usuario foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Usuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Usuario foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Usuario is created with identifier {{ param }}",
+      "updated": "A Tipo Usuario is updated with identifier {{ param }}",
+      "deleted": "A Tipo Usuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Usuario {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Usuario {{ id }}?"
       },
       "detail": {
         "title": "Tipo Usuario"
       },
       "tipoUsuario": "Tipo Usuario",
-      "ativo": "Ativo",
-      "usuario": "Usuario"
+      "ativo": "Ativo"
     }
   }
 }

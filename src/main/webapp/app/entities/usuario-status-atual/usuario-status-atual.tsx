@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './usuario-status-atual.reducer';
+import { getUsuarioStatusAtualState, IUsuarioStatusAtualBaseState, getEntities } from './usuario-status-atual.reducer';
 import { IUsuarioStatusAtual } from 'app/shared/model/usuario-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IUsuarioStatusAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IUsuarioStatusAtualBaseState {
-  idUsuario: any;
-  statusAtual: any;
-  obs: any;
-  ativo: any;
-}
 export interface IUsuarioStatusAtualState extends IUsuarioStatusAtualBaseState, IPaginationBaseState {}
 
 export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps, IUsuarioStatusAtualState> {
@@ -44,24 +38,9 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getUsuarioStatusAtualState(this.props.location)
+      ...getUsuarioStatusAtualState(this.props.location)
     };
   }
-
-  getUsuarioStatusAtualState = (location): IUsuarioStatusAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-    const statusAtual = url.searchParams.get('statusAtual') || '';
-    const obs = url.searchParams.get('obs') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      idUsuario,
-      statusAtual,
-      obs,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -70,7 +49,6 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
   cancelCourse = () => {
     this.setState(
       {
-        idUsuario: '',
         statusAtual: '',
         obs: '',
         ativo: ''
@@ -106,7 +84,9 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -117,9 +97,6 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
       this.state.sort +
       ',' +
       this.state.order +
-      '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
       '&' +
       'statusAtual=' +
       this.state.statusAtual +
@@ -137,8 +114,8 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, statusAtual, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idUsuario, statusAtual, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { statusAtual, obs, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(statusAtual, obs, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -160,7 +137,11 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.usuarioStatusAtual.home.createLabel">Create a new Usuario Status Atual</Translate>
@@ -173,40 +154,44 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="usuario-status-atual-idUsuario">
-                            <Translate contentKey="generadorApp.usuarioStatusAtual.idUsuario">Id Usuario</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'statusAtual' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="statusAtualLabel" for="usuario-status-atual-statusAtual">
+                              <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="statusAtual"
+                              id="usuario-status-atual-statusAtual"
+                              value={this.state.statusAtual}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="idUsuario" id="usuario-status-atual-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="statusAtualLabel" for="usuario-status-atual-statusAtual">
-                            <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
-                          </Label>
-                          <AvInput type="string" name="statusAtual" id="usuario-status-atual-statusAtual" value={this.state.statusAtual} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="obsLabel" for="usuario-status-atual-obs">
-                            <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'obs' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="obsLabel" for="usuario-status-atual-obs">
+                              <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="obs" id="usuario-status-atual-obs" value={this.state.obs} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="usuario-status-atual-ativo">
-                            <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="usuario-status-atual-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="obs" id="usuario-status-atual-obs" value={this.state.obs} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="usuario-status-atual-ativo">
+                              <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="usuario-status-atual-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -234,22 +219,24 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.usuarioStatusAtual.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('statusAtual')}>
-                        <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('obs')}>
-                        <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'statusAtual' ? (
+                        <th className="hand" onClick={this.sort('statusAtual')}>
+                          <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'obs' ? (
+                        <th className="hand" onClick={this.sort('obs')}>
+                          <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -264,29 +251,37 @@ export class UsuarioStatusAtual extends React.Component<IUsuarioStatusAtualProps
                           </Button>
                         </td>
 
-                        <td>{usuarioStatusAtual.idUsuario}</td>
+                        {this.state.baseFilters !== 'statusAtual' ? <td>{usuarioStatusAtual.statusAtual}</td> : null}
 
-                        <td>{usuarioStatusAtual.statusAtual}</td>
+                        {this.state.baseFilters !== 'obs' ? <td>{usuarioStatusAtual.obs}</td> : null}
 
-                        <td>{usuarioStatusAtual.obs}</td>
-
-                        <td>{usuarioStatusAtual.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{usuarioStatusAtual.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${usuarioStatusAtual.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${usuarioStatusAtual.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${usuarioStatusAtual.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${usuarioStatusAtual.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${usuarioStatusAtual.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${usuarioStatusAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

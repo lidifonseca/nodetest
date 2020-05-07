@@ -1,8 +1,5 @@
 import { Moment } from 'moment';
-import { IDiario } from 'app/shared/model/diario.model';
-import { IPacienteDiario } from 'app/shared/model/paciente-diario.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
-import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
 
 export interface IUsuario {
   id?: string;
@@ -129,12 +126,8 @@ export interface IUsuario {
   envioAnaliseResultadoEsperado?: number;
   envioDescumprimento?: number;
   envioMelhoraTempo?: boolean;
-  senhaChat?: string;
-  diarios?: IDiario[];
-  pacienteDiarios?: IPacienteDiario[];
   unidadeRazaoSocial?: string;
   unidade?: string | any;
-  idTipoUsuario?: string | any;
 }
 
 export const defaultValue: Readonly<IUsuario> = {

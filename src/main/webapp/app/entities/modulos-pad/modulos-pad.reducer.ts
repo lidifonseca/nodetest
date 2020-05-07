@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IModulosPad, defaultValue } from 'app/shared/model/modulos-pad.model';
 
 export const ACTION_TYPES = {
+  FETCH_MODULOSPAD_LIST_EXPORT: 'modulosPad/FETCH_MODULOSPAD_LIST_EXPORT',
   FETCH_MODULOSPAD_LIST: 'modulosPad/FETCH_MODULOSPAD_LIST',
   FETCH_MODULOSPAD: 'modulosPad/FETCH_MODULOSPAD',
   CREATE_MODULOSPAD: 'modulosPad/CREATE_MODULOSPAD',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type ModulosPadState = Readonly<typeof initialState>;
 
+export interface IModulosPadBaseState {
+  baseFilters: any;
+  nomeModulo: any;
+  ativo: any;
+}
+
+export interface IModulosPadUpdateState {
+  fieldsBase: IModulosPadBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ModulosPadState = initialState, action): ModulosPadState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_MODULOSPAD_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_MODULOSPAD_LIST):
     case REQUEST(ACTION_TYPES.FETCH_MODULOSPAD):
       return {
@@ -51,6 +64,7 @@ export default (state: ModulosPadState = initialState, action): ModulosPadState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_MODULOSPAD_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_MODULOSPAD_LIST):
     case FAILURE(ACTION_TYPES.FETCH_MODULOSPAD):
     case FAILURE(ACTION_TYPES.CREATE_MODULOSPAD):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IModulosPad> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionModulosPad<IModulosPad> = (nomeModulo, ativo, page, size, sort) => {
+  const nomeModuloRequest = nomeModulo ? `nomeModulo.contains=${nomeModulo}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_MODULOSPAD_LIST,
+    payload: axios.get<IModulosPad>(`${requestUrl}${nomeModuloRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IModulosPad> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IModulosPad> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getModulosPadState = (location): IModulosPadBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nomeModulo = url.searchParams.get('nomeModulo') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    nomeModulo,
+    ativo
+  };
+};

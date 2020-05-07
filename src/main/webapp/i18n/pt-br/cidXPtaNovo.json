@@ -19,11 +19,7 @@
       "complexidade": "Complexidade",
       "versao": "Versao",
       "score": "Score",
-      "titulo": "Titulo",
-      "cidXPtaNovo": "Cid X Pta Novo",
-      "cidXPtaNovoPadItemIndi": "Cid X Pta Novo Pad Item Indi",
-      "cidId": "Cid Id",
-      "cidXPtaNovoId": "Cid X Pta Novo Id"
+      "titulo": "Titulo"
     }
   }
 }

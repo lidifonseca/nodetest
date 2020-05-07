@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-mat-med.reducer';
+import { getEntity, ITipoMatMedBaseState, getTipoMatMedState } from './tipo-mat-med.reducer';
 import { ITipoMatMed } from 'app/shared/model/tipo-mat-med.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoMatMedState {
+  fieldsBase: ITipoMatMedBaseState;
+}
+
 export interface ITipoMatMedDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoMatMedDetail extends React.Component<ITipoMatMedDetailProps> {
+export class TipoMatMedDetail extends React.Component<ITipoMatMedDetailProps, ITipoMatMedState> {
   constructor(props: Readonly<ITipoMatMedDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoMatMedState(this.props.location)
     };
   }
 

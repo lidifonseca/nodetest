@@ -33,11 +33,15 @@ const initialState = {
 export type ProfissionalStatusAtualState = Readonly<typeof initialState>;
 
 export interface IProfissionalStatusAtualBaseState {
+  baseFilters: any;
   idProfissional: any;
   obs: any;
   ativo: any;
-  idUsuario: any;
-  idStatusAtualProf: any;
+}
+
+export interface IProfissionalStatusAtualUpdateState {
+  fieldsBase: IProfissionalStatusAtualBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -83,6 +87,7 @@ export default (state: ProfissionalStatusAtualState = initialState, action): Pro
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUAL):
+      action.payload.data.obs = action.payload.data.obs ? Buffer.from(action.payload.data.obs).toString() : action.payload.data.obs;
       return {
         ...state,
         loading: false,
@@ -104,13 +109,14 @@ export default (state: ProfissionalStatusAtualState = initialState, action): Pro
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -132,8 +138,6 @@ export type ICrudGetAllActionProfissionalStatusAtual<T> = (
   idProfissional?: any,
   obs?: any,
   ativo?: any,
-  idUsuario?: any,
-  idStatusAtualProf?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -143,8 +147,6 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtual<IProfissional
   idProfissional,
   obs,
   ativo,
-  idUsuario,
-  idStatusAtualProf,
   page,
   size,
   sort
@@ -152,14 +154,12 @@ export const getEntities: ICrudGetAllActionProfissionalStatusAtual<IProfissional
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const idStatusAtualProfRequest = idStatusAtualProf ? `idStatusAtualProf.equals=${idStatusAtualProf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUAL_LIST,
     payload: axios.get<IProfissionalStatusAtual>(
-      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}${idUsuarioRequest}${idStatusAtualProfRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -175,8 +175,6 @@ export const getEntitiesExport: ICrudGetAllActionProfissionalStatusAtual<IProfis
   idProfissional,
   obs,
   ativo,
-  idUsuario,
-  idStatusAtualProf,
   page,
   size,
   sort
@@ -184,22 +182,19 @@ export const getEntitiesExport: ICrudGetAllActionProfissionalStatusAtual<IProfis
   const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
   const obsRequest = obs ? `obs.contains=${obs}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
-  const idStatusAtualProfRequest = idStatusAtualProf ? `idStatusAtualProf.equals=${idStatusAtualProf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALSTATUSATUAL_LIST,
     payload: axios.get<IProfissionalStatusAtual>(
-      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}${idUsuarioRequest}${idStatusAtualProfRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
 
 export const createEntity: ICrudPutAction<IProfissionalStatusAtual> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idStatusAtualProf: entity.idStatusAtualProf === 'null' ? null : entity.idStatusAtualProf
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PROFISSIONALSTATUSATUAL,
@@ -210,7 +205,7 @@ export const createEntity: ICrudPutAction<IProfissionalStatusAtual> = entity => 
 };
 
 export const updateEntity: ICrudPutAction<IProfissionalStatusAtual> = entity => async dispatch => {
-  entity = { ...entity, idStatusAtualProf: entity.idStatusAtualProf === 'null' ? null : entity.idStatusAtualProf };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PROFISSIONALSTATUSATUAL,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -229,12 +224,13 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalStatusAtual> = id => a
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -244,18 +240,15 @@ export const reset = () => ({
 
 export const getProfissionalStatusAtualState = (location): IProfissionalStatusAtualBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idProfissional = url.searchParams.get('idProfissional') || '';
   const obs = url.searchParams.get('obs') || '';
   const ativo = url.searchParams.get('ativo') || '';
-  const idUsuario = url.searchParams.get('idUsuario') || '';
-
-  const idStatusAtualProf = url.searchParams.get('idStatusAtualProf') || '';
 
   return {
+    baseFilters,
     idProfissional,
     obs,
-    ativo,
-    idUsuario,
-    idStatusAtualProf
+    ativo
   };
 };

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICidXPtaNovoPadItemIndi, defaultValue } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
 
 export const ACTION_TYPES = {
+  FETCH_CIDXPTANOVOPADITEMINDI_LIST_EXPORT: 'cidXPtaNovoPadItemIndi/FETCH_CIDXPTANOVOPADITEMINDI_LIST_EXPORT',
   FETCH_CIDXPTANOVOPADITEMINDI_LIST: 'cidXPtaNovoPadItemIndi/FETCH_CIDXPTANOVOPADITEMINDI_LIST',
   FETCH_CIDXPTANOVOPADITEMINDI: 'cidXPtaNovoPadItemIndi/FETCH_CIDXPTANOVOPADITEMINDI',
   CREATE_CIDXPTANOVOPADITEMINDI: 'cidXPtaNovoPadItemIndi/CREATE_CIDXPTANOVOPADITEMINDI',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type CidXPtaNovoPadItemIndiState = Readonly<typeof initialState>;
 
+export interface ICidXPtaNovoPadItemIndiBaseState {
+  baseFilters: any;
+  meta: any;
+  maximo: any;
+  minimo: any;
+  unidadeMedidaExtra: any;
+  unidadeMedidaId: any;
+  score: any;
+}
+
+export interface ICidXPtaNovoPadItemIndiUpdateState {
+  fieldsBase: ICidXPtaNovoPadItemIndiBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CidXPtaNovoPadItemIndiState = initialState, action): CidXPtaNovoPadItemIndiState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI):
       return {
@@ -51,6 +68,7 @@ export default (state: CidXPtaNovoPadItemIndiState = initialState, action): CidX
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI):
     case FAILURE(ACTION_TYPES.CREATE_CIDXPTANOVOPADITEMINDI):
@@ -112,10 +130,6 @@ export type ICrudGetAllActionCidXPtaNovoPadItemIndi<T> = (
   unidadeMedidaExtra?: any,
   unidadeMedidaId?: any,
   score?: any,
-  alertasIndicadores?: any,
-  padItemIndicadoresId?: any,
-  categoriasId?: any,
-  cidXPtaNovoId?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -128,10 +142,6 @@ export const getEntities: ICrudGetAllActionCidXPtaNovoPadItemIndi<ICidXPtaNovoPa
   unidadeMedidaExtra,
   unidadeMedidaId,
   score,
-  alertasIndicadores,
-  padItemIndicadoresId,
-  categoriasId,
-  cidXPtaNovoId,
   page,
   size,
   sort
@@ -142,16 +152,12 @@ export const getEntities: ICrudGetAllActionCidXPtaNovoPadItemIndi<ICidXPtaNovoPa
   const unidadeMedidaExtraRequest = unidadeMedidaExtra ? `unidadeMedidaExtra.contains=${unidadeMedidaExtra}&` : '';
   const unidadeMedidaIdRequest = unidadeMedidaId ? `unidadeMedidaId.contains=${unidadeMedidaId}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
-  const alertasIndicadoresRequest = alertasIndicadores ? `alertasIndicadores.equals=${alertasIndicadores}&` : '';
-  const padItemIndicadoresIdRequest = padItemIndicadoresId ? `padItemIndicadoresId.equals=${padItemIndicadoresId}&` : '';
-  const categoriasIdRequest = categoriasId ? `categoriasId.equals=${categoriasId}&` : '';
-  const cidXPtaNovoIdRequest = cidXPtaNovoId ? `cidXPtaNovoId.equals=${cidXPtaNovoId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST,
     payload: axios.get<ICidXPtaNovoPadItemIndi>(
-      `${requestUrl}${metaRequest}${maximoRequest}${minimoRequest}${unidadeMedidaExtraRequest}${unidadeMedidaIdRequest}${scoreRequest}${alertasIndicadoresRequest}${padItemIndicadoresIdRequest}${categoriasIdRequest}${cidXPtaNovoIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${metaRequest}${maximoRequest}${minimoRequest}${unidadeMedidaExtraRequest}${unidadeMedidaIdRequest}${scoreRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -163,12 +169,36 @@ export const getEntity: ICrudGetAction<ICidXPtaNovoPadItemIndi> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCidXPtaNovoPadItemIndi<ICidXPtaNovoPadItemIndi> = (
+  meta,
+  maximo,
+  minimo,
+  unidadeMedidaExtra,
+  unidadeMedidaId,
+  score,
+  page,
+  size,
+  sort
+) => {
+  const metaRequest = meta ? `meta.contains=${meta}&` : '';
+  const maximoRequest = maximo ? `maximo.contains=${maximo}&` : '';
+  const minimoRequest = minimo ? `minimo.contains=${minimo}&` : '';
+  const unidadeMedidaExtraRequest = unidadeMedidaExtra ? `unidadeMedidaExtra.contains=${unidadeMedidaExtra}&` : '';
+  const unidadeMedidaIdRequest = unidadeMedidaId ? `unidadeMedidaId.contains=${unidadeMedidaId}&` : '';
+  const scoreRequest = score ? `score.contains=${score}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CIDXPTANOVOPADITEMINDI_LIST,
+    payload: axios.get<ICidXPtaNovoPadItemIndi>(
+      `${requestUrl}${metaRequest}${maximoRequest}${minimoRequest}${unidadeMedidaExtraRequest}${unidadeMedidaIdRequest}${scoreRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ICidXPtaNovoPadItemIndi> = entity => async dispatch => {
   entity = {
-    ...entity,
-    padItemIndicadoresId: entity.padItemIndicadoresId === 'null' ? null : entity.padItemIndicadoresId,
-    categoriasId: entity.categoriasId === 'null' ? null : entity.categoriasId,
-    cidXPtaNovoId: entity.cidXPtaNovoId === 'null' ? null : entity.cidXPtaNovoId
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDXPTANOVOPADITEMINDI,
@@ -179,12 +209,7 @@ export const createEntity: ICrudPutAction<ICidXPtaNovoPadItemIndi> = entity => a
 };
 
 export const updateEntity: ICrudPutAction<ICidXPtaNovoPadItemIndi> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    padItemIndicadoresId: entity.padItemIndicadoresId === 'null' ? null : entity.padItemIndicadoresId,
-    categoriasId: entity.categoriasId === 'null' ? null : entity.categoriasId,
-    cidXPtaNovoId: entity.cidXPtaNovoId === 'null' ? null : entity.cidXPtaNovoId
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDXPTANOVOPADITEMINDI,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -206,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<ICidXPtaNovoPadItemIndi> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCidXPtaNovoPadItemIndiState = (location): ICidXPtaNovoPadItemIndiBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const meta = url.searchParams.get('meta') || '';
+  const maximo = url.searchParams.get('maximo') || '';
+  const minimo = url.searchParams.get('minimo') || '';
+  const unidadeMedidaExtra = url.searchParams.get('unidadeMedidaExtra') || '';
+  const unidadeMedidaId = url.searchParams.get('unidadeMedidaId') || '';
+  const score = url.searchParams.get('score') || '';
+
+  return {
+    baseFilters,
+    meta,
+    maximo,
+    minimo,
+    unidadeMedidaExtra,
+    unidadeMedidaId,
+    score
+  };
+};

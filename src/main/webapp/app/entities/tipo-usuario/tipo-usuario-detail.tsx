@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-usuario.reducer';
+import { getEntity, ITipoUsuarioBaseState, getTipoUsuarioState } from './tipo-usuario.reducer';
 import { ITipoUsuario } from 'app/shared/model/tipo-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoUsuarioState {
+  fieldsBase: ITipoUsuarioBaseState;
+}
+
 export interface ITipoUsuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoUsuarioDetail extends React.Component<ITipoUsuarioDetailProps> {
+export class TipoUsuarioDetail extends React.Component<ITipoUsuarioDetailProps, ITipoUsuarioState> {
   constructor(props: Readonly<ITipoUsuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoUsuarioState(this.props.location)
     };
   }
 

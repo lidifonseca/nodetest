@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './tipo-operadora.reducer';
+import { getTipoOperadoraState, ITipoOperadoraBaseState, getEntities } from './tipo-operadora.reducer';
 import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ITipoOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ITipoOperadoraBaseState {
-  tipo: any;
-  ativo: any;
-}
 export interface ITipoOperadoraState extends ITipoOperadoraBaseState, IPaginationBaseState {}
 
 export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOperadoraState> {
@@ -42,20 +38,9 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getTipoOperadoraState(this.props.location)
+      ...getTipoOperadoraState(this.props.location)
     };
   }
-
-  getTipoOperadoraState = (location): ITipoOperadoraBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const tipo = url.searchParams.get('tipo') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      tipo,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +83,9 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +133,11 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.tipoOperadora.home.createLabel">Create a new Tipo Operadora</Translate>
@@ -159,24 +150,29 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoLabel" for="tipo-operadora-tipo">
-                            <Translate contentKey="generadorApp.tipoOperadora.tipo">Tipo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoLabel" for="tipo-operadora-tipo">
+                              <Translate contentKey="generadorApp.tipoOperadora.tipo">Tipo</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="tipo" id="tipo-operadora-tipo" value={this.state.tipo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="tipo-operadora-ativo">
-                            <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
-                          </Label>
+                            <AvInput type="text" name="tipo" id="tipo-operadora-tipo" value={this.state.tipo} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="ativo" id="tipo-operadora-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="tipo-operadora-ativo">
+                              <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="ativo" id="tipo-operadora-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -204,14 +200,18 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('tipo')}>
-                        <Translate contentKey="generadorApp.tipoOperadora.tipo">Tipo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <th className="hand" onClick={this.sort('tipo')}>
+                          <Translate contentKey="generadorApp.tipoOperadora.tipo">Tipo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.tipoOperadora.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -226,25 +226,35 @@ export class TipoOperadora extends React.Component<ITipoOperadoraProps, ITipoOpe
                           </Button>
                         </td>
 
-                        <td>{tipoOperadora.tipo}</td>
+                        {this.state.baseFilters !== 'tipo' ? <td>{tipoOperadora.tipo}</td> : null}
 
-                        <td>{tipoOperadora.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{tipoOperadora.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${tipoOperadora.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${tipoOperadora.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tipoOperadora.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${tipoOperadora.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tipoOperadora.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${tipoOperadora.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

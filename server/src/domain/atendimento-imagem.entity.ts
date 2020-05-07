@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A AtendimentoImagem.
  */
-@Entity('atendimento_imagem')
+@Entity('tb_atendimento_imagem')
 export default class AtendimentoImagem extends BaseEntity {
-  @Column({ type: 'integer', name: 'atendimento_id', nullable: false })
+  @Column({ type: 'integer', name: 'ATENDIMENTO_ID', nullable: false })
   atendimentoId: number;
 
-  @Column({ name: 'imagem', length: 200, nullable: false })
+  @Column({ name: 'IMAGEM', length: 200, nullable: false })
   imagem: string;
 
-  @Column({ type: 'timestamp', name: 'criado_em', nullable: false })
+  @Column({ type: 'timestamp', name: 'CRIADO_EM', nullable: false })
   criadoEm: any;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

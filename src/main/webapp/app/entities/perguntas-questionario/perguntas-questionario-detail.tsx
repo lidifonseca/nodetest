@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './perguntas-questionario.reducer';
+import { getEntity, IPerguntasQuestionarioBaseState, getPerguntasQuestionarioState } from './perguntas-questionario.reducer';
 import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPerguntasQuestionarioState {
+  fieldsBase: IPerguntasQuestionarioBaseState;
+}
+
 export interface IPerguntasQuestionarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PerguntasQuestionarioDetail extends React.Component<IPerguntasQuestionarioDetailProps> {
+export class PerguntasQuestionarioDetail extends React.Component<IPerguntasQuestionarioDetailProps, IPerguntasQuestionarioState> {
   constructor(props: Readonly<IPerguntasQuestionarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPerguntasQuestionarioState(this.props.location)
     };
   }
 
@@ -107,21 +112,6 @@ export class PerguntasQuestionarioDetail extends React.Component<IPerguntasQuest
                       </Col>
                       <Col md="9">
                         <dd>{perguntasQuestionarioEntity.tipoCampo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.perguntasQuestionario.segmentosPerguntasId">Segmentos Perguntas Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>
-                          {perguntasQuestionarioEntity.segmentosPerguntasId ? perguntasQuestionarioEntity.segmentosPerguntasId.id : ''}
-                        </dd>
                       </Col>
                     </Row>
                   </Col>

@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './segmentos-perguntas.reducer';
+import {
+  ISegmentosPerguntasUpdateState,
+  getEntity,
+  getSegmentosPerguntasState,
+  ISegmentosPerguntasBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './segmentos-perguntas.reducer';
 import { ISegmentosPerguntas } from 'app/shared/model/segmentos-perguntas.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ISegmentosPerguntasUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ISegmentosPerguntasUpdateState {
-  isNew: boolean;
-}
-
 export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPerguntasUpdateProps, ISegmentosPerguntasUpdateState> {
   constructor(props: Readonly<ISegmentosPerguntasUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getSegmentosPerguntasState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,19 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['segmento'] ? '&segmento=' + fieldsBase['segmento'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { segmentosPerguntasEntity } = this.props;
@@ -57,13 +76,14 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
   };
 
   handleClose = () => {
-    this.props.history.push('/segmentos-perguntas');
+    this.props.history.push('/segmentos-perguntas?' + this.getFiltersURL());
   };
 
   render() {
     const { segmentosPerguntasEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -98,7 +118,14 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/segmentos-perguntas" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/segmentos-perguntas?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -113,7 +140,7 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -129,29 +156,27 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="segmentoLabel" for="segmentos-perguntas-segmento">
-                                <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="segmentos-perguntas-segmento"
-                                type="text"
-                                name="segmento"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'segmento' ? (
+                          <Col md="segmento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="segmentoLabel" for="segmentos-perguntas-segmento">
+                                    <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="segmentos-perguntas-segmento" type="text" name="segmento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="segmento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

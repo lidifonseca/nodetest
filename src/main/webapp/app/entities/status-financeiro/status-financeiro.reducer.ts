@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IStatusFinanceiro, defaultValue } from 'app/shared/model/status-financeiro.model';
 
 export const ACTION_TYPES = {
+  FETCH_STATUSFINANCEIRO_LIST_EXPORT: 'statusFinanceiro/FETCH_STATUSFINANCEIRO_LIST_EXPORT',
   FETCH_STATUSFINANCEIRO_LIST: 'statusFinanceiro/FETCH_STATUSFINANCEIRO_LIST',
   FETCH_STATUSFINANCEIRO: 'statusFinanceiro/FETCH_STATUSFINANCEIRO',
   CREATE_STATUSFINANCEIRO: 'statusFinanceiro/CREATE_STATUSFINANCEIRO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type StatusFinanceiroState = Readonly<typeof initialState>;
 
+export interface IStatusFinanceiroBaseState {
+  baseFilters: any;
+  nome: any;
+  ativo: any;
+}
+
+export interface IStatusFinanceiroUpdateState {
+  fieldsBase: IStatusFinanceiroBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: StatusFinanceiroState = initialState, action): StatusFinanceiroState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_STATUSFINANCEIRO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_STATUSFINANCEIRO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_STATUSFINANCEIRO):
       return {
@@ -51,6 +64,7 @@ export default (state: StatusFinanceiroState = initialState, action): StatusFina
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_STATUSFINANCEIRO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_STATUSFINANCEIRO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_STATUSFINANCEIRO):
     case FAILURE(ACTION_TYPES.CREATE_STATUSFINANCEIRO):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IStatusFinanceiro> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionStatusFinanceiro<IStatusFinanceiro> = (nome, ativo, page, size, sort) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_STATUSFINANCEIRO_LIST,
+    payload: axios.get<IStatusFinanceiro>(`${requestUrl}${nomeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IStatusFinanceiro> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IStatusFinanceiro> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getStatusFinanceiroState = (location): IStatusFinanceiroBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    nome,
+    ativo
+  };
+};

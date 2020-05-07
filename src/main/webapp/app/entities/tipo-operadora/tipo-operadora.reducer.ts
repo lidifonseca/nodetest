@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITipoOperadora, defaultValue } from 'app/shared/model/tipo-operadora.model';
 
 export const ACTION_TYPES = {
+  FETCH_TIPOOPERADORA_LIST_EXPORT: 'tipoOperadora/FETCH_TIPOOPERADORA_LIST_EXPORT',
   FETCH_TIPOOPERADORA_LIST: 'tipoOperadora/FETCH_TIPOOPERADORA_LIST',
   FETCH_TIPOOPERADORA: 'tipoOperadora/FETCH_TIPOOPERADORA',
   CREATE_TIPOOPERADORA: 'tipoOperadora/CREATE_TIPOOPERADORA',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type TipoOperadoraState = Readonly<typeof initialState>;
 
+export interface ITipoOperadoraBaseState {
+  baseFilters: any;
+  tipo: any;
+  ativo: any;
+}
+
+export interface ITipoOperadoraUpdateState {
+  fieldsBase: ITipoOperadoraBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TipoOperadoraState = initialState, action): TipoOperadoraState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TIPOOPERADORA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TIPOOPERADORA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TIPOOPERADORA):
       return {
@@ -51,6 +64,7 @@ export default (state: TipoOperadoraState = initialState, action): TipoOperadora
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TIPOOPERADORA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TIPOOPERADORA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TIPOOPERADORA):
     case FAILURE(ACTION_TYPES.CREATE_TIPOOPERADORA):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<ITipoOperadora> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTipoOperadora<ITipoOperadora> = (tipo, ativo, page, size, sort) => {
+  const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TIPOOPERADORA_LIST,
+    payload: axios.get<ITipoOperadora>(`${requestUrl}${tipoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ITipoOperadora> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<ITipoOperadora> = id => async dispa
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTipoOperadoraState = (location): ITipoOperadoraBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const tipo = url.searchParams.get('tipo') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    tipo,
+    ativo
+  };
+};

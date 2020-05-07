@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPad, defaultValue } from 'app/shared/model/pad.model';
 
 export const ACTION_TYPES = {
+  FETCH_PAD_LIST_EXPORT: 'pad/FETCH_PAD_LIST_EXPORT',
   FETCH_PAD_LIST: 'pad/FETCH_PAD_LIST',
   FETCH_PAD: 'pad/FETCH_PAD',
   CREATE_PAD: 'pad/CREATE_PAD',
@@ -30,10 +31,33 @@ const initialState = {
 
 export type PadState = Readonly<typeof initialState>;
 
+export interface IPadBaseState {
+  baseFilters: any;
+  idOperadora: any;
+  idFranquia: any;
+  nroPad: any;
+  dataInicio: any;
+  dataFim: any;
+  dataConferido: any;
+  ativo: any;
+  statusPad: any;
+  novoModelo: any;
+  imagePath: any;
+  score: any;
+  unidade: any;
+}
+
+export interface IPadUpdateState {
+  fieldsBase: IPadBaseState;
+  isNew: boolean;
+  unidadeId: string;
+}
+
 // Reducer
 
 export default (state: PadState = initialState, action): PadState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PAD_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PAD_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PAD):
       return {
@@ -51,6 +75,7 @@ export default (state: PadState = initialState, action): PadState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PAD_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PAD_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PAD):
     case FAILURE(ACTION_TYPES.CREATE_PAD):
@@ -113,15 +138,11 @@ export type ICrudGetAllActionPad<T> = (
   dataFim?: any,
   dataConferido?: any,
   ativo?: any,
-  idUsuario?: any,
   statusPad?: any,
   novoModelo?: any,
   imagePath?: any,
   score?: any,
-  padCid?: any,
-  padItem?: any,
   unidade?: any,
-  idPaciente?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -135,15 +156,11 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   dataFim,
   dataConferido,
   ativo,
-  idUsuario,
   statusPad,
   novoModelo,
   imagePath,
   score,
-  padCid,
-  padItem,
   unidade,
-  idPaciente,
   page,
   size,
   sort
@@ -155,21 +172,17 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
   const dataConferidoRequest = dataConferido ? `dataConferido.equals=${dataConferido}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const statusPadRequest = statusPad ? `statusPad.contains=${statusPad}&` : '';
   const novoModeloRequest = novoModelo ? `novoModelo.contains=${novoModelo}&` : '';
   const imagePathRequest = imagePath ? `imagePath.contains=${imagePath}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
-  const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
-  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
-  const idPacienteRequest = idPaciente ? `idPaciente.equals=${idPaciente}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${idUsuarioRequest}${statusPadRequest}${novoModeloRequest}${imagePathRequest}${scoreRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${idPacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${novoModeloRequest}${imagePathRequest}${scoreRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -181,11 +194,49 @@ export const getEntity: ICrudGetAction<IPad> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
+  idOperadora,
+  idFranquia,
+  nroPad,
+  dataInicio,
+  dataFim,
+  dataConferido,
+  ativo,
+  statusPad,
+  novoModelo,
+  imagePath,
+  score,
+  unidade,
+  page,
+  size,
+  sort
+) => {
+  const idOperadoraRequest = idOperadora ? `idOperadora.contains=${idOperadora}&` : '';
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+  const nroPadRequest = nroPad ? `nroPad.contains=${nroPad}&` : '';
+  const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
+  const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
+  const dataConferidoRequest = dataConferido ? `dataConferido.equals=${dataConferido}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const statusPadRequest = statusPad ? `statusPad.contains=${statusPad}&` : '';
+  const novoModeloRequest = novoModelo ? `novoModelo.contains=${novoModelo}&` : '';
+  const imagePathRequest = imagePath ? `imagePath.contains=${imagePath}&` : '';
+  const scoreRequest = score ? `score.contains=${score}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PAD_LIST,
+    payload: axios.get<IPad>(
+      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${novoModeloRequest}${imagePathRequest}${scoreRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPad> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PAD,
@@ -196,11 +247,7 @@ export const createEntity: ICrudPutAction<IPad> = entity => async dispatch => {
 };
 
 export const updateEntity: ICrudPutAction<IPad> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idPaciente: entity.idPaciente === 'null' ? null : entity.idPaciente
-  };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PAD,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -222,3 +269,37 @@ export const deleteEntity: ICrudDeleteAction<IPad> = id => async dispatch => {
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadState = (location): IPadBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idOperadora = url.searchParams.get('idOperadora') || '';
+  const idFranquia = url.searchParams.get('idFranquia') || '';
+  const nroPad = url.searchParams.get('nroPad') || '';
+  const dataInicio = url.searchParams.get('dataInicio') || '';
+  const dataFim = url.searchParams.get('dataFim') || '';
+  const dataConferido = url.searchParams.get('dataConferido') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const statusPad = url.searchParams.get('statusPad') || '';
+  const novoModelo = url.searchParams.get('novoModelo') || '';
+  const imagePath = url.searchParams.get('imagePath') || '';
+  const score = url.searchParams.get('score') || '';
+
+  const unidade = url.searchParams.get('unidade') || '';
+
+  return {
+    baseFilters,
+    idOperadora,
+    idFranquia,
+    nroPad,
+    dataInicio,
+    dataFim,
+    dataConferido,
+    ativo,
+    statusPad,
+    novoModelo,
+    imagePath,
+    score,
+    unidade
+  };
+};

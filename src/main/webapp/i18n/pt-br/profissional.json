@@ -53,10 +53,8 @@
       "dataSenha": "Data Senha",
       "expoToken": "Expo Token",
       "preferenciaAtendimento": "Preferencia Atendimento",
-      "senhaChat": "Senha Chat",
-      "atendimentoAceite": "Atendimento Aceite",
-      "atendimentoAssinaturas": "Atendimento Assinaturas",
-      "unidade": "Unidade"
+      "unidade": "Unidade",
+      "help": {}
     }
   }
 }

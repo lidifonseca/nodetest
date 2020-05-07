@@ -68,7 +68,9 @@ export class PadCsvController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() padCsv: PadCsv): Promise<PadCsv> {
+    console.info(padCsv);
     const created = await this.padCsvService.save(padCsv);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadCsv', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PadCsvController {
   })
   async put(@Req() req: Request, @Body() padCsv: PadCsv): Promise<PadCsv> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PadCsv', padCsv.id);
+
     return await this.padCsvService.update(padCsv);
   }
 

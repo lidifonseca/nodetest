@@ -22,22 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './franquia-area-atuacao.reducer';
+import { getFranquiaAreaAtuacaoState, IFranquiaAreaAtuacaoBaseState, getEntities } from './franquia-area-atuacao.reducer';
 import { IFranquiaAreaAtuacao } from 'app/shared/model/franquia-area-atuacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IFranquia } from 'app/shared/model/franquia.model';
-import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
-
 export interface IFranquiaAreaAtuacaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IFranquiaAreaAtuacaoBaseState {
-  cepIni: any;
-  cepFim: any;
-  ativo: any;
-  idFranquia: any;
-}
 export interface IFranquiaAreaAtuacaoState extends IFranquiaAreaAtuacaoBaseState, IPaginationBaseState {}
 
 export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoProps, IFranquiaAreaAtuacaoState> {
@@ -47,30 +38,12 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getFranquiaAreaAtuacaoState(this.props.location)
+      ...getFranquiaAreaAtuacaoState(this.props.location)
     };
   }
 
-  getFranquiaAreaAtuacaoState = (location): IFranquiaAreaAtuacaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const cepIni = url.searchParams.get('cepIni') || '';
-    const cepFim = url.searchParams.get('cepFim') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-
-    return {
-      cepIni,
-      cepFim,
-      ativo,
-      idFranquia
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getFranquias();
   }
 
   cancelCourse = () => {
@@ -78,8 +51,7 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       {
         cepIni: '',
         cepFim: '',
-        ativo: '',
-        idFranquia: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -112,7 +84,9 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -133,9 +107,6 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idFranquia=' +
-      this.state.idFranquia +
-      '&' +
       ''
     );
   };
@@ -143,12 +114,12 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { cepIni, cepFim, ativo, idFranquia, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(cepIni, cepFim, ativo, idFranquia, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { cepIni, cepFim, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(cepIni, cepFim, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { franquias, franquiaAreaAtuacaoList, match, totalItems } = this.props;
+    const { franquiaAreaAtuacaoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -166,7 +137,11 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.franquiaAreaAtuacao.home.createLabel">Create a new Franquia Area Atuacao</Translate>
@@ -179,52 +154,40 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepIniLabel" for="franquia-area-atuacao-cepIni">
-                            <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cepIni" id="franquia-area-atuacao-cepIni" value={this.state.cepIni} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepFimLabel" for="franquia-area-atuacao-cepFim">
-                            <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cepFim" id="franquia-area-atuacao-cepFim" value={this.state.cepFim} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="franquia-area-atuacao-ativo">
-                            <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="franquia-area-atuacao-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="franquia-area-atuacao-idFranquia">
-                              <Translate contentKey="generadorApp.franquiaAreaAtuacao.idFranquia">Id Franquia</Translate>
+                      {this.state.baseFilters !== 'cepIni' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepIniLabel" for="franquia-area-atuacao-cepIni">
+                              <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
                             </Label>
-                            <AvInput id="franquia-area-atuacao-idFranquia" type="select" className="form-control" name="idFranquiaId">
-                              <option value="" key="0" />
-                              {franquias
-                                ? franquias.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="cepIni" id="franquia-area-atuacao-cepIni" value={this.state.cepIni} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cepFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepFimLabel" for="franquia-area-atuacao-cepFim">
+                              <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cepFim" id="franquia-area-atuacao-cepFim" value={this.state.cepFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="franquia-area-atuacao-ativo">
+                              <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="franquia-area-atuacao-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -252,22 +215,24 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('cepIni')}>
-                        <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cepFim')}>
-                        <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.franquiaAreaAtuacao.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'cepIni' ? (
+                        <th className="hand" onClick={this.sort('cepIni')}>
+                          <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepIni">Cep Ini</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cepFim' ? (
+                        <th className="hand" onClick={this.sort('cepFim')}>
+                          <Translate contentKey="generadorApp.franquiaAreaAtuacao.cepFim">Cep Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.franquiaAreaAtuacao.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -282,34 +247,37 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
                           </Button>
                         </td>
 
-                        <td>{franquiaAreaAtuacao.cepIni}</td>
+                        {this.state.baseFilters !== 'cepIni' ? <td>{franquiaAreaAtuacao.cepIni}</td> : null}
 
-                        <td>{franquiaAreaAtuacao.cepFim}</td>
+                        {this.state.baseFilters !== 'cepFim' ? <td>{franquiaAreaAtuacao.cepFim}</td> : null}
 
-                        <td>{franquiaAreaAtuacao.ativo}</td>
-                        <td>
-                          {franquiaAreaAtuacao.idFranquia ? (
-                            <Link to={`franquia/${franquiaAreaAtuacao.idFranquia.id}`}>{franquiaAreaAtuacao.idFranquia.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{franquiaAreaAtuacao.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${franquiaAreaAtuacao.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${franquiaAreaAtuacao.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${franquiaAreaAtuacao.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${franquiaAreaAtuacao.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${franquiaAreaAtuacao.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${franquiaAreaAtuacao.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -351,13 +319,11 @@ export class FranquiaAreaAtuacao extends React.Component<IFranquiaAreaAtuacaoPro
 }
 
 const mapStateToProps = ({ franquiaAreaAtuacao, ...storeState }: IRootState) => ({
-  franquias: storeState.franquia.entities,
   franquiaAreaAtuacaoList: franquiaAreaAtuacao.entities,
   totalItems: franquiaAreaAtuacao.totalItems
 });
 
 const mapDispatchToProps = {
-  getFranquias,
   getEntities
 };
 

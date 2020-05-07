@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITela, defaultValue } from 'app/shared/model/tela.model';
 
 export const ACTION_TYPES = {
+  FETCH_TELA_LIST_EXPORT: 'tela/FETCH_TELA_LIST_EXPORT',
   FETCH_TELA_LIST: 'tela/FETCH_TELA_LIST',
   FETCH_TELA: 'tela/FETCH_TELA',
   CREATE_TELA: 'tela/CREATE_TELA',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type TelaState = Readonly<typeof initialState>;
 
+export interface ITelaBaseState {
+  baseFilters: any;
+  tela: any;
+}
+
+export interface ITelaUpdateState {
+  fieldsBase: ITelaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TelaState = initialState, action): TelaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TELA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TELA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TELA):
       return {
@@ -51,6 +63,7 @@ export default (state: TelaState = initialState, action): TelaState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TELA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TELA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TELA):
     case FAILURE(ACTION_TYPES.CREATE_TELA):
@@ -107,26 +120,18 @@ const apiUrl = 'api/telas';
 // Actions
 export type ICrudGetAllActionTela<T> = (
   tela?: any,
-  logUser?: any,
-  logUserFranquia?: any,
-  usuarioAcao?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionTela<ITela> = (tela, logUser, logUserFranquia, usuarioAcao, page, size, sort) => {
+export const getEntities: ICrudGetAllActionTela<ITela> = (tela, page, size, sort) => {
   const telaRequest = tela ? `tela.contains=${tela}&` : '';
-  const logUserRequest = logUser ? `logUser.equals=${logUser}&` : '';
-  const logUserFranquiaRequest = logUserFranquia ? `logUserFranquia.equals=${logUserFranquia}&` : '';
-  const usuarioAcaoRequest = usuarioAcao ? `usuarioAcao.equals=${usuarioAcao}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_TELA_LIST,
-    payload: axios.get<ITela>(
-      `${requestUrl}${telaRequest}${logUserRequest}${logUserFranquiaRequest}${usuarioAcaoRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ITela>(`${requestUrl}${telaRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ITela> = id => {
@@ -134,6 +139,16 @@ export const getEntity: ICrudGetAction<ITela> = id => {
   return {
     type: ACTION_TYPES.FETCH_TELA,
     payload: axios.get<ITela>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionTela<ITela> = (tela, page, size, sort) => {
+  const telaRequest = tela ? `tela.contains=${tela}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TELA_LIST,
+    payload: axios.get<ITela>(`${requestUrl}${telaRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -172,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<ITela> = id => async dispatch => {
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTelaState = (location): ITelaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const tela = url.searchParams.get('tela') || '';
+
+  return {
+    baseFilters,
+    tela
+  };
+};

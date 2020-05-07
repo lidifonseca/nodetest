@@ -22,18 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-dispositivo-complexidade-atual.reducer';
+import {
+  getProfissionalDispositivoComplexidadeAtualState,
+  IProfissionalDispositivoComplexidadeAtualBaseState,
+  getEntities
+} from './profissional-dispositivo-complexidade-atual.reducer';
 import { IProfissionalDispositivoComplexidadeAtual } from 'app/shared/model/profissional-dispositivo-complexidade-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalDispositivoComplexidadeAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalDispositivoComplexidadeAtualBaseState {
-  idProfissional: any;
-  idProfissionalDispositivoComplexidade: any;
-  idUsuario: any;
-}
 export interface IProfissionalDispositivoComplexidadeAtualState
   extends IProfissionalDispositivoComplexidadeAtualBaseState,
     IPaginationBaseState {}
@@ -48,22 +47,9 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalDispositivoComplexidadeAtualState(this.props.location)
+      ...getProfissionalDispositivoComplexidadeAtualState(this.props.location)
     };
   }
-
-  getProfissionalDispositivoComplexidadeAtualState = (location): IProfissionalDispositivoComplexidadeAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const idProfissionalDispositivoComplexidade = url.searchParams.get('idProfissionalDispositivoComplexidade') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idProfissional,
-      idProfissionalDispositivoComplexidade,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -73,8 +59,7 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
     this.setState(
       {
         idProfissional: '',
-        idProfissionalDispositivoComplexidade: '',
-        idUsuario: ''
+        idProfissionalDispositivoComplexidade: ''
       },
       () => this.sortEntities()
     );
@@ -107,7 +92,9 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -125,9 +112,6 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
       'idProfissionalDispositivoComplexidade=' +
       this.state.idProfissionalDispositivoComplexidade +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -135,15 +119,8 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idProfissional, idProfissionalDispositivoComplexidade, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(
-      idProfissional,
-      idProfissionalDispositivoComplexidade,
-      idUsuario,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { idProfissional, idProfissionalDispositivoComplexidade, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idProfissional, idProfissionalDispositivoComplexidade, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -165,7 +142,11 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.home.createLabel">
@@ -180,52 +161,44 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-dispositivo-complexidade-atual-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">
-                              Id Profissional
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idProfissional"
-                            id="profissional-dispositivo-complexidade-atual-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label
-                            id="idProfissionalDispositivoComplexidadeLabel"
-                            for="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
-                          >
-                            <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
-                              Id Profissional Dispositivo Complexidade
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idProfissionalDispositivoComplexidade"
-                            id="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
-                            value={this.state.idProfissionalDispositivoComplexidade}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="profissional-dispositivo-complexidade-atual-idUsuario">
-                            <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="profissional-dispositivo-complexidade-atual-idUsuario"
-                            value={this.state.idUsuario}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-dispositivo-complexidade-atual-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">
+                                Id Profissional
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idProfissional"
+                              id="profissional-dispositivo-complexidade-atual-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idProfissionalDispositivoComplexidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label
+                              id="idProfissionalDispositivoComplexidadeLabel"
+                              for="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
+                            >
+                              <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
+                                Id Profissional Dispositivo Complexidade
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idProfissionalDispositivoComplexidade"
+                              id="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
+                              value={this.state.idProfissionalDispositivoComplexidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -257,22 +230,22 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">
-                          Id Profissional
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idProfissionalDispositivoComplexidade')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
-                          Id Profissional Dispositivo Complexidade
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">
+                            Id Profissional
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idProfissionalDispositivoComplexidade' ? (
+                        <th className="hand" onClick={this.sort('idProfissionalDispositivoComplexidade')}>
+                          <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
+                            Id Profissional Dispositivo Complexidade
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -287,15 +260,22 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                           </Button>
                         </td>
 
-                        <td>{profissionalDispositivoComplexidadeAtual.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? (
+                          <td>{profissionalDispositivoComplexidadeAtual.idProfissional}</td>
+                        ) : null}
 
-                        <td>{profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade}</td>
-
-                        <td>{profissionalDispositivoComplexidadeAtual.idUsuario}</td>
+                        {this.state.baseFilters !== 'idProfissionalDispositivoComplexidade' ? (
+                          <td>{profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalDispositivoComplexidadeAtual.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalDispositivoComplexidadeAtual.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
@@ -303,7 +283,7 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                             </Button>
                             <Button
                               tag={Link}
-                              to={`${match.url}/${profissionalDispositivoComplexidadeAtual.id}/edit`}
+                              to={`${match.url}/${profissionalDispositivoComplexidadeAtual.id}/edit?${this.getFiltersURL()}`}
                               color="primary"
                               size="sm"
                             >
@@ -314,7 +294,7 @@ export class ProfissionalDispositivoComplexidadeAtual extends React.Component<
                             </Button>
                             <Button
                               tag={Link}
-                              to={`${match.url}/${profissionalDispositivoComplexidadeAtual.id}/delete`}
+                              to={`${match.url}/${profissionalDispositivoComplexidadeAtual.id}/delete?${this.getFiltersURL()}`}
                               color="danger"
                               size="sm"
                             >

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './especialidade-operadora.reducer';
+import { getEntity, IEspecialidadeOperadoraBaseState, getEspecialidadeOperadoraState } from './especialidade-operadora.reducer';
 import { IEspecialidadeOperadora } from 'app/shared/model/especialidade-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IEspecialidadeOperadoraState {
+  fieldsBase: IEspecialidadeOperadoraBaseState;
+}
+
 export interface IEspecialidadeOperadoraDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class EspecialidadeOperadoraDetail extends React.Component<IEspecialidadeOperadoraDetailProps> {
+export class EspecialidadeOperadoraDetail extends React.Component<IEspecialidadeOperadoraDetailProps, IEspecialidadeOperadoraState> {
   constructor(props: Readonly<IEspecialidadeOperadoraDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getEspecialidadeOperadoraState(this.props.location)
     };
   }
 
@@ -167,32 +172,6 @@ export class EspecialidadeOperadoraDetail extends React.Component<IEspecialidade
                       </Col>
                       <Col md="9">
                         <dd>{especialidadeOperadoraEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.especialidadeOperadora.idOperadora">Id Operadora</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{especialidadeOperadoraEntity.idOperadora ? especialidadeOperadoraEntity.idOperadora.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.especialidadeOperadora.idEspecialidade">Id Especialidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{especialidadeOperadoraEntity.idEspecialidade ? especialidadeOperadoraEntity.idEspecialidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

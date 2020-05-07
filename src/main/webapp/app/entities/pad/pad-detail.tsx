@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad.reducer';
+import { getEntity, IPadBaseState, getPadState } from './pad.reducer';
 import { IPad } from 'app/shared/model/pad.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadState {
+  fieldsBase: IPadBaseState;
+}
+
 export interface IPadDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadDetail extends React.Component<IPadDetailProps> {
+export class PadDetail extends React.Component<IPadDetailProps, IPadState> {
   constructor(props: Readonly<IPadDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadState(this.props.location)
     };
   }
 
@@ -165,21 +170,6 @@ export class PadDetail extends React.Component<IPadDetailProps> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.pad.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.idUsuario}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="statusPad">
                             <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
                           </span>
@@ -245,19 +235,6 @@ export class PadDetail extends React.Component<IPadDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{padEntity.unidade ? padEntity.unidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pad.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.idPaciente ? padEntity.idPaciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

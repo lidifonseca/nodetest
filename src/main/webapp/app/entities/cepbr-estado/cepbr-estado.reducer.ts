@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICepbrEstado, defaultValue } from 'app/shared/model/cepbr-estado.model';
 
 export const ACTION_TYPES = {
+  FETCH_CEPBRESTADO_LIST_EXPORT: 'cepbrEstado/FETCH_CEPBRESTADO_LIST_EXPORT',
   FETCH_CEPBRESTADO_LIST: 'cepbrEstado/FETCH_CEPBRESTADO_LIST',
   FETCH_CEPBRESTADO: 'cepbrEstado/FETCH_CEPBRESTADO',
   CREATE_CEPBRESTADO: 'cepbrEstado/CREATE_CEPBRESTADO',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type CepbrEstadoState = Readonly<typeof initialState>;
 
+export interface ICepbrEstadoBaseState {
+  baseFilters: any;
+  uf: any;
+  estado: any;
+  codIbge: any;
+}
+
+export interface ICepbrEstadoUpdateState {
+  fieldsBase: ICepbrEstadoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CepbrEstadoState = initialState, action): CepbrEstadoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CEPBRESTADO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRESTADO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRESTADO):
       return {
@@ -51,6 +65,7 @@ export default (state: CepbrEstadoState = initialState, action): CepbrEstadoStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CEPBRESTADO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRESTADO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRESTADO):
     case FAILURE(ACTION_TYPES.CREATE_CEPBRESTADO):
@@ -109,24 +124,20 @@ export type ICrudGetAllActionCepbrEstado<T> = (
   uf?: any,
   estado?: any,
   codIbge?: any,
-  cepbrCidade?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCepbrEstado<ICepbrEstado> = (uf, estado, codIbge, cepbrCidade, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCepbrEstado<ICepbrEstado> = (uf, estado, codIbge, page, size, sort) => {
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const estadoRequest = estado ? `estado.contains=${estado}&` : '';
   const codIbgeRequest = codIbge ? `codIbge.contains=${codIbge}&` : '';
-  const cepbrCidadeRequest = cepbrCidade ? `cepbrCidade.equals=${cepbrCidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CEPBRESTADO_LIST,
-    payload: axios.get<ICepbrEstado>(
-      `${requestUrl}${ufRequest}${estadoRequest}${codIbgeRequest}${cepbrCidadeRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ICepbrEstado>(`${requestUrl}${ufRequest}${estadoRequest}${codIbgeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ICepbrEstado> = id => {
@@ -134,6 +145,18 @@ export const getEntity: ICrudGetAction<ICepbrEstado> = id => {
   return {
     type: ACTION_TYPES.FETCH_CEPBRESTADO,
     payload: axios.get<ICepbrEstado>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionCepbrEstado<ICepbrEstado> = (uf, estado, codIbge, page, size, sort) => {
+  const ufRequest = uf ? `uf.contains=${uf}&` : '';
+  const estadoRequest = estado ? `estado.contains=${estado}&` : '';
+  const codIbgeRequest = codIbge ? `codIbge.contains=${codIbge}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CEPBRESTADO_LIST,
+    payload: axios.get<ICepbrEstado>(`${requestUrl}${ufRequest}${estadoRequest}${codIbgeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 
@@ -172,3 +195,18 @@ export const deleteEntity: ICrudDeleteAction<ICepbrEstado> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCepbrEstadoState = (location): ICepbrEstadoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const uf = url.searchParams.get('uf') || '';
+  const estado = url.searchParams.get('estado') || '';
+  const codIbge = url.searchParams.get('codIbge') || '';
+
+  return {
+    baseFilters,
+    uf,
+    estado,
+    codIbge
+  };
+};

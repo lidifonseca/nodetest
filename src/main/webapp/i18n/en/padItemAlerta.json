@@ -3,15 +3,15 @@
     "padItemAlerta": {
       "home": {
         "title": "Pad Item Alertas",
-        "createLabel": "Criar novo Pad Item Alerta",
-        "createOrEditLabel": "Criar ou editar Pad Item Alerta",
-        "notFound": "Nenhum Pad Item Alerta encontrado"
+        "createLabel": "Create a new Pad Item Alerta",
+        "createOrEditLabel": "Create or edit a Pad Item Alerta",
+        "notFound": "No Pad Item Alertas found"
       },
-      "created": "Um novo Pad Item Alerta foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Item Alerta foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Item Alerta foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Item Alerta is created with identifier {{ param }}",
+      "updated": "A Pad Item Alerta is updated with identifier {{ param }}",
+      "deleted": "A Pad Item Alerta is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Item Alerta {{ id }}?"
+        "question": "Are you sure you want to delete Pad Item Alerta {{ id }}?"
       },
       "detail": {
         "title": "Pad Item Alerta"

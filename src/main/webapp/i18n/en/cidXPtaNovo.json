@@ -3,15 +3,15 @@
     "cidXPtaNovo": {
       "home": {
         "title": "Cid X Pta Novos",
-        "createLabel": "Criar novo Cid X Pta Novo",
-        "createOrEditLabel": "Criar ou editar Cid X Pta Novo",
-        "notFound": "Nenhum Cid X Pta Novo encontrado"
+        "createLabel": "Create a new Cid X Pta Novo",
+        "createOrEditLabel": "Create or edit a Cid X Pta Novo",
+        "notFound": "No Cid X Pta Novos found"
       },
-      "created": "Um novo Cid X Pta Novo foi criado com o identificador {{ param }}",
-      "updated": "Um Cid X Pta Novo foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Cid X Pta Novo foi excluído com o identificador {{ param }}",
+      "created": "A new Cid X Pta Novo is created with identifier {{ param }}",
+      "updated": "A Cid X Pta Novo is updated with identifier {{ param }}",
+      "deleted": "A Cid X Pta Novo is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Cid X Pta Novo {{ id }}?"
+        "question": "Are you sure you want to delete Cid X Pta Novo {{ id }}?"
       },
       "detail": {
         "title": "Cid X Pta Novo"
@@ -19,11 +19,7 @@
       "complexidade": "Complexidade",
       "versao": "Versao",
       "score": "Score",
-      "titulo": "Titulo",
-      "cidXPtaNovo": "Cid X Pta Novo",
-      "cidXPtaNovoPadItemIndi": "Cid X Pta Novo Pad Item Indi",
-      "cidId": "Cid Id",
-      "cidXPtaNovoId": "Cid X Pta Novo Id"
+      "titulo": "Titulo"
     }
   }
 }

@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import CepbrBairro from './cepbr-bairro';
 import CepbrBairroDetail from './cepbr-bairro-detail';
+import CepbrBairroRelatorioCSV from './relatorio/cepbr-bairro.csv';
 import CepbrBairroUpdate from './cepbr-bairro-update';
 import CepbrBairroDeleteDialog from './cepbr-bairro-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={CepbrBairroRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={CepbrBairroUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={CepbrBairroUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={CepbrBairroDetail} />

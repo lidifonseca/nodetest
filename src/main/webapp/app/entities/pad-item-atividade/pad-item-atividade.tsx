@@ -31,24 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-item-atividade.reducer';
+import { getPadItemAtividadeState, IPadItemAtividadeBaseState, getEntities } from './pad-item-atividade.reducer';
 import { IPadItemAtividade } from 'app/shared/model/pad-item-atividade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
-import { getEntities as getCategoriaAtividades } from 'app/entities/categoria-atividade/categoria-atividade.reducer';
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-
 export interface IPadItemAtividadeProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadItemAtividadeBaseState {
-  dataInicio: any;
-  dataFim: any;
-  idAtividade: any;
-  idPadItem: any;
-}
 export interface IPadItemAtividadeState extends IPadItemAtividadeBaseState, IPaginationBaseState {}
 
 export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IPadItemAtividadeState> {
@@ -58,40 +47,19 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadItemAtividadeState(this.props.location)
+      ...getPadItemAtividadeState(this.props.location)
     };
   }
 
-  getPadItemAtividadeState = (location): IPadItemAtividadeBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const dataInicio = url.searchParams.get('dataInicio') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-
-    const idAtividade = url.searchParams.get('idAtividade') || '';
-    const idPadItem = url.searchParams.get('idPadItem') || '';
-
-    return {
-      dataInicio,
-      dataFim,
-      idAtividade,
-      idPadItem
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getCategoriaAtividades();
-    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
         dataInicio: '',
-        dataFim: '',
-        idAtividade: '',
-        idPadItem: ''
+        dataFim: ''
       },
       () => this.sortEntities()
     );
@@ -124,7 +92,9 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -142,12 +112,6 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
       'dataFim=' +
       this.state.dataFim +
       '&' +
-      'idAtividade=' +
-      this.state.idAtividade +
-      '&' +
-      'idPadItem=' +
-      this.state.idPadItem +
-      '&' +
       ''
     );
   };
@@ -155,12 +119,12 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { dataInicio, dataFim, idAtividade, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(dataInicio, dataFim, idAtividade, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { dataInicio, dataFim, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(dataInicio, dataFim, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { categoriaAtividades, padItems, padItemAtividadeList, match, totalItems } = this.props;
+    const { padItemAtividadeList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -178,7 +142,11 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padItemAtividade.home.createLabel">Create a new Pad Item Atividade</Translate>
@@ -191,62 +159,27 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataInicioLabel" for="pad-item-atividade-dataInicio">
-                            <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataInicio" id="pad-item-atividade-dataInicio" value={this.state.dataInicio} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataFimLabel" for="pad-item-atividade-dataFim">
-                            <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataFim" id="pad-item-atividade-dataFim" value={this.state.dataFim} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="pad-item-atividade-idAtividade">
-                              <Translate contentKey="generadorApp.padItemAtividade.idAtividade">Id Atividade</Translate>
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataInicioLabel" for="pad-item-atividade-dataInicio">
+                              <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
                             </Label>
-                            <AvInput id="pad-item-atividade-idAtividade" type="select" className="form-control" name="idAtividadeId">
-                              <option value="" key="0" />
-                              {categoriaAtividades
-                                ? categoriaAtividades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="date" name="dataInicio" id="pad-item-atividade-dataInicio" value={this.state.dataInicio} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="pad-item-atividade-idPadItem">
-                              <Translate contentKey="generadorApp.padItemAtividade.idPadItem">Id Pad Item</Translate>
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataFimLabel" for="pad-item-atividade-dataFim">
+                              <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
                             </Label>
-                            <AvInput id="pad-item-atividade-idPadItem" type="select" className="form-control" name="idPadItemId">
-                              <option value="" key="0" />
-                              {padItems
-                                ? padItems.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="date" name="dataFim" id="pad-item-atividade-dataFim" value={this.state.dataFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -274,22 +207,18 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataInicio')}>
-                        <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataFim')}>
-                        <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.padItemAtividade.idAtividade">Id Atividade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.padItemAtividade.idPadItem">Id Pad Item</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <th className="hand" onClick={this.sort('dataInicio')}>
+                          <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <th className="hand" onClick={this.sort('dataFim')}>
+                          <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -304,43 +233,43 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
                           </Button>
                         </td>
 
-                        <td>
-                          <TextFormat type="date" value={padItemAtividade.dataInicio} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataInicio' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemAtividade.dataInicio} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={padItemAtividade.dataFim} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
-                        <td>
-                          {padItemAtividade.idAtividade ? (
-                            <Link to={`categoria-atividade/${padItemAtividade.idAtividade.id}`}>{padItemAtividade.idAtividade.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {padItemAtividade.idPadItem ? (
-                            <Link to={`pad-item/${padItemAtividade.idPadItem.id}`}>{padItemAtividade.idPadItem.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'dataFim' ? (
+                          <td>
+                            <TextFormat type="date" value={padItemAtividade.dataFim} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padItemAtividade.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padItemAtividade.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemAtividade.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemAtividade.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padItemAtividade.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${padItemAtividade.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -382,15 +311,11 @@ export class PadItemAtividade extends React.Component<IPadItemAtividadeProps, IP
 }
 
 const mapStateToProps = ({ padItemAtividade, ...storeState }: IRootState) => ({
-  categoriaAtividades: storeState.categoriaAtividade.entities,
-  padItems: storeState.padItem.entities,
   padItemAtividadeList: padItemAtividade.entities,
   totalItems: padItemAtividade.totalItems
 });
 
 const mapDispatchToProps = {
-  getCategoriaAtividades,
-  getPadItems,
   getEntities
 };
 

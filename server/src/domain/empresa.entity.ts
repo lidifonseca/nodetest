@@ -4,72 +4,79 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Cidade from './cidade.entity';
-
 /**
  * A Empresa.
  */
-@Entity('empresa')
+@Entity('tb_empresa')
 export default class Empresa extends BaseEntity {
-  @Column({ name: 'empresa', length: 100 })
+  @Column({ name: 'EMPRESA', length: 100 })
   empresa: string;
 
-  @Column({ name: 'nome', length: 60 })
+  @Column({ name: 'NOME', length: 60 })
   nome: string;
 
-  @Column({ name: 'email', length: 100 })
+  @Column({ name: 'EMAIL', length: 100 })
   email: string;
 
-  @Column({ name: 'cpf', length: 20 })
+  @Column({ name: 'CPF', length: 20 })
   cpf: string;
 
-  @Column({ name: 'rg', length: 30 })
+  @Column({ name: 'RG', length: 30 })
   rg: string;
 
-  @Column({ type: 'date', name: 'nascimento' })
+  @Column({ type: 'date', name: 'NASCIMENTO' })
   nascimento: any;
 
-  @Column({ type: 'integer', name: 'sexo' })
+  @Column({ type: 'integer', name: 'SEXO' })
   sexo: number;
 
-  @Column({ name: 'telefone_1', length: 20 })
+  /**
+   * @dbName TELEFONE1@@
+   */
+  @Column({ name: 'TELEFONE1', length: 20 })
   telefone1: string;
 
-  @Column({ name: 'telefone_2', length: 20 })
+  /**
+   * @dbName TELEFONE2@@
+   */
+  @Column({ name: 'TELEFONE2', length: 20 })
   telefone2: string;
 
-  @Column({ name: 'celular_1', length: 20 })
+  /**
+   * @dbName CELULAR1@@
+   */
+  @Column({ name: 'CELULAR1', length: 20 })
   celular1: string;
 
-  @Column({ name: 'celular_2', length: 20 })
+  /**
+   * @dbName CELULAR2@@
+   */
+  @Column({ name: 'CELULAR2', length: 20 })
   celular2: string;
 
-  @Column({ name: 'cep', length: 10 })
+  @Column({ name: 'CEP', length: 10 })
   cep: string;
 
-  @Column({ name: 'endereco', length: 100 })
+  @Column({ name: 'ENDERECO', length: 100 })
   endereco: string;
 
-  @Column({ name: 'numero', length: 30 })
+  @Column({ name: 'NUMERO', length: 30 })
   numero: string;
 
-  @Column({ name: 'complemento', length: 20 })
+  @Column({ name: 'COMPLEMENTO', length: 20 })
   complemento: string;
 
-  @Column({ name: 'bairro', length: 40 })
+  @Column({ name: 'BAIRRO', length: 40 })
   bairro: string;
 
-  @Column({ name: 'cidade', length: 100 })
+  @Column({ name: 'CIDADE', length: 100 })
   cidade: string;
 
-  @Column({ name: 'uf', length: 5 })
+  @Column({ name: 'UF', length: 5 })
   uf: string;
 
-  @Column({ type: 'integer', name: 'tipo', nullable: false })
+  @Column({ type: 'integer', name: 'TIPO', nullable: false })
   tipo: number;
-
-  @ManyToOne(type => Cidade)
-  idCidade: Cidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

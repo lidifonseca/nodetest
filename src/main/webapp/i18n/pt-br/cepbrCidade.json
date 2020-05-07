@@ -19,10 +19,7 @@
       "idCidade": "Id Cidade",
       "cidade": "Cidade",
       "codIbge": "Cod Ibge",
-      "area": "Area",
-      "cepbrBairro": "Cepbr Bairro",
-      "cepbrEndereco": "Cepbr Endereco",
-      "uf": "Uf"
+      "area": "Area"
     }
   }
 }

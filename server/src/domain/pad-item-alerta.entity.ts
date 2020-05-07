@@ -7,24 +7,24 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A PadItemAlerta.
  */
-@Entity('pad_item_alerta')
+@Entity('tb_pad_item_alerta')
 export default class PadItemAlerta extends BaseEntity {
-  @Column({ type: 'integer', name: 'pad_item_meta_id', nullable: false })
+  @Column({ type: 'integer', name: 'PAD_ITEM_META_ID', nullable: false })
   padItemMetaId: number;
 
-  @Column({ type: 'timestamp', name: 'envio_email_em' })
+  @Column({ type: 'timestamp', name: 'ENVIO_EMAIL_EM' })
   envioEmailEm: any;
 
-  @Column({ type: 'timestamp', name: 'visualizado_em' })
+  @Column({ type: 'timestamp', name: 'VISUALIZADO_EM' })
   visualizadoEm: any;
 
-  @Column({ type: 'timestamp', name: 'criado_em' })
+  @Column({ type: 'timestamp', name: 'CRIADO_EM' })
   criadoEm: any;
 
-  @Column({ type: 'boolean', name: 'ativo', nullable: false })
+  @Column({ type: 'boolean', name: 'ATIVO', nullable: false })
   ativo: boolean;
 
-  @Column({ name: 'mensagem', length: 100 })
+  @Column({ name: 'MENSAGEM', length: 100 })
   mensagem: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -42,36 +42,8 @@
             "fieldType": "Double"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "alertasIndicadores",
-            "otherEntityRelationshipName": "padItemIndicadoresId",
-            "relationshipName": "alertasIndicadores"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "padItemIndicadores",
-            "otherEntityRelationshipName": "cidXPtaNovoPadItemIndi",
-            "relationshipName": "padItemIndicadoresId",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "categoria",
-            "otherEntityRelationshipName": "cidXPtaNovoPadItemIndi",
-            "relationshipName": "categoriasId",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cidXPtaNovo",
-            "otherEntityRelationshipName": "cidXPtaNovoPadItemIndi",
-            "relationshipName": "cidXPtaNovoId",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502231700",
+    "relationships": [],
+    "changelogDate": "20200507120200",
     "entityTableName": "cid_x_pta_novo_pad_item_indi",
     "dto": "mapstruct",
     "pagination": "pagination",

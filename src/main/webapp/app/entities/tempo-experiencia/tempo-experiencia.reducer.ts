@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITempoExperiencia, defaultValue } from 'app/shared/model/tempo-experiencia.model';
 
 export const ACTION_TYPES = {
+  FETCH_TEMPOEXPERIENCIA_LIST_EXPORT: 'tempoExperiencia/FETCH_TEMPOEXPERIENCIA_LIST_EXPORT',
   FETCH_TEMPOEXPERIENCIA_LIST: 'tempoExperiencia/FETCH_TEMPOEXPERIENCIA_LIST',
   FETCH_TEMPOEXPERIENCIA: 'tempoExperiencia/FETCH_TEMPOEXPERIENCIA',
   CREATE_TEMPOEXPERIENCIA: 'tempoExperiencia/CREATE_TEMPOEXPERIENCIA',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type TempoExperienciaState = Readonly<typeof initialState>;
 
+export interface ITempoExperienciaBaseState {
+  baseFilters: any;
+  tempoExperiencia: any;
+}
+
+export interface ITempoExperienciaUpdateState {
+  fieldsBase: ITempoExperienciaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TempoExperienciaState = initialState, action): TempoExperienciaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TEMPOEXPERIENCIA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TEMPOEXPERIENCIA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TEMPOEXPERIENCIA):
       return {
@@ -51,6 +63,7 @@ export default (state: TempoExperienciaState = initialState, action): TempoExper
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TEMPOEXPERIENCIA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TEMPOEXPERIENCIA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TEMPOEXPERIENCIA):
     case FAILURE(ACTION_TYPES.CREATE_TEMPOEXPERIENCIA):
@@ -129,6 +142,16 @@ export const getEntity: ICrudGetAction<ITempoExperiencia> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTempoExperiencia<ITempoExperiencia> = (tempoExperiencia, page, size, sort) => {
+  const tempoExperienciaRequest = tempoExperiencia ? `tempoExperiencia.contains=${tempoExperiencia}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TEMPOEXPERIENCIA_LIST,
+    payload: axios.get<ITempoExperiencia>(`${requestUrl}${tempoExperienciaRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ITempoExperiencia> = entity => async dispatch => {
   entity = {
     ...entity
@@ -164,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<ITempoExperiencia> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTempoExperienciaState = (location): ITempoExperienciaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const tempoExperiencia = url.searchParams.get('tempoExperiencia') || '';
+
+  return {
+    baseFilters,
+    tempoExperiencia
+  };
+};

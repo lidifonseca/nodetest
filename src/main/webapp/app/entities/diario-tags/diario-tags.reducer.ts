@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IDiarioTags, defaultValue } from 'app/shared/model/diario-tags.model';
 
 export const ACTION_TYPES = {
+  FETCH_DIARIOTAGS_LIST_EXPORT: 'diarioTags/FETCH_DIARIOTAGS_LIST_EXPORT',
   FETCH_DIARIOTAGS_LIST: 'diarioTags/FETCH_DIARIOTAGS_LIST',
   FETCH_DIARIOTAGS: 'diarioTags/FETCH_DIARIOTAGS',
   CREATE_DIARIOTAGS: 'diarioTags/CREATE_DIARIOTAGS',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type DiarioTagsState = Readonly<typeof initialState>;
 
+export interface IDiarioTagsBaseState {
+  baseFilters: any;
+  nome: any;
+  idPai: any;
+  nomeId: any;
+  ativo: any;
+}
+
+export interface IDiarioTagsUpdateState {
+  fieldsBase: IDiarioTagsBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: DiarioTagsState = initialState, action): DiarioTagsState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_DIARIOTAGS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_DIARIOTAGS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_DIARIOTAGS):
       return {
@@ -51,6 +66,7 @@ export default (state: DiarioTagsState = initialState, action): DiarioTagsState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_DIARIOTAGS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_DIARIOTAGS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_DIARIOTAGS):
     case FAILURE(ACTION_TYPES.CREATE_DIARIOTAGS):
@@ -137,6 +153,21 @@ export const getEntity: ICrudGetAction<IDiarioTags> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionDiarioTags<IDiarioTags> = (nome, idPai, nomeId, ativo, page, size, sort) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const idPaiRequest = idPai ? `idPai.contains=${idPai}&` : '';
+  const nomeIdRequest = nomeId ? `nomeId.contains=${nomeId}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_DIARIOTAGS_LIST,
+    payload: axios.get<IDiarioTags>(
+      `${requestUrl}${nomeRequest}${idPaiRequest}${nomeIdRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IDiarioTags> = entity => async dispatch => {
   entity = {
     ...entity
@@ -172,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<IDiarioTags> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getDiarioTagsState = (location): IDiarioTagsBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const idPai = url.searchParams.get('idPai') || '';
+  const nomeId = url.searchParams.get('nomeId') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    nome,
+    idPai,
+    nomeId,
+    ativo
+  };
+};

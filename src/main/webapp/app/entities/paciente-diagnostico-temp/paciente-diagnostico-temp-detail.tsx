@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-diagnostico-temp.reducer';
+import { getEntity, IPacienteDiagnosticoTempBaseState, getPacienteDiagnosticoTempState } from './paciente-diagnostico-temp.reducer';
 import { IPacienteDiagnosticoTemp } from 'app/shared/model/paciente-diagnostico-temp.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteDiagnosticoTempState {
+  fieldsBase: IPacienteDiagnosticoTempBaseState;
+}
+
 export interface IPacienteDiagnosticoTempDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteDiagnosticoTempDetail extends React.Component<IPacienteDiagnosticoTempDetailProps> {
+export class PacienteDiagnosticoTempDetail extends React.Component<IPacienteDiagnosticoTempDetailProps, IPacienteDiagnosticoTempState> {
   constructor(props: Readonly<IPacienteDiagnosticoTempDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteDiagnosticoTempState(this.props.location)
     };
   }
 

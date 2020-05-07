@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './modulos-pad.reducer';
+import { getModulosPadState, IModulosPadBaseState, getEntities } from './modulos-pad.reducer';
 import { IModulosPad } from 'app/shared/model/modulos-pad.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IModulosPadProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IModulosPadBaseState {
-  nomeModulo: any;
-  ativo: any;
-}
 export interface IModulosPadState extends IModulosPadBaseState, IPaginationBaseState {}
 
 export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadState> {
@@ -42,20 +38,9 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getModulosPadState(this.props.location)
+      ...getModulosPadState(this.props.location)
     };
   }
-
-  getModulosPadState = (location): IModulosPadBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nomeModulo = url.searchParams.get('nomeModulo') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    return {
-      nomeModulo,
-      ativo
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +83,9 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +133,11 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.modulosPad.home.createLabel">Create a new Modulos Pad</Translate>
@@ -159,24 +150,29 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeModuloLabel" for="modulos-pad-nomeModulo">
-                            <Translate contentKey="generadorApp.modulosPad.nomeModulo">Nome Modulo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nomeModulo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeModuloLabel" for="modulos-pad-nomeModulo">
+                              <Translate contentKey="generadorApp.modulosPad.nomeModulo">Nome Modulo</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="nomeModulo" id="modulos-pad-nomeModulo" value={this.state.nomeModulo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="modulos-pad-ativo">
-                            <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
-                          </Label>
+                            <AvInput type="text" name="nomeModulo" id="modulos-pad-nomeModulo" value={this.state.nomeModulo} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="ativo" id="modulos-pad-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="modulos-pad-ativo">
+                              <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="ativo" id="modulos-pad-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -204,14 +200,18 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nomeModulo')}>
-                        <Translate contentKey="generadorApp.modulosPad.nomeModulo">Nome Modulo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nomeModulo' ? (
+                        <th className="hand" onClick={this.sort('nomeModulo')}>
+                          <Translate contentKey="generadorApp.modulosPad.nomeModulo">Nome Modulo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.modulosPad.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -226,25 +226,25 @@ export class ModulosPad extends React.Component<IModulosPadProps, IModulosPadSta
                           </Button>
                         </td>
 
-                        <td>{modulosPad.nomeModulo}</td>
+                        {this.state.baseFilters !== 'nomeModulo' ? <td>{modulosPad.nomeModulo}</td> : null}
 
-                        <td>{modulosPad.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{modulosPad.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${modulosPad.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${modulosPad.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${modulosPad.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${modulosPad.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${modulosPad.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${modulosPad.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

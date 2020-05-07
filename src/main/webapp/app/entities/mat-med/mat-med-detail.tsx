@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './mat-med.reducer';
+import { getEntity, IMatMedBaseState, getMatMedState } from './mat-med.reducer';
 import { IMatMed } from 'app/shared/model/mat-med.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IMatMedState {
+  fieldsBase: IMatMedBaseState;
+}
+
 export interface IMatMedDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class MatMedDetail extends React.Component<IMatMedDetailProps> {
+export class MatMedDetail extends React.Component<IMatMedDetailProps, IMatMedState> {
   constructor(props: Readonly<IMatMedDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getMatMedState(this.props.location)
     };
   }
 

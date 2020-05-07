@@ -22,24 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './pad-csv.reducer';
+import { getPadCsvState, IPadCsvBaseState, getEntities } from './pad-csv.reducer';
 import { IPadCsv } from 'app/shared/model/pad-csv.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPadCsvProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPadCsvBaseState {
-  idFranquia: any;
-  idPaciente: any;
-  nroPad: any;
-  dataInicio: any;
-  dataFim: any;
-  idEspecialidade: any;
-  idPeriodicidade: any;
-  idPeriodo: any;
-  qtdSessoes: any;
-}
 export interface IPadCsvState extends IPadCsvBaseState, IPaginationBaseState {}
 
 export class PadCsv extends React.Component<IPadCsvProps, IPadCsvState> {
@@ -49,34 +38,9 @@ export class PadCsv extends React.Component<IPadCsvProps, IPadCsvState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPadCsvState(this.props.location)
+      ...getPadCsvState(this.props.location)
     };
   }
-
-  getPadCsvState = (location): IPadCsvBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const nroPad = url.searchParams.get('nroPad') || '';
-    const dataInicio = url.searchParams.get('dataInicio') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-    const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
-    const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
-    const idPeriodo = url.searchParams.get('idPeriodo') || '';
-    const qtdSessoes = url.searchParams.get('qtdSessoes') || '';
-
-    return {
-      idFranquia,
-      idPaciente,
-      nroPad,
-      dataInicio,
-      dataFim,
-      idEspecialidade,
-      idPeriodicidade,
-      idPeriodo,
-      qtdSessoes
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -126,7 +90,9 @@ export class PadCsv extends React.Component<IPadCsvProps, IPadCsvState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -222,7 +188,11 @@ export class PadCsv extends React.Component<IPadCsvProps, IPadCsvState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.padCsv.home.createLabel">Create a new Pad Csv</Translate>
@@ -235,105 +205,107 @@ export class PadCsv extends React.Component<IPadCsvProps, IPadCsvState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idFranquiaLabel" for="pad-csv-idFranquia">
-                            <Translate contentKey="generadorApp.padCsv.idFranquia">Id Franquia</Translate>
-                          </Label>
-                          <AvInput type="string" name="idFranquia" id="pad-csv-idFranquia" value={this.state.idFranquia} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="pad-csv-idPaciente">
-                            <Translate contentKey="generadorApp.padCsv.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPaciente" id="pad-csv-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nroPadLabel" for="pad-csv-nroPad">
-                            <Translate contentKey="generadorApp.padCsv.nroPad">Nro Pad</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idFranquiaLabel" for="pad-csv-idFranquia">
+                              <Translate contentKey="generadorApp.padCsv.idFranquia">Id Franquia</Translate>
+                            </Label>
+                            <AvInput type="string" name="idFranquia" id="pad-csv-idFranquia" value={this.state.idFranquia} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="nroPad"
-                            id="pad-csv-nroPad"
-                            value={this.state.nroPad}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataInicioLabel" for="pad-csv-dataInicio">
-                            <Translate contentKey="generadorApp.padCsv.dataInicio">Data Inicio</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="pad-csv-idPaciente">
+                              <Translate contentKey="generadorApp.padCsv.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPaciente" id="pad-csv-idPaciente" value={this.state.idPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="dataInicio"
-                            id="pad-csv-dataInicio"
-                            value={this.state.dataInicio}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataFimLabel" for="pad-csv-dataFim">
-                            <Translate contentKey="generadorApp.padCsv.dataFim">Data Fim</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nroPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nroPadLabel" for="pad-csv-nroPad">
+                              <Translate contentKey="generadorApp.padCsv.nroPad">Nro Pad</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="dataFim"
-                            id="pad-csv-dataFim"
-                            value={this.state.dataFim}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idEspecialidadeLabel" for="pad-csv-idEspecialidade">
-                            <Translate contentKey="generadorApp.padCsv.idEspecialidade">Id Especialidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="idEspecialidade" id="pad-csv-idEspecialidade" value={this.state.idEspecialidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodicidadeLabel" for="pad-csv-idPeriodicidade">
-                            <Translate contentKey="generadorApp.padCsv.idPeriodicidade">Id Periodicidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPeriodicidade" id="pad-csv-idPeriodicidade" value={this.state.idPeriodicidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPeriodoLabel" for="pad-csv-idPeriodo">
-                            <Translate contentKey="generadorApp.padCsv.idPeriodo">Id Periodo</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPeriodo" id="pad-csv-idPeriodo" value={this.state.idPeriodo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="qtdSessoesLabel" for="pad-csv-qtdSessoes">
-                            <Translate contentKey="generadorApp.padCsv.qtdSessoes">Qtd Sessoes</Translate>
-                          </Label>
-                          <AvInput type="string" name="qtdSessoes" id="pad-csv-qtdSessoes" value={this.state.qtdSessoes} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="nroPad" id="pad-csv-nroPad" value={this.state.nroPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataInicioLabel" for="pad-csv-dataInicio">
+                              <Translate contentKey="generadorApp.padCsv.dataInicio">Data Inicio</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="dataInicio" id="pad-csv-dataInicio" value={this.state.dataInicio} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataFimLabel" for="pad-csv-dataFim">
+                              <Translate contentKey="generadorApp.padCsv.dataFim">Data Fim</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="dataFim" id="pad-csv-dataFim" value={this.state.dataFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idEspecialidadeLabel" for="pad-csv-idEspecialidade">
+                              <Translate contentKey="generadorApp.padCsv.idEspecialidade">Id Especialidade</Translate>
+                            </Label>
+                            <AvInput type="string" name="idEspecialidade" id="pad-csv-idEspecialidade" value={this.state.idEspecialidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodicidadeLabel" for="pad-csv-idPeriodicidade">
+                              <Translate contentKey="generadorApp.padCsv.idPeriodicidade">Id Periodicidade</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPeriodicidade" id="pad-csv-idPeriodicidade" value={this.state.idPeriodicidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPeriodoLabel" for="pad-csv-idPeriodo">
+                              <Translate contentKey="generadorApp.padCsv.idPeriodo">Id Periodo</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPeriodo" id="pad-csv-idPeriodo" value={this.state.idPeriodo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="qtdSessoesLabel" for="pad-csv-qtdSessoes">
+                              <Translate contentKey="generadorApp.padCsv.qtdSessoes">Qtd Sessoes</Translate>
+                            </Label>
+                            <AvInput type="string" name="qtdSessoes" id="pad-csv-qtdSessoes" value={this.state.qtdSessoes} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -361,42 +333,60 @@ export class PadCsv extends React.Component<IPadCsvProps, IPadCsvState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idFranquia')}>
-                        <Translate contentKey="generadorApp.padCsv.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.padCsv.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nroPad')}>
-                        <Translate contentKey="generadorApp.padCsv.nroPad">Nro Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataInicio')}>
-                        <Translate contentKey="generadorApp.padCsv.dataInicio">Data Inicio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataFim')}>
-                        <Translate contentKey="generadorApp.padCsv.dataFim">Data Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idEspecialidade')}>
-                        <Translate contentKey="generadorApp.padCsv.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodicidade')}>
-                        <Translate contentKey="generadorApp.padCsv.idPeriodicidade">Id Periodicidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPeriodo')}>
-                        <Translate contentKey="generadorApp.padCsv.idPeriodo">Id Periodo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('qtdSessoes')}>
-                        <Translate contentKey="generadorApp.padCsv.qtdSessoes">Qtd Sessoes</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <th className="hand" onClick={this.sort('idFranquia')}>
+                          <Translate contentKey="generadorApp.padCsv.idFranquia">Id Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.padCsv.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nroPad' ? (
+                        <th className="hand" onClick={this.sort('nroPad')}>
+                          <Translate contentKey="generadorApp.padCsv.nroPad">Nro Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <th className="hand" onClick={this.sort('dataInicio')}>
+                          <Translate contentKey="generadorApp.padCsv.dataInicio">Data Inicio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <th className="hand" onClick={this.sort('dataFim')}>
+                          <Translate contentKey="generadorApp.padCsv.dataFim">Data Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <th className="hand" onClick={this.sort('idEspecialidade')}>
+                          <Translate contentKey="generadorApp.padCsv.idEspecialidade">Id Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodicidade' ? (
+                        <th className="hand" onClick={this.sort('idPeriodicidade')}>
+                          <Translate contentKey="generadorApp.padCsv.idPeriodicidade">Id Periodicidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPeriodo' ? (
+                        <th className="hand" onClick={this.sort('idPeriodo')}>
+                          <Translate contentKey="generadorApp.padCsv.idPeriodo">Id Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'qtdSessoes' ? (
+                        <th className="hand" onClick={this.sort('qtdSessoes')}>
+                          <Translate contentKey="generadorApp.padCsv.qtdSessoes">Qtd Sessoes</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -411,39 +401,39 @@ export class PadCsv extends React.Component<IPadCsvProps, IPadCsvState> {
                           </Button>
                         </td>
 
-                        <td>{padCsv.idFranquia}</td>
+                        {this.state.baseFilters !== 'idFranquia' ? <td>{padCsv.idFranquia}</td> : null}
 
-                        <td>{padCsv.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{padCsv.idPaciente}</td> : null}
 
-                        <td>{padCsv.nroPad}</td>
+                        {this.state.baseFilters !== 'nroPad' ? <td>{padCsv.nroPad}</td> : null}
 
-                        <td>{padCsv.dataInicio}</td>
+                        {this.state.baseFilters !== 'dataInicio' ? <td>{padCsv.dataInicio}</td> : null}
 
-                        <td>{padCsv.dataFim}</td>
+                        {this.state.baseFilters !== 'dataFim' ? <td>{padCsv.dataFim}</td> : null}
 
-                        <td>{padCsv.idEspecialidade}</td>
+                        {this.state.baseFilters !== 'idEspecialidade' ? <td>{padCsv.idEspecialidade}</td> : null}
 
-                        <td>{padCsv.idPeriodicidade}</td>
+                        {this.state.baseFilters !== 'idPeriodicidade' ? <td>{padCsv.idPeriodicidade}</td> : null}
 
-                        <td>{padCsv.idPeriodo}</td>
+                        {this.state.baseFilters !== 'idPeriodo' ? <td>{padCsv.idPeriodo}</td> : null}
 
-                        <td>{padCsv.qtdSessoes}</td>
+                        {this.state.baseFilters !== 'qtdSessoes' ? <td>{padCsv.qtdSessoes}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${padCsv.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padCsv.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padCsv.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padCsv.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${padCsv.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${padCsv.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

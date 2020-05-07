@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-complexidade-atual.reducer';
+import {
+  getEntity,
+  IProfissionalComplexidadeAtualBaseState,
+  getProfissionalComplexidadeAtualState
+} from './profissional-complexidade-atual.reducer';
 import { IProfissionalComplexidadeAtual } from 'app/shared/model/profissional-complexidade-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalComplexidadeAtualState {
+  fieldsBase: IProfissionalComplexidadeAtualBaseState;
+}
+
 export interface IProfissionalComplexidadeAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalComplexidadeAtualDetail extends React.Component<IProfissionalComplexidadeAtualDetailProps> {
+export class ProfissionalComplexidadeAtualDetail extends React.Component<
+  IProfissionalComplexidadeAtualDetailProps,
+  IProfissionalComplexidadeAtualState
+> {
   constructor(props: Readonly<IProfissionalComplexidadeAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalComplexidadeAtualState(this.props.location)
     };
   }
 
@@ -141,21 +153,6 @@ export class ProfissionalComplexidadeAtualDetail extends React.Component<IProfis
                       </Col>
                       <Col md="9">
                         <dd>{profissionalComplexidadeAtualEntity.telemonitoramente}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.profissionalComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{profissionalComplexidadeAtualEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

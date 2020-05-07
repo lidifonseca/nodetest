@@ -7,7 +7,6 @@ export interface IPacienteProntuario {
   oQue?: any;
   resultado?: any;
   ativo?: number;
-  idUsuario?: string;
   idEspecialidade?: number;
   dataConsulta?: Moment;
   idExame?: number;

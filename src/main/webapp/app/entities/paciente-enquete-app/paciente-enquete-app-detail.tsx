@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-enquete-app.reducer';
+import { getEntity, IPacienteEnqueteAppBaseState, getPacienteEnqueteAppState } from './paciente-enquete-app.reducer';
 import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteEnqueteAppState {
+  fieldsBase: IPacienteEnqueteAppBaseState;
+}
+
 export interface IPacienteEnqueteAppDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteEnqueteAppDetail extends React.Component<IPacienteEnqueteAppDetailProps> {
+export class PacienteEnqueteAppDetail extends React.Component<IPacienteEnqueteAppDetailProps, IPacienteEnqueteAppState> {
   constructor(props: Readonly<IPacienteEnqueteAppDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteEnqueteAppState(this.props.location)
     };
   }
 
@@ -62,19 +67,6 @@ export class PacienteEnqueteAppDetail extends React.Component<IPacienteEnqueteAp
                       </Col>
                       <Col md="9">
                         <dd>{pacienteEnqueteAppEntity.votacao}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteEnqueteApp.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteEnqueteAppEntity.idPaciente ? pacienteEnqueteAppEntity.idPaciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

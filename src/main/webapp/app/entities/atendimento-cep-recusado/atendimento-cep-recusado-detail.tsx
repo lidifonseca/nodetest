@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento-cep-recusado.reducer';
+import { getEntity, IAtendimentoCepRecusadoBaseState, getAtendimentoCepRecusadoState } from './atendimento-cep-recusado.reducer';
 import { IAtendimentoCepRecusado } from 'app/shared/model/atendimento-cep-recusado.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoCepRecusadoState {
+  fieldsBase: IAtendimentoCepRecusadoBaseState;
+}
+
 export interface IAtendimentoCepRecusadoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoCepRecusadoDetail extends React.Component<IAtendimentoCepRecusadoDetailProps> {
+export class AtendimentoCepRecusadoDetail extends React.Component<IAtendimentoCepRecusadoDetailProps, IAtendimentoCepRecusadoState> {
   constructor(props: Readonly<IAtendimentoCepRecusadoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoCepRecusadoState(this.props.location)
     };
   }
 
@@ -62,19 +67,6 @@ export class AtendimentoCepRecusadoDetail extends React.Component<IAtendimentoCe
                       </Col>
                       <Col md="9">
                         <dd>{atendimentoCepRecusadoEntity.cep}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.atendimentoCepRecusado.idPadItem">Id Pad Item</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoCepRecusadoEntity.idPadItem ? atendimentoCepRecusadoEntity.idPadItem.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

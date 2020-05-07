@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { ICepbrCidade } from 'app/shared/model/cepbr-cidade.model';
-import { getEntities as getCepbrCidades } from 'app/entities/cepbr-cidade/cepbr-cidade.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './cepbr-bairro.reducer';
+import {
+  ICepbrBairroUpdateState,
+  getEntity,
+  getCepbrBairroState,
+  ICepbrBairroBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './cepbr-bairro.reducer';
 import { ICepbrBairro } from 'app/shared/model/cepbr-bairro.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ICepbrBairroUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ICepbrBairroUpdateState {
-  isNew: boolean;
-  idCidadeId: string;
-}
-
 export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, ICepbrBairroUpdateState> {
   constructor(props: Readonly<ICepbrBairroUpdateProps>) {
     super(props);
+
     this.state = {
-      idCidadeId: '0',
+      fieldsBase: getCepbrBairroState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,22 @@ export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, 
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getCepbrCidades();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idBairro'] ? '&idBairro=' + fieldsBase['idBairro'] : '') +
+      (fieldsBase['bairro'] ? '&bairro=' + fieldsBase['bairro'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { cepbrBairroEntity } = this.props;
@@ -63,13 +77,14 @@ export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, 
   };
 
   handleClose = () => {
-    this.props.history.push('/cepbr-bairro');
+    this.props.history.push('/cepbr-bairro?' + this.getFiltersURL());
   };
 
   render() {
-    const { cepbrBairroEntity, cepbrCidades, loading, updating } = this.props;
+    const { cepbrBairroEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +100,7 @@ export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, 
             isNew
               ? {}
               : {
-                  ...cepbrBairroEntity,
-                  idCidade: cepbrBairroEntity.idCidade ? cepbrBairroEntity.idCidade.id : null
+                  ...cepbrBairroEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -103,7 +117,14 @@ export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, 
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/cepbr-bairro" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/cepbr-bairro?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -118,7 +139,7 @@ export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, 
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -134,78 +155,46 @@ export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, 
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idBairro' ? (
+                          <Col md="idBairro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idBairroLabel" for="cepbr-bairro-idBairro">
+                                    <Translate contentKey="generadorApp.cepbrBairro.idBairro">Id Bairro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cepbr-bairro-idBairro" type="string" className="form-control" name="idBairro" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idBairro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idBairroLabel" for="cepbr-bairro-idBairro">
-                                <Translate contentKey="generadorApp.cepbrBairro.idBairro">Id Bairro</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cepbr-bairro-idBairro"
-                                type="string"
-                                className="form-control"
-                                name="idBairro"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="bairroLabel" for="cepbr-bairro-bairro">
-                                <Translate contentKey="generadorApp.cepbrBairro.bairro">Bairro</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cepbr-bairro-bairro"
-                                type="text"
-                                name="bairro"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="cepbr-bairro-idCidade">
-                                <Translate contentKey="generadorApp.cepbrBairro.idCidade">Id Cidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="cepbr-bairro-idCidade" type="select" className="form-control" name="idCidade">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.cepbrBairro.idCidade.empty')}
-                                </option>
-                                {cepbrCidades
-                                  ? cepbrCidades.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'bairro' ? (
+                          <Col md="bairro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="bairroLabel" for="cepbr-bairro-bairro">
+                                    <Translate contentKey="generadorApp.cepbrBairro.bairro">Bairro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cepbr-bairro-bairro" type="text" name="bairro" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="bairro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -218,7 +207,6 @@ export class CepbrBairroUpdate extends React.Component<ICepbrBairroUpdateProps, 
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  cepbrCidades: storeState.cepbrCidade.entities,
   cepbrBairroEntity: storeState.cepbrBairro.entity,
   loading: storeState.cepbrBairro.loading,
   updating: storeState.cepbrBairro.updating,
@@ -226,7 +214,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getCepbrCidades,
   getEntity,
   updateEntity,
   createEntity,

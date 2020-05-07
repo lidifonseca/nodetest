@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IOcorrenciaProntuario, defaultValue } from 'app/shared/model/ocorrencia-prontuario.model';
 
 export const ACTION_TYPES = {
+  FETCH_OCORRENCIAPRONTUARIO_LIST_EXPORT: 'ocorrenciaProntuario/FETCH_OCORRENCIAPRONTUARIO_LIST_EXPORT',
   FETCH_OCORRENCIAPRONTUARIO_LIST: 'ocorrenciaProntuario/FETCH_OCORRENCIAPRONTUARIO_LIST',
   FETCH_OCORRENCIAPRONTUARIO: 'ocorrenciaProntuario/FETCH_OCORRENCIAPRONTUARIO',
   CREATE_OCORRENCIAPRONTUARIO: 'ocorrenciaProntuario/CREATE_OCORRENCIAPRONTUARIO',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type OcorrenciaProntuarioState = Readonly<typeof initialState>;
 
+export interface IOcorrenciaProntuarioBaseState {
+  baseFilters: any;
+  nome: any;
+  ativo: any;
+}
+
+export interface IOcorrenciaProntuarioUpdateState {
+  fieldsBase: IOcorrenciaProntuarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: OcorrenciaProntuarioState = initialState, action): OcorrenciaProntuarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO):
       return {
@@ -51,6 +64,7 @@ export default (state: OcorrenciaProntuarioState = initialState, action): Ocorre
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO):
     case FAILURE(ACTION_TYPES.CREATE_OCORRENCIAPRONTUARIO):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IOcorrenciaProntuario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionOcorrenciaProntuario<IOcorrenciaProntuario> = (nome, ativo, page, size, sort) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_OCORRENCIAPRONTUARIO_LIST,
+    payload: axios.get<IOcorrenciaProntuario>(`${requestUrl}${nomeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IOcorrenciaProntuario> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IOcorrenciaProntuario> = id => asyn
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getOcorrenciaProntuarioState = (location): IOcorrenciaProntuarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    nome,
+    ativo
+  };
+};

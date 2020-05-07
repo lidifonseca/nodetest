@@ -31,38 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './empresa.reducer';
+import { getEmpresaState, IEmpresaBaseState, getEntities } from './empresa.reducer';
 import { IEmpresa } from 'app/shared/model/empresa.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ICidade } from 'app/shared/model/cidade.model';
-import { getEntities as getCidades } from 'app/entities/cidade/cidade.reducer';
-
 export interface IEmpresaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IEmpresaBaseState {
-  empresa: any;
-  nome: any;
-  email: any;
-  cpf: any;
-  rg: any;
-  nascimento: any;
-  sexo: any;
-  telefone1: any;
-  telefone2: any;
-  celular1: any;
-  celular2: any;
-  cep: any;
-  endereco: any;
-  numero: any;
-  complemento: any;
-  bairro: any;
-  cidade: any;
-  uf: any;
-  tipo: any;
-  idCidade: any;
-}
 export interface IEmpresaState extends IEmpresaBaseState, IPaginationBaseState {}
 
 export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
@@ -72,62 +47,12 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getEmpresaState(this.props.location)
+      ...getEmpresaState(this.props.location)
     };
   }
 
-  getEmpresaState = (location): IEmpresaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const empresa = url.searchParams.get('empresa') || '';
-    const nome = url.searchParams.get('nome') || '';
-    const email = url.searchParams.get('email') || '';
-    const cpf = url.searchParams.get('cpf') || '';
-    const rg = url.searchParams.get('rg') || '';
-    const nascimento = url.searchParams.get('nascimento') || '';
-    const sexo = url.searchParams.get('sexo') || '';
-    const telefone1 = url.searchParams.get('telefone1') || '';
-    const telefone2 = url.searchParams.get('telefone2') || '';
-    const celular1 = url.searchParams.get('celular1') || '';
-    const celular2 = url.searchParams.get('celular2') || '';
-    const cep = url.searchParams.get('cep') || '';
-    const endereco = url.searchParams.get('endereco') || '';
-    const numero = url.searchParams.get('numero') || '';
-    const complemento = url.searchParams.get('complemento') || '';
-    const bairro = url.searchParams.get('bairro') || '';
-    const cidade = url.searchParams.get('cidade') || '';
-    const uf = url.searchParams.get('uf') || '';
-    const tipo = url.searchParams.get('tipo') || '';
-
-    const idCidade = url.searchParams.get('idCidade') || '';
-
-    return {
-      empresa,
-      nome,
-      email,
-      cpf,
-      rg,
-      nascimento,
-      sexo,
-      telefone1,
-      telefone2,
-      celular1,
-      celular2,
-      cep,
-      endereco,
-      numero,
-      complemento,
-      bairro,
-      cidade,
-      uf,
-      tipo,
-      idCidade
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getCidades();
   }
 
   cancelCourse = () => {
@@ -151,8 +76,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
         bairro: '',
         cidade: '',
         uf: '',
-        tipo: '',
-        idCidade: ''
+        tipo: ''
       },
       () => this.sortEntities()
     );
@@ -185,7 +109,9 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -254,9 +180,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       'tipo=' +
       this.state.tipo +
       '&' +
-      'idCidade=' +
-      this.state.idCidade +
-      '&' +
       ''
     );
   };
@@ -284,7 +207,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
-      idCidade,
       activePage,
       itemsPerPage,
       sort,
@@ -310,7 +232,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       cidade,
       uf,
       tipo,
-      idCidade,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -318,7 +239,7 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
   };
 
   render() {
-    const { cidades, empresaList, match, totalItems } = this.props;
+    const { empresaList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -336,7 +257,11 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.empresa.home.createLabel">Create a new Empresa</Translate>
@@ -349,194 +274,230 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="empresaLabel" for="empresa-empresa">
-                            <Translate contentKey="generadorApp.empresa.empresa">Empresa</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="empresa" id="empresa-empresa" value={this.state.empresa} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="empresa-nome">
-                            <Translate contentKey="generadorApp.empresa.nome">Nome</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="nome" id="empresa-nome" value={this.state.nome} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="emailLabel" for="empresa-email">
-                            <Translate contentKey="generadorApp.empresa.email">Email</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="email" id="empresa-email" value={this.state.email} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cpfLabel" for="empresa-cpf">
-                            <Translate contentKey="generadorApp.empresa.cpf">Cpf</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cpf" id="empresa-cpf" value={this.state.cpf} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="rgLabel" for="empresa-rg">
-                            <Translate contentKey="generadorApp.empresa.rg">Rg</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="rg" id="empresa-rg" value={this.state.rg} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nascimentoLabel" for="empresa-nascimento">
-                            <Translate contentKey="generadorApp.empresa.nascimento">Nascimento</Translate>
-                          </Label>
-                          <AvInput type="date" name="nascimento" id="empresa-nascimento" value={this.state.nascimento} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="sexoLabel" for="empresa-sexo">
-                            <Translate contentKey="generadorApp.empresa.sexo">Sexo</Translate>
-                          </Label>
-                          <AvInput type="string" name="sexo" id="empresa-sexo" value={this.state.sexo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="telefone1Label" for="empresa-telefone1">
-                            <Translate contentKey="generadorApp.empresa.telefone1">Telefone 1</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="telefone1" id="empresa-telefone1" value={this.state.telefone1} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="telefone2Label" for="empresa-telefone2">
-                            <Translate contentKey="generadorApp.empresa.telefone2">Telefone 2</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="telefone2" id="empresa-telefone2" value={this.state.telefone2} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="celular1Label" for="empresa-celular1">
-                            <Translate contentKey="generadorApp.empresa.celular1">Celular 1</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="celular1" id="empresa-celular1" value={this.state.celular1} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="celular2Label" for="empresa-celular2">
-                            <Translate contentKey="generadorApp.empresa.celular2">Celular 2</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="celular2" id="empresa-celular2" value={this.state.celular2} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepLabel" for="empresa-cep">
-                            <Translate contentKey="generadorApp.empresa.cep">Cep</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cep" id="empresa-cep" value={this.state.cep} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="enderecoLabel" for="empresa-endereco">
-                            <Translate contentKey="generadorApp.empresa.endereco">Endereco</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="endereco" id="empresa-endereco" value={this.state.endereco} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="numeroLabel" for="empresa-numero">
-                            <Translate contentKey="generadorApp.empresa.numero">Numero</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="numero" id="empresa-numero" value={this.state.numero} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="complementoLabel" for="empresa-complemento">
-                            <Translate contentKey="generadorApp.empresa.complemento">Complemento</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="complemento" id="empresa-complemento" value={this.state.complemento} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="bairroLabel" for="empresa-bairro">
-                            <Translate contentKey="generadorApp.empresa.bairro">Bairro</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="bairro" id="empresa-bairro" value={this.state.bairro} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cidadeLabel" for="empresa-cidade">
-                            <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="cidade" id="empresa-cidade" value={this.state.cidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ufLabel" for="empresa-uf">
-                            <Translate contentKey="generadorApp.empresa.uf">Uf</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="uf" id="empresa-uf" value={this.state.uf} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoLabel" for="empresa-tipo">
-                            <Translate contentKey="generadorApp.empresa.tipo">Tipo</Translate>
-                          </Label>
-                          <AvInput type="string" name="tipo" id="empresa-tipo" value={this.state.tipo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="empresa-idCidade">
-                              <Translate contentKey="generadorApp.empresa.idCidade">Id Cidade</Translate>
+                      {this.state.baseFilters !== 'empresa' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="empresaLabel" for="empresa-empresa">
+                              <Translate contentKey="generadorApp.empresa.empresa">Empresa</Translate>
                             </Label>
-                            <AvInput id="empresa-idCidade" type="select" className="form-control" name="idCidadeId">
-                              <option value="" key="0" />
-                              {cidades
-                                ? cidades.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="empresa" id="empresa-empresa" value={this.state.empresa} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="empresa-nome">
+                              <Translate contentKey="generadorApp.empresa.nome">Nome</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="nome" id="empresa-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'email' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="emailLabel" for="empresa-email">
+                              <Translate contentKey="generadorApp.empresa.email">Email</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="email" id="empresa-email" value={this.state.email} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cpf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cpfLabel" for="empresa-cpf">
+                              <Translate contentKey="generadorApp.empresa.cpf">Cpf</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cpf" id="empresa-cpf" value={this.state.cpf} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'rg' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="rgLabel" for="empresa-rg">
+                              <Translate contentKey="generadorApp.empresa.rg">Rg</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="rg" id="empresa-rg" value={this.state.rg} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'nascimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nascimentoLabel" for="empresa-nascimento">
+                              <Translate contentKey="generadorApp.empresa.nascimento">Nascimento</Translate>
+                            </Label>
+                            <AvInput type="date" name="nascimento" id="empresa-nascimento" value={this.state.nascimento} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'sexo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="sexoLabel" for="empresa-sexo">
+                              <Translate contentKey="generadorApp.empresa.sexo">Sexo</Translate>
+                            </Label>
+                            <AvInput type="string" name="sexo" id="empresa-sexo" value={this.state.sexo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'telefone1' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="telefone1Label" for="empresa-telefone1">
+                              <Translate contentKey="generadorApp.empresa.telefone1">Telefone 1</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="telefone1" id="empresa-telefone1" value={this.state.telefone1} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'telefone2' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="telefone2Label" for="empresa-telefone2">
+                              <Translate contentKey="generadorApp.empresa.telefone2">Telefone 2</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="telefone2" id="empresa-telefone2" value={this.state.telefone2} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'celular1' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="celular1Label" for="empresa-celular1">
+                              <Translate contentKey="generadorApp.empresa.celular1">Celular 1</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="celular1" id="empresa-celular1" value={this.state.celular1} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'celular2' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="celular2Label" for="empresa-celular2">
+                              <Translate contentKey="generadorApp.empresa.celular2">Celular 2</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="celular2" id="empresa-celular2" value={this.state.celular2} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cep' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepLabel" for="empresa-cep">
+                              <Translate contentKey="generadorApp.empresa.cep">Cep</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cep" id="empresa-cep" value={this.state.cep} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'endereco' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="enderecoLabel" for="empresa-endereco">
+                              <Translate contentKey="generadorApp.empresa.endereco">Endereco</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="endereco" id="empresa-endereco" value={this.state.endereco} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'numero' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="numeroLabel" for="empresa-numero">
+                              <Translate contentKey="generadorApp.empresa.numero">Numero</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="numero" id="empresa-numero" value={this.state.numero} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="complementoLabel" for="empresa-complemento">
+                              <Translate contentKey="generadorApp.empresa.complemento">Complemento</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="complemento" id="empresa-complemento" value={this.state.complemento} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'bairro' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="bairroLabel" for="empresa-bairro">
+                              <Translate contentKey="generadorApp.empresa.bairro">Bairro</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="bairro" id="empresa-bairro" value={this.state.bairro} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cidadeLabel" for="empresa-cidade">
+                              <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cidade" id="empresa-cidade" value={this.state.cidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'uf' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ufLabel" for="empresa-uf">
+                              <Translate contentKey="generadorApp.empresa.uf">Uf</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="uf" id="empresa-uf" value={this.state.uf} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoLabel" for="empresa-tipo">
+                              <Translate contentKey="generadorApp.empresa.tipo">Tipo</Translate>
+                            </Label>
+                            <AvInput type="string" name="tipo" id="empresa-tipo" value={this.state.tipo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -564,86 +525,120 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('empresa')}>
-                        <Translate contentKey="generadorApp.empresa.empresa">Empresa</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.empresa.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('email')}>
-                        <Translate contentKey="generadorApp.empresa.email">Email</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cpf')}>
-                        <Translate contentKey="generadorApp.empresa.cpf">Cpf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('rg')}>
-                        <Translate contentKey="generadorApp.empresa.rg">Rg</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nascimento')}>
-                        <Translate contentKey="generadorApp.empresa.nascimento">Nascimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('sexo')}>
-                        <Translate contentKey="generadorApp.empresa.sexo">Sexo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('telefone1')}>
-                        <Translate contentKey="generadorApp.empresa.telefone1">Telefone 1</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('telefone2')}>
-                        <Translate contentKey="generadorApp.empresa.telefone2">Telefone 2</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('celular1')}>
-                        <Translate contentKey="generadorApp.empresa.celular1">Celular 1</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('celular2')}>
-                        <Translate contentKey="generadorApp.empresa.celular2">Celular 2</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cep')}>
-                        <Translate contentKey="generadorApp.empresa.cep">Cep</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('endereco')}>
-                        <Translate contentKey="generadorApp.empresa.endereco">Endereco</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('numero')}>
-                        <Translate contentKey="generadorApp.empresa.numero">Numero</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('complemento')}>
-                        <Translate contentKey="generadorApp.empresa.complemento">Complemento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('bairro')}>
-                        <Translate contentKey="generadorApp.empresa.bairro">Bairro</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cidade')}>
-                        <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('uf')}>
-                        <Translate contentKey="generadorApp.empresa.uf">Uf</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipo')}>
-                        <Translate contentKey="generadorApp.empresa.tipo">Tipo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.empresa.idCidade">Id Cidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'empresa' ? (
+                        <th className="hand" onClick={this.sort('empresa')}>
+                          <Translate contentKey="generadorApp.empresa.empresa">Empresa</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.empresa.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'email' ? (
+                        <th className="hand" onClick={this.sort('email')}>
+                          <Translate contentKey="generadorApp.empresa.email">Email</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cpf' ? (
+                        <th className="hand" onClick={this.sort('cpf')}>
+                          <Translate contentKey="generadorApp.empresa.cpf">Cpf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'rg' ? (
+                        <th className="hand" onClick={this.sort('rg')}>
+                          <Translate contentKey="generadorApp.empresa.rg">Rg</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nascimento' ? (
+                        <th className="hand" onClick={this.sort('nascimento')}>
+                          <Translate contentKey="generadorApp.empresa.nascimento">Nascimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'sexo' ? (
+                        <th className="hand" onClick={this.sort('sexo')}>
+                          <Translate contentKey="generadorApp.empresa.sexo">Sexo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'telefone1' ? (
+                        <th className="hand" onClick={this.sort('telefone1')}>
+                          <Translate contentKey="generadorApp.empresa.telefone1">Telefone 1</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'telefone2' ? (
+                        <th className="hand" onClick={this.sort('telefone2')}>
+                          <Translate contentKey="generadorApp.empresa.telefone2">Telefone 2</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'celular1' ? (
+                        <th className="hand" onClick={this.sort('celular1')}>
+                          <Translate contentKey="generadorApp.empresa.celular1">Celular 1</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'celular2' ? (
+                        <th className="hand" onClick={this.sort('celular2')}>
+                          <Translate contentKey="generadorApp.empresa.celular2">Celular 2</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cep' ? (
+                        <th className="hand" onClick={this.sort('cep')}>
+                          <Translate contentKey="generadorApp.empresa.cep">Cep</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'endereco' ? (
+                        <th className="hand" onClick={this.sort('endereco')}>
+                          <Translate contentKey="generadorApp.empresa.endereco">Endereco</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'numero' ? (
+                        <th className="hand" onClick={this.sort('numero')}>
+                          <Translate contentKey="generadorApp.empresa.numero">Numero</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'complemento' ? (
+                        <th className="hand" onClick={this.sort('complemento')}>
+                          <Translate contentKey="generadorApp.empresa.complemento">Complemento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'bairro' ? (
+                        <th className="hand" onClick={this.sort('bairro')}>
+                          <Translate contentKey="generadorApp.empresa.bairro">Bairro</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cidade' ? (
+                        <th className="hand" onClick={this.sort('cidade')}>
+                          <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'uf' ? (
+                        <th className="hand" onClick={this.sort('uf')}>
+                          <Translate contentKey="generadorApp.empresa.uf">Uf</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipo' ? (
+                        <th className="hand" onClick={this.sort('tipo')}>
+                          <Translate contentKey="generadorApp.empresa.tipo">Tipo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -658,62 +653,63 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                           </Button>
                         </td>
 
-                        <td>{empresa.empresa}</td>
+                        {this.state.baseFilters !== 'empresa' ? <td>{empresa.empresa}</td> : null}
 
-                        <td>{empresa.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{empresa.nome}</td> : null}
 
-                        <td>{empresa.email}</td>
+                        {this.state.baseFilters !== 'email' ? <td>{empresa.email}</td> : null}
 
-                        <td>{empresa.cpf}</td>
+                        {this.state.baseFilters !== 'cpf' ? <td>{empresa.cpf}</td> : null}
 
-                        <td>{empresa.rg}</td>
+                        {this.state.baseFilters !== 'rg' ? <td>{empresa.rg}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={empresa.nascimento} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'nascimento' ? (
+                          <td>
+                            <TextFormat type="date" value={empresa.nascimento} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>{empresa.sexo}</td>
+                        {this.state.baseFilters !== 'sexo' ? <td>{empresa.sexo}</td> : null}
 
-                        <td>{empresa.telefone1}</td>
+                        {this.state.baseFilters !== 'telefone1' ? <td>{empresa.telefone1}</td> : null}
 
-                        <td>{empresa.telefone2}</td>
+                        {this.state.baseFilters !== 'telefone2' ? <td>{empresa.telefone2}</td> : null}
 
-                        <td>{empresa.celular1}</td>
+                        {this.state.baseFilters !== 'celular1' ? <td>{empresa.celular1}</td> : null}
 
-                        <td>{empresa.celular2}</td>
+                        {this.state.baseFilters !== 'celular2' ? <td>{empresa.celular2}</td> : null}
 
-                        <td>{empresa.cep}</td>
+                        {this.state.baseFilters !== 'cep' ? <td>{empresa.cep}</td> : null}
 
-                        <td>{empresa.endereco}</td>
+                        {this.state.baseFilters !== 'endereco' ? <td>{empresa.endereco}</td> : null}
 
-                        <td>{empresa.numero}</td>
+                        {this.state.baseFilters !== 'numero' ? <td>{empresa.numero}</td> : null}
 
-                        <td>{empresa.complemento}</td>
+                        {this.state.baseFilters !== 'complemento' ? <td>{empresa.complemento}</td> : null}
 
-                        <td>{empresa.bairro}</td>
+                        {this.state.baseFilters !== 'bairro' ? <td>{empresa.bairro}</td> : null}
 
-                        <td>{empresa.cidade}</td>
+                        {this.state.baseFilters !== 'cidade' ? <td>{empresa.cidade}</td> : null}
 
-                        <td>{empresa.uf}</td>
+                        {this.state.baseFilters !== 'uf' ? <td>{empresa.uf}</td> : null}
 
-                        <td>{empresa.tipo}</td>
-                        <td>{empresa.idCidade ? <Link to={`cidade/${empresa.idCidade.id}`}>{empresa.idCidade.id}</Link> : ''}</td>
+                        {this.state.baseFilters !== 'tipo' ? <td>{empresa.tipo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${empresa.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${empresa.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${empresa.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${empresa.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${empresa.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${empresa.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -755,13 +751,11 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
 }
 
 const mapStateToProps = ({ empresa, ...storeState }: IRootState) => ({
-  cidades: storeState.cidade.entities,
   empresaList: empresa.entities,
   totalItems: empresa.totalItems
 });
 
 const mapDispatchToProps = {
-  getCidades,
   getEntities
 };
 

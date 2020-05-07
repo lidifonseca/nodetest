@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './franquia-usuario.reducer';
+import { getEntity, IFranquiaUsuarioBaseState, getFranquiaUsuarioState } from './franquia-usuario.reducer';
 import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IFranquiaUsuarioState {
+  fieldsBase: IFranquiaUsuarioBaseState;
+}
+
 export interface IFranquiaUsuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class FranquiaUsuarioDetail extends React.Component<IFranquiaUsuarioDetailProps> {
+export class FranquiaUsuarioDetail extends React.Component<IFranquiaUsuarioDetailProps, IFranquiaUsuarioState> {
   constructor(props: Readonly<IFranquiaUsuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getFranquiaUsuarioState(this.props.location)
     };
   }
 
@@ -602,19 +607,6 @@ export class FranquiaUsuarioDetail extends React.Component<IFranquiaUsuarioDetai
                       </Col>
                       <Col md="9">
                         <dd>{franquiaUsuarioEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.franquiaUsuario.idFranquia">Id Franquia</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{franquiaUsuarioEntity.idFranquia ? franquiaUsuarioEntity.idFranquia.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

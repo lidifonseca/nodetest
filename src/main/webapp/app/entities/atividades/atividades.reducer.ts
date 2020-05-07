@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAtividades, defaultValue } from 'app/shared/model/atividades.model';
 
 export const ACTION_TYPES = {
+  FETCH_ATIVIDADES_LIST_EXPORT: 'atividades/FETCH_ATIVIDADES_LIST_EXPORT',
   FETCH_ATIVIDADES_LIST: 'atividades/FETCH_ATIVIDADES_LIST',
   FETCH_ATIVIDADES: 'atividades/FETCH_ATIVIDADES',
   CREATE_ATIVIDADES: 'atividades/CREATE_ATIVIDADES',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type AtividadesState = Readonly<typeof initialState>;
 
+export interface IAtividadesBaseState {
+  baseFilters: any;
+  atividade: any;
+  ativo: any;
+}
+
+export interface IAtividadesUpdateState {
+  fieldsBase: IAtividadesBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: AtividadesState = initialState, action): AtividadesState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ATIVIDADES_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ATIVIDADES_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ATIVIDADES):
       return {
@@ -51,6 +64,7 @@ export default (state: AtividadesState = initialState, action): AtividadesState 
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ATIVIDADES_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ATIVIDADES_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ATIVIDADES):
     case FAILURE(ACTION_TYPES.CREATE_ATIVIDADES):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IAtividades> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionAtividades<IAtividades> = (atividade, ativo, page, size, sort) => {
+  const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ATIVIDADES_LIST,
+    payload: axios.get<IAtividades>(`${requestUrl}${atividadeRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IAtividades> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IAtividades> = id => async dispatch
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAtividadesState = (location): IAtividadesBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const atividade = url.searchParams.get('atividade') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    atividade,
+    ativo
+  };
+};

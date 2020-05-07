@@ -22,27 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './acoes-respostas.reducer';
+import { getAcoesRespostasState, IAcoesRespostasBaseState, getEntities } from './acoes-respostas.reducer';
 import { IAcoesRespostas } from 'app/shared/model/acoes-respostas.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IRespostas } from 'app/shared/model/respostas.model';
-import { getEntities as getRespostas } from 'app/entities/respostas/respostas.reducer';
-import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
-import { getEntities as getPerguntasQuestionarios } from 'app/entities/perguntas-questionario/perguntas-questionario.reducer';
-
 export interface IAcoesRespostasProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAcoesRespostasBaseState {
-  abrirCampoPersonalizado: any;
-  condicaoSexo: any;
-  observacoes: any;
-  tipoCampo1: any;
-  tipoCampo2: any;
-  respostasId: any;
-  perguntasQuestionarioId: any;
-}
 export interface IAcoesRespostasState extends IAcoesRespostasBaseState, IPaginationBaseState {}
 
 export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoesRespostasState> {
@@ -52,37 +38,12 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAcoesRespostasState(this.props.location)
+      ...getAcoesRespostasState(this.props.location)
     };
   }
 
-  getAcoesRespostasState = (location): IAcoesRespostasBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const abrirCampoPersonalizado = url.searchParams.get('abrirCampoPersonalizado') || '';
-    const condicaoSexo = url.searchParams.get('condicaoSexo') || '';
-    const observacoes = url.searchParams.get('observacoes') || '';
-    const tipoCampo1 = url.searchParams.get('tipoCampo1') || '';
-    const tipoCampo2 = url.searchParams.get('tipoCampo2') || '';
-
-    const respostasId = url.searchParams.get('respostasId') || '';
-    const perguntasQuestionarioId = url.searchParams.get('perguntasQuestionarioId') || '';
-
-    return {
-      abrirCampoPersonalizado,
-      condicaoSexo,
-      observacoes,
-      tipoCampo1,
-      tipoCampo2,
-      respostasId,
-      perguntasQuestionarioId
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getRespostas();
-    this.props.getPerguntasQuestionarios();
   }
 
   cancelCourse = () => {
@@ -92,9 +53,7 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
         condicaoSexo: '',
         observacoes: '',
         tipoCampo1: '',
-        tipoCampo2: '',
-        respostasId: '',
-        perguntasQuestionarioId: ''
+        tipoCampo2: ''
       },
       () => this.sortEntities()
     );
@@ -127,7 +86,9 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -154,12 +115,6 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       'tipoCampo2=' +
       this.state.tipoCampo2 +
       '&' +
-      'respostasId=' +
-      this.state.respostasId +
-      '&' +
-      'perguntasQuestionarioId=' +
-      this.state.perguntasQuestionarioId +
-      '&' +
       ''
     );
   };
@@ -173,8 +128,6 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       observacoes,
       tipoCampo1,
       tipoCampo2,
-      respostasId,
-      perguntasQuestionarioId,
       activePage,
       itemsPerPage,
       sort,
@@ -186,8 +139,6 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
       observacoes,
       tipoCampo1,
       tipoCampo2,
-      respostasId,
-      perguntasQuestionarioId,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -195,7 +146,7 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
   };
 
   render() {
-    const { respostas, perguntasQuestionarios, acoesRespostasList, match, totalItems } = this.props;
+    const { acoesRespostasList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -213,7 +164,11 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.acoesRespostas.home.createLabel">Create a new Acoes Respostas</Translate>
@@ -226,136 +181,71 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="abrirCampoPersonalizadoLabel" check>
-                            <AvInput
-                              id="acoes-respostas-abrirCampoPersonalizado"
-                              type="checkbox"
-                              className="form-control"
-                              name="abrirCampoPersonalizado"
-                            />
-                            <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">
-                              Abrir Campo Personalizado
-                            </Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
-                            <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="condicaoSexo"
-                            id="acoes-respostas-condicaoSexo"
-                            value={this.state.condicaoSexo}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacoesLabel" for="acoes-respostas-observacoes">
-                            <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="observacoes"
-                            id="acoes-respostas-observacoes"
-                            value={this.state.observacoes}
-                            validate={{
-                              maxLength: { value: 125, errorMessage: translate('entity.validation.maxlength', { max: 125 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
-                            <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="tipoCampo1"
-                            id="acoes-respostas-tipoCampo1"
-                            value={this.state.tipoCampo1}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
-                            <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="tipoCampo2"
-                            id="acoes-respostas-tipoCampo2"
-                            value={this.state.tipoCampo2}
-                            validate={{
-                              maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="acoes-respostas-respostasId">
-                              <Translate contentKey="generadorApp.acoesRespostas.respostasId">Respostas Id</Translate>
-                            </Label>
-                            <AvInput id="acoes-respostas-respostasId" type="select" className="form-control" name="respostasIdId">
-                              <option value="" key="0" />
-                              {respostas
-                                ? respostas.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="acoes-respostas-perguntasQuestionarioId">
-                              <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionarioId">
-                                Perguntas Questionario Id
+                      {this.state.baseFilters !== 'abrirCampoPersonalizado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="abrirCampoPersonalizadoLabel" check>
+                              <AvInput
+                                id="acoes-respostas-abrirCampoPersonalizado"
+                                type="checkbox"
+                                className="form-control"
+                                name="abrirCampoPersonalizado"
+                              />
+                              <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">
+                                Abrir Campo Personalizado
                               </Translate>
                             </Label>
-                            <AvInput
-                              id="acoes-respostas-perguntasQuestionarioId"
-                              type="select"
-                              className="form-control"
-                              name="perguntasQuestionarioIdId"
-                            >
-                              <option value="" key="0" />
-                              {perguntasQuestionarios
-                                ? perguntasQuestionarios.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'condicaoSexo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
+                              <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="condicaoSexo" id="acoes-respostas-condicaoSexo" value={this.state.condicaoSexo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'observacoes' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacoesLabel" for="acoes-respostas-observacoes">
+                              <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="observacoes" id="acoes-respostas-observacoes" value={this.state.observacoes} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipoCampo1' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
+                              <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tipoCampo1" id="acoes-respostas-tipoCampo1" value={this.state.tipoCampo1} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'tipoCampo2' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
+                              <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="tipoCampo2" id="acoes-respostas-tipoCampo2" value={this.state.tipoCampo2} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -383,34 +273,36 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('abrirCampoPersonalizado')}>
-                        <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">Abrir Campo Personalizado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('condicaoSexo')}>
-                        <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('observacoes')}>
-                        <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipoCampo1')}>
-                        <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('tipoCampo2')}>
-                        <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.acoesRespostas.respostasId">Respostas Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionarioId">Perguntas Questionario Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'abrirCampoPersonalizado' ? (
+                        <th className="hand" onClick={this.sort('abrirCampoPersonalizado')}>
+                          <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">Abrir Campo Personalizado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'condicaoSexo' ? (
+                        <th className="hand" onClick={this.sort('condicaoSexo')}>
+                          <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'observacoes' ? (
+                        <th className="hand" onClick={this.sort('observacoes')}>
+                          <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipoCampo1' ? (
+                        <th className="hand" onClick={this.sort('tipoCampo1')}>
+                          <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'tipoCampo2' ? (
+                        <th className="hand" onClick={this.sort('tipoCampo2')}>
+                          <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -425,47 +317,43 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
                           </Button>
                         </td>
 
-                        <td>{acoesRespostas.abrirCampoPersonalizado ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'abrirCampoPersonalizado' ? (
+                          <td>{acoesRespostas.abrirCampoPersonalizado ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        <td>{acoesRespostas.condicaoSexo}</td>
+                        {this.state.baseFilters !== 'condicaoSexo' ? <td>{acoesRespostas.condicaoSexo}</td> : null}
 
-                        <td>{acoesRespostas.observacoes}</td>
+                        {this.state.baseFilters !== 'observacoes' ? <td>{acoesRespostas.observacoes}</td> : null}
 
-                        <td>{acoesRespostas.tipoCampo1}</td>
+                        {this.state.baseFilters !== 'tipoCampo1' ? <td>{acoesRespostas.tipoCampo1}</td> : null}
 
-                        <td>{acoesRespostas.tipoCampo2}</td>
-                        <td>
-                          {acoesRespostas.respostasId ? (
-                            <Link to={`respostas/${acoesRespostas.respostasId.id}`}>{acoesRespostas.respostasId.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {acoesRespostas.perguntasQuestionarioId ? (
-                            <Link to={`perguntas-questionario/${acoesRespostas.perguntasQuestionarioId.id}`}>
-                              {acoesRespostas.perguntasQuestionarioId.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'tipoCampo2' ? <td>{acoesRespostas.tipoCampo2}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${acoesRespostas.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${acoesRespostas.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${acoesRespostas.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${acoesRespostas.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${acoesRespostas.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${acoesRespostas.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -507,15 +395,11 @@ export class AcoesRespostas extends React.Component<IAcoesRespostasProps, IAcoes
 }
 
 const mapStateToProps = ({ acoesRespostas, ...storeState }: IRootState) => ({
-  respostas: storeState.respostas.entities,
-  perguntasQuestionarios: storeState.perguntasQuestionario.entities,
   acoesRespostasList: acoesRespostas.entities,
   totalItems: acoesRespostas.totalItems
 });
 
 const mapDispatchToProps = {
-  getRespostas,
-  getPerguntasQuestionarios,
   getEntities
 };
 

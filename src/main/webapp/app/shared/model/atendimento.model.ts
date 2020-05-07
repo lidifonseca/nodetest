@@ -1,15 +1,5 @@
 import { Moment } from 'moment';
-import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
-import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
-import { IAtendimentoAtividades } from 'app/shared/model/atendimento-atividades.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { IOperadora } from 'app/shared/model/operadora.model';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
-import { IPeriodo } from 'app/shared/model/periodo.model';
-import { ICidade } from 'app/shared/model/cidade.model';
 
 export interface IAtendimento {
   id?: string;
@@ -48,18 +38,8 @@ export interface IAtendimento {
   confidencialProfissional?: string;
   confidencialPaciente?: string;
   imagemAssinatura?: string;
-  atendimentoAceites?: IAtendimentoAceite[];
-  atendimentoAssinaturas?: IAtendimentoAssinaturas[];
-  atendimentoAtividades?: IAtendimentoAtividades[];
   unidadeRazaoSocial?: string;
   unidade?: string | any;
-  idPaciente?: string | any;
-  idOperadora?: string | any;
-  idEspecialidade?: string | any;
-  idPadItem?: string | any;
-  idStatusAtendimento?: string | any;
-  idPeriodo?: string | any;
-  idCidade?: string | any;
 }
 
 export const defaultValue: Readonly<IAtendimento> = {};

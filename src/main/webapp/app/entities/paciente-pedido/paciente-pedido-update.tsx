@@ -10,35 +10,28 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
-import { getEntities as getPacienteDadosCartaos } from 'app/entities/paciente-dados-cartao/paciente-dados-cartao.reducer';
-import { IEspecialidade } from 'app/shared/model/especialidade.model';
-import { getEntities as getEspecialidades } from 'app/entities/especialidade/especialidade.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './paciente-pedido.reducer';
+import {
+  IPacientePedidoUpdateState,
+  getEntity,
+  getPacientePedidoState,
+  IPacientePedidoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-pedido.reducer';
 import { IPacientePedido } from 'app/shared/model/paciente-pedido.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacientePedidoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacientePedidoUpdateState {
-  isNew: boolean;
-  unidadeId: string;
-  idPacienteId: string;
-  idCartaoId: string;
-  idEspecialidadeId: string;
-}
-
 export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateProps, IPacientePedidoUpdateState> {
   constructor(props: Readonly<IPacientePedidoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPacientePedidoState(this.props.location),
       unidadeId: '0',
-      idPacienteId: '0',
-      idCartaoId: '0',
-      idEspecialidadeId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -56,11 +49,28 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
     }
 
     this.props.getUnidadeEasies();
-    this.props.getPacientes();
-    this.props.getPacienteDadosCartaos();
-    this.props.getEspecialidades();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['dataPedido'] ? '&dataPedido=' + fieldsBase['dataPedido'] : '') +
+      (fieldsBase['dataAgenda'] ? '&dataAgenda=' + fieldsBase['dataAgenda'] : '') +
+      (fieldsBase['qtdSessoes'] ? '&qtdSessoes=' + fieldsBase['qtdSessoes'] : '') +
+      (fieldsBase['parcelas'] ? '&parcelas=' + fieldsBase['parcelas'] : '') +
+      (fieldsBase['valor'] ? '&valor=' + fieldsBase['valor'] : '') +
+      (fieldsBase['desconto'] ? '&desconto=' + fieldsBase['desconto'] : '') +
+      (fieldsBase['tipoValor'] ? '&tipoValor=' + fieldsBase['tipoValor'] : '') +
+      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataAgenda = convertDateTimeToServer(values.dataAgenda);
 
@@ -80,13 +90,14 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-pedido');
+    this.props.history.push('/paciente-pedido?' + this.getFiltersURL());
   };
 
   render() {
-    const { pacientePedidoEntity, unidadeEasies, pacientes, pacienteDadosCartaos, especialidades, loading, updating } = this.props;
+    const { pacientePedidoEntity, unidadeEasies, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -103,10 +114,7 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
               ? {}
               : {
                   ...pacientePedidoEntity,
-                  unidade: pacientePedidoEntity.unidade ? pacientePedidoEntity.unidade.id : null,
-                  idPaciente: pacientePedidoEntity.idPaciente ? pacientePedidoEntity.idPaciente.id : null,
-                  idCartao: pacientePedidoEntity.idCartao ? pacientePedidoEntity.idCartao.id : null,
-                  idEspecialidade: pacientePedidoEntity.idEspecialidade ? pacientePedidoEntity.idEspecialidade.id : null
+                  unidade: pacientePedidoEntity.unidade ? pacientePedidoEntity.unidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -123,7 +131,14 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/paciente-pedido" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/paciente-pedido?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -138,7 +153,7 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -154,222 +169,177 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'dataPedido' ? (
+                          <Col md="dataPedido">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataPedidoLabel" for="paciente-pedido-dataPedido">
+                                    <Translate contentKey="generadorApp.pacientePedido.dataPedido">Data Pedido</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-pedido-dataPedido" type="date" className="form-control" name="dataPedido" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataPedido" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataPedidoLabel" for="paciente-pedido-dataPedido">
-                                <Translate contentKey="generadorApp.pacientePedido.dataPedido">Data Pedido</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-pedido-dataPedido" type="date" className="form-control" name="dataPedido" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'dataAgenda' ? (
+                          <Col md="dataAgenda">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataAgendaLabel" for="paciente-pedido-dataAgenda">
+                                    <Translate contentKey="generadorApp.pacientePedido.dataAgenda">Data Agenda</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="paciente-pedido-dataAgenda"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataAgenda"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.pacientePedidoEntity.dataAgenda)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataAgenda" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataAgendaLabel" for="paciente-pedido-dataAgenda">
-                                <Translate contentKey="generadorApp.pacientePedido.dataAgenda">Data Agenda</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="paciente-pedido-dataAgenda"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataAgenda"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.pacientePedidoEntity.dataAgenda)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'qtdSessoes' ? (
+                          <Col md="qtdSessoes">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="qtdSessoesLabel" for="paciente-pedido-qtdSessoes">
+                                    <Translate contentKey="generadorApp.pacientePedido.qtdSessoes">Qtd Sessoes</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-pedido-qtdSessoes" type="string" className="form-control" name="qtdSessoes" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="qtdSessoes" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="qtdSessoesLabel" for="paciente-pedido-qtdSessoes">
-                                <Translate contentKey="generadorApp.pacientePedido.qtdSessoes">Qtd Sessoes</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-pedido-qtdSessoes" type="string" className="form-control" name="qtdSessoes" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'parcelas' ? (
+                          <Col md="parcelas">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="parcelasLabel" for="paciente-pedido-parcelas">
+                                    <Translate contentKey="generadorApp.pacientePedido.parcelas">Parcelas</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-pedido-parcelas" type="string" className="form-control" name="parcelas" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="parcelas" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="parcelasLabel" for="paciente-pedido-parcelas">
-                                <Translate contentKey="generadorApp.pacientePedido.parcelas">Parcelas</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-pedido-parcelas" type="string" className="form-control" name="parcelas" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'valor' ? (
+                          <Col md="valor">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorLabel" for="paciente-pedido-valor">
+                                    <Translate contentKey="generadorApp.pacientePedido.valor">Valor</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-pedido-valor" type="string" className="form-control" name="valor" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="valorLabel" for="paciente-pedido-valor">
-                                <Translate contentKey="generadorApp.pacientePedido.valor">Valor</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-pedido-valor" type="string" className="form-control" name="valor" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'desconto' ? (
+                          <Col md="desconto">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descontoLabel" for="paciente-pedido-desconto">
+                                    <Translate contentKey="generadorApp.pacientePedido.desconto">Desconto</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-pedido-desconto" type="string" className="form-control" name="desconto" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="desconto" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="descontoLabel" for="paciente-pedido-desconto">
-                                <Translate contentKey="generadorApp.pacientePedido.desconto">Desconto</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-pedido-desconto" type="string" className="form-control" name="desconto" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoValorLabel" for="paciente-pedido-tipoValor">
-                                <Translate contentKey="generadorApp.pacientePedido.tipoValor">Tipo Valor</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-pedido-tipoValor" type="string" className="form-control" name="tipoValor" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-pedido-unidade">
-                                <Translate contentKey="generadorApp.pacientePedido.unidade">Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-pedido-unidade" type="select" className="form-control" name="unidade">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacientePedido.unidade.empty')}
-                                </option>
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-pedido-idPaciente">
-                                <Translate contentKey="generadorApp.pacientePedido.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-pedido-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacientePedido.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-pedido-idCartao">
-                                <Translate contentKey="generadorApp.pacientePedido.idCartao">Id Cartao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-pedido-idCartao" type="select" className="form-control" name="idCartao">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacientePedido.idCartao.empty')}
-                                </option>
-                                {pacienteDadosCartaos
-                                  ? pacienteDadosCartaos.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-pedido-idEspecialidade">
-                                <Translate contentKey="generadorApp.pacientePedido.idEspecialidade">Id Especialidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-pedido-idEspecialidade" type="select" className="form-control" name="idEspecialidade">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacientePedido.idEspecialidade.empty')}
-                                </option>
-                                {especialidades
-                                  ? especialidades.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'tipoValor' ? (
+                          <Col md="tipoValor">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoValorLabel" for="paciente-pedido-tipoValor">
+                                    <Translate contentKey="generadorApp.pacientePedido.tipoValor">Tipo Valor</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-pedido-tipoValor" type="string" className="form-control" name="tipoValor" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoValor" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-pedido-unidade">
+                                    <Translate contentKey="generadorApp.pacientePedido.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="paciente-pedido-unidade" type="select" className="form-control" name="unidade">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.pacientePedido.unidade.empty')}
+                                    </option>
+                                    {unidadeEasies
+                                      ? unidadeEasies.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.razaoSocial}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -383,9 +353,6 @@ export class PacientePedidoUpdate extends React.Component<IPacientePedidoUpdateP
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  pacientes: storeState.paciente.entities,
-  pacienteDadosCartaos: storeState.pacienteDadosCartao.entities,
-  especialidades: storeState.especialidade.entities,
   pacientePedidoEntity: storeState.pacientePedido.entity,
   loading: storeState.pacientePedido.loading,
   updating: storeState.pacientePedido.updating,
@@ -394,9 +361,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getPacientes,
-  getPacienteDadosCartaos,
-  getEspecialidades,
   getEntity,
   updateEntity,
   createEntity,

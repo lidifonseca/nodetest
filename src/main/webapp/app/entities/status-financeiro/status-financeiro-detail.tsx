@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './status-financeiro.reducer';
+import { getEntity, IStatusFinanceiroBaseState, getStatusFinanceiroState } from './status-financeiro.reducer';
 import { IStatusFinanceiro } from 'app/shared/model/status-financeiro.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IStatusFinanceiroState {
+  fieldsBase: IStatusFinanceiroBaseState;
+}
+
 export interface IStatusFinanceiroDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class StatusFinanceiroDetail extends React.Component<IStatusFinanceiroDetailProps> {
+export class StatusFinanceiroDetail extends React.Component<IStatusFinanceiroDetailProps, IStatusFinanceiroState> {
   constructor(props: Readonly<IStatusFinanceiroDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getStatusFinanceiroState(this.props.location)
     };
   }
 

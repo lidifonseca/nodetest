@@ -725,6 +725,9 @@ function analizeJavadoc(generator) {
                     if(parameter[0] === "viewTab" && generator.viewTabs.indexOf(parameter[1].trim()) === -1) {
                         generator.viewTabs.push(parameter[1].trim());
                     }
+                    if(parameter[0] === "dbName" && generator.viewTabs.indexOf(parameter[1].trim()) === -1) {
+                        generator.viewTabs.push(parameter[1].trim());
+                    }
                 }
                 javadoc = javadoc.substring(0,javadoc.indexOf('@')) + javadoc.substring(javadoc.indexOf('@@')+2).trim();
             }

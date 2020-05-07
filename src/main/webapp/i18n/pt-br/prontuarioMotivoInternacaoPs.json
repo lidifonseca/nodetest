@@ -18,8 +18,7 @@
       },
       "idProntuario": "Id Prontuario",
       "idPaciente": "Id Paciente",
-      "idMotivo": "Id Motivo",
-      "idUsuario": "Id Usuario"
+      "idMotivo": "Id Motivo"
     }
   }
 }

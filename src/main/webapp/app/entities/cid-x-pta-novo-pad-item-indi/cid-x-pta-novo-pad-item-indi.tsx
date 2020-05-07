@@ -22,32 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './cid-x-pta-novo-pad-item-indi.reducer';
+import { getCidXPtaNovoPadItemIndiState, ICidXPtaNovoPadItemIndiBaseState, getEntities } from './cid-x-pta-novo-pad-item-indi.reducer';
 import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
-import { getEntities as getPadItemIndicadores } from 'app/entities/pad-item-indicadores/pad-item-indicadores.reducer';
-import { ICategoria } from 'app/shared/model/categoria.model';
-import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
-import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
-import { getEntities as getCidXPtaNovos } from 'app/entities/cid-x-pta-novo/cid-x-pta-novo.reducer';
-
 export interface ICidXPtaNovoPadItemIndiProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ICidXPtaNovoPadItemIndiBaseState {
-  meta: any;
-  maximo: any;
-  minimo: any;
-  unidadeMedidaExtra: any;
-  unidadeMedidaId: any;
-  score: any;
-  alertasIndicadores: any;
-  padItemIndicadoresId: any;
-  categoriasId: any;
-  cidXPtaNovoId: any;
-}
 export interface ICidXPtaNovoPadItemIndiState extends ICidXPtaNovoPadItemIndiBaseState, IPaginationBaseState {}
 
 export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemIndiProps, ICidXPtaNovoPadItemIndiState> {
@@ -57,44 +38,12 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getCidXPtaNovoPadItemIndiState(this.props.location)
+      ...getCidXPtaNovoPadItemIndiState(this.props.location)
     };
   }
 
-  getCidXPtaNovoPadItemIndiState = (location): ICidXPtaNovoPadItemIndiBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const meta = url.searchParams.get('meta') || '';
-    const maximo = url.searchParams.get('maximo') || '';
-    const minimo = url.searchParams.get('minimo') || '';
-    const unidadeMedidaExtra = url.searchParams.get('unidadeMedidaExtra') || '';
-    const unidadeMedidaId = url.searchParams.get('unidadeMedidaId') || '';
-    const score = url.searchParams.get('score') || '';
-
-    const alertasIndicadores = url.searchParams.get('alertasIndicadores') || '';
-    const padItemIndicadoresId = url.searchParams.get('padItemIndicadoresId') || '';
-    const categoriasId = url.searchParams.get('categoriasId') || '';
-    const cidXPtaNovoId = url.searchParams.get('cidXPtaNovoId') || '';
-
-    return {
-      meta,
-      maximo,
-      minimo,
-      unidadeMedidaExtra,
-      unidadeMedidaId,
-      score,
-      alertasIndicadores,
-      padItemIndicadoresId,
-      categoriasId,
-      cidXPtaNovoId
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPadItemIndicadores();
-    this.props.getCategorias();
-    this.props.getCidXPtaNovos();
   }
 
   cancelCourse = () => {
@@ -105,11 +54,7 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
         minimo: '',
         unidadeMedidaExtra: '',
         unidadeMedidaId: '',
-        score: '',
-        alertasIndicadores: '',
-        padItemIndicadoresId: '',
-        categoriasId: '',
-        cidXPtaNovoId: ''
+        score: ''
       },
       () => this.sortEntities()
     );
@@ -142,7 +87,9 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -172,18 +119,6 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
       'score=' +
       this.state.score +
       '&' +
-      'alertasIndicadores=' +
-      this.state.alertasIndicadores +
-      '&' +
-      'padItemIndicadoresId=' +
-      this.state.padItemIndicadoresId +
-      '&' +
-      'categoriasId=' +
-      this.state.categoriasId +
-      '&' +
-      'cidXPtaNovoId=' +
-      this.state.cidXPtaNovoId +
-      '&' +
       ''
     );
   };
@@ -191,22 +126,7 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      meta,
-      maximo,
-      minimo,
-      unidadeMedidaExtra,
-      unidadeMedidaId,
-      score,
-      alertasIndicadores,
-      padItemIndicadoresId,
-      categoriasId,
-      cidXPtaNovoId,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
+    const { meta, maximo, minimo, unidadeMedidaExtra, unidadeMedidaId, score, activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(
       meta,
       maximo,
@@ -214,10 +134,6 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
       unidadeMedidaExtra,
       unidadeMedidaId,
       score,
-      alertasIndicadores,
-      padItemIndicadoresId,
-      categoriasId,
-      cidXPtaNovoId,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -225,7 +141,7 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
   };
 
   render() {
-    const { padItemIndicadores, categorias, cidXPtaNovos, cidXPtaNovoPadItemIndiList, match, totalItems } = this.props;
+    const { cidXPtaNovoPadItemIndiList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -243,7 +159,11 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.home.createLabel">
@@ -258,176 +178,87 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="metaLabel" for="cid-x-pta-novo-pad-item-indi-meta">
-                            <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.meta">Meta</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'meta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="metaLabel" for="cid-x-pta-novo-pad-item-indi-meta">
+                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.meta">Meta</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="meta"
-                            id="cid-x-pta-novo-pad-item-indi-meta"
-                            value={this.state.meta}
-                            validate={{
-                              maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="maximoLabel" for="cid-x-pta-novo-pad-item-indi-maximo">
-                            <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.maximo">Maximo</Translate>
-                          </Label>
+                            <AvInput type="text" name="meta" id="cid-x-pta-novo-pad-item-indi-meta" value={this.state.meta} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="maximo"
-                            id="cid-x-pta-novo-pad-item-indi-maximo"
-                            value={this.state.maximo}
-                            validate={{
-                              maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="minimoLabel" for="cid-x-pta-novo-pad-item-indi-minimo">
-                            <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.minimo">Minimo</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'maximo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="maximoLabel" for="cid-x-pta-novo-pad-item-indi-maximo">
+                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.maximo">Maximo</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="minimo"
-                            id="cid-x-pta-novo-pad-item-indi-minimo"
-                            value={this.state.minimo}
-                            validate={{
-                              maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="unidadeMedidaExtraLabel" for="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra">
-                            <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaExtra">Unidade Medida Extra</Translate>
-                          </Label>
+                            <AvInput type="text" name="maximo" id="cid-x-pta-novo-pad-item-indi-maximo" value={this.state.maximo} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="unidadeMedidaExtra"
-                            id="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra"
-                            value={this.state.unidadeMedidaExtra}
-                            validate={{
-                              maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="unidadeMedidaIdLabel" for="cid-x-pta-novo-pad-item-indi-unidadeMedidaId">
-                            <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaId">Unidade Medida Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="unidadeMedidaId"
-                            id="cid-x-pta-novo-pad-item-indi-unidadeMedidaId"
-                            value={this.state.unidadeMedidaId}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="scoreLabel" for="cid-x-pta-novo-pad-item-indi-score">
-                            <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.score">Score</Translate>
-                          </Label>
-                          <AvInput type="string" name="score" id="cid-x-pta-novo-pad-item-indi-score" value={this.state.score} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'minimo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="minimoLabel" for="cid-x-pta-novo-pad-item-indi-minimo">
+                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.minimo">Minimo</Translate>
+                            </Label>
 
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="minimo" id="cid-x-pta-novo-pad-item-indi-minimo" value={this.state.minimo} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cid-x-pta-novo-pad-item-indi-padItemIndicadoresId">
-                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadoresId">
-                                Pad Item Indicadores Id
+                      {this.state.baseFilters !== 'unidadeMedidaExtra' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="unidadeMedidaExtraLabel" for="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra">
+                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaExtra">
+                                Unidade Medida Extra
                               </Translate>
                             </Label>
-                            <AvInput
-                              id="cid-x-pta-novo-pad-item-indi-padItemIndicadoresId"
-                              type="select"
-                              className="form-control"
-                              name="padItemIndicadoresIdId"
-                            >
-                              <option value="" key="0" />
-                              {padItemIndicadores
-                                ? padItemIndicadores.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cid-x-pta-novo-pad-item-indi-categoriasId">
-                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categoriasId">Categorias Id</Translate>
+                            <AvInput
+                              type="text"
+                              name="unidadeMedidaExtra"
+                              id="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra"
+                              value={this.state.unidadeMedidaExtra}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'unidadeMedidaId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="unidadeMedidaIdLabel" for="cid-x-pta-novo-pad-item-indi-unidadeMedidaId">
+                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaId">Unidade Medida Id</Translate>
                             </Label>
                             <AvInput
-                              id="cid-x-pta-novo-pad-item-indi-categoriasId"
-                              type="select"
-                              className="form-control"
-                              name="categoriasIdId"
-                            >
-                              <option value="" key="0" />
-                              {categorias
-                                ? categorias.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                              type="string"
+                              name="unidadeMedidaId"
+                              id="cid-x-pta-novo-pad-item-indi-unidadeMedidaId"
+                              value={this.state.unidadeMedidaId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="cid-x-pta-novo-pad-item-indi-cidXPtaNovoId">
-                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
+                      {this.state.baseFilters !== 'score' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="scoreLabel" for="cid-x-pta-novo-pad-item-indi-score">
+                              <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.score">Score</Translate>
                             </Label>
-                            <AvInput
-                              id="cid-x-pta-novo-pad-item-indi-cidXPtaNovoId"
-                              type="select"
-                              className="form-control"
-                              name="cidXPtaNovoIdId"
-                            >
-                              <option value="" key="0" />
-                              {cidXPtaNovos
-                                ? cidXPtaNovos.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="score" id="cid-x-pta-novo-pad-item-indi-score" value={this.state.score} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -455,42 +286,42 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('meta')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.meta">Meta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('maximo')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.maximo">Maximo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('minimo')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.minimo">Minimo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('unidadeMedidaExtra')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaExtra">Unidade Medida Extra</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('unidadeMedidaId')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaId">Unidade Medida Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('score')}>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.score">Score</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadoresId">Pad Item Indicadores Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categoriasId">Categorias Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'meta' ? (
+                        <th className="hand" onClick={this.sort('meta')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.meta">Meta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'maximo' ? (
+                        <th className="hand" onClick={this.sort('maximo')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.maximo">Maximo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'minimo' ? (
+                        <th className="hand" onClick={this.sort('minimo')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.minimo">Minimo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'unidadeMedidaExtra' ? (
+                        <th className="hand" onClick={this.sort('unidadeMedidaExtra')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaExtra">Unidade Medida Extra</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'unidadeMedidaId' ? (
+                        <th className="hand" onClick={this.sort('unidadeMedidaId')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaId">Unidade Medida Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'score' ? (
+                        <th className="hand" onClick={this.sort('score')}>
+                          <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.score">Score</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -505,58 +336,48 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
                           </Button>
                         </td>
 
-                        <td>{cidXPtaNovoPadItemIndi.meta}</td>
+                        {this.state.baseFilters !== 'meta' ? <td>{cidXPtaNovoPadItemIndi.meta}</td> : null}
 
-                        <td>{cidXPtaNovoPadItemIndi.maximo}</td>
+                        {this.state.baseFilters !== 'maximo' ? <td>{cidXPtaNovoPadItemIndi.maximo}</td> : null}
 
-                        <td>{cidXPtaNovoPadItemIndi.minimo}</td>
+                        {this.state.baseFilters !== 'minimo' ? <td>{cidXPtaNovoPadItemIndi.minimo}</td> : null}
 
-                        <td>{cidXPtaNovoPadItemIndi.unidadeMedidaExtra}</td>
+                        {this.state.baseFilters !== 'unidadeMedidaExtra' ? <td>{cidXPtaNovoPadItemIndi.unidadeMedidaExtra}</td> : null}
 
-                        <td>{cidXPtaNovoPadItemIndi.unidadeMedidaId}</td>
+                        {this.state.baseFilters !== 'unidadeMedidaId' ? <td>{cidXPtaNovoPadItemIndi.unidadeMedidaId}</td> : null}
 
-                        <td>{cidXPtaNovoPadItemIndi.score}</td>
-                        <td>
-                          {cidXPtaNovoPadItemIndi.padItemIndicadoresId ? (
-                            <Link to={`pad-item-indicadores/${cidXPtaNovoPadItemIndi.padItemIndicadoresId.id}`}>
-                              {cidXPtaNovoPadItemIndi.padItemIndicadoresId.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {cidXPtaNovoPadItemIndi.categoriasId ? (
-                            <Link to={`categoria/${cidXPtaNovoPadItemIndi.categoriasId.id}`}>{cidXPtaNovoPadItemIndi.categoriasId.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          {cidXPtaNovoPadItemIndi.cidXPtaNovoId ? (
-                            <Link to={`cid-x-pta-novo/${cidXPtaNovoPadItemIndi.cidXPtaNovoId.id}`}>
-                              {cidXPtaNovoPadItemIndi.cidXPtaNovoId.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'score' ? <td>{cidXPtaNovoPadItemIndi.score}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${cidXPtaNovoPadItemIndi.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cidXPtaNovoPadItemIndi.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cidXPtaNovoPadItemIndi.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cidXPtaNovoPadItemIndi.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${cidXPtaNovoPadItemIndi.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${cidXPtaNovoPadItemIndi.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -600,17 +421,11 @@ export class CidXPtaNovoPadItemIndi extends React.Component<ICidXPtaNovoPadItemI
 }
 
 const mapStateToProps = ({ cidXPtaNovoPadItemIndi, ...storeState }: IRootState) => ({
-  padItemIndicadores: storeState.padItemIndicadores.entities,
-  categorias: storeState.categoria.entities,
-  cidXPtaNovos: storeState.cidXPtaNovo.entities,
   cidXPtaNovoPadItemIndiList: cidXPtaNovoPadItemIndi.entities,
   totalItems: cidXPtaNovoPadItemIndi.totalItems
 });
 
 const mapDispatchToProps = {
-  getPadItemIndicadores,
-  getCategorias,
-  getCidXPtaNovos,
   getEntities
 };
 

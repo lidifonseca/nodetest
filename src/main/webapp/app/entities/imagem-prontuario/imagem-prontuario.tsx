@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './imagem-prontuario.reducer';
+import { getImagemProntuarioState, IImagemProntuarioBaseState, getEntities } from './imagem-prontuario.reducer';
 import { IImagemProntuario } from 'app/shared/model/imagem-prontuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IImagemProntuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IImagemProntuarioBaseState {
-  idProntuario: any;
-  imagem: any;
-  ativo: any;
-  diretorio: any;
-}
 export interface IImagemProntuarioState extends IImagemProntuarioBaseState, IPaginationBaseState {}
 
 export class ImagemProntuario extends React.Component<IImagemProntuarioProps, IImagemProntuarioState> {
@@ -44,24 +38,9 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getImagemProntuarioState(this.props.location)
+      ...getImagemProntuarioState(this.props.location)
     };
   }
-
-  getImagemProntuarioState = (location): IImagemProntuarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProntuario = url.searchParams.get('idProntuario') || '';
-    const imagem = url.searchParams.get('imagem') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const diretorio = url.searchParams.get('diretorio') || '';
-
-    return {
-      idProntuario,
-      imagem,
-      ativo,
-      diretorio
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -106,7 +85,9 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -160,7 +141,11 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.imagemProntuario.home.createLabel">Create a new Imagem Prontuario</Translate>
@@ -173,75 +158,52 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProntuarioLabel" for="imagem-prontuario-idProntuario">
-                            <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idProntuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProntuarioLabel" for="imagem-prontuario-idProntuario">
+                              <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idProntuario"
-                            id="imagem-prontuario-idProntuario"
-                            value={this.state.idProntuario}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="imagemLabel" for="imagem-prontuario-imagem">
-                            <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
-                          </Label>
+                            <AvInput type="text" name="idProntuario" id="imagem-prontuario-idProntuario" value={this.state.idProntuario} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="imagem"
-                            id="imagem-prontuario-imagem"
-                            value={this.state.imagem}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="imagem-prontuario-ativo">
-                            <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ativo"
-                            id="imagem-prontuario-ativo"
-                            value={this.state.ativo}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="diretorioLabel" for="imagem-prontuario-diretorio">
-                            <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'imagem' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="imagemLabel" for="imagem-prontuario-imagem">
+                              <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="diretorio"
-                            id="imagem-prontuario-diretorio"
-                            value={this.state.diretorio}
-                            validate={{
-                              maxLength: { value: 500, errorMessage: translate('entity.validation.maxlength', { max: 500 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="imagem" id="imagem-prontuario-imagem" value={this.state.imagem} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="imagem-prontuario-ativo">
+                              <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="imagem-prontuario-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'diretorio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="diretorioLabel" for="imagem-prontuario-diretorio">
+                              <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="diretorio" id="imagem-prontuario-diretorio" value={this.state.diretorio} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -269,22 +231,30 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProntuario')}>
-                        <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('imagem')}>
-                        <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('diretorio')}>
-                        <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProntuario' ? (
+                        <th className="hand" onClick={this.sort('idProntuario')}>
+                          <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'imagem' ? (
+                        <th className="hand" onClick={this.sort('imagem')}>
+                          <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'diretorio' ? (
+                        <th className="hand" onClick={this.sort('diretorio')}>
+                          <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -299,29 +269,39 @@ export class ImagemProntuario extends React.Component<IImagemProntuarioProps, II
                           </Button>
                         </td>
 
-                        <td>{imagemProntuario.idProntuario}</td>
+                        {this.state.baseFilters !== 'idProntuario' ? <td>{imagemProntuario.idProntuario}</td> : null}
 
-                        <td>{imagemProntuario.imagem}</td>
+                        {this.state.baseFilters !== 'imagem' ? <td>{imagemProntuario.imagem}</td> : null}
 
-                        <td>{imagemProntuario.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{imagemProntuario.ativo}</td> : null}
 
-                        <td>{imagemProntuario.diretorio}</td>
+                        {this.state.baseFilters !== 'diretorio' ? <td>{imagemProntuario.diretorio}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${imagemProntuario.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${imagemProntuario.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${imagemProntuario.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${imagemProntuario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${imagemProntuario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${imagemProntuario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

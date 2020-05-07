@@ -22,23 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './alertas-indicadores.reducer';
+import { getAlertasIndicadoresState, IAlertasIndicadoresBaseState, getEntities } from './alertas-indicadores.reducer';
 import { IAlertasIndicadores } from 'app/shared/model/alertas-indicadores.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
-import { getEntities as getCidXPtaNovoPadItemIndis } from 'app/entities/cid-x-pta-novo-pad-item-indi/cid-x-pta-novo-pad-item-indi.reducer';
-
 export interface IAlertasIndicadoresProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAlertasIndicadoresBaseState {
-  pontuacao: any;
-  alteracaoEsperada: any;
-  observacoes: any;
-  usuarioId: any;
-  padItemIndicadoresId: any;
-}
 export interface IAlertasIndicadoresState extends IAlertasIndicadoresBaseState, IPaginationBaseState {}
 
 export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps, IAlertasIndicadoresState> {
@@ -48,32 +38,12 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAlertasIndicadoresState(this.props.location)
+      ...getAlertasIndicadoresState(this.props.location)
     };
   }
 
-  getAlertasIndicadoresState = (location): IAlertasIndicadoresBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const pontuacao = url.searchParams.get('pontuacao') || '';
-    const alteracaoEsperada = url.searchParams.get('alteracaoEsperada') || '';
-    const observacoes = url.searchParams.get('observacoes') || '';
-    const usuarioId = url.searchParams.get('usuarioId') || '';
-
-    const padItemIndicadoresId = url.searchParams.get('padItemIndicadoresId') || '';
-
-    return {
-      pontuacao,
-      alteracaoEsperada,
-      observacoes,
-      usuarioId,
-      padItemIndicadoresId
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getCidXPtaNovoPadItemIndis();
   }
 
   cancelCourse = () => {
@@ -82,8 +52,7 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
         pontuacao: '',
         alteracaoEsperada: '',
         observacoes: '',
-        usuarioId: '',
-        padItemIndicadoresId: ''
+        usuarioId: ''
       },
       () => this.sortEntities()
     );
@@ -116,7 +85,9 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -140,9 +111,6 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
       'usuarioId=' +
       this.state.usuarioId +
       '&' +
-      'padItemIndicadoresId=' +
-      this.state.padItemIndicadoresId +
-      '&' +
       ''
     );
   };
@@ -150,31 +118,12 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const {
-      pontuacao,
-      alteracaoEsperada,
-      observacoes,
-      usuarioId,
-      padItemIndicadoresId,
-      activePage,
-      itemsPerPage,
-      sort,
-      order
-    } = this.state;
-    this.props.getEntities(
-      pontuacao,
-      alteracaoEsperada,
-      observacoes,
-      usuarioId,
-      padItemIndicadoresId,
-      activePage - 1,
-      itemsPerPage,
-      `${sort},${order}`
-    );
+    const { pontuacao, alteracaoEsperada, observacoes, usuarioId, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(pontuacao, alteracaoEsperada, observacoes, usuarioId, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { cidXPtaNovoPadItemIndis, alertasIndicadoresList, match, totalItems } = this.props;
+    const { alertasIndicadoresList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -192,7 +141,11 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.alertasIndicadores.home.createLabel">Create a new Alertas Indicadores</Translate>
@@ -205,79 +158,55 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="pontuacaoLabel" for="alertas-indicadores-pontuacao">
-                            <Translate contentKey="generadorApp.alertasIndicadores.pontuacao">Pontuacao</Translate>
-                          </Label>
-                          <AvInput type="string" name="pontuacao" id="alertas-indicadores-pontuacao" value={this.state.pontuacao} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="alteracaoEsperadaLabel" check>
-                            <AvInput
-                              id="alertas-indicadores-alteracaoEsperada"
-                              type="checkbox"
-                              className="form-control"
-                              name="alteracaoEsperada"
-                            />
-                            <Translate contentKey="generadorApp.alertasIndicadores.alteracaoEsperada">Alteracao Esperada</Translate>
-                          </Label>
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="observacoesLabel" for="alertas-indicadores-observacoes">
-                            <Translate contentKey="generadorApp.alertasIndicadores.observacoes">Observacoes</Translate>
-                          </Label>
-
-                          <AvInput
-                            type="text"
-                            name="observacoes"
-                            id="alertas-indicadores-observacoes"
-                            value={this.state.observacoes}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="usuarioIdLabel" for="alertas-indicadores-usuarioId">
-                            <Translate contentKey="generadorApp.alertasIndicadores.usuarioId">Usuario Id</Translate>
-                          </Label>
-                          <AvInput type="string" name="usuarioId" id="alertas-indicadores-usuarioId" value={this.state.usuarioId} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="alertas-indicadores-padItemIndicadoresId">
-                              <Translate contentKey="generadorApp.alertasIndicadores.padItemIndicadoresId">
-                                Pad Item Indicadores Id
-                              </Translate>
+                      {this.state.baseFilters !== 'pontuacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="pontuacaoLabel" for="alertas-indicadores-pontuacao">
+                              <Translate contentKey="generadorApp.alertasIndicadores.pontuacao">Pontuacao</Translate>
                             </Label>
-                            <AvInput
-                              id="alertas-indicadores-padItemIndicadoresId"
-                              type="select"
-                              className="form-control"
-                              name="padItemIndicadoresIdId"
-                            >
-                              <option value="" key="0" />
-                              {cidXPtaNovoPadItemIndis
-                                ? cidXPtaNovoPadItemIndis.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="pontuacao" id="alertas-indicadores-pontuacao" value={this.state.pontuacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'alteracaoEsperada' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="alteracaoEsperadaLabel" check>
+                              <AvInput
+                                id="alertas-indicadores-alteracaoEsperada"
+                                type="checkbox"
+                                className="form-control"
+                                name="alteracaoEsperada"
+                              />
+                              <Translate contentKey="generadorApp.alertasIndicadores.alteracaoEsperada">Alteracao Esperada</Translate>
+                            </Label>
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'observacoes' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="observacoesLabel" for="alertas-indicadores-observacoes">
+                              <Translate contentKey="generadorApp.alertasIndicadores.observacoes">Observacoes</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="observacoes" id="alertas-indicadores-observacoes" value={this.state.observacoes} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'usuarioId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="usuarioIdLabel" for="alertas-indicadores-usuarioId">
+                              <Translate contentKey="generadorApp.alertasIndicadores.usuarioId">Usuario Id</Translate>
+                            </Label>
+                            <AvInput type="string" name="usuarioId" id="alertas-indicadores-usuarioId" value={this.state.usuarioId} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -305,26 +234,30 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('pontuacao')}>
-                        <Translate contentKey="generadorApp.alertasIndicadores.pontuacao">Pontuacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('alteracaoEsperada')}>
-                        <Translate contentKey="generadorApp.alertasIndicadores.alteracaoEsperada">Alteracao Esperada</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('observacoes')}>
-                        <Translate contentKey="generadorApp.alertasIndicadores.observacoes">Observacoes</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('usuarioId')}>
-                        <Translate contentKey="generadorApp.alertasIndicadores.usuarioId">Usuario Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.alertasIndicadores.padItemIndicadoresId">Pad Item Indicadores Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'pontuacao' ? (
+                        <th className="hand" onClick={this.sort('pontuacao')}>
+                          <Translate contentKey="generadorApp.alertasIndicadores.pontuacao">Pontuacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'alteracaoEsperada' ? (
+                        <th className="hand" onClick={this.sort('alteracaoEsperada')}>
+                          <Translate contentKey="generadorApp.alertasIndicadores.alteracaoEsperada">Alteracao Esperada</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'observacoes' ? (
+                        <th className="hand" onClick={this.sort('observacoes')}>
+                          <Translate contentKey="generadorApp.alertasIndicadores.observacoes">Observacoes</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'usuarioId' ? (
+                        <th className="hand" onClick={this.sort('usuarioId')}>
+                          <Translate contentKey="generadorApp.alertasIndicadores.usuarioId">Usuario Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -339,38 +272,41 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
                           </Button>
                         </td>
 
-                        <td>{alertasIndicadores.pontuacao}</td>
+                        {this.state.baseFilters !== 'pontuacao' ? <td>{alertasIndicadores.pontuacao}</td> : null}
 
-                        <td>{alertasIndicadores.alteracaoEsperada ? 'true' : 'false'}</td>
+                        {this.state.baseFilters !== 'alteracaoEsperada' ? (
+                          <td>{alertasIndicadores.alteracaoEsperada ? 'true' : 'false'}</td>
+                        ) : null}
 
-                        <td>{alertasIndicadores.observacoes}</td>
+                        {this.state.baseFilters !== 'observacoes' ? <td>{alertasIndicadores.observacoes}</td> : null}
 
-                        <td>{alertasIndicadores.usuarioId}</td>
-                        <td>
-                          {alertasIndicadores.padItemIndicadoresId ? (
-                            <Link to={`cid-x-pta-novo-pad-item-indi/${alertasIndicadores.padItemIndicadoresId.id}`}>
-                              {alertasIndicadores.padItemIndicadoresId.id}
-                            </Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'usuarioId' ? <td>{alertasIndicadores.usuarioId}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${alertasIndicadores.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${alertasIndicadores.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${alertasIndicadores.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${alertasIndicadores.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${alertasIndicadores.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${alertasIndicadores.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -412,13 +348,11 @@ export class AlertasIndicadores extends React.Component<IAlertasIndicadoresProps
 }
 
 const mapStateToProps = ({ alertasIndicadores, ...storeState }: IRootState) => ({
-  cidXPtaNovoPadItemIndis: storeState.cidXPtaNovoPadItemIndi.entities,
   alertasIndicadoresList: alertasIndicadores.entities,
   totalItems: alertasIndicadores.totalItems
 });
 
 const mapDispatchToProps = {
-  getCidXPtaNovoPadItemIndis,
   getEntities
 };
 

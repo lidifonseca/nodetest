@@ -7,22 +7,22 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A LogPacAcesso.
  */
-@Entity('log_pac_acesso')
+@Entity('tb_log_pac_acesso')
 export default class LogPacAcesso extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_paciente', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE', nullable: false })
   idPaciente: number;
 
-  @Column({ name: 'profissional', length: 255 })
+  @Column({ name: 'PROFISSIONAL', length: 255 })
   profissional: string;
 
-  @Column({ name: 'token', length: 200 })
+  @Column({ name: 'TOKEN', length: 200 })
   token: string;
 
-  @Column({ name: 'ip_local', length: 25 })
+  @Column({ name: 'IP_LOCAL', length: 25 })
   ipLocal: string;
 
-  @Column({ type: 'blob', name: 'infor_acesso' })
-  inforAcesso: any;
+  @Column({ name: 'INFOR_ACESSO' })
+  inforAcesso: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

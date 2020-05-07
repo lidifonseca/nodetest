@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './status-atual-ligacao.reducer';
+import { getEntity, IStatusAtualLigacaoBaseState, getStatusAtualLigacaoState } from './status-atual-ligacao.reducer';
 import { IStatusAtualLigacao } from 'app/shared/model/status-atual-ligacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IStatusAtualLigacaoState {
+  fieldsBase: IStatusAtualLigacaoBaseState;
+}
+
 export interface IStatusAtualLigacaoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class StatusAtualLigacaoDetail extends React.Component<IStatusAtualLigacaoDetailProps> {
+export class StatusAtualLigacaoDetail extends React.Component<IStatusAtualLigacaoDetailProps, IStatusAtualLigacaoState> {
   constructor(props: Readonly<IStatusAtualLigacaoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getStatusAtualLigacaoState(this.props.location)
     };
   }
 

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-operadora.reducer';
+import { getEntity, ITipoOperadoraBaseState, getTipoOperadoraState } from './tipo-operadora.reducer';
 import { ITipoOperadora } from 'app/shared/model/tipo-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoOperadoraState {
+  fieldsBase: ITipoOperadoraBaseState;
+}
+
 export interface ITipoOperadoraDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoOperadoraDetail extends React.Component<ITipoOperadoraDetailProps> {
+export class TipoOperadoraDetail extends React.Component<ITipoOperadoraDetailProps, ITipoOperadoraState> {
   constructor(props: Readonly<ITipoOperadoraDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoOperadoraState(this.props.location)
     };
   }
 

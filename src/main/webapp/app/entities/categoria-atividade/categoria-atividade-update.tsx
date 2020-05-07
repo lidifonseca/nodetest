@@ -10,27 +10,28 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 import { getEntities as getUnidadeEasies } from 'app/entities/unidade-easy/unidade-easy.reducer';
-import { ICategoria } from 'app/shared/model/categoria.model';
-import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './categoria-atividade.reducer';
+import {
+  ICategoriaAtividadeUpdateState,
+  getEntity,
+  getCategoriaAtividadeState,
+  ICategoriaAtividadeBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './categoria-atividade.reducer';
 import { ICategoriaAtividade } from 'app/shared/model/categoria-atividade.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ICategoriaAtividadeUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ICategoriaAtividadeUpdateState {
-  isNew: boolean;
-  unidadeId: string;
-  idCategoriaId: string;
-}
-
 export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividadeUpdateProps, ICategoriaAtividadeUpdateState> {
   constructor(props: Readonly<ICategoriaAtividadeUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getCategoriaAtividadeState(this.props.location),
       unidadeId: '0',
-      idCategoriaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -48,9 +49,22 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
     }
 
     this.props.getUnidadeEasies();
-    this.props.getCategorias();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['atividade'] ? '&atividade=' + fieldsBase['atividade'] : '') +
+      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { categoriaAtividadeEntity } = this.props;
@@ -68,13 +82,14 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
   };
 
   handleClose = () => {
-    this.props.history.push('/categoria-atividade');
+    this.props.history.push('/categoria-atividade?' + this.getFiltersURL());
   };
 
   render() {
-    const { categoriaAtividadeEntity, unidadeEasies, categorias, loading, updating } = this.props;
+    const { categoriaAtividadeEntity, unidadeEasies, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -91,8 +106,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
               ? {}
               : {
                   ...categoriaAtividadeEntity,
-                  unidade: categoriaAtividadeEntity.unidade ? categoriaAtividadeEntity.unidade.id : null,
-                  idCategoria: categoriaAtividadeEntity.idCategoria ? categoriaAtividadeEntity.idCategoria.id : null
+                  unidade: categoriaAtividadeEntity.unidade ? categoriaAtividadeEntity.unidade.id : null
                 }
           }
           onSubmit={this.saveEntity}
@@ -111,7 +125,14 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/categoria-atividade" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/categoria-atividade?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -126,7 +147,7 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -142,73 +163,56 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
                           </Row>
                         </AvGroup>
                       ) : null}
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="atividadeLabel" for="categoria-atividade-atividade">
-                                <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="categoria-atividade-atividade" type="text" name="atividade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="categoria-atividade-unidade">
-                                <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="categoria-atividade-unidade" type="select" className="form-control" name="unidade">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.categoriaAtividade.unidade.empty')}
-                                </option>
-                                {unidadeEasies
-                                  ? unidadeEasies.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.razaoSocial}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="categoria-atividade-idCategoria">
-                                <Translate contentKey="generadorApp.categoriaAtividade.idCategoria">Id Categoria</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="categoria-atividade-idCategoria" type="select" className="form-control" name="idCategoria">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.categoriaAtividade.idCategoria.empty')}
-                                </option>
-                                {categorias
-                                  ? categorias.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                      <Row>
+                        {baseFilters !== 'atividade' ? (
+                          <Col md="atividade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atividadeLabel" for="categoria-atividade-atividade">
+                                    <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="categoria-atividade-atividade" type="text" name="atividade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="categoria-atividade-unidade">
+                                    <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="categoria-atividade-unidade" type="select" className="form-control" name="unidade">
+                                    <option value="null" key="0">
+                                      {translate('generadorApp.categoriaAtividade.unidade.empty')}
+                                    </option>
+                                    {unidadeEasies
+                                      ? unidadeEasies.map(otherEntity => (
+                                          <option value={otherEntity.id} key={otherEntity.id}>
+                                            {otherEntity.razaoSocial}
+                                          </option>
+                                        ))
+                                      : null}
+                                  </AvInput>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -222,7 +226,6 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
 
 const mapStateToProps = (storeState: IRootState) => ({
   unidadeEasies: storeState.unidadeEasy.entities,
-  categorias: storeState.categoria.entities,
   categoriaAtividadeEntity: storeState.categoriaAtividade.entity,
   loading: storeState.categoriaAtividade.loading,
   updating: storeState.categoriaAtividade.updating,
@@ -231,7 +234,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUnidadeEasies,
-  getCategorias,
   getEntity,
   updateEntity,
   createEntity,

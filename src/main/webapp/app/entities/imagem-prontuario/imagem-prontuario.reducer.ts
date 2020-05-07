@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IImagemProntuario, defaultValue } from 'app/shared/model/imagem-prontuario.model';
 
 export const ACTION_TYPES = {
+  FETCH_IMAGEMPRONTUARIO_LIST_EXPORT: 'imagemProntuario/FETCH_IMAGEMPRONTUARIO_LIST_EXPORT',
   FETCH_IMAGEMPRONTUARIO_LIST: 'imagemProntuario/FETCH_IMAGEMPRONTUARIO_LIST',
   FETCH_IMAGEMPRONTUARIO: 'imagemProntuario/FETCH_IMAGEMPRONTUARIO',
   CREATE_IMAGEMPRONTUARIO: 'imagemProntuario/CREATE_IMAGEMPRONTUARIO',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type ImagemProntuarioState = Readonly<typeof initialState>;
 
+export interface IImagemProntuarioBaseState {
+  baseFilters: any;
+  idProntuario: any;
+  imagem: any;
+  ativo: any;
+  diretorio: any;
+}
+
+export interface IImagemProntuarioUpdateState {
+  fieldsBase: IImagemProntuarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ImagemProntuarioState = initialState, action): ImagemProntuarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_IMAGEMPRONTUARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_IMAGEMPRONTUARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_IMAGEMPRONTUARIO):
       return {
@@ -51,6 +66,7 @@ export default (state: ImagemProntuarioState = initialState, action): ImagemPron
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_IMAGEMPRONTUARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_IMAGEMPRONTUARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_IMAGEMPRONTUARIO):
     case FAILURE(ACTION_TYPES.CREATE_IMAGEMPRONTUARIO):
@@ -145,6 +161,29 @@ export const getEntity: ICrudGetAction<IImagemProntuario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionImagemProntuario<IImagemProntuario> = (
+  idProntuario,
+  imagem,
+  ativo,
+  diretorio,
+  page,
+  size,
+  sort
+) => {
+  const idProntuarioRequest = idProntuario ? `idProntuario.contains=${idProntuario}&` : '';
+  const imagemRequest = imagem ? `imagem.contains=${imagem}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const diretorioRequest = diretorio ? `diretorio.contains=${diretorio}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_IMAGEMPRONTUARIO_LIST,
+    payload: axios.get<IImagemProntuario>(
+      `${requestUrl}${idProntuarioRequest}${imagemRequest}${ativoRequest}${diretorioRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IImagemProntuario> = entity => async dispatch => {
   entity = {
     ...entity
@@ -180,3 +219,20 @@ export const deleteEntity: ICrudDeleteAction<IImagemProntuario> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getImagemProntuarioState = (location): IImagemProntuarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProntuario = url.searchParams.get('idProntuario') || '';
+  const imagem = url.searchParams.get('imagem') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const diretorio = url.searchParams.get('diretorio') || '';
+
+  return {
+    baseFilters,
+    idProntuario,
+    imagem,
+    ativo,
+    diretorio
+  };
+};

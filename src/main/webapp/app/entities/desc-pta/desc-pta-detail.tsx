@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './desc-pta.reducer';
+import { getEntity, IDescPtaBaseState, getDescPtaState } from './desc-pta.reducer';
 import { IDescPta } from 'app/shared/model/desc-pta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IDescPtaState {
+  fieldsBase: IDescPtaBaseState;
+}
+
 export interface IDescPtaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class DescPtaDetail extends React.Component<IDescPtaDetailProps> {
+export class DescPtaDetail extends React.Component<IDescPtaDetailProps, IDescPtaState> {
   constructor(props: Readonly<IDescPtaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getDescPtaState(this.props.location)
     };
   }
 

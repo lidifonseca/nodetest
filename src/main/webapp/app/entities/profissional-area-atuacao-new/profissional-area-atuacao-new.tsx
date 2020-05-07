@@ -22,20 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-area-atuacao-new.reducer';
+import {
+  getProfissionalAreaAtuacaoNewState,
+  IProfissionalAreaAtuacaoNewBaseState,
+  getEntities
+} from './profissional-area-atuacao-new.reducer';
 import { IProfissionalAreaAtuacaoNew } from 'app/shared/model/profissional-area-atuacao-new.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalAreaAtuacaoNewProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalAreaAtuacaoNewBaseState {
-  idProfissional: any;
-  cepArea: any;
-  cepFim: any;
-  ativo: any;
-  cepIni: any;
-}
 export interface IProfissionalAreaAtuacaoNewState extends IProfissionalAreaAtuacaoNewBaseState, IPaginationBaseState {}
 
 export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAreaAtuacaoNewProps, IProfissionalAreaAtuacaoNewState> {
@@ -45,26 +42,9 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalAreaAtuacaoNewState(this.props.location)
+      ...getProfissionalAreaAtuacaoNewState(this.props.location)
     };
   }
-
-  getProfissionalAreaAtuacaoNewState = (location): IProfissionalAreaAtuacaoNewBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const cepArea = url.searchParams.get('cepArea') || '';
-    const cepFim = url.searchParams.get('cepFim') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const cepIni = url.searchParams.get('cepIni') || '';
-
-    return {
-      idProfissional,
-      cepArea,
-      cepFim,
-      ativo,
-      cepIni
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -110,7 +90,9 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -167,7 +149,11 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.home.createLabel">
@@ -182,55 +168,69 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-area-atuacao-new-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.idProfissional">Id Profissional</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-area-atuacao-new-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.idProfissional">Id Profissional</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idProfissional"
-                            id="profissional-area-atuacao-new-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepAreaLabel" for="profissional-area-atuacao-new-cepArea">
-                            <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepArea">Cep Area</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="idProfissional"
+                              id="profissional-area-atuacao-new-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="cepArea" id="profissional-area-atuacao-new-cepArea" value={this.state.cepArea} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepFimLabel" for="profissional-area-atuacao-new-cepFim">
-                            <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepFim">Cep Fim</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'cepArea' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepAreaLabel" for="profissional-area-atuacao-new-cepArea">
+                              <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepArea">Cep Area</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="cepFim" id="profissional-area-atuacao-new-cepFim" value={this.state.cepFim} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="profissional-area-atuacao-new-ativo">
-                            <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="profissional-area-atuacao-new-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cepIniLabel" for="profissional-area-atuacao-new-cepIni">
-                            <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
-                          </Label>
+                            <AvInput type="text" name="cepArea" id="profissional-area-atuacao-new-cepArea" value={this.state.cepArea} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="cepIni" id="profissional-area-atuacao-new-cepIni" value={this.state.cepIni} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'cepFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepFimLabel" for="profissional-area-atuacao-new-cepFim">
+                              <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepFim">Cep Fim</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cepFim" id="profissional-area-atuacao-new-cepFim" value={this.state.cepFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="profissional-area-atuacao-new-ativo">
+                              <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="profissional-area-atuacao-new-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cepIni' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cepIniLabel" for="profissional-area-atuacao-new-cepIni">
+                              <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="cepIni" id="profissional-area-atuacao-new-cepIni" value={this.state.cepIni} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -258,26 +258,36 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cepArea')}>
-                        <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepArea">Cep Area</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cepFim')}>
-                        <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepFim">Cep Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cepIni')}>
-                        <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cepArea' ? (
+                        <th className="hand" onClick={this.sort('cepArea')}>
+                          <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepArea">Cep Area</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cepFim' ? (
+                        <th className="hand" onClick={this.sort('cepFim')}>
+                          <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepFim">Cep Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cepIni' ? (
+                        <th className="hand" onClick={this.sort('cepIni')}>
+                          <Translate contentKey="generadorApp.profissionalAreaAtuacaoNew.cepIni">Cep Ini</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -292,31 +302,46 @@ export class ProfissionalAreaAtuacaoNew extends React.Component<IProfissionalAre
                           </Button>
                         </td>
 
-                        <td>{profissionalAreaAtuacaoNew.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalAreaAtuacaoNew.idProfissional}</td> : null}
 
-                        <td>{profissionalAreaAtuacaoNew.cepArea}</td>
+                        {this.state.baseFilters !== 'cepArea' ? <td>{profissionalAreaAtuacaoNew.cepArea}</td> : null}
 
-                        <td>{profissionalAreaAtuacaoNew.cepFim}</td>
+                        {this.state.baseFilters !== 'cepFim' ? <td>{profissionalAreaAtuacaoNew.cepFim}</td> : null}
 
-                        <td>{profissionalAreaAtuacaoNew.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{profissionalAreaAtuacaoNew.ativo}</td> : null}
 
-                        <td>{profissionalAreaAtuacaoNew.cepIni}</td>
+                        {this.state.baseFilters !== 'cepIni' ? <td>{profissionalAreaAtuacaoNew.cepIni}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalAreaAtuacaoNew.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalAreaAtuacaoNew.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalAreaAtuacaoNew.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalAreaAtuacaoNew.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalAreaAtuacaoNew.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalAreaAtuacaoNew.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IIndicadoresValores, defaultValue } from 'app/shared/model/indicadores-valores.model';
 
 export const ACTION_TYPES = {
+  FETCH_INDICADORESVALORES_LIST_EXPORT: 'indicadoresValores/FETCH_INDICADORESVALORES_LIST_EXPORT',
   FETCH_INDICADORESVALORES_LIST: 'indicadoresValores/FETCH_INDICADORESVALORES_LIST',
   FETCH_INDICADORESVALORES: 'indicadoresValores/FETCH_INDICADORESVALORES',
   CREATE_INDICADORESVALORES: 'indicadoresValores/CREATE_INDICADORESVALORES',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type IndicadoresValoresState = Readonly<typeof initialState>;
 
+export interface IIndicadoresValoresBaseState {
+  baseFilters: any;
+  sexo: any;
+  vlMinimo: any;
+  vlMaximo: any;
+  unidadeMedida: any;
+  idadeMinima: any;
+  idadeMaxima: any;
+}
+
+export interface IIndicadoresValoresUpdateState {
+  fieldsBase: IIndicadoresValoresBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: IndicadoresValoresState = initialState, action): IndicadoresValoresState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_INDICADORESVALORES_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_INDICADORESVALORES_LIST):
     case REQUEST(ACTION_TYPES.FETCH_INDICADORESVALORES):
       return {
@@ -51,6 +68,7 @@ export default (state: IndicadoresValoresState = initialState, action): Indicado
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_INDICADORESVALORES_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_INDICADORESVALORES_LIST):
     case FAILURE(ACTION_TYPES.FETCH_INDICADORESVALORES):
     case FAILURE(ACTION_TYPES.CREATE_INDICADORESVALORES):
@@ -112,7 +130,6 @@ export type ICrudGetAllActionIndicadoresValores<T> = (
   unidadeMedida?: any,
   idadeMinima?: any,
   idadeMaxima?: any,
-  indicadoresId?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -125,7 +142,6 @@ export const getEntities: ICrudGetAllActionIndicadoresValores<IIndicadoresValore
   unidadeMedida,
   idadeMinima,
   idadeMaxima,
-  indicadoresId,
   page,
   size,
   sort
@@ -136,13 +152,12 @@ export const getEntities: ICrudGetAllActionIndicadoresValores<IIndicadoresValore
   const unidadeMedidaRequest = unidadeMedida ? `unidadeMedida.contains=${unidadeMedida}&` : '';
   const idadeMinimaRequest = idadeMinima ? `idadeMinima.contains=${idadeMinima}&` : '';
   const idadeMaximaRequest = idadeMaxima ? `idadeMaxima.contains=${idadeMaxima}&` : '';
-  const indicadoresIdRequest = indicadoresId ? `indicadoresId.equals=${indicadoresId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_INDICADORESVALORES_LIST,
     payload: axios.get<IIndicadoresValores>(
-      `${requestUrl}${sexoRequest}${vlMinimoRequest}${vlMaximoRequest}${unidadeMedidaRequest}${idadeMinimaRequest}${idadeMaximaRequest}${indicadoresIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${sexoRequest}${vlMinimoRequest}${vlMaximoRequest}${unidadeMedidaRequest}${idadeMinimaRequest}${idadeMaximaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,10 +169,36 @@ export const getEntity: ICrudGetAction<IIndicadoresValores> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionIndicadoresValores<IIndicadoresValores> = (
+  sexo,
+  vlMinimo,
+  vlMaximo,
+  unidadeMedida,
+  idadeMinima,
+  idadeMaxima,
+  page,
+  size,
+  sort
+) => {
+  const sexoRequest = sexo ? `sexo.contains=${sexo}&` : '';
+  const vlMinimoRequest = vlMinimo ? `vlMinimo.contains=${vlMinimo}&` : '';
+  const vlMaximoRequest = vlMaximo ? `vlMaximo.contains=${vlMaximo}&` : '';
+  const unidadeMedidaRequest = unidadeMedida ? `unidadeMedida.contains=${unidadeMedida}&` : '';
+  const idadeMinimaRequest = idadeMinima ? `idadeMinima.contains=${idadeMinima}&` : '';
+  const idadeMaximaRequest = idadeMaxima ? `idadeMaxima.contains=${idadeMaxima}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_INDICADORESVALORES_LIST,
+    payload: axios.get<IIndicadoresValores>(
+      `${requestUrl}${sexoRequest}${vlMinimoRequest}${vlMaximoRequest}${unidadeMedidaRequest}${idadeMinimaRequest}${idadeMaximaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IIndicadoresValores> = entity => async dispatch => {
   entity = {
-    ...entity,
-    indicadoresId: entity.indicadoresId === 'null' ? null : entity.indicadoresId
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_INDICADORESVALORES,
@@ -168,7 +209,7 @@ export const createEntity: ICrudPutAction<IIndicadoresValores> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<IIndicadoresValores> = entity => async dispatch => {
-  entity = { ...entity, indicadoresId: entity.indicadoresId === 'null' ? null : entity.indicadoresId };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_INDICADORESVALORES,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -190,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<IIndicadoresValores> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getIndicadoresValoresState = (location): IIndicadoresValoresBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const sexo = url.searchParams.get('sexo') || '';
+  const vlMinimo = url.searchParams.get('vlMinimo') || '';
+  const vlMaximo = url.searchParams.get('vlMaximo') || '';
+  const unidadeMedida = url.searchParams.get('unidadeMedida') || '';
+  const idadeMinima = url.searchParams.get('idadeMinima') || '';
+  const idadeMaxima = url.searchParams.get('idadeMaxima') || '';
+
+  return {
+    baseFilters,
+    sexo,
+    vlMinimo,
+    vlMaximo,
+    unidadeMedida,
+    idadeMinima,
+    idadeMaxima
+  };
+};

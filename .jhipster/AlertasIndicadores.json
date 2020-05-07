@@ -22,16 +22,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cidXPtaNovoPadItemIndi",
-            "otherEntityRelationshipName": "alertasIndicadores",
-            "relationshipName": "padItemIndicadoresId",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502225400",
+    "relationships": [],
+    "changelogDate": "20200507102700",
     "entityTableName": "alertas_indicadores",
     "dto": "mapstruct",
     "pagination": "pagination",

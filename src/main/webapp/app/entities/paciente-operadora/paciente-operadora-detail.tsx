@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-operadora.reducer';
+import { getEntity, IPacienteOperadoraBaseState, getPacienteOperadoraState } from './paciente-operadora.reducer';
 import { IPacienteOperadora } from 'app/shared/model/paciente-operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteOperadoraState {
+  fieldsBase: IPacienteOperadoraBaseState;
+}
+
 export interface IPacienteOperadoraDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteOperadoraDetail extends React.Component<IPacienteOperadoraDetailProps> {
+export class PacienteOperadoraDetail extends React.Component<IPacienteOperadoraDetailProps, IPacienteOperadoraState> {
   constructor(props: Readonly<IPacienteOperadoraDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteOperadoraState(this.props.location)
     };
   }
 
@@ -77,32 +82,6 @@ export class PacienteOperadoraDetail extends React.Component<IPacienteOperadoraD
                       </Col>
                       <Col md="9">
                         <dd>{pacienteOperadoraEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteOperadora.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteOperadoraEntity.idPaciente ? pacienteOperadoraEntity.idPaciente.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteOperadora.idOperadora">Id Operadora</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteOperadoraEntity.idOperadora ? pacienteOperadoraEntity.idOperadora.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

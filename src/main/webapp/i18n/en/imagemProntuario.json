@@ -3,15 +3,15 @@
     "imagemProntuario": {
       "home": {
         "title": "Imagem Prontuarios",
-        "createLabel": "Criar novo Imagem Prontuario",
-        "createOrEditLabel": "Criar ou editar Imagem Prontuario",
-        "notFound": "Nenhum Imagem Prontuario encontrado"
+        "createLabel": "Create a new Imagem Prontuario",
+        "createOrEditLabel": "Create or edit a Imagem Prontuario",
+        "notFound": "No Imagem Prontuarios found"
       },
-      "created": "Um novo Imagem Prontuario foi criado com o identificador {{ param }}",
-      "updated": "Um Imagem Prontuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Imagem Prontuario foi excluído com o identificador {{ param }}",
+      "created": "A new Imagem Prontuario is created with identifier {{ param }}",
+      "updated": "A Imagem Prontuario is updated with identifier {{ param }}",
+      "deleted": "A Imagem Prontuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Imagem Prontuario {{ id }}?"
+        "question": "Are you sure you want to delete Imagem Prontuario {{ id }}?"
       },
       "detail": {
         "title": "Imagem Prontuario"

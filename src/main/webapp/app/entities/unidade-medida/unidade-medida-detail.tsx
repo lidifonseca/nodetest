@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './unidade-medida.reducer';
+import { getEntity, IUnidadeMedidaBaseState, getUnidadeMedidaState } from './unidade-medida.reducer';
 import { IUnidadeMedida } from 'app/shared/model/unidade-medida.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUnidadeMedidaState {
+  fieldsBase: IUnidadeMedidaBaseState;
+}
+
 export interface IUnidadeMedidaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UnidadeMedidaDetail extends React.Component<IUnidadeMedidaDetailProps> {
+export class UnidadeMedidaDetail extends React.Component<IUnidadeMedidaDetailProps, IUnidadeMedidaState> {
   constructor(props: Readonly<IUnidadeMedidaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUnidadeMedidaState(this.props.location)
     };
   }
 

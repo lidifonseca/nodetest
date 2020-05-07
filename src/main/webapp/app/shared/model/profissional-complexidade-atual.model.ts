@@ -6,7 +6,6 @@ export interface IProfissionalComplexidadeAtual {
   alta?: number;
   ventilacaoMecanica?: number;
   telemonitoramente?: number;
-  idUsuario?: number;
 }
 
 export const defaultValue: Readonly<IProfissionalComplexidadeAtual> = {};

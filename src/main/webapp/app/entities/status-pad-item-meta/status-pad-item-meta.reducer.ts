@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IStatusPadItemMeta, defaultValue } from 'app/shared/model/status-pad-item-meta.model';
 
 export const ACTION_TYPES = {
+  FETCH_STATUSPADITEMMETA_LIST_EXPORT: 'statusPadItemMeta/FETCH_STATUSPADITEMMETA_LIST_EXPORT',
   FETCH_STATUSPADITEMMETA_LIST: 'statusPadItemMeta/FETCH_STATUSPADITEMMETA_LIST',
   FETCH_STATUSPADITEMMETA: 'statusPadItemMeta/FETCH_STATUSPADITEMMETA',
   CREATE_STATUSPADITEMMETA: 'statusPadItemMeta/CREATE_STATUSPADITEMMETA',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type StatusPadItemMetaState = Readonly<typeof initialState>;
 
+export interface IStatusPadItemMetaBaseState {
+  baseFilters: any;
+  statusItemMeta: any;
+  styleLabel: any;
+  ordenacao: any;
+  ativo: any;
+}
+
+export interface IStatusPadItemMetaUpdateState {
+  fieldsBase: IStatusPadItemMetaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: StatusPadItemMetaState = initialState, action): StatusPadItemMetaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_STATUSPADITEMMETA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_STATUSPADITEMMETA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_STATUSPADITEMMETA):
       return {
@@ -51,6 +66,7 @@ export default (state: StatusPadItemMetaState = initialState, action): StatusPad
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_STATUSPADITEMMETA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_STATUSPADITEMMETA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_STATUSPADITEMMETA):
     case FAILURE(ACTION_TYPES.CREATE_STATUSPADITEMMETA):
@@ -145,6 +161,29 @@ export const getEntity: ICrudGetAction<IStatusPadItemMeta> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionStatusPadItemMeta<IStatusPadItemMeta> = (
+  statusItemMeta,
+  styleLabel,
+  ordenacao,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const statusItemMetaRequest = statusItemMeta ? `statusItemMeta.contains=${statusItemMeta}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+  const ordenacaoRequest = ordenacao ? `ordenacao.contains=${ordenacao}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_STATUSPADITEMMETA_LIST,
+    payload: axios.get<IStatusPadItemMeta>(
+      `${requestUrl}${statusItemMetaRequest}${styleLabelRequest}${ordenacaoRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IStatusPadItemMeta> = entity => async dispatch => {
   entity = {
     ...entity
@@ -180,3 +219,20 @@ export const deleteEntity: ICrudDeleteAction<IStatusPadItemMeta> = id => async d
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getStatusPadItemMetaState = (location): IStatusPadItemMetaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const statusItemMeta = url.searchParams.get('statusItemMeta') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+  const ordenacao = url.searchParams.get('ordenacao') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    statusItemMeta,
+    styleLabel,
+    ordenacao,
+    ativo
+  };
+};

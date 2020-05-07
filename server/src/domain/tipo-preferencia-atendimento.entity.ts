@@ -7,12 +7,12 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A TipoPreferenciaAtendimento.
  */
-@Entity('tipo_preferencia_atendimento')
+@Entity('tb_tipo_preferencia_atendimento')
 export default class TipoPreferenciaAtendimento extends BaseEntity {
-  @Column({ name: 'nome', length: 80 })
+  @Column({ name: 'NOME', length: 80 })
   nome: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalHorario, defaultValue } from 'app/shared/model/profissional-horario.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALHORARIO_LIST_EXPORT: 'profissionalHorario/FETCH_PROFISSIONALHORARIO_LIST_EXPORT',
   FETCH_PROFISSIONALHORARIO_LIST: 'profissionalHorario/FETCH_PROFISSIONALHORARIO_LIST',
   FETCH_PROFISSIONALHORARIO: 'profissionalHorario/FETCH_PROFISSIONALHORARIO',
   CREATE_PROFISSIONALHORARIO: 'profissionalHorario/CREATE_PROFISSIONALHORARIO',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type ProfissionalHorarioState = Readonly<typeof initialState>;
 
+export interface IProfissionalHorarioBaseState {
+  baseFilters: any;
+  idAtendimento: any;
+  idProfissional: any;
+  horario: any;
+  confirm: any;
+}
+
+export interface IProfissionalHorarioUpdateState {
+  fieldsBase: IProfissionalHorarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalHorarioState = initialState, action): ProfissionalHorarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALHORARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALHORARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALHORARIO):
       return {
@@ -51,6 +66,7 @@ export default (state: ProfissionalHorarioState = initialState, action): Profiss
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALHORARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALHORARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALHORARIO):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALHORARIO):
@@ -145,6 +161,29 @@ export const getEntity: ICrudGetAction<IProfissionalHorario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalHorario<IProfissionalHorario> = (
+  idAtendimento,
+  idProfissional,
+  horario,
+  confirm,
+  page,
+  size,
+  sort
+) => {
+  const idAtendimentoRequest = idAtendimento ? `idAtendimento.contains=${idAtendimento}&` : '';
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const horarioRequest = horario ? `horario.contains=${horario}&` : '';
+  const confirmRequest = confirm ? `confirm.contains=${confirm}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALHORARIO_LIST,
+    payload: axios.get<IProfissionalHorario>(
+      `${requestUrl}${idAtendimentoRequest}${idProfissionalRequest}${horarioRequest}${confirmRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalHorario> = entity => async dispatch => {
   entity = {
     ...entity
@@ -180,3 +219,20 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalHorario> = id => async
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalHorarioState = (location): IProfissionalHorarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idAtendimento = url.searchParams.get('idAtendimento') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const horario = url.searchParams.get('horario') || '';
+  const confirm = url.searchParams.get('confirm') || '';
+
+  return {
+    baseFilters,
+    idAtendimento,
+    idProfissional,
+    horario,
+    confirm
+  };
+};

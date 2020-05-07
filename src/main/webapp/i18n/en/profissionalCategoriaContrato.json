@@ -3,15 +3,15 @@
     "profissionalCategoriaContrato": {
       "home": {
         "title": "Profissional Categoria Contratoes",
-        "createLabel": "Criar novo Profissional Categoria Contrato",
-        "createOrEditLabel": "Criar ou editar Profissional Categoria Contrato",
-        "notFound": "Nenhum Profissional Categoria Contrato encontrado"
+        "createLabel": "Create a new Profissional Categoria Contrato",
+        "createOrEditLabel": "Create or edit a Profissional Categoria Contrato",
+        "notFound": "No Profissional Categoria Contratoes found"
       },
-      "created": "Um novo Profissional Categoria Contrato foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Categoria Contrato foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Categoria Contrato foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Categoria Contrato is created with identifier {{ param }}",
+      "updated": "A Profissional Categoria Contrato is updated with identifier {{ param }}",
+      "deleted": "A Profissional Categoria Contrato is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Categoria Contrato {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Categoria Contrato {{ id }}?"
       },
       "detail": {
         "title": "Profissional Categoria Contrato"

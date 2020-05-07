@@ -22,18 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-categoria-contrato.reducer';
+import {
+  getProfissionalCategoriaContratoState,
+  IProfissionalCategoriaContratoBaseState,
+  getEntities
+} from './profissional-categoria-contrato.reducer';
 import { IProfissionalCategoriaContrato } from 'app/shared/model/profissional-categoria-contrato.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalCategoriaContratoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalCategoriaContratoBaseState {
-  idProfissional: any;
-  idCategoriaContrato: any;
-  aceito: any;
-}
 export interface IProfissionalCategoriaContratoState extends IProfissionalCategoriaContratoBaseState, IPaginationBaseState {}
 
 export class ProfissionalCategoriaContrato extends React.Component<
@@ -46,22 +45,9 @@ export class ProfissionalCategoriaContrato extends React.Component<
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalCategoriaContratoState(this.props.location)
+      ...getProfissionalCategoriaContratoState(this.props.location)
     };
   }
-
-  getProfissionalCategoriaContratoState = (location): IProfissionalCategoriaContratoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const idCategoriaContrato = url.searchParams.get('idCategoriaContrato') || '';
-    const aceito = url.searchParams.get('aceito') || '';
-
-    return {
-      idProfissional,
-      idCategoriaContrato,
-      aceito
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -105,7 +91,9 @@ export class ProfissionalCategoriaContrato extends React.Component<
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -156,7 +144,11 @@ export class ProfissionalCategoriaContrato extends React.Component<
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalCategoriaContrato.home.createLabel">
@@ -171,43 +163,51 @@ export class ProfissionalCategoriaContrato extends React.Component<
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-categoria-contrato-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">Id Profissional</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-categoria-contrato-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">Id Profissional</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idProfissional"
-                            id="profissional-categoria-contrato-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idCategoriaContratoLabel" for="profissional-categoria-contrato-idCategoriaContrato">
-                            <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">
-                              Id Categoria Contrato
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idCategoriaContrato"
-                            id="profissional-categoria-contrato-idCategoriaContrato"
-                            value={this.state.idCategoriaContrato}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="aceitoLabel" for="profissional-categoria-contrato-aceito">
-                            <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
-                          </Label>
-                          <AvInput type="string" name="aceito" id="profissional-categoria-contrato-aceito" value={this.state.aceito} />
-                        </Row>
-                      </Col>
+                            <AvInput
+                              type="text"
+                              name="idProfissional"
+                              id="profissional-categoria-contrato-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idCategoriaContrato' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idCategoriaContratoLabel" for="profissional-categoria-contrato-idCategoriaContrato">
+                              <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">
+                                Id Categoria Contrato
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idCategoriaContrato"
+                              id="profissional-categoria-contrato-idCategoriaContrato"
+                              value={this.state.idCategoriaContrato}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'aceito' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="aceitoLabel" for="profissional-categoria-contrato-aceito">
+                              <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
+                            </Label>
+                            <AvInput type="string" name="aceito" id="profissional-categoria-contrato-aceito" value={this.state.aceito} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -235,20 +235,26 @@ export class ProfissionalCategoriaContrato extends React.Component<
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idCategoriaContrato')}>
-                        <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">
-                          Id Categoria Contrato
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('aceito')}>
-                        <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idCategoriaContrato' ? (
+                        <th className="hand" onClick={this.sort('idCategoriaContrato')}>
+                          <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">
+                            Id Categoria Contrato
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'aceito' ? (
+                        <th className="hand" onClick={this.sort('aceito')}>
+                          <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -263,27 +269,44 @@ export class ProfissionalCategoriaContrato extends React.Component<
                           </Button>
                         </td>
 
-                        <td>{profissionalCategoriaContrato.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalCategoriaContrato.idProfissional}</td> : null}
 
-                        <td>{profissionalCategoriaContrato.idCategoriaContrato}</td>
+                        {this.state.baseFilters !== 'idCategoriaContrato' ? (
+                          <td>{profissionalCategoriaContrato.idCategoriaContrato}</td>
+                        ) : null}
 
-                        <td>{profissionalCategoriaContrato.aceito}</td>
+                        {this.state.baseFilters !== 'aceito' ? <td>{profissionalCategoriaContrato.aceito}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalCategoriaContrato.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalCategoriaContrato.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalCategoriaContrato.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalCategoriaContrato.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalCategoriaContrato.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalCategoriaContrato.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -31,18 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atendimento-imagem.reducer';
+import { getAtendimentoImagemState, IAtendimentoImagemBaseState, getEntities } from './atendimento-imagem.reducer';
 import { IAtendimentoImagem } from 'app/shared/model/atendimento-imagem.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IAtendimentoImagemProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtendimentoImagemBaseState {
-  atendimentoId: any;
-  imagem: any;
-  criadoEm: any;
-}
 export interface IAtendimentoImagemState extends IAtendimentoImagemBaseState, IPaginationBaseState {}
 
 export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, IAtendimentoImagemState> {
@@ -52,22 +47,9 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtendimentoImagemState(this.props.location)
+      ...getAtendimentoImagemState(this.props.location)
     };
   }
-
-  getAtendimentoImagemState = (location): IAtendimentoImagemBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const atendimentoId = url.searchParams.get('atendimentoId') || '';
-    const imagem = url.searchParams.get('imagem') || '';
-    const criadoEm = url.searchParams.get('criadoEm') || '';
-
-    return {
-      atendimentoId,
-      imagem,
-      criadoEm
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -111,7 +93,9 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -162,7 +146,11 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atendimentoImagem.home.createLabel">Create a new Atendimento Imagem</Translate>
@@ -175,59 +163,51 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="atendimentoIdLabel" for="atendimento-imagem-atendimentoId">
-                            <Translate contentKey="generadorApp.atendimentoImagem.atendimentoId">Atendimento Id</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="atendimentoId"
-                            id="atendimento-imagem-atendimentoId"
-                            value={this.state.atendimentoId}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              number: { value: true, errorMessage: translate('entity.validation.number') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="imagemLabel" for="atendimento-imagem-imagem">
-                            <Translate contentKey="generadorApp.atendimentoImagem.imagem">Imagem</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'atendimentoId' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="atendimentoIdLabel" for="atendimento-imagem-atendimentoId">
+                              <Translate contentKey="generadorApp.atendimentoImagem.atendimentoId">Atendimento Id</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="atendimentoId"
+                              id="atendimento-imagem-atendimentoId"
+                              value={this.state.atendimentoId}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="imagem"
-                            id="atendimento-imagem-imagem"
-                            value={this.state.imagem}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') },
-                              maxLength: { value: 200, errorMessage: translate('entity.validation.maxlength', { max: 200 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="criadoEmLabel" for="atendimento-imagem-criadoEm">
-                            <Translate contentKey="generadorApp.atendimentoImagem.criadoEm">Criado Em</Translate>
-                          </Label>
-                          <AvInput
-                            id="atendimento-imagem-criadoEm"
-                            type="datetime-local"
-                            className="form-control"
-                            name="criadoEm"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.criadoEm ? convertDateTimeFromServer(this.state.criadoEm) : null}
-                            validate={{
-                              required: { value: true, errorMessage: translate('entity.validation.required') }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'imagem' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="imagemLabel" for="atendimento-imagem-imagem">
+                              <Translate contentKey="generadorApp.atendimentoImagem.imagem">Imagem</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="imagem" id="atendimento-imagem-imagem" value={this.state.imagem} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'criadoEm' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="criadoEmLabel" for="atendimento-imagem-criadoEm">
+                              <Translate contentKey="generadorApp.atendimentoImagem.criadoEm">Criado Em</Translate>
+                            </Label>
+                            <AvInput
+                              id="atendimento-imagem-criadoEm"
+                              type="datetime-local"
+                              className="form-control"
+                              name="criadoEm"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.criadoEm ? convertDateTimeFromServer(this.state.criadoEm) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -255,18 +235,24 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('atendimentoId')}>
-                        <Translate contentKey="generadorApp.atendimentoImagem.atendimentoId">Atendimento Id</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('imagem')}>
-                        <Translate contentKey="generadorApp.atendimentoImagem.imagem">Imagem</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('criadoEm')}>
-                        <Translate contentKey="generadorApp.atendimentoImagem.criadoEm">Criado Em</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'atendimentoId' ? (
+                        <th className="hand" onClick={this.sort('atendimentoId')}>
+                          <Translate contentKey="generadorApp.atendimentoImagem.atendimentoId">Atendimento Id</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'imagem' ? (
+                        <th className="hand" onClick={this.sort('imagem')}>
+                          <Translate contentKey="generadorApp.atendimentoImagem.imagem">Imagem</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'criadoEm' ? (
+                        <th className="hand" onClick={this.sort('criadoEm')}>
+                          <Translate contentKey="generadorApp.atendimentoImagem.criadoEm">Criado Em</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -281,29 +267,41 @@ export class AtendimentoImagem extends React.Component<IAtendimentoImagemProps, 
                           </Button>
                         </td>
 
-                        <td>{atendimentoImagem.atendimentoId}</td>
+                        {this.state.baseFilters !== 'atendimentoId' ? <td>{atendimentoImagem.atendimentoId}</td> : null}
 
-                        <td>{atendimentoImagem.imagem}</td>
+                        {this.state.baseFilters !== 'imagem' ? <td>{atendimentoImagem.imagem}</td> : null}
 
-                        <td>
-                          <TextFormat type="date" value={atendimentoImagem.criadoEm} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'criadoEm' ? (
+                          <td>
+                            <TextFormat type="date" value={atendimentoImagem.criadoEm} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atendimentoImagem.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${atendimentoImagem.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoImagem.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoImagem.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoImagem.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoImagem.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

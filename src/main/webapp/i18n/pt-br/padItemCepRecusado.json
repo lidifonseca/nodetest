@@ -16,8 +16,7 @@
       "detail": {
         "title": "Pad Item Cep Recusado"
       },
-      "cep": "Cep",
-      "idPadItem": "Id Pad Item"
+      "cep": "Cep"
     }
   }
 }

@@ -3,23 +3,22 @@
     "franquiaAreaAtuacao": {
       "home": {
         "title": "Franquia Area Atuacaos",
-        "createLabel": "Criar novo Franquia Area Atuacao",
-        "createOrEditLabel": "Criar ou editar Franquia Area Atuacao",
-        "notFound": "Nenhum Franquia Area Atuacao encontrado"
+        "createLabel": "Create a new Franquia Area Atuacao",
+        "createOrEditLabel": "Create or edit a Franquia Area Atuacao",
+        "notFound": "No Franquia Area Atuacaos found"
       },
-      "created": "Um novo Franquia Area Atuacao foi criado com o identificador {{ param }}",
-      "updated": "Um Franquia Area Atuacao foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Franquia Area Atuacao foi excluído com o identificador {{ param }}",
+      "created": "A new Franquia Area Atuacao is created with identifier {{ param }}",
+      "updated": "A Franquia Area Atuacao is updated with identifier {{ param }}",
+      "deleted": "A Franquia Area Atuacao is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Franquia Area Atuacao {{ id }}?"
+        "question": "Are you sure you want to delete Franquia Area Atuacao {{ id }}?"
       },
       "detail": {
         "title": "Franquia Area Atuacao"
       },
       "cepIni": "Cep Ini",
       "cepFim": "Cep Fim",
-      "ativo": "Ativo",
-      "idFranquia": "Id Franquia"
+      "ativo": "Ativo"
     }
   }
 }

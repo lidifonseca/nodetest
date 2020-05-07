@@ -4,169 +4,121 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import AtendimentoAceite from './atendimento-aceite.entity';
-import AtendimentoAssinaturas from './atendimento-assinaturas.entity';
-import AtendimentoAtividades from './atendimento-atividades.entity';
 import UnidadeEasy from './unidade-easy.entity';
-import Paciente from './paciente.entity';
-import Operadora from './operadora.entity';
-import Especialidade from './especialidade.entity';
-import PadItem from './pad-item.entity';
-import StatusAtendimento from './status-atendimento.entity';
-import Periodo from './periodo.entity';
-import Cidade from './cidade.entity';
 
 /**
  * A Atendimento.
  */
-@Entity('atendimento')
+@Entity('tb_atendimento')
 export default class Atendimento extends BaseEntity {
-  @Column({ name: 'id_franquia' })
+  @Column({ name: 'ID_FRANQUIA' })
   idFranquia: string;
 
-  @Column({ name: 'id_profissional' })
+  @Column({ name: 'ID_PROFISSIONAL' })
   idProfissional: string;
 
-  @Column({ name: 'cep', length: 10 })
+  @Column({ name: 'CEP', length: 10 })
   cep: string;
 
-  @Column({ name: 'endereco', length: 100 })
+  @Column({ name: 'ENDERECO', length: 100 })
   endereco: string;
 
-  @Column({ name: 'numero', length: 30 })
+  @Column({ name: 'NUMERO', length: 30 })
   numero: string;
 
-  @Column({ name: 'complemento', length: 20 })
+  @Column({ name: 'COMPLEMENTO', length: 20 })
   complemento: string;
 
-  @Column({ name: 'bairro', length: 40 })
+  @Column({ name: 'BAIRRO', length: 40 })
   bairro: string;
 
-  @Column({ name: 'cidade', length: 100 })
+  @Column({ name: 'CIDADE', length: 100 })
   cidade: string;
 
-  @Column({ name: 'uf', length: 5 })
+  @Column({ name: 'UF', length: 5 })
   uf: string;
 
-  @Column({ name: 'latitude', length: 60 })
+  @Column({ name: 'LATITUDE', length: 60 })
   latitude: string;
 
-  @Column({ name: 'longitude', length: 60 })
+  @Column({ name: 'LONGITUDE', length: 60 })
   longitude: string;
 
-  @Column({ type: 'timestamp', name: 'data_agenda' })
+  @Column({ type: 'timestamp', name: 'DATA_AGENDA' })
   dataAgenda: any;
 
-  @Column({ name: 'horario', length: 10 })
+  @Column({ name: 'HORARIO', length: 10 })
   horario: string;
 
-  @Column({ type: 'timestamp', name: 'data_chegada' })
+  @Column({ type: 'timestamp', name: 'DATA_CHEGADA' })
   dataChegada: any;
 
-  @Column({ name: 'latitude_chegada', length: 60 })
+  @Column({ name: 'LATITUDE_CHEGADA', length: 60 })
   latitudeChegada: string;
 
-  @Column({ name: 'longitude_chegada', length: 60 })
+  @Column({ name: 'LONGITUDE_CHEGADA', length: 60 })
   longitudeChegada: string;
 
-  @Column({ type: 'timestamp', name: 'data_saida' })
+  @Column({ type: 'timestamp', name: 'DATA_SAIDA' })
   dataSaida: any;
 
-  @Column({ name: 'latitude_saida', length: 60 })
+  @Column({ name: 'LATITUDE_SAIDA', length: 60 })
   latitudeSaida: string;
 
-  @Column({ name: 'longitude_saida', length: 60 })
+  @Column({ name: 'LONGITUDE_SAIDA', length: 60 })
   longitudeSaida: string;
 
-  @Column({ name: 'evolucao', length: 255 })
+  @Column({ name: 'EVOLUCAO', length: 255 })
   evolucao: string;
 
-  @Column({ name: 'observacao', length: 255 })
+  @Column({ name: 'OBSERVACAO', length: 255 })
   observacao: string;
 
-  @Column({ type: 'integer', name: 'intercorrencia' })
+  @Column({ type: 'integer', name: 'INTERCORRENCIA' })
   intercorrencia: number;
 
-  @Column({ type: 'integer', name: 'avaliacao' })
+  @Column({ type: 'integer', name: 'AVALIACAO' })
   avaliacao: number;
 
-  @Column({ type: 'integer', name: 'aceito' })
+  @Column({ type: 'integer', name: 'ACEITO' })
   aceito: number;
 
-  @Column({ name: 'motivo', length: 255 })
+  @Column({ name: 'MOTIVO', length: 255 })
   motivo: string;
 
-  @Column({ type: 'float', name: 'valor' })
+  @Column({ type: 'float', name: 'VALOR' })
   valor: number;
 
-  @Column({ type: 'integer', name: 'ordem_atendimento' })
+  @Column({ type: 'integer', name: 'ORDEM_ATENDIMENTO' })
   ordemAtendimento: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @Column({ type: 'timestamp', name: 'data_fora_hora' })
+  @Column({ type: 'timestamp', name: 'DATA_FORA_HORA' })
   dataForaHora: any;
 
-  @Column({ type: 'integer', name: 'id_usuario_cancelamento' })
+  @Column({ type: 'integer', name: 'ID_USUARIO_CANCELAMENTO' })
   idUsuarioCancelamento: number;
 
-  @Column({ type: 'date', name: 'data_cancelamento' })
+  @Column({ type: 'date', name: 'DATA_CANCELAMENTO' })
   dataCancelamento: any;
 
-  @Column({ name: 'tipo_usuario_cancelamento', length: 5 })
+  @Column({ name: 'TIPO_USUARIO_CANCELAMENTO', length: 5 })
   tipoUsuarioCancelamento: string;
 
-  @Column({ name: 'confidencial_profissional', length: 255 })
+  @Column({ name: 'CONFIDENCIAL_PROFISSIONAL', length: 255 })
   confidencialProfissional: string;
 
-  @Column({ name: 'confidencial_paciente', length: 255 })
+  @Column({ name: 'CONFIDENCIAL_PACIENTE', length: 255 })
   confidencialPaciente: string;
 
-  @Column({ name: 'imagem_assinatura', length: 245 })
+  @Column({ name: 'IMAGEM_ASSINATURA', length: 245 })
   imagemAssinatura: string;
 
-  @OneToMany(
-    type => AtendimentoAceite,
-    other => other.idAtendimento
-  )
-  atendimentoAceites: AtendimentoAceite[];
-
-  @OneToMany(
-    type => AtendimentoAssinaturas,
-    other => other.idAtendimento
-  )
-  atendimentoAssinaturas: AtendimentoAssinaturas[];
-
-  @OneToMany(
-    type => AtendimentoAtividades,
-    other => other.idAtendimento
-  )
-  atendimentoAtividades: AtendimentoAtividades[];
-
   @ManyToOne(type => UnidadeEasy)
+  @JoinColumn({ name: 'ID_UNIDADE', referencedColumnName: 'id' })
   unidade: UnidadeEasy;
-
-  @ManyToOne(type => Paciente)
-  idPaciente: Paciente;
-
-  @ManyToOne(type => Operadora)
-  idOperadora: Operadora;
-
-  @ManyToOne(type => Especialidade)
-  idEspecialidade: Especialidade;
-
-  @ManyToOne(type => PadItem)
-  idPadItem: PadItem;
-
-  @ManyToOne(type => StatusAtendimento)
-  idStatusAtendimento: StatusAtendimento;
-
-  @ManyToOne(type => Periodo)
-  idPeriodo: Periodo;
-
-  @ManyToOne(type => Cidade)
-  idCidade: Cidade;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

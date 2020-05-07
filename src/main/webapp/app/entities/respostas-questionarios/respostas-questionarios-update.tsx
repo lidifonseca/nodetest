@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IQuestionarios } from 'app/shared/model/questionarios.model';
-import { getEntities as getQuestionarios } from 'app/entities/questionarios/questionarios.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './respostas-questionarios.reducer';
+import {
+  IRespostasQuestionariosUpdateState,
+  getEntity,
+  getRespostasQuestionariosState,
+  IRespostasQuestionariosBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './respostas-questionarios.reducer';
 import { IRespostasQuestionarios } from 'app/shared/model/respostas-questionarios.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IRespostasQuestionariosUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IRespostasQuestionariosUpdateState {
-  isNew: boolean;
-  questionariosIdId: string;
-}
-
 export class RespostasQuestionariosUpdate extends React.Component<IRespostasQuestionariosUpdateProps, IRespostasQuestionariosUpdateState> {
   constructor(props: Readonly<IRespostasQuestionariosUpdateProps>) {
     super(props);
+
     this.state = {
-      questionariosIdId: '0',
+      fieldsBase: getRespostasQuestionariosState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,23 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getQuestionarios();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['dataResposta'] ? '&dataResposta=' + fieldsBase['dataResposta'] : '') +
+      (fieldsBase['informacaoAdicional'] ? '&informacaoAdicional=' + fieldsBase['informacaoAdicional'] : '') +
+      (fieldsBase['questionarioId'] ? '&questionarioId=' + fieldsBase['questionarioId'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     values.dataResposta = convertDateTimeToServer(values.dataResposta);
 
@@ -65,13 +80,14 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
   };
 
   handleClose = () => {
-    this.props.history.push('/respostas-questionarios');
+    this.props.history.push('/respostas-questionarios?' + this.getFiltersURL());
   };
 
   render() {
-    const { respostasQuestionariosEntity, questionarios, loading, updating } = this.props;
+    const { respostasQuestionariosEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -87,8 +103,7 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
             isNew
               ? {}
               : {
-                  ...respostasQuestionariosEntity,
-                  questionariosId: respostasQuestionariosEntity.questionariosId ? respostasQuestionariosEntity.questionariosId.id : null
+                  ...respostasQuestionariosEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -110,7 +125,7 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/respostas-questionarios"
+                  to={'/respostas-questionarios?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -129,7 +144,7 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -145,103 +160,79 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'dataResposta' ? (
+                          <Col md="dataResposta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataRespostaLabel" for="respostas-questionarios-dataResposta">
+                                    <Translate contentKey="generadorApp.respostasQuestionarios.dataResposta">Data Resposta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="respostas-questionarios-dataResposta"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataResposta"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.respostasQuestionariosEntity.dataResposta)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataResposta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="dataRespostaLabel" for="respostas-questionarios-dataResposta">
-                                <Translate contentKey="generadorApp.respostasQuestionarios.dataResposta">Data Resposta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="respostas-questionarios-dataResposta"
-                                type="datetime-local"
-                                className="form-control"
-                                name="dataResposta"
-                                placeholder={'YYYY-MM-DD HH:mm'}
-                                value={isNew ? null : convertDateTimeFromServer(this.props.respostasQuestionariosEntity.dataResposta)}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'informacaoAdicional' ? (
+                          <Col md="informacaoAdicional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="informacaoAdicionalLabel" for="respostas-questionarios-informacaoAdicional">
+                                    <Translate contentKey="generadorApp.respostasQuestionarios.informacaoAdicional">
+                                      Informacao Adicional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="respostas-questionarios-informacaoAdicional" type="text" name="informacaoAdicional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="informacaoAdicional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="informacaoAdicionalLabel" for="respostas-questionarios-informacaoAdicional">
-                                <Translate contentKey="generadorApp.respostasQuestionarios.informacaoAdicional">
-                                  Informacao Adicional
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="respostas-questionarios-informacaoAdicional"
-                                type="text"
-                                name="informacaoAdicional"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="questionarioIdLabel" for="respostas-questionarios-questionarioId">
-                                <Translate contentKey="generadorApp.respostasQuestionarios.questionarioId">Questionario Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="respostas-questionarios-questionarioId"
-                                type="string"
-                                className="form-control"
-                                name="questionarioId"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="respostas-questionarios-questionariosId">
-                                <Translate contentKey="generadorApp.respostasQuestionarios.questionariosId">Questionarios Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="respostas-questionarios-questionariosId"
-                                type="select"
-                                className="form-control"
-                                name="questionariosId"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.respostasQuestionarios.questionariosId.empty')}
-                                </option>
-                                {questionarios
-                                  ? questionarios.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'questionarioId' ? (
+                          <Col md="questionarioId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="questionarioIdLabel" for="respostas-questionarios-questionarioId">
+                                    <Translate contentKey="generadorApp.respostasQuestionarios.questionarioId">Questionario Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="respostas-questionarios-questionarioId"
+                                    type="string"
+                                    className="form-control"
+                                    name="questionarioId"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="questionarioId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -254,7 +245,6 @@ export class RespostasQuestionariosUpdate extends React.Component<IRespostasQues
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  questionarios: storeState.questionarios.entities,
   respostasQuestionariosEntity: storeState.respostasQuestionarios.entity,
   loading: storeState.respostasQuestionarios.loading,
   updating: storeState.respostasQuestionarios.updating,
@@ -262,7 +252,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getQuestionarios,
   getEntity,
   updateEntity,
   createEntity,

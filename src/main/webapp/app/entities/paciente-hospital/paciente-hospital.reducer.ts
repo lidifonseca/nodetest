@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPacienteHospital, defaultValue } from 'app/shared/model/paciente-hospital.model';
 
 export const ACTION_TYPES = {
+  FETCH_PACIENTEHOSPITAL_LIST_EXPORT: 'pacienteHospital/FETCH_PACIENTEHOSPITAL_LIST_EXPORT',
   FETCH_PACIENTEHOSPITAL_LIST: 'pacienteHospital/FETCH_PACIENTEHOSPITAL_LIST',
   FETCH_PACIENTEHOSPITAL: 'pacienteHospital/FETCH_PACIENTEHOSPITAL',
   CREATE_PACIENTEHOSPITAL: 'pacienteHospital/CREATE_PACIENTEHOSPITAL',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PacienteHospitalState = Readonly<typeof initialState>;
 
+export interface IPacienteHospitalBaseState {
+  baseFilters: any;
+  servico: any;
+  styleLabel: any;
+}
+
+export interface IPacienteHospitalUpdateState {
+  fieldsBase: IPacienteHospitalBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PacienteHospitalState = initialState, action): PacienteHospitalState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PACIENTEHOSPITAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEHOSPITAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PACIENTEHOSPITAL):
       return {
@@ -51,6 +64,7 @@ export default (state: PacienteHospitalState = initialState, action): PacienteHo
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PACIENTEHOSPITAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEHOSPITAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PACIENTEHOSPITAL):
     case FAILURE(ACTION_TYPES.CREATE_PACIENTEHOSPITAL):
@@ -131,6 +145,17 @@ export const getEntity: ICrudGetAction<IPacienteHospital> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPacienteHospital<IPacienteHospital> = (servico, styleLabel, page, size, sort) => {
+  const servicoRequest = servico ? `servico.contains=${servico}&` : '';
+  const styleLabelRequest = styleLabel ? `styleLabel.contains=${styleLabel}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PACIENTEHOSPITAL_LIST,
+    payload: axios.get<IPacienteHospital>(`${requestUrl}${servicoRequest}${styleLabelRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IPacienteHospital> = entity => async dispatch => {
   entity = {
     ...entity
@@ -166,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IPacienteHospital> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPacienteHospitalState = (location): IPacienteHospitalBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const servico = url.searchParams.get('servico') || '';
+  const styleLabel = url.searchParams.get('styleLabel') || '';
+
+  return {
+    baseFilters,
+    servico,
+    styleLabel
+  };
+};

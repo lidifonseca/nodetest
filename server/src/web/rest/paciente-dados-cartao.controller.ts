@@ -68,7 +68,9 @@ export class PacienteDadosCartaoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() pacienteDadosCartao: PacienteDadosCartao): Promise<PacienteDadosCartao> {
+    console.info(pacienteDadosCartao);
     const created = await this.pacienteDadosCartaoService.save(pacienteDadosCartao);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteDadosCartao', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PacienteDadosCartaoController {
   })
   async put(@Req() req: Request, @Body() pacienteDadosCartao: PacienteDadosCartao): Promise<PacienteDadosCartao> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PacienteDadosCartao', pacienteDadosCartao.id);
+
     return await this.pacienteDadosCartaoService.update(pacienteDadosCartao);
   }
 

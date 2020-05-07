@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
-import { Translate, ICrudGetAction, byteSize } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -154,45 +154,6 @@ export class EspecialidadeDetail extends React.Component<IEspecialidadeDetailPro
                       </Col>
                       <Col md="9">
                         <dd>{especialidadeEntity.unidade ? especialidadeEntity.unidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.especialidade.idCategoria">Id Categoria</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{especialidadeEntity.idCategoria ? especialidadeEntity.idCategoria.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.especialidade.idTipoEspecialidade">Id Tipo Especialidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{especialidadeEntity.idTipoEspecialidade ? especialidadeEntity.idTipoEspecialidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.especialidade.idTipoUnidade">Id Tipo Unidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{especialidadeEntity.idTipoUnidade ? especialidadeEntity.idTipoUnidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

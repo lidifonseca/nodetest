@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICepbrCidade, defaultValue } from 'app/shared/model/cepbr-cidade.model';
 
 export const ACTION_TYPES = {
+  FETCH_CEPBRCIDADE_LIST_EXPORT: 'cepbrCidade/FETCH_CEPBRCIDADE_LIST_EXPORT',
   FETCH_CEPBRCIDADE_LIST: 'cepbrCidade/FETCH_CEPBRCIDADE_LIST',
   FETCH_CEPBRCIDADE: 'cepbrCidade/FETCH_CEPBRCIDADE',
   CREATE_CEPBRCIDADE: 'cepbrCidade/CREATE_CEPBRCIDADE',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type CepbrCidadeState = Readonly<typeof initialState>;
 
+export interface ICepbrCidadeBaseState {
+  baseFilters: any;
+  idCidade: any;
+  cidade: any;
+  codIbge: any;
+  area: any;
+}
+
+export interface ICepbrCidadeUpdateState {
+  fieldsBase: ICepbrCidadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CepbrCidadeState = initialState, action): CepbrCidadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CEPBRCIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRCIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRCIDADE):
       return {
@@ -51,6 +66,7 @@ export default (state: CepbrCidadeState = initialState, action): CepbrCidadeStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CEPBRCIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRCIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRCIDADE):
     case FAILURE(ACTION_TYPES.CREATE_CEPBRCIDADE):
@@ -110,39 +126,22 @@ export type ICrudGetAllActionCepbrCidade<T> = (
   cidade?: any,
   codIbge?: any,
   area?: any,
-  cepbrBairro?: any,
-  cepbrEndereco?: any,
-  uf?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCepbrCidade<ICepbrCidade> = (
-  idCidade,
-  cidade,
-  codIbge,
-  area,
-  cepbrBairro,
-  cepbrEndereco,
-  uf,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionCepbrCidade<ICepbrCidade> = (idCidade, cidade, codIbge, area, page, size, sort) => {
   const idCidadeRequest = idCidade ? `idCidade.contains=${idCidade}&` : '';
   const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const codIbgeRequest = codIbge ? `codIbge.contains=${codIbge}&` : '';
   const areaRequest = area ? `area.contains=${area}&` : '';
-  const cepbrBairroRequest = cepbrBairro ? `cepbrBairro.equals=${cepbrBairro}&` : '';
-  const cepbrEnderecoRequest = cepbrEndereco ? `cepbrEndereco.equals=${cepbrEndereco}&` : '';
-  const ufRequest = uf ? `uf.equals=${uf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CEPBRCIDADE_LIST,
     payload: axios.get<ICepbrCidade>(
-      `${requestUrl}${idCidadeRequest}${cidadeRequest}${codIbgeRequest}${areaRequest}${cepbrBairroRequest}${cepbrEnderecoRequest}${ufRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${cidadeRequest}${codIbgeRequest}${areaRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,10 +153,24 @@ export const getEntity: ICrudGetAction<ICepbrCidade> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCepbrCidade<ICepbrCidade> = (idCidade, cidade, codIbge, area, page, size, sort) => {
+  const idCidadeRequest = idCidade ? `idCidade.contains=${idCidade}&` : '';
+  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
+  const codIbgeRequest = codIbge ? `codIbge.contains=${codIbge}&` : '';
+  const areaRequest = area ? `area.contains=${area}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CEPBRCIDADE_LIST,
+    payload: axios.get<ICepbrCidade>(
+      `${requestUrl}${idCidadeRequest}${cidadeRequest}${codIbgeRequest}${areaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ICepbrCidade> = entity => async dispatch => {
   entity = {
-    ...entity,
-    uf: entity.uf === 'null' ? null : entity.uf
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CEPBRCIDADE,
@@ -168,7 +181,7 @@ export const createEntity: ICrudPutAction<ICepbrCidade> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<ICepbrCidade> = entity => async dispatch => {
-  entity = { ...entity, uf: entity.uf === 'null' ? null : entity.uf };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CEPBRCIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -190,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<ICepbrCidade> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCepbrCidadeState = (location): ICepbrCidadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idCidade = url.searchParams.get('idCidade') || '';
+  const cidade = url.searchParams.get('cidade') || '';
+  const codIbge = url.searchParams.get('codIbge') || '';
+  const area = url.searchParams.get('area') || '';
+
+  return {
+    baseFilters,
+    idCidade,
+    cidade,
+    codIbge,
+    area
+  };
+};

@@ -19,8 +19,7 @@
       "pontuacao": "Pontuacao",
       "alteracaoEsperada": "Alteracao Esperada",
       "observacoes": "Observacoes",
-      "usuarioId": "Usuario Id",
-      "padItemIndicadoresId": "Pad Item Indicadores Id"
+      "usuarioId": "Usuario Id"
     }
   }
 }

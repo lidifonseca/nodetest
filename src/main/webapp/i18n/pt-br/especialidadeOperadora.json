@@ -23,9 +23,7 @@
       "valorVenda": "Valor Venda",
       "descontoCusto": "Desconto Custo",
       "descontoVenda": "Desconto Venda",
-      "ativo": "Ativo",
-      "idOperadora": "Id Operadora",
-      "idEspecialidade": "Id Especialidade"
+      "ativo": "Ativo"
     }
   }
 }

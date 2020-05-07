@@ -45,7 +45,7 @@ export class AuthService {
     return await this.authorityRepository.find();
   }
 
-  async findUserWithAuthById(userId: string): Promise<User | undefined> {
+  async findUserWithAuthById(userId: number): Promise<User | undefined> {
     const user: any = await this.userService.findByfields({ where: { id: userId } });
     return user;
   }

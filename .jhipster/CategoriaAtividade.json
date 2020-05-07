@@ -12,33 +12,14 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimentoAtividades",
-            "otherEntityRelationshipName": "idAtividade",
-            "relationshipName": "atendimentoAtividades"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItemAtividade",
-            "otherEntityRelationshipName": "idAtividade",
-            "relationshipName": "padItemAtividade"
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "categoriaAtividade",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "categoria",
-            "otherEntityRelationshipName": "categoriaAtividade",
-            "relationshipName": "idCategoria",
-            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200502231200",
+    "changelogDate": "20200507104500",
     "entityTableName": "categoria_atividade",
     "dto": "mapstruct",
     "pagination": "pagination",

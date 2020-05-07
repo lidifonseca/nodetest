@@ -68,7 +68,9 @@ export class ModulosPadConfigController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() modulosPadConfig: ModulosPadConfig): Promise<ModulosPadConfig> {
+    console.info(modulosPadConfig);
     const created = await this.modulosPadConfigService.save(modulosPadConfig);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ModulosPadConfig', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ModulosPadConfigController {
   })
   async put(@Req() req: Request, @Body() modulosPadConfig: ModulosPadConfig): Promise<ModulosPadConfig> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ModulosPadConfig', modulosPadConfig.id);
+
     return await this.modulosPadConfigService.update(modulosPadConfig);
   }
 

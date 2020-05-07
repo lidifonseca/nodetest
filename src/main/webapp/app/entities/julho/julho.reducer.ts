@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IJulho, defaultValue } from 'app/shared/model/julho.model';
 
 export const ACTION_TYPES = {
+  FETCH_JULHO_LIST_EXPORT: 'julho/FETCH_JULHO_LIST_EXPORT',
   FETCH_JULHO_LIST: 'julho/FETCH_JULHO_LIST',
   FETCH_JULHO: 'julho/FETCH_JULHO',
   CREATE_JULHO: 'julho/CREATE_JULHO',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type JulhoState = Readonly<typeof initialState>;
 
+export interface IJulhoBaseState {
+  baseFilters: any;
+  dataInicio: any;
+  dataFim: any;
+  especialidade: any;
+  periodicidade: any;
+  periodo: any;
+  qtd: any;
+}
+
+export interface IJulhoUpdateState {
+  fieldsBase: IJulhoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: JulhoState = initialState, action): JulhoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_JULHO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_JULHO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_JULHO):
       return {
@@ -51,6 +68,7 @@ export default (state: JulhoState = initialState, action): JulhoState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_JULHO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_JULHO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_JULHO):
     case FAILURE(ACTION_TYPES.CREATE_JULHO):
@@ -151,6 +169,33 @@ export const getEntity: ICrudGetAction<IJulho> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionJulho<IJulho> = (
+  dataInicio,
+  dataFim,
+  especialidade,
+  periodicidade,
+  periodo,
+  qtd,
+  page,
+  size,
+  sort
+) => {
+  const dataInicioRequest = dataInicio ? `dataInicio.contains=${dataInicio}&` : '';
+  const dataFimRequest = dataFim ? `dataFim.contains=${dataFim}&` : '';
+  const especialidadeRequest = especialidade ? `especialidade.contains=${especialidade}&` : '';
+  const periodicidadeRequest = periodicidade ? `periodicidade.contains=${periodicidade}&` : '';
+  const periodoRequest = periodo ? `periodo.contains=${periodo}&` : '';
+  const qtdRequest = qtd ? `qtd.contains=${qtd}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_JULHO_LIST,
+    payload: axios.get<IJulho>(
+      `${requestUrl}${dataInicioRequest}${dataFimRequest}${especialidadeRequest}${periodicidadeRequest}${periodoRequest}${qtdRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IJulho> = entity => async dispatch => {
   entity = {
     ...entity
@@ -186,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<IJulho> = id => async dispatch => {
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getJulhoState = (location): IJulhoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const dataInicio = url.searchParams.get('dataInicio') || '';
+  const dataFim = url.searchParams.get('dataFim') || '';
+  const especialidade = url.searchParams.get('especialidade') || '';
+  const periodicidade = url.searchParams.get('periodicidade') || '';
+  const periodo = url.searchParams.get('periodo') || '';
+  const qtd = url.searchParams.get('qtd') || '';
+
+  return {
+    baseFilters,
+    dataInicio,
+    dataFim,
+    especialidade,
+    periodicidade,
+    periodo,
+    qtd
+  };
+};

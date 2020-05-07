@@ -20,9 +20,7 @@
       "ativo": "Ativo",
       "cidPrimario": "Cid Primario",
       "complexidade": "Complexidade",
-      "cidComAlta": "Cid Com Alta",
-      "idPaciente": "Id Paciente",
-      "idCid": "Id Cid"
+      "cidComAlta": "Cid Com Alta"
     }
   }
 }

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IEmpresa, defaultValue } from 'app/shared/model/empresa.model';
 
 export const ACTION_TYPES = {
+  FETCH_EMPRESA_LIST_EXPORT: 'empresa/FETCH_EMPRESA_LIST_EXPORT',
   FETCH_EMPRESA_LIST: 'empresa/FETCH_EMPRESA_LIST',
   FETCH_EMPRESA: 'empresa/FETCH_EMPRESA',
   CREATE_EMPRESA: 'empresa/CREATE_EMPRESA',
@@ -30,10 +31,39 @@ const initialState = {
 
 export type EmpresaState = Readonly<typeof initialState>;
 
+export interface IEmpresaBaseState {
+  baseFilters: any;
+  empresa: any;
+  nome: any;
+  email: any;
+  cpf: any;
+  rg: any;
+  nascimento: any;
+  sexo: any;
+  telefone1: any;
+  telefone2: any;
+  celular1: any;
+  celular2: any;
+  cep: any;
+  endereco: any;
+  numero: any;
+  complemento: any;
+  bairro: any;
+  cidade: any;
+  uf: any;
+  tipo: any;
+}
+
+export interface IEmpresaUpdateState {
+  fieldsBase: IEmpresaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: EmpresaState = initialState, action): EmpresaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_EMPRESA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_EMPRESA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_EMPRESA):
       return {
@@ -51,6 +81,7 @@ export default (state: EmpresaState = initialState, action): EmpresaState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_EMPRESA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_EMPRESA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_EMPRESA):
     case FAILURE(ACTION_TYPES.CREATE_EMPRESA):
@@ -125,7 +156,6 @@ export type ICrudGetAllActionEmpresa<T> = (
   cidade?: any,
   uf?: any,
   tipo?: any,
-  idCidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -151,7 +181,6 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   cidade,
   uf,
   tipo,
-  idCidade,
   page,
   size,
   sort
@@ -175,13 +204,12 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
-  const idCidadeRequest = idCidade ? `idCidade.equals=${idCidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_EMPRESA_LIST,
     payload: axios.get<IEmpresa>(
-      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}${idCidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -193,10 +221,62 @@ export const getEntity: ICrudGetAction<IEmpresa> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionEmpresa<IEmpresa> = (
+  empresa,
+  nome,
+  email,
+  cpf,
+  rg,
+  nascimento,
+  sexo,
+  telefone1,
+  telefone2,
+  celular1,
+  celular2,
+  cep,
+  endereco,
+  numero,
+  complemento,
+  bairro,
+  cidade,
+  uf,
+  tipo,
+  page,
+  size,
+  sort
+) => {
+  const empresaRequest = empresa ? `empresa.contains=${empresa}&` : '';
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const emailRequest = email ? `email.contains=${email}&` : '';
+  const cpfRequest = cpf ? `cpf.contains=${cpf}&` : '';
+  const rgRequest = rg ? `rg.contains=${rg}&` : '';
+  const nascimentoRequest = nascimento ? `nascimento.equals=${nascimento}&` : '';
+  const sexoRequest = sexo ? `sexo.contains=${sexo}&` : '';
+  const telefone1Request = telefone1 ? `telefone1.contains=${telefone1}&` : '';
+  const telefone2Request = telefone2 ? `telefone2.contains=${telefone2}&` : '';
+  const celular1Request = celular1 ? `celular1.contains=${celular1}&` : '';
+  const celular2Request = celular2 ? `celular2.contains=${celular2}&` : '';
+  const cepRequest = cep ? `cep.contains=${cep}&` : '';
+  const enderecoRequest = endereco ? `endereco.contains=${endereco}&` : '';
+  const numeroRequest = numero ? `numero.contains=${numero}&` : '';
+  const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
+  const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
+  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
+  const ufRequest = uf ? `uf.contains=${uf}&` : '';
+  const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_EMPRESA_LIST,
+    payload: axios.get<IEmpresa>(
+      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IEmpresa> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idCidade: entity.idCidade === 'null' ? null : entity.idCidade
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_EMPRESA,
@@ -207,7 +287,7 @@ export const createEntity: ICrudPutAction<IEmpresa> = entity => async dispatch =
 };
 
 export const updateEntity: ICrudPutAction<IEmpresa> = entity => async dispatch => {
-  entity = { ...entity, idCidade: entity.idCidade === 'null' ? null : entity.idCidade };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_EMPRESA,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -229,3 +309,50 @@ export const deleteEntity: ICrudDeleteAction<IEmpresa> = id => async dispatch =>
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getEmpresaState = (location): IEmpresaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const empresa = url.searchParams.get('empresa') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const email = url.searchParams.get('email') || '';
+  const cpf = url.searchParams.get('cpf') || '';
+  const rg = url.searchParams.get('rg') || '';
+  const nascimento = url.searchParams.get('nascimento') || '';
+  const sexo = url.searchParams.get('sexo') || '';
+  const telefone1 = url.searchParams.get('telefone1') || '';
+  const telefone2 = url.searchParams.get('telefone2') || '';
+  const celular1 = url.searchParams.get('celular1') || '';
+  const celular2 = url.searchParams.get('celular2') || '';
+  const cep = url.searchParams.get('cep') || '';
+  const endereco = url.searchParams.get('endereco') || '';
+  const numero = url.searchParams.get('numero') || '';
+  const complemento = url.searchParams.get('complemento') || '';
+  const bairro = url.searchParams.get('bairro') || '';
+  const cidade = url.searchParams.get('cidade') || '';
+  const uf = url.searchParams.get('uf') || '';
+  const tipo = url.searchParams.get('tipo') || '';
+
+  return {
+    baseFilters,
+    empresa,
+    nome,
+    email,
+    cpf,
+    rg,
+    nascimento,
+    sexo,
+    telefone1,
+    telefone2,
+    celular1,
+    celular2,
+    cep,
+    endereco,
+    numero,
+    complemento,
+    bairro,
+    cidade,
+    uf,
+    tipo
+  };
+};

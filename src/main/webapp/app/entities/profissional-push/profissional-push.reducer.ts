@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalPush, defaultValue } from 'app/shared/model/profissional-push.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALPUSH_LIST_EXPORT: 'profissionalPush/FETCH_PROFISSIONALPUSH_LIST_EXPORT',
   FETCH_PROFISSIONALPUSH_LIST: 'profissionalPush/FETCH_PROFISSIONALPUSH_LIST',
   FETCH_PROFISSIONALPUSH: 'profissionalPush/FETCH_PROFISSIONALPUSH',
   CREATE_PROFISSIONALPUSH: 'profissionalPush/CREATE_PROFISSIONALPUSH',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type ProfissionalPushState = Readonly<typeof initialState>;
 
+export interface IProfissionalPushBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  idFranquia: any;
+  mensagem: any;
+  ativo: any;
+}
+
+export interface IProfissionalPushUpdateState {
+  fieldsBase: IProfissionalPushBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalPushState = initialState, action): ProfissionalPushState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALPUSH_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALPUSH_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALPUSH):
       return {
@@ -51,6 +66,7 @@ export default (state: ProfissionalPushState = initialState, action): Profission
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALPUSH_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALPUSH_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALPUSH):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALPUSH):
@@ -145,6 +161,29 @@ export const getEntity: ICrudGetAction<IProfissionalPush> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionProfissionalPush<IProfissionalPush> = (
+  idProfissional,
+  idFranquia,
+  mensagem,
+  ativo,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const idFranquiaRequest = idFranquia ? `idFranquia.contains=${idFranquia}&` : '';
+  const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALPUSH_LIST,
+    payload: axios.get<IProfissionalPush>(
+      `${requestUrl}${idProfissionalRequest}${idFranquiaRequest}${mensagemRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IProfissionalPush> = entity => async dispatch => {
   entity = {
     ...entity
@@ -180,3 +219,20 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalPush> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalPushState = (location): IProfissionalPushBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const idFranquia = url.searchParams.get('idFranquia') || '';
+  const mensagem = url.searchParams.get('mensagem') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    idFranquia,
+    mensagem,
+    ativo
+  };
+};

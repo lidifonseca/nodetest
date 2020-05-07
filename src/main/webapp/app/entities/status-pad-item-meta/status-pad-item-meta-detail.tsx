@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './status-pad-item-meta.reducer';
+import { getEntity, IStatusPadItemMetaBaseState, getStatusPadItemMetaState } from './status-pad-item-meta.reducer';
 import { IStatusPadItemMeta } from 'app/shared/model/status-pad-item-meta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IStatusPadItemMetaState {
+  fieldsBase: IStatusPadItemMetaBaseState;
+}
+
 export interface IStatusPadItemMetaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class StatusPadItemMetaDetail extends React.Component<IStatusPadItemMetaDetailProps> {
+export class StatusPadItemMetaDetail extends React.Component<IStatusPadItemMetaDetailProps, IStatusPadItemMetaState> {
   constructor(props: Readonly<IStatusPadItemMetaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getStatusPadItemMetaState(this.props.location)
     };
   }
 

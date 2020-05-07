@@ -21,17 +21,10 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503005000",
+    "changelogDate": "20200507122300",
     "entityTableName": "prontuario_motivo_internacao_ps",
     "dto": "mapstruct",
     "pagination": "pagination",

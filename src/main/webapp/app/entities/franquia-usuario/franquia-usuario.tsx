@@ -22,57 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './franquia-usuario.reducer';
+import { getFranquiaUsuarioState, IFranquiaUsuarioBaseState, getEntities } from './franquia-usuario.reducer';
 import { IFranquiaUsuario } from 'app/shared/model/franquia-usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IFranquia } from 'app/shared/model/franquia.model';
-import { getEntities as getFranquias } from 'app/entities/franquia/franquia.reducer';
-
 export interface IFranquiaUsuarioProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IFranquiaUsuarioBaseState {
-  senha: any;
-  nome: any;
-  email: any;
-  verProfissional: any;
-  cadProfissional: any;
-  ediProfissional: any;
-  delProfissional: any;
-  relProfissional: any;
-  verPaciente: any;
-  cadPaciente: any;
-  ediPaciente: any;
-  delPaciente: any;
-  relPaciente: any;
-  verPad: any;
-  cadPad: any;
-  ediPad: any;
-  delPad: any;
-  relPad: any;
-  verAtendimento: any;
-  cadAtendimento: any;
-  ediAtendimento: any;
-  delAtendimento: any;
-  relAtendimento: any;
-  verPush: any;
-  cadPush: any;
-  verEspecialidadeValor: any;
-  cadEspecialidadeValor: any;
-  ediEspecialidadeValor: any;
-  delEspecialidadeValor: any;
-  verUsuario: any;
-  cadUsuario: any;
-  ediUsuario: any;
-  delUsuario: any;
-  envioRecusa: any;
-  envioIntercorrencia: any;
-  envioCancelamento: any;
-  ativo: any;
-  logUserFranquia: any;
-  idFranquia: any;
-}
 export interface IFranquiaUsuarioState extends IFranquiaUsuarioBaseState, IPaginationBaseState {}
 
 export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFranquiaUsuarioState> {
@@ -82,100 +38,12 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getFranquiaUsuarioState(this.props.location)
+      ...getFranquiaUsuarioState(this.props.location)
     };
   }
 
-  getFranquiaUsuarioState = (location): IFranquiaUsuarioBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const senha = url.searchParams.get('senha') || '';
-    const nome = url.searchParams.get('nome') || '';
-    const email = url.searchParams.get('email') || '';
-    const verProfissional = url.searchParams.get('verProfissional') || '';
-    const cadProfissional = url.searchParams.get('cadProfissional') || '';
-    const ediProfissional = url.searchParams.get('ediProfissional') || '';
-    const delProfissional = url.searchParams.get('delProfissional') || '';
-    const relProfissional = url.searchParams.get('relProfissional') || '';
-    const verPaciente = url.searchParams.get('verPaciente') || '';
-    const cadPaciente = url.searchParams.get('cadPaciente') || '';
-    const ediPaciente = url.searchParams.get('ediPaciente') || '';
-    const delPaciente = url.searchParams.get('delPaciente') || '';
-    const relPaciente = url.searchParams.get('relPaciente') || '';
-    const verPad = url.searchParams.get('verPad') || '';
-    const cadPad = url.searchParams.get('cadPad') || '';
-    const ediPad = url.searchParams.get('ediPad') || '';
-    const delPad = url.searchParams.get('delPad') || '';
-    const relPad = url.searchParams.get('relPad') || '';
-    const verAtendimento = url.searchParams.get('verAtendimento') || '';
-    const cadAtendimento = url.searchParams.get('cadAtendimento') || '';
-    const ediAtendimento = url.searchParams.get('ediAtendimento') || '';
-    const delAtendimento = url.searchParams.get('delAtendimento') || '';
-    const relAtendimento = url.searchParams.get('relAtendimento') || '';
-    const verPush = url.searchParams.get('verPush') || '';
-    const cadPush = url.searchParams.get('cadPush') || '';
-    const verEspecialidadeValor = url.searchParams.get('verEspecialidadeValor') || '';
-    const cadEspecialidadeValor = url.searchParams.get('cadEspecialidadeValor') || '';
-    const ediEspecialidadeValor = url.searchParams.get('ediEspecialidadeValor') || '';
-    const delEspecialidadeValor = url.searchParams.get('delEspecialidadeValor') || '';
-    const verUsuario = url.searchParams.get('verUsuario') || '';
-    const cadUsuario = url.searchParams.get('cadUsuario') || '';
-    const ediUsuario = url.searchParams.get('ediUsuario') || '';
-    const delUsuario = url.searchParams.get('delUsuario') || '';
-    const envioRecusa = url.searchParams.get('envioRecusa') || '';
-    const envioIntercorrencia = url.searchParams.get('envioIntercorrencia') || '';
-    const envioCancelamento = url.searchParams.get('envioCancelamento') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-
-    return {
-      senha,
-      nome,
-      email,
-      verProfissional,
-      cadProfissional,
-      ediProfissional,
-      delProfissional,
-      relProfissional,
-      verPaciente,
-      cadPaciente,
-      ediPaciente,
-      delPaciente,
-      relPaciente,
-      verPad,
-      cadPad,
-      ediPad,
-      delPad,
-      relPad,
-      verAtendimento,
-      cadAtendimento,
-      ediAtendimento,
-      delAtendimento,
-      relAtendimento,
-      verPush,
-      cadPush,
-      verEspecialidadeValor,
-      cadEspecialidadeValor,
-      ediEspecialidadeValor,
-      delEspecialidadeValor,
-      verUsuario,
-      cadUsuario,
-      ediUsuario,
-      delUsuario,
-      envioRecusa,
-      envioIntercorrencia,
-      envioCancelamento,
-      ativo,
-      logUserFranquia,
-      idFranquia
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getFranquias();
   }
 
   cancelCourse = () => {
@@ -217,9 +85,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
         envioRecusa: '',
         envioIntercorrencia: '',
         envioCancelamento: '',
-        ativo: '',
-        logUserFranquia: '',
-        idFranquia: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -252,7 +118,9 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -375,12 +243,6 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       'ativo=' +
       this.state.ativo +
       '&' +
-      'logUserFranquia=' +
-      this.state.logUserFranquia +
-      '&' +
-      'idFranquia=' +
-      this.state.idFranquia +
-      '&' +
       ''
     );
   };
@@ -426,8 +288,6 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       envioIntercorrencia,
       envioCancelamento,
       ativo,
-      logUserFranquia,
-      idFranquia,
       activePage,
       itemsPerPage,
       sort,
@@ -471,8 +331,6 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
       envioIntercorrencia,
       envioCancelamento,
       ativo,
-      logUserFranquia,
-      idFranquia,
       activePage - 1,
       itemsPerPage,
       `${sort},${order}`
@@ -480,7 +338,7 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
   };
 
   render() {
-    const { franquias, franquiaUsuarioList, match, totalItems } = this.props;
+    const { franquiaUsuarioList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -498,7 +356,11 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.franquiaUsuario.home.createLabel">Create a new Franquia Usuario</Translate>
@@ -511,409 +373,495 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="senhaLabel" for="franquia-usuario-senha">
-                            <Translate contentKey="generadorApp.franquiaUsuario.senha">Senha</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="senha" id="franquia-usuario-senha" value={this.state.senha} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="franquia-usuario-nome">
-                            <Translate contentKey="generadorApp.franquiaUsuario.nome">Nome</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="nome" id="franquia-usuario-nome" value={this.state.nome} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="emailLabel" for="franquia-usuario-email">
-                            <Translate contentKey="generadorApp.franquiaUsuario.email">Email</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="email" id="franquia-usuario-email" value={this.state.email} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="verProfissionalLabel" for="franquia-usuario-verProfissional">
-                            <Translate contentKey="generadorApp.franquiaUsuario.verProfissional">Ver Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="verProfissional"
-                            id="franquia-usuario-verProfissional"
-                            value={this.state.verProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cadProfissionalLabel" for="franquia-usuario-cadProfissional">
-                            <Translate contentKey="generadorApp.franquiaUsuario.cadProfissional">Cad Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="cadProfissional"
-                            id="franquia-usuario-cadProfissional"
-                            value={this.state.cadProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ediProfissionalLabel" for="franquia-usuario-ediProfissional">
-                            <Translate contentKey="generadorApp.franquiaUsuario.ediProfissional">Edi Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ediProfissional"
-                            id="franquia-usuario-ediProfissional"
-                            value={this.state.ediProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="delProfissionalLabel" for="franquia-usuario-delProfissional">
-                            <Translate contentKey="generadorApp.franquiaUsuario.delProfissional">Del Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="delProfissional"
-                            id="franquia-usuario-delProfissional"
-                            value={this.state.delProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="relProfissionalLabel" for="franquia-usuario-relProfissional">
-                            <Translate contentKey="generadorApp.franquiaUsuario.relProfissional">Rel Profissional</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="relProfissional"
-                            id="franquia-usuario-relProfissional"
-                            value={this.state.relProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="verPacienteLabel" for="franquia-usuario-verPaciente">
-                            <Translate contentKey="generadorApp.franquiaUsuario.verPaciente">Ver Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="verPaciente" id="franquia-usuario-verPaciente" value={this.state.verPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cadPacienteLabel" for="franquia-usuario-cadPaciente">
-                            <Translate contentKey="generadorApp.franquiaUsuario.cadPaciente">Cad Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="cadPaciente" id="franquia-usuario-cadPaciente" value={this.state.cadPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ediPacienteLabel" for="franquia-usuario-ediPaciente">
-                            <Translate contentKey="generadorApp.franquiaUsuario.ediPaciente">Edi Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="ediPaciente" id="franquia-usuario-ediPaciente" value={this.state.ediPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="delPacienteLabel" for="franquia-usuario-delPaciente">
-                            <Translate contentKey="generadorApp.franquiaUsuario.delPaciente">Del Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="delPaciente" id="franquia-usuario-delPaciente" value={this.state.delPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="relPacienteLabel" for="franquia-usuario-relPaciente">
-                            <Translate contentKey="generadorApp.franquiaUsuario.relPaciente">Rel Paciente</Translate>
-                          </Label>
-                          <AvInput type="string" name="relPaciente" id="franquia-usuario-relPaciente" value={this.state.relPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="verPadLabel" for="franquia-usuario-verPad">
-                            <Translate contentKey="generadorApp.franquiaUsuario.verPad">Ver Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="verPad" id="franquia-usuario-verPad" value={this.state.verPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cadPadLabel" for="franquia-usuario-cadPad">
-                            <Translate contentKey="generadorApp.franquiaUsuario.cadPad">Cad Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="cadPad" id="franquia-usuario-cadPad" value={this.state.cadPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ediPadLabel" for="franquia-usuario-ediPad">
-                            <Translate contentKey="generadorApp.franquiaUsuario.ediPad">Edi Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="ediPad" id="franquia-usuario-ediPad" value={this.state.ediPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="delPadLabel" for="franquia-usuario-delPad">
-                            <Translate contentKey="generadorApp.franquiaUsuario.delPad">Del Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="delPad" id="franquia-usuario-delPad" value={this.state.delPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="relPadLabel" for="franquia-usuario-relPad">
-                            <Translate contentKey="generadorApp.franquiaUsuario.relPad">Rel Pad</Translate>
-                          </Label>
-                          <AvInput type="string" name="relPad" id="franquia-usuario-relPad" value={this.state.relPad} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="verAtendimentoLabel" for="franquia-usuario-verAtendimento">
-                            <Translate contentKey="generadorApp.franquiaUsuario.verAtendimento">Ver Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="verAtendimento"
-                            id="franquia-usuario-verAtendimento"
-                            value={this.state.verAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cadAtendimentoLabel" for="franquia-usuario-cadAtendimento">
-                            <Translate contentKey="generadorApp.franquiaUsuario.cadAtendimento">Cad Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="cadAtendimento"
-                            id="franquia-usuario-cadAtendimento"
-                            value={this.state.cadAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ediAtendimentoLabel" for="franquia-usuario-ediAtendimento">
-                            <Translate contentKey="generadorApp.franquiaUsuario.ediAtendimento">Edi Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ediAtendimento"
-                            id="franquia-usuario-ediAtendimento"
-                            value={this.state.ediAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="delAtendimentoLabel" for="franquia-usuario-delAtendimento">
-                            <Translate contentKey="generadorApp.franquiaUsuario.delAtendimento">Del Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="delAtendimento"
-                            id="franquia-usuario-delAtendimento"
-                            value={this.state.delAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="relAtendimentoLabel" for="franquia-usuario-relAtendimento">
-                            <Translate contentKey="generadorApp.franquiaUsuario.relAtendimento">Rel Atendimento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="relAtendimento"
-                            id="franquia-usuario-relAtendimento"
-                            value={this.state.relAtendimento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="verPushLabel" for="franquia-usuario-verPush">
-                            <Translate contentKey="generadorApp.franquiaUsuario.verPush">Ver Push</Translate>
-                          </Label>
-                          <AvInput type="string" name="verPush" id="franquia-usuario-verPush" value={this.state.verPush} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cadPushLabel" for="franquia-usuario-cadPush">
-                            <Translate contentKey="generadorApp.franquiaUsuario.cadPush">Cad Push</Translate>
-                          </Label>
-                          <AvInput type="string" name="cadPush" id="franquia-usuario-cadPush" value={this.state.cadPush} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="verEspecialidadeValorLabel" for="franquia-usuario-verEspecialidadeValor">
-                            <Translate contentKey="generadorApp.franquiaUsuario.verEspecialidadeValor">Ver Especialidade Valor</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="verEspecialidadeValor"
-                            id="franquia-usuario-verEspecialidadeValor"
-                            value={this.state.verEspecialidadeValor}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cadEspecialidadeValorLabel" for="franquia-usuario-cadEspecialidadeValor">
-                            <Translate contentKey="generadorApp.franquiaUsuario.cadEspecialidadeValor">Cad Especialidade Valor</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="cadEspecialidadeValor"
-                            id="franquia-usuario-cadEspecialidadeValor"
-                            value={this.state.cadEspecialidadeValor}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ediEspecialidadeValorLabel" for="franquia-usuario-ediEspecialidadeValor">
-                            <Translate contentKey="generadorApp.franquiaUsuario.ediEspecialidadeValor">Edi Especialidade Valor</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="ediEspecialidadeValor"
-                            id="franquia-usuario-ediEspecialidadeValor"
-                            value={this.state.ediEspecialidadeValor}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="delEspecialidadeValorLabel" for="franquia-usuario-delEspecialidadeValor">
-                            <Translate contentKey="generadorApp.franquiaUsuario.delEspecialidadeValor">Del Especialidade Valor</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="delEspecialidadeValor"
-                            id="franquia-usuario-delEspecialidadeValor"
-                            value={this.state.delEspecialidadeValor}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="verUsuarioLabel" for="franquia-usuario-verUsuario">
-                            <Translate contentKey="generadorApp.franquiaUsuario.verUsuario">Ver Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="verUsuario" id="franquia-usuario-verUsuario" value={this.state.verUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="cadUsuarioLabel" for="franquia-usuario-cadUsuario">
-                            <Translate contentKey="generadorApp.franquiaUsuario.cadUsuario">Cad Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="cadUsuario" id="franquia-usuario-cadUsuario" value={this.state.cadUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ediUsuarioLabel" for="franquia-usuario-ediUsuario">
-                            <Translate contentKey="generadorApp.franquiaUsuario.ediUsuario">Edi Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="ediUsuario" id="franquia-usuario-ediUsuario" value={this.state.ediUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="delUsuarioLabel" for="franquia-usuario-delUsuario">
-                            <Translate contentKey="generadorApp.franquiaUsuario.delUsuario">Del Usuario</Translate>
-                          </Label>
-                          <AvInput type="string" name="delUsuario" id="franquia-usuario-delUsuario" value={this.state.delUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="envioRecusaLabel" for="franquia-usuario-envioRecusa">
-                            <Translate contentKey="generadorApp.franquiaUsuario.envioRecusa">Envio Recusa</Translate>
-                          </Label>
-                          <AvInput type="string" name="envioRecusa" id="franquia-usuario-envioRecusa" value={this.state.envioRecusa} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="envioIntercorrenciaLabel" for="franquia-usuario-envioIntercorrencia">
-                            <Translate contentKey="generadorApp.franquiaUsuario.envioIntercorrencia">Envio Intercorrencia</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="envioIntercorrencia"
-                            id="franquia-usuario-envioIntercorrencia"
-                            value={this.state.envioIntercorrencia}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="envioCancelamentoLabel" for="franquia-usuario-envioCancelamento">
-                            <Translate contentKey="generadorApp.franquiaUsuario.envioCancelamento">Envio Cancelamento</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="envioCancelamento"
-                            id="franquia-usuario-envioCancelamento"
-                            value={this.state.envioCancelamento}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="franquia-usuario-ativo">
-                            <Translate contentKey="generadorApp.franquiaUsuario.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="franquia-usuario-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="franquia-usuario-idFranquia">
-                              <Translate contentKey="generadorApp.franquiaUsuario.idFranquia">Id Franquia</Translate>
+                      {this.state.baseFilters !== 'senha' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="senhaLabel" for="franquia-usuario-senha">
+                              <Translate contentKey="generadorApp.franquiaUsuario.senha">Senha</Translate>
                             </Label>
-                            <AvInput id="franquia-usuario-idFranquia" type="select" className="form-control" name="idFranquiaId">
-                              <option value="" key="0" />
-                              {franquias
-                                ? franquias.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="senha" id="franquia-usuario-senha" value={this.state.senha} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="franquia-usuario-nome">
+                              <Translate contentKey="generadorApp.franquiaUsuario.nome">Nome</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="nome" id="franquia-usuario-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'email' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="emailLabel" for="franquia-usuario-email">
+                              <Translate contentKey="generadorApp.franquiaUsuario.email">Email</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="email" id="franquia-usuario-email" value={this.state.email} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'verProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="verProfissionalLabel" for="franquia-usuario-verProfissional">
+                              <Translate contentKey="generadorApp.franquiaUsuario.verProfissional">Ver Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="verProfissional"
+                              id="franquia-usuario-verProfissional"
+                              value={this.state.verProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cadProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cadProfissionalLabel" for="franquia-usuario-cadProfissional">
+                              <Translate contentKey="generadorApp.franquiaUsuario.cadProfissional">Cad Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="cadProfissional"
+                              id="franquia-usuario-cadProfissional"
+                              value={this.state.cadProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ediProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ediProfissionalLabel" for="franquia-usuario-ediProfissional">
+                              <Translate contentKey="generadorApp.franquiaUsuario.ediProfissional">Edi Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="ediProfissional"
+                              id="franquia-usuario-ediProfissional"
+                              value={this.state.ediProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'delProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="delProfissionalLabel" for="franquia-usuario-delProfissional">
+                              <Translate contentKey="generadorApp.franquiaUsuario.delProfissional">Del Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="delProfissional"
+                              id="franquia-usuario-delProfissional"
+                              value={this.state.delProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'relProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="relProfissionalLabel" for="franquia-usuario-relProfissional">
+                              <Translate contentKey="generadorApp.franquiaUsuario.relProfissional">Rel Profissional</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="relProfissional"
+                              id="franquia-usuario-relProfissional"
+                              value={this.state.relProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'verPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="verPacienteLabel" for="franquia-usuario-verPaciente">
+                              <Translate contentKey="generadorApp.franquiaUsuario.verPaciente">Ver Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="verPaciente" id="franquia-usuario-verPaciente" value={this.state.verPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cadPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cadPacienteLabel" for="franquia-usuario-cadPaciente">
+                              <Translate contentKey="generadorApp.franquiaUsuario.cadPaciente">Cad Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="cadPaciente" id="franquia-usuario-cadPaciente" value={this.state.cadPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ediPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ediPacienteLabel" for="franquia-usuario-ediPaciente">
+                              <Translate contentKey="generadorApp.franquiaUsuario.ediPaciente">Edi Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="ediPaciente" id="franquia-usuario-ediPaciente" value={this.state.ediPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'delPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="delPacienteLabel" for="franquia-usuario-delPaciente">
+                              <Translate contentKey="generadorApp.franquiaUsuario.delPaciente">Del Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="delPaciente" id="franquia-usuario-delPaciente" value={this.state.delPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'relPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="relPacienteLabel" for="franquia-usuario-relPaciente">
+                              <Translate contentKey="generadorApp.franquiaUsuario.relPaciente">Rel Paciente</Translate>
+                            </Label>
+                            <AvInput type="string" name="relPaciente" id="franquia-usuario-relPaciente" value={this.state.relPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'verPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="verPadLabel" for="franquia-usuario-verPad">
+                              <Translate contentKey="generadorApp.franquiaUsuario.verPad">Ver Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="verPad" id="franquia-usuario-verPad" value={this.state.verPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cadPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cadPadLabel" for="franquia-usuario-cadPad">
+                              <Translate contentKey="generadorApp.franquiaUsuario.cadPad">Cad Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="cadPad" id="franquia-usuario-cadPad" value={this.state.cadPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ediPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ediPadLabel" for="franquia-usuario-ediPad">
+                              <Translate contentKey="generadorApp.franquiaUsuario.ediPad">Edi Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="ediPad" id="franquia-usuario-ediPad" value={this.state.ediPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'delPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="delPadLabel" for="franquia-usuario-delPad">
+                              <Translate contentKey="generadorApp.franquiaUsuario.delPad">Del Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="delPad" id="franquia-usuario-delPad" value={this.state.delPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'relPad' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="relPadLabel" for="franquia-usuario-relPad">
+                              <Translate contentKey="generadorApp.franquiaUsuario.relPad">Rel Pad</Translate>
+                            </Label>
+                            <AvInput type="string" name="relPad" id="franquia-usuario-relPad" value={this.state.relPad} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'verAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="verAtendimentoLabel" for="franquia-usuario-verAtendimento">
+                              <Translate contentKey="generadorApp.franquiaUsuario.verAtendimento">Ver Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="verAtendimento"
+                              id="franquia-usuario-verAtendimento"
+                              value={this.state.verAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cadAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cadAtendimentoLabel" for="franquia-usuario-cadAtendimento">
+                              <Translate contentKey="generadorApp.franquiaUsuario.cadAtendimento">Cad Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="cadAtendimento"
+                              id="franquia-usuario-cadAtendimento"
+                              value={this.state.cadAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ediAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ediAtendimentoLabel" for="franquia-usuario-ediAtendimento">
+                              <Translate contentKey="generadorApp.franquiaUsuario.ediAtendimento">Edi Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="ediAtendimento"
+                              id="franquia-usuario-ediAtendimento"
+                              value={this.state.ediAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'delAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="delAtendimentoLabel" for="franquia-usuario-delAtendimento">
+                              <Translate contentKey="generadorApp.franquiaUsuario.delAtendimento">Del Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="delAtendimento"
+                              id="franquia-usuario-delAtendimento"
+                              value={this.state.delAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'relAtendimento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="relAtendimentoLabel" for="franquia-usuario-relAtendimento">
+                              <Translate contentKey="generadorApp.franquiaUsuario.relAtendimento">Rel Atendimento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="relAtendimento"
+                              id="franquia-usuario-relAtendimento"
+                              value={this.state.relAtendimento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'verPush' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="verPushLabel" for="franquia-usuario-verPush">
+                              <Translate contentKey="generadorApp.franquiaUsuario.verPush">Ver Push</Translate>
+                            </Label>
+                            <AvInput type="string" name="verPush" id="franquia-usuario-verPush" value={this.state.verPush} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cadPush' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cadPushLabel" for="franquia-usuario-cadPush">
+                              <Translate contentKey="generadorApp.franquiaUsuario.cadPush">Cad Push</Translate>
+                            </Label>
+                            <AvInput type="string" name="cadPush" id="franquia-usuario-cadPush" value={this.state.cadPush} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'verEspecialidadeValor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="verEspecialidadeValorLabel" for="franquia-usuario-verEspecialidadeValor">
+                              <Translate contentKey="generadorApp.franquiaUsuario.verEspecialidadeValor">Ver Especialidade Valor</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="verEspecialidadeValor"
+                              id="franquia-usuario-verEspecialidadeValor"
+                              value={this.state.verEspecialidadeValor}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cadEspecialidadeValor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cadEspecialidadeValorLabel" for="franquia-usuario-cadEspecialidadeValor">
+                              <Translate contentKey="generadorApp.franquiaUsuario.cadEspecialidadeValor">Cad Especialidade Valor</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="cadEspecialidadeValor"
+                              id="franquia-usuario-cadEspecialidadeValor"
+                              value={this.state.cadEspecialidadeValor}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ediEspecialidadeValor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ediEspecialidadeValorLabel" for="franquia-usuario-ediEspecialidadeValor">
+                              <Translate contentKey="generadorApp.franquiaUsuario.ediEspecialidadeValor">Edi Especialidade Valor</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="ediEspecialidadeValor"
+                              id="franquia-usuario-ediEspecialidadeValor"
+                              value={this.state.ediEspecialidadeValor}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'delEspecialidadeValor' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="delEspecialidadeValorLabel" for="franquia-usuario-delEspecialidadeValor">
+                              <Translate contentKey="generadorApp.franquiaUsuario.delEspecialidadeValor">Del Especialidade Valor</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="delEspecialidadeValor"
+                              id="franquia-usuario-delEspecialidadeValor"
+                              value={this.state.delEspecialidadeValor}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'verUsuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="verUsuarioLabel" for="franquia-usuario-verUsuario">
+                              <Translate contentKey="generadorApp.franquiaUsuario.verUsuario">Ver Usuario</Translate>
+                            </Label>
+                            <AvInput type="string" name="verUsuario" id="franquia-usuario-verUsuario" value={this.state.verUsuario} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'cadUsuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="cadUsuarioLabel" for="franquia-usuario-cadUsuario">
+                              <Translate contentKey="generadorApp.franquiaUsuario.cadUsuario">Cad Usuario</Translate>
+                            </Label>
+                            <AvInput type="string" name="cadUsuario" id="franquia-usuario-cadUsuario" value={this.state.cadUsuario} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ediUsuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ediUsuarioLabel" for="franquia-usuario-ediUsuario">
+                              <Translate contentKey="generadorApp.franquiaUsuario.ediUsuario">Edi Usuario</Translate>
+                            </Label>
+                            <AvInput type="string" name="ediUsuario" id="franquia-usuario-ediUsuario" value={this.state.ediUsuario} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'delUsuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="delUsuarioLabel" for="franquia-usuario-delUsuario">
+                              <Translate contentKey="generadorApp.franquiaUsuario.delUsuario">Del Usuario</Translate>
+                            </Label>
+                            <AvInput type="string" name="delUsuario" id="franquia-usuario-delUsuario" value={this.state.delUsuario} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'envioRecusa' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="envioRecusaLabel" for="franquia-usuario-envioRecusa">
+                              <Translate contentKey="generadorApp.franquiaUsuario.envioRecusa">Envio Recusa</Translate>
+                            </Label>
+                            <AvInput type="string" name="envioRecusa" id="franquia-usuario-envioRecusa" value={this.state.envioRecusa} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'envioIntercorrencia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="envioIntercorrenciaLabel" for="franquia-usuario-envioIntercorrencia">
+                              <Translate contentKey="generadorApp.franquiaUsuario.envioIntercorrencia">Envio Intercorrencia</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="envioIntercorrencia"
+                              id="franquia-usuario-envioIntercorrencia"
+                              value={this.state.envioIntercorrencia}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'envioCancelamento' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="envioCancelamentoLabel" for="franquia-usuario-envioCancelamento">
+                              <Translate contentKey="generadorApp.franquiaUsuario.envioCancelamento">Envio Cancelamento</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="envioCancelamento"
+                              id="franquia-usuario-envioCancelamento"
+                              value={this.state.envioCancelamento}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="franquia-usuario-ativo">
+                              <Translate contentKey="generadorApp.franquiaUsuario.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="franquia-usuario-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -941,158 +889,228 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('senha')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.senha">Senha</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('email')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.email">Email</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('verProfissional')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.verProfissional">Ver Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cadProfissional')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.cadProfissional">Cad Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ediProfissional')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.ediProfissional">Edi Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('delProfissional')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.delProfissional">Del Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('relProfissional')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.relProfissional">Rel Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('verPaciente')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.verPaciente">Ver Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cadPaciente')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.cadPaciente">Cad Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ediPaciente')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.ediPaciente">Edi Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('delPaciente')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.delPaciente">Del Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('relPaciente')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.relPaciente">Rel Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('verPad')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.verPad">Ver Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cadPad')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.cadPad">Cad Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ediPad')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.ediPad">Edi Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('delPad')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.delPad">Del Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('relPad')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.relPad">Rel Pad</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('verAtendimento')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.verAtendimento">Ver Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cadAtendimento')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.cadAtendimento">Cad Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ediAtendimento')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.ediAtendimento">Edi Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('delAtendimento')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.delAtendimento">Del Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('relAtendimento')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.relAtendimento">Rel Atendimento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('verPush')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.verPush">Ver Push</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cadPush')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.cadPush">Cad Push</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('verEspecialidadeValor')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.verEspecialidadeValor">Ver Especialidade Valor</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cadEspecialidadeValor')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.cadEspecialidadeValor">Cad Especialidade Valor</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ediEspecialidadeValor')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.ediEspecialidadeValor">Edi Especialidade Valor</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('delEspecialidadeValor')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.delEspecialidadeValor">Del Especialidade Valor</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('verUsuario')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.verUsuario">Ver Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('cadUsuario')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.cadUsuario">Cad Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ediUsuario')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.ediUsuario">Edi Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('delUsuario')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.delUsuario">Del Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('envioRecusa')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.envioRecusa">Envio Recusa</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('envioIntercorrencia')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.envioIntercorrencia">Envio Intercorrencia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('envioCancelamento')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.envioCancelamento">Envio Cancelamento</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.franquiaUsuario.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.franquiaUsuario.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'senha' ? (
+                        <th className="hand" onClick={this.sort('senha')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.senha">Senha</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'email' ? (
+                        <th className="hand" onClick={this.sort('email')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.email">Email</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'verProfissional' ? (
+                        <th className="hand" onClick={this.sort('verProfissional')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.verProfissional">Ver Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cadProfissional' ? (
+                        <th className="hand" onClick={this.sort('cadProfissional')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.cadProfissional">Cad Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ediProfissional' ? (
+                        <th className="hand" onClick={this.sort('ediProfissional')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.ediProfissional">Edi Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'delProfissional' ? (
+                        <th className="hand" onClick={this.sort('delProfissional')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.delProfissional">Del Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'relProfissional' ? (
+                        <th className="hand" onClick={this.sort('relProfissional')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.relProfissional">Rel Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'verPaciente' ? (
+                        <th className="hand" onClick={this.sort('verPaciente')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.verPaciente">Ver Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cadPaciente' ? (
+                        <th className="hand" onClick={this.sort('cadPaciente')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.cadPaciente">Cad Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ediPaciente' ? (
+                        <th className="hand" onClick={this.sort('ediPaciente')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.ediPaciente">Edi Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'delPaciente' ? (
+                        <th className="hand" onClick={this.sort('delPaciente')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.delPaciente">Del Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'relPaciente' ? (
+                        <th className="hand" onClick={this.sort('relPaciente')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.relPaciente">Rel Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'verPad' ? (
+                        <th className="hand" onClick={this.sort('verPad')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.verPad">Ver Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cadPad' ? (
+                        <th className="hand" onClick={this.sort('cadPad')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.cadPad">Cad Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ediPad' ? (
+                        <th className="hand" onClick={this.sort('ediPad')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.ediPad">Edi Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'delPad' ? (
+                        <th className="hand" onClick={this.sort('delPad')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.delPad">Del Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'relPad' ? (
+                        <th className="hand" onClick={this.sort('relPad')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.relPad">Rel Pad</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'verAtendimento' ? (
+                        <th className="hand" onClick={this.sort('verAtendimento')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.verAtendimento">Ver Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cadAtendimento' ? (
+                        <th className="hand" onClick={this.sort('cadAtendimento')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.cadAtendimento">Cad Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ediAtendimento' ? (
+                        <th className="hand" onClick={this.sort('ediAtendimento')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.ediAtendimento">Edi Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'delAtendimento' ? (
+                        <th className="hand" onClick={this.sort('delAtendimento')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.delAtendimento">Del Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'relAtendimento' ? (
+                        <th className="hand" onClick={this.sort('relAtendimento')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.relAtendimento">Rel Atendimento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'verPush' ? (
+                        <th className="hand" onClick={this.sort('verPush')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.verPush">Ver Push</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cadPush' ? (
+                        <th className="hand" onClick={this.sort('cadPush')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.cadPush">Cad Push</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'verEspecialidadeValor' ? (
+                        <th className="hand" onClick={this.sort('verEspecialidadeValor')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.verEspecialidadeValor">Ver Especialidade Valor</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cadEspecialidadeValor' ? (
+                        <th className="hand" onClick={this.sort('cadEspecialidadeValor')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.cadEspecialidadeValor">Cad Especialidade Valor</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ediEspecialidadeValor' ? (
+                        <th className="hand" onClick={this.sort('ediEspecialidadeValor')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.ediEspecialidadeValor">Edi Especialidade Valor</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'delEspecialidadeValor' ? (
+                        <th className="hand" onClick={this.sort('delEspecialidadeValor')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.delEspecialidadeValor">Del Especialidade Valor</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'verUsuario' ? (
+                        <th className="hand" onClick={this.sort('verUsuario')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.verUsuario">Ver Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'cadUsuario' ? (
+                        <th className="hand" onClick={this.sort('cadUsuario')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.cadUsuario">Cad Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ediUsuario' ? (
+                        <th className="hand" onClick={this.sort('ediUsuario')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.ediUsuario">Edi Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'delUsuario' ? (
+                        <th className="hand" onClick={this.sort('delUsuario')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.delUsuario">Del Usuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'envioRecusa' ? (
+                        <th className="hand" onClick={this.sort('envioRecusa')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.envioRecusa">Envio Recusa</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'envioIntercorrencia' ? (
+                        <th className="hand" onClick={this.sort('envioIntercorrencia')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.envioIntercorrencia">Envio Intercorrencia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'envioCancelamento' ? (
+                        <th className="hand" onClick={this.sort('envioCancelamento')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.envioCancelamento">Envio Cancelamento</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.franquiaUsuario.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -1107,102 +1125,105 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
                           </Button>
                         </td>
 
-                        <td>{franquiaUsuario.senha}</td>
+                        {this.state.baseFilters !== 'senha' ? <td>{franquiaUsuario.senha}</td> : null}
 
-                        <td>{franquiaUsuario.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{franquiaUsuario.nome}</td> : null}
 
-                        <td>{franquiaUsuario.email}</td>
+                        {this.state.baseFilters !== 'email' ? <td>{franquiaUsuario.email}</td> : null}
 
-                        <td>{franquiaUsuario.verProfissional}</td>
+                        {this.state.baseFilters !== 'verProfissional' ? <td>{franquiaUsuario.verProfissional}</td> : null}
 
-                        <td>{franquiaUsuario.cadProfissional}</td>
+                        {this.state.baseFilters !== 'cadProfissional' ? <td>{franquiaUsuario.cadProfissional}</td> : null}
 
-                        <td>{franquiaUsuario.ediProfissional}</td>
+                        {this.state.baseFilters !== 'ediProfissional' ? <td>{franquiaUsuario.ediProfissional}</td> : null}
 
-                        <td>{franquiaUsuario.delProfissional}</td>
+                        {this.state.baseFilters !== 'delProfissional' ? <td>{franquiaUsuario.delProfissional}</td> : null}
 
-                        <td>{franquiaUsuario.relProfissional}</td>
+                        {this.state.baseFilters !== 'relProfissional' ? <td>{franquiaUsuario.relProfissional}</td> : null}
 
-                        <td>{franquiaUsuario.verPaciente}</td>
+                        {this.state.baseFilters !== 'verPaciente' ? <td>{franquiaUsuario.verPaciente}</td> : null}
 
-                        <td>{franquiaUsuario.cadPaciente}</td>
+                        {this.state.baseFilters !== 'cadPaciente' ? <td>{franquiaUsuario.cadPaciente}</td> : null}
 
-                        <td>{franquiaUsuario.ediPaciente}</td>
+                        {this.state.baseFilters !== 'ediPaciente' ? <td>{franquiaUsuario.ediPaciente}</td> : null}
 
-                        <td>{franquiaUsuario.delPaciente}</td>
+                        {this.state.baseFilters !== 'delPaciente' ? <td>{franquiaUsuario.delPaciente}</td> : null}
 
-                        <td>{franquiaUsuario.relPaciente}</td>
+                        {this.state.baseFilters !== 'relPaciente' ? <td>{franquiaUsuario.relPaciente}</td> : null}
 
-                        <td>{franquiaUsuario.verPad}</td>
+                        {this.state.baseFilters !== 'verPad' ? <td>{franquiaUsuario.verPad}</td> : null}
 
-                        <td>{franquiaUsuario.cadPad}</td>
+                        {this.state.baseFilters !== 'cadPad' ? <td>{franquiaUsuario.cadPad}</td> : null}
 
-                        <td>{franquiaUsuario.ediPad}</td>
+                        {this.state.baseFilters !== 'ediPad' ? <td>{franquiaUsuario.ediPad}</td> : null}
 
-                        <td>{franquiaUsuario.delPad}</td>
+                        {this.state.baseFilters !== 'delPad' ? <td>{franquiaUsuario.delPad}</td> : null}
 
-                        <td>{franquiaUsuario.relPad}</td>
+                        {this.state.baseFilters !== 'relPad' ? <td>{franquiaUsuario.relPad}</td> : null}
 
-                        <td>{franquiaUsuario.verAtendimento}</td>
+                        {this.state.baseFilters !== 'verAtendimento' ? <td>{franquiaUsuario.verAtendimento}</td> : null}
 
-                        <td>{franquiaUsuario.cadAtendimento}</td>
+                        {this.state.baseFilters !== 'cadAtendimento' ? <td>{franquiaUsuario.cadAtendimento}</td> : null}
 
-                        <td>{franquiaUsuario.ediAtendimento}</td>
+                        {this.state.baseFilters !== 'ediAtendimento' ? <td>{franquiaUsuario.ediAtendimento}</td> : null}
 
-                        <td>{franquiaUsuario.delAtendimento}</td>
+                        {this.state.baseFilters !== 'delAtendimento' ? <td>{franquiaUsuario.delAtendimento}</td> : null}
 
-                        <td>{franquiaUsuario.relAtendimento}</td>
+                        {this.state.baseFilters !== 'relAtendimento' ? <td>{franquiaUsuario.relAtendimento}</td> : null}
 
-                        <td>{franquiaUsuario.verPush}</td>
+                        {this.state.baseFilters !== 'verPush' ? <td>{franquiaUsuario.verPush}</td> : null}
 
-                        <td>{franquiaUsuario.cadPush}</td>
+                        {this.state.baseFilters !== 'cadPush' ? <td>{franquiaUsuario.cadPush}</td> : null}
 
-                        <td>{franquiaUsuario.verEspecialidadeValor}</td>
+                        {this.state.baseFilters !== 'verEspecialidadeValor' ? <td>{franquiaUsuario.verEspecialidadeValor}</td> : null}
 
-                        <td>{franquiaUsuario.cadEspecialidadeValor}</td>
+                        {this.state.baseFilters !== 'cadEspecialidadeValor' ? <td>{franquiaUsuario.cadEspecialidadeValor}</td> : null}
 
-                        <td>{franquiaUsuario.ediEspecialidadeValor}</td>
+                        {this.state.baseFilters !== 'ediEspecialidadeValor' ? <td>{franquiaUsuario.ediEspecialidadeValor}</td> : null}
 
-                        <td>{franquiaUsuario.delEspecialidadeValor}</td>
+                        {this.state.baseFilters !== 'delEspecialidadeValor' ? <td>{franquiaUsuario.delEspecialidadeValor}</td> : null}
 
-                        <td>{franquiaUsuario.verUsuario}</td>
+                        {this.state.baseFilters !== 'verUsuario' ? <td>{franquiaUsuario.verUsuario}</td> : null}
 
-                        <td>{franquiaUsuario.cadUsuario}</td>
+                        {this.state.baseFilters !== 'cadUsuario' ? <td>{franquiaUsuario.cadUsuario}</td> : null}
 
-                        <td>{franquiaUsuario.ediUsuario}</td>
+                        {this.state.baseFilters !== 'ediUsuario' ? <td>{franquiaUsuario.ediUsuario}</td> : null}
 
-                        <td>{franquiaUsuario.delUsuario}</td>
+                        {this.state.baseFilters !== 'delUsuario' ? <td>{franquiaUsuario.delUsuario}</td> : null}
 
-                        <td>{franquiaUsuario.envioRecusa}</td>
+                        {this.state.baseFilters !== 'envioRecusa' ? <td>{franquiaUsuario.envioRecusa}</td> : null}
 
-                        <td>{franquiaUsuario.envioIntercorrencia}</td>
+                        {this.state.baseFilters !== 'envioIntercorrencia' ? <td>{franquiaUsuario.envioIntercorrencia}</td> : null}
 
-                        <td>{franquiaUsuario.envioCancelamento}</td>
+                        {this.state.baseFilters !== 'envioCancelamento' ? <td>{franquiaUsuario.envioCancelamento}</td> : null}
 
-                        <td>{franquiaUsuario.ativo}</td>
-                        <td>
-                          {franquiaUsuario.idFranquia ? (
-                            <Link to={`franquia/${franquiaUsuario.idFranquia.id}`}>{franquiaUsuario.idFranquia.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{franquiaUsuario.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${franquiaUsuario.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${franquiaUsuario.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${franquiaUsuario.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${franquiaUsuario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${franquiaUsuario.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${franquiaUsuario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -1244,13 +1265,11 @@ export class FranquiaUsuario extends React.Component<IFranquiaUsuarioProps, IFra
 }
 
 const mapStateToProps = ({ franquiaUsuario, ...storeState }: IRootState) => ({
-  franquias: storeState.franquia.entities,
   franquiaUsuarioList: franquiaUsuario.entities,
   totalItems: franquiaUsuario.totalItems
 });
 
 const mapDispatchToProps = {
-  getFranquias,
   getEntities
 };
 

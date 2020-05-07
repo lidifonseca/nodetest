@@ -3,23 +3,20 @@
     "tela": {
       "home": {
         "title": "Telas",
-        "createLabel": "Criar novo Tela",
-        "createOrEditLabel": "Criar ou editar Tela",
-        "notFound": "Nenhum Tela encontrado"
+        "createLabel": "Create a new Tela",
+        "createOrEditLabel": "Create or edit a Tela",
+        "notFound": "No Telas found"
       },
-      "created": "Um novo Tela foi criado com o identificador {{ param }}",
-      "updated": "Um Tela foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tela foi excluído com o identificador {{ param }}",
+      "created": "A new Tela is created with identifier {{ param }}",
+      "updated": "A Tela is updated with identifier {{ param }}",
+      "deleted": "A Tela is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tela {{ id }}?"
+        "question": "Are you sure you want to delete Tela {{ id }}?"
       },
       "detail": {
         "title": "Tela"
       },
-      "tela": "Tela",
-      "logUser": "Log User",
-      "logUserFranquia": "Log User Franquia",
-      "usuarioAcao": "Usuario Acao"
+      "tela": "Tela"
     }
   }
 }

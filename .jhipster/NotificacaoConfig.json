@@ -64,7 +64,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502235000",
+    "changelogDate": "20200507112300",
     "entityTableName": "notificacao_config",
     "dto": "mapstruct",
     "pagination": "pagination",

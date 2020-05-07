@@ -3,15 +3,15 @@
     "tipoMatMed": {
       "home": {
         "title": "Tipo Mat Meds",
-        "createLabel": "Criar novo Tipo Mat Med",
-        "createOrEditLabel": "Criar ou editar Tipo Mat Med",
-        "notFound": "Nenhum Tipo Mat Med encontrado"
+        "createLabel": "Create a new Tipo Mat Med",
+        "createOrEditLabel": "Create or edit a Tipo Mat Med",
+        "notFound": "No Tipo Mat Meds found"
       },
-      "created": "Um novo Tipo Mat Med foi criado com o identificador {{ param }}",
-      "updated": "Um Tipo Mat Med foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Tipo Mat Med foi excluído com o identificador {{ param }}",
+      "created": "A new Tipo Mat Med is created with identifier {{ param }}",
+      "updated": "A Tipo Mat Med is updated with identifier {{ param }}",
+      "deleted": "A Tipo Mat Med is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Tipo Mat Med {{ id }}?"
+        "question": "Are you sure you want to delete Tipo Mat Med {{ id }}?"
       },
       "detail": {
         "title": "Tipo Mat Med"

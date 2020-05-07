@@ -7,15 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProfissionalCategoriaContrato.
  */
-@Entity('profissional_categoria_contrato')
+@Entity('tb_profissional_categoria_contrato')
 export default class ProfissionalCategoriaContrato extends BaseEntity {
-  @Column({ name: 'id_profissional', nullable: false })
+  @Column({ name: 'ID_PROFISSIONAL', nullable: false })
   idProfissional: string;
 
-  @Column({ type: 'integer', name: 'id_categoria_contrato', nullable: false })
+  @Column({ type: 'integer', name: 'ID_CATEGORIA_CONTRATO', nullable: false })
   idCategoriaContrato: number;
 
-  @Column({ type: 'integer', name: 'aceito' })
+  @Column({ type: 'integer', name: 'ACEITO' })
   aceito: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

@@ -3,15 +3,15 @@
     "tokenUsuario": {
       "home": {
         "title": "Token Usuarios",
-        "createLabel": "Criar novo Token Usuario",
-        "createOrEditLabel": "Criar ou editar Token Usuario",
-        "notFound": "Nenhum Token Usuario encontrado"
+        "createLabel": "Create a new Token Usuario",
+        "createOrEditLabel": "Create or edit a Token Usuario",
+        "notFound": "No Token Usuarios found"
       },
-      "created": "Um novo Token Usuario foi criado com o identificador {{ param }}",
-      "updated": "Um Token Usuario foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Token Usuario foi excluído com o identificador {{ param }}",
+      "created": "A new Token Usuario is created with identifier {{ param }}",
+      "updated": "A Token Usuario is updated with identifier {{ param }}",
+      "deleted": "A Token Usuario is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Token Usuario {{ id }}?"
+        "question": "Are you sure you want to delete Token Usuario {{ id }}?"
       },
       "detail": {
         "title": "Token Usuario"

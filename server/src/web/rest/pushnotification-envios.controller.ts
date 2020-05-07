@@ -68,7 +68,9 @@ export class PushnotificationEnviosController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() pushnotificationEnvios: PushnotificationEnvios): Promise<PushnotificationEnvios> {
+    console.info(pushnotificationEnvios);
     const created = await this.pushnotificationEnviosService.save(pushnotificationEnvios);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PushnotificationEnvios', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class PushnotificationEnviosController {
   })
   async put(@Req() req: Request, @Body() pushnotificationEnvios: PushnotificationEnvios): Promise<PushnotificationEnvios> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'PushnotificationEnvios', pushnotificationEnvios.id);
+
     return await this.pushnotificationEnviosService.update(pushnotificationEnvios);
   }
 

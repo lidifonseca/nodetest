@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './profissional-push.reducer';
+import { getEntity, IProfissionalPushBaseState, getProfissionalPushState } from './profissional-push.reducer';
 import { IProfissionalPush } from 'app/shared/model/profissional-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProfissionalPushState {
+  fieldsBase: IProfissionalPushBaseState;
+}
+
 export interface IProfissionalPushDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProfissionalPushDetail extends React.Component<IProfissionalPushDetailProps> {
+export class ProfissionalPushDetail extends React.Component<IProfissionalPushDetailProps, IProfissionalPushState> {
   constructor(props: Readonly<IProfissionalPushDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProfissionalPushState(this.props.location)
     };
   }
 

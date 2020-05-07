@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICidade, defaultValue } from 'app/shared/model/cidade.model';
 
 export const ACTION_TYPES = {
+  FETCH_CIDADE_LIST_EXPORT: 'cidade/FETCH_CIDADE_LIST_EXPORT',
   FETCH_CIDADE_LIST: 'cidade/FETCH_CIDADE_LIST',
   FETCH_CIDADE: 'cidade/FETCH_CIDADE',
   CREATE_CIDADE: 'cidade/CREATE_CIDADE',
@@ -30,10 +31,21 @@ const initialState = {
 
 export type CidadeState = Readonly<typeof initialState>;
 
+export interface ICidadeBaseState {
+  baseFilters: any;
+  descrCidade: any;
+}
+
+export interface ICidadeUpdateState {
+  fieldsBase: ICidadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CidadeState = initialState, action): CidadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CIDADE):
       return {
@@ -51,6 +63,7 @@ export default (state: CidadeState = initialState, action): CidadeState => {
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CIDADE):
     case FAILURE(ACTION_TYPES.CREATE_CIDADE):
@@ -107,26 +120,18 @@ const apiUrl = 'api/cidades';
 // Actions
 export type ICrudGetAllActionCidade<T> = (
   descrCidade?: any,
-  atendimento?: any,
-  empresa?: any,
-  idUf?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, atendimento, empresa, idUf, page, size, sort) => {
+export const getEntities: ICrudGetAllActionCidade<ICidade> = (descrCidade, page, size, sort) => {
   const descrCidadeRequest = descrCidade ? `descrCidade.contains=${descrCidade}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
-  const empresaRequest = empresa ? `empresa.equals=${empresa}&` : '';
-  const idUfRequest = idUf ? `idUf.equals=${idUf}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDADE_LIST,
-    payload: axios.get<ICidade>(
-      `${requestUrl}${descrCidadeRequest}${atendimentoRequest}${empresaRequest}${idUfRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ICidade>(`${requestUrl}${descrCidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ICidade> = id => {
@@ -137,10 +142,19 @@ export const getEntity: ICrudGetAction<ICidade> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCidade<ICidade> = (descrCidade, page, size, sort) => {
+  const descrCidadeRequest = descrCidade ? `descrCidade.contains=${descrCidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CIDADE_LIST,
+    payload: axios.get<ICidade>(`${requestUrl}${descrCidadeRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idUf: entity.idUf === 'null' ? null : entity.idUf
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDADE,
@@ -151,7 +165,7 @@ export const createEntity: ICrudPutAction<ICidade> = entity => async dispatch =>
 };
 
 export const updateEntity: ICrudPutAction<ICidade> = entity => async dispatch => {
-  entity = { ...entity, idUf: entity.idUf === 'null' ? null : entity.idUf };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -173,3 +187,14 @@ export const deleteEntity: ICrudDeleteAction<ICidade> = id => async dispatch => 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCidadeState = (location): ICidadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const descrCidade = url.searchParams.get('descrCidade') || '';
+
+  return {
+    baseFilters,
+    descrCidade
+  };
+};

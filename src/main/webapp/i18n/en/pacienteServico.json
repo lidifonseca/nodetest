@@ -3,15 +3,15 @@
     "pacienteServico": {
       "home": {
         "title": "Paciente Servicos",
-        "createLabel": "Criar novo Paciente Servico",
-        "createOrEditLabel": "Criar ou editar Paciente Servico",
-        "notFound": "Nenhum Paciente Servico encontrado"
+        "createLabel": "Create a new Paciente Servico",
+        "createOrEditLabel": "Create or edit a Paciente Servico",
+        "notFound": "No Paciente Servicos found"
       },
-      "created": "Um novo Paciente Servico foi criado com o identificador {{ param }}",
-      "updated": "Um Paciente Servico foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Paciente Servico foi excluído com o identificador {{ param }}",
+      "created": "A new Paciente Servico is created with identifier {{ param }}",
+      "updated": "A Paciente Servico is updated with identifier {{ param }}",
+      "deleted": "A Paciente Servico is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Paciente Servico {{ id }}?"
+        "question": "Are you sure you want to delete Paciente Servico {{ id }}?"
       },
       "detail": {
         "title": "Paciente Servico"

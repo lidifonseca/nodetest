@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atividades.reducer';
+import { getEntity, IAtividadesBaseState, getAtividadesState } from './atividades.reducer';
 import { IAtividades } from 'app/shared/model/atividades.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtividadesState {
+  fieldsBase: IAtividadesBaseState;
+}
+
 export interface IAtividadesDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtividadesDetail extends React.Component<IAtividadesDetailProps> {
+export class AtividadesDetail extends React.Component<IAtividadesDetailProps, IAtividadesState> {
   constructor(props: Readonly<IAtividadesDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtividadesState(this.props.location)
     };
   }
 

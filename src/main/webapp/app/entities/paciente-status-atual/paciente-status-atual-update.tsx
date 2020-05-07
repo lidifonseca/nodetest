@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -29,8 +29,13 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPacienteStatusAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAtualUpdateProps, IPacienteStatusAtualUpdateState> {
+  observacaoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<IPacienteStatusAtualUpdateProps>) {
     super(props);
+
+    this.observacaoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getPacienteStatusAtualState(this.props.location),
       pacienteId: '0',
@@ -55,8 +60,9 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
     this.props.getStatusAtuals();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
@@ -74,7 +80,6 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
       (fieldsBase['dataStatus'] ? '&dataStatus=' + fieldsBase['dataStatus'] : '') +
       (fieldsBase['observacao'] ? '&observacao=' + fieldsBase['observacao'] : '') +
       (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
-      (fieldsBase['idUsuario'] ? '&idUsuario=' + fieldsBase['idUsuario'] : '') +
       (fieldsBase['paciente'] ? '&paciente=' + fieldsBase['paciente'] : '') +
       (fieldsBase['status'] ? '&status=' + fieldsBase['status'] : '') +
       ''
@@ -197,7 +202,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="dataStatus" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="dataStatus" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
                         {baseFilters !== 'observacao' ? (
@@ -216,7 +221,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="observacao" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
                         {baseFilters !== 'ativo' ? (
@@ -235,26 +240,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="ativo" value={this.state[baseFilters]} />
-                        )}
-
-                        {baseFilters !== 'idUsuario' ? (
-                          <Col md="idUsuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idUsuarioLabel" for="paciente-status-atual-idUsuario">
-                                    <Translate contentKey="generadorApp.pacienteStatusAtual.idUsuario">Id Usuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="paciente-status-atual-idUsuario" type="text" name="idUsuario" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
                         )}
                         {baseFilters !== 'paciente' ? (
                           <Col md="12">
@@ -283,7 +269,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="paciente" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
                         )}
                         {baseFilters !== 'status' ? (
                           <Col md="12">
@@ -312,7 +298,7 @@ export class PacienteStatusAtualUpdate extends React.Component<IPacienteStatusAt
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="status" value={this.state[baseFilters]} />
+                          <AvInput type="hidden" name="status" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

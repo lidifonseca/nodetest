@@ -22,18 +22,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-caracteristica-atual.reducer';
+import {
+  getPacienteCaracteristicaAtualState,
+  IPacienteCaracteristicaAtualBaseState,
+  getEntities
+} from './paciente-caracteristica-atual.reducer';
 import { IPacienteCaracteristicaAtual } from 'app/shared/model/paciente-caracteristica-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IPacienteCaracteristicaAtualProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteCaracteristicaAtualBaseState {
-  idPaciente: any;
-  idPacienteCaracteristica: any;
-  idUsuario: any;
-}
 export interface IPacienteCaracteristicaAtualState extends IPacienteCaracteristicaAtualBaseState, IPaginationBaseState {}
 
 export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaracteristicaAtualProps, IPacienteCaracteristicaAtualState> {
@@ -43,22 +42,9 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteCaracteristicaAtualState(this.props.location)
+      ...getPacienteCaracteristicaAtualState(this.props.location)
     };
   }
-
-  getPacienteCaracteristicaAtualState = (location): IPacienteCaracteristicaAtualBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-    const idPacienteCaracteristica = url.searchParams.get('idPacienteCaracteristica') || '';
-    const idUsuario = url.searchParams.get('idUsuario') || '';
-
-    return {
-      idPaciente,
-      idPacienteCaracteristica,
-      idUsuario
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -68,8 +54,7 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
     this.setState(
       {
         idPaciente: '',
-        idPacienteCaracteristica: '',
-        idUsuario: ''
+        idPacienteCaracteristica: ''
       },
       () => this.sortEntities()
     );
@@ -102,7 +87,9 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -120,9 +107,6 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
       'idPacienteCaracteristica=' +
       this.state.idPacienteCaracteristica +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       ''
     );
   };
@@ -130,8 +114,8 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idPaciente, idPacienteCaracteristica, idUsuario, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idPaciente, idPacienteCaracteristica, idUsuario, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idPaciente, idPacienteCaracteristica, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idPaciente, idPacienteCaracteristica, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -153,7 +137,11 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.home.createLabel">
@@ -168,47 +156,39 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="paciente-caracteristica-atual-idPaciente">
-                            <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPaciente">Id Paciente</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPaciente"
-                            id="paciente-caracteristica-atual-idPaciente"
-                            value={this.state.idPaciente}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteCaracteristicaLabel" for="paciente-caracteristica-atual-idPacienteCaracteristica">
-                            <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPacienteCaracteristica">
-                              Id Paciente Caracteristica
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idPacienteCaracteristica"
-                            id="paciente-caracteristica-atual-idPacienteCaracteristica"
-                            value={this.state.idPacienteCaracteristica}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="paciente-caracteristica-atual-idUsuario">
-                            <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idUsuario">Id Usuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idUsuario"
-                            id="paciente-caracteristica-atual-idUsuario"
-                            value={this.state.idUsuario}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="paciente-caracteristica-atual-idPaciente">
+                              <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPaciente">Id Paciente</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPaciente"
+                              id="paciente-caracteristica-atual-idPaciente"
+                              value={this.state.idPaciente}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idPacienteCaracteristica' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteCaracteristicaLabel" for="paciente-caracteristica-atual-idPacienteCaracteristica">
+                              <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPacienteCaracteristica">
+                                Id Paciente Caracteristica
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idPacienteCaracteristica"
+                              id="paciente-caracteristica-atual-idPacienteCaracteristica"
+                              value={this.state.idPacienteCaracteristica}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -236,20 +216,20 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPacienteCaracteristica')}>
-                        <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPacienteCaracteristica">
-                          Id Paciente Caracteristica
-                        </Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPacienteCaracteristica' ? (
+                        <th className="hand" onClick={this.sort('idPacienteCaracteristica')}>
+                          <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPacienteCaracteristica">
+                            Id Paciente Caracteristica
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -264,27 +244,42 @@ export class PacienteCaracteristicaAtual extends React.Component<IPacienteCaract
                           </Button>
                         </td>
 
-                        <td>{pacienteCaracteristicaAtual.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{pacienteCaracteristicaAtual.idPaciente}</td> : null}
 
-                        <td>{pacienteCaracteristicaAtual.idPacienteCaracteristica}</td>
-
-                        <td>{pacienteCaracteristicaAtual.idUsuario}</td>
+                        {this.state.baseFilters !== 'idPacienteCaracteristica' ? (
+                          <td>{pacienteCaracteristicaAtual.idPacienteCaracteristica}</td>
+                        ) : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteCaracteristicaAtual.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteCaracteristicaAtual.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteCaracteristicaAtual.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteCaracteristicaAtual.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteCaracteristicaAtual.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteCaracteristicaAtual.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

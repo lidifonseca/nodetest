@@ -10,23 +10,8 @@
             "fieldType": "LocalDate"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "categoriaAtividade",
-            "otherEntityRelationshipName": "padItemAtividade",
-            "relationshipName": "idAtividade",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "padItem",
-            "otherEntityRelationshipName": "padItemAtividade",
-            "relationshipName": "idPadItem",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200503001900",
+    "relationships": [],
+    "changelogDate": "20200507115200",
     "entityTableName": "pad_item_atividade",
     "dto": "mapstruct",
     "pagination": "pagination",

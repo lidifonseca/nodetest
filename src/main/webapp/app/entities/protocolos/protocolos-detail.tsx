@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './protocolos.reducer';
+import { getEntity, IProtocolosBaseState, getProtocolosState } from './protocolos.reducer';
 import { IProtocolos } from 'app/shared/model/protocolos.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IProtocolosState {
+  fieldsBase: IProtocolosBaseState;
+}
+
 export interface IProtocolosDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ProtocolosDetail extends React.Component<IProtocolosDetailProps> {
+export class ProtocolosDetail extends React.Component<IProtocolosDetailProps, IProtocolosState> {
   constructor(props: Readonly<IProtocolosDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getProtocolosState(this.props.location)
     };
   }
 

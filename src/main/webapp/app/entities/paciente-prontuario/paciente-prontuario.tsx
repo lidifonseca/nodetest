@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { AvForm, div, AvInput } from 'availity-reactstrap-validation';
 import {
-  byteSize,
   Translate,
   translate,
   ICrudGetAllAction,
@@ -64,7 +63,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
         oQue: '',
         resultado: '',
         ativo: '',
-        idUsuario: '',
         idEspecialidade: '',
         dataConsulta: '',
         idExame: '',
@@ -108,7 +106,9 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -134,9 +134,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       '&' +
       'ativo=' +
       this.state.ativo +
-      '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
       '&' +
       'idEspecialidade=' +
       this.state.idEspecialidade +
@@ -184,7 +181,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       oQue,
       resultado,
       ativo,
-      idUsuario,
       idEspecialidade,
       dataConsulta,
       idExame,
@@ -207,7 +203,6 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
       oQue,
       resultado,
       ativo,
-      idUsuario,
       idEspecialidade,
       dataConsulta,
       idExame,
@@ -244,7 +239,11 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteProntuario.home.createLabel">Create a new Paciente Prontuario</Translate>
@@ -257,183 +256,221 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPacienteLabel" for="paciente-prontuario-idPaciente">
-                            <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPacienteLabel" for="paciente-prontuario-idPaciente">
+                              <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="idPaciente" id="paciente-prontuario-idPaciente" value={this.state.idPaciente} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idTipoProntuarioLabel" for="paciente-prontuario-idTipoProntuario">
-                            <Translate contentKey="generadorApp.pacienteProntuario.idTipoProntuario">Id Tipo Prontuario</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idTipoProntuario"
-                            id="paciente-prontuario-idTipoProntuario"
-                            value={this.state.idTipoProntuario}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="oQueLabel" for="paciente-prontuario-oQue">
-                            <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
-                          </Label>
-                          <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="resultadoLabel" for="paciente-prontuario-resultado">
-                            <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
-                          </Label>
-                          <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-prontuario-ativo">
-                            <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-prontuario-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idUsuarioLabel" for="paciente-prontuario-idUsuario">
-                            <Translate contentKey="generadorApp.pacienteProntuario.idUsuario">Id Usuario</Translate>
-                          </Label>
+                            <AvInput type="text" name="idPaciente" id="paciente-prontuario-idPaciente" value={this.state.idPaciente} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="idUsuario" id="paciente-prontuario-idUsuario" value={this.state.idUsuario} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idEspecialidadeLabel" for="paciente-prontuario-idEspecialidade">
-                            <Translate contentKey="generadorApp.pacienteProntuario.idEspecialidade">Id Especialidade</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idEspecialidade"
-                            id="paciente-prontuario-idEspecialidade"
-                            value={this.state.idEspecialidade}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataConsultaLabel" for="paciente-prontuario-dataConsulta">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataConsulta">Data Consulta</Translate>
-                          </Label>
-                          <AvInput
-                            id="paciente-prontuario-dataConsulta"
-                            type="datetime-local"
-                            className="form-control"
-                            name="dataConsulta"
-                            placeholder={'YYYY-MM-DD HH:mm'}
-                            value={this.state.dataConsulta ? convertDateTimeFromServer(this.state.dataConsulta) : null}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idExameLabel" for="paciente-prontuario-idExame">
-                            <Translate contentKey="generadorApp.pacienteProntuario.idExame">Id Exame</Translate>
-                          </Label>
-                          <AvInput type="string" name="idExame" id="paciente-prontuario-idExame" value={this.state.idExame} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idTipoExameLabel" for="paciente-prontuario-idTipoExame">
-                            <Translate contentKey="generadorApp.pacienteProntuario.idTipoExame">Id Tipo Exame</Translate>
-                          </Label>
-                          <AvInput type="string" name="idTipoExame" id="paciente-prontuario-idTipoExame" value={this.state.idTipoExame} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataExameLabel" for="paciente-prontuario-dataExame">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataExame">Data Exame</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataExame" id="paciente-prontuario-dataExame" value={this.state.dataExame} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataInternacaoLabel" for="paciente-prontuario-dataInternacao">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataInternacao">Data Internacao</Translate>
-                          </Label>
-                          <AvInput
-                            type="date"
-                            name="dataInternacao"
-                            id="paciente-prontuario-dataInternacao"
-                            value={this.state.dataInternacao}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataAltaLabel" for="paciente-prontuario-dataAlta">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataAlta">Data Alta</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataAlta" id="paciente-prontuario-dataAlta" value={this.state.dataAlta} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataPsLabel" for="paciente-prontuario-dataPs">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataPs">Data Ps</Translate>
-                          </Label>
-                          <AvInput type="date" name="dataPs" id="paciente-prontuario-dataPs" value={this.state.dataPs} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataOcorrenciaLabel" for="paciente-prontuario-dataOcorrencia">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataOcorrencia">Data Ocorrencia</Translate>
-                          </Label>
-                          <AvInput
-                            type="date"
-                            name="dataOcorrencia"
-                            id="paciente-prontuario-dataOcorrencia"
-                            value={this.state.dataOcorrencia}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idOcorrenciaProntuarioLabel" for="paciente-prontuario-idOcorrenciaProntuario">
-                            <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">
-                              Id Ocorrencia Prontuario
-                            </Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="idOcorrenciaProntuario"
-                            id="paciente-prontuario-idOcorrenciaProntuario"
-                            value={this.state.idOcorrenciaProntuario}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataManifestacaoLabel" for="paciente-prontuario-dataManifestacao">
-                            <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
-                          </Label>
-                          <AvInput
-                            type="date"
-                            name="dataManifestacao"
-                            id="paciente-prontuario-dataManifestacao"
-                            value={this.state.dataManifestacao}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idTipoProntuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idTipoProntuarioLabel" for="paciente-prontuario-idTipoProntuario">
+                              <Translate contentKey="generadorApp.pacienteProntuario.idTipoProntuario">Id Tipo Prontuario</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idTipoProntuario"
+                              id="paciente-prontuario-idTipoProntuario"
+                              value={this.state.idTipoProntuario}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'oQue' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="oQueLabel" for="paciente-prontuario-oQue">
+                              <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
+                            </Label>
+                            <AvInput id="paciente-prontuario-oQue" type="textarea" name="oQue" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'resultado' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="resultadoLabel" for="paciente-prontuario-resultado">
+                              <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
+                            </Label>
+                            <AvInput id="paciente-prontuario-resultado" type="textarea" name="resultado" />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-prontuario-ativo">
+                              <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="paciente-prontuario-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idEspecialidadeLabel" for="paciente-prontuario-idEspecialidade">
+                              <Translate contentKey="generadorApp.pacienteProntuario.idEspecialidade">Id Especialidade</Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idEspecialidade"
+                              id="paciente-prontuario-idEspecialidade"
+                              value={this.state.idEspecialidade}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataConsulta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataConsultaLabel" for="paciente-prontuario-dataConsulta">
+                              <Translate contentKey="generadorApp.pacienteProntuario.dataConsulta">Data Consulta</Translate>
+                            </Label>
+                            <AvInput
+                              id="paciente-prontuario-dataConsulta"
+                              type="datetime-local"
+                              className="form-control"
+                              name="dataConsulta"
+                              placeholder={'YYYY-MM-DD HH:mm'}
+                              value={this.state.dataConsulta ? convertDateTimeFromServer(this.state.dataConsulta) : null}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idExame' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idExameLabel" for="paciente-prontuario-idExame">
+                              <Translate contentKey="generadorApp.pacienteProntuario.idExame">Id Exame</Translate>
+                            </Label>
+                            <AvInput type="string" name="idExame" id="paciente-prontuario-idExame" value={this.state.idExame} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idTipoExame' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idTipoExameLabel" for="paciente-prontuario-idTipoExame">
+                              <Translate contentKey="generadorApp.pacienteProntuario.idTipoExame">Id Tipo Exame</Translate>
+                            </Label>
+                            <AvInput type="string" name="idTipoExame" id="paciente-prontuario-idTipoExame" value={this.state.idTipoExame} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataExame' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataExameLabel" for="paciente-prontuario-dataExame">
+                              <Translate contentKey="generadorApp.pacienteProntuario.dataExame">Data Exame</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataExame" id="paciente-prontuario-dataExame" value={this.state.dataExame} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataInternacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataInternacaoLabel" for="paciente-prontuario-dataInternacao">
+                              <Translate contentKey="generadorApp.pacienteProntuario.dataInternacao">Data Internacao</Translate>
+                            </Label>
+                            <AvInput
+                              type="date"
+                              name="dataInternacao"
+                              id="paciente-prontuario-dataInternacao"
+                              value={this.state.dataInternacao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataAlta' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataAltaLabel" for="paciente-prontuario-dataAlta">
+                              <Translate contentKey="generadorApp.pacienteProntuario.dataAlta">Data Alta</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataAlta" id="paciente-prontuario-dataAlta" value={this.state.dataAlta} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataPs' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataPsLabel" for="paciente-prontuario-dataPs">
+                              <Translate contentKey="generadorApp.pacienteProntuario.dataPs">Data Ps</Translate>
+                            </Label>
+                            <AvInput type="date" name="dataPs" id="paciente-prontuario-dataPs" value={this.state.dataPs} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataOcorrencia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataOcorrenciaLabel" for="paciente-prontuario-dataOcorrencia">
+                              <Translate contentKey="generadorApp.pacienteProntuario.dataOcorrencia">Data Ocorrencia</Translate>
+                            </Label>
+                            <AvInput
+                              type="date"
+                              name="dataOcorrencia"
+                              id="paciente-prontuario-dataOcorrencia"
+                              value={this.state.dataOcorrencia}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'idOcorrenciaProntuario' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idOcorrenciaProntuarioLabel" for="paciente-prontuario-idOcorrenciaProntuario">
+                              <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">
+                                Id Ocorrencia Prontuario
+                              </Translate>
+                            </Label>
+                            <AvInput
+                              type="string"
+                              name="idOcorrenciaProntuario"
+                              id="paciente-prontuario-idOcorrenciaProntuario"
+                              value={this.state.idOcorrenciaProntuario}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'dataManifestacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataManifestacaoLabel" for="paciente-prontuario-dataManifestacao">
+                              <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
+                            </Label>
+                            <AvInput
+                              type="date"
+                              name="dataManifestacao"
+                              id="paciente-prontuario-dataManifestacao"
+                              value={this.state.dataManifestacao}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -461,74 +498,104 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idPaciente')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idTipoProntuario')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.idTipoProntuario">Id Tipo Prontuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('oQue')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('resultado')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idUsuario')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.idUsuario">Id Usuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idEspecialidade')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.idEspecialidade">Id Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataConsulta')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataConsulta">Data Consulta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idExame')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.idExame">Id Exame</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idTipoExame')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.idTipoExame">Id Tipo Exame</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataExame')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataExame">Data Exame</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataInternacao')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataInternacao">Data Internacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataAlta')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataAlta">Data Alta</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataPs')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataPs">Data Ps</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataOcorrencia')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataOcorrencia">Data Ocorrencia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idOcorrenciaProntuario')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">Id Ocorrencia Prontuario</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataManifestacao')}>
-                        <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idPaciente' ? (
+                        <th className="hand" onClick={this.sort('idPaciente')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.idPaciente">Id Paciente</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idTipoProntuario' ? (
+                        <th className="hand" onClick={this.sort('idTipoProntuario')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.idTipoProntuario">Id Tipo Prontuario</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'oQue' ? (
+                        <th className="hand" onClick={this.sort('oQue')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.oQue">O Que</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'resultado' ? (
+                        <th className="hand" onClick={this.sort('resultado')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.resultado">Resultado</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idEspecialidade' ? (
+                        <th className="hand" onClick={this.sort('idEspecialidade')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.idEspecialidade">Id Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataConsulta' ? (
+                        <th className="hand" onClick={this.sort('dataConsulta')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.dataConsulta">Data Consulta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idExame' ? (
+                        <th className="hand" onClick={this.sort('idExame')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.idExame">Id Exame</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idTipoExame' ? (
+                        <th className="hand" onClick={this.sort('idTipoExame')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.idTipoExame">Id Tipo Exame</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataExame' ? (
+                        <th className="hand" onClick={this.sort('dataExame')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.dataExame">Data Exame</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataInternacao' ? (
+                        <th className="hand" onClick={this.sort('dataInternacao')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.dataInternacao">Data Internacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataAlta' ? (
+                        <th className="hand" onClick={this.sort('dataAlta')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.dataAlta">Data Alta</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataPs' ? (
+                        <th className="hand" onClick={this.sort('dataPs')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.dataPs">Data Ps</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataOcorrencia' ? (
+                        <th className="hand" onClick={this.sort('dataOcorrencia')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.dataOcorrencia">Data Ocorrencia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idOcorrenciaProntuario' ? (
+                        <th className="hand" onClick={this.sort('idOcorrenciaProntuario')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.idOcorrenciaProntuario">
+                            Id Ocorrencia Prontuario
+                          </Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataManifestacao' ? (
+                        <th className="hand" onClick={this.sort('dataManifestacao')}>
+                          <Translate contentKey="generadorApp.pacienteProntuario.dataManifestacao">Data Manifestacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -543,56 +610,101 @@ export class PacienteProntuario extends React.Component<IPacienteProntuarioProps
                           </Button>
                         </td>
 
-                        <td>{pacienteProntuario.idPaciente}</td>
+                        {this.state.baseFilters !== 'idPaciente' ? <td>{pacienteProntuario.idPaciente}</td> : null}
 
-                        <td>{pacienteProntuario.idTipoProntuario}</td>
+                        {this.state.baseFilters !== 'idTipoProntuario' ? <td>{pacienteProntuario.idTipoProntuario}</td> : null}
 
-                        <td>{pacienteProntuario.oQue}</td>
+                        {this.state.baseFilters !== 'oQue' ? (
+                          <td>{pacienteProntuario.oQue ? Buffer.from(pacienteProntuario.oQue).toString() : null}</td>
+                        ) : null}
 
-                        <td>{pacienteProntuario.resultado}</td>
+                        {this.state.baseFilters !== 'resultado' ? (
+                          <td>{pacienteProntuario.resultado ? Buffer.from(pacienteProntuario.resultado).toString() : null}</td>
+                        ) : null}
 
-                        <td>{pacienteProntuario.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacienteProntuario.ativo}</td> : null}
 
-                        <td>{pacienteProntuario.idUsuario}</td>
+                        {this.state.baseFilters !== 'idEspecialidade' ? <td>{pacienteProntuario.idEspecialidade}</td> : null}
 
-                        <td>{pacienteProntuario.idEspecialidade}</td>
+                        {this.state.baseFilters !== 'dataConsulta' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteProntuario.dataConsulta} format={APP_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataConsulta} format={APP_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'idExame' ? <td>{pacienteProntuario.idExame}</td> : null}
 
-                        <td>{pacienteProntuario.idExame}</td>
+                        {this.state.baseFilters !== 'idTipoExame' ? <td>{pacienteProntuario.idTipoExame}</td> : null}
 
-                        <td>{pacienteProntuario.idTipoExame}</td>
+                        {this.state.baseFilters !== 'dataExame' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteProntuario.dataExame} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataExame} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataInternacao' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteProntuario.dataInternacao} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataInternacao} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataAlta' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteProntuario.dataAlta} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataAlta} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataPs' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteProntuario.dataPs} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataPs} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataOcorrencia' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteProntuario.dataOcorrencia} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataOcorrencia} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'idOcorrenciaProntuario' ? <td>{pacienteProntuario.idOcorrenciaProntuario}</td> : null}
 
-                        <td>{pacienteProntuario.idOcorrenciaProntuario}</td>
-
-                        <td>
-                          <TextFormat type="date" value={pacienteProntuario.dataManifestacao} format={APP_LOCAL_DATE_FORMAT} />
-                        </td>
+                        {this.state.baseFilters !== 'dataManifestacao' ? (
+                          <td>
+                            <TextFormat type="date" value={pacienteProntuario.dataManifestacao} format={APP_LOCAL_DATE_FORMAT} />
+                          </td>
+                        ) : null}
 
                         <td className="text-right">
-                          <div className="btn-group flex-btn-group-container"></div>
+                          <div className="btn-group flex-btn-group-container">
+                            <Button tag={Link} to={`${match.url}/${pacienteProntuario.id}?${this.getFiltersURL()}`} color="info" size="sm">
+                              <FontAwesomeIcon icon="eye" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.view">View</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteProntuario.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="pencil-alt" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.edit">Edit</Translate>
+                              </span>
+                            </Button>
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteProntuario.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
+                              <FontAwesomeIcon icon="trash" />{' '}
+                              <span className="d-none d-md-inline">
+                                <Translate contentKey="entity.action.delete">Delete</Translate>
+                              </span>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

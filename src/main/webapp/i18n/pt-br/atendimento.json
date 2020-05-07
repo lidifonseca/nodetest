@@ -51,17 +51,7 @@
       "confidencialProfissional": "Confidencial Profissional",
       "confidencialPaciente": "Confidencial Paciente",
       "imagemAssinatura": "Imagem Assinatura",
-      "atendimentoAceite": "Atendimento Aceite",
-      "atendimentoAssinaturas": "Atendimento Assinaturas",
-      "atendimentoAtividades": "Atendimento Atividades",
-      "unidade": "Unidade",
-      "idPaciente": "Id Paciente",
-      "idOperadora": "Id Operadora",
-      "idEspecialidade": "Id Especialidade",
-      "idPadItem": "Id Pad Item",
-      "idStatusAtendimento": "Id Status Atendimento",
-      "idPeriodo": "Id Periodo",
-      "idCidade": "Id Cidade"
+      "unidade": "Unidade"
     }
   }
 }

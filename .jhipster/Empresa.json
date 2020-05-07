@@ -51,6 +51,7 @@
         },
         {
             "fieldName": "telefone1",
+            "javadoc": "@dbName TELEFONE1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -59,6 +60,7 @@
         },
         {
             "fieldName": "telefone2",
+            "javadoc": "@dbName TELEFONE2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -67,6 +69,7 @@
         },
         {
             "fieldName": "celular1",
+            "javadoc": "@dbName CELULAR1@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -75,6 +78,7 @@
         },
         {
             "fieldName": "celular2",
+            "javadoc": "@dbName CELULAR2@@",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -145,16 +149,8 @@
             ]
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cidade",
-            "otherEntityRelationshipName": "empresa",
-            "relationshipName": "idCidade",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502232300",
+    "relationships": [],
+    "changelogDate": "20200507105600",
     "entityTableName": "empresa",
     "dto": "mapstruct",
     "pagination": "pagination",

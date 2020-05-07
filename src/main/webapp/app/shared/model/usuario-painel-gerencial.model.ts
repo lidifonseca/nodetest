@@ -1,6 +1,5 @@
 export interface IUsuarioPainelGerencial {
   id?: string;
-  idUsuario?: number;
   verCronicos?: number;
   verPacientesAtivosCr?: number;
   filtroPacientesAtivosCr?: number;

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IProfissionalDispositivoAtual, defaultValue } from 'app/shared/model/profissional-dispositivo-atual.model';
 
 export const ACTION_TYPES = {
+  FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST_EXPORT: 'profissionalDispositivoAtual/FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST_EXPORT',
   FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST: 'profissionalDispositivoAtual/FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST',
   FETCH_PROFISSIONALDISPOSITIVOATUAL: 'profissionalDispositivoAtual/FETCH_PROFISSIONALDISPOSITIVOATUAL',
   CREATE_PROFISSIONALDISPOSITIVOATUAL: 'profissionalDispositivoAtual/CREATE_PROFISSIONALDISPOSITIVOATUAL',
@@ -30,10 +31,40 @@ const initialState = {
 
 export type ProfissionalDispositivoAtualState = Readonly<typeof initialState>;
 
+export interface IProfissionalDispositivoAtualBaseState {
+  baseFilters: any;
+  idProfissional: any;
+  tqtTraqueostomia: any;
+  gttGastrostomia: any;
+  sneSondaNasoenteral: any;
+  svdSondaVesicalDeDemora: any;
+  svaSondaVesicalDeAlivio: any;
+  portACath: any;
+  piccAcessoVenosoCentral: any;
+  ventiladores: any;
+  uppUlceraPorPressao: any;
+  avpAcessoVenosoPeriferico: any;
+  uripen: any;
+  fraldaGeriatrica: any;
+  sngSondaNasogastrica: any;
+  bipap: any;
+  cpap: any;
+  cistostomia: any;
+  cateterNasalDeOxigenio: any;
+  mascaraDeVentilacao: any;
+  entubacaoOrotraqueal: any;
+}
+
+export interface IProfissionalDispositivoAtualUpdateState {
+  fieldsBase: IProfissionalDispositivoAtualBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ProfissionalDispositivoAtualState = initialState, action): ProfissionalDispositivoAtualState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL):
       return {
@@ -51,6 +82,7 @@ export default (state: ProfissionalDispositivoAtualState = initialState, action)
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL):
     case FAILURE(ACTION_TYPES.CREATE_PROFISSIONALDISPOSITIVOATUAL):
@@ -126,7 +158,6 @@ export type ICrudGetAllActionProfissionalDispositivoAtual<T> = (
   cateterNasalDeOxigenio?: any,
   mascaraDeVentilacao?: any,
   entubacaoOrotraqueal?: any,
-  idUsuario?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -153,7 +184,6 @@ export const getEntities: ICrudGetAllActionProfissionalDispositivoAtual<IProfiss
   cateterNasalDeOxigenio,
   mascaraDeVentilacao,
   entubacaoOrotraqueal,
-  idUsuario,
   page,
   size,
   sort
@@ -180,13 +210,12 @@ export const getEntities: ICrudGetAllActionProfissionalDispositivoAtual<IProfiss
   const cateterNasalDeOxigenioRequest = cateterNasalDeOxigenio ? `cateterNasalDeOxigenio.contains=${cateterNasalDeOxigenio}&` : '';
   const mascaraDeVentilacaoRequest = mascaraDeVentilacao ? `mascaraDeVentilacao.contains=${mascaraDeVentilacao}&` : '';
   const entubacaoOrotraquealRequest = entubacaoOrotraqueal ? `entubacaoOrotraqueal.contains=${entubacaoOrotraqueal}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST,
     payload: axios.get<IProfissionalDispositivoAtual>(
-      `${requestUrl}${idProfissionalRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}${idUsuarioRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idProfissionalRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -195,6 +224,63 @@ export const getEntity: ICrudGetAction<IProfissionalDispositivoAtual> = id => {
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL,
     payload: axios.get<IProfissionalDispositivoAtual>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionProfissionalDispositivoAtual<IProfissionalDispositivoAtual> = (
+  idProfissional,
+  tqtTraqueostomia,
+  gttGastrostomia,
+  sneSondaNasoenteral,
+  svdSondaVesicalDeDemora,
+  svaSondaVesicalDeAlivio,
+  portACath,
+  piccAcessoVenosoCentral,
+  ventiladores,
+  uppUlceraPorPressao,
+  avpAcessoVenosoPeriferico,
+  uripen,
+  fraldaGeriatrica,
+  sngSondaNasogastrica,
+  bipap,
+  cpap,
+  cistostomia,
+  cateterNasalDeOxigenio,
+  mascaraDeVentilacao,
+  entubacaoOrotraqueal,
+  page,
+  size,
+  sort
+) => {
+  const idProfissionalRequest = idProfissional ? `idProfissional.contains=${idProfissional}&` : '';
+  const tqtTraqueostomiaRequest = tqtTraqueostomia ? `tqtTraqueostomia.contains=${tqtTraqueostomia}&` : '';
+  const gttGastrostomiaRequest = gttGastrostomia ? `gttGastrostomia.contains=${gttGastrostomia}&` : '';
+  const sneSondaNasoenteralRequest = sneSondaNasoenteral ? `sneSondaNasoenteral.contains=${sneSondaNasoenteral}&` : '';
+  const svdSondaVesicalDeDemoraRequest = svdSondaVesicalDeDemora ? `svdSondaVesicalDeDemora.contains=${svdSondaVesicalDeDemora}&` : '';
+  const svaSondaVesicalDeAlivioRequest = svaSondaVesicalDeAlivio ? `svaSondaVesicalDeAlivio.contains=${svaSondaVesicalDeAlivio}&` : '';
+  const portACathRequest = portACath ? `portACath.contains=${portACath}&` : '';
+  const piccAcessoVenosoCentralRequest = piccAcessoVenosoCentral ? `piccAcessoVenosoCentral.contains=${piccAcessoVenosoCentral}&` : '';
+  const ventiladoresRequest = ventiladores ? `ventiladores.contains=${ventiladores}&` : '';
+  const uppUlceraPorPressaoRequest = uppUlceraPorPressao ? `uppUlceraPorPressao.contains=${uppUlceraPorPressao}&` : '';
+  const avpAcessoVenosoPerifericoRequest = avpAcessoVenosoPeriferico
+    ? `avpAcessoVenosoPeriferico.contains=${avpAcessoVenosoPeriferico}&`
+    : '';
+  const uripenRequest = uripen ? `uripen.contains=${uripen}&` : '';
+  const fraldaGeriatricaRequest = fraldaGeriatrica ? `fraldaGeriatrica.contains=${fraldaGeriatrica}&` : '';
+  const sngSondaNasogastricaRequest = sngSondaNasogastrica ? `sngSondaNasogastrica.contains=${sngSondaNasogastrica}&` : '';
+  const bipapRequest = bipap ? `bipap.contains=${bipap}&` : '';
+  const cpapRequest = cpap ? `cpap.contains=${cpap}&` : '';
+  const cistostomiaRequest = cistostomia ? `cistostomia.contains=${cistostomia}&` : '';
+  const cateterNasalDeOxigenioRequest = cateterNasalDeOxigenio ? `cateterNasalDeOxigenio.contains=${cateterNasalDeOxigenio}&` : '';
+  const mascaraDeVentilacaoRequest = mascaraDeVentilacao ? `mascaraDeVentilacao.contains=${mascaraDeVentilacao}&` : '';
+  const entubacaoOrotraquealRequest = entubacaoOrotraqueal ? `entubacaoOrotraqueal.contains=${entubacaoOrotraqueal}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PROFISSIONALDISPOSITIVOATUAL_LIST,
+    payload: axios.get<IProfissionalDispositivoAtual>(
+      `${requestUrl}${idProfissionalRequest}${tqtTraqueostomiaRequest}${gttGastrostomiaRequest}${sneSondaNasoenteralRequest}${svdSondaVesicalDeDemoraRequest}${svaSondaVesicalDeAlivioRequest}${portACathRequest}${piccAcessoVenosoCentralRequest}${ventiladoresRequest}${uppUlceraPorPressaoRequest}${avpAcessoVenosoPerifericoRequest}${uripenRequest}${fraldaGeriatricaRequest}${sngSondaNasogastricaRequest}${bipapRequest}${cpapRequest}${cistostomiaRequest}${cateterNasalDeOxigenioRequest}${mascaraDeVentilacaoRequest}${entubacaoOrotraquealRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -233,3 +319,52 @@ export const deleteEntity: ICrudDeleteAction<IProfissionalDispositivoAtual> = id
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getProfissionalDispositivoAtualState = (location): IProfissionalDispositivoAtualBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idProfissional = url.searchParams.get('idProfissional') || '';
+  const tqtTraqueostomia = url.searchParams.get('tqtTraqueostomia') || '';
+  const gttGastrostomia = url.searchParams.get('gttGastrostomia') || '';
+  const sneSondaNasoenteral = url.searchParams.get('sneSondaNasoenteral') || '';
+  const svdSondaVesicalDeDemora = url.searchParams.get('svdSondaVesicalDeDemora') || '';
+  const svaSondaVesicalDeAlivio = url.searchParams.get('svaSondaVesicalDeAlivio') || '';
+  const portACath = url.searchParams.get('portACath') || '';
+  const piccAcessoVenosoCentral = url.searchParams.get('piccAcessoVenosoCentral') || '';
+  const ventiladores = url.searchParams.get('ventiladores') || '';
+  const uppUlceraPorPressao = url.searchParams.get('uppUlceraPorPressao') || '';
+  const avpAcessoVenosoPeriferico = url.searchParams.get('avpAcessoVenosoPeriferico') || '';
+  const uripen = url.searchParams.get('uripen') || '';
+  const fraldaGeriatrica = url.searchParams.get('fraldaGeriatrica') || '';
+  const sngSondaNasogastrica = url.searchParams.get('sngSondaNasogastrica') || '';
+  const bipap = url.searchParams.get('bipap') || '';
+  const cpap = url.searchParams.get('cpap') || '';
+  const cistostomia = url.searchParams.get('cistostomia') || '';
+  const cateterNasalDeOxigenio = url.searchParams.get('cateterNasalDeOxigenio') || '';
+  const mascaraDeVentilacao = url.searchParams.get('mascaraDeVentilacao') || '';
+  const entubacaoOrotraqueal = url.searchParams.get('entubacaoOrotraqueal') || '';
+
+  return {
+    baseFilters,
+    idProfissional,
+    tqtTraqueostomia,
+    gttGastrostomia,
+    sneSondaNasoenteral,
+    svdSondaVesicalDeDemora,
+    svaSondaVesicalDeAlivio,
+    portACath,
+    piccAcessoVenosoCentral,
+    ventiladores,
+    uppUlceraPorPressao,
+    avpAcessoVenosoPeriferico,
+    uripen,
+    fraldaGeriatrica,
+    sngSondaNasogastrica,
+    bipap,
+    cpap,
+    cistostomia,
+    cateterNasalDeOxigenio,
+    mascaraDeVentilacao,
+    entubacaoOrotraqueal
+  };
+};

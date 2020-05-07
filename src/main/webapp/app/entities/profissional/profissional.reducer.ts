@@ -33,6 +33,7 @@ const initialState = {
 export type ProfissionalState = Readonly<typeof initialState>;
 
 export interface IProfissionalBaseState {
+  baseFilters: any;
   idCidade: any;
   idTempoExperiencia: any;
   idBanco: any;
@@ -70,10 +71,13 @@ export interface IProfissionalBaseState {
   dataSenha: any;
   expoToken: any;
   preferenciaAtendimento: any;
-  senhaChat: any;
-  atendimentoAceite: any;
-  atendimentoAssinaturas: any;
   unidade: any;
+}
+
+export interface IProfissionalUpdateState {
+  fieldsBase: IProfissionalBaseState;
+  isNew: boolean;
+  unidadeId: string;
 }
 
 // Reducer
@@ -119,6 +123,7 @@ export default (state: ProfissionalState = initialState, action): ProfissionalSt
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PROFISSIONAL):
+      action.payload.data.obs = action.payload.data.obs ? Buffer.from(action.payload.data.obs).toString() : action.payload.data.obs;
       return {
         ...state,
         loading: false,
@@ -140,13 +145,14 @@ export default (state: ProfissionalState = initialState, action): ProfissionalSt
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -202,9 +208,6 @@ export type ICrudGetAllActionProfissional<T> = (
   dataSenha?: any,
   expoToken?: any,
   preferenciaAtendimento?: any,
-  senhaChat?: any,
-  atendimentoAceite?: any,
-  atendimentoAssinaturas?: any,
   unidade?: any,
   page?: number,
   size?: number,
@@ -249,9 +252,6 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   dataSenha,
   expoToken,
   preferenciaAtendimento,
-  senhaChat,
-  atendimentoAceite,
-  atendimentoAssinaturas,
   unidade,
   page,
   size,
@@ -294,16 +294,13 @@ export const getEntities: ICrudGetAllActionProfissional<IProfissional> = (
   const dataSenhaRequest = dataSenha ? `dataSenha.contains=${dataSenha}&` : '';
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
   const preferenciaAtendimentoRequest = preferenciaAtendimento ? `preferenciaAtendimento.contains=${preferenciaAtendimento}&` : '';
-  const senhaChatRequest = senhaChat ? `senhaChat.contains=${senhaChat}&` : '';
-  const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
-  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONAL_LIST,
     payload: axios.get<IProfissional>(
-      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${senhaChatRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -353,9 +350,6 @@ export const getEntitiesExport: ICrudGetAllActionProfissional<IProfissional> = (
   dataSenha,
   expoToken,
   preferenciaAtendimento,
-  senhaChat,
-  atendimentoAceite,
-  atendimentoAssinaturas,
   unidade,
   page,
   size,
@@ -398,16 +392,13 @@ export const getEntitiesExport: ICrudGetAllActionProfissional<IProfissional> = (
   const dataSenhaRequest = dataSenha ? `dataSenha.contains=${dataSenha}&` : '';
   const expoTokenRequest = expoToken ? `expoToken.contains=${expoToken}&` : '';
   const preferenciaAtendimentoRequest = preferenciaAtendimento ? `preferenciaAtendimento.contains=${preferenciaAtendimento}&` : '';
-  const senhaChatRequest = senhaChat ? `senhaChat.contains=${senhaChat}&` : '';
-  const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
-  const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PROFISSIONAL_LIST,
     payload: axios.get<IProfissional>(
-      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${senhaChatRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idCidadeRequest}${idTempoExperienciaRequest}${idBancoRequest}${senhaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nomeEmpresaRequest}${cnpjRequest}${registroRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${atendeCriancaRequest}${atendeIdosoRequest}${agRequest}${contaRequest}${tipoContaRequest}${origemCadastroRequest}${obsRequest}${chavePrivadaRequest}${ativoRequest}${senhaOriginalRequest}${dataSenhaRequest}${expoTokenRequest}${preferenciaAtendimentoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -445,12 +436,13 @@ export const deleteEntity: ICrudDeleteAction<IProfissional> = id => async dispat
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -460,6 +452,7 @@ export const reset = () => ({
 
 export const getProfissionalState = (location): IProfissionalBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idCidade = url.searchParams.get('idCidade') || '';
   const idTempoExperiencia = url.searchParams.get('idTempoExperiencia') || '';
   const idBanco = url.searchParams.get('idBanco') || '';
@@ -497,13 +490,11 @@ export const getProfissionalState = (location): IProfissionalBaseState => {
   const dataSenha = url.searchParams.get('dataSenha') || '';
   const expoToken = url.searchParams.get('expoToken') || '';
   const preferenciaAtendimento = url.searchParams.get('preferenciaAtendimento') || '';
-  const senhaChat = url.searchParams.get('senhaChat') || '';
 
-  const atendimentoAceite = url.searchParams.get('atendimentoAceite') || '';
-  const atendimentoAssinaturas = url.searchParams.get('atendimentoAssinaturas') || '';
   const unidade = url.searchParams.get('unidade') || '';
 
   return {
+    baseFilters,
     idCidade,
     idTempoExperiencia,
     idBanco,
@@ -541,9 +532,6 @@ export const getProfissionalState = (location): IProfissionalBaseState => {
     dataSenha,
     expoToken,
     preferenciaAtendimento,
-    senhaChat,
-    atendimentoAceite,
-    atendimentoAssinaturas,
     unidade
   };
 };

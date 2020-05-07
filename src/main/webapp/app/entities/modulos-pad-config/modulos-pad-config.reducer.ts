@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IModulosPadConfig, defaultValue } from 'app/shared/model/modulos-pad-config.model';
 
 export const ACTION_TYPES = {
+  FETCH_MODULOSPADCONFIG_LIST_EXPORT: 'modulosPadConfig/FETCH_MODULOSPADCONFIG_LIST_EXPORT',
   FETCH_MODULOSPADCONFIG_LIST: 'modulosPadConfig/FETCH_MODULOSPADCONFIG_LIST',
   FETCH_MODULOSPADCONFIG: 'modulosPadConfig/FETCH_MODULOSPADCONFIG',
   CREATE_MODULOSPADCONFIG: 'modulosPadConfig/CREATE_MODULOSPADCONFIG',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type ModulosPadConfigState = Readonly<typeof initialState>;
 
+export interface IModulosPadConfigBaseState {
+  baseFilters: any;
+  idModulosPad: any;
+  idEspecialidade: any;
+  idPeriodicidade: any;
+}
+
+export interface IModulosPadConfigUpdateState {
+  fieldsBase: IModulosPadConfigBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ModulosPadConfigState = initialState, action): ModulosPadConfigState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_MODULOSPADCONFIG_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_MODULOSPADCONFIG_LIST):
     case REQUEST(ACTION_TYPES.FETCH_MODULOSPADCONFIG):
       return {
@@ -51,6 +65,7 @@ export default (state: ModulosPadConfigState = initialState, action): ModulosPad
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_MODULOSPADCONFIG_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_MODULOSPADCONFIG_LIST):
     case FAILURE(ACTION_TYPES.FETCH_MODULOSPADCONFIG):
     case FAILURE(ACTION_TYPES.CREATE_MODULOSPADCONFIG):
@@ -142,6 +157,27 @@ export const getEntity: ICrudGetAction<IModulosPadConfig> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionModulosPadConfig<IModulosPadConfig> = (
+  idModulosPad,
+  idEspecialidade,
+  idPeriodicidade,
+  page,
+  size,
+  sort
+) => {
+  const idModulosPadRequest = idModulosPad ? `idModulosPad.contains=${idModulosPad}&` : '';
+  const idEspecialidadeRequest = idEspecialidade ? `idEspecialidade.contains=${idEspecialidade}&` : '';
+  const idPeriodicidadeRequest = idPeriodicidade ? `idPeriodicidade.contains=${idPeriodicidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_MODULOSPADCONFIG_LIST,
+    payload: axios.get<IModulosPadConfig>(
+      `${requestUrl}${idModulosPadRequest}${idEspecialidadeRequest}${idPeriodicidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IModulosPadConfig> = entity => async dispatch => {
   entity = {
     ...entity
@@ -177,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IModulosPadConfig> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getModulosPadConfigState = (location): IModulosPadConfigBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idModulosPad = url.searchParams.get('idModulosPad') || '';
+  const idEspecialidade = url.searchParams.get('idEspecialidade') || '';
+  const idPeriodicidade = url.searchParams.get('idPeriodicidade') || '';
+
+  return {
+    baseFilters,
+    idModulosPad,
+    idEspecialidade,
+    idPeriodicidade
+  };
+};

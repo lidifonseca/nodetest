@@ -13,13 +13,6 @@
         {
             "fieldName": "ativo",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [
@@ -38,7 +31,7 @@
             "otherEntityField": "statusAtual"
         }
     ],
-    "changelogDate": "20200503001400",
+    "changelogDate": "20200507114700",
     "entityTableName": "paciente_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './status-atendimento.reducer';
+import {
+  IStatusAtendimentoUpdateState,
+  getEntity,
+  getStatusAtendimentoState,
+  IStatusAtendimentoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './status-atendimento.reducer';
 import { IStatusAtendimento } from 'app/shared/model/status-atendimento.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IStatusAtendimentoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IStatusAtendimentoUpdateState {
-  isNew: boolean;
-}
-
 export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoUpdateProps, IStatusAtendimentoUpdateState> {
   constructor(props: Readonly<IStatusAtendimentoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getStatusAtendimentoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,22 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['statusAtendimento'] ? '&statusAtendimento=' + fieldsBase['statusAtendimento'] : '') +
+      (fieldsBase['styleLabel'] ? '&styleLabel=' + fieldsBase['styleLabel'] : '') +
+      (fieldsBase['ordenacao'] ? '&ordenacao=' + fieldsBase['ordenacao'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { statusAtendimentoEntity } = this.props;
@@ -57,13 +79,14 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
   };
 
   handleClose = () => {
-    this.props.history.push('/status-atendimento');
+    this.props.history.push('/status-atendimento?' + this.getFiltersURL());
   };
 
   render() {
     const { statusAtendimentoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -98,7 +121,14 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/status-atendimento" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/status-atendimento?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -113,7 +143,7 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -129,81 +159,84 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'statusAtendimento' ? (
+                          <Col md="statusAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusAtendimentoLabel" for="status-atendimento-statusAtendimento">
+                                    <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-statusAtendimento" type="text" name="statusAtendimento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="statusAtendimentoLabel" for="status-atendimento-statusAtendimento">
-                                <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="status-atendimento-statusAtendimento"
-                                type="text"
-                                name="statusAtendimento"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="status-atendimento-styleLabel">
+                                    <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="styleLabelLabel" for="status-atendimento-styleLabel">
-                                <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="status-atendimento-styleLabel"
-                                type="text"
-                                name="styleLabel"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ordenacao' ? (
+                          <Col md="ordenacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ordenacaoLabel" for="status-atendimento-ordenacao">
+                                    <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-ordenacao" type="string" className="form-control" name="ordenacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ordenacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ordenacaoLabel" for="status-atendimento-ordenacao">
-                                <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="status-atendimento-ordenacao" type="string" className="form-control" name="ordenacao" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="status-atendimento-ativo">
-                                <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="status-atendimento-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="status-atendimento-ativo">
+                                    <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

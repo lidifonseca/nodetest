@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './paciente-dispositivo-atual.reducer';
+import {
+  IPacienteDispositivoAtualUpdateState,
+  getEntity,
+  getPacienteDispositivoAtualState,
+  IPacienteDispositivoAtualBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-dispositivo-atual.reducer';
 import { IPacienteDispositivoAtual } from 'app/shared/model/paciente-dispositivo-atual.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteDispositivoAtualUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IPacienteDispositivoAtualUpdateState {
-  isNew: boolean;
-}
 
 export class PacienteDispositivoAtualUpdate extends React.Component<
   IPacienteDispositivoAtualUpdateProps,
@@ -25,7 +29,9 @@ export class PacienteDispositivoAtualUpdate extends React.Component<
 > {
   constructor(props: Readonly<IPacienteDispositivoAtualUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPacienteDispositivoAtualState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,42 @@ export class PacienteDispositivoAtualUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['idPacienteDispositivo'] ? '&idPacienteDispositivo=' + fieldsBase['idPacienteDispositivo'] : '') +
+      (fieldsBase['tqtTraqueostomia'] ? '&tqtTraqueostomia=' + fieldsBase['tqtTraqueostomia'] : '') +
+      (fieldsBase['gttGastrostomia'] ? '&gttGastrostomia=' + fieldsBase['gttGastrostomia'] : '') +
+      (fieldsBase['sneSondaNasoenteral'] ? '&sneSondaNasoenteral=' + fieldsBase['sneSondaNasoenteral'] : '') +
+      (fieldsBase['svdSondaVesicalDeDemora'] ? '&svdSondaVesicalDeDemora=' + fieldsBase['svdSondaVesicalDeDemora'] : '') +
+      (fieldsBase['svaSondaVesicalDeAlivio'] ? '&svaSondaVesicalDeAlivio=' + fieldsBase['svaSondaVesicalDeAlivio'] : '') +
+      (fieldsBase['portACath'] ? '&portACath=' + fieldsBase['portACath'] : '') +
+      (fieldsBase['piccAcessoVenosoCentral'] ? '&piccAcessoVenosoCentral=' + fieldsBase['piccAcessoVenosoCentral'] : '') +
+      (fieldsBase['ventiladores'] ? '&ventiladores=' + fieldsBase['ventiladores'] : '') +
+      (fieldsBase['uppUlceraPorPressao'] ? '&uppUlceraPorPressao=' + fieldsBase['uppUlceraPorPressao'] : '') +
+      (fieldsBase['avpAcessoVenosoPeriferico'] ? '&avpAcessoVenosoPeriferico=' + fieldsBase['avpAcessoVenosoPeriferico'] : '') +
+      (fieldsBase['uripen'] ? '&uripen=' + fieldsBase['uripen'] : '') +
+      (fieldsBase['fraldaGeriatrica'] ? '&fraldaGeriatrica=' + fieldsBase['fraldaGeriatrica'] : '') +
+      (fieldsBase['sngSondaNasogastrica'] ? '&sngSondaNasogastrica=' + fieldsBase['sngSondaNasogastrica'] : '') +
+      (fieldsBase['bipap'] ? '&bipap=' + fieldsBase['bipap'] : '') +
+      (fieldsBase['cpap'] ? '&cpap=' + fieldsBase['cpap'] : '') +
+      (fieldsBase['cistostomia'] ? '&cistostomia=' + fieldsBase['cistostomia'] : '') +
+      (fieldsBase['cateterNasalDeOxigenio'] ? '&cateterNasalDeOxigenio=' + fieldsBase['cateterNasalDeOxigenio'] : '') +
+      (fieldsBase['mascaraDeVentilacao'] ? '&mascaraDeVentilacao=' + fieldsBase['mascaraDeVentilacao'] : '') +
+      (fieldsBase['entubacaoOrotraqueal'] ? '&entubacaoOrotraqueal=' + fieldsBase['entubacaoOrotraqueal'] : '') +
+      (fieldsBase['ileostomia'] ? '&ileostomia=' + fieldsBase['ileostomia'] : '') +
+      (fieldsBase['jejunostomia'] ? '&jejunostomia=' + fieldsBase['jejunostomia'] : '') +
+      (fieldsBase['colostomia'] ? '&colostomia=' + fieldsBase['colostomia'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteDispositivoAtualEntity } = this.props;
@@ -60,13 +102,14 @@ export class PacienteDispositivoAtualUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-dispositivo-atual');
+    this.props.history.push('/paciente-dispositivo-atual?' + this.getFiltersURL());
   };
 
   render() {
     const { pacienteDispositivoAtualEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +147,7 @@ export class PacienteDispositivoAtualUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-dispositivo-atual"
+                  to={'/paciente-dispositivo-atual?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +166,7 @@ export class PacienteDispositivoAtualUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,653 +189,641 @@ export class PacienteDispositivoAtualUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="paciente-dispositivo-atual-idPaciente">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-idPaciente"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPaciente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="paciente-dispositivo-atual-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-idPaciente"
-                                type="string"
-                                className="form-control"
-                                name="idPaciente"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPacienteDispositivo' ? (
+                          <Col md="idPacienteDispositivo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idPacienteDispositivoLabel"
+                                    for="paciente-dispositivo-atual-idPacienteDispositivo"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.idPacienteDispositivo">
+                                      Id Paciente Dispositivo
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-idPacienteDispositivo"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPacienteDispositivo"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPacienteDispositivo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="idPacienteDispositivoLabel"
-                                for="paciente-dispositivo-atual-idPacienteDispositivo"
-                              >
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.idPacienteDispositivo">
-                                  Id Paciente Dispositivo
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-idPacienteDispositivo"
-                                type="string"
-                                className="form-control"
-                                name="idPacienteDispositivo"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'tqtTraqueostomia' ? (
+                          <Col md="tqtTraqueostomia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tqtTraqueostomiaLabel" for="paciente-dispositivo-atual-tqtTraqueostomia">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.tqtTraqueostomia">
+                                      Tqt Traqueostomia
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-tqtTraqueostomia"
+                                    type="string"
+                                    className="form-control"
+                                    name="tqtTraqueostomia"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tqtTraqueostomia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tqtTraqueostomiaLabel" for="paciente-dispositivo-atual-tqtTraqueostomia">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.tqtTraqueostomia">Tqt Traqueostomia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-tqtTraqueostomia"
-                                type="string"
-                                className="form-control"
-                                name="tqtTraqueostomia"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'gttGastrostomia' ? (
+                          <Col md="gttGastrostomia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="gttGastrostomiaLabel" for="paciente-dispositivo-atual-gttGastrostomia">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.gttGastrostomia">
+                                      Gtt Gastrostomia
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-gttGastrostomia"
+                                    type="string"
+                                    className="form-control"
+                                    name="gttGastrostomia"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="gttGastrostomia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="gttGastrostomiaLabel" for="paciente-dispositivo-atual-gttGastrostomia">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.gttGastrostomia">Gtt Gastrostomia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-gttGastrostomia"
-                                type="string"
-                                className="form-control"
-                                name="gttGastrostomia"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'sneSondaNasoenteral' ? (
+                          <Col md="sneSondaNasoenteral">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="sneSondaNasoenteralLabel"
+                                    for="paciente-dispositivo-atual-sneSondaNasoenteral"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.sneSondaNasoenteral">
+                                      Sne Sonda Nasoenteral
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-sneSondaNasoenteral"
+                                    type="string"
+                                    className="form-control"
+                                    name="sneSondaNasoenteral"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sneSondaNasoenteral" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="sneSondaNasoenteralLabel" for="paciente-dispositivo-atual-sneSondaNasoenteral">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.sneSondaNasoenteral">
-                                  Sne Sonda Nasoenteral
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-sneSondaNasoenteral"
-                                type="string"
-                                className="form-control"
-                                name="sneSondaNasoenteral"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'svdSondaVesicalDeDemora' ? (
+                          <Col md="svdSondaVesicalDeDemora">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="svdSondaVesicalDeDemoraLabel"
+                                    for="paciente-dispositivo-atual-svdSondaVesicalDeDemora"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.svdSondaVesicalDeDemora">
+                                      Svd Sonda Vesical De Demora
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-svdSondaVesicalDeDemora"
+                                    type="string"
+                                    className="form-control"
+                                    name="svdSondaVesicalDeDemora"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="svdSondaVesicalDeDemora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="svdSondaVesicalDeDemoraLabel"
-                                for="paciente-dispositivo-atual-svdSondaVesicalDeDemora"
-                              >
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.svdSondaVesicalDeDemora">
-                                  Svd Sonda Vesical De Demora
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-svdSondaVesicalDeDemora"
-                                type="string"
-                                className="form-control"
-                                name="svdSondaVesicalDeDemora"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'svaSondaVesicalDeAlivio' ? (
+                          <Col md="svaSondaVesicalDeAlivio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="svaSondaVesicalDeAlivioLabel"
+                                    for="paciente-dispositivo-atual-svaSondaVesicalDeAlivio"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.svaSondaVesicalDeAlivio">
+                                      Sva Sonda Vesical De Alivio
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-svaSondaVesicalDeAlivio"
+                                    type="string"
+                                    className="form-control"
+                                    name="svaSondaVesicalDeAlivio"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="svaSondaVesicalDeAlivio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="svaSondaVesicalDeAlivioLabel"
-                                for="paciente-dispositivo-atual-svaSondaVesicalDeAlivio"
-                              >
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.svaSondaVesicalDeAlivio">
-                                  Sva Sonda Vesical De Alivio
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-svaSondaVesicalDeAlivio"
-                                type="string"
-                                className="form-control"
-                                name="svaSondaVesicalDeAlivio"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'portACath' ? (
+                          <Col md="portACath">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="portACathLabel" for="paciente-dispositivo-atual-portACath">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.portACath">Port A Cath</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-portACath"
+                                    type="string"
+                                    className="form-control"
+                                    name="portACath"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="portACath" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="portACathLabel" for="paciente-dispositivo-atual-portACath">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.portACath">Port A Cath</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-portACath"
-                                type="string"
-                                className="form-control"
-                                name="portACath"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'piccAcessoVenosoCentral' ? (
+                          <Col md="piccAcessoVenosoCentral">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="piccAcessoVenosoCentralLabel"
+                                    for="paciente-dispositivo-atual-piccAcessoVenosoCentral"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.piccAcessoVenosoCentral">
+                                      Picc Acesso Venoso Central
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-piccAcessoVenosoCentral"
+                                    type="string"
+                                    className="form-control"
+                                    name="piccAcessoVenosoCentral"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="piccAcessoVenosoCentral" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="piccAcessoVenosoCentralLabel"
-                                for="paciente-dispositivo-atual-piccAcessoVenosoCentral"
-                              >
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.piccAcessoVenosoCentral">
-                                  Picc Acesso Venoso Central
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-piccAcessoVenosoCentral"
-                                type="string"
-                                className="form-control"
-                                name="piccAcessoVenosoCentral"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ventiladores' ? (
+                          <Col md="ventiladores">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ventiladoresLabel" for="paciente-dispositivo-atual-ventiladores">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.ventiladores">Ventiladores</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-ventiladores"
+                                    type="string"
+                                    className="form-control"
+                                    name="ventiladores"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ventiladores" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ventiladoresLabel" for="paciente-dispositivo-atual-ventiladores">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.ventiladores">Ventiladores</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-ventiladores"
-                                type="string"
-                                className="form-control"
-                                name="ventiladores"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'uppUlceraPorPressao' ? (
+                          <Col md="uppUlceraPorPressao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="uppUlceraPorPressaoLabel"
+                                    for="paciente-dispositivo-atual-uppUlceraPorPressao"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.uppUlceraPorPressao">
+                                      Upp Ulcera Por Pressao
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-uppUlceraPorPressao"
+                                    type="string"
+                                    className="form-control"
+                                    name="uppUlceraPorPressao"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="uppUlceraPorPressao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="uppUlceraPorPressaoLabel" for="paciente-dispositivo-atual-uppUlceraPorPressao">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.uppUlceraPorPressao">
-                                  Upp Ulcera Por Pressao
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-uppUlceraPorPressao"
-                                type="string"
-                                className="form-control"
-                                name="uppUlceraPorPressao"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'avpAcessoVenosoPeriferico' ? (
+                          <Col md="avpAcessoVenosoPeriferico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="avpAcessoVenosoPerifericoLabel"
+                                    for="paciente-dispositivo-atual-avpAcessoVenosoPeriferico"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.avpAcessoVenosoPeriferico">
+                                      Avp Acesso Venoso Periferico
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-avpAcessoVenosoPeriferico"
+                                    type="string"
+                                    className="form-control"
+                                    name="avpAcessoVenosoPeriferico"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="avpAcessoVenosoPeriferico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="avpAcessoVenosoPerifericoLabel"
-                                for="paciente-dispositivo-atual-avpAcessoVenosoPeriferico"
-                              >
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.avpAcessoVenosoPeriferico">
-                                  Avp Acesso Venoso Periferico
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-avpAcessoVenosoPeriferico"
-                                type="string"
-                                className="form-control"
-                                name="avpAcessoVenosoPeriferico"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'uripen' ? (
+                          <Col md="uripen">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="uripenLabel" for="paciente-dispositivo-atual-uripen">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.uripen">Uripen</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dispositivo-atual-uripen" type="string" className="form-control" name="uripen" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="uripen" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="uripenLabel" for="paciente-dispositivo-atual-uripen">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.uripen">Uripen</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-uripen"
-                                type="string"
-                                className="form-control"
-                                name="uripen"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'fraldaGeriatrica' ? (
+                          <Col md="fraldaGeriatrica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="fraldaGeriatricaLabel" for="paciente-dispositivo-atual-fraldaGeriatrica">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.fraldaGeriatrica">
+                                      Fralda Geriatrica
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-fraldaGeriatrica"
+                                    type="string"
+                                    className="form-control"
+                                    name="fraldaGeriatrica"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="fraldaGeriatrica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="fraldaGeriatricaLabel" for="paciente-dispositivo-atual-fraldaGeriatrica">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.fraldaGeriatrica">Fralda Geriatrica</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-fraldaGeriatrica"
-                                type="string"
-                                className="form-control"
-                                name="fraldaGeriatrica"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'sngSondaNasogastrica' ? (
+                          <Col md="sngSondaNasogastrica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="sngSondaNasogastricaLabel"
+                                    for="paciente-dispositivo-atual-sngSondaNasogastrica"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.sngSondaNasogastrica">
+                                      Sng Sonda Nasogastrica
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-sngSondaNasogastrica"
+                                    type="string"
+                                    className="form-control"
+                                    name="sngSondaNasogastrica"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sngSondaNasogastrica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="sngSondaNasogastricaLabel" for="paciente-dispositivo-atual-sngSondaNasogastrica">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.sngSondaNasogastrica">
-                                  Sng Sonda Nasogastrica
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-sngSondaNasogastrica"
-                                type="string"
-                                className="form-control"
-                                name="sngSondaNasogastrica"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'bipap' ? (
+                          <Col md="bipap">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="bipapLabel" for="paciente-dispositivo-atual-bipap">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.bipap">Bipap</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dispositivo-atual-bipap" type="string" className="form-control" name="bipap" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="bipap" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="bipapLabel" for="paciente-dispositivo-atual-bipap">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.bipap">Bipap</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-bipap"
-                                type="string"
-                                className="form-control"
-                                name="bipap"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cpap' ? (
+                          <Col md="cpap">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cpapLabel" for="paciente-dispositivo-atual-cpap">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.cpap">Cpap</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dispositivo-atual-cpap" type="string" className="form-control" name="cpap" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cpap" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cpapLabel" for="paciente-dispositivo-atual-cpap">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.cpap">Cpap</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-cpap"
-                                type="string"
-                                className="form-control"
-                                name="cpap"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cistostomia' ? (
+                          <Col md="cistostomia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cistostomiaLabel" for="paciente-dispositivo-atual-cistostomia">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.cistostomia">Cistostomia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-cistostomia"
+                                    type="string"
+                                    className="form-control"
+                                    name="cistostomia"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cistostomia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cistostomiaLabel" for="paciente-dispositivo-atual-cistostomia">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.cistostomia">Cistostomia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-cistostomia"
-                                type="string"
-                                className="form-control"
-                                name="cistostomia"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'cateterNasalDeOxigenio' ? (
+                          <Col md="cateterNasalDeOxigenio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="cateterNasalDeOxigenioLabel"
+                                    for="paciente-dispositivo-atual-cateterNasalDeOxigenio"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.cateterNasalDeOxigenio">
+                                      Cateter Nasal De Oxigenio
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-cateterNasalDeOxigenio"
+                                    type="string"
+                                    className="form-control"
+                                    name="cateterNasalDeOxigenio"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cateterNasalDeOxigenio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label
-                                className="mt-2"
-                                id="cateterNasalDeOxigenioLabel"
-                                for="paciente-dispositivo-atual-cateterNasalDeOxigenio"
-                              >
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.cateterNasalDeOxigenio">
-                                  Cateter Nasal De Oxigenio
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-cateterNasalDeOxigenio"
-                                type="string"
-                                className="form-control"
-                                name="cateterNasalDeOxigenio"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'mascaraDeVentilacao' ? (
+                          <Col md="mascaraDeVentilacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="mascaraDeVentilacaoLabel"
+                                    for="paciente-dispositivo-atual-mascaraDeVentilacao"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.mascaraDeVentilacao">
+                                      Mascara De Ventilacao
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-mascaraDeVentilacao"
+                                    type="string"
+                                    className="form-control"
+                                    name="mascaraDeVentilacao"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="mascaraDeVentilacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="mascaraDeVentilacaoLabel" for="paciente-dispositivo-atual-mascaraDeVentilacao">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.mascaraDeVentilacao">
-                                  Mascara De Ventilacao
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-mascaraDeVentilacao"
-                                type="string"
-                                className="form-control"
-                                name="mascaraDeVentilacao"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'entubacaoOrotraqueal' ? (
+                          <Col md="entubacaoOrotraqueal">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="entubacaoOrotraquealLabel"
+                                    for="paciente-dispositivo-atual-entubacaoOrotraqueal"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.entubacaoOrotraqueal">
+                                      Entubacao Orotraqueal
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-entubacaoOrotraqueal"
+                                    type="string"
+                                    className="form-control"
+                                    name="entubacaoOrotraqueal"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="entubacaoOrotraqueal" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="entubacaoOrotraquealLabel" for="paciente-dispositivo-atual-entubacaoOrotraqueal">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.entubacaoOrotraqueal">
-                                  Entubacao Orotraqueal
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-entubacaoOrotraqueal"
-                                type="string"
-                                className="form-control"
-                                name="entubacaoOrotraqueal"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'ileostomia' ? (
+                          <Col md="ileostomia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ileostomiaLabel" for="paciente-dispositivo-atual-ileostomia">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.ileostomia">Ileostomia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-ileostomia"
+                                    type="string"
+                                    className="form-control"
+                                    name="ileostomia"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ileostomia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ileostomiaLabel" for="paciente-dispositivo-atual-ileostomia">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.ileostomia">Ileostomia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-ileostomia"
-                                type="string"
-                                className="form-control"
-                                name="ileostomia"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'jejunostomia' ? (
+                          <Col md="jejunostomia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="jejunostomiaLabel" for="paciente-dispositivo-atual-jejunostomia">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.jejunostomia">Jejunostomia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-jejunostomia"
+                                    type="string"
+                                    className="form-control"
+                                    name="jejunostomia"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="jejunostomia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="jejunostomiaLabel" for="paciente-dispositivo-atual-jejunostomia">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.jejunostomia">Jejunostomia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-jejunostomia"
-                                type="string"
-                                className="form-control"
-                                name="jejunostomia"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="colostomiaLabel" for="paciente-dispositivo-atual-colostomia">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.colostomia">Colostomia</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-colostomia"
-                                type="string"
-                                className="form-control"
-                                name="colostomia"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="paciente-dispositivo-atual-idUsuario">
-                                <Translate contentKey="generadorApp.pacienteDispositivoAtual.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dispositivo-atual-idUsuario"
-                                type="string"
-                                className="form-control"
-                                name="idUsuario"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'colostomia' ? (
+                          <Col md="colostomia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="colostomiaLabel" for="paciente-dispositivo-atual-colostomia">
+                                    <Translate contentKey="generadorApp.pacienteDispositivoAtual.colostomia">Colostomia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dispositivo-atual-colostomia"
+                                    type="string"
+                                    className="form-control"
+                                    name="colostomia"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="colostomia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

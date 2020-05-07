@@ -20,7 +20,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503012400",
+    "changelogDate": "20200507125700",
     "entityTableName": "unidade_medida",
     "dto": "mapstruct",
     "pagination": "pagination",

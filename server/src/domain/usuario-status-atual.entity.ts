@@ -7,18 +7,15 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A UsuarioStatusAtual.
  */
-@Entity('usuario_status_atual')
+@Entity('tb_usuario_status_atual')
 export default class UsuarioStatusAtual extends BaseEntity {
-  @Column({ name: 'id_usuario' })
-  idUsuario: string;
-
-  @Column({ type: 'integer', name: 'status_atual' })
+  @Column({ type: 'integer', name: 'STATUS_ATUAL' })
   statusAtual: number;
 
-  @Column({ name: 'obs', length: 255 })
+  @Column({ name: 'OBS', length: 255 })
   obs: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

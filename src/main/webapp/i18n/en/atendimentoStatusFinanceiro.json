@@ -3,22 +3,21 @@
     "atendimentoStatusFinanceiro": {
       "home": {
         "title": "Atendimento Status Financeiros",
-        "createLabel": "Criar novo Atendimento Status Financeiro",
-        "createOrEditLabel": "Criar ou editar Atendimento Status Financeiro",
-        "notFound": "Nenhum Atendimento Status Financeiro encontrado"
+        "createLabel": "Create a new Atendimento Status Financeiro",
+        "createOrEditLabel": "Create or edit a Atendimento Status Financeiro",
+        "notFound": "No Atendimento Status Financeiros found"
       },
-      "created": "Um novo Atendimento Status Financeiro foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento Status Financeiro foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento Status Financeiro foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento Status Financeiro is created with identifier {{ param }}",
+      "updated": "A Atendimento Status Financeiro is updated with identifier {{ param }}",
+      "deleted": "A Atendimento Status Financeiro is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento Status Financeiro {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento Status Financeiro {{ id }}?"
       },
       "detail": {
         "title": "Atendimento Status Financeiro"
       },
       "idAtendimento": "Id Atendimento",
-      "idStatusFinanceiro": "Id Status Financeiro",
-      "idUsuario": "Id Usuario"
+      "idStatusFinanceiro": "Id Status Financeiro"
     }
   }
 }

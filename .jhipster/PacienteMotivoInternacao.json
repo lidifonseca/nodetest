@@ -14,17 +14,10 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503000800",
+    "changelogDate": "20200507114100",
     "entityTableName": "paciente_motivo_internacao",
     "dto": "mapstruct",
     "pagination": "pagination",

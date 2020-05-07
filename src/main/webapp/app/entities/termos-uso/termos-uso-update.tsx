@@ -4,25 +4,34 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, getTermosUsoState, ITermosUsoBaseState, updateEntity, createEntity, setBlob, reset } from './termos-uso.reducer';
+import {
+  ITermosUsoUpdateState,
+  getEntity,
+  getTermosUsoState,
+  ITermosUsoBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './termos-uso.reducer';
 import { ITermosUso } from 'app/shared/model/termos-uso.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ITermosUsoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ITermosUsoUpdateState {
-  fieldsBase: ITermosUsoBaseState;
-  isNew: boolean;
-}
-
 export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITermosUsoUpdateState> {
+  termosUsoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<ITermosUsoUpdateProps>) {
     super(props);
+
+    this.termosUsoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getTermosUsoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
@@ -42,14 +51,28 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
     }
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['termosUso'] ? '&termosUso=' + fieldsBase['termosUso'] : '') +
+      (fieldsBase['tipo'] ? '&tipo=' + fieldsBase['tipo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { termosUsoEntity } = this.props;
@@ -67,7 +90,7 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
   };
 
   handleClose = () => {
-    this.props.history.push('/termos-uso');
+    this.props.history.push('/termos-uso?' + this.getFiltersURL());
   };
 
   render() {
@@ -75,7 +98,7 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
     const { isNew } = this.state;
 
     const { termosUso } = termosUsoEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -108,7 +131,14 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/termos-uso" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/termos-uso?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -140,7 +170,7 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.termosUso ? (
+                        {baseFilters !== 'termosUso' ? (
                           <Col md="termosUso">
                             <AvGroup>
                               <Row>
@@ -156,10 +186,10 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="termosUso" value={this.state.fieldsBase.termosUso} />
+                          <AvInput type="hidden" name="termosUso" value={this.state.fieldsBase[baseFilters]} />
                         )}
 
-                        {!this.state.fieldsBase.tipo ? (
+                        {baseFilters !== 'tipo' ? (
                           <Col md="tipo">
                             <AvGroup>
                               <Row>
@@ -175,7 +205,7 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase.tipo} />
+                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>

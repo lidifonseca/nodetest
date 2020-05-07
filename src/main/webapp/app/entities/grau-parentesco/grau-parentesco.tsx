@@ -22,16 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './grau-parentesco.reducer';
+import { getGrauParentescoState, IGrauParentescoBaseState, getEntities } from './grau-parentesco.reducer';
 import { IGrauParentesco } from 'app/shared/model/grau-parentesco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IGrauParentescoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IGrauParentescoBaseState {
-  grauParentesco: any;
-}
 export interface IGrauParentescoState extends IGrauParentescoBaseState, IPaginationBaseState {}
 
 export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauParentescoState> {
@@ -41,18 +38,9 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getGrauParentescoState(this.props.location)
+      ...getGrauParentescoState(this.props.location)
     };
   }
-
-  getGrauParentescoState = (location): IGrauParentescoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const grauParentesco = url.searchParams.get('grauParentesco') || '';
-
-    return {
-      grauParentesco
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -94,7 +82,9 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -139,7 +129,11 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.grauParentesco.home.createLabel">Create a new Grau Parentesco</Translate>
@@ -152,20 +146,22 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="grauParentescoLabel" for="grau-parentesco-grauParentesco">
-                            <Translate contentKey="generadorApp.grauParentesco.grauParentesco">Grau Parentesco</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'grauParentesco' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="grauParentescoLabel" for="grau-parentesco-grauParentesco">
+                              <Translate contentKey="generadorApp.grauParentesco.grauParentesco">Grau Parentesco</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="grauParentesco"
-                            id="grau-parentesco-grauParentesco"
-                            value={this.state.grauParentesco}
-                          />
-                        </Row>
-                      </Col>
+                            <AvInput
+                              type="text"
+                              name="grauParentesco"
+                              id="grau-parentesco-grauParentesco"
+                              value={this.state.grauParentesco}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -193,10 +189,12 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('grauParentesco')}>
-                        <Translate contentKey="generadorApp.grauParentesco.grauParentesco">Grau Parentesco</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'grauParentesco' ? (
+                        <th className="hand" onClick={this.sort('grauParentesco')}>
+                          <Translate contentKey="generadorApp.grauParentesco.grauParentesco">Grau Parentesco</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -211,23 +209,33 @@ export class GrauParentesco extends React.Component<IGrauParentescoProps, IGrauP
                           </Button>
                         </td>
 
-                        <td>{grauParentesco.grauParentesco}</td>
+                        {this.state.baseFilters !== 'grauParentesco' ? <td>{grauParentesco.grauParentesco}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${grauParentesco.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${grauParentesco.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${grauParentesco.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${grauParentesco.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${grauParentesco.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${grauParentesco.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

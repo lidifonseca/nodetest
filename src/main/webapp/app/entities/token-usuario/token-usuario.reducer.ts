@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ITokenUsuario, defaultValue } from 'app/shared/model/token-usuario.model';
 
 export const ACTION_TYPES = {
+  FETCH_TOKENUSUARIO_LIST_EXPORT: 'tokenUsuario/FETCH_TOKENUSUARIO_LIST_EXPORT',
   FETCH_TOKENUSUARIO_LIST: 'tokenUsuario/FETCH_TOKENUSUARIO_LIST',
   FETCH_TOKENUSUARIO: 'tokenUsuario/FETCH_TOKENUSUARIO',
   CREATE_TOKENUSUARIO: 'tokenUsuario/CREATE_TOKENUSUARIO',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type TokenUsuarioState = Readonly<typeof initialState>;
 
+export interface ITokenUsuarioBaseState {
+  baseFilters: any;
+  idPaciente: any;
+  token: any;
+  dataValida: any;
+}
+
+export interface ITokenUsuarioUpdateState {
+  fieldsBase: ITokenUsuarioBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: TokenUsuarioState = initialState, action): TokenUsuarioState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_TOKENUSUARIO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_TOKENUSUARIO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_TOKENUSUARIO):
       return {
@@ -51,6 +65,7 @@ export default (state: TokenUsuarioState = initialState, action): TokenUsuarioSt
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_TOKENUSUARIO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_TOKENUSUARIO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_TOKENUSUARIO):
     case FAILURE(ACTION_TYPES.CREATE_TOKENUSUARIO):
@@ -135,6 +150,20 @@ export const getEntity: ICrudGetAction<ITokenUsuario> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionTokenUsuario<ITokenUsuario> = (idPaciente, token, dataValida, page, size, sort) => {
+  const idPacienteRequest = idPaciente ? `idPaciente.contains=${idPaciente}&` : '';
+  const tokenRequest = token ? `token.contains=${token}&` : '';
+  const dataValidaRequest = dataValida ? `dataValida.contains=${dataValida}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_TOKENUSUARIO_LIST,
+    payload: axios.get<ITokenUsuario>(
+      `${requestUrl}${idPacienteRequest}${tokenRequest}${dataValidaRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ITokenUsuario> = entity => async dispatch => {
   entity = {
     ...entity
@@ -170,3 +199,18 @@ export const deleteEntity: ICrudDeleteAction<ITokenUsuario> = id => async dispat
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getTokenUsuarioState = (location): ITokenUsuarioBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPaciente = url.searchParams.get('idPaciente') || '';
+  const token = url.searchParams.get('token') || '';
+  const dataValida = url.searchParams.get('dataValida') || '';
+
+  return {
+    baseFilters,
+    idPaciente,
+    token,
+    dataValida
+  };
+};

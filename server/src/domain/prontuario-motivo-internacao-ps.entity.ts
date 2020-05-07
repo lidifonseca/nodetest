@@ -7,19 +7,16 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A ProntuarioMotivoInternacaoPs.
  */
-@Entity('prontuario_motivo_internacao_ps')
+@Entity('tb_prontuario_motivo_internacao_ps')
 export default class ProntuarioMotivoInternacaoPs extends BaseEntity {
-  @Column({ type: 'integer', name: 'id_prontuario', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PRONTUARIO', nullable: false })
   idProntuario: number;
 
-  @Column({ type: 'integer', name: 'id_paciente', nullable: false })
+  @Column({ type: 'integer', name: 'ID_PACIENTE', nullable: false })
   idPaciente: number;
 
-  @Column({ type: 'integer', name: 'id_motivo', nullable: false })
+  @Column({ type: 'integer', name: 'ID_MOTIVO', nullable: false })
   idMotivo: number;
-
-  @Column({ type: 'integer', name: 'id_usuario', nullable: false })
-  idUsuario: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

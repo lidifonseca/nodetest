@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tela.reducer';
+import { getEntity, ITelaBaseState, getTelaState } from './tela.reducer';
 import { ITela } from 'app/shared/model/tela.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITelaState {
+  fieldsBase: ITelaBaseState;
+}
+
 export interface ITelaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TelaDetail extends React.Component<ITelaDetailProps> {
+export class TelaDetail extends React.Component<ITelaDetailProps, ITelaState> {
   constructor(props: Readonly<ITelaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTelaState(this.props.location)
     };
   }
 

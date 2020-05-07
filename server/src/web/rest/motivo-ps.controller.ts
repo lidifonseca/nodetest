@@ -68,7 +68,9 @@ export class MotivoPsController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() motivoPs: MotivoPs): Promise<MotivoPs> {
+    console.info(motivoPs);
     const created = await this.motivoPsService.save(motivoPs);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'MotivoPs', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class MotivoPsController {
   })
   async put(@Req() req: Request, @Body() motivoPs: MotivoPs): Promise<MotivoPs> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'MotivoPs', motivoPs.id);
+
     return await this.motivoPsService.update(motivoPs);
   }
 

@@ -3,23 +3,22 @@
     "prontuarioMotivoInternacaoPs": {
       "home": {
         "title": "Prontuario Motivo Internacao Ps",
-        "createLabel": "Criar novo Prontuario Motivo Internacao Ps",
-        "createOrEditLabel": "Criar ou editar Prontuario Motivo Internacao Ps",
-        "notFound": "Nenhum Prontuario Motivo Internacao Ps encontrado"
+        "createLabel": "Create a new Prontuario Motivo Internacao Ps",
+        "createOrEditLabel": "Create or edit a Prontuario Motivo Internacao Ps",
+        "notFound": "No Prontuario Motivo Internacao Ps found"
       },
-      "created": "Um novo Prontuario Motivo Internacao Ps foi criado com o identificador {{ param }}",
-      "updated": "Um Prontuario Motivo Internacao Ps foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Prontuario Motivo Internacao Ps foi excluído com o identificador {{ param }}",
+      "created": "A new Prontuario Motivo Internacao Ps is created with identifier {{ param }}",
+      "updated": "A Prontuario Motivo Internacao Ps is updated with identifier {{ param }}",
+      "deleted": "A Prontuario Motivo Internacao Ps is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Prontuario Motivo Internacao Ps {{ id }}?"
+        "question": "Are you sure you want to delete Prontuario Motivo Internacao Ps {{ id }}?"
       },
       "detail": {
         "title": "Prontuario Motivo Internacao Ps"
       },
       "idProntuario": "Id Prontuario",
       "idPaciente": "Id Paciente",
-      "idMotivo": "Id Motivo",
-      "idUsuario": "Id Usuario"
+      "idMotivo": "Id Motivo"
     }
   }
 }

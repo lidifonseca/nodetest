@@ -68,7 +68,9 @@ export class CidXPtaNovoPadItemIndiController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() cidXPtaNovoPadItemIndi: CidXPtaNovoPadItemIndi): Promise<CidXPtaNovoPadItemIndi> {
+    console.info(cidXPtaNovoPadItemIndi);
     const created = await this.cidXPtaNovoPadItemIndiService.save(cidXPtaNovoPadItemIndi);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CidXPtaNovoPadItemIndi', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class CidXPtaNovoPadItemIndiController {
   })
   async put(@Req() req: Request, @Body() cidXPtaNovoPadItemIndi: CidXPtaNovoPadItemIndi): Promise<CidXPtaNovoPadItemIndi> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'CidXPtaNovoPadItemIndi', cidXPtaNovoPadItemIndi.id);
+
     return await this.cidXPtaNovoPadItemIndiService.update(cidXPtaNovoPadItemIndi);
   }
 

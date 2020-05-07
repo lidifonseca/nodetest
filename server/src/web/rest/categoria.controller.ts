@@ -68,7 +68,9 @@ export class CategoriaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() categoria: Categoria): Promise<Categoria> {
+    console.info(categoria);
     const created = await this.categoriaService.save(categoria);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Categoria', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class CategoriaController {
   })
   async put(@Req() req: Request, @Body() categoria: Categoria): Promise<Categoria> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Categoria', categoria.id);
+
     return await this.categoriaService.update(categoria);
   }
 

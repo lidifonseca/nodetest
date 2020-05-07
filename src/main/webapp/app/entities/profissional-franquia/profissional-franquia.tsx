@@ -22,17 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './profissional-franquia.reducer';
+import { getProfissionalFranquiaState, IProfissionalFranquiaBaseState, getEntities } from './profissional-franquia.reducer';
 import { IProfissionalFranquia } from 'app/shared/model/profissional-franquia.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IProfissionalFranquiaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IProfissionalFranquiaBaseState {
-  idProfissional: any;
-  idFranquia: any;
-}
 export interface IProfissionalFranquiaState extends IProfissionalFranquiaBaseState, IPaginationBaseState {}
 
 export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaProps, IProfissionalFranquiaState> {
@@ -42,20 +38,9 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getProfissionalFranquiaState(this.props.location)
+      ...getProfissionalFranquiaState(this.props.location)
     };
   }
-
-  getProfissionalFranquiaState = (location): IProfissionalFranquiaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idProfissional = url.searchParams.get('idProfissional') || '';
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-
-    return {
-      idProfissional,
-      idFranquia
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -98,7 +83,9 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -146,7 +133,11 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.profissionalFranquia.home.createLabel">Create a new Profissional Franquia</Translate>
@@ -159,29 +150,34 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idProfissionalLabel" for="profissional-franquia-idProfissional">
-                            <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idProfissionalLabel" for="profissional-franquia-idProfissional">
+                              <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="idProfissional"
-                            id="profissional-franquia-idProfissional"
-                            value={this.state.idProfissional}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idFranquiaLabel" for="profissional-franquia-idFranquia">
-                            <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
-                          </Label>
+                            <AvInput
+                              type="text"
+                              name="idProfissional"
+                              id="profissional-franquia-idProfissional"
+                              value={this.state.idProfissional}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput type="text" name="idFranquia" id="profissional-franquia-idFranquia" value={this.state.idFranquia} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idFranquiaLabel" for="profissional-franquia-idFranquia">
+                              <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="idFranquia" id="profissional-franquia-idFranquia" value={this.state.idFranquia} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -209,14 +205,18 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idProfissional')}>
-                        <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idFranquia')}>
-                        <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idProfissional' ? (
+                        <th className="hand" onClick={this.sort('idProfissional')}>
+                          <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <th className="hand" onClick={this.sort('idFranquia')}>
+                          <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -231,25 +231,40 @@ export class ProfissionalFranquia extends React.Component<IProfissionalFranquiaP
                           </Button>
                         </td>
 
-                        <td>{profissionalFranquia.idProfissional}</td>
+                        {this.state.baseFilters !== 'idProfissional' ? <td>{profissionalFranquia.idProfissional}</td> : null}
 
-                        <td>{profissionalFranquia.idFranquia}</td>
+                        {this.state.baseFilters !== 'idFranquia' ? <td>{profissionalFranquia.idFranquia}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${profissionalFranquia.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalFranquia.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalFranquia.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalFranquia.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${profissionalFranquia.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${profissionalFranquia.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

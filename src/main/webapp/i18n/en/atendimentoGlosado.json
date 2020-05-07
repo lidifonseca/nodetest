@@ -3,22 +3,21 @@
     "atendimentoGlosado": {
       "home": {
         "title": "Atendimento Glosados",
-        "createLabel": "Criar novo Atendimento Glosado",
-        "createOrEditLabel": "Criar ou editar Atendimento Glosado",
-        "notFound": "Nenhum Atendimento Glosado encontrado"
+        "createLabel": "Create a new Atendimento Glosado",
+        "createOrEditLabel": "Create or edit a Atendimento Glosado",
+        "notFound": "No Atendimento Glosados found"
       },
-      "created": "Um novo Atendimento Glosado foi criado com o identificador {{ param }}",
-      "updated": "Um Atendimento Glosado foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Atendimento Glosado foi excluído com o identificador {{ param }}",
+      "created": "A new Atendimento Glosado is created with identifier {{ param }}",
+      "updated": "A Atendimento Glosado is updated with identifier {{ param }}",
+      "deleted": "A Atendimento Glosado is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Atendimento Glosado {{ id }}?"
+        "question": "Are you sure you want to delete Atendimento Glosado {{ id }}?"
       },
       "detail": {
         "title": "Atendimento Glosado"
       },
       "idAtendimento": "Id Atendimento",
-      "glosado": "Glosado",
-      "idUsuario": "Id Usuario"
+      "glosado": "Glosado"
     }
   }
 }

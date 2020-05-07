@@ -3,15 +3,15 @@
     "grupoRisco": {
       "home": {
         "title": "Grupo Riscos",
-        "createLabel": "Criar novo Grupo Risco",
-        "createOrEditLabel": "Criar ou editar Grupo Risco",
-        "notFound": "Nenhum Grupo Risco encontrado"
+        "createLabel": "Create a new Grupo Risco",
+        "createOrEditLabel": "Create or edit a Grupo Risco",
+        "notFound": "No Grupo Riscos found"
       },
-      "created": "Um novo Grupo Risco foi criado com o identificador {{ param }}",
-      "updated": "Um Grupo Risco foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Grupo Risco foi excluído com o identificador {{ param }}",
+      "created": "A new Grupo Risco is created with identifier {{ param }}",
+      "updated": "A Grupo Risco is updated with identifier {{ param }}",
+      "deleted": "A Grupo Risco is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Grupo Risco {{ id }}?"
+        "question": "Are you sure you want to delete Grupo Risco {{ id }}?"
       },
       "detail": {
         "title": "Grupo Risco"

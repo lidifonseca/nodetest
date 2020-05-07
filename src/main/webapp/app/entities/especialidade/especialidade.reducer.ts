@@ -33,22 +33,20 @@ const initialState = {
 export type EspecialidadeState = Readonly<typeof initialState>;
 
 export interface IEspecialidadeBaseState {
+  baseFilters: any;
   icon: any;
   especialidade: any;
   descricao: any;
   duracao: any;
   importante: any;
   ativo: any;
-  atendimento: any;
-  especialidadeOperadora: any;
-  especialidadeUnidade: any;
-  especialidadeValor: any;
-  pacientePedido: any;
-  padItem: any;
   unidade: any;
-  idCategoria: any;
-  idTipoEspecialidade: any;
-  idTipoUnidade: any;
+}
+
+export interface IEspecialidadeUpdateState {
+  fieldsBase: IEspecialidadeBaseState;
+  isNew: boolean;
+  unidadeId: string;
 }
 
 // Reducer
@@ -94,6 +92,9 @@ export default (state: EspecialidadeState = initialState, action): Especialidade
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_ESPECIALIDADE):
+      action.payload.data.descricao = action.payload.data.descricao
+        ? Buffer.from(action.payload.data.descricao).toString()
+        : action.payload.data.descricao;
       return {
         ...state,
         loading: false,
@@ -115,13 +116,14 @@ export default (state: EspecialidadeState = initialState, action): Especialidade
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -146,16 +148,7 @@ export type ICrudGetAllActionEspecialidade<T> = (
   duracao?: any,
   importante?: any,
   ativo?: any,
-  atendimento?: any,
-  especialidadeOperadora?: any,
-  especialidadeUnidade?: any,
-  especialidadeValor?: any,
-  pacientePedido?: any,
-  padItem?: any,
   unidade?: any,
-  idCategoria?: any,
-  idTipoEspecialidade?: any,
-  idTipoUnidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -168,16 +161,7 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   duracao,
   importante,
   ativo,
-  atendimento,
-  especialidadeOperadora,
-  especialidadeUnidade,
-  especialidadeValor,
-  pacientePedido,
-  padItem,
   unidade,
-  idCategoria,
-  idTipoEspecialidade,
-  idTipoUnidade,
   page,
   size,
   sort
@@ -188,22 +172,13 @@ export const getEntities: ICrudGetAllActionEspecialidade<IEspecialidade> = (
   const duracaoRequest = duracao ? `duracao.contains=${duracao}&` : '';
   const importanteRequest = importante ? `importante.contains=${importante}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
-  const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
-  const especialidadeUnidadeRequest = especialidadeUnidade ? `especialidadeUnidade.equals=${especialidadeUnidade}&` : '';
-  const especialidadeValorRequest = especialidadeValor ? `especialidadeValor.equals=${especialidadeValor}&` : '';
-  const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
-  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
-  const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
-  const idTipoEspecialidadeRequest = idTipoEspecialidade ? `idTipoEspecialidade.equals=${idTipoEspecialidade}&` : '';
-  const idTipoUnidadeRequest = idTipoUnidade ? `idTipoUnidade.equals=${idTipoUnidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADE_LIST,
     payload: axios.get<IEspecialidade>(
-      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${especialidadeUnidadeRequest}${especialidadeValorRequest}${pacientePedidoRequest}${padItemRequest}${unidadeRequest}${idCategoriaRequest}${idTipoEspecialidadeRequest}${idTipoUnidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -222,16 +197,7 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidade<IEspecialidade> =
   duracao,
   importante,
   ativo,
-  atendimento,
-  especialidadeOperadora,
-  especialidadeUnidade,
-  especialidadeValor,
-  pacientePedido,
-  padItem,
   unidade,
-  idCategoria,
-  idTipoEspecialidade,
-  idTipoUnidade,
   page,
   size,
   sort
@@ -242,22 +208,13 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidade<IEspecialidade> =
   const duracaoRequest = duracao ? `duracao.contains=${duracao}&` : '';
   const importanteRequest = importante ? `importante.contains=${importante}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const atendimentoRequest = atendimento ? `atendimento.equals=${atendimento}&` : '';
-  const especialidadeOperadoraRequest = especialidadeOperadora ? `especialidadeOperadora.equals=${especialidadeOperadora}&` : '';
-  const especialidadeUnidadeRequest = especialidadeUnidade ? `especialidadeUnidade.equals=${especialidadeUnidade}&` : '';
-  const especialidadeValorRequest = especialidadeValor ? `especialidadeValor.equals=${especialidadeValor}&` : '';
-  const pacientePedidoRequest = pacientePedido ? `pacientePedido.equals=${pacientePedido}&` : '';
-  const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
-  const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
-  const idTipoEspecialidadeRequest = idTipoEspecialidade ? `idTipoEspecialidade.equals=${idTipoEspecialidade}&` : '';
-  const idTipoUnidadeRequest = idTipoUnidade ? `idTipoUnidade.equals=${idTipoUnidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_ESPECIALIDADE_LIST,
     payload: axios.get<IEspecialidade>(
-      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${atendimentoRequest}${especialidadeOperadoraRequest}${especialidadeUnidadeRequest}${especialidadeValorRequest}${pacientePedidoRequest}${padItemRequest}${unidadeRequest}${idCategoriaRequest}${idTipoEspecialidadeRequest}${idTipoUnidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${iconRequest}${especialidadeRequest}${descricaoRequest}${duracaoRequest}${importanteRequest}${ativoRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -265,10 +222,7 @@ export const getEntitiesExport: ICrudGetAllActionEspecialidade<IEspecialidade> =
 export const createEntity: ICrudPutAction<IEspecialidade> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria,
-    idTipoEspecialidade: entity.idTipoEspecialidade === 'null' ? null : entity.idTipoEspecialidade,
-    idTipoUnidade: entity.idTipoUnidade === 'null' ? null : entity.idTipoUnidade
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_ESPECIALIDADE,
@@ -279,13 +233,7 @@ export const createEntity: ICrudPutAction<IEspecialidade> = entity => async disp
 };
 
 export const updateEntity: ICrudPutAction<IEspecialidade> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria,
-    idTipoEspecialidade: entity.idTipoEspecialidade === 'null' ? null : entity.idTipoEspecialidade,
-    idTipoUnidade: entity.idTipoUnidade === 'null' ? null : entity.idTipoUnidade
-  };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_ESPECIALIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -304,12 +252,13 @@ export const deleteEntity: ICrudDeleteAction<IEspecialidade> = id => async dispa
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -319,6 +268,7 @@ export const reset = () => ({
 
 export const getEspecialidadeState = (location): IEspecialidadeBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const icon = url.searchParams.get('icon') || '';
   const especialidade = url.searchParams.get('especialidade') || '';
   const descricao = url.searchParams.get('descricao') || '';
@@ -326,33 +276,16 @@ export const getEspecialidadeState = (location): IEspecialidadeBaseState => {
   const importante = url.searchParams.get('importante') || '';
   const ativo = url.searchParams.get('ativo') || '';
 
-  const atendimento = url.searchParams.get('atendimento') || '';
-  const especialidadeOperadora = url.searchParams.get('especialidadeOperadora') || '';
-  const especialidadeUnidade = url.searchParams.get('especialidadeUnidade') || '';
-  const especialidadeValor = url.searchParams.get('especialidadeValor') || '';
-  const pacientePedido = url.searchParams.get('pacientePedido') || '';
-  const padItem = url.searchParams.get('padItem') || '';
   const unidade = url.searchParams.get('unidade') || '';
-  const idCategoria = url.searchParams.get('idCategoria') || '';
-  const idTipoEspecialidade = url.searchParams.get('idTipoEspecialidade') || '';
-  const idTipoUnidade = url.searchParams.get('idTipoUnidade') || '';
 
   return {
+    baseFilters,
     icon,
     especialidade,
     descricao,
     duracao,
     importante,
     ativo,
-    atendimento,
-    especialidadeOperadora,
-    especialidadeUnidade,
-    especialidadeValor,
-    pacientePedido,
-    padItem,
-    unidade,
-    idCategoria,
-    idTipoEspecialidade,
-    idTipoUnidade
+    unidade
   };
 };

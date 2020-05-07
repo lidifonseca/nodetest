@@ -6,9 +6,6 @@ import { PacientePedidoRepository } from '../repository/paciente-pedido.reposito
 
 const relationshipNames = [];
 relationshipNames.push('unidade');
-relationshipNames.push('idPaciente');
-relationshipNames.push('idCartao');
-relationshipNames.push('idEspecialidade');
 
 @Injectable()
 export class PacientePedidoService {

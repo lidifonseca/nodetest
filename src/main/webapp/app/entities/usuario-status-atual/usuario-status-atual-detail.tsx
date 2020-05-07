@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './usuario-status-atual.reducer';
+import { getEntity, IUsuarioStatusAtualBaseState, getUsuarioStatusAtualState } from './usuario-status-atual.reducer';
 import { IUsuarioStatusAtual } from 'app/shared/model/usuario-status-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUsuarioStatusAtualState {
+  fieldsBase: IUsuarioStatusAtualBaseState;
+}
+
 export interface IUsuarioStatusAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UsuarioStatusAtualDetail extends React.Component<IUsuarioStatusAtualDetailProps> {
+export class UsuarioStatusAtualDetail extends React.Component<IUsuarioStatusAtualDetailProps, IUsuarioStatusAtualState> {
   constructor(props: Readonly<IUsuarioStatusAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUsuarioStatusAtualState(this.props.location)
     };
   }
 
@@ -51,21 +56,6 @@ export class UsuarioStatusAtualDetail extends React.Component<IUsuarioStatusAtua
                   <b>{usuarioStatusAtualEntity.id}</b>]
                 </h2>
                 <Row className="jh-entity-details">
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.usuarioStatusAtual.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioStatusAtualEntity.idUsuario}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
                   <Col md="12">
                     <Row>
                       <Col md="3">

@@ -33,6 +33,7 @@ const initialState = {
 export type NotificacaoConfigState = Readonly<typeof initialState>;
 
 export interface INotificacaoConfigBaseState {
+  baseFilters: any;
   criadoEm: any;
   titulo: any;
   referencia: any;
@@ -41,6 +42,11 @@ export interface INotificacaoConfigBaseState {
   envioObrigatorio: any;
   serveProfissional: any;
   servePaciente: any;
+}
+
+export interface INotificacaoConfigUpdateState {
+  fieldsBase: INotificacaoConfigBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -86,6 +92,9 @@ export default (state: NotificacaoConfigState = initialState, action): Notificac
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_NOTIFICACAOCONFIG):
+      action.payload.data.descricao = action.payload.data.descricao
+        ? Buffer.from(action.payload.data.descricao).toString()
+        : action.payload.data.descricao;
       return {
         ...state,
         loading: false,
@@ -107,13 +116,14 @@ export default (state: NotificacaoConfigState = initialState, action): Notificac
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -246,12 +256,13 @@ export const deleteEntity: ICrudDeleteAction<INotificacaoConfig> = id => async d
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -261,6 +272,7 @@ export const reset = () => ({
 
 export const getNotificacaoConfigState = (location): INotificacaoConfigBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const criadoEm = url.searchParams.get('criadoEm') || '';
   const titulo = url.searchParams.get('titulo') || '';
   const referencia = url.searchParams.get('referencia') || '';
@@ -271,6 +283,7 @@ export const getNotificacaoConfigState = (location): INotificacaoConfigBaseState
   const servePaciente = url.searchParams.get('servePaciente') || '';
 
   return {
+    baseFilters,
     criadoEm,
     titulo,
     referencia,

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IApiReturn, defaultValue } from 'app/shared/model/api-return.model';
 
 export const ACTION_TYPES = {
+  FETCH_APIRETURN_LIST_EXPORT: 'apiReturn/FETCH_APIRETURN_LIST_EXPORT',
   FETCH_APIRETURN_LIST: 'apiReturn/FETCH_APIRETURN_LIST',
   FETCH_APIRETURN: 'apiReturn/FETCH_APIRETURN',
   CREATE_APIRETURN: 'apiReturn/CREATE_APIRETURN',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type ApiReturnState = Readonly<typeof initialState>;
 
+export interface IApiReturnBaseState {
+  baseFilters: any;
+  idApiName: any;
+  apiReturn: any;
+  apiType: any;
+  obs: any;
+  ativo: any;
+}
+
+export interface IApiReturnUpdateState {
+  fieldsBase: IApiReturnBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: ApiReturnState = initialState, action): ApiReturnState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_APIRETURN_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_APIRETURN_LIST):
     case REQUEST(ACTION_TYPES.FETCH_APIRETURN):
       return {
@@ -51,6 +67,7 @@ export default (state: ApiReturnState = initialState, action): ApiReturnState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_APIRETURN_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_APIRETURN_LIST):
     case FAILURE(ACTION_TYPES.FETCH_APIRETURN):
     case FAILURE(ACTION_TYPES.CREATE_APIRETURN):
@@ -139,6 +156,22 @@ export const getEntity: ICrudGetAction<IApiReturn> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionApiReturn<IApiReturn> = (idApiName, apiReturn, apiType, obs, ativo, page, size, sort) => {
+  const idApiNameRequest = idApiName ? `idApiName.contains=${idApiName}&` : '';
+  const apiReturnRequest = apiReturn ? `apiReturn.contains=${apiReturn}&` : '';
+  const apiTypeRequest = apiType ? `apiType.contains=${apiType}&` : '';
+  const obsRequest = obs ? `obs.contains=${obs}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_APIRETURN_LIST,
+    payload: axios.get<IApiReturn>(
+      `${requestUrl}${idApiNameRequest}${apiReturnRequest}${apiTypeRequest}${obsRequest}${ativoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IApiReturn> = entity => async dispatch => {
   entity = {
     ...entity
@@ -174,3 +207,22 @@ export const deleteEntity: ICrudDeleteAction<IApiReturn> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getApiReturnState = (location): IApiReturnBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idApiName = url.searchParams.get('idApiName') || '';
+  const apiReturn = url.searchParams.get('apiReturn') || '';
+  const apiType = url.searchParams.get('apiType') || '';
+  const obs = url.searchParams.get('obs') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+
+  return {
+    baseFilters,
+    idApiName,
+    apiReturn,
+    apiType,
+    obs,
+    ativo
+  };
+};

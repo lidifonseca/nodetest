@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './pad-pta-temp.reducer';
+import {
+  IPadPtaTempUpdateState,
+  getEntity,
+  getPadPtaTempState,
+  IPadPtaTempBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './pad-pta-temp.reducer';
 import { IPadPtaTemp } from 'app/shared/model/pad-pta-temp.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPadPtaTempUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPadPtaTempUpdateState {
-  isNew: boolean;
-}
-
 export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IPadPtaTempUpdateState> {
   constructor(props: Readonly<IPadPtaTempUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPadPtaTempState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,22 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['sessionId'] ? '&sessionId=' + fieldsBase['sessionId'] : '') +
+      (fieldsBase['idPta'] ? '&idPta=' + fieldsBase['idPta'] : '') +
+      (fieldsBase['idCid'] ? '&idCid=' + fieldsBase['idCid'] : '') +
+      (fieldsBase['cidXPtaNovoId'] ? '&cidXPtaNovoId=' + fieldsBase['cidXPtaNovoId'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { padPtaTempEntity } = this.props;
@@ -57,13 +79,14 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
   };
 
   handleClose = () => {
-    this.props.history.push('/pad-pta-temp');
+    this.props.history.push('/pad-pta-temp?' + this.getFiltersURL());
   };
 
   render() {
     const { padPtaTempEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +119,14 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/pad-pta-temp" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/pad-pta-temp?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +141,7 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,116 +157,84 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'sessionId' ? (
+                          <Col md="sessionId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sessionIdLabel" for="pad-pta-temp-sessionId">
+                                    <Translate contentKey="generadorApp.padPtaTemp.sessionId">Session Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-sessionId" type="text" name="sessionId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sessionId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="sessionIdLabel" for="pad-pta-temp-sessionId">
-                                <Translate contentKey="generadorApp.padPtaTemp.sessionId">Session Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-pta-temp-sessionId"
-                                type="text"
-                                name="sessionId"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idPta' ? (
+                          <Col md="idPta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPtaLabel" for="pad-pta-temp-idPta">
+                                    <Translate contentKey="generadorApp.padPtaTemp.idPta">Id Pta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-idPta" type="string" className="form-control" name="idPta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPtaLabel" for="pad-pta-temp-idPta">
-                                <Translate contentKey="generadorApp.padPtaTemp.idPta">Id Pta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-pta-temp-idPta"
-                                type="string"
-                                className="form-control"
-                                name="idPta"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'idCid' ? (
+                          <Col md="idCid">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idCidLabel" for="pad-pta-temp-idCid">
+                                    <Translate contentKey="generadorApp.padPtaTemp.idCid">Id Cid</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-idCid" type="string" className="form-control" name="idCid" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idCidLabel" for="pad-pta-temp-idCid">
-                                <Translate contentKey="generadorApp.padPtaTemp.idCid">Id Cid</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-pta-temp-idCid"
-                                type="string"
-                                className="form-control"
-                                name="idCid"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="pad-pta-temp-idUsuario">
-                                <Translate contentKey="generadorApp.padPtaTemp.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="pad-pta-temp-idUsuario"
-                                type="string"
-                                className="form-control"
-                                name="idUsuario"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="cidXPtaNovoIdLabel" for="pad-pta-temp-cidXPtaNovoId">
-                                <Translate contentKey="generadorApp.padPtaTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="pad-pta-temp-cidXPtaNovoId" type="string" className="form-control" name="cidXPtaNovoId" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'cidXPtaNovoId' ? (
+                          <Col md="cidXPtaNovoId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cidXPtaNovoIdLabel" for="pad-pta-temp-cidXPtaNovoId">
+                                    <Translate contentKey="generadorApp.padPtaTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-cidXPtaNovoId" type="string" className="form-control" name="cidXPtaNovoId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidXPtaNovoId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

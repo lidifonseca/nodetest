@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import StatusAtualProf from './status-atual-prof';
 import StatusAtualProfDetail from './status-atual-prof-detail';
+import StatusAtualProfRelatorioCSV from './relatorio/status-atual-prof.csv';
 import StatusAtualProfUpdate from './status-atual-prof-update';
 import StatusAtualProfDeleteDialog from './status-atual-prof-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={StatusAtualProfRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={StatusAtualProfUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={StatusAtualProfUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={StatusAtualProfDetail} />

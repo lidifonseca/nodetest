@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadItemHistDataIncComp, defaultValue } from 'app/shared/model/pad-item-hist-data-inc-comp.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADITEMHISTDATAINCCOMP_LIST_EXPORT: 'padItemHistDataIncComp/FETCH_PADITEMHISTDATAINCCOMP_LIST_EXPORT',
   FETCH_PADITEMHISTDATAINCCOMP_LIST: 'padItemHistDataIncComp/FETCH_PADITEMHISTDATAINCCOMP_LIST',
   FETCH_PADITEMHISTDATAINCCOMP: 'padItemHistDataIncComp/FETCH_PADITEMHISTDATAINCCOMP',
   CREATE_PADITEMHISTDATAINCCOMP: 'padItemHistDataIncComp/CREATE_PADITEMHISTDATAINCCOMP',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type PadItemHistDataIncCompState = Readonly<typeof initialState>;
 
+export interface IPadItemHistDataIncCompBaseState {
+  baseFilters: any;
+  idPadItem: any;
+  dataPadItemIncompleto: any;
+  dataPadItemCompleto: any;
+}
+
+export interface IPadItemHistDataIncCompUpdateState {
+  fieldsBase: IPadItemHistDataIncCompBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PadItemHistDataIncCompState = initialState, action): PadItemHistDataIncCompState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADITEMHISTDATAINCCOMP_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMHISTDATAINCCOMP_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMHISTDATAINCCOMP):
       return {
@@ -51,6 +65,7 @@ export default (state: PadItemHistDataIncCompState = initialState, action): PadI
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADITEMHISTDATAINCCOMP_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMHISTDATAINCCOMP_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMHISTDATAINCCOMP):
     case FAILURE(ACTION_TYPES.CREATE_PADITEMHISTDATAINCCOMP):
@@ -142,6 +157,27 @@ export const getEntity: ICrudGetAction<IPadItemHistDataIncComp> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPadItemHistDataIncComp<IPadItemHistDataIncComp> = (
+  idPadItem,
+  dataPadItemIncompleto,
+  dataPadItemCompleto,
+  page,
+  size,
+  sort
+) => {
+  const idPadItemRequest = idPadItem ? `idPadItem.contains=${idPadItem}&` : '';
+  const dataPadItemIncompletoRequest = dataPadItemIncompleto ? `dataPadItemIncompleto.contains=${dataPadItemIncompleto}&` : '';
+  const dataPadItemCompletoRequest = dataPadItemCompleto ? `dataPadItemCompleto.contains=${dataPadItemCompleto}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADITEMHISTDATAINCCOMP_LIST,
+    payload: axios.get<IPadItemHistDataIncComp>(
+      `${requestUrl}${idPadItemRequest}${dataPadItemIncompletoRequest}${dataPadItemCompletoRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPadItemHistDataIncComp> = entity => async dispatch => {
   entity = {
     ...entity
@@ -177,3 +213,18 @@ export const deleteEntity: ICrudDeleteAction<IPadItemHistDataIncComp> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadItemHistDataIncCompState = (location): IPadItemHistDataIncCompBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const idPadItem = url.searchParams.get('idPadItem') || '';
+  const dataPadItemIncompleto = url.searchParams.get('dataPadItemIncompleto') || '';
+  const dataPadItemCompleto = url.searchParams.get('dataPadItemCompleto') || '';
+
+  return {
+    baseFilters,
+    idPadItem,
+    dataPadItemIncompleto,
+    dataPadItemCompleto
+  };
+};

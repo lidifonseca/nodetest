@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-especialidade.reducer';
+import { getEntity, ITipoEspecialidadeBaseState, getTipoEspecialidadeState } from './tipo-especialidade.reducer';
 import { ITipoEspecialidade } from 'app/shared/model/tipo-especialidade.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoEspecialidadeState {
+  fieldsBase: ITipoEspecialidadeBaseState;
+}
+
 export interface ITipoEspecialidadeDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoEspecialidadeDetail extends React.Component<ITipoEspecialidadeDetailProps> {
+export class TipoEspecialidadeDetail extends React.Component<ITipoEspecialidadeDetailProps, ITipoEspecialidadeState> {
   constructor(props: Readonly<ITipoEspecialidadeDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoEspecialidadeState(this.props.location)
     };
   }
 

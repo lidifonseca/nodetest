@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './indicadores.reducer';
+import { getEntity, IIndicadoresBaseState, getIndicadoresState } from './indicadores.reducer';
 import { IIndicadores } from 'app/shared/model/indicadores.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IIndicadoresState {
+  fieldsBase: IIndicadoresBaseState;
+}
+
 export interface IIndicadoresDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class IndicadoresDetail extends React.Component<IIndicadoresDetailProps> {
+export class IndicadoresDetail extends React.Component<IIndicadoresDetailProps, IIndicadoresState> {
   constructor(props: Readonly<IIndicadoresDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getIndicadoresState(this.props.location)
     };
   }
 

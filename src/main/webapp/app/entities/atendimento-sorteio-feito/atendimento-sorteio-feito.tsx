@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './atendimento-sorteio-feito.reducer';
+import { getAtendimentoSorteioFeitoState, IAtendimentoSorteioFeitoBaseState, getEntities } from './atendimento-sorteio-feito.reducer';
 import { IAtendimentoSorteioFeito } from 'app/shared/model/atendimento-sorteio-feito.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPadItem } from 'app/shared/model/pad-item.model';
-import { getEntities as getPadItems } from 'app/entities/pad-item/pad-item.reducer';
-
 export interface IAtendimentoSorteioFeitoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IAtendimentoSorteioFeitoBaseState {
-  sorteioFeito: any;
-  idPadItem: any;
-}
 export interface IAtendimentoSorteioFeitoState extends IAtendimentoSorteioFeitoBaseState, IPaginationBaseState {}
 
 export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteioFeitoProps, IAtendimentoSorteioFeitoState> {
@@ -45,33 +38,18 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getAtendimentoSorteioFeitoState(this.props.location)
+      ...getAtendimentoSorteioFeitoState(this.props.location)
     };
   }
 
-  getAtendimentoSorteioFeitoState = (location): IAtendimentoSorteioFeitoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const sorteioFeito = url.searchParams.get('sorteioFeito') || '';
-
-    const idPadItem = url.searchParams.get('idPadItem') || '';
-
-    return {
-      sorteioFeito,
-      idPadItem
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPadItems();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        sorteioFeito: '',
-        idPadItem: ''
+        sorteioFeito: ''
       },
       () => this.sortEntities()
     );
@@ -104,7 +82,9 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -119,9 +99,6 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
       'sorteioFeito=' +
       this.state.sorteioFeito +
       '&' +
-      'idPadItem=' +
-      this.state.idPadItem +
-      '&' +
       ''
     );
   };
@@ -129,12 +106,12 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { sorteioFeito, idPadItem, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(sorteioFeito, idPadItem, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { sorteioFeito, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(sorteioFeito, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { padItems, atendimentoSorteioFeitoList, match, totalItems } = this.props;
+    const { atendimentoSorteioFeitoList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -152,7 +129,11 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.atendimentoSorteioFeito.home.createLabel">
@@ -167,39 +148,21 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="sorteioFeitoLabel" for="atendimento-sorteio-feito-sorteioFeito">
-                            <Translate contentKey="generadorApp.atendimentoSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
-                          </Label>
-                          <AvInput
-                            type="string"
-                            name="sorteioFeito"
-                            id="atendimento-sorteio-feito-sorteioFeito"
-                            value={this.state.sorteioFeito}
-                          />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="atendimento-sorteio-feito-idPadItem">
-                              <Translate contentKey="generadorApp.atendimentoSorteioFeito.idPadItem">Id Pad Item</Translate>
+                      {this.state.baseFilters !== 'sorteioFeito' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="sorteioFeitoLabel" for="atendimento-sorteio-feito-sorteioFeito">
+                              <Translate contentKey="generadorApp.atendimentoSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
                             </Label>
-                            <AvInput id="atendimento-sorteio-feito-idPadItem" type="select" className="form-control" name="idPadItemId">
-                              <option value="" key="0" />
-                              {padItems
-                                ? padItems.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput
+                              type="string"
+                              name="sorteioFeito"
+                              id="atendimento-sorteio-feito-sorteioFeito"
+                              value={this.state.sorteioFeito}
+                            />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -227,14 +190,12 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('sorteioFeito')}>
-                        <Translate contentKey="generadorApp.atendimentoSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.atendimentoSorteioFeito.idPadItem">Id Pad Item</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'sorteioFeito' ? (
+                        <th className="hand" onClick={this.sort('sorteioFeito')}>
+                          <Translate contentKey="generadorApp.atendimentoSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -249,30 +210,38 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
                           </Button>
                         </td>
 
-                        <td>{atendimentoSorteioFeito.sorteioFeito}</td>
-                        <td>
-                          {atendimentoSorteioFeito.idPadItem ? (
-                            <Link to={`pad-item/${atendimentoSorteioFeito.idPadItem.id}`}>{atendimentoSorteioFeito.idPadItem.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'sorteioFeito' ? <td>{atendimentoSorteioFeito.sorteioFeito}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${atendimentoSorteioFeito.id}`} color="info" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoSorteioFeito.id}?${this.getFiltersURL()}`}
+                              color="info"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoSorteioFeito.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoSorteioFeito.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${atendimentoSorteioFeito.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${atendimentoSorteioFeito.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -314,13 +283,11 @@ export class AtendimentoSorteioFeito extends React.Component<IAtendimentoSorteio
 }
 
 const mapStateToProps = ({ atendimentoSorteioFeito, ...storeState }: IRootState) => ({
-  padItems: storeState.padItem.entities,
   atendimentoSorteioFeitoList: atendimentoSorteioFeito.entities,
   totalItems: atendimentoSorteioFeito.totalItems
 });
 
 const mapDispatchToProps = {
-  getPadItems,
   getEntities
 };
 

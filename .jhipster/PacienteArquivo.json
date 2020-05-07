@@ -20,7 +20,7 @@
             "otherEntityField": "nome"
         }
     ],
-    "changelogDate": "20200502235500",
+    "changelogDate": "20200507112800",
     "entityTableName": "paciente_arquivo",
     "dto": "mapstruct",
     "pagination": "pagination",

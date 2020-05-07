@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-pta-temp.reducer';
+import { getEntity, IPadPtaTempBaseState, getPadPtaTempState } from './pad-pta-temp.reducer';
 import { IPadPtaTemp } from 'app/shared/model/pad-pta-temp.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadPtaTempState {
+  fieldsBase: IPadPtaTempBaseState;
+}
+
 export interface IPadPtaTempDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadPtaTempDetail extends React.Component<IPadPtaTempDetailProps> {
+export class PadPtaTempDetail extends React.Component<IPadPtaTempDetailProps, IPadPtaTempState> {
   constructor(props: Readonly<IPadPtaTempDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadPtaTempState(this.props.location)
     };
   }
 
@@ -91,21 +96,6 @@ export class PadPtaTempDetail extends React.Component<IPadPtaTempDetailProps> {
                       </Col>
                       <Col md="9">
                         <dd>{padPtaTempEntity.idCid}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.padPtaTemp.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padPtaTempEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

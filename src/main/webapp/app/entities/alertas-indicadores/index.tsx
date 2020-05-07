@@ -5,12 +5,14 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import AlertasIndicadores from './alertas-indicadores';
 import AlertasIndicadoresDetail from './alertas-indicadores-detail';
+import AlertasIndicadoresRelatorioCSV from './relatorio/alertas-indicadores.csv';
 import AlertasIndicadoresUpdate from './alertas-indicadores-update';
 import AlertasIndicadoresDeleteDialog from './alertas-indicadores-delete-dialog';
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <ErrorBoundaryRoute exact path={`${match.url}/relatorio/csv`} component={AlertasIndicadoresRelatorioCSV} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={AlertasIndicadoresUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={AlertasIndicadoresUpdate} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={AlertasIndicadoresDetail} />

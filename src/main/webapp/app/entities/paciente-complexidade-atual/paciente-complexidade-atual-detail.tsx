@@ -7,17 +7,25 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-complexidade-atual.reducer';
+import { getEntity, IPacienteComplexidadeAtualBaseState, getPacienteComplexidadeAtualState } from './paciente-complexidade-atual.reducer';
 import { IPacienteComplexidadeAtual } from 'app/shared/model/paciente-complexidade-atual.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteComplexidadeAtualState {
+  fieldsBase: IPacienteComplexidadeAtualBaseState;
+}
+
 export interface IPacienteComplexidadeAtualDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteComplexidadeAtualDetail extends React.Component<IPacienteComplexidadeAtualDetailProps> {
+export class PacienteComplexidadeAtualDetail extends React.Component<
+  IPacienteComplexidadeAtualDetailProps,
+  IPacienteComplexidadeAtualState
+> {
   constructor(props: Readonly<IPacienteComplexidadeAtualDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteComplexidadeAtualState(this.props.location)
     };
   }
 
@@ -156,21 +164,6 @@ export class PacienteComplexidadeAtualDetail extends React.Component<IPacienteCo
                       </Col>
                       <Col md="9">
                         <dd>{pacienteComplexidadeAtualEntity.telemonitoramente}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteComplexidadeAtualEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

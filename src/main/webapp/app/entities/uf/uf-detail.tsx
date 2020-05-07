@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './uf.reducer';
+import { getEntity, IUfBaseState, getUfState } from './uf.reducer';
 import { IUf } from 'app/shared/model/uf.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUfState {
+  fieldsBase: IUfBaseState;
+}
+
 export interface IUfDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UfDetail extends React.Component<IUfDetailProps> {
+export class UfDetail extends React.Component<IUfDetailProps, IUfState> {
   constructor(props: Readonly<IUfDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUfState(this.props.location)
     };
   }
 

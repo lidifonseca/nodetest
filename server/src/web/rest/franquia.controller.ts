@@ -68,7 +68,9 @@ export class FranquiaController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() franquia: Franquia): Promise<Franquia> {
+    console.info(franquia);
     const created = await this.franquiaService.save(franquia);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Franquia', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class FranquiaController {
   })
   async put(@Req() req: Request, @Body() franquia: Franquia): Promise<Franquia> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'Franquia', franquia.id);
+
     return await this.franquiaService.update(franquia);
   }
 

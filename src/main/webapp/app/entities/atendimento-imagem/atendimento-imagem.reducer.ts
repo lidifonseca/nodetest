@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IAtendimentoImagem, defaultValue } from 'app/shared/model/atendimento-imagem.model';
 
 export const ACTION_TYPES = {
+  FETCH_ATENDIMENTOIMAGEM_LIST_EXPORT: 'atendimentoImagem/FETCH_ATENDIMENTOIMAGEM_LIST_EXPORT',
   FETCH_ATENDIMENTOIMAGEM_LIST: 'atendimentoImagem/FETCH_ATENDIMENTOIMAGEM_LIST',
   FETCH_ATENDIMENTOIMAGEM: 'atendimentoImagem/FETCH_ATENDIMENTOIMAGEM',
   CREATE_ATENDIMENTOIMAGEM: 'atendimentoImagem/CREATE_ATENDIMENTOIMAGEM',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type AtendimentoImagemState = Readonly<typeof initialState>;
 
+export interface IAtendimentoImagemBaseState {
+  baseFilters: any;
+  atendimentoId: any;
+  imagem: any;
+  criadoEm: any;
+}
+
+export interface IAtendimentoImagemUpdateState {
+  fieldsBase: IAtendimentoImagemBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: AtendimentoImagemState = initialState, action): AtendimentoImagemState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOIMAGEM_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOIMAGEM_LIST):
     case REQUEST(ACTION_TYPES.FETCH_ATENDIMENTOIMAGEM):
       return {
@@ -51,6 +65,7 @@ export default (state: AtendimentoImagemState = initialState, action): Atendimen
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOIMAGEM_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOIMAGEM_LIST):
     case FAILURE(ACTION_TYPES.FETCH_ATENDIMENTOIMAGEM):
     case FAILURE(ACTION_TYPES.CREATE_ATENDIMENTOIMAGEM):
@@ -135,6 +150,27 @@ export const getEntity: ICrudGetAction<IAtendimentoImagem> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionAtendimentoImagem<IAtendimentoImagem> = (
+  atendimentoId,
+  imagem,
+  criadoEm,
+  page,
+  size,
+  sort
+) => {
+  const atendimentoIdRequest = atendimentoId ? `atendimentoId.contains=${atendimentoId}&` : '';
+  const imagemRequest = imagem ? `imagem.contains=${imagem}&` : '';
+  const criadoEmRequest = criadoEm ? `criadoEm.contains=${criadoEm}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_ATENDIMENTOIMAGEM_LIST,
+    payload: axios.get<IAtendimentoImagem>(
+      `${requestUrl}${atendimentoIdRequest}${imagemRequest}${criadoEmRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IAtendimentoImagem> = entity => async dispatch => {
   entity = {
     ...entity
@@ -170,3 +206,18 @@ export const deleteEntity: ICrudDeleteAction<IAtendimentoImagem> = id => async d
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getAtendimentoImagemState = (location): IAtendimentoImagemBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const atendimentoId = url.searchParams.get('atendimentoId') || '';
+  const imagem = url.searchParams.get('imagem') || '';
+  const criadoEm = url.searchParams.get('criadoEm') || '';
+
+  return {
+    baseFilters,
+    atendimentoId,
+    imagem,
+    criadoEm
+  };
+};

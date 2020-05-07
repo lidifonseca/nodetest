@@ -33,8 +33,14 @@ const initialState = {
 export type TermosUsoState = Readonly<typeof initialState>;
 
 export interface ITermosUsoBaseState {
+  baseFilters: any;
   termosUso: any;
   tipo: any;
+}
+
+export interface ITermosUsoUpdateState {
+  fieldsBase: ITermosUsoBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -80,6 +86,9 @@ export default (state: TermosUsoState = initialState, action): TermosUsoState =>
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_TERMOSUSO):
+      action.payload.data.termosUso = action.payload.data.termosUso
+        ? Buffer.from(action.payload.data.termosUso).toString()
+        : action.payload.data.termosUso;
       return {
         ...state,
         loading: false,
@@ -101,13 +110,14 @@ export default (state: TermosUsoState = initialState, action): TermosUsoState =>
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -194,12 +204,13 @@ export const deleteEntity: ICrudDeleteAction<ITermosUso> = id => async dispatch 
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -209,10 +220,12 @@ export const reset = () => ({
 
 export const getTermosUsoState = (location): ITermosUsoBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const termosUso = url.searchParams.get('termosUso') || '';
   const tipo = url.searchParams.get('tipo') || '';
 
   return {
+    baseFilters,
     termosUso,
     tipo
   };

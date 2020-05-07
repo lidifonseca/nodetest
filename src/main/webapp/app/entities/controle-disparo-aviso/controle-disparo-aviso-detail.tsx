@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './controle-disparo-aviso.reducer';
+import { getEntity, IControleDisparoAvisoBaseState, getControleDisparoAvisoState } from './controle-disparo-aviso.reducer';
 import { IControleDisparoAviso } from 'app/shared/model/controle-disparo-aviso.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IControleDisparoAvisoState {
+  fieldsBase: IControleDisparoAvisoBaseState;
+}
+
 export interface IControleDisparoAvisoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class ControleDisparoAvisoDetail extends React.Component<IControleDisparoAvisoDetailProps> {
+export class ControleDisparoAvisoDetail extends React.Component<IControleDisparoAvisoDetailProps, IControleDisparoAvisoState> {
   constructor(props: Readonly<IControleDisparoAvisoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getControleDisparoAvisoState(this.props.location)
     };
   }
 

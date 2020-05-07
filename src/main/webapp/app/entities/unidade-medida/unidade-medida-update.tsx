@@ -8,21 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './unidade-medida.reducer';
+import {
+  IUnidadeMedidaUpdateState,
+  getEntity,
+  getUnidadeMedidaState,
+  IUnidadeMedidaBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './unidade-medida.reducer';
 import { IUnidadeMedida } from 'app/shared/model/unidade-medida.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IUnidadeMedidaUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IUnidadeMedidaUpdateState {
-  isNew: boolean;
-}
-
 export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdateProps, IUnidadeMedidaUpdateState> {
   constructor(props: Readonly<IUnidadeMedidaUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getUnidadeMedidaState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +46,20 @@ export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdatePro
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['unidade'] ? '&unidade=' + fieldsBase['unidade'] : '') +
+      (fieldsBase['descricao'] ? '&descricao=' + fieldsBase['descricao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { unidadeMedidaEntity } = this.props;
@@ -57,13 +77,14 @@ export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdatePro
   };
 
   handleClose = () => {
-    this.props.history.push('/unidade-medida');
+    this.props.history.push('/unidade-medida?' + this.getFiltersURL());
   };
 
   render() {
     const { unidadeMedidaEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +117,14 @@ export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdatePro
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/unidade-medida" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/unidade-medida?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +139,7 @@ export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdatePro
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,52 +155,46 @@ export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdatePro
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="unidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="unidadeLabel" for="unidade-medida-unidade">
+                                    <Translate contentKey="generadorApp.unidadeMedida.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="unidade-medida-unidade" type="text" name="unidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="unidadeLabel" for="unidade-medida-unidade">
-                                <Translate contentKey="generadorApp.unidadeMedida.unidade">Unidade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="unidade-medida-unidade"
-                                type="text"
-                                name="unidade"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="descricaoLabel" for="unidade-medida-descricao">
-                                <Translate contentKey="generadorApp.unidadeMedida.descricao">Descricao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="unidade-medida-descricao"
-                                type="text"
-                                name="descricao"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'descricao' ? (
+                          <Col md="descricao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descricaoLabel" for="unidade-medida-descricao">
+                                    <Translate contentKey="generadorApp.unidadeMedida.descricao">Descricao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="unidade-medida-descricao" type="text" name="descricao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

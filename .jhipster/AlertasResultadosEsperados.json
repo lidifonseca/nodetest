@@ -26,16 +26,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "resultados",
-            "otherEntityRelationshipName": "alertasResultadosEsperados",
-            "relationshipName": "resultadosId",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200502225500",
+    "relationships": [],
+    "changelogDate": "20200507102800",
     "entityTableName": "alertas_resultados_esperados",
     "dto": "mapstruct",
     "pagination": "pagination",

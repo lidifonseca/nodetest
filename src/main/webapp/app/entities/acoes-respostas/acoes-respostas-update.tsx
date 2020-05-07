@@ -8,29 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IRespostas } from 'app/shared/model/respostas.model';
-import { getEntities as getRespostas } from 'app/entities/respostas/respostas.reducer';
-import { IPerguntasQuestionario } from 'app/shared/model/perguntas-questionario.model';
-import { getEntities as getPerguntasQuestionarios } from 'app/entities/perguntas-questionario/perguntas-questionario.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './acoes-respostas.reducer';
+import {
+  IAcoesRespostasUpdateState,
+  getEntity,
+  getAcoesRespostasState,
+  IAcoesRespostasBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './acoes-respostas.reducer';
 import { IAcoesRespostas } from 'app/shared/model/acoes-respostas.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IAcoesRespostasUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IAcoesRespostasUpdateState {
-  isNew: boolean;
-  respostasIdId: string;
-  perguntasQuestionarioIdId: string;
-}
-
 export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateProps, IAcoesRespostasUpdateState> {
   constructor(props: Readonly<IAcoesRespostasUpdateProps>) {
     super(props);
+
     this.state = {
-      respostasIdId: '0',
-      perguntasQuestionarioIdId: '0',
+      fieldsBase: getAcoesRespostasState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -46,11 +44,25 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getRespostas();
-    this.props.getPerguntasQuestionarios();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['abrirCampoPersonalizado'] ? '&abrirCampoPersonalizado=' + fieldsBase['abrirCampoPersonalizado'] : '') +
+      (fieldsBase['condicaoSexo'] ? '&condicaoSexo=' + fieldsBase['condicaoSexo'] : '') +
+      (fieldsBase['observacoes'] ? '&observacoes=' + fieldsBase['observacoes'] : '') +
+      (fieldsBase['tipoCampo1'] ? '&tipoCampo1=' + fieldsBase['tipoCampo1'] : '') +
+      (fieldsBase['tipoCampo2'] ? '&tipoCampo2=' + fieldsBase['tipoCampo2'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { acoesRespostasEntity } = this.props;
@@ -68,13 +80,14 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
   };
 
   handleClose = () => {
-    this.props.history.push('/acoes-respostas');
+    this.props.history.push('/acoes-respostas?' + this.getFiltersURL());
   };
 
   render() {
-    const { acoesRespostasEntity, respostas, perguntasQuestionarios, loading, updating } = this.props;
+    const { acoesRespostasEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -90,11 +103,7 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
             isNew
               ? {}
               : {
-                  ...acoesRespostasEntity,
-                  respostasId: acoesRespostasEntity.respostasId ? acoesRespostasEntity.respostasId.id : null,
-                  perguntasQuestionarioId: acoesRespostasEntity.perguntasQuestionarioId
-                    ? acoesRespostasEntity.perguntasQuestionarioId.id
-                    : null
+                  ...acoesRespostasEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -111,7 +120,14 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/acoes-respostas" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/acoes-respostas?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -126,7 +142,7 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -142,173 +158,108 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'abrirCampoPersonalizado' ? (
+                          <Col md="abrirCampoPersonalizado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="abrirCampoPersonalizadoLabel" check>
+                                    <AvInput
+                                      id="acoes-respostas-abrirCampoPersonalizado"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="abrirCampoPersonalizado"
+                                    />
+                                    <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">
+                                      Abrir Campo Personalizado
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="abrirCampoPersonalizado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="12">
-                              <Label className="mt-2" id="abrirCampoPersonalizadoLabel" check>
-                                <AvInput
-                                  id="acoes-respostas-abrirCampoPersonalizado"
-                                  type="checkbox"
-                                  className="form-control"
-                                  name="abrirCampoPersonalizado"
-                                />
-                                <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">
-                                  Abrir Campo Personalizado
-                                </Translate>
-                              </Label>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'condicaoSexo' ? (
+                          <Col md="condicaoSexo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
+                                    <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-condicaoSexo" type="text" name="condicaoSexo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="condicaoSexo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
-                                <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="acoes-respostas-condicaoSexo"
-                                type="text"
-                                name="condicaoSexo"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'observacoes' ? (
+                          <Col md="observacoes">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacoesLabel" for="acoes-respostas-observacoes">
+                                    <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-observacoes" type="text" name="observacoes" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="observacoesLabel" for="acoes-respostas-observacoes">
-                                <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="acoes-respostas-observacoes"
-                                type="text"
-                                name="observacoes"
-                                validate={{
-                                  maxLength: { value: 125, errorMessage: translate('entity.validation.maxlength', { max: 125 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'tipoCampo1' ? (
+                          <Col md="tipoCampo1">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
+                                    <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-tipoCampo1" type="text" name="tipoCampo1" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoCampo1" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
-                                <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="acoes-respostas-tipoCampo1"
-                                type="text"
-                                name="tipoCampo1"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
-                                <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="acoes-respostas-tipoCampo2"
-                                type="text"
-                                name="tipoCampo2"
-                                validate={{
-                                  maxLength: { value: 45, errorMessage: translate('entity.validation.maxlength', { max: 45 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="acoes-respostas-respostasId">
-                                <Translate contentKey="generadorApp.acoesRespostas.respostasId">Respostas Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="acoes-respostas-respostasId" type="select" className="form-control" name="respostasId">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.acoesRespostas.respostasId.empty')}
-                                </option>
-                                {respostas
-                                  ? respostas.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="acoes-respostas-perguntasQuestionarioId">
-                                <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionarioId">
-                                  Perguntas Questionario Id
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="acoes-respostas-perguntasQuestionarioId"
-                                type="select"
-                                className="form-control"
-                                name="perguntasQuestionarioId"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.acoesRespostas.perguntasQuestionarioId.empty')}
-                                </option>
-                                {perguntasQuestionarios
-                                  ? perguntasQuestionarios.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'tipoCampo2' ? (
+                          <Col md="tipoCampo2">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
+                                    <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-tipoCampo2" type="text" name="tipoCampo2" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoCampo2" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -321,8 +272,6 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  respostas: storeState.respostas.entities,
-  perguntasQuestionarios: storeState.perguntasQuestionario.entities,
   acoesRespostasEntity: storeState.acoesRespostas.entity,
   loading: storeState.acoesRespostas.loading,
   updating: storeState.acoesRespostas.updating,
@@ -330,8 +279,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getRespostas,
-  getPerguntasQuestionarios,
   getEntity,
   updateEntity,
   createEntity,

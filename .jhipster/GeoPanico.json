@@ -33,7 +33,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502233300",
+    "changelogDate": "20200507110600",
     "entityTableName": "geo_panico",
     "dto": "mapstruct",
     "pagination": "pagination",

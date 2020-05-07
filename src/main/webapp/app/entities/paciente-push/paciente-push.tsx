@@ -22,22 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-push.reducer';
+import { getPacientePushState, IPacientePushBaseState, getEntities } from './paciente-push.reducer';
 import { IPacientePush } from 'app/shared/model/paciente-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-
 export interface IPacientePushProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacientePushBaseState {
-  idFranquia: any;
-  mensagem: any;
-  ativo: any;
-  idPaciente: any;
-}
 export interface IPacientePushState extends IPacientePushBaseState, IPaginationBaseState {}
 
 export class PacientePush extends React.Component<IPacientePushProps, IPacientePushState> {
@@ -47,30 +38,12 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacientePushState(this.props.location)
+      ...getPacientePushState(this.props.location)
     };
   }
 
-  getPacientePushState = (location): IPacientePushBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const idFranquia = url.searchParams.get('idFranquia') || '';
-    const mensagem = url.searchParams.get('mensagem') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-
-    return {
-      idFranquia,
-      mensagem,
-      ativo,
-      idPaciente
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPacientes();
   }
 
   cancelCourse = () => {
@@ -78,8 +51,7 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       {
         idFranquia: '',
         mensagem: '',
-        ativo: '',
-        idPaciente: ''
+        ativo: ''
       },
       () => this.sortEntities()
     );
@@ -112,7 +84,9 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -133,9 +107,6 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
       'ativo=' +
       this.state.ativo +
       '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
       ''
     );
   };
@@ -143,12 +114,12 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idFranquia, mensagem, ativo, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(idFranquia, mensagem, ativo, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { idFranquia, mensagem, ativo, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(idFranquia, mensagem, ativo, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacientes, pacientePushList, match, totalItems } = this.props;
+    const { pacientePushList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -166,7 +137,11 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacientePush.home.createLabel">Create a new Paciente Push</Translate>
@@ -179,52 +154,40 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="idFranquiaLabel" for="paciente-push-idFranquia">
-                            <Translate contentKey="generadorApp.pacientePush.idFranquia">Id Franquia</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="idFranquia" id="paciente-push-idFranquia" value={this.state.idFranquia} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="mensagemLabel" for="paciente-push-mensagem">
-                            <Translate contentKey="generadorApp.pacientePush.mensagem">Mensagem</Translate>
-                          </Label>
-
-                          <AvInput type="text" name="mensagem" id="paciente-push-mensagem" value={this.state.mensagem} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="paciente-push-ativo">
-                            <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="paciente-push-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-push-idPaciente">
-                              <Translate contentKey="generadorApp.pacientePush.idPaciente">Id Paciente</Translate>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idFranquiaLabel" for="paciente-push-idFranquia">
+                              <Translate contentKey="generadorApp.pacientePush.idFranquia">Id Franquia</Translate>
                             </Label>
-                            <AvInput id="paciente-push-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+
+                            <AvInput type="text" name="idFranquia" id="paciente-push-idFranquia" value={this.state.idFranquia} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'mensagem' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="mensagemLabel" for="paciente-push-mensagem">
+                              <Translate contentKey="generadorApp.pacientePush.mensagem">Mensagem</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="mensagem" id="paciente-push-mensagem" value={this.state.mensagem} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="paciente-push-ativo">
+                              <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="paciente-push-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -252,22 +215,24 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('idFranquia')}>
-                        <Translate contentKey="generadorApp.pacientePush.idFranquia">Id Franquia</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('mensagem')}>
-                        <Translate contentKey="generadorApp.pacientePush.mensagem">Mensagem</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacientePush.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'idFranquia' ? (
+                        <th className="hand" onClick={this.sort('idFranquia')}>
+                          <Translate contentKey="generadorApp.pacientePush.idFranquia">Id Franquia</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'mensagem' ? (
+                        <th className="hand" onClick={this.sort('mensagem')}>
+                          <Translate contentKey="generadorApp.pacientePush.mensagem">Mensagem</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.pacientePush.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -282,34 +247,37 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
                           </Button>
                         </td>
 
-                        <td>{pacientePush.idFranquia}</td>
+                        {this.state.baseFilters !== 'idFranquia' ? <td>{pacientePush.idFranquia}</td> : null}
 
-                        <td>{pacientePush.mensagem}</td>
+                        {this.state.baseFilters !== 'mensagem' ? <td>{pacientePush.mensagem}</td> : null}
 
-                        <td>{pacientePush.ativo}</td>
-                        <td>
-                          {pacientePush.idPaciente ? (
-                            <Link to={`paciente/${pacientePush.idPaciente.id}`}>{pacientePush.idPaciente.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{pacientePush.ativo}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacientePush.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pacientePush.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacientePush.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacientePush.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacientePush.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacientePush.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -351,13 +319,11 @@ export class PacientePush extends React.Component<IPacientePushProps, IPacienteP
 }
 
 const mapStateToProps = ({ pacientePush, ...storeState }: IRootState) => ({
-  pacientes: storeState.paciente.entities,
   pacientePushList: pacientePush.entities,
   totalItems: pacientePush.totalItems
 });
 
 const mapDispatchToProps = {
-  getPacientes,
   getEntities
 };
 

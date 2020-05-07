@@ -34,10 +34,6 @@
             "fieldType": "Integer"
         },
         {
-            "fieldName": "idUsuario",
-            "fieldType": "Integer"
-        },
-        {
             "fieldName": "statusPad",
             "fieldType": "Integer"
         },
@@ -60,33 +56,14 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padCid",
-            "otherEntityRelationshipName": "idPad",
-            "relationshipName": "padCid"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItem",
-            "otherEntityRelationshipName": "idPad",
-            "relationshipName": "padItem"
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "unidadeEasy",
             "otherEntityRelationshipName": "pad",
             "relationshipName": "unidade",
             "otherEntityField": "razaoSocial"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "paciente",
-            "otherEntityRelationshipName": "pad",
-            "relationshipName": "idPaciente",
-            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200503001500",
+    "changelogDate": "20200507114800",
     "entityTableName": "pad",
     "dto": "mapstruct",
     "pagination": "pagination",

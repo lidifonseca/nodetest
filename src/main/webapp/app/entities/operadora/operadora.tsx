@@ -22,7 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './operadora.reducer';
+import { getOperadoraState, IOperadoraBaseState, getEntities } from './operadora.reducer';
 import { IOperadora } from 'app/shared/model/operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
@@ -34,28 +34,6 @@ import { getEntities as getTipoOperadoras } from 'app/entities/tipo-operadora/ti
 
 export interface IOperadoraProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IOperadoraBaseState {
-  nomeFantasia: any;
-  razaoSocial: any;
-  cnpj: any;
-  ie: any;
-  site: any;
-  ativo: any;
-  endereco: any;
-  contatoCentralAtendimento: any;
-  emailCentralAtendimento: any;
-  nomeContatoComercial: any;
-  contatoComercial: any;
-  emailComercial: any;
-  nomeContatoFinanceiro: any;
-  contatoFinanceiro: any;
-  emailFinanceiro: any;
-  atendimento: any;
-  especialidadeOperadora: any;
-  pacienteOperadora: any;
-  unidade: any;
-  tipoOperadora: any;
-}
 export interface IOperadoraState extends IOperadoraBaseState, IPaginationBaseState {}
 
 export class Operadora extends React.Component<IOperadoraProps, IOperadoraState> {
@@ -65,57 +43,9 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getOperadoraState(this.props.location)
+      ...getOperadoraState(this.props.location)
     };
   }
-
-  getOperadoraState = (location): IOperadoraBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nomeFantasia = url.searchParams.get('nomeFantasia') || '';
-    const razaoSocial = url.searchParams.get('razaoSocial') || '';
-    const cnpj = url.searchParams.get('cnpj') || '';
-    const ie = url.searchParams.get('ie') || '';
-    const site = url.searchParams.get('site') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const endereco = url.searchParams.get('endereco') || '';
-    const contatoCentralAtendimento = url.searchParams.get('contatoCentralAtendimento') || '';
-    const emailCentralAtendimento = url.searchParams.get('emailCentralAtendimento') || '';
-    const nomeContatoComercial = url.searchParams.get('nomeContatoComercial') || '';
-    const contatoComercial = url.searchParams.get('contatoComercial') || '';
-    const emailComercial = url.searchParams.get('emailComercial') || '';
-    const nomeContatoFinanceiro = url.searchParams.get('nomeContatoFinanceiro') || '';
-    const contatoFinanceiro = url.searchParams.get('contatoFinanceiro') || '';
-    const emailFinanceiro = url.searchParams.get('emailFinanceiro') || '';
-
-    const atendimento = url.searchParams.get('atendimento') || '';
-    const especialidadeOperadora = url.searchParams.get('especialidadeOperadora') || '';
-    const pacienteOperadora = url.searchParams.get('pacienteOperadora') || '';
-    const unidade = url.searchParams.get('unidade') || '';
-    const tipoOperadora = url.searchParams.get('tipoOperadora') || '';
-
-    return {
-      nomeFantasia,
-      razaoSocial,
-      cnpj,
-      ie,
-      site,
-      ativo,
-      endereco,
-      contatoCentralAtendimento,
-      emailCentralAtendimento,
-      nomeContatoComercial,
-      contatoComercial,
-      emailComercial,
-      nomeContatoFinanceiro,
-      contatoFinanceiro,
-      emailFinanceiro,
-      atendimento,
-      especialidadeOperadora,
-      pacienteOperadora,
-      unidade,
-      tipoOperadora
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -142,9 +72,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
         nomeContatoFinanceiro: '',
         contatoFinanceiro: '',
         emailFinanceiro: '',
-        atendimento: '',
-        especialidadeOperadora: '',
-        pacienteOperadora: '',
         unidade: '',
         tipoOperadora: ''
       },
@@ -179,7 +106,9 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -236,15 +165,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       'emailFinanceiro=' +
       this.state.emailFinanceiro +
       '&' +
-      'atendimento=' +
-      this.state.atendimento +
-      '&' +
-      'especialidadeOperadora=' +
-      this.state.especialidadeOperadora +
-      '&' +
-      'pacienteOperadora=' +
-      this.state.pacienteOperadora +
-      '&' +
       'unidade=' +
       this.state.unidade +
       '&' +
@@ -274,9 +194,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       nomeContatoFinanceiro,
       contatoFinanceiro,
       emailFinanceiro,
-      atendimento,
-      especialidadeOperadora,
-      pacienteOperadora,
       unidade,
       tipoOperadora,
       activePage,
@@ -300,9 +217,6 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
       nomeContatoFinanceiro,
       contatoFinanceiro,
       emailFinanceiro,
-      atendimento,
-      especialidadeOperadora,
-      pacienteOperadora,
       unidade,
       tipoOperadora,
       activePage - 1,
@@ -330,7 +244,11 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.operadora.home.createLabel">Create a new Operadora</Translate>
@@ -343,15 +261,17 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeFantasiaLabel" for="operadora-nomeFantasia">
-                            <Translate contentKey="generadorApp.operadora.nomeFantasia">Nome Fantasia</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nomeFantasia' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeFantasiaLabel" for="operadora-nomeFantasia">
+                              <Translate contentKey="generadorApp.operadora.nomeFantasia">Nome Fantasia</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="nomeFantasia" id="operadora-nomeFantasia" value={this.state.nomeFantasia} />
-                        </Row>
-                      </Col>
+                            <AvInput type="text" name="nomeFantasia" id="operadora-nomeFantasia" value={this.state.nomeFantasia} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -397,23 +317,23 @@ export class Operadora extends React.Component<IOperadoraProps, IOperadoraState>
                           </Button>
                         </td>
 
-                        <td>{operadora.nomeFantasia}</td>
+                        {this.state.baseFilters !== 'nomeFantasia' ? <td>{operadora.nomeFantasia}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${operadora.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${operadora.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${operadora.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${operadora.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${operadora.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${operadora.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

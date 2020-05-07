@@ -4,133 +4,121 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import LogUserFranquia from './log-user-franquia.entity';
-import Franquia from './franquia.entity';
-
 /**
  * A FranquiaUsuario.
  */
-@Entity('franquia_usuario')
+@Entity('tb_franquia_usuario')
 export default class FranquiaUsuario extends BaseEntity {
-  @Column({ name: 'senha', length: 100 })
+  @Column({ name: 'SENHA', length: 100 })
   senha: string;
 
-  @Column({ name: 'nome', length: 60 })
+  @Column({ name: 'NOME', length: 60 })
   nome: string;
 
-  @Column({ name: 'email', length: 100 })
+  @Column({ name: 'EMAIL', length: 100 })
   email: string;
 
-  @Column({ type: 'integer', name: 'ver_profissional' })
+  @Column({ type: 'integer', name: 'VER_PROFISSIONAL' })
   verProfissional: number;
 
-  @Column({ type: 'integer', name: 'cad_profissional' })
+  @Column({ type: 'integer', name: 'CAD_PROFISSIONAL' })
   cadProfissional: number;
 
-  @Column({ type: 'integer', name: 'edi_profissional' })
+  @Column({ type: 'integer', name: 'EDI_PROFISSIONAL' })
   ediProfissional: number;
 
-  @Column({ type: 'integer', name: 'del_profissional' })
+  @Column({ type: 'integer', name: 'DEL_PROFISSIONAL' })
   delProfissional: number;
 
-  @Column({ type: 'integer', name: 'rel_profissional' })
+  @Column({ type: 'integer', name: 'REL_PROFISSIONAL' })
   relProfissional: number;
 
-  @Column({ type: 'integer', name: 'ver_paciente' })
+  @Column({ type: 'integer', name: 'VER_PACIENTE' })
   verPaciente: number;
 
-  @Column({ type: 'integer', name: 'cad_paciente' })
+  @Column({ type: 'integer', name: 'CAD_PACIENTE' })
   cadPaciente: number;
 
-  @Column({ type: 'integer', name: 'edi_paciente' })
+  @Column({ type: 'integer', name: 'EDI_PACIENTE' })
   ediPaciente: number;
 
-  @Column({ type: 'integer', name: 'del_paciente' })
+  @Column({ type: 'integer', name: 'DEL_PACIENTE' })
   delPaciente: number;
 
-  @Column({ type: 'integer', name: 'rel_paciente' })
+  @Column({ type: 'integer', name: 'REL_PACIENTE' })
   relPaciente: number;
 
-  @Column({ type: 'integer', name: 'ver_pad' })
+  @Column({ type: 'integer', name: 'VER_PAD' })
   verPad: number;
 
-  @Column({ type: 'integer', name: 'cad_pad' })
+  @Column({ type: 'integer', name: 'CAD_PAD' })
   cadPad: number;
 
-  @Column({ type: 'integer', name: 'edi_pad' })
+  @Column({ type: 'integer', name: 'EDI_PAD' })
   ediPad: number;
 
-  @Column({ type: 'integer', name: 'del_pad' })
+  @Column({ type: 'integer', name: 'DEL_PAD' })
   delPad: number;
 
-  @Column({ type: 'integer', name: 'rel_pad' })
+  @Column({ type: 'integer', name: 'REL_PAD' })
   relPad: number;
 
-  @Column({ type: 'integer', name: 'ver_atendimento' })
+  @Column({ type: 'integer', name: 'VER_ATENDIMENTO' })
   verAtendimento: number;
 
-  @Column({ type: 'integer', name: 'cad_atendimento' })
+  @Column({ type: 'integer', name: 'CAD_ATENDIMENTO' })
   cadAtendimento: number;
 
-  @Column({ type: 'integer', name: 'edi_atendimento' })
+  @Column({ type: 'integer', name: 'EDI_ATENDIMENTO' })
   ediAtendimento: number;
 
-  @Column({ type: 'integer', name: 'del_atendimento' })
+  @Column({ type: 'integer', name: 'DEL_ATENDIMENTO' })
   delAtendimento: number;
 
-  @Column({ type: 'integer', name: 'rel_atendimento' })
+  @Column({ type: 'integer', name: 'REL_ATENDIMENTO' })
   relAtendimento: number;
 
-  @Column({ type: 'integer', name: 'ver_push' })
+  @Column({ type: 'integer', name: 'VER_PUSH' })
   verPush: number;
 
-  @Column({ type: 'integer', name: 'cad_push' })
+  @Column({ type: 'integer', name: 'CAD_PUSH' })
   cadPush: number;
 
-  @Column({ type: 'integer', name: 'ver_especialidade_valor' })
+  @Column({ type: 'integer', name: 'VER_ESPECIALIDADE_VALOR' })
   verEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'cad_especialidade_valor' })
+  @Column({ type: 'integer', name: 'CAD_ESPECIALIDADE_VALOR' })
   cadEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'edi_especialidade_valor' })
+  @Column({ type: 'integer', name: 'EDI_ESPECIALIDADE_VALOR' })
   ediEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'del_especialidade_valor' })
+  @Column({ type: 'integer', name: 'DEL_ESPECIALIDADE_VALOR' })
   delEspecialidadeValor: number;
 
-  @Column({ type: 'integer', name: 'ver_usuario' })
+  @Column({ type: 'integer', name: 'VER_USUARIO' })
   verUsuario: number;
 
-  @Column({ type: 'integer', name: 'cad_usuario' })
+  @Column({ type: 'integer', name: 'CAD_USUARIO' })
   cadUsuario: number;
 
-  @Column({ type: 'integer', name: 'edi_usuario' })
+  @Column({ type: 'integer', name: 'EDI_USUARIO' })
   ediUsuario: number;
 
-  @Column({ type: 'integer', name: 'del_usuario' })
+  @Column({ type: 'integer', name: 'DEL_USUARIO' })
   delUsuario: number;
 
-  @Column({ type: 'integer', name: 'envio_recusa' })
+  @Column({ type: 'integer', name: 'ENVIO_RECUSA' })
   envioRecusa: number;
 
-  @Column({ type: 'integer', name: 'envio_intercorrencia' })
+  @Column({ type: 'integer', name: 'ENVIO_INTERCORRENCIA' })
   envioIntercorrencia: number;
 
-  @Column({ type: 'integer', name: 'envio_cancelamento' })
+  @Column({ type: 'integer', name: 'ENVIO_CANCELAMENTO' })
   envioCancelamento: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
-
-  @OneToMany(
-    type => LogUserFranquia,
-    other => other.idUsuario
-  )
-  logUserFranquias: LogUserFranquia[];
-
-  @ManyToOne(type => Franquia)
-  idFranquia: Franquia;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

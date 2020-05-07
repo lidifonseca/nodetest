@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-meta.reducer';
+import { getEntity, IPadItemMetaBaseState, getPadItemMetaState } from './pad-item-meta.reducer';
 import { IPadItemMeta } from 'app/shared/model/pad-item-meta.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemMetaState {
+  fieldsBase: IPadItemMetaBaseState;
+}
+
 export interface IPadItemMetaDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemMetaDetail extends React.Component<IPadItemMetaDetailProps> {
+export class PadItemMetaDetail extends React.Component<IPadItemMetaDetailProps, IPadItemMetaState> {
   constructor(props: Readonly<IPadItemMetaDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemMetaState(this.props.location)
     };
   }
 
@@ -338,21 +343,6 @@ export class PadItemMetaDetail extends React.Component<IPadItemMetaDetailProps> 
                       </Col>
                       <Col md="9">
                         <dd>{padItemMetaEntity.maximoDiastolica}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="idUsuario">
-                            <Translate contentKey="generadorApp.padItemMeta.idUsuario">Id Usuario</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemMetaEntity.idUsuario}</dd>
                       </Col>
                     </Row>
                   </Col>

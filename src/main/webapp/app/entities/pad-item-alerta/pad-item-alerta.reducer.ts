@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadItemAlerta, defaultValue } from 'app/shared/model/pad-item-alerta.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADITEMALERTA_LIST_EXPORT: 'padItemAlerta/FETCH_PADITEMALERTA_LIST_EXPORT',
   FETCH_PADITEMALERTA_LIST: 'padItemAlerta/FETCH_PADITEMALERTA_LIST',
   FETCH_PADITEMALERTA: 'padItemAlerta/FETCH_PADITEMALERTA',
   CREATE_PADITEMALERTA: 'padItemAlerta/CREATE_PADITEMALERTA',
@@ -30,10 +31,26 @@ const initialState = {
 
 export type PadItemAlertaState = Readonly<typeof initialState>;
 
+export interface IPadItemAlertaBaseState {
+  baseFilters: any;
+  padItemMetaId: any;
+  envioEmailEm: any;
+  visualizadoEm: any;
+  criadoEm: any;
+  ativo: any;
+  mensagem: any;
+}
+
+export interface IPadItemAlertaUpdateState {
+  fieldsBase: IPadItemAlertaBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PadItemAlertaState = initialState, action): PadItemAlertaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADITEMALERTA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMALERTA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMALERTA):
       return {
@@ -51,6 +68,7 @@ export default (state: PadItemAlertaState = initialState, action): PadItemAlerta
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADITEMALERTA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMALERTA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMALERTA):
     case FAILURE(ACTION_TYPES.CREATE_PADITEMALERTA):
@@ -151,6 +169,33 @@ export const getEntity: ICrudGetAction<IPadItemAlerta> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPadItemAlerta<IPadItemAlerta> = (
+  padItemMetaId,
+  envioEmailEm,
+  visualizadoEm,
+  criadoEm,
+  ativo,
+  mensagem,
+  page,
+  size,
+  sort
+) => {
+  const padItemMetaIdRequest = padItemMetaId ? `padItemMetaId.contains=${padItemMetaId}&` : '';
+  const envioEmailEmRequest = envioEmailEm ? `envioEmailEm.contains=${envioEmailEm}&` : '';
+  const visualizadoEmRequest = visualizadoEm ? `visualizadoEm.contains=${visualizadoEm}&` : '';
+  const criadoEmRequest = criadoEm ? `criadoEm.contains=${criadoEm}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const mensagemRequest = mensagem ? `mensagem.contains=${mensagem}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADITEMALERTA_LIST,
+    payload: axios.get<IPadItemAlerta>(
+      `${requestUrl}${padItemMetaIdRequest}${envioEmailEmRequest}${visualizadoEmRequest}${criadoEmRequest}${ativoRequest}${mensagemRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IPadItemAlerta> = entity => async dispatch => {
   entity = {
     ...entity
@@ -186,3 +231,24 @@ export const deleteEntity: ICrudDeleteAction<IPadItemAlerta> = id => async dispa
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadItemAlertaState = (location): IPadItemAlertaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const padItemMetaId = url.searchParams.get('padItemMetaId') || '';
+  const envioEmailEm = url.searchParams.get('envioEmailEm') || '';
+  const visualizadoEm = url.searchParams.get('visualizadoEm') || '';
+  const criadoEm = url.searchParams.get('criadoEm') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const mensagem = url.searchParams.get('mensagem') || '';
+
+  return {
+    baseFilters,
+    padItemMetaId,
+    envioEmailEm,
+    visualizadoEm,
+    criadoEm,
+    ativo,
+    mensagem
+  };
+};

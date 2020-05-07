@@ -16,10 +16,7 @@
       "detail": {
         "title": "Cidade"
       },
-      "descrCidade": "Descr Cidade",
-      "atendimento": "Atendimento",
-      "empresa": "Empresa",
-      "idUf": "Id Uf"
+      "descrCidade": "Descr Cidade"
     }
   }
 }

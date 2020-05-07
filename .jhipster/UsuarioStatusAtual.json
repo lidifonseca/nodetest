@@ -2,10 +2,6 @@
     "name": "UsuarioStatusAtual",
     "fields": [
         {
-            "fieldName": "idUsuario",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "statusAtual",
             "fieldType": "Integer"
         },
@@ -23,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200503012900",
+    "changelogDate": "20200507130200",
     "entityTableName": "usuario_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

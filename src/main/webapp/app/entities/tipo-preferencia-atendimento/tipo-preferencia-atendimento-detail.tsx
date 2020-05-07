@@ -7,17 +7,29 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-preferencia-atendimento.reducer';
+import {
+  getEntity,
+  ITipoPreferenciaAtendimentoBaseState,
+  getTipoPreferenciaAtendimentoState
+} from './tipo-preferencia-atendimento.reducer';
 import { ITipoPreferenciaAtendimento } from 'app/shared/model/tipo-preferencia-atendimento.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoPreferenciaAtendimentoState {
+  fieldsBase: ITipoPreferenciaAtendimentoBaseState;
+}
+
 export interface ITipoPreferenciaAtendimentoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoPreferenciaAtendimentoDetail extends React.Component<ITipoPreferenciaAtendimentoDetailProps> {
+export class TipoPreferenciaAtendimentoDetail extends React.Component<
+  ITipoPreferenciaAtendimentoDetailProps,
+  ITipoPreferenciaAtendimentoState
+> {
   constructor(props: Readonly<ITipoPreferenciaAtendimentoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoPreferenciaAtendimentoState(this.props.location)
     };
   }
 

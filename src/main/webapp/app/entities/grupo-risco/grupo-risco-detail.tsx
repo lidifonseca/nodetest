@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './grupo-risco.reducer';
+import { getEntity, IGrupoRiscoBaseState, getGrupoRiscoState } from './grupo-risco.reducer';
 import { IGrupoRisco } from 'app/shared/model/grupo-risco.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IGrupoRiscoState {
+  fieldsBase: IGrupoRiscoBaseState;
+}
+
 export interface IGrupoRiscoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class GrupoRiscoDetail extends React.Component<IGrupoRiscoDetailProps> {
+export class GrupoRiscoDetail extends React.Component<IGrupoRiscoDetailProps, IGrupoRiscoState> {
   constructor(props: Readonly<IGrupoRiscoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getGrupoRiscoState(this.props.location)
     };
   }
 

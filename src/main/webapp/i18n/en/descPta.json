@@ -3,15 +3,15 @@
     "descPta": {
       "home": {
         "title": "Desc Ptas",
-        "createLabel": "Criar novo Desc Pta",
-        "createOrEditLabel": "Criar ou editar Desc Pta",
-        "notFound": "Nenhum Desc Pta encontrado"
+        "createLabel": "Create a new Desc Pta",
+        "createOrEditLabel": "Create or edit a Desc Pta",
+        "notFound": "No Desc Ptas found"
       },
-      "created": "Um novo Desc Pta foi criado com o identificador {{ param }}",
-      "updated": "Um Desc Pta foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Desc Pta foi excluído com o identificador {{ param }}",
+      "created": "A new Desc Pta is created with identifier {{ param }}",
+      "updated": "A Desc Pta is updated with identifier {{ param }}",
+      "deleted": "A Desc Pta is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Desc Pta {{ id }}?"
+        "question": "Are you sure you want to delete Desc Pta {{ id }}?"
       },
       "detail": {
         "title": "Desc Pta"

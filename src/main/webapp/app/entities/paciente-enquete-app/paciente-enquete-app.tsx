@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './paciente-enquete-app.reducer';
+import { getPacienteEnqueteAppState, IPacienteEnqueteAppBaseState, getEntities } from './paciente-enquete-app.reducer';
 import { IPacienteEnqueteApp } from 'app/shared/model/paciente-enquete-app.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-
 export interface IPacienteEnqueteAppProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IPacienteEnqueteAppBaseState {
-  votacao: any;
-  idPaciente: any;
-}
 export interface IPacienteEnqueteAppState extends IPacienteEnqueteAppBaseState, IPaginationBaseState {}
 
 export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps, IPacienteEnqueteAppState> {
@@ -45,33 +38,18 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getPacienteEnqueteAppState(this.props.location)
+      ...getPacienteEnqueteAppState(this.props.location)
     };
   }
 
-  getPacienteEnqueteAppState = (location): IPacienteEnqueteAppBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const votacao = url.searchParams.get('votacao') || '';
-
-    const idPaciente = url.searchParams.get('idPaciente') || '';
-
-    return {
-      votacao,
-      idPaciente
-    };
-  };
-
   componentDidMount() {
     this.getEntities();
-
-    this.props.getPacientes();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        votacao: '',
-        idPaciente: ''
+        votacao: ''
       },
       () => this.sortEntities()
     );
@@ -104,7 +82,9 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -119,9 +99,6 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
       'votacao=' +
       this.state.votacao +
       '&' +
-      'idPaciente=' +
-      this.state.idPaciente +
-      '&' +
       ''
     );
   };
@@ -129,12 +106,12 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { votacao, idPaciente, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(votacao, idPaciente, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { votacao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(votacao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
-    const { pacientes, pacienteEnqueteAppList, match, totalItems } = this.props;
+    const { pacienteEnqueteAppList, match, totalItems } = this.props;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -152,7 +129,11 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.pacienteEnqueteApp.home.createLabel">Create a new Paciente Enquete App</Translate>
@@ -165,34 +146,16 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="votacaoLabel" for="paciente-enquete-app-votacao">
-                            <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
-                          </Label>
-                          <AvInput type="string" name="votacao" id="paciente-enquete-app-votacao" value={this.state.votacao} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row>
-                          <div>
-                            <Label for="paciente-enquete-app-idPaciente">
-                              <Translate contentKey="generadorApp.pacienteEnqueteApp.idPaciente">Id Paciente</Translate>
+                      {this.state.baseFilters !== 'votacao' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="votacaoLabel" for="paciente-enquete-app-votacao">
+                              <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
                             </Label>
-                            <AvInput id="paciente-enquete-app-idPaciente" type="select" className="form-control" name="idPacienteId">
-                              <option value="" key="0" />
-                              {pacientes
-                                ? pacientes.map(otherEntity => (
-                                    <option value={otherEntity.id} key={otherEntity.id}>
-                                      {otherEntity.id}
-                                    </option>
-                                  ))
-                                : null}
-                            </AvInput>
-                          </div>
-                        </Row>
-                      </Col>
+                            <AvInput type="string" name="votacao" id="paciente-enquete-app-votacao" value={this.state.votacao} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -220,14 +183,12 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('votacao')}>
-                        <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th>
-                        <Translate contentKey="generadorApp.pacienteEnqueteApp.idPaciente">Id Paciente</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'votacao' ? (
+                        <th className="hand" onClick={this.sort('votacao')}>
+                          <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -242,30 +203,33 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
                           </Button>
                         </td>
 
-                        <td>{pacienteEnqueteApp.votacao}</td>
-                        <td>
-                          {pacienteEnqueteApp.idPaciente ? (
-                            <Link to={`paciente/${pacienteEnqueteApp.idPaciente.id}`}>{pacienteEnqueteApp.idPaciente.id}</Link>
-                          ) : (
-                            ''
-                          )}
-                        </td>
+                        {this.state.baseFilters !== 'votacao' ? <td>{pacienteEnqueteApp.votacao}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${pacienteEnqueteApp.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${pacienteEnqueteApp.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteEnqueteApp.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteEnqueteApp.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${pacienteEnqueteApp.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${pacienteEnqueteApp.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>
@@ -307,13 +271,11 @@ export class PacienteEnqueteApp extends React.Component<IPacienteEnqueteAppProps
 }
 
 const mapStateToProps = ({ pacienteEnqueteApp, ...storeState }: IRootState) => ({
-  pacientes: storeState.paciente.entities,
   pacienteEnqueteAppList: pacienteEnqueteApp.entities,
   totalItems: pacienteEnqueteApp.totalItems
 });
 
 const mapDispatchToProps = {
-  getPacientes,
   getEntities
 };
 

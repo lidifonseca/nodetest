@@ -3,23 +3,21 @@
     "padCid": {
       "home": {
         "title": "Pad Cids",
-        "createLabel": "Criar novo Pad Cid",
-        "createOrEditLabel": "Criar ou editar Pad Cid",
-        "notFound": "Nenhum Pad Cid encontrado"
+        "createLabel": "Create a new Pad Cid",
+        "createOrEditLabel": "Create or edit a Pad Cid",
+        "notFound": "No Pad Cids found"
       },
-      "created": "Um novo Pad Cid foi criado com o identificador {{ param }}",
-      "updated": "Um Pad Cid foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Pad Cid foi excluído com o identificador {{ param }}",
+      "created": "A new Pad Cid is created with identifier {{ param }}",
+      "updated": "A Pad Cid is updated with identifier {{ param }}",
+      "deleted": "A Pad Cid is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Pad Cid {{ id }}?"
+        "question": "Are you sure you want to delete Pad Cid {{ id }}?"
       },
       "detail": {
         "title": "Pad Cid"
       },
       "observacao": "Observacao",
-      "ativo": "Ativo",
-      "idPad": "Id Pad",
-      "idCid": "Id Cid"
+      "ativo": "Ativo"
     }
   }
 }

@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPadItemAtividade, defaultValue } from 'app/shared/model/pad-item-atividade.model';
 
 export const ACTION_TYPES = {
+  FETCH_PADITEMATIVIDADE_LIST_EXPORT: 'padItemAtividade/FETCH_PADITEMATIVIDADE_LIST_EXPORT',
   FETCH_PADITEMATIVIDADE_LIST: 'padItemAtividade/FETCH_PADITEMATIVIDADE_LIST',
   FETCH_PADITEMATIVIDADE: 'padItemAtividade/FETCH_PADITEMATIVIDADE',
   CREATE_PADITEMATIVIDADE: 'padItemAtividade/CREATE_PADITEMATIVIDADE',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PadItemAtividadeState = Readonly<typeof initialState>;
 
+export interface IPadItemAtividadeBaseState {
+  baseFilters: any;
+  dataInicio: any;
+  dataFim: any;
+}
+
+export interface IPadItemAtividadeUpdateState {
+  fieldsBase: IPadItemAtividadeBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PadItemAtividadeState = initialState, action): PadItemAtividadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PADITEMATIVIDADE):
       return {
@@ -51,6 +64,7 @@ export default (state: PadItemAtividadeState = initialState, action): PadItemAti
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PADITEMATIVIDADE):
     case FAILURE(ACTION_TYPES.CREATE_PADITEMATIVIDADE):
@@ -108,33 +122,19 @@ const apiUrl = 'api/pad-item-atividades';
 export type ICrudGetAllActionPadItemAtividade<T> = (
   dataInicio?: any,
   dataFim?: any,
-  idAtividade?: any,
-  idPadItem?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (
-  dataInicio,
-  dataFim,
-  idAtividade,
-  idPadItem,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (dataInicio, dataFim, page, size, sort) => {
   const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
   const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
-  const idAtividadeRequest = idAtividade ? `idAtividade.equals=${idAtividade}&` : '';
-  const idPadItemRequest = idPadItem ? `idPadItem.equals=${idPadItem}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST,
-    payload: axios.get<IPadItemAtividade>(
-      `${requestUrl}${dataInicioRequest}${dataFimRequest}${idAtividadeRequest}${idPadItemRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<IPadItemAtividade>(`${requestUrl}${dataInicioRequest}${dataFimRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<IPadItemAtividade> = id => {
@@ -145,11 +145,20 @@ export const getEntity: ICrudGetAction<IPadItemAtividade> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPadItemAtividade<IPadItemAtividade> = (dataInicio, dataFim, page, size, sort) => {
+  const dataInicioRequest = dataInicio ? `dataInicio.equals=${dataInicio}&` : '';
+  const dataFimRequest = dataFim ? `dataFim.equals=${dataFim}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PADITEMATIVIDADE_LIST,
+    payload: axios.get<IPadItemAtividade>(`${requestUrl}${dataInicioRequest}${dataFimRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IPadItemAtividade> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idAtividade: entity.idAtividade === 'null' ? null : entity.idAtividade,
-    idPadItem: entity.idPadItem === 'null' ? null : entity.idPadItem
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_PADITEMATIVIDADE,
@@ -160,11 +169,7 @@ export const createEntity: ICrudPutAction<IPadItemAtividade> = entity => async d
 };
 
 export const updateEntity: ICrudPutAction<IPadItemAtividade> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idAtividade: entity.idAtividade === 'null' ? null : entity.idAtividade,
-    idPadItem: entity.idPadItem === 'null' ? null : entity.idPadItem
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_PADITEMATIVIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -186,3 +191,16 @@ export const deleteEntity: ICrudDeleteAction<IPadItemAtividade> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPadItemAtividadeState = (location): IPadItemAtividadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const dataInicio = url.searchParams.get('dataInicio') || '';
+  const dataFim = url.searchParams.get('dataFim') || '';
+
+  return {
+    baseFilters,
+    dataInicio,
+    dataFim
+  };
+};

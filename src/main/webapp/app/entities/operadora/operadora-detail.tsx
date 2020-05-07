@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './operadora.reducer';
+import { getEntity, IOperadoraBaseState, getOperadoraState } from './operadora.reducer';
 import { IOperadora } from 'app/shared/model/operadora.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IOperadoraState {
+  fieldsBase: IOperadoraBaseState;
+}
+
 export interface IOperadoraDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class OperadoraDetail extends React.Component<IOperadoraDetailProps> {
+export class OperadoraDetail extends React.Component<IOperadoraDetailProps, IOperadoraState> {
   constructor(props: Readonly<IOperadoraDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getOperadoraState(this.props.location)
     };
   }
 

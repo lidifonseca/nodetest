@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICepbrEndereco, defaultValue } from 'app/shared/model/cepbr-endereco.model';
 
 export const ACTION_TYPES = {
+  FETCH_CEPBRENDERECO_LIST_EXPORT: 'cepbrEndereco/FETCH_CEPBRENDERECO_LIST_EXPORT',
   FETCH_CEPBRENDERECO_LIST: 'cepbrEndereco/FETCH_CEPBRENDERECO_LIST',
   FETCH_CEPBRENDERECO: 'cepbrEndereco/FETCH_CEPBRENDERECO',
   CREATE_CEPBRENDERECO: 'cepbrEndereco/CREATE_CEPBRENDERECO',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type CepbrEnderecoState = Readonly<typeof initialState>;
 
+export interface ICepbrEnderecoBaseState {
+  baseFilters: any;
+  cep: any;
+  logradouro: any;
+  tipoLogradouro: any;
+  complemento: any;
+  local: any;
+}
+
+export interface ICepbrEnderecoUpdateState {
+  fieldsBase: ICepbrEnderecoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CepbrEnderecoState = initialState, action): CepbrEnderecoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CEPBRENDERECO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRENDERECO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CEPBRENDERECO):
       return {
@@ -51,6 +67,7 @@ export default (state: CepbrEnderecoState = initialState, action): CepbrEndereco
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CEPBRENDERECO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRENDERECO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CEPBRENDERECO):
     case FAILURE(ACTION_TYPES.CREATE_CEPBRENDERECO):
@@ -111,8 +128,6 @@ export type ICrudGetAllActionCepbrEndereco<T> = (
   tipoLogradouro?: any,
   complemento?: any,
   local?: any,
-  idCidade?: any,
-  idBairro?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -124,8 +139,6 @@ export const getEntities: ICrudGetAllActionCepbrEndereco<ICepbrEndereco> = (
   tipoLogradouro,
   complemento,
   local,
-  idCidade,
-  idBairro,
   page,
   size,
   sort
@@ -135,14 +148,12 @@ export const getEntities: ICrudGetAllActionCepbrEndereco<ICepbrEndereco> = (
   const tipoLogradouroRequest = tipoLogradouro ? `tipoLogradouro.contains=${tipoLogradouro}&` : '';
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const localRequest = local ? `local.contains=${local}&` : '';
-  const idCidadeRequest = idCidade ? `idCidade.equals=${idCidade}&` : '';
-  const idBairroRequest = idBairro ? `idBairro.equals=${idBairro}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CEPBRENDERECO_LIST,
     payload: axios.get<ICepbrEndereco>(
-      `${requestUrl}${cepRequest}${logradouroRequest}${tipoLogradouroRequest}${complementoRequest}${localRequest}${idCidadeRequest}${idBairroRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${cepRequest}${logradouroRequest}${tipoLogradouroRequest}${complementoRequest}${localRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -154,11 +165,34 @@ export const getEntity: ICrudGetAction<ICepbrEndereco> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCepbrEndereco<ICepbrEndereco> = (
+  cep,
+  logradouro,
+  tipoLogradouro,
+  complemento,
+  local,
+  page,
+  size,
+  sort
+) => {
+  const cepRequest = cep ? `cep.contains=${cep}&` : '';
+  const logradouroRequest = logradouro ? `logradouro.contains=${logradouro}&` : '';
+  const tipoLogradouroRequest = tipoLogradouro ? `tipoLogradouro.contains=${tipoLogradouro}&` : '';
+  const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
+  const localRequest = local ? `local.contains=${local}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CEPBRENDERECO_LIST,
+    payload: axios.get<ICepbrEndereco>(
+      `${requestUrl}${cepRequest}${logradouroRequest}${tipoLogradouroRequest}${complementoRequest}${localRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ICepbrEndereco> = entity => async dispatch => {
   entity = {
-    ...entity,
-    idCidade: entity.idCidade === 'null' ? null : entity.idCidade,
-    idBairro: entity.idBairro === 'null' ? null : entity.idBairro
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CEPBRENDERECO,
@@ -169,11 +203,7 @@ export const createEntity: ICrudPutAction<ICepbrEndereco> = entity => async disp
 };
 
 export const updateEntity: ICrudPutAction<ICepbrEndereco> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    idCidade: entity.idCidade === 'null' ? null : entity.idCidade,
-    idBairro: entity.idBairro === 'null' ? null : entity.idBairro
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CEPBRENDERECO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -195,3 +225,22 @@ export const deleteEntity: ICrudDeleteAction<ICepbrEndereco> = id => async dispa
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCepbrEnderecoState = (location): ICepbrEnderecoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const cep = url.searchParams.get('cep') || '';
+  const logradouro = url.searchParams.get('logradouro') || '';
+  const tipoLogradouro = url.searchParams.get('tipoLogradouro') || '';
+  const complemento = url.searchParams.get('complemento') || '';
+  const local = url.searchParams.get('local') || '';
+
+  return {
+    baseFilters,
+    cep,
+    logradouro,
+    tipoLogradouro,
+    complemento,
+    local
+  };
+};

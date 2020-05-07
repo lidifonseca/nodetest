@@ -37,7 +37,6 @@ export interface IPacienteStatusAtualBaseState {
   dataStatus: any;
   observacao: any;
   ativo: any;
-  idUsuario: any;
   paciente: any;
   status: any;
 }
@@ -116,13 +115,14 @@ export default (state: PacienteStatusAtualState = initialState, action): Pacient
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -144,7 +144,6 @@ export type ICrudGetAllActionPacienteStatusAtual<T> = (
   dataStatus?: any,
   observacao?: any,
   ativo?: any,
-  idUsuario?: any,
   paciente?: any,
   status?: any,
   page?: number,
@@ -156,7 +155,6 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   dataStatus,
   observacao,
   ativo,
-  idUsuario,
   paciente,
   status,
   page,
@@ -166,7 +164,6 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   const dataStatusRequest = dataStatus ? `dataStatus.equals=${dataStatus}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
   const statusRequest = status ? `status.equals=${status}&` : '';
 
@@ -174,7 +171,7 @@ export const getEntities: ICrudGetAllActionPacienteStatusAtual<IPacienteStatusAt
   return {
     type: ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST,
     payload: axios.get<IPacienteStatusAtual>(
-      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${idUsuarioRequest}${pacienteRequest}${statusRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${pacienteRequest}${statusRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -190,7 +187,6 @@ export const getEntitiesExport: ICrudGetAllActionPacienteStatusAtual<IPacienteSt
   dataStatus,
   observacao,
   ativo,
-  idUsuario,
   paciente,
   status,
   page,
@@ -200,7 +196,6 @@ export const getEntitiesExport: ICrudGetAllActionPacienteStatusAtual<IPacienteSt
   const dataStatusRequest = dataStatus ? `dataStatus.equals=${dataStatus}&` : '';
   const observacaoRequest = observacao ? `observacao.contains=${observacao}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
-  const idUsuarioRequest = idUsuario ? `idUsuario.contains=${idUsuario}&` : '';
   const pacienteRequest = paciente ? `paciente.equals=${paciente}&` : '';
   const statusRequest = status ? `status.equals=${status}&` : '';
 
@@ -208,7 +203,7 @@ export const getEntitiesExport: ICrudGetAllActionPacienteStatusAtual<IPacienteSt
   return {
     type: ACTION_TYPES.FETCH_PACIENTESTATUSATUAL_LIST,
     payload: axios.get<IPacienteStatusAtual>(
-      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${idUsuarioRequest}${pacienteRequest}${statusRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${dataStatusRequest}${observacaoRequest}${ativoRequest}${pacienteRequest}${statusRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -251,12 +246,13 @@ export const deleteEntity: ICrudDeleteAction<IPacienteStatusAtual> = id => async
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -270,7 +266,6 @@ export const getPacienteStatusAtualState = (location): IPacienteStatusAtualBaseS
   const dataStatus = url.searchParams.get('dataStatus') || '';
   const observacao = url.searchParams.get('observacao') || '';
   const ativo = url.searchParams.get('ativo') || '';
-  const idUsuario = url.searchParams.get('idUsuario') || '';
 
   const paciente = url.searchParams.get('paciente') || '';
   const status = url.searchParams.get('status') || '';
@@ -280,7 +275,6 @@ export const getPacienteStatusAtualState = (location): IPacienteStatusAtualBaseS
     dataStatus,
     observacao,
     ativo,
-    idUsuario,
     paciente,
     status
   };

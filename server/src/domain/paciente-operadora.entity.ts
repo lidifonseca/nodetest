@@ -4,25 +4,16 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Paciente from './paciente.entity';
-import Operadora from './operadora.entity';
-
 /**
  * A PacienteOperadora.
  */
-@Entity('paciente_operadora')
+@Entity('tb_paciente_operadora')
 export default class PacienteOperadora extends BaseEntity {
-  @Column({ name: 'registro', length: 100 })
+  @Column({ name: 'REGISTRO', length: 100 })
   registro: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
-
-  @ManyToOne(type => Paciente)
-  idPaciente: Paciente;
-
-  @ManyToOne(type => Operadora)
-  idOperadora: Operadora;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

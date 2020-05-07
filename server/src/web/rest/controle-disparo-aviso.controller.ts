@@ -68,7 +68,9 @@ export class ControleDisparoAvisoController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   async post(@Req() req: Request, @Body() controleDisparoAviso: ControleDisparoAviso): Promise<ControleDisparoAviso> {
+    console.info(controleDisparoAviso);
     const created = await this.controleDisparoAvisoService.save(controleDisparoAviso);
+    console.info(created);
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ControleDisparoAviso', created.id);
     return created;
   }
@@ -83,6 +85,7 @@ export class ControleDisparoAvisoController {
   })
   async put(@Req() req: Request, @Body() controleDisparoAviso: ControleDisparoAviso): Promise<ControleDisparoAviso> {
     HeaderUtil.addEntityCreatedHeaders(req.res, 'ControleDisparoAviso', controleDisparoAviso.id);
+
     return await this.controleDisparoAvisoService.update(controleDisparoAviso);
   }
 

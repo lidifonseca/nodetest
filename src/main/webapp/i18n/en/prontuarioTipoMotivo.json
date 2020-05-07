@@ -3,15 +3,15 @@
     "prontuarioTipoMotivo": {
       "home": {
         "title": "Prontuario Tipo Motivos",
-        "createLabel": "Criar novo Prontuario Tipo Motivo",
-        "createOrEditLabel": "Criar ou editar Prontuario Tipo Motivo",
-        "notFound": "Nenhum Prontuario Tipo Motivo encontrado"
+        "createLabel": "Create a new Prontuario Tipo Motivo",
+        "createOrEditLabel": "Create or edit a Prontuario Tipo Motivo",
+        "notFound": "No Prontuario Tipo Motivos found"
       },
-      "created": "Um novo Prontuario Tipo Motivo foi criado com o identificador {{ param }}",
-      "updated": "Um Prontuario Tipo Motivo foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Prontuario Tipo Motivo foi excluído com o identificador {{ param }}",
+      "created": "A new Prontuario Tipo Motivo is created with identifier {{ param }}",
+      "updated": "A Prontuario Tipo Motivo is updated with identifier {{ param }}",
+      "deleted": "A Prontuario Tipo Motivo is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Prontuario Tipo Motivo {{ id }}?"
+        "question": "Are you sure you want to delete Prontuario Tipo Motivo {{ id }}?"
       },
       "detail": {
         "title": "Prontuario Tipo Motivo"

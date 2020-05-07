@@ -4,30 +4,25 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Resultados from './resultados.entity';
-
 /**
  * A AlertasResultadosEsperados.
  */
-@Entity('alertas_resultados_esperados')
+@Entity('tb_alertas_resultados_esperados')
 export default class AlertasResultadosEsperados extends BaseEntity {
-  @Column({ type: 'double', name: 'pontuacao' })
+  @Column({ type: 'double', name: 'PONTUACAO' })
   pontuacao: number;
 
-  @Column({ type: 'boolean', name: 'alteracao_esperada' })
+  @Column({ type: 'boolean', name: 'ALTERACAO_ESPERADA' })
   alteracaoEsperada: boolean;
 
-  @Column({ name: 'observacoes', length: 255 })
+  @Column({ name: 'OBSERVACOES', length: 255 })
   observacoes: string;
 
-  @Column({ type: 'integer', name: 'usuario_id' })
+  @Column({ type: 'integer', name: 'USUARIO_ID' })
   usuarioId: number;
 
-  @Column({ type: 'integer', name: 'valor' })
+  @Column({ type: 'integer', name: 'VALOR' })
   valor: number;
-
-  @ManyToOne(type => Resultados)
-  resultadosId: Resultados;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

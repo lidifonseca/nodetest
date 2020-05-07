@@ -4,25 +4,16 @@ import { BaseEntity } from './base/base.entity';
 
 import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } from 'class-validator';
 
-import Pad from './pad.entity';
-import Cid from './cid.entity';
-
 /**
  * A PadCid.
  */
-@Entity('pad_cid')
+@Entity('tb_pad_cid')
 export default class PadCid extends BaseEntity {
-  @Column({ name: 'observacao', length: 255 })
+  @Column({ name: 'OBSERVACAO', length: 255 })
   observacao: string;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
-
-  @ManyToOne(type => Pad)
-  idPad: Pad;
-
-  @ManyToOne(type => Cid)
-  idCid: Cid;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 }

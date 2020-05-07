@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IMotivoInternacao, defaultValue } from 'app/shared/model/motivo-internacao.model';
 
 export const ACTION_TYPES = {
+  FETCH_MOTIVOINTERNACAO_LIST_EXPORT: 'motivoInternacao/FETCH_MOTIVOINTERNACAO_LIST_EXPORT',
   FETCH_MOTIVOINTERNACAO_LIST: 'motivoInternacao/FETCH_MOTIVOINTERNACAO_LIST',
   FETCH_MOTIVOINTERNACAO: 'motivoInternacao/FETCH_MOTIVOINTERNACAO',
   CREATE_MOTIVOINTERNACAO: 'motivoInternacao/CREATE_MOTIVOINTERNACAO',
@@ -30,10 +31,25 @@ const initialState = {
 
 export type MotivoInternacaoState = Readonly<typeof initialState>;
 
+export interface IMotivoInternacaoBaseState {
+  baseFilters: any;
+  nome: any;
+  idPai: any;
+  ativo: any;
+  classe: any;
+  name: any;
+}
+
+export interface IMotivoInternacaoUpdateState {
+  fieldsBase: IMotivoInternacaoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: MotivoInternacaoState = initialState, action): MotivoInternacaoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_MOTIVOINTERNACAO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_MOTIVOINTERNACAO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_MOTIVOINTERNACAO):
       return {
@@ -51,6 +67,7 @@ export default (state: MotivoInternacaoState = initialState, action): MotivoInte
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_MOTIVOINTERNACAO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_MOTIVOINTERNACAO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_MOTIVOINTERNACAO):
     case FAILURE(ACTION_TYPES.CREATE_MOTIVOINTERNACAO):
@@ -139,6 +156,31 @@ export const getEntity: ICrudGetAction<IMotivoInternacao> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionMotivoInternacao<IMotivoInternacao> = (
+  nome,
+  idPai,
+  ativo,
+  classe,
+  name,
+  page,
+  size,
+  sort
+) => {
+  const nomeRequest = nome ? `nome.contains=${nome}&` : '';
+  const idPaiRequest = idPai ? `idPai.contains=${idPai}&` : '';
+  const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
+  const classeRequest = classe ? `classe.contains=${classe}&` : '';
+  const nameRequest = name ? `name.contains=${name}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_MOTIVOINTERNACAO_LIST,
+    payload: axios.get<IMotivoInternacao>(
+      `${requestUrl}${nomeRequest}${idPaiRequest}${ativoRequest}${classeRequest}${nameRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<IMotivoInternacao> = entity => async dispatch => {
   entity = {
     ...entity
@@ -174,3 +216,22 @@ export const deleteEntity: ICrudDeleteAction<IMotivoInternacao> = id => async di
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getMotivoInternacaoState = (location): IMotivoInternacaoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const nome = url.searchParams.get('nome') || '';
+  const idPai = url.searchParams.get('idPai') || '';
+  const ativo = url.searchParams.get('ativo') || '';
+  const classe = url.searchParams.get('classe') || '';
+  const name = url.searchParams.get('name') || '';
+
+  return {
+    baseFilters,
+    nome,
+    idPai,
+    ativo,
+    classe,
+    name
+  };
+};

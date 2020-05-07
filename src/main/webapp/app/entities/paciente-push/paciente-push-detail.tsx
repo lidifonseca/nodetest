@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-push.reducer';
+import { getEntity, IPacientePushBaseState, getPacientePushState } from './paciente-push.reducer';
 import { IPacientePush } from 'app/shared/model/paciente-push.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacientePushState {
+  fieldsBase: IPacientePushBaseState;
+}
+
 export interface IPacientePushDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacientePushDetail extends React.Component<IPacientePushDetailProps> {
+export class PacientePushDetail extends React.Component<IPacientePushDetailProps, IPacientePushState> {
   constructor(props: Readonly<IPacientePushDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacientePushState(this.props.location)
     };
   }
 
@@ -91,19 +96,6 @@ export class PacientePushDetail extends React.Component<IPacientePushDetailProps
                       </Col>
                       <Col md="9">
                         <dd>{pacientePushEntity.ativo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacientePush.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacientePushEntity.idPaciente ? pacientePushEntity.idPaciente.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

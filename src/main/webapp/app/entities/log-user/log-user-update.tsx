@@ -4,35 +4,36 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IAcao } from 'app/shared/model/acao.model';
-import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-import { ITela } from 'app/shared/model/tela.model';
-import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
-import { getEntity, getLogUserState, ILogUserBaseState, updateEntity, createEntity, setBlob, reset } from './log-user.reducer';
+import {
+  ILogUserUpdateState,
+  getEntity,
+  getLogUserState,
+  ILogUserBaseState,
+  updateEntity,
+  createEntity,
+  setBlob,
+  reset
+} from './log-user.reducer';
 import { ILogUser } from 'app/shared/model/log-user.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ILogUserUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ILogUserUpdateState {
-  fieldsBase: ILogUserBaseState;
-  isNew: boolean;
-  idAcaoId: string;
-  idTelaId: string;
-}
-
 export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUserUpdateState> {
+  descricaoFileInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: Readonly<ILogUserUpdateProps>) {
     super(props);
+
+    this.descricaoFileInput = React.createRef();
+
     this.state = {
       fieldsBase: getLogUserState(this.props.location),
-      idAcaoId: '0',
-      idTelaId: '0',
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -48,19 +49,29 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getAcaos();
-    this.props.getTelas();
   }
 
-  onBlobChange = (isAnImage, name) => event => {
-    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType), isAnImage);
+  onBlobChange = (isAnImage, name, fileInput) => event => {
+    const fileName = fileInput.current.files[0].name;
+    setFileData(event, (contentType, data) => this.props.setBlob(name, data, contentType, fileName), isAnImage);
   };
 
   clearBlob = name => () => {
     this.props.setBlob(name, undefined, undefined);
   };
-
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['descricao'] ? '&descricao=' + fieldsBase['descricao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { logUserEntity } = this.props;
@@ -78,15 +89,15 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
   };
 
   handleClose = () => {
-    this.props.history.push('/log-user');
+    this.props.history.push('/log-user?' + this.getFiltersURL());
   };
 
   render() {
-    const { logUserEntity, acaos, telas, loading, updating } = this.props;
+    const { logUserEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
     const { descricao } = logUserEntity;
-
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -102,9 +113,7 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
             isNew
               ? {}
               : {
-                  ...logUserEntity,
-                  idAcao: logUserEntity.idAcao ? logUserEntity.idAcao.id : null,
-                  idTela: logUserEntity.idTela ? logUserEntity.idTela.id : null
+                  ...logUserEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -121,7 +130,14 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/log-user" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/log-user?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -153,26 +169,7 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
                         </AvGroup>
                       ) : null}
                       <Row>
-                        {!this.state.fieldsBase.idUsuario ? (
-                          <Col md="idUsuario">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" id="idUsuarioLabel" for="log-user-idUsuario">
-                                    <Translate contentKey="generadorApp.logUser.idUsuario">Id Usuario</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvField id="log-user-idUsuario" type="text" name="idUsuario" />
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idUsuario" value={this.state.fieldsBase.idUsuario} />
-                        )}
-
-                        {!this.state.fieldsBase.descricao ? (
+                        {baseFilters !== 'descricao' ? (
                           <Col md="descricao">
                             <AvGroup>
                               <Row>
@@ -188,65 +185,7 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
                             </AvGroup>
                           </Col>
                         ) : (
-                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase.descricao} />
-                        )}
-                        {!this.state.fieldsBase.idAcao ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="log-user-idAcao">
-                                    <Translate contentKey="generadorApp.logUser.idAcao">Id Acao</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="log-user-idAcao" type="select" className="form-control" name="idAcao">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.logUser.idAcao.empty')}
-                                    </option>
-                                    {acaos
-                                      ? acaos.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idAcao" value={this.state.fieldsBase.idAcao} />
-                        )}
-                        {!this.state.fieldsBase.idTela ? (
-                          <Col md="12">
-                            <AvGroup>
-                              <Row>
-                                <Col md="3">
-                                  <Label className="mt-2" for="log-user-idTela">
-                                    <Translate contentKey="generadorApp.logUser.idTela">Id Tela</Translate>
-                                  </Label>
-                                </Col>
-                                <Col md="9">
-                                  <AvInput id="log-user-idTela" type="select" className="form-control" name="idTela">
-                                    <option value="null" key="0">
-                                      {translate('generadorApp.logUser.idTela.empty')}
-                                    </option>
-                                    {telas
-                                      ? telas.map(otherEntity => (
-                                          <option value={otherEntity.id} key={otherEntity.id}>
-                                            {otherEntity.id}
-                                          </option>
-                                        ))
-                                      : null}
-                                  </AvInput>
-                                </Col>
-                              </Row>
-                            </AvGroup>
-                          </Col>
-                        ) : (
-                          <AvInput type="hidden" name="idTela" value={this.state.fieldsBase.idTela} />
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
                         )}
                       </Row>
                     </div>
@@ -262,8 +201,6 @@ export class LogUserUpdate extends React.Component<ILogUserUpdateProps, ILogUser
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  acaos: storeState.acao.entities,
-  telas: storeState.tela.entities,
   logUserEntity: storeState.logUser.entity,
   loading: storeState.logUser.loading,
   updating: storeState.logUser.updating,
@@ -271,8 +208,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getAcaos,
-  getTelas,
   getEntity,
   updateEntity,
   setBlob,

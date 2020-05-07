@@ -18,16 +18,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "questionarios",
-            "otherEntityRelationshipName": "respostasQuestionarios",
-            "relationshipName": "questionariosId",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200503005900",
+    "relationships": [],
+    "changelogDate": "20200507123200",
     "entityTableName": "respostas_questionarios",
     "dto": "mapstruct",
     "pagination": "pagination",

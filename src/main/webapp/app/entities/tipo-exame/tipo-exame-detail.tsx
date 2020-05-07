@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './tipo-exame.reducer';
+import { getEntity, ITipoExameBaseState, getTipoExameState } from './tipo-exame.reducer';
 import { ITipoExame } from 'app/shared/model/tipo-exame.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ITipoExameState {
+  fieldsBase: ITipoExameBaseState;
+}
+
 export interface ITipoExameDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class TipoExameDetail extends React.Component<ITipoExameDetailProps> {
+export class TipoExameDetail extends React.Component<ITipoExameDetailProps, ITipoExameState> {
   constructor(props: Readonly<ITipoExameDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getTipoExameState(this.props.location)
     };
   }
 

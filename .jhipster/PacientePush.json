@@ -18,16 +18,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "paciente",
-            "otherEntityRelationshipName": "pacientePush",
-            "relationshipName": "idPaciente",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200503001200",
+    "relationships": [],
+    "changelogDate": "20200507114500",
     "entityTableName": "paciente_push",
     "dto": "mapstruct",
     "pagination": "pagination",

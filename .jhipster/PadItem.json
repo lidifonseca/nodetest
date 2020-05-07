@@ -59,79 +59,8 @@
             "fieldType": "Double"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimento",
-            "otherEntityRelationshipName": "idPadItem",
-            "relationshipName": "atendimento"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimentoCepRecusado",
-            "otherEntityRelationshipName": "idPadItem",
-            "relationshipName": "atendimentoCepRecusado"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "atendimentoSorteioFeito",
-            "otherEntityRelationshipName": "idPadItem",
-            "relationshipName": "atendimentoSorteioFeito"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItemAtividade",
-            "otherEntityRelationshipName": "idPadItem",
-            "relationshipName": "padItemAtividade"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItemCepRecusado",
-            "otherEntityRelationshipName": "idPadItem",
-            "relationshipName": "padItemCepRecusado"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItemResultado",
-            "otherEntityRelationshipName": "idPadItem",
-            "relationshipName": "padItemResultado"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "padItemSorteioFeito",
-            "otherEntityRelationshipName": "idPadItem",
-            "relationshipName": "padItemSorteioFeito"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "pad",
-            "otherEntityRelationshipName": "padItem",
-            "relationshipName": "idPad",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "especialidade",
-            "otherEntityRelationshipName": "padItem",
-            "relationshipName": "idEspecialidade",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "periodicidade",
-            "otherEntityRelationshipName": "padItem",
-            "relationshipName": "idPeriodicidade",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "periodo",
-            "otherEntityRelationshipName": "padItem",
-            "relationshipName": "idPeriodo",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200503001700",
+    "relationships": [],
+    "changelogDate": "20200507115000",
     "entityTableName": "pad_item",
     "dto": "mapstruct",
     "pagination": "pagination",

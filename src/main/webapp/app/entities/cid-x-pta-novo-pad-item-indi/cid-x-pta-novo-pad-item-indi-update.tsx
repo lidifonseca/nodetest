@@ -8,33 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPadItemIndicadores } from 'app/shared/model/pad-item-indicadores.model';
-import { getEntities as getPadItemIndicadores } from 'app/entities/pad-item-indicadores/pad-item-indicadores.reducer';
-import { ICategoria } from 'app/shared/model/categoria.model';
-import { getEntities as getCategorias } from 'app/entities/categoria/categoria.reducer';
-import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
-import { getEntities as getCidXPtaNovos } from 'app/entities/cid-x-pta-novo/cid-x-pta-novo.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './cid-x-pta-novo-pad-item-indi.reducer';
+import {
+  ICidXPtaNovoPadItemIndiUpdateState,
+  getEntity,
+  getCidXPtaNovoPadItemIndiState,
+  ICidXPtaNovoPadItemIndiBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './cid-x-pta-novo-pad-item-indi.reducer';
 import { ICidXPtaNovoPadItemIndi } from 'app/shared/model/cid-x-pta-novo-pad-item-indi.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface ICidXPtaNovoPadItemIndiUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface ICidXPtaNovoPadItemIndiUpdateState {
-  isNew: boolean;
-  padItemIndicadoresIdId: string;
-  categoriasIdId: string;
-  cidXPtaNovoIdId: string;
-}
-
 export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPadItemIndiUpdateProps, ICidXPtaNovoPadItemIndiUpdateState> {
   constructor(props: Readonly<ICidXPtaNovoPadItemIndiUpdateProps>) {
     super(props);
+
     this.state = {
-      padItemIndicadoresIdId: '0',
-      categoriasIdId: '0',
-      cidXPtaNovoIdId: '0',
+      fieldsBase: getCidXPtaNovoPadItemIndiState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -50,12 +44,26 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPadItemIndicadores();
-    this.props.getCategorias();
-    this.props.getCidXPtaNovos();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['meta'] ? '&meta=' + fieldsBase['meta'] : '') +
+      (fieldsBase['maximo'] ? '&maximo=' + fieldsBase['maximo'] : '') +
+      (fieldsBase['minimo'] ? '&minimo=' + fieldsBase['minimo'] : '') +
+      (fieldsBase['unidadeMedidaExtra'] ? '&unidadeMedidaExtra=' + fieldsBase['unidadeMedidaExtra'] : '') +
+      (fieldsBase['unidadeMedidaId'] ? '&unidadeMedidaId=' + fieldsBase['unidadeMedidaId'] : '') +
+      (fieldsBase['score'] ? '&score=' + fieldsBase['score'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { cidXPtaNovoPadItemIndiEntity } = this.props;
@@ -73,13 +81,14 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
   };
 
   handleClose = () => {
-    this.props.history.push('/cid-x-pta-novo-pad-item-indi');
+    this.props.history.push('/cid-x-pta-novo-pad-item-indi?' + this.getFiltersURL());
   };
 
   render() {
-    const { cidXPtaNovoPadItemIndiEntity, padItemIndicadores, categorias, cidXPtaNovos, loading, updating } = this.props;
+    const { cidXPtaNovoPadItemIndiEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -95,12 +104,7 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
             isNew
               ? {}
               : {
-                  ...cidXPtaNovoPadItemIndiEntity,
-                  padItemIndicadoresId: cidXPtaNovoPadItemIndiEntity.padItemIndicadoresId
-                    ? cidXPtaNovoPadItemIndiEntity.padItemIndicadoresId.id
-                    : null,
-                  categoriasId: cidXPtaNovoPadItemIndiEntity.categoriasId ? cidXPtaNovoPadItemIndiEntity.categoriasId.id : null,
-                  cidXPtaNovoId: cidXPtaNovoPadItemIndiEntity.cidXPtaNovoId ? cidXPtaNovoPadItemIndiEntity.cidXPtaNovoId.id : null
+                  ...cidXPtaNovoPadItemIndiEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -122,7 +126,7 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/cid-x-pta-novo-pad-item-indi"
+                  to={'/cid-x-pta-novo-pad-item-indi?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -141,7 +145,7 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -164,226 +168,135 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'meta' ? (
+                          <Col md="meta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="metaLabel" for="cid-x-pta-novo-pad-item-indi-meta">
+                                    <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.meta">Meta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-x-pta-novo-pad-item-indi-meta" type="text" name="meta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="meta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="metaLabel" for="cid-x-pta-novo-pad-item-indi-meta">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.meta">Meta</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cid-x-pta-novo-pad-item-indi-meta"
-                                type="text"
-                                name="meta"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'maximo' ? (
+                          <Col md="maximo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="maximoLabel" for="cid-x-pta-novo-pad-item-indi-maximo">
+                                    <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.maximo">Maximo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-x-pta-novo-pad-item-indi-maximo" type="text" name="maximo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="maximo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="maximoLabel" for="cid-x-pta-novo-pad-item-indi-maximo">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.maximo">Maximo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cid-x-pta-novo-pad-item-indi-maximo"
-                                type="text"
-                                name="maximo"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'minimo' ? (
+                          <Col md="minimo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="minimoLabel" for="cid-x-pta-novo-pad-item-indi-minimo">
+                                    <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.minimo">Minimo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-x-pta-novo-pad-item-indi-minimo" type="text" name="minimo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="minimo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="minimoLabel" for="cid-x-pta-novo-pad-item-indi-minimo">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.minimo">Minimo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cid-x-pta-novo-pad-item-indi-minimo"
-                                type="text"
-                                name="minimo"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'unidadeMedidaExtra' ? (
+                          <Col md="unidadeMedidaExtra">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="unidadeMedidaExtraLabel"
+                                    for="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra"
+                                  >
+                                    <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaExtra">
+                                      Unidade Medida Extra
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra" type="text" name="unidadeMedidaExtra" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidadeMedidaExtra" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="unidadeMedidaExtraLabel" for="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaExtra">
-                                  Unidade Medida Extra
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cid-x-pta-novo-pad-item-indi-unidadeMedidaExtra"
-                                type="text"
-                                name="unidadeMedidaExtra"
-                                validate={{
-                                  maxLength: { value: 145, errorMessage: translate('entity.validation.maxlength', { max: 145 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'unidadeMedidaId' ? (
+                          <Col md="unidadeMedidaId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="unidadeMedidaIdLabel" for="cid-x-pta-novo-pad-item-indi-unidadeMedidaId">
+                                    <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaId">
+                                      Unidade Medida Id
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="cid-x-pta-novo-pad-item-indi-unidadeMedidaId"
+                                    type="string"
+                                    className="form-control"
+                                    name="unidadeMedidaId"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidadeMedidaId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="unidadeMedidaIdLabel" for="cid-x-pta-novo-pad-item-indi-unidadeMedidaId">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.unidadeMedidaId">Unidade Medida Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="cid-x-pta-novo-pad-item-indi-unidadeMedidaId"
-                                type="string"
-                                className="form-control"
-                                name="unidadeMedidaId"
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="scoreLabel" for="cid-x-pta-novo-pad-item-indi-score">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.score">Score</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="cid-x-pta-novo-pad-item-indi-score" type="string" className="form-control" name="score" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="cid-x-pta-novo-pad-item-indi-padItemIndicadoresId">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadoresId">
-                                  Pad Item Indicadores Id
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="cid-x-pta-novo-pad-item-indi-padItemIndicadoresId"
-                                type="select"
-                                className="form-control"
-                                name="padItemIndicadoresId"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.cidXPtaNovoPadItemIndi.padItemIndicadoresId.empty')}
-                                </option>
-                                {padItemIndicadores
-                                  ? padItemIndicadores.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="cid-x-pta-novo-pad-item-indi-categoriasId">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.categoriasId">Categorias Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="cid-x-pta-novo-pad-item-indi-categoriasId"
-                                type="select"
-                                className="form-control"
-                                name="categoriasId"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.cidXPtaNovoPadItemIndi.categoriasId.empty')}
-                                </option>
-                                {categorias
-                                  ? categorias.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="cid-x-pta-novo-pad-item-indi-cidXPtaNovoId">
-                                <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput
-                                id="cid-x-pta-novo-pad-item-indi-cidXPtaNovoId"
-                                type="select"
-                                className="form-control"
-                                name="cidXPtaNovoId"
-                              >
-                                <option value="null" key="0">
-                                  {translate('generadorApp.cidXPtaNovoPadItemIndi.cidXPtaNovoId.empty')}
-                                </option>
-                                {cidXPtaNovos
-                                  ? cidXPtaNovos.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'score' ? (
+                          <Col md="score">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="scoreLabel" for="cid-x-pta-novo-pad-item-indi-score">
+                                    <Translate contentKey="generadorApp.cidXPtaNovoPadItemIndi.score">Score</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-x-pta-novo-pad-item-indi-score" type="string" className="form-control" name="score" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -396,9 +309,6 @@ export class CidXPtaNovoPadItemIndiUpdate extends React.Component<ICidXPtaNovoPa
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  padItemIndicadores: storeState.padItemIndicadores.entities,
-  categorias: storeState.categoria.entities,
-  cidXPtaNovos: storeState.cidXPtaNovo.entities,
   cidXPtaNovoPadItemIndiEntity: storeState.cidXPtaNovoPadItemIndi.entity,
   loading: storeState.cidXPtaNovoPadItemIndi.loading,
   updating: storeState.cidXPtaNovoPadItemIndi.updating,
@@ -406,9 +316,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPadItemIndicadores,
-  getCategorias,
-  getCidXPtaNovos,
   getEntity,
   updateEntity,
   createEntity,

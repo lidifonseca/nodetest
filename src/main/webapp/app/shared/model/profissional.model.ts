@@ -1,6 +1,4 @@
 import { Moment } from 'moment';
-import { IAtendimentoAceite } from 'app/shared/model/atendimento-aceite.model';
-import { IAtendimentoAssinaturas } from 'app/shared/model/atendimento-assinaturas.model';
 import { IUnidadeEasy } from 'app/shared/model/unidade-easy.model';
 
 export interface IProfissional {
@@ -42,9 +40,6 @@ export interface IProfissional {
   dataSenha?: Moment;
   expoToken?: string;
   preferenciaAtendimento?: number;
-  senhaChat?: string;
-  atendimentoAceites?: IAtendimentoAceite[];
-  atendimentoAssinaturas?: IAtendimentoAssinaturas[];
   unidadeRazaoSocial?: string;
   unidade?: string | any;
 }

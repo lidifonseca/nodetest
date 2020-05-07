@@ -8,25 +8,27 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IPaciente } from 'app/shared/model/paciente.model';
-import { getEntities as getPacientes } from 'app/entities/paciente/paciente.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './paciente-dados-cartao.reducer';
+import {
+  IPacienteDadosCartaoUpdateState,
+  getEntity,
+  getPacienteDadosCartaoState,
+  IPacienteDadosCartaoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-dados-cartao.reducer';
 import { IPacienteDadosCartao } from 'app/shared/model/paciente-dados-cartao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteDadosCartaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IPacienteDadosCartaoUpdateState {
-  isNew: boolean;
-  idPacienteId: string;
-}
-
 export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCartaoUpdateProps, IPacienteDadosCartaoUpdateState> {
   constructor(props: Readonly<IPacienteDadosCartaoUpdateProps>) {
     super(props);
+
     this.state = {
-      idPacienteId: '0',
+      fieldsBase: getPacienteDadosCartaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -42,10 +44,25 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
-
-    this.props.getPacientes();
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['bandeira'] ? '&bandeira=' + fieldsBase['bandeira'] : '') +
+      (fieldsBase['numeroCartao'] ? '&numeroCartao=' + fieldsBase['numeroCartao'] : '') +
+      (fieldsBase['validade'] ? '&validade=' + fieldsBase['validade'] : '') +
+      (fieldsBase['codAtivacao'] ? '&codAtivacao=' + fieldsBase['codAtivacao'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteDadosCartaoEntity } = this.props;
@@ -63,13 +80,14 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-dados-cartao');
+    this.props.history.push('/paciente-dados-cartao?' + this.getFiltersURL());
   };
 
   render() {
-    const { pacienteDadosCartaoEntity, pacientes, loading, updating } = this.props;
+    const { pacienteDadosCartaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -85,8 +103,7 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
             isNew
               ? {}
               : {
-                  ...pacienteDadosCartaoEntity,
-                  idPaciente: pacienteDadosCartaoEntity.idPaciente ? pacienteDadosCartaoEntity.idPaciente.id : null
+                  ...pacienteDadosCartaoEntity
                 }
           }
           onSubmit={this.saveEntity}
@@ -108,7 +125,7 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-dados-cartao"
+                  to={'/paciente-dados-cartao?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -127,7 +144,7 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -143,121 +160,108 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'bandeira' ? (
+                          <Col md="bandeira">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="bandeiraLabel" for="paciente-dados-cartao-bandeira">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-bandeira" type="text" name="bandeira" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="bandeira" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="bandeiraLabel" for="paciente-dados-cartao-bandeira">
-                                <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dados-cartao-bandeira"
-                                type="text"
-                                name="bandeira"
-                                validate={{
-                                  maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'numeroCartao' ? (
+                          <Col md="numeroCartao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="numeroCartaoLabel" for="paciente-dados-cartao-numeroCartao">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-numeroCartao" type="text" name="numeroCartao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="numeroCartao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="numeroCartaoLabel" for="paciente-dados-cartao-numeroCartao">
-                                <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-dados-cartao-numeroCartao"
-                                type="text"
-                                name="numeroCartao"
-                                validate={{
-                                  maxLength: { value: 30, errorMessage: translate('entity.validation.maxlength', { max: 30 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'validade' ? (
+                          <Col md="validade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="validadeLabel" for="paciente-dados-cartao-validade">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-validade" type="date" className="form-control" name="validade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="validade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="validadeLabel" for="paciente-dados-cartao-validade">
-                                <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-dados-cartao-validade" type="date" className="form-control" name="validade" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'codAtivacao' ? (
+                          <Col md="codAtivacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codAtivacaoLabel" for="paciente-dados-cartao-codAtivacao">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dados-cartao-codAtivacao"
+                                    type="string"
+                                    className="form-control"
+                                    name="codAtivacao"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codAtivacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="codAtivacaoLabel" for="paciente-dados-cartao-codAtivacao">
-                                <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-dados-cartao-codAtivacao" type="string" className="form-control" name="codAtivacao" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="paciente-dados-cartao-ativo">
-                                <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="paciente-dados-cartao-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" for="paciente-dados-cartao-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteDadosCartao.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvInput id="paciente-dados-cartao-idPaciente" type="select" className="form-control" name="idPaciente">
-                                <option value="null" key="0">
-                                  {translate('generadorApp.pacienteDadosCartao.idPaciente.empty')}
-                                </option>
-                                {pacientes
-                                  ? pacientes.map(otherEntity => (
-                                      <option value={otherEntity.id} key={otherEntity.id}>
-                                        {otherEntity.id}
-                                      </option>
-                                    ))
-                                  : null}
-                              </AvInput>
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-dados-cartao-ativo">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>
@@ -270,7 +274,6 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
 }
 
 const mapStateToProps = (storeState: IRootState) => ({
-  pacientes: storeState.paciente.entities,
   pacienteDadosCartaoEntity: storeState.pacienteDadosCartao.entity,
   loading: storeState.pacienteDadosCartao.loading,
   updating: storeState.pacienteDadosCartao.updating,
@@ -278,7 +281,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getPacientes,
   getEntity,
   updateEntity,
   createEntity,

@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-pedido.reducer';
+import { getEntity, IPacientePedidoBaseState, getPacientePedidoState } from './paciente-pedido.reducer';
 import { IPacientePedido } from 'app/shared/model/paciente-pedido.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacientePedidoState {
+  fieldsBase: IPacientePedidoBaseState;
+}
+
 export interface IPacientePedidoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacientePedidoDetail extends React.Component<IPacientePedidoDetailProps> {
+export class PacientePedidoDetail extends React.Component<IPacientePedidoDetailProps, IPacientePedidoState> {
   constructor(props: Readonly<IPacientePedidoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacientePedidoState(this.props.location)
     };
   }
 
@@ -169,45 +174,6 @@ export class PacientePedidoDetail extends React.Component<IPacientePedidoDetailP
                       </Col>
                       <Col md="9">
                         <dd>{pacientePedidoEntity.unidade ? pacientePedidoEntity.unidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacientePedido.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacientePedidoEntity.idPaciente ? pacientePedidoEntity.idPaciente.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacientePedido.idCartao">Id Cartao</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacientePedidoEntity.idCartao ? pacientePedidoEntity.idCartao.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacientePedido.idEspecialidade">Id Especialidade</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacientePedidoEntity.idEspecialidade ? pacientePedidoEntity.idEspecialidade.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

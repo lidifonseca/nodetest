@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './pad-item-hist-data-inc-comp.reducer';
+import { getEntity, IPadItemHistDataIncCompBaseState, getPadItemHistDataIncCompState } from './pad-item-hist-data-inc-comp.reducer';
 import { IPadItemHistDataIncComp } from 'app/shared/model/pad-item-hist-data-inc-comp.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPadItemHistDataIncCompState {
+  fieldsBase: IPadItemHistDataIncCompBaseState;
+}
+
 export interface IPadItemHistDataIncCompDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PadItemHistDataIncCompDetail extends React.Component<IPadItemHistDataIncCompDetailProps> {
+export class PadItemHistDataIncCompDetail extends React.Component<IPadItemHistDataIncCompDetailProps, IPadItemHistDataIncCompState> {
   constructor(props: Readonly<IPadItemHistDataIncCompDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPadItemHistDataIncCompState(this.props.location)
     };
   }
 

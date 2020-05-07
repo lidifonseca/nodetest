@@ -3,15 +3,15 @@
     "cidPta": {
       "home": {
         "title": "Cid Ptas",
-        "createLabel": "Criar novo Cid Pta",
-        "createOrEditLabel": "Criar ou editar Cid Pta",
-        "notFound": "Nenhum Cid Pta encontrado"
+        "createLabel": "Create a new Cid Pta",
+        "createOrEditLabel": "Create or edit a Cid Pta",
+        "notFound": "No Cid Ptas found"
       },
-      "created": "Um novo Cid Pta foi criado com o identificador {{ param }}",
-      "updated": "Um Cid Pta foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Cid Pta foi excluído com o identificador {{ param }}",
+      "created": "A new Cid Pta is created with identifier {{ param }}",
+      "updated": "A Cid Pta is updated with identifier {{ param }}",
+      "deleted": "A Cid Pta is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Cid Pta {{ id }}?"
+        "question": "Are you sure you want to delete Cid Pta {{ id }}?"
       },
       "detail": {
         "title": "Cid Pta"

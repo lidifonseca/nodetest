@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './paciente-diagnostico.reducer';
+import { getEntity, IPacienteDiagnosticoBaseState, getPacienteDiagnosticoState } from './paciente-diagnostico.reducer';
 import { IPacienteDiagnostico } from 'app/shared/model/paciente-diagnostico.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IPacienteDiagnosticoState {
+  fieldsBase: IPacienteDiagnosticoBaseState;
+}
+
 export interface IPacienteDiagnosticoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class PacienteDiagnosticoDetail extends React.Component<IPacienteDiagnosticoDetailProps> {
+export class PacienteDiagnosticoDetail extends React.Component<IPacienteDiagnosticoDetailProps, IPacienteDiagnosticoState> {
   constructor(props: Readonly<IPacienteDiagnosticoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getPacienteDiagnosticoState(this.props.location)
     };
   }
 
@@ -122,32 +127,6 @@ export class PacienteDiagnosticoDetail extends React.Component<IPacienteDiagnost
                       </Col>
                       <Col md="9">
                         <dd>{pacienteDiagnosticoEntity.cidComAlta ? 'true' : 'false'}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteDiagnostico.idPaciente">Id Paciente</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteDiagnosticoEntity.idPaciente ? pacienteDiagnosticoEntity.idPaciente.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.pacienteDiagnostico.idCid">Id Cid</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{pacienteDiagnosticoEntity.idCid ? pacienteDiagnosticoEntity.idCid.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

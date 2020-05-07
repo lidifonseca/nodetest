@@ -22,19 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './tela.reducer';
+import { getTelaState, ITelaBaseState, getEntities } from './tela.reducer';
 import { ITela } from 'app/shared/model/tela.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface ITelaProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface ITelaBaseState {
-  tela: any;
-  logUser: any;
-  logUserFranquia: any;
-  usuarioAcao: any;
-}
 export interface ITelaState extends ITelaBaseState, IPaginationBaseState {}
 
 export class Tela extends React.Component<ITelaProps, ITelaState> {
@@ -44,25 +38,9 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getTelaState(this.props.location)
+      ...getTelaState(this.props.location)
     };
   }
-
-  getTelaState = (location): ITelaBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const tela = url.searchParams.get('tela') || '';
-
-    const logUser = url.searchParams.get('logUser') || '';
-    const logUserFranquia = url.searchParams.get('logUserFranquia') || '';
-    const usuarioAcao = url.searchParams.get('usuarioAcao') || '';
-
-    return {
-      tela,
-      logUser,
-      logUserFranquia,
-      usuarioAcao
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -71,10 +49,7 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   cancelCourse = () => {
     this.setState(
       {
-        tela: '',
-        logUser: '',
-        logUserFranquia: '',
-        usuarioAcao: ''
+        tela: ''
       },
       () => this.sortEntities()
     );
@@ -107,7 +82,9 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -122,15 +99,6 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
       'tela=' +
       this.state.tela +
       '&' +
-      'logUser=' +
-      this.state.logUser +
-      '&' +
-      'logUserFranquia=' +
-      this.state.logUserFranquia +
-      '&' +
-      'usuarioAcao=' +
-      this.state.usuarioAcao +
-      '&' +
       ''
     );
   };
@@ -138,8 +106,8 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { tela, logUser, logUserFranquia, usuarioAcao, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(tela, logUser, logUserFranquia, usuarioAcao, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { tela, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntities(tela, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
   render() {
@@ -161,7 +129,11 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.tela.home.createLabel">Create a new Tela</Translate>
@@ -174,27 +146,17 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="telaLabel" for="tela-tela">
-                            <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'tela' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="telaLabel" for="tela-tela">
+                              <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
+                            </Label>
 
-                          <AvInput type="text" name="tela" id="tela-tela" value={this.state.tela} />
-                        </Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
-
-                      <Col md="3">
-                        <Row></Row>
-                      </Col>
+                            <AvInput type="text" name="tela" id="tela-tela" value={this.state.tela} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -222,10 +184,12 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('tela')}>
-                        <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'tela' ? (
+                        <th className="hand" onClick={this.sort('tela')}>
+                          <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -240,23 +204,23 @@ export class Tela extends React.Component<ITelaProps, ITelaState> {
                           </Button>
                         </td>
 
-                        <td>{tela.tela}</td>
+                        {this.state.baseFilters !== 'tela' ? <td>{tela.tela}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${tela.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${tela.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tela.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${tela.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${tela.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${tela.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

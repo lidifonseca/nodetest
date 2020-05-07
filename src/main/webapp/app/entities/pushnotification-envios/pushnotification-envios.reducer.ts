@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPushnotificationEnvios, defaultValue } from 'app/shared/model/pushnotification-envios.model';
 
 export const ACTION_TYPES = {
+  FETCH_PUSHNOTIFICATIONENVIOS_LIST_EXPORT: 'pushnotificationEnvios/FETCH_PUSHNOTIFICATIONENVIOS_LIST_EXPORT',
   FETCH_PUSHNOTIFICATIONENVIOS_LIST: 'pushnotificationEnvios/FETCH_PUSHNOTIFICATIONENVIOS_LIST',
   FETCH_PUSHNOTIFICATIONENVIOS: 'pushnotificationEnvios/FETCH_PUSHNOTIFICATIONENVIOS',
   CREATE_PUSHNOTIFICATIONENVIOS: 'pushnotificationEnvios/CREATE_PUSHNOTIFICATIONENVIOS',
@@ -30,10 +31,22 @@ const initialState = {
 
 export type PushnotificationEnviosState = Readonly<typeof initialState>;
 
+export interface IPushnotificationEnviosBaseState {
+  baseFilters: any;
+  referencia: any;
+  ultimoEnvio: any;
+}
+
+export interface IPushnotificationEnviosUpdateState {
+  fieldsBase: IPushnotificationEnviosBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: PushnotificationEnviosState = initialState, action): PushnotificationEnviosState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_PUSHNOTIFICATIONENVIOS_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_PUSHNOTIFICATIONENVIOS_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PUSHNOTIFICATIONENVIOS):
       return {
@@ -51,6 +64,7 @@ export default (state: PushnotificationEnviosState = initialState, action): Push
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_PUSHNOTIFICATIONENVIOS_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_PUSHNOTIFICATIONENVIOS_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PUSHNOTIFICATIONENVIOS):
     case FAILURE(ACTION_TYPES.CREATE_PUSHNOTIFICATIONENVIOS):
@@ -137,6 +151,23 @@ export const getEntity: ICrudGetAction<IPushnotificationEnvios> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionPushnotificationEnvios<IPushnotificationEnvios> = (
+  referencia,
+  ultimoEnvio,
+  page,
+  size,
+  sort
+) => {
+  const referenciaRequest = referencia ? `referencia.contains=${referencia}&` : '';
+  const ultimoEnvioRequest = ultimoEnvio ? `ultimoEnvio.contains=${ultimoEnvio}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_PUSHNOTIFICATIONENVIOS_LIST,
+    payload: axios.get<IPushnotificationEnvios>(`${requestUrl}${referenciaRequest}${ultimoEnvioRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<IPushnotificationEnvios> = entity => async dispatch => {
   entity = {
     ...entity
@@ -172,3 +203,16 @@ export const deleteEntity: ICrudDeleteAction<IPushnotificationEnvios> = id => as
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getPushnotificationEnviosState = (location): IPushnotificationEnviosBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const referencia = url.searchParams.get('referencia') || '';
+  const ultimoEnvio = url.searchParams.get('ultimoEnvio') || '';
+
+  return {
+    baseFilters,
+    referencia,
+    ultimoEnvio
+  };
+};

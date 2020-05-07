@@ -22,20 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './motivo-internacao.reducer';
+import { getMotivoInternacaoState, IMotivoInternacaoBaseState, getEntities } from './motivo-internacao.reducer';
 import { IMotivoInternacao } from 'app/shared/model/motivo-internacao.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IMotivoInternacaoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IMotivoInternacaoBaseState {
-  nome: any;
-  idPai: any;
-  ativo: any;
-  classe: any;
-  name: any;
-}
 export interface IMotivoInternacaoState extends IMotivoInternacaoBaseState, IPaginationBaseState {}
 
 export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IMotivoInternacaoState> {
@@ -45,26 +38,9 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getMotivoInternacaoState(this.props.location)
+      ...getMotivoInternacaoState(this.props.location)
     };
   }
-
-  getMotivoInternacaoState = (location): IMotivoInternacaoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const nome = url.searchParams.get('nome') || '';
-    const idPai = url.searchParams.get('idPai') || '';
-    const ativo = url.searchParams.get('ativo') || '';
-    const classe = url.searchParams.get('classe') || '';
-    const name = url.searchParams.get('name') || '';
-
-    return {
-      nome,
-      idPai,
-      ativo,
-      classe,
-      name
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -110,7 +86,9 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -167,7 +145,11 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.motivoInternacao.home.createLabel">Create a new Motivo Internacao</Translate>
@@ -180,73 +162,63 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="nomeLabel" for="motivo-internacao-nome">
-                            <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nomeLabel" for="motivo-internacao-nome">
+                              <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="nome"
-                            id="motivo-internacao-nome"
-                            value={this.state.nome}
-                            validate={{
-                              maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="idPaiLabel" for="motivo-internacao-idPai">
-                            <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
-                          </Label>
-                          <AvInput type="string" name="idPai" id="motivo-internacao-idPai" value={this.state.idPai} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="ativoLabel" for="motivo-internacao-ativo">
-                            <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
-                          </Label>
-                          <AvInput type="string" name="ativo" id="motivo-internacao-ativo" value={this.state.ativo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="classeLabel" for="motivo-internacao-classe">
-                            <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
-                          </Label>
+                            <AvInput type="text" name="nome" id="motivo-internacao-nome" value={this.state.nome} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="classe"
-                            id="motivo-internacao-classe"
-                            value={this.state.classe}
-                            validate={{
-                              maxLength: { value: 40, errorMessage: translate('entity.validation.maxlength', { max: 40 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="nameLabel" for="motivo-internacao-name">
-                            <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="idPaiLabel" for="motivo-internacao-idPai">
+                              <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
+                            </Label>
+                            <AvInput type="string" name="idPai" id="motivo-internacao-idPai" value={this.state.idPai} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="name"
-                            id="motivo-internacao-name"
-                            value={this.state.name}
-                            validate={{
-                              maxLength: { value: 20, errorMessage: translate('entity.validation.maxlength', { max: 20 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="ativoLabel" for="motivo-internacao-ativo">
+                              <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
+                            </Label>
+                            <AvInput type="string" name="ativo" id="motivo-internacao-ativo" value={this.state.ativo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'classe' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="classeLabel" for="motivo-internacao-classe">
+                              <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="classe" id="motivo-internacao-classe" value={this.state.classe} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'name' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="nameLabel" for="motivo-internacao-name">
+                              <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="name" id="motivo-internacao-name" value={this.state.name} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -274,26 +246,36 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('nome')}>
-                        <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('idPai')}>
-                        <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('ativo')}>
-                        <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('classe')}>
-                        <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('name')}>
-                        <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'nome' ? (
+                        <th className="hand" onClick={this.sort('nome')}>
+                          <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'idPai' ? (
+                        <th className="hand" onClick={this.sort('idPai')}>
+                          <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'ativo' ? (
+                        <th className="hand" onClick={this.sort('ativo')}>
+                          <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'classe' ? (
+                        <th className="hand" onClick={this.sort('classe')}>
+                          <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'name' ? (
+                        <th className="hand" onClick={this.sort('name')}>
+                          <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -308,31 +290,41 @@ export class MotivoInternacao extends React.Component<IMotivoInternacaoProps, IM
                           </Button>
                         </td>
 
-                        <td>{motivoInternacao.nome}</td>
+                        {this.state.baseFilters !== 'nome' ? <td>{motivoInternacao.nome}</td> : null}
 
-                        <td>{motivoInternacao.idPai}</td>
+                        {this.state.baseFilters !== 'idPai' ? <td>{motivoInternacao.idPai}</td> : null}
 
-                        <td>{motivoInternacao.ativo}</td>
+                        {this.state.baseFilters !== 'ativo' ? <td>{motivoInternacao.ativo}</td> : null}
 
-                        <td>{motivoInternacao.classe}</td>
+                        {this.state.baseFilters !== 'classe' ? <td>{motivoInternacao.classe}</td> : null}
 
-                        <td>{motivoInternacao.name}</td>
+                        {this.state.baseFilters !== 'name' ? <td>{motivoInternacao.name}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${motivoInternacao.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${motivoInternacao.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${motivoInternacao.id}/edit`} color="primary" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${motivoInternacao.id}/edit?${this.getFiltersURL()}`}
+                              color="primary"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${motivoInternacao.id}/delete`} color="danger" size="sm">
+                            <Button
+                              tag={Link}
+                              to={`${match.url}/${motivoInternacao.id}/delete?${this.getFiltersURL()}`}
+                              color="danger"
+                              size="sm"
+                            >
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

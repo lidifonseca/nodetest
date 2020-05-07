@@ -33,13 +33,18 @@ const initialState = {
 export type PadItemIndicadoresState = Readonly<typeof initialState>;
 
 export interface IPadItemIndicadoresBaseState {
+  baseFilters: any;
   idUnidadeMedida: any;
   titulo: any;
   descricao: any;
   meta: any;
   maximoSt: any;
   minimoSt: any;
-  cidXPtaNovoPadItemIndi: any;
+}
+
+export interface IPadItemIndicadoresUpdateState {
+  fieldsBase: IPadItemIndicadoresBaseState;
+  isNew: boolean;
 }
 
 // Reducer
@@ -85,6 +90,9 @@ export default (state: PadItemIndicadoresState = initialState, action): PadItemI
         totalItems: parseInt(action.payload.headers['x-total-count'], 10)
       };
     case SUCCESS(ACTION_TYPES.FETCH_PADITEMINDICADORES):
+      action.payload.data.descricao = action.payload.data.descricao
+        ? Buffer.from(action.payload.data.descricao).toString()
+        : action.payload.data.descricao;
       return {
         ...state,
         loading: false,
@@ -106,13 +114,14 @@ export default (state: PadItemIndicadoresState = initialState, action): PadItemI
         entity: {}
       };
     case ACTION_TYPES.SET_BLOB: {
-      const { name, data, contentType } = action.payload;
+      const { name, data, contentType, fileName } = action.payload;
       return {
         ...state,
         entity: {
           ...state.entity,
-          [name]: data,
-          [name + 'ContentType']: contentType
+          [name + 'Base64']: data,
+          [name + 'ContentType']: contentType,
+          [name + 'FileName']: fileName
         }
       };
     }
@@ -137,7 +146,6 @@ export type ICrudGetAllActionPadItemIndicadores<T> = (
   meta?: any,
   maximoSt?: any,
   minimoSt?: any,
-  cidXPtaNovoPadItemIndi?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -150,7 +158,6 @@ export const getEntities: ICrudGetAllActionPadItemIndicadores<IPadItemIndicadore
   meta,
   maximoSt,
   minimoSt,
-  cidXPtaNovoPadItemIndi,
   page,
   size,
   sort
@@ -161,13 +168,12 @@ export const getEntities: ICrudGetAllActionPadItemIndicadores<IPadItemIndicadore
   const metaRequest = meta ? `meta.contains=${meta}&` : '';
   const maximoStRequest = maximoSt ? `maximoSt.contains=${maximoSt}&` : '';
   const minimoStRequest = minimoSt ? `minimoSt.contains=${minimoSt}&` : '';
-  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST,
     payload: axios.get<IPadItemIndicadores>(
-      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}${cidXPtaNovoPadItemIndiRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -186,7 +192,6 @@ export const getEntitiesExport: ICrudGetAllActionPadItemIndicadores<IPadItemIndi
   meta,
   maximoSt,
   minimoSt,
-  cidXPtaNovoPadItemIndi,
   page,
   size,
   sort
@@ -197,13 +202,12 @@ export const getEntitiesExport: ICrudGetAllActionPadItemIndicadores<IPadItemIndi
   const metaRequest = meta ? `meta.contains=${meta}&` : '';
   const maximoStRequest = maximoSt ? `maximoSt.contains=${maximoSt}&` : '';
   const minimoStRequest = minimoSt ? `minimoSt.contains=${minimoSt}&` : '';
-  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_PADITEMINDICADORES_LIST,
     payload: axios.get<IPadItemIndicadores>(
-      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}${cidXPtaNovoPadItemIndiRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idUnidadeMedidaRequest}${tituloRequest}${descricaoRequest}${metaRequest}${maximoStRequest}${minimoStRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -240,12 +244,13 @@ export const deleteEntity: ICrudDeleteAction<IPadItemIndicadores> = id => async 
   return result;
 };
 
-export const setBlob = (name, data, contentType?) => ({
+export const setBlob = (name, data, contentType?, fileName?) => ({
   type: ACTION_TYPES.SET_BLOB,
   payload: {
     name,
     data,
-    contentType
+    contentType,
+    fileName
   }
 });
 
@@ -255,6 +260,7 @@ export const reset = () => ({
 
 export const getPadItemIndicadoresState = (location): IPadItemIndicadoresBaseState => {
   const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
   const idUnidadeMedida = url.searchParams.get('idUnidadeMedida') || '';
   const titulo = url.searchParams.get('titulo') || '';
   const descricao = url.searchParams.get('descricao') || '';
@@ -262,15 +268,13 @@ export const getPadItemIndicadoresState = (location): IPadItemIndicadoresBaseSta
   const maximoSt = url.searchParams.get('maximoSt') || '';
   const minimoSt = url.searchParams.get('minimoSt') || '';
 
-  const cidXPtaNovoPadItemIndi = url.searchParams.get('cidXPtaNovoPadItemIndi') || '';
-
   return {
+    baseFilters,
     idUnidadeMedida,
     titulo,
     descricao,
     meta,
     maximoSt,
-    minimoSt,
-    cidXPtaNovoPadItemIndi
+    minimoSt
   };
 };

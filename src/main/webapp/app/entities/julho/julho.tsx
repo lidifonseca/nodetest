@@ -22,21 +22,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Panel, PanelHeader, PanelBody, PanelFooter } from 'app/shared/layout/panel/panel.tsx';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './julho.reducer';
+import { getJulhoState, IJulhoBaseState, getEntities } from './julho.reducer';
 import { IJulho } from 'app/shared/model/julho.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
 export interface IJulhoProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-export interface IJulhoBaseState {
-  dataInicio: any;
-  dataFim: any;
-  especialidade: any;
-  periodicidade: any;
-  periodo: any;
-  qtd: any;
-}
 export interface IJulhoState extends IJulhoBaseState, IPaginationBaseState {}
 
 export class Julho extends React.Component<IJulhoProps, IJulhoState> {
@@ -46,28 +38,9 @@ export class Julho extends React.Component<IJulhoProps, IJulhoState> {
     super(props);
     this.state = {
       ...getSortState(this.props.location, ITEMS_PER_PAGE),
-      ...this.getJulhoState(this.props.location)
+      ...getJulhoState(this.props.location)
     };
   }
-
-  getJulhoState = (location): IJulhoBaseState => {
-    const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
-    const dataInicio = url.searchParams.get('dataInicio') || '';
-    const dataFim = url.searchParams.get('dataFim') || '';
-    const especialidade = url.searchParams.get('especialidade') || '';
-    const periodicidade = url.searchParams.get('periodicidade') || '';
-    const periodo = url.searchParams.get('periodo') || '';
-    const qtd = url.searchParams.get('qtd') || '';
-
-    return {
-      dataInicio,
-      dataFim,
-      especialidade,
-      periodicidade,
-      periodo,
-      qtd
-    };
-  };
 
   componentDidMount() {
     this.getEntities();
@@ -114,7 +87,9 @@ export class Julho extends React.Component<IJulhoProps, IJulhoState> {
 
   getFiltersURL = (offset = null) => {
     return (
-      'page=' +
+      'baseFilters=' +
+      this.state.baseFilters +
+      '&page=' +
       this.state.activePage +
       '&' +
       'size=' +
@@ -184,7 +159,11 @@ export class Julho extends React.Component<IJulhoProps, IJulhoState> {
                 Filtros&nbsp;
                 <FontAwesomeIcon icon="caret-down" />
               </Button>
-              <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
+              <Link
+                to={`${match.url}/new?${this.getFiltersURL()}`}
+                className="btn btn-primary float-right jh-create-entity"
+                id="jh-create-entity"
+              >
                 <FontAwesomeIcon icon="plus" />
                 &nbsp;
                 <Translate contentKey="generadorApp.julho.home.createLabel">Create a new Julho</Translate>
@@ -197,72 +176,73 @@ export class Julho extends React.Component<IJulhoProps, IJulhoState> {
                 <CardBody>
                   <AvForm ref={el => (this.myFormRef = el)} id="form-filter" onSubmit={this.filterEntity}>
                     <div className="row mt-1 ml-3 mr-3">
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataInicioLabel" for="julho-dataInicio">
-                            <Translate contentKey="generadorApp.julho.dataInicio">Data Inicio</Translate>
-                          </Label>
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataInicioLabel" for="julho-dataInicio">
+                              <Translate contentKey="generadorApp.julho.dataInicio">Data Inicio</Translate>
+                            </Label>
 
-                          <AvInput
-                            type="text"
-                            name="dataInicio"
-                            id="julho-dataInicio"
-                            value={this.state.dataInicio}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="dataFimLabel" for="julho-dataFim">
-                            <Translate contentKey="generadorApp.julho.dataFim">Data Fim</Translate>
-                          </Label>
+                            <AvInput type="text" name="dataInicio" id="julho-dataInicio" value={this.state.dataInicio} />
+                          </Row>
+                        </Col>
+                      ) : null}
 
-                          <AvInput
-                            type="text"
-                            name="dataFim"
-                            id="julho-dataFim"
-                            value={this.state.dataFim}
-                            validate={{
-                              maxLength: { value: 10, errorMessage: translate('entity.validation.maxlength', { max: 10 }) }
-                            }}
-                          />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="especialidadeLabel" for="julho-especialidade">
-                            <Translate contentKey="generadorApp.julho.especialidade">Especialidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="especialidade" id="julho-especialidade" value={this.state.especialidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="periodicidadeLabel" for="julho-periodicidade">
-                            <Translate contentKey="generadorApp.julho.periodicidade">Periodicidade</Translate>
-                          </Label>
-                          <AvInput type="string" name="periodicidade" id="julho-periodicidade" value={this.state.periodicidade} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="periodoLabel" for="julho-periodo">
-                            <Translate contentKey="generadorApp.julho.periodo">Periodo</Translate>
-                          </Label>
-                          <AvInput type="string" name="periodo" id="julho-periodo" value={this.state.periodo} />
-                        </Row>
-                      </Col>
-                      <Col md="3">
-                        <Row>
-                          <Label id="qtdLabel" for="julho-qtd">
-                            <Translate contentKey="generadorApp.julho.qtd">Qtd</Translate>
-                          </Label>
-                          <AvInput type="string" name="qtd" id="julho-qtd" value={this.state.qtd} />
-                        </Row>
-                      </Col>
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="dataFimLabel" for="julho-dataFim">
+                              <Translate contentKey="generadorApp.julho.dataFim">Data Fim</Translate>
+                            </Label>
+
+                            <AvInput type="text" name="dataFim" id="julho-dataFim" value={this.state.dataFim} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="especialidadeLabel" for="julho-especialidade">
+                              <Translate contentKey="generadorApp.julho.especialidade">Especialidade</Translate>
+                            </Label>
+                            <AvInput type="string" name="especialidade" id="julho-especialidade" value={this.state.especialidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodicidade' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="periodicidadeLabel" for="julho-periodicidade">
+                              <Translate contentKey="generadorApp.julho.periodicidade">Periodicidade</Translate>
+                            </Label>
+                            <AvInput type="string" name="periodicidade" id="julho-periodicidade" value={this.state.periodicidade} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="periodoLabel" for="julho-periodo">
+                              <Translate contentKey="generadorApp.julho.periodo">Periodo</Translate>
+                            </Label>
+                            <AvInput type="string" name="periodo" id="julho-periodo" value={this.state.periodo} />
+                          </Row>
+                        </Col>
+                      ) : null}
+
+                      {this.state.baseFilters !== 'qtd' ? (
+                        <Col md="3">
+                          <Row>
+                            <Label id="qtdLabel" for="julho-qtd">
+                              <Translate contentKey="generadorApp.julho.qtd">Qtd</Translate>
+                            </Label>
+                            <AvInput type="string" name="qtd" id="julho-qtd" value={this.state.qtd} />
+                          </Row>
+                        </Col>
+                      ) : null}
                     </div>
 
                     <div className="row mb-2 mr-4 justify-content-end">
@@ -290,30 +270,42 @@ export class Julho extends React.Component<IJulhoProps, IJulhoState> {
                         <Translate contentKey="global.field.id">ID</Translate>
                         <FontAwesomeIcon icon="sort" />
                       </th>
-                      <th className="hand" onClick={this.sort('dataInicio')}>
-                        <Translate contentKey="generadorApp.julho.dataInicio">Data Inicio</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('dataFim')}>
-                        <Translate contentKey="generadorApp.julho.dataFim">Data Fim</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('especialidade')}>
-                        <Translate contentKey="generadorApp.julho.especialidade">Especialidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('periodicidade')}>
-                        <Translate contentKey="generadorApp.julho.periodicidade">Periodicidade</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('periodo')}>
-                        <Translate contentKey="generadorApp.julho.periodo">Periodo</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
-                      <th className="hand" onClick={this.sort('qtd')}>
-                        <Translate contentKey="generadorApp.julho.qtd">Qtd</Translate>
-                        <FontAwesomeIcon icon="sort" />
-                      </th>
+                      {this.state.baseFilters !== 'dataInicio' ? (
+                        <th className="hand" onClick={this.sort('dataInicio')}>
+                          <Translate contentKey="generadorApp.julho.dataInicio">Data Inicio</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'dataFim' ? (
+                        <th className="hand" onClick={this.sort('dataFim')}>
+                          <Translate contentKey="generadorApp.julho.dataFim">Data Fim</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'especialidade' ? (
+                        <th className="hand" onClick={this.sort('especialidade')}>
+                          <Translate contentKey="generadorApp.julho.especialidade">Especialidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'periodicidade' ? (
+                        <th className="hand" onClick={this.sort('periodicidade')}>
+                          <Translate contentKey="generadorApp.julho.periodicidade">Periodicidade</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'periodo' ? (
+                        <th className="hand" onClick={this.sort('periodo')}>
+                          <Translate contentKey="generadorApp.julho.periodo">Periodo</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
+                      {this.state.baseFilters !== 'qtd' ? (
+                        <th className="hand" onClick={this.sort('qtd')}>
+                          <Translate contentKey="generadorApp.julho.qtd">Qtd</Translate>
+                          <FontAwesomeIcon icon="sort" />
+                        </th>
+                      ) : null}
 
                       <th />
                     </tr>
@@ -328,33 +320,33 @@ export class Julho extends React.Component<IJulhoProps, IJulhoState> {
                           </Button>
                         </td>
 
-                        <td>{julho.dataInicio}</td>
+                        {this.state.baseFilters !== 'dataInicio' ? <td>{julho.dataInicio}</td> : null}
 
-                        <td>{julho.dataFim}</td>
+                        {this.state.baseFilters !== 'dataFim' ? <td>{julho.dataFim}</td> : null}
 
-                        <td>{julho.especialidade}</td>
+                        {this.state.baseFilters !== 'especialidade' ? <td>{julho.especialidade}</td> : null}
 
-                        <td>{julho.periodicidade}</td>
+                        {this.state.baseFilters !== 'periodicidade' ? <td>{julho.periodicidade}</td> : null}
 
-                        <td>{julho.periodo}</td>
+                        {this.state.baseFilters !== 'periodo' ? <td>{julho.periodo}</td> : null}
 
-                        <td>{julho.qtd}</td>
+                        {this.state.baseFilters !== 'qtd' ? <td>{julho.qtd}</td> : null}
 
                         <td className="text-right">
                           <div className="btn-group flex-btn-group-container">
-                            <Button tag={Link} to={`${match.url}/${julho.id}`} color="info" size="sm">
+                            <Button tag={Link} to={`${match.url}/${julho.id}?${this.getFiltersURL()}`} color="info" size="sm">
                               <FontAwesomeIcon icon="eye" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.view">View</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${julho.id}/edit`} color="primary" size="sm">
+                            <Button tag={Link} to={`${match.url}/${julho.id}/edit?${this.getFiltersURL()}`} color="primary" size="sm">
                               <FontAwesomeIcon icon="pencil-alt" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.edit">Edit</Translate>
                               </span>
                             </Button>
-                            <Button tag={Link} to={`${match.url}/${julho.id}/delete`} color="danger" size="sm">
+                            <Button tag={Link} to={`${match.url}/${julho.id}/delete?${this.getFiltersURL()}`} color="danger" size="sm">
                               <FontAwesomeIcon icon="trash" />{' '}
                               <span className="d-none d-md-inline">
                                 <Translate contentKey="entity.action.delete">Delete</Translate>

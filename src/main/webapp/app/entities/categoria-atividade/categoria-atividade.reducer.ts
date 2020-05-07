@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICategoriaAtividade, defaultValue } from 'app/shared/model/categoria-atividade.model';
 
 export const ACTION_TYPES = {
+  FETCH_CATEGORIAATIVIDADE_LIST_EXPORT: 'categoriaAtividade/FETCH_CATEGORIAATIVIDADE_LIST_EXPORT',
   FETCH_CATEGORIAATIVIDADE_LIST: 'categoriaAtividade/FETCH_CATEGORIAATIVIDADE_LIST',
   FETCH_CATEGORIAATIVIDADE: 'categoriaAtividade/FETCH_CATEGORIAATIVIDADE',
   CREATE_CATEGORIAATIVIDADE: 'categoriaAtividade/CREATE_CATEGORIAATIVIDADE',
@@ -30,10 +31,23 @@ const initialState = {
 
 export type CategoriaAtividadeState = Readonly<typeof initialState>;
 
+export interface ICategoriaAtividadeBaseState {
+  baseFilters: any;
+  atividade: any;
+  unidade: any;
+}
+
+export interface ICategoriaAtividadeUpdateState {
+  fieldsBase: ICategoriaAtividadeBaseState;
+  isNew: boolean;
+  unidadeId: string;
+}
+
 // Reducer
 
 export default (state: CategoriaAtividadeState = initialState, action): CategoriaAtividadeState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CATEGORIAATIVIDADE):
       return {
@@ -51,6 +65,7 @@ export default (state: CategoriaAtividadeState = initialState, action): Categori
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CATEGORIAATIVIDADE):
     case FAILURE(ACTION_TYPES.CREATE_CATEGORIAATIVIDADE):
@@ -107,37 +122,20 @@ const apiUrl = 'api/categoria-atividades';
 // Actions
 export type ICrudGetAllActionCategoriaAtividade<T> = (
   atividade?: any,
-  atendimentoAtividades?: any,
-  padItemAtividade?: any,
   unidade?: any,
-  idCategoria?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (
-  atividade,
-  atendimentoAtividades,
-  padItemAtividade,
-  unidade,
-  idCategoria,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (atividade, unidade, page, size, sort) => {
   const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
-  const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
-  const padItemAtividadeRequest = padItemAtividade ? `padItemAtividade.equals=${padItemAtividade}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
-  const idCategoriaRequest = idCategoria ? `idCategoria.equals=${idCategoria}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST,
-    payload: axios.get<ICategoriaAtividade>(
-      `${requestUrl}${atividadeRequest}${atendimentoAtividadesRequest}${padItemAtividadeRequest}${unidadeRequest}${idCategoriaRequest}cacheBuster=${new Date().getTime()}`
-    )
+    payload: axios.get<ICategoriaAtividade>(`${requestUrl}${atividadeRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`)
   };
 };
 export const getEntity: ICrudGetAction<ICategoriaAtividade> = id => {
@@ -148,11 +146,21 @@ export const getEntity: ICrudGetAction<ICategoriaAtividade> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCategoriaAtividade<ICategoriaAtividade> = (atividade, unidade, page, size, sort) => {
+  const atividadeRequest = atividade ? `atividade.contains=${atividade}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CATEGORIAATIVIDADE_LIST,
+    payload: axios.get<ICategoriaAtividade>(`${requestUrl}${atividadeRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`)
+  };
+};
+
 export const createEntity: ICrudPutAction<ICategoriaAtividade> = entity => async dispatch => {
   entity = {
     ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria
+    unidade: entity.unidade === 'null' ? null : entity.unidade
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CATEGORIAATIVIDADE,
@@ -163,11 +171,7 @@ export const createEntity: ICrudPutAction<ICategoriaAtividade> = entity => async
 };
 
 export const updateEntity: ICrudPutAction<ICategoriaAtividade> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    unidade: entity.unidade === 'null' ? null : entity.unidade,
-    idCategoria: entity.idCategoria === 'null' ? null : entity.idCategoria
-  };
+  entity = { ...entity, unidade: entity.unidade === 'null' ? null : entity.unidade };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CATEGORIAATIVIDADE,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -189,3 +193,17 @@ export const deleteEntity: ICrudDeleteAction<ICategoriaAtividade> = id => async 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCategoriaAtividadeState = (location): ICategoriaAtividadeBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const atividade = url.searchParams.get('atividade') || '';
+
+  const unidade = url.searchParams.get('unidade') || '';
+
+  return {
+    baseFilters,
+    atividade,
+    unidade
+  };
+};

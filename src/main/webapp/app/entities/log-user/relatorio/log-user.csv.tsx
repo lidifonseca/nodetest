@@ -43,11 +43,6 @@ import { ILogUser } from 'app/shared/model/log-user.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 
-import { IAcao } from 'app/shared/model/acao.model';
-import { getEntities as getAcaos } from 'app/entities/acao/acao.reducer';
-import { ITela } from 'app/shared/model/tela.model';
-import { getEntities as getTelas } from 'app/entities/tela/tela.reducer';
-
 export interface ILogUserProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export interface ILogUserState extends ILogUserBaseState, IPaginationBaseState {
@@ -68,18 +63,12 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 
   componentDidMount() {
     this.getEntities();
-
-    this.props.getAcaos();
-    this.props.getTelas();
   }
 
   cancelCourse = () => {
     this.setState(
       {
-        idUsuario: '',
-        descricao: '',
-        idAcao: '',
-        idTela: ''
+        descricao: ''
       },
       () => this.sortEntities()
     );
@@ -124,17 +113,8 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
       ',' +
       this.state.order +
       '&' +
-      'idUsuario=' +
-      this.state.idUsuario +
-      '&' +
       'descricao=' +
       this.state.descricao +
-      '&' +
-      'idAcao=' +
-      this.state.idAcao +
-      '&' +
-      'idTela=' +
-      this.state.idTela +
       '&' +
       ''
     );
@@ -143,17 +123,18 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
   handlePagination = activePage => this.setState({ activePage }, () => this.sortEntities());
 
   getEntities = () => {
-    const { idUsuario, descricao, idAcao, idTela, activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntitiesExport(idUsuario, descricao, idAcao, idTela, activePage - 1, itemsPerPage, `${sort},${order}`);
+    const { descricao, activePage, itemsPerPage, sort, order } = this.state;
+    this.props.getEntitiesExport(descricao, activePage - 1, itemsPerPage, `${sort},${order}`);
   };
 
-  async confirmExport() {
-    /* eslint-disable require-await */
-    const result = await this.getEntities();
-    this.setState({
-      exportData: result['value']['data']
-    });
-  }
+  confirmExport() {}
+  //  async confirmExport() {
+  //    /* eslint-disable require-await */
+  //    const result = await this.getEntities();
+  //    this.setState({
+  //      exportData: result['value']['data']
+  //    })
+  //  };
 
   handleClose = event => {
     event.stopPropagation();
@@ -192,15 +173,11 @@ export class LogUser extends React.Component<ILogUserProps, ILogUserState> {
 }
 
 const mapStateToProps = ({ logUser, ...storeState }: IRootState) => ({
-  acaos: storeState.acao.entities,
-  telas: storeState.tela.entities,
   logUserList: logUser.entities,
   totalItems: logUser.totalItems
 });
 
 const mapDispatchToProps = {
-  getAcaos,
-  getTelas,
   getEntitiesExport
 };
 

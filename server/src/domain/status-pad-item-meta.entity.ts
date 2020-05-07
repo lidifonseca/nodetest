@@ -7,18 +7,18 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A StatusPadItemMeta.
  */
-@Entity('status_pad_item_meta')
+@Entity('tb_status_pad_item_meta')
 export default class StatusPadItemMeta extends BaseEntity {
-  @Column({ name: 'status_item_meta', length: 200 })
+  @Column({ name: 'STATUS_ITEM_META', length: 200 })
   statusItemMeta: string;
 
-  @Column({ name: 'style_label', length: 40 })
+  @Column({ name: 'STYLE_LABEL', length: 40 })
   styleLabel: string;
 
-  @Column({ type: 'integer', name: 'ordenacao' })
+  @Column({ type: 'integer', name: 'ORDENACAO' })
   ordenacao: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

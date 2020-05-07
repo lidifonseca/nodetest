@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './atendimento-imagem.reducer';
+import { getEntity, IAtendimentoImagemBaseState, getAtendimentoImagemState } from './atendimento-imagem.reducer';
 import { IAtendimentoImagem } from 'app/shared/model/atendimento-imagem.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IAtendimentoImagemState {
+  fieldsBase: IAtendimentoImagemBaseState;
+}
+
 export interface IAtendimentoImagemDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class AtendimentoImagemDetail extends React.Component<IAtendimentoImagemDetailProps> {
+export class AtendimentoImagemDetail extends React.Component<IAtendimentoImagemDetailProps, IAtendimentoImagemState> {
   constructor(props: Readonly<IAtendimentoImagemDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getAtendimentoImagemState(this.props.location)
     };
   }
 

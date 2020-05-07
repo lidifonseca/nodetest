@@ -14,23 +14,8 @@
             "fieldType": "Integer"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "pad",
-            "otherEntityRelationshipName": "padCid",
-            "relationshipName": "idPad",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cid",
-            "otherEntityRelationshipName": "padCid",
-            "relationshipName": "idCid",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200503001600",
+    "relationships": [],
+    "changelogDate": "20200507114900",
     "entityTableName": "pad_cid",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -8,16 +8,20 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './paciente-motivo-internacao.reducer';
+import {
+  IPacienteMotivoInternacaoUpdateState,
+  getEntity,
+  getPacienteMotivoInternacaoState,
+  IPacienteMotivoInternacaoBaseState,
+  updateEntity,
+  createEntity,
+  reset
+} from './paciente-motivo-internacao.reducer';
 import { IPacienteMotivoInternacao } from 'app/shared/model/paciente-motivo-internacao.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IPacienteMotivoInternacaoUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
-
-export interface IPacienteMotivoInternacaoUpdateState {
-  isNew: boolean;
-}
 
 export class PacienteMotivoInternacaoUpdate extends React.Component<
   IPacienteMotivoInternacaoUpdateProps,
@@ -25,7 +29,9 @@ export class PacienteMotivoInternacaoUpdate extends React.Component<
 > {
   constructor(props: Readonly<IPacienteMotivoInternacaoUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getPacienteMotivoInternacaoState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -43,6 +49,20 @@ export class PacienteMotivoInternacaoUpdate extends React.Component<
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['idPaciente'] ? '&idPaciente=' + fieldsBase['idPaciente'] : '') +
+      (fieldsBase['idMotivoInternacao'] ? '&idMotivoInternacao=' + fieldsBase['idMotivoInternacao'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { pacienteMotivoInternacaoEntity } = this.props;
@@ -60,13 +80,14 @@ export class PacienteMotivoInternacaoUpdate extends React.Component<
   };
 
   handleClose = () => {
-    this.props.history.push('/paciente-motivo-internacao');
+    this.props.history.push('/paciente-motivo-internacao?' + this.getFiltersURL());
   };
 
   render() {
     const { pacienteMotivoInternacaoEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -104,7 +125,7 @@ export class PacienteMotivoInternacaoUpdate extends React.Component<
                 <Button
                   tag={Link}
                   id="cancel-save"
-                  to="/paciente-motivo-internacao"
+                  to={'/paciente-motivo-internacao?' + this.getFiltersURL()}
                   replace
                   color="info"
                   className="float-right jh-create-entity"
@@ -123,7 +144,7 @@ export class PacienteMotivoInternacaoUpdate extends React.Component<
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -146,81 +167,58 @@ export class PacienteMotivoInternacaoUpdate extends React.Component<
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="paciente-motivo-internacao-idPaciente">
+                                    <Translate contentKey="generadorApp.pacienteMotivoInternacao.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-motivo-internacao-idPaciente"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPaciente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idPacienteLabel" for="paciente-motivo-internacao-idPaciente">
-                                <Translate contentKey="generadorApp.pacienteMotivoInternacao.idPaciente">Id Paciente</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-motivo-internacao-idPaciente"
-                                type="string"
-                                className="form-control"
-                                name="idPaciente"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idMotivoInternacaoLabel" for="paciente-motivo-internacao-idMotivoInternacao">
-                                <Translate contentKey="generadorApp.pacienteMotivoInternacao.idMotivoInternacao">
-                                  Id Motivo Internacao
-                                </Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-motivo-internacao-idMotivoInternacao"
-                                type="string"
-                                className="form-control"
-                                name="idMotivoInternacao"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="idUsuarioLabel" for="paciente-motivo-internacao-idUsuario">
-                                <Translate contentKey="generadorApp.pacienteMotivoInternacao.idUsuario">Id Usuario</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="paciente-motivo-internacao-idUsuario"
-                                type="string"
-                                className="form-control"
-                                name="idUsuario"
-                                validate={{
-                                  required: { value: true, errorMessage: translate('entity.validation.required') },
-                                  number: { value: true, errorMessage: translate('entity.validation.number') }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'idMotivoInternacao' ? (
+                          <Col md="idMotivoInternacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idMotivoInternacaoLabel" for="paciente-motivo-internacao-idMotivoInternacao">
+                                    <Translate contentKey="generadorApp.pacienteMotivoInternacao.idMotivoInternacao">
+                                      Id Motivo Internacao
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-motivo-internacao-idMotivoInternacao"
+                                    type="string"
+                                    className="form-control"
+                                    name="idMotivoInternacao"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idMotivoInternacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

@@ -3,15 +3,15 @@
     "profissionalComplexidadeAtual": {
       "home": {
         "title": "Profissional Complexidade Atuals",
-        "createLabel": "Criar novo Profissional Complexidade Atual",
-        "createOrEditLabel": "Criar ou editar Profissional Complexidade Atual",
-        "notFound": "Nenhum Profissional Complexidade Atual encontrado"
+        "createLabel": "Create a new Profissional Complexidade Atual",
+        "createOrEditLabel": "Create or edit a Profissional Complexidade Atual",
+        "notFound": "No Profissional Complexidade Atuals found"
       },
-      "created": "Um novo Profissional Complexidade Atual foi criado com o identificador {{ param }}",
-      "updated": "Um Profissional Complexidade Atual foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Profissional Complexidade Atual foi excluído com o identificador {{ param }}",
+      "created": "A new Profissional Complexidade Atual is created with identifier {{ param }}",
+      "updated": "A Profissional Complexidade Atual is updated with identifier {{ param }}",
+      "deleted": "A Profissional Complexidade Atual is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Profissional Complexidade Atual {{ id }}?"
+        "question": "Are you sure you want to delete Profissional Complexidade Atual {{ id }}?"
       },
       "detail": {
         "title": "Profissional Complexidade Atual"
@@ -21,8 +21,7 @@
       "media": "Media",
       "alta": "Alta",
       "ventilacaoMecanica": "Ventilacao Mecanica",
-      "telemonitoramente": "Telemonitoramente",
-      "idUsuario": "Id Usuario"
+      "telemonitoramente": "Telemonitoramente"
     }
   }
 }

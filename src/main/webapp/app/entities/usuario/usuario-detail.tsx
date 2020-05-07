@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './usuario.reducer';
+import { getEntity, IUsuarioBaseState, getUsuarioState } from './usuario.reducer';
 import { IUsuario } from 'app/shared/model/usuario.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface IUsuarioState {
+  fieldsBase: IUsuarioBaseState;
+}
+
 export interface IUsuarioDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class UsuarioDetail extends React.Component<IUsuarioDetailProps> {
+export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuarioState> {
   constructor(props: Readonly<IUsuarioDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getUsuarioState(this.props.location)
     };
   }
 
@@ -1907,39 +1912,11 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="senhaChat">
-                            <Translate contentKey="generadorApp.usuario.senhaChat">Senha Chat</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioEntity.senhaChat}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.usuario.unidade">Unidade</Translate>
                         </dt>
                       </Col>
                       <Col md="9">
                         <dd>{usuarioEntity.unidade ? usuarioEntity.unidade.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.usuario.idTipoUsuario">Id Tipo Usuario</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioEntity.idTipoUsuario ? usuarioEntity.idTipoUsuario.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

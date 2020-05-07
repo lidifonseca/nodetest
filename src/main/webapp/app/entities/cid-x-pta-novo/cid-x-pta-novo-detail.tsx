@@ -7,17 +7,22 @@ import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntity } from './cid-x-pta-novo.reducer';
+import { getEntity, ICidXPtaNovoBaseState, getCidXPtaNovoState } from './cid-x-pta-novo.reducer';
 import { ICidXPtaNovo } from 'app/shared/model/cid-x-pta-novo.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
+export interface ICidXPtaNovoState {
+  fieldsBase: ICidXPtaNovoBaseState;
+}
+
 export interface ICidXPtaNovoDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export class CidXPtaNovoDetail extends React.Component<ICidXPtaNovoDetailProps> {
+export class CidXPtaNovoDetail extends React.Component<ICidXPtaNovoDetailProps, ICidXPtaNovoState> {
   constructor(props: Readonly<ICidXPtaNovoDetailProps>) {
     super(props);
     this.state = {
-      ...this.state
+      ...this.state,
+      fieldsBase: getCidXPtaNovoState(this.props.location)
     };
   }
 
@@ -106,32 +111,6 @@ export class CidXPtaNovoDetail extends React.Component<ICidXPtaNovoDetailProps> 
                       </Col>
                       <Col md="9">
                         <dd>{cidXPtaNovoEntity.titulo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cidXPtaNovo.cidId">Cid Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cidXPtaNovoEntity.cidId ? cidXPtaNovoEntity.cidId.id : ''}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <Translate contentKey="generadorApp.cidXPtaNovo.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{cidXPtaNovoEntity.cidXPtaNovoId ? cidXPtaNovoEntity.cidXPtaNovoId.id : ''}</dd>
                       </Col>
                     </Row>
                   </Col>

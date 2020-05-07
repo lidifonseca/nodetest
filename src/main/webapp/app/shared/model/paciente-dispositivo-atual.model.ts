@@ -24,7 +24,6 @@ export interface IPacienteDispositivoAtual {
   ileostomia?: number;
   jejunostomia?: number;
   colostomia?: number;
-  idUsuario?: number;
 }
 
 export const defaultValue: Readonly<IPacienteDispositivoAtual> = {};

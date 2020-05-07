@@ -20,9 +20,7 @@
       "numeroCartao": "Numero Cartao",
       "validade": "Validade",
       "codAtivacao": "Cod Ativacao",
-      "ativo": "Ativo",
-      "pacientePedido": "Paciente Pedido",
-      "idPaciente": "Id Paciente"
+      "ativo": "Ativo"
     }
   }
 }

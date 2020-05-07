@@ -7,21 +7,21 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A MotivoPs.
  */
-@Entity('motivo_ps')
+@Entity('tb_motivo_ps')
 export default class MotivoPs extends BaseEntity {
-  @Column({ name: 'nome', length: 255 })
+  @Column({ name: 'NOME', length: 255 })
   nome: string;
 
-  @Column({ type: 'integer', name: 'id_pai' })
+  @Column({ type: 'integer', name: 'ID_PAI' })
   idPai: number;
 
-  @Column({ type: 'integer', name: 'ativo' })
+  @Column({ type: 'integer', name: 'ATIVO' })
   ativo: number;
 
-  @Column({ name: 'classe', length: 40 })
+  @Column({ name: 'CLASSE', length: 40 })
   classe: string;
 
-  @Column({ name: 'name', length: 20 })
+  @Column({ name: 'NAME', length: 20 })
   name: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

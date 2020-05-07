@@ -26,7 +26,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200502230600",
+    "changelogDate": "20200507103900",
     "entityTableName": "atendimento_imagem",
     "dto": "mapstruct",
     "pagination": "pagination",

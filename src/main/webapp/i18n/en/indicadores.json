@@ -3,21 +3,20 @@
     "indicadores": {
       "home": {
         "title": "Indicadores",
-        "createLabel": "Criar novo Indicadores",
-        "createOrEditLabel": "Criar ou editar Indicadores",
-        "notFound": "Nenhum Indicadores encontrado"
+        "createLabel": "Create a new Indicadores",
+        "createOrEditLabel": "Create or edit a Indicadores",
+        "notFound": "No Indicadores found"
       },
-      "created": "Um novo Indicadores foi criado com o identificador {{ param }}",
-      "updated": "Um Indicadores foi atualizado com o identificador {{ param }}",
-      "deleted": "Um Indicadores foi excluído com o identificador {{ param }}",
+      "created": "A new Indicadores is created with identifier {{ param }}",
+      "updated": "A Indicadores is updated with identifier {{ param }}",
+      "deleted": "A Indicadores is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Tem certeza de que deseja excluir Indicadores {{ id }}?"
+        "question": "Are you sure you want to delete Indicadores {{ id }}?"
       },
       "detail": {
         "title": "Indicadores"
       },
-      "titulo": "Titulo",
-      "indicadoresValores": "Indicadores Valores"
+      "titulo": "Titulo"
     }
   }
 }

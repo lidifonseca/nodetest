@@ -8,21 +8,19 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntity, updateEntity, createEntity, reset } from './api-name.reducer';
+import { IApiNameUpdateState, getEntity, getApiNameState, IApiNameBaseState, updateEntity, createEntity, reset } from './api-name.reducer';
 import { IApiName } from 'app/shared/model/api-name.model';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 
 export interface IApiNameUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
-export interface IApiNameUpdateState {
-  isNew: boolean;
-}
-
 export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiNameUpdateState> {
   constructor(props: Readonly<IApiNameUpdateProps>) {
     super(props);
+
     this.state = {
+      fieldsBase: getApiNameState(this.props.location),
       isNew: !this.props.match.params || !this.props.match.params.id
     };
   }
@@ -40,6 +38,22 @@ export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiName
     }
   }
 
+  getFiltersURL = (offset = null) => {
+    const fieldsBase = this.state.fieldsBase;
+    return (
+      '_back=1' +
+      (fieldsBase['baseFilters'] ? '&baseFilters=' + fieldsBase['baseFilters'] : '') +
+      (fieldsBase['activePage'] ? '&page=' + fieldsBase['activePage'] : '') +
+      (fieldsBase['itemsPerPage'] ? '&size=' + fieldsBase['itemsPerPage'] : '') +
+      (fieldsBase['sort'] ? '&sort=' + (fieldsBase['sort'] + ',' + fieldsBase['order']) : '') +
+      (offset !== null ? '&offset=' + offset : '') +
+      (fieldsBase['apiName'] ? '&apiName=' + fieldsBase['apiName'] : '') +
+      (fieldsBase['apiReceiver'] ? '&apiReceiver=' + fieldsBase['apiReceiver'] : '') +
+      (fieldsBase['apiObs'] ? '&apiObs=' + fieldsBase['apiObs'] : '') +
+      (fieldsBase['ativo'] ? '&ativo=' + fieldsBase['ativo'] : '') +
+      ''
+    );
+  };
   saveEntity = (event: any, errors: any, values: any) => {
     if (errors.length === 0) {
       const { apiNameEntity } = this.props;
@@ -57,13 +71,14 @@ export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiName
   };
 
   handleClose = () => {
-    this.props.history.push('/api-name');
+    this.props.history.push('/api-name?' + this.getFiltersURL());
   };
 
   render() {
     const { apiNameEntity, loading, updating } = this.props;
     const { isNew } = this.state;
 
+    const baseFilters = this.state.fieldsBase && this.state.fieldsBase['baseFilters'] ? this.state.fieldsBase['baseFilters'] : null;
     return (
       <div>
         <ol className="breadcrumb float-xl-right">
@@ -96,7 +111,14 @@ export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiName
                   &nbsp;
                   <Translate contentKey="entity.action.save">Save</Translate>
                 </Button>
-                <Button tag={Link} id="cancel-save" to="/api-name" replace color="info" className="float-right jh-create-entity">
+                <Button
+                  tag={Link}
+                  id="cancel-save"
+                  to={'/api-name?' + this.getFiltersURL()}
+                  replace
+                  color="info"
+                  className="float-right jh-create-entity"
+                >
                   <FontAwesomeIcon icon="arrow-left" />
                   &nbsp;
                   <span className="d-none d-md-inline">
@@ -111,7 +133,7 @@ export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiName
                   {loading ? (
                     <p>Loading...</p>
                   ) : (
-                    <Row>
+                    <div>
                       {!isNew ? (
                         <AvGroup>
                           <Row>
@@ -127,88 +149,84 @@ export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiName
                           </Row>
                         </AvGroup>
                       ) : null}
+                      <Row>
+                        {baseFilters !== 'apiName' ? (
+                          <Col md="apiName">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiNameLabel" for="api-name-apiName">
+                                    <Translate contentKey="generadorApp.apiName.apiName">Api Name</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-apiName" type="text" name="apiName" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiName" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="apiNameLabel" for="api-name-apiName">
-                                <Translate contentKey="generadorApp.apiName.apiName">Api Name</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="api-name-apiName"
-                                type="text"
-                                name="apiName"
-                                validate={{
-                                  maxLength: { value: 100, errorMessage: translate('entity.validation.maxlength', { max: 100 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'apiReceiver' ? (
+                          <Col md="apiReceiver">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiReceiverLabel" for="api-name-apiReceiver">
+                                    <Translate contentKey="generadorApp.apiName.apiReceiver">Api Receiver</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-apiReceiver" type="text" name="apiReceiver" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiReceiver" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="apiReceiverLabel" for="api-name-apiReceiver">
-                                <Translate contentKey="generadorApp.apiName.apiReceiver">Api Receiver</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="api-name-apiReceiver"
-                                type="text"
-                                name="apiReceiver"
-                                validate={{
-                                  maxLength: { value: 60, errorMessage: translate('entity.validation.maxlength', { max: 60 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
+                        {baseFilters !== 'apiObs' ? (
+                          <Col md="apiObs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiObsLabel" for="api-name-apiObs">
+                                    <Translate contentKey="generadorApp.apiName.apiObs">Api Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-apiObs" type="text" name="apiObs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiObs" value={this.state.fieldsBase[baseFilters]} />
+                        )}
 
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="apiObsLabel" for="api-name-apiObs">
-                                <Translate contentKey="generadorApp.apiName.apiObs">Api Obs</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField
-                                id="api-name-apiObs"
-                                type="text"
-                                name="apiObs"
-                                validate={{
-                                  maxLength: { value: 255, errorMessage: translate('entity.validation.maxlength', { max: 255 }) }
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-
-                      <Col md="12">
-                        <AvGroup>
-                          <Row>
-                            <Col md="3">
-                              <Label className="mt-2" id="ativoLabel" for="api-name-ativo">
-                                <Translate contentKey="generadorApp.apiName.ativo">Ativo</Translate>
-                              </Label>
-                            </Col>
-                            <Col md="9">
-                              <AvField id="api-name-ativo" type="string" className="form-control" name="ativo" />
-                            </Col>
-                          </Row>
-                        </AvGroup>
-                      </Col>
-                    </Row>
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="api-name-ativo">
+                                    <Translate contentKey="generadorApp.apiName.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                      </Row>
+                    </div>
                   )}
                 </Col>
               </Row>

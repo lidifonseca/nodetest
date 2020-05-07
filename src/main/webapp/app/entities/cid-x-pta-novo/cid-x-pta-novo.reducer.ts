@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICidXPtaNovo, defaultValue } from 'app/shared/model/cid-x-pta-novo.model';
 
 export const ACTION_TYPES = {
+  FETCH_CIDXPTANOVO_LIST_EXPORT: 'cidXPtaNovo/FETCH_CIDXPTANOVO_LIST_EXPORT',
   FETCH_CIDXPTANOVO_LIST: 'cidXPtaNovo/FETCH_CIDXPTANOVO_LIST',
   FETCH_CIDXPTANOVO: 'cidXPtaNovo/FETCH_CIDXPTANOVO',
   CREATE_CIDXPTANOVO: 'cidXPtaNovo/CREATE_CIDXPTANOVO',
@@ -30,10 +31,24 @@ const initialState = {
 
 export type CidXPtaNovoState = Readonly<typeof initialState>;
 
+export interface ICidXPtaNovoBaseState {
+  baseFilters: any;
+  complexidade: any;
+  versao: any;
+  score: any;
+  titulo: any;
+}
+
+export interface ICidXPtaNovoUpdateState {
+  fieldsBase: ICidXPtaNovoBaseState;
+  isNew: boolean;
+}
+
 // Reducer
 
 export default (state: CidXPtaNovoState = initialState, action): CidXPtaNovoState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CIDXPTANOVO_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CIDXPTANOVO_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CIDXPTANOVO):
       return {
@@ -51,6 +66,7 @@ export default (state: CidXPtaNovoState = initialState, action): CidXPtaNovoStat
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CIDXPTANOVO_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CIDXPTANOVO_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CIDXPTANOVO):
     case FAILURE(ACTION_TYPES.CREATE_CIDXPTANOVO):
@@ -110,42 +126,22 @@ export type ICrudGetAllActionCidXPtaNovo<T> = (
   versao?: any,
   score?: any,
   titulo?: any,
-  cidXPtaNovo?: any,
-  cidXPtaNovoPadItemIndi?: any,
-  cidId?: any,
-  cidXPtaNovoId?: any,
   page?: number,
   size?: number,
   sort?: string
 ) => IPayload<T> | ((dispatch: any) => IPayload<T>);
 
-export const getEntities: ICrudGetAllActionCidXPtaNovo<ICidXPtaNovo> = (
-  complexidade,
-  versao,
-  score,
-  titulo,
-  cidXPtaNovo,
-  cidXPtaNovoPadItemIndi,
-  cidId,
-  cidXPtaNovoId,
-  page,
-  size,
-  sort
-) => {
+export const getEntities: ICrudGetAllActionCidXPtaNovo<ICidXPtaNovo> = (complexidade, versao, score, titulo, page, size, sort) => {
   const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
   const versaoRequest = versao ? `versao.contains=${versao}&` : '';
   const scoreRequest = score ? `score.contains=${score}&` : '';
   const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
-  const cidXPtaNovoRequest = cidXPtaNovo ? `cidXPtaNovo.equals=${cidXPtaNovo}&` : '';
-  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
-  const cidIdRequest = cidId ? `cidId.equals=${cidId}&` : '';
-  const cidXPtaNovoIdRequest = cidXPtaNovoId ? `cidXPtaNovoId.equals=${cidXPtaNovoId}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CIDXPTANOVO_LIST,
     payload: axios.get<ICidXPtaNovo>(
-      `${requestUrl}${complexidadeRequest}${versaoRequest}${scoreRequest}${tituloRequest}${cidXPtaNovoRequest}${cidXPtaNovoPadItemIndiRequest}${cidIdRequest}${cidXPtaNovoIdRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${complexidadeRequest}${versaoRequest}${scoreRequest}${tituloRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -157,12 +153,24 @@ export const getEntity: ICrudGetAction<ICidXPtaNovo> = id => {
   };
 };
 
+export const getEntitiesExport: ICrudGetAllActionCidXPtaNovo<ICidXPtaNovo> = (complexidade, versao, score, titulo, page, size, sort) => {
+  const complexidadeRequest = complexidade ? `complexidade.contains=${complexidade}&` : '';
+  const versaoRequest = versao ? `versao.contains=${versao}&` : '';
+  const scoreRequest = score ? `score.contains=${score}&` : '';
+  const tituloRequest = titulo ? `titulo.contains=${titulo}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CIDXPTANOVO_LIST,
+    payload: axios.get<ICidXPtaNovo>(
+      `${requestUrl}${complexidadeRequest}${versaoRequest}${scoreRequest}${tituloRequest}cacheBuster=${new Date().getTime()}`
+    )
+  };
+};
+
 export const createEntity: ICrudPutAction<ICidXPtaNovo> = entity => async dispatch => {
   entity = {
-    ...entity,
-    cidXPtaNovo: entity.cidXPtaNovo === 'null' ? null : entity.cidXPtaNovo,
-    cidXPtaNovoId: entity.cidXPtaNovoId === 'null' ? null : entity.cidXPtaNovoId,
-    cidId: entity.cidId === 'null' ? null : entity.cidId
+    ...entity
   };
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_CIDXPTANOVO,
@@ -173,12 +181,7 @@ export const createEntity: ICrudPutAction<ICidXPtaNovo> = entity => async dispat
 };
 
 export const updateEntity: ICrudPutAction<ICidXPtaNovo> = entity => async dispatch => {
-  entity = {
-    ...entity,
-    cidXPtaNovo: entity.cidXPtaNovo === 'null' ? null : entity.cidXPtaNovo,
-    cidXPtaNovoId: entity.cidXPtaNovoId === 'null' ? null : entity.cidXPtaNovoId,
-    cidId: entity.cidId === 'null' ? null : entity.cidId
-  };
+  entity = { ...entity };
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_CIDXPTANOVO,
     payload: axios.put(apiUrl, cleanEntity(entity))
@@ -200,3 +203,20 @@ export const deleteEntity: ICrudDeleteAction<ICidXPtaNovo> = id => async dispatc
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCidXPtaNovoState = (location): ICidXPtaNovoBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const complexidade = url.searchParams.get('complexidade') || '';
+  const versao = url.searchParams.get('versao') || '';
+  const score = url.searchParams.get('score') || '';
+  const titulo = url.searchParams.get('titulo') || '';
+
+  return {
+    baseFilters,
+    complexidade,
+    versao,
+    score,
+    titulo
+  };
+};

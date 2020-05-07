@@ -10,6 +10,7 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { ICategoria, defaultValue } from 'app/shared/model/categoria.model';
 
 export const ACTION_TYPES = {
+  FETCH_CATEGORIA_LIST_EXPORT: 'categoria/FETCH_CATEGORIA_LIST_EXPORT',
   FETCH_CATEGORIA_LIST: 'categoria/FETCH_CATEGORIA_LIST',
   FETCH_CATEGORIA: 'categoria/FETCH_CATEGORIA',
   CREATE_CATEGORIA: 'categoria/CREATE_CATEGORIA',
@@ -30,10 +31,28 @@ const initialState = {
 
 export type CategoriaState = Readonly<typeof initialState>;
 
+export interface ICategoriaBaseState {
+  baseFilters: any;
+  categoria: any;
+  styleCategoria: any;
+  icon: any;
+  publicar: any;
+  ordem: any;
+  publicarSite: any;
+  unidade: any;
+}
+
+export interface ICategoriaUpdateState {
+  fieldsBase: ICategoriaBaseState;
+  isNew: boolean;
+  idsunidade: any[];
+}
+
 // Reducer
 
 export default (state: CategoriaState = initialState, action): CategoriaState => {
   switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_CATEGORIA_LIST_EXPORT):
     case REQUEST(ACTION_TYPES.FETCH_CATEGORIA_LIST):
     case REQUEST(ACTION_TYPES.FETCH_CATEGORIA):
       return {
@@ -51,6 +70,7 @@ export default (state: CategoriaState = initialState, action): CategoriaState =>
         updateSuccess: false,
         updating: true
       };
+    case FAILURE(ACTION_TYPES.FETCH_CATEGORIA_LIST_EXPORT):
     case FAILURE(ACTION_TYPES.FETCH_CATEGORIA_LIST):
     case FAILURE(ACTION_TYPES.FETCH_CATEGORIA):
     case FAILURE(ACTION_TYPES.CREATE_CATEGORIA):
@@ -112,11 +132,7 @@ export type ICrudGetAllActionCategoria<T> = (
   publicar?: any,
   ordem?: any,
   publicarSite?: any,
-  categoriaAtividade?: any,
-  categoriaContrato?: any,
-  categoriaUnidade?: any,
-  cidXPtaNovoPadItemIndi?: any,
-  especialidade?: any,
+  unidade?: any,
   page?: number,
   size?: number,
   sort?: string
@@ -129,11 +145,7 @@ export const getEntities: ICrudGetAllActionCategoria<ICategoria> = (
   publicar,
   ordem,
   publicarSite,
-  categoriaAtividade,
-  categoriaContrato,
-  categoriaUnidade,
-  cidXPtaNovoPadItemIndi,
-  especialidade,
+  unidade,
   page,
   size,
   sort
@@ -144,17 +156,13 @@ export const getEntities: ICrudGetAllActionCategoria<ICategoria> = (
   const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
   const ordemRequest = ordem ? `ordem.contains=${ordem}&` : '';
   const publicarSiteRequest = publicarSite ? `publicarSite.contains=${publicarSite}&` : '';
-  const categoriaAtividadeRequest = categoriaAtividade ? `categoriaAtividade.equals=${categoriaAtividade}&` : '';
-  const categoriaContratoRequest = categoriaContrato ? `categoriaContrato.equals=${categoriaContrato}&` : '';
-  const categoriaUnidadeRequest = categoriaUnidade ? `categoriaUnidade.equals=${categoriaUnidade}&` : '';
-  const cidXPtaNovoPadItemIndiRequest = cidXPtaNovoPadItemIndi ? `cidXPtaNovoPadItemIndi.equals=${cidXPtaNovoPadItemIndi}&` : '';
-  const especialidadeRequest = especialidade ? `especialidade.equals=${especialidade}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
 
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
   return {
     type: ACTION_TYPES.FETCH_CATEGORIA_LIST,
     payload: axios.get<ICategoria>(
-      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${categoriaAtividadeRequest}${categoriaContratoRequest}${categoriaUnidadeRequest}${cidXPtaNovoPadItemIndiRequest}${especialidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -163,6 +171,35 @@ export const getEntity: ICrudGetAction<ICategoria> = id => {
   return {
     type: ACTION_TYPES.FETCH_CATEGORIA,
     payload: axios.get<ICategoria>(requestUrl)
+  };
+};
+
+export const getEntitiesExport: ICrudGetAllActionCategoria<ICategoria> = (
+  categoria,
+  styleCategoria,
+  icon,
+  publicar,
+  ordem,
+  publicarSite,
+  unidade,
+  page,
+  size,
+  sort
+) => {
+  const categoriaRequest = categoria ? `categoria.contains=${categoria}&` : '';
+  const styleCategoriaRequest = styleCategoria ? `styleCategoria.contains=${styleCategoria}&` : '';
+  const iconRequest = icon ? `icon.contains=${icon}&` : '';
+  const publicarRequest = publicar ? `publicar.contains=${publicar}&` : '';
+  const ordemRequest = ordem ? `ordem.contains=${ordem}&` : '';
+  const publicarSiteRequest = publicarSite ? `publicarSite.contains=${publicarSite}&` : '';
+  const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
+
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}&` : '?'}`;
+  return {
+    type: ACTION_TYPES.FETCH_CATEGORIA_LIST,
+    payload: axios.get<ICategoria>(
+      `${requestUrl}${categoriaRequest}${styleCategoriaRequest}${iconRequest}${publicarRequest}${ordemRequest}${publicarSiteRequest}${unidadeRequest}cacheBuster=${new Date().getTime()}`
+    )
   };
 };
 
@@ -201,3 +238,27 @@ export const deleteEntity: ICrudDeleteAction<ICategoria> = id => async dispatch 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
 });
+
+export const getCategoriaState = (location): ICategoriaBaseState => {
+  const url = new URL(`http://localhost${location.search}`); // using a dummy url for parsing
+  const baseFilters = url.searchParams.get('baseFilters') || '';
+  const categoria = url.searchParams.get('categoria') || '';
+  const styleCategoria = url.searchParams.get('styleCategoria') || '';
+  const icon = url.searchParams.get('icon') || '';
+  const publicar = url.searchParams.get('publicar') || '';
+  const ordem = url.searchParams.get('ordem') || '';
+  const publicarSite = url.searchParams.get('publicarSite') || '';
+
+  const unidade = url.searchParams.get('unidade') || '';
+
+  return {
+    baseFilters,
+    categoria,
+    styleCategoria,
+    icon,
+    publicar,
+    ordem,
+    publicarSite,
+    unidade
+  };
+};

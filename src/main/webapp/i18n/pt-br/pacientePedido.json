@@ -23,10 +23,7 @@
       "valor": "Valor",
       "desconto": "Desconto",
       "tipoValor": "Tipo Valor",
-      "unidade": "Unidade",
-      "idPaciente": "Id Paciente",
-      "idCartao": "Id Cartao",
-      "idEspecialidade": "Id Especialidade"
+      "unidade": "Unidade"
     }
   }
 }

@@ -7,30 +7,30 @@ import { validate, Contains, IsInt, Length, IsEmail, IsFQDN, IsDate, Min, Max } 
 /**
  * A NotificacaoConfigUsuario.
  */
-@Entity('notificacao_config_usuario')
+@Entity('tb_notificacao_config_usuario')
 export default class NotificacaoConfigUsuario extends BaseEntity {
-  @Column({ type: 'integer', name: 'notificacao_config_id', nullable: false })
+  @Column({ type: 'integer', name: 'NOTIFICACAO_CONFIG_ID', nullable: false })
   notificacaoConfigId: number;
 
-  @Column({ type: 'integer', name: 'profissional_id' })
+  @Column({ type: 'integer', name: 'PROFISSIONAL_ID' })
   profissionalId: number;
 
-  @Column({ type: 'integer', name: 'paciente_id' })
+  @Column({ type: 'integer', name: 'PACIENTE_ID' })
   pacienteId: number;
 
-  @Column({ type: 'timestamp', name: 'atualizado_em', nullable: false })
+  @Column({ type: 'timestamp', name: 'ATUALIZADO_EM', nullable: false })
   atualizadoEm: any;
 
-  @Column({ type: 'integer', name: 'atualizado_por' })
+  @Column({ type: 'integer', name: 'ATUALIZADO_POR' })
   atualizadoPor: number;
 
-  @Column({ type: 'boolean', name: 'enviar_push', nullable: false })
+  @Column({ type: 'boolean', name: 'ENVIAR_PUSH', nullable: false })
   enviarPush: boolean;
 
-  @Column({ type: 'boolean', name: 'enviar_email', nullable: false })
+  @Column({ type: 'boolean', name: 'ENVIAR_EMAIL', nullable: false })
   enviarEmail: boolean;
 
-  @Column({ name: 'observacao', length: 100 })
+  @Column({ name: 'OBSERVACAO', length: 100 })
   observacao: string;
 
   // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

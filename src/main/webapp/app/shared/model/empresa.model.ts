@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-import { ICidade } from 'app/shared/model/cidade.model';
 
 export interface IEmpresa {
   id?: string;
@@ -22,7 +21,6 @@ export interface IEmpresa {
   cidade?: string;
   uf?: string;
   tipo?: number;
-  idCidade?: string | any;
 }
 
 export const defaultValue: Readonly<IEmpresa> = {};

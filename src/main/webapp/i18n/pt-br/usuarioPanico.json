@@ -17,7 +17,6 @@
         "title": "Usuario Panico"
       },
       "idPaciente": "Id Paciente",
-      "idUsuario": "Id Usuario",
       "idProfissional": "Id Profissional",
       "observacao": "Observacao",
       "resolvido": "Resolvido",
