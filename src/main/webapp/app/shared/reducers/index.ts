@@ -58,10 +58,6 @@ import padCsv, {
   PadCsvState
 } from 'app/entities/pad-csv/pad-csv.reducer';
 // prettier-ignore
-import phinxlog, {
-  PhinxlogState
-} from 'app/entities/phinxlog/phinxlog.reducer';
-// prettier-ignore
 import acao, {
   AcaoState
 } from 'app/entities/acao/acao.reducer';
@@ -150,10 +146,6 @@ import categoriaContrato, {
   CategoriaContratoState
 } from 'app/entities/categoria-contrato/categoria-contrato.reducer';
 // prettier-ignore
-import categoriaUnidade, {
-  CategoriaUnidadeState
-} from 'app/entities/categoria-unidade/categoria-unidade.reducer';
-// prettier-ignore
 import cidPta, {
   CidPtaState
 } from 'app/entities/cid-pta/cid-pta.reducer';
@@ -161,10 +153,6 @@ import cidPta, {
 import cidXPtaNovo, {
   CidXPtaNovoState
 } from 'app/entities/cid-x-pta-novo/cid-x-pta-novo.reducer';
-// prettier-ignore
-import cidXPtaNovoPadItemIndicadores, {
-  CidXPtaNovoPadItemIndicadoresState
-} from 'app/entities/cid-x-pta-novo-pad-item-indicadores/cid-x-pta-novo-pad-item-indicadores.reducer';
 // prettier-ignore
 import controleDisparoAviso, {
   ControleDisparoAvisoState
@@ -718,7 +706,6 @@ export interface IRootState {
   readonly junho: JunhoState;
   readonly maio: MaioState;
   readonly padCsv: PadCsvState;
-  readonly phinxlog: PhinxlogState;
   readonly acao: AcaoState;
   readonly acoesRespostas: AcoesRespostasState;
   readonly alertasIndicadores: AlertasIndicadoresState;
@@ -741,10 +728,8 @@ export interface IRootState {
   readonly categoria: CategoriaState;
   readonly categoriaAtividade: CategoriaAtividadeState;
   readonly categoriaContrato: CategoriaContratoState;
-  readonly categoriaUnidade: CategoriaUnidadeState;
   readonly cidPta: CidPtaState;
   readonly cidXPtaNovo: CidXPtaNovoState;
-  readonly cidXPtaNovoPadItemIndicadores: CidXPtaNovoPadItemIndicadoresState;
   readonly controleDisparoAviso: ControleDisparoAvisoState;
   readonly descPta: DescPtaState;
   readonly diario: DiarioState;
@@ -904,7 +889,6 @@ const rootReducer = combineReducers<IRootState>({
   junho,
   maio,
   padCsv,
-  phinxlog,
   acao,
   acoesRespostas,
   alertasIndicadores,
@@ -927,10 +911,8 @@ const rootReducer = combineReducers<IRootState>({
   categoria,
   categoriaAtividade,
   categoriaContrato,
-  categoriaUnidade,
   cidPta,
   cidXPtaNovo,
-  cidXPtaNovoPadItemIndicadores,
   controleDisparoAviso,
   descPta,
   diario,
