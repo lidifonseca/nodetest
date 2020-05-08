@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -208,11 +209,11 @@ export class LogUserFranquiaUpdate extends React.Component<ILogUserFranquiaUpdat
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="log-user-franquia-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="log-user-franquia-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="log-user-franquia-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -220,13 +221,101 @@ export class LogUserFranquiaUpdate extends React.Component<ILogUserFranquiaUpdat
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <DescricaoComponentUpdate baseFilters />
-
-                        <AcaoComponentUpdate baseFilter acaos />
-
-                        <TelaComponentUpdate baseFilter telas />
-
-                        <UsuarioComponentUpdate baseFilter franquiaUsuarios />
+                        {baseFilters !== 'descricao' ? (
+                          <Col md="descricao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descricaoLabel" for="log-user-franquia-descricao">
+                                    <Translate contentKey="generadorApp.logUserFranquia.descricao">Descricao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="log-user-franquia-descricao" type="textarea" name="descricao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'acao' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="log-user-franquia-acao">
+                                    <Translate contentKey="generadorApp.logUserFranquia.acao">Acao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="log-user-franquia-acao"
+                                    className={'css-select-control'}
+                                    value={this.state.acaoSelectValue}
+                                    options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ acaoSelectValue: options })}
+                                    name={'acao'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="acao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'tela' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="log-user-franquia-tela">
+                                    <Translate contentKey="generadorApp.logUserFranquia.tela">Tela</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="log-user-franquia-tela"
+                                    className={'css-select-control'}
+                                    value={this.state.telaSelectValue}
+                                    options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ telaSelectValue: options })}
+                                    name={'tela'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'usuario' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="log-user-franquia-usuario">
+                                    <Translate contentKey="generadorApp.logUserFranquia.usuario">Usuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="log-user-franquia-usuario"
+                                    className={'css-select-control'}
+                                    value={this.state.franquiaUsuarioSelectValue}
+                                    options={
+                                      franquiaUsuarios ? franquiaUsuarios.map(option => ({ value: option.id, label: option.id })) : null
+                                    }
+                                    onChange={options => this.setState({ franquiaUsuarioSelectValue: options })}
+                                    name={'usuario'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -263,110 +352,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const DescricaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descricao' ? (
-    <Col md="descricao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descricaoLabel" for="log-user-franquia-descricao">
-              <Translate contentKey="generadorApp.logUserFranquia.descricao">Descricao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="log-user-franquia-descricao" type="textarea" name="descricao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AcaoComponentUpdate = ({ baseFilters, acaos }) => {
-  return baseFilters !== 'acao' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="log-user-franquia-acao">
-              <Translate contentKey="generadorApp.logUserFranquia.acao">Acao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="log-user-franquia-acao"
-              className={'css-select-control'}
-              value={this.state.acaoSelectValue}
-              options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ acaoSelectValue: options })}
-              name={'acao'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="acao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TelaComponentUpdate = ({ baseFilters, telas }) => {
-  return baseFilters !== 'tela' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="log-user-franquia-tela">
-              <Translate contentKey="generadorApp.logUserFranquia.tela">Tela</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="log-user-franquia-tela"
-              className={'css-select-control'}
-              value={this.state.telaSelectValue}
-              options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ telaSelectValue: options })}
-              name={'tela'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UsuarioComponentUpdate = ({ baseFilters, franquiaUsuarios }) => {
-  return baseFilters !== 'usuario' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="log-user-franquia-usuario">
-              <Translate contentKey="generadorApp.logUserFranquia.usuario">Usuario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="log-user-franquia-usuario"
-              className={'css-select-control'}
-              value={this.state.franquiaUsuarioSelectValue}
-              options={franquiaUsuarios ? franquiaUsuarios.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ franquiaUsuarioSelectValue: options })}
-              name={'usuario'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogUserFranquiaUpdate);

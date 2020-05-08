@@ -48,9 +48,22 @@ entity ApiReturn {
 	ativo Integer
 }
 
+
+
+/*
+	@listTableLayout padItem dataAgenda paciente profissional operadora dataChegada dataSaida @@ 
+	@listFilterLayout 
+		padItem{Label:top,Size:6}
+		dataAgenda{Label:top,Size:6}
+		paciente{Label:top,Size:6}
+		profissional{Label:top,Size:6}
+		operadora{Label:top,Size:6}
+		dataChegada{Label:top,Size:6}
+		dataSaida{Label:top,Size:6}
+	@@
+*/
+
 entity Atendimento {
-	idFranquia String,
-	idProfissional String,
 	cep String maxlength(10),
 	endereco String maxlength(100),
 	numero String maxlength(30),
@@ -623,12 +636,8 @@ entity Operadora {
 		detalhes{Label:top,Size:12}
 		observacao{Label:top,Size:12}
 		comResponsavel{Label:top,Size:12}
-
 		grauParentesco{Label:top,Size:12}
 		responsavelFamiliar{Label:top,Size:12}
-
-
-
 		cepFamiliar{Label:top,Size:12}
 		enderecoFamiliar{Label:top,Size:12}
 		numeroFamiliar{Label:top,Size:12}
@@ -647,8 +656,6 @@ entity Operadora {
 		telefoneFamiliar{Label:top,Size:12}
 		celularFamiliar{Label:top,Size:12}
 		observacaoFamiliar{Label:top,Size:12}
-
-
 		franquia{Label:top,Size:12}
 		senha{Label:top,Size:12}
 		registro{Label:top,Size:12}
@@ -1786,6 +1793,15 @@ relationship ManyToOne {
 	 EspecialidadeUnidade{unidade(razaoSocial)} to UnidadeEasy
 	 PacientePedido{unidade(razaoSocial)} to UnidadeEasy
 	 UnidadeEasyAreaAtuacao{unidade(razaoSocial)} to UnidadeEasy
+
+
+
+	 Atendimento{padItem(id)} to PadItem
+	 Atendimento{paciente(nome)} to Paciente
+	 Atendimento{operadora(nomeFantasia)} to Operadora
+	 Atendimento{profissional(nome)} to Profissional
+	 Atendimento{franquia(nomeFantasia)} to Franquia
+
 }
 
 
@@ -1802,20 +1818,17 @@ relationship OneToMany {
 	 PerguntasQuestionario{acoesRespostas} to AcoesRespostas{perguntasQuestionario}
 	 CidXPtaNovoPadItemIndi{alertasIndicadores} to AlertasIndicadores{padItemIndicadores}
 	 Resultados{alertasResultadosEsperados} to AlertasResultadosEsperados{resultados}
-	 Paciente{atendimento} to Atendimento{paciente}
-	 Operadora{atendimento} to Atendimento{operadora}
 	 Especialidade{atendimento} to Atendimento{especialidade}
-	 PadItem{atendimento} to Atendimento{padItem}
 	 StatusAtendimento{atendimento} to Atendimento{statusAtendimento}
 	 Periodo{atendimento} to Atendimento{periodo}
 	 Cidade{atendimento} to Atendimento{cidade}
 	 Profissional{atendimentoAceite} to AtendimentoAceite{profissional}
 	 Atendimento{atendimentoAceite} to AtendimentoAceite{atendimento}
 	 Atendimento{atendimentoAssinaturas} to AtendimentoAssinaturas{atendimento}
+	 Atendimento{atendimentoAtividades} to AtendimentoAtividades{atendimento}
 	 Profissional{atendimentoAssinaturas} to AtendimentoAssinaturas{profissional}
 	 Paciente{atendimentoAssinaturas} to AtendimentoAssinaturas{paciente}
 	 CategoriaAtividade{atendimentoAtividades} to AtendimentoAtividades{atividade}
-	 Atendimento{atendimentoAtividades} to AtendimentoAtividades{atendimento}
 	 PadItem{atendimentoCepRecusado} to AtendimentoCepRecusado{padItem}
 	 PadItem{atendimentoSorteioFeito} to AtendimentoSorteioFeito{padItem}
 	 Categoria{categoriaAtividade} to CategoriaAtividade{categoria}

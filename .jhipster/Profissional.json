@@ -280,7 +280,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200508175200",
+    "changelogDate": "20200508233100",
     "entityTableName": "profissional",
     "dto": "mapstruct",
     "pagination": "pagination",

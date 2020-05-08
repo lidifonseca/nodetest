@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class TipoMatMedUpdate extends React.Component<ITipoMatMedUpdateProps, IT
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="tipo-mat-med-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="tipo-mat-med-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="tipo-mat-med-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,42 @@ export class TipoMatMedUpdate extends React.Component<ITipoMatMedUpdateProps, IT
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TipoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'tipo' ? (
+                          <Col md="tipo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoLabel" for="tipo-mat-med-tipo">
+                                    <Translate contentKey="generadorApp.tipoMatMed.tipo">Tipo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-mat-med-tipo" type="text" name="tipo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="tipo-mat-med-ativo">
+                                    <Translate contentKey="generadorApp.tipoMatMed.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-mat-med-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +216,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TipoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipo' ? (
-    <Col md="tipo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoLabel" for="tipo-mat-med-tipo">
-              <Translate contentKey="generadorApp.tipoMatMed.tipo">Tipo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-mat-med-tipo" type="text" name="tipo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="tipo-mat-med-ativo">
-              <Translate contentKey="generadorApp.tipoMatMed.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-mat-med-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipoMatMedUpdate);

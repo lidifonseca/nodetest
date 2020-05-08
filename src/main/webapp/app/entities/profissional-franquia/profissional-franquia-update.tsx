@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -140,11 +141,11 @@ export class ProfissionalFranquiaUpdate extends React.Component<IProfissionalFra
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-franquia-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-franquia-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="profissional-franquia-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -152,9 +153,42 @@ export class ProfissionalFranquiaUpdate extends React.Component<IProfissionalFra
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProfissionalComponentUpdate baseFilters />
-
-                        <IdFranquiaComponentUpdate baseFilters />
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-franquia-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-franquia-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idFranquia' ? (
+                          <Col md="idFranquia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idFranquiaLabel" for="profissional-franquia-idFranquia">
+                                    <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-franquia-idFranquia" type="text" name="idFranquia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -184,47 +218,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-franquia-idProfissional">
-              <Translate contentKey="generadorApp.profissionalFranquia.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-franquia-idProfissional" type="text" name="idProfissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdFranquiaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idFranquia' ? (
-    <Col md="idFranquia">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idFranquiaLabel" for="profissional-franquia-idFranquia">
-              <Translate contentKey="generadorApp.profissionalFranquia.idFranquia">Id Franquia</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-franquia-idFranquia" type="text" name="idFranquia" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalFranquiaUpdate);

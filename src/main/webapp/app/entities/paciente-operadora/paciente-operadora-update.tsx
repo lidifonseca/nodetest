@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -178,11 +179,11 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-operadora-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-operadora-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="paciente-operadora-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -190,13 +191,92 @@ export class PacienteOperadoraUpdate extends React.Component<IPacienteOperadoraU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <RegistroComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
-
-                        <OperadoraComponentUpdate baseFilter operadoras />
+                        {baseFilters !== 'registro' ? (
+                          <Col md="registro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="registroLabel" for="paciente-operadora-registro">
+                                    <Translate contentKey="generadorApp.pacienteOperadora.registro">Registro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-operadora-registro" type="text" name="registro" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="registro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-operadora-ativo">
+                                    <Translate contentKey="generadorApp.pacienteOperadora.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-operadora-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-operadora-paciente">
+                                    <Translate contentKey="generadorApp.pacienteOperadora.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-operadora-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'operadora' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-operadora-operadora">
+                                    <Translate contentKey="generadorApp.pacienteOperadora.operadora">Operadora</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-operadora-operadora"
+                                    className={'css-select-control'}
+                                    value={this.state.operadoraSelectValue}
+                                    options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ operadoraSelectValue: options })}
+                                    name={'operadora'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -230,103 +310,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const RegistroComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'registro' ? (
-    <Col md="registro">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="registroLabel" for="paciente-operadora-registro">
-              <Translate contentKey="generadorApp.pacienteOperadora.registro">Registro</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-operadora-registro" type="text" name="registro" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="registro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="paciente-operadora-ativo">
-              <Translate contentKey="generadorApp.pacienteOperadora.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-operadora-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-operadora-paciente">
-              <Translate contentKey="generadorApp.pacienteOperadora.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-operadora-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const OperadoraComponentUpdate = ({ baseFilters, operadoras }) => {
-  return baseFilters !== 'operadora' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-operadora-operadora">
-              <Translate contentKey="generadorApp.pacienteOperadora.operadora">Operadora</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-operadora-operadora"
-              className={'css-select-control'}
-              value={this.state.operadoraSelectValue}
-              options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ operadoraSelectValue: options })}
-              name={'operadora'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteOperadoraUpdate);

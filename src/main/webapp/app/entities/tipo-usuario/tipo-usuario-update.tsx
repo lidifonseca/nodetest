@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class TipoUsuarioUpdate extends React.Component<ITipoUsuarioUpdateProps, 
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="tipo-usuario-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="tipo-usuario-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="tipo-usuario-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,11 +151,47 @@ export class TipoUsuarioUpdate extends React.Component<ITipoUsuarioUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TipoUsuarioComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <UsuarioComponentUpdate baseFilter usuarios />
+                        {baseFilters !== 'tipoUsuario' ? (
+                          <Col md="tipoUsuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoUsuarioLabel" for="tipo-usuario-tipoUsuario">
+                                    <Translate contentKey="generadorApp.tipoUsuario.tipoUsuario">Tipo Usuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-usuario-tipoUsuario" type="text" name="tipoUsuario" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoUsuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="tipo-usuario-ativo">
+                                    <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-usuario-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'usuario' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -184,55 +221,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TipoUsuarioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipoUsuario' ? (
-    <Col md="tipoUsuario">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoUsuarioLabel" for="tipo-usuario-tipoUsuario">
-              <Translate contentKey="generadorApp.tipoUsuario.tipoUsuario">Tipo Usuario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-usuario-tipoUsuario" type="text" name="tipoUsuario" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipoUsuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="tipo-usuario-ativo">
-              <Translate contentKey="generadorApp.tipoUsuario.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-usuario-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UsuarioComponentUpdate = ({ baseFilters, usuarios }) => {
-  return baseFilters !== 'usuario' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipoUsuarioUpdate);

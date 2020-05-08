@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -178,11 +179,11 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="atendimento-aceite-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="atendimento-aceite-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="atendimento-aceite-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -190,11 +191,74 @@ export class AtendimentoAceiteUpdate extends React.Component<IAtendimentoAceiteU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <MsgPushComponentUpdate baseFilters />
-
-                        <ProfissionalComponentUpdate baseFilter profissionals />
-
-                        <AtendimentoComponentUpdate baseFilter atendimentos />
+                        {baseFilters !== 'msgPush' ? (
+                          <Col md="msgPush">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="msgPushLabel" for="atendimento-aceite-msgPush">
+                                    <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-aceite-msgPush" type="text" name="msgPush" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="msgPush" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'profissional' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-aceite-profissional">
+                                    <Translate contentKey="generadorApp.atendimentoAceite.profissional">Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-aceite-profissional"
+                                    className={'css-select-control'}
+                                    value={this.state.profissionalSelectValue}
+                                    options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ profissionalSelectValue: options })}
+                                    name={'profissional'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atendimento' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-aceite-atendimento">
+                                    <Translate contentKey="generadorApp.atendimentoAceite.atendimento">Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-aceite-atendimento"
+                                    className={'css-select-control'}
+                                    value={this.state.atendimentoSelectValue}
+                                    options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ atendimentoSelectValue: options })}
+                                    name={'atendimento'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -228,82 +292,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const MsgPushComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'msgPush' ? (
-    <Col md="msgPush">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="msgPushLabel" for="atendimento-aceite-msgPush">
-              <Translate contentKey="generadorApp.atendimentoAceite.msgPush">Msg Push</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-aceite-msgPush" type="text" name="msgPush" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="msgPush" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ProfissionalComponentUpdate = ({ baseFilters, profissionals }) => {
-  return baseFilters !== 'profissional' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-aceite-profissional">
-              <Translate contentKey="generadorApp.atendimentoAceite.profissional">Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-aceite-profissional"
-              className={'css-select-control'}
-              value={this.state.profissionalSelectValue}
-              options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ profissionalSelectValue: options })}
-              name={'profissional'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
-  return baseFilters !== 'atendimento' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-aceite-atendimento">
-              <Translate contentKey="generadorApp.atendimentoAceite.atendimento">Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-aceite-atendimento"
-              className={'css-select-control'}
-              value={this.state.atendimentoSelectValue}
-              options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ atendimentoSelectValue: options })}
-              name={'atendimento'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtendimentoAceiteUpdate);

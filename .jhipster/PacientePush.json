@@ -27,7 +27,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508173100",
+    "changelogDate": "20200508231000",
     "entityTableName": "paciente_push",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class StatusFinanceiroUpdate extends React.Component<IStatusFinanceiroUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="status-financeiro-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="status-financeiro-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="status-financeiro-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,42 @@ export class StatusFinanceiroUpdate extends React.Component<IStatusFinanceiroUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <NomeComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="status-financeiro-nome">
+                                    <Translate contentKey="generadorApp.statusFinanceiro.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-financeiro-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="status-financeiro-ativo">
+                                    <Translate contentKey="generadorApp.statusFinanceiro.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-financeiro-ativo" type="text" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +216,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const NomeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nome' ? (
-    <Col md="nome">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeLabel" for="status-financeiro-nome">
-              <Translate contentKey="generadorApp.statusFinanceiro.nome">Nome</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-financeiro-nome" type="text" name="nome" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="status-financeiro-ativo">
-              <Translate contentKey="generadorApp.statusFinanceiro.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-financeiro-ativo" type="text" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatusFinanceiroUpdate);

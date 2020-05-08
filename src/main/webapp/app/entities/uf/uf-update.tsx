@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="uf-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="uf-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="uf-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,11 +143,47 @@ export class UfUpdate extends React.Component<IUfUpdateProps, IUfUpdateState> {
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <SiglaUfComponentUpdate baseFilters />
-
-                        <DescrUfComponentUpdate baseFilters />
-
-                        <CidadeComponentUpdate baseFilter cidades />
+                        {baseFilters !== 'siglaUf' ? (
+                          <Col md="siglaUf">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="siglaUfLabel" for="uf-siglaUf">
+                                    <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="uf-siglaUf" type="text" name="siglaUf" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="siglaUf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'descrUf' ? (
+                          <Col md="descrUf">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descrUfLabel" for="uf-descrUf">
+                                    <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="uf-descrUf" type="text" name="descrUf" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descrUf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cidade' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -176,55 +213,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const SiglaUfComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'siglaUf' ? (
-    <Col md="siglaUf">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="siglaUfLabel" for="uf-siglaUf">
-              <Translate contentKey="generadorApp.uf.siglaUf">Sigla Uf</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="uf-siglaUf" type="text" name="siglaUf" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="siglaUf" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DescrUfComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descrUf' ? (
-    <Col md="descrUf">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descrUfLabel" for="uf-descrUf">
-              <Translate contentKey="generadorApp.uf.descrUf">Descr Uf</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="uf-descrUf" type="text" name="descrUf" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descrUf" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidadeComponentUpdate = ({ baseFilters, cidades }) => {
-  return baseFilters !== 'cidade' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UfUpdate);

@@ -24,7 +24,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508180700",
+    "changelogDate": "20200508234600",
     "entityTableName": "profissional_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

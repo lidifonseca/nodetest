@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -180,11 +181,11 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="especialidade-unidade-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="especialidade-unidade-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="especialidade-unidade-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -192,19 +193,158 @@ export class EspecialidadeUnidadeUpdate extends React.Component<IEspecialidadeUn
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ValorBaixaUrgComponentUpdate baseFilters />
-
-                        <ValorAltaUrgComponentUpdate baseFilters />
-
-                        <ValorPagarComponentUpdate baseFilters />
-
-                        <PublicarComponentUpdate baseFilters />
-
-                        <ComentarioPrecoComponentUpdate baseFilters />
-
-                        <UnidadeComponentUpdate baseFilter unidadeEasies />
-
-                        <EspecialidadeComponentUpdate baseFilter especialidades />
+                        {baseFilters !== 'valorBaixaUrg' ? (
+                          <Col md="valorBaixaUrg">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorBaixaUrgLabel" for="especialidade-unidade-valorBaixaUrg">
+                                    <Translate contentKey="generadorApp.especialidadeUnidade.valorBaixaUrg">Valor Baixa Urg</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-unidade-valorBaixaUrg"
+                                    type="string"
+                                    className="form-control"
+                                    name="valorBaixaUrg"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorBaixaUrg" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'valorAltaUrg' ? (
+                          <Col md="valorAltaUrg">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorAltaUrgLabel" for="especialidade-unidade-valorAltaUrg">
+                                    <Translate contentKey="generadorApp.especialidadeUnidade.valorAltaUrg">Valor Alta Urg</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-unidade-valorAltaUrg"
+                                    type="string"
+                                    className="form-control"
+                                    name="valorAltaUrg"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorAltaUrg" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'valorPagar' ? (
+                          <Col md="valorPagar">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorPagarLabel" for="especialidade-unidade-valorPagar">
+                                    <Translate contentKey="generadorApp.especialidadeUnidade.valorPagar">Valor Pagar</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-unidade-valorPagar" type="string" className="form-control" name="valorPagar" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorPagar" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'publicar' ? (
+                          <Col md="publicar">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="publicarLabel" for="especialidade-unidade-publicar">
+                                    <Translate contentKey="generadorApp.especialidadeUnidade.publicar">Publicar</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-unidade-publicar" type="string" className="form-control" name="publicar" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="publicar" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'comentarioPreco' ? (
+                          <Col md="comentarioPreco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="comentarioPrecoLabel" for="especialidade-unidade-comentarioPreco">
+                                    <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-unidade-comentarioPreco" type="text" name="comentarioPreco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="comentarioPreco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="especialidade-unidade-unidade">
+                                    <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="especialidade-unidade-unidade"
+                                    className={'css-select-control'}
+                                    value={this.state.unidadeEasySelectValue}
+                                    options={
+                                      unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                    }
+                                    onChange={options => this.setState({ unidadeEasySelectValue: options })}
+                                    name={'unidade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'especialidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="especialidade-unidade-especialidade">
+                                    <Translate contentKey="generadorApp.especialidadeUnidade.especialidade">Especialidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="especialidade-unidade-especialidade"
+                                    className={'css-select-control'}
+                                    value={this.state.especialidadeSelectValue}
+                                    options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ especialidadeSelectValue: options })}
+                                    name={'especialidade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -238,166 +378,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ValorBaixaUrgComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'valorBaixaUrg' ? (
-    <Col md="valorBaixaUrg">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="valorBaixaUrgLabel" for="especialidade-unidade-valorBaixaUrg">
-              <Translate contentKey="generadorApp.especialidadeUnidade.valorBaixaUrg">Valor Baixa Urg</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-unidade-valorBaixaUrg" type="string" className="form-control" name="valorBaixaUrg" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="valorBaixaUrg" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ValorAltaUrgComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'valorAltaUrg' ? (
-    <Col md="valorAltaUrg">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="valorAltaUrgLabel" for="especialidade-unidade-valorAltaUrg">
-              <Translate contentKey="generadorApp.especialidadeUnidade.valorAltaUrg">Valor Alta Urg</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-unidade-valorAltaUrg" type="string" className="form-control" name="valorAltaUrg" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="valorAltaUrg" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ValorPagarComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'valorPagar' ? (
-    <Col md="valorPagar">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="valorPagarLabel" for="especialidade-unidade-valorPagar">
-              <Translate contentKey="generadorApp.especialidadeUnidade.valorPagar">Valor Pagar</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-unidade-valorPagar" type="string" className="form-control" name="valorPagar" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="valorPagar" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PublicarComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'publicar' ? (
-    <Col md="publicar">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="publicarLabel" for="especialidade-unidade-publicar">
-              <Translate contentKey="generadorApp.especialidadeUnidade.publicar">Publicar</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-unidade-publicar" type="string" className="form-control" name="publicar" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="publicar" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ComentarioPrecoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'comentarioPreco' ? (
-    <Col md="comentarioPreco">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="comentarioPrecoLabel" for="especialidade-unidade-comentarioPreco">
-              <Translate contentKey="generadorApp.especialidadeUnidade.comentarioPreco">Comentario Preco</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-unidade-comentarioPreco" type="text" name="comentarioPreco" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="comentarioPreco" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
-  return baseFilters !== 'unidade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="especialidade-unidade-unidade">
-              <Translate contentKey="generadorApp.especialidadeUnidade.unidade">Unidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="especialidade-unidade-unidade"
-              className={'css-select-control'}
-              value={this.state.unidadeEasySelectValue}
-              options={unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null}
-              onChange={options => this.setState({ unidadeEasySelectValue: options })}
-              name={'unidade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
-  return baseFilters !== 'especialidade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="especialidade-unidade-especialidade">
-              <Translate contentKey="generadorApp.especialidadeUnidade.especialidade">Especialidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="especialidade-unidade-especialidade"
-              className={'css-select-control'}
-              value={this.state.especialidadeSelectValue}
-              options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ especialidadeSelectValue: options })}
-              name={'especialidade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EspecialidadeUnidadeUpdate);

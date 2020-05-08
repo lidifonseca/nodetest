@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="prontuario-tipo-manifestacao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="prontuario-tipo-manifestacao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="prontuario-tipo-manifestacao-id"
@@ -162,11 +163,60 @@ export class ProntuarioTipoManifestacaoUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <NomeComponentUpdate baseFilters />
-
-                        <IdPaiComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-manifestacao-nome">
+                                    <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-manifestacao-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-manifestacao-idPai">
+                                    <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-manifestacao-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
+                                    <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-manifestacao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -196,68 +246,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const NomeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nome' ? (
-    <Col md="nome">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-manifestacao-nome">
-              <Translate contentKey="generadorApp.prontuarioTipoManifestacao.nome">Nome</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-manifestacao-nome" type="text" name="nome" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPaiComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPai' ? (
-    <Col md="idPai">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-manifestacao-idPai">
-              <Translate contentKey="generadorApp.prontuarioTipoManifestacao.idPai">Id Pai</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-manifestacao-idPai" type="string" className="form-control" name="idPai" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-manifestacao-ativo">
-              <Translate contentKey="generadorApp.prontuarioTipoManifestacao.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-manifestacao-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProntuarioTipoManifestacaoUpdate);

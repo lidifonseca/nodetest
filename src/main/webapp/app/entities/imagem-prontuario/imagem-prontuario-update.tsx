@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="imagem-prontuario-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="imagem-prontuario-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="imagem-prontuario-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,13 +151,78 @@ export class ImagemProntuarioUpdate extends React.Component<IImagemProntuarioUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProntuarioComponentUpdate baseFilters />
-
-                        <ImagemComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <DiretorioComponentUpdate baseFilters />
+                        {baseFilters !== 'idProntuario' ? (
+                          <Col md="idProntuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProntuarioLabel" for="imagem-prontuario-idProntuario">
+                                    <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-idProntuario" type="text" name="idProntuario" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'imagem' ? (
+                          <Col md="imagem">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="imagemLabel" for="imagem-prontuario-imagem">
+                                    <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-imagem" type="text" name="imagem" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="imagem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="imagem-prontuario-ativo">
+                                    <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'diretorio' ? (
+                          <Col md="diretorio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="diretorioLabel" for="imagem-prontuario-diretorio">
+                                    <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="imagem-prontuario-diretorio" type="text" name="diretorio" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="diretorio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,89 +252,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProntuarioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProntuario' ? (
-    <Col md="idProntuario">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProntuarioLabel" for="imagem-prontuario-idProntuario">
-              <Translate contentKey="generadorApp.imagemProntuario.idProntuario">Id Prontuario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="imagem-prontuario-idProntuario" type="text" name="idProntuario" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ImagemComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'imagem' ? (
-    <Col md="imagem">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="imagemLabel" for="imagem-prontuario-imagem">
-              <Translate contentKey="generadorApp.imagemProntuario.imagem">Imagem</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="imagem-prontuario-imagem" type="text" name="imagem" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="imagem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="imagem-prontuario-ativo">
-              <Translate contentKey="generadorApp.imagemProntuario.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="imagem-prontuario-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DiretorioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'diretorio' ? (
-    <Col md="diretorio">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="diretorioLabel" for="imagem-prontuario-diretorio">
-              <Translate contentKey="generadorApp.imagemProntuario.diretorio">Diretorio</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="imagem-prontuario-diretorio" type="text" name="diretorio" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="diretorio" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImagemProntuarioUpdate);

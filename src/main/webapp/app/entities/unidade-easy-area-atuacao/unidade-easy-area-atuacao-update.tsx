@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -160,11 +161,11 @@ export class UnidadeEasyAreaAtuacaoUpdate extends React.Component<IUnidadeEasyAr
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="unidade-easy-area-atuacao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="unidade-easy-area-atuacao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="unidade-easy-area-atuacao-id"
@@ -179,11 +180,69 @@ export class UnidadeEasyAreaAtuacaoUpdate extends React.Component<IUnidadeEasyAr
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <CepInicialComponentUpdate baseFilters />
-
-                        <CepFinalComponentUpdate baseFilters />
-
-                        <UnidadeComponentUpdate baseFilter unidadeEasies />
+                        {baseFilters !== 'cepInicial' ? (
+                          <Col md="cepInicial">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepInicialLabel" for="unidade-easy-area-atuacao-cepInicial">
+                                    <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepInicial">Cep Inicial</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="unidade-easy-area-atuacao-cepInicial" type="text" name="cepInicial" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepInicial" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cepFinal' ? (
+                          <Col md="cepFinal">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepFinalLabel" for="unidade-easy-area-atuacao-cepFinal">
+                                    <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="unidade-easy-area-atuacao-cepFinal" type="text" name="cepFinal" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepFinal" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="unidade-easy-area-atuacao-unidade">
+                                    <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="unidade-easy-area-atuacao-unidade"
+                                    className={'css-select-control'}
+                                    value={this.state.unidadeEasySelectValue}
+                                    options={
+                                      unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                    }
+                                    onChange={options => this.setState({ unidadeEasySelectValue: options })}
+                                    name={'unidade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -215,75 +274,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const CepInicialComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cepInicial' ? (
-    <Col md="cepInicial">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cepInicialLabel" for="unidade-easy-area-atuacao-cepInicial">
-              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepInicial">Cep Inicial</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="unidade-easy-area-atuacao-cepInicial" type="text" name="cepInicial" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cepInicial" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CepFinalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cepFinal' ? (
-    <Col md="cepFinal">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cepFinalLabel" for="unidade-easy-area-atuacao-cepFinal">
-              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.cepFinal">Cep Final</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="unidade-easy-area-atuacao-cepFinal" type="text" name="cepFinal" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cepFinal" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
-  return baseFilters !== 'unidade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="unidade-easy-area-atuacao-unidade">
-              <Translate contentKey="generadorApp.unidadeEasyAreaAtuacao.unidade">Unidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="unidade-easy-area-atuacao-unidade"
-              className={'css-select-control'}
-              value={this.state.unidadeEasySelectValue}
-              options={unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null}
-              onChange={options => this.setState({ unidadeEasySelectValue: options })}
-              name={'unidade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UnidadeEasyAreaAtuacaoUpdate);

@@ -31,7 +31,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508174600",
+    "changelogDate": "20200508232500",
     "entityTableName": "pad_mat_med",
     "dto": "mapstruct",
     "pagination": "pagination",

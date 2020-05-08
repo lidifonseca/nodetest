@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="segmentos-perguntas-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="segmentos-perguntas-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="segmentos-perguntas-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,29 @@ export class SegmentosPerguntasUpdate extends React.Component<ISegmentosPergunta
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <SegmentoComponentUpdate baseFilters />
-
-                        <PerguntasQuestionarioComponentUpdate baseFilter perguntasQuestionarios />
+                        {baseFilters !== 'segmento' ? (
+                          <Col md="segmento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="segmentoLabel" for="segmentos-perguntas-segmento">
+                                    <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="segmentos-perguntas-segmento" type="text" name="segmento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="segmento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'perguntasQuestionario' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="perguntasQuestionario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,34 +203,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const SegmentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'segmento' ? (
-    <Col md="segmento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="segmentoLabel" for="segmentos-perguntas-segmento">
-              <Translate contentKey="generadorApp.segmentosPerguntas.segmento">Segmento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="segmentos-perguntas-segmento" type="text" name="segmento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="segmento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PerguntasQuestionarioComponentUpdate = ({ baseFilters, perguntasQuestionarios }) => {
-  return baseFilters !== 'perguntasQuestionario' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="perguntasQuestionario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SegmentosPerguntasUpdate);

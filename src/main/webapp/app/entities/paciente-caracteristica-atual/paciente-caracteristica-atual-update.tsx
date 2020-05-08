@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class PacienteCaracteristicaAtualUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-caracteristica-atual-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-caracteristica-atual-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="paciente-caracteristica-atual-id"
@@ -162,9 +163,58 @@ export class PacienteCaracteristicaAtualUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdPacienteComponentUpdate baseFilters />
-
-                        <IdPacienteCaracteristicaComponentUpdate baseFilters />
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="paciente-caracteristica-atual-idPaciente">
+                                    <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-caracteristica-atual-idPaciente"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPaciente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPacienteCaracteristica' ? (
+                          <Col md="idPacienteCaracteristica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idPacienteCaracteristicaLabel"
+                                    for="paciente-caracteristica-atual-idPacienteCaracteristica"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPacienteCaracteristica">
+                                      Id Paciente Caracteristica
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-caracteristica-atual-idPacienteCaracteristica"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPacienteCaracteristica"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPacienteCaracteristica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -194,54 +244,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdPacienteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPaciente' ? (
-    <Col md="idPaciente">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPacienteLabel" for="paciente-caracteristica-atual-idPaciente">
-              <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPaciente">Id Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-caracteristica-atual-idPaciente" type="string" className="form-control" name="idPaciente" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPacienteCaracteristicaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPacienteCaracteristica' ? (
-    <Col md="idPacienteCaracteristica">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPacienteCaracteristicaLabel" for="paciente-caracteristica-atual-idPacienteCaracteristica">
-              <Translate contentKey="generadorApp.pacienteCaracteristicaAtual.idPacienteCaracteristica">
-                Id Paciente Caracteristica
-              </Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField
-              id="paciente-caracteristica-atual-idPacienteCaracteristica"
-              type="string"
-              className="form-control"
-              name="idPacienteCaracteristica"
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPacienteCaracteristica" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteCaracteristicaAtualUpdate);

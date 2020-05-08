@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="tipo-unidade-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="tipo-unidade-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="tipo-unidade-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,29 @@ export class TipoUnidadeUpdate extends React.Component<ITipoUnidadeUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TipoUnidadeComponentUpdate baseFilters />
-
-                        <EspecialidadeComponentUpdate baseFilter especialidades />
+                        {baseFilters !== 'tipoUnidade' ? (
+                          <Col md="tipoUnidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoUnidadeLabel" for="tipo-unidade-tipoUnidade">
+                                    <Translate contentKey="generadorApp.tipoUnidade.tipoUnidade">Tipo Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-unidade-tipoUnidade" type="text" name="tipoUnidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoUnidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'especialidade' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,34 +203,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TipoUnidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipoUnidade' ? (
-    <Col md="tipoUnidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoUnidadeLabel" for="tipo-unidade-tipoUnidade">
-              <Translate contentKey="generadorApp.tipoUnidade.tipoUnidade">Tipo Unidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-unidade-tipoUnidade" type="text" name="tipoUnidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipoUnidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
-  return baseFilters !== 'especialidade' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipoUnidadeUpdate);

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdatePro
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="unidade-medida-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="unidade-medida-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="unidade-medida-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,42 @@ export class UnidadeMedidaUpdate extends React.Component<IUnidadeMedidaUpdatePro
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <UnidadeComponentUpdate baseFilters />
-
-                        <DescricaoComponentUpdate baseFilters />
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="unidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="unidadeLabel" for="unidade-medida-unidade">
+                                    <Translate contentKey="generadorApp.unidadeMedida.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="unidade-medida-unidade" type="text" name="unidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'descricao' ? (
+                          <Col md="descricao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descricaoLabel" for="unidade-medida-descricao">
+                                    <Translate contentKey="generadorApp.unidadeMedida.descricao">Descricao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="unidade-medida-descricao" type="text" name="descricao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +216,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const UnidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'unidade' ? (
-    <Col md="unidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="unidadeLabel" for="unidade-medida-unidade">
-              <Translate contentKey="generadorApp.unidadeMedida.unidade">Unidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="unidade-medida-unidade" type="text" name="unidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DescricaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descricao' ? (
-    <Col md="descricao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descricaoLabel" for="unidade-medida-descricao">
-              <Translate contentKey="generadorApp.unidadeMedida.descricao">Descricao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="unidade-medida-descricao" type="text" name="descricao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UnidadeMedidaUpdate);

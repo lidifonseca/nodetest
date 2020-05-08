@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class TipoExameUpdate extends React.Component<ITipoExameUpdateProps, ITip
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="tipo-exame-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="tipo-exame-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="tipo-exame-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,11 +151,60 @@ export class TipoExameUpdate extends React.Component<ITipoExameUpdateProps, ITip
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ExameComponentUpdate baseFilters />
-
-                        <IdPaiComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'exame' ? (
+                          <Col md="exame">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="exameLabel" for="tipo-exame-exame">
+                                    <Translate contentKey="generadorApp.tipoExame.exame">Exame</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-exame-exame" type="text" name="exame" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="exame" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="tipo-exame-idPai">
+                                    <Translate contentKey="generadorApp.tipoExame.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-exame-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="tipo-exame-ativo">
+                                    <Translate contentKey="generadorApp.tipoExame.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-exame-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -184,68 +234,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ExameComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'exame' ? (
-    <Col md="exame">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="exameLabel" for="tipo-exame-exame">
-              <Translate contentKey="generadorApp.tipoExame.exame">Exame</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-exame-exame" type="text" name="exame" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="exame" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPaiComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPai' ? (
-    <Col md="idPai">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPaiLabel" for="tipo-exame-idPai">
-              <Translate contentKey="generadorApp.tipoExame.idPai">Id Pai</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-exame-idPai" type="string" className="form-control" name="idPai" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="tipo-exame-ativo">
-              <Translate contentKey="generadorApp.tipoExame.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-exame-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipoExameUpdate);

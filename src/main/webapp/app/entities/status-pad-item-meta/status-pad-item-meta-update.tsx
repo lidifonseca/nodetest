@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class StatusPadItemMetaUpdate extends React.Component<IStatusPadItemMetaU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="status-pad-item-meta-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="status-pad-item-meta-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="status-pad-item-meta-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,13 +151,78 @@ export class StatusPadItemMetaUpdate extends React.Component<IStatusPadItemMetaU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <StatusItemMetaComponentUpdate baseFilters />
-
-                        <StyleLabelComponentUpdate baseFilters />
-
-                        <OrdenacaoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'statusItemMeta' ? (
+                          <Col md="statusItemMeta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusItemMetaLabel" for="status-pad-item-meta-statusItemMeta">
+                                    <Translate contentKey="generadorApp.statusPadItemMeta.statusItemMeta">Status Item Meta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-pad-item-meta-statusItemMeta" type="text" name="statusItemMeta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusItemMeta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="status-pad-item-meta-styleLabel">
+                                    <Translate contentKey="generadorApp.statusPadItemMeta.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-pad-item-meta-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ordenacao' ? (
+                          <Col md="ordenacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ordenacaoLabel" for="status-pad-item-meta-ordenacao">
+                                    <Translate contentKey="generadorApp.statusPadItemMeta.ordenacao">Ordenacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-pad-item-meta-ordenacao" type="string" className="form-control" name="ordenacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ordenacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="status-pad-item-meta-ativo">
+                                    <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-pad-item-meta-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,89 +252,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const StatusItemMetaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'statusItemMeta' ? (
-    <Col md="statusItemMeta">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="statusItemMetaLabel" for="status-pad-item-meta-statusItemMeta">
-              <Translate contentKey="generadorApp.statusPadItemMeta.statusItemMeta">Status Item Meta</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-pad-item-meta-statusItemMeta" type="text" name="statusItemMeta" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="statusItemMeta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const StyleLabelComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'styleLabel' ? (
-    <Col md="styleLabel">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="styleLabelLabel" for="status-pad-item-meta-styleLabel">
-              <Translate contentKey="generadorApp.statusPadItemMeta.styleLabel">Style Label</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-pad-item-meta-styleLabel" type="text" name="styleLabel" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const OrdenacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ordenacao' ? (
-    <Col md="ordenacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ordenacaoLabel" for="status-pad-item-meta-ordenacao">
-              <Translate contentKey="generadorApp.statusPadItemMeta.ordenacao">Ordenacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-pad-item-meta-ordenacao" type="string" className="form-control" name="ordenacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ordenacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="status-pad-item-meta-ativo">
-              <Translate contentKey="generadorApp.statusPadItemMeta.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-pad-item-meta-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatusPadItemMetaUpdate);

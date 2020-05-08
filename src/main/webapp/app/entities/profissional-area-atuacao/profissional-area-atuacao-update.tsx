@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class ProfissionalAreaAtuacaoUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-area-atuacao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-area-atuacao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="profissional-area-atuacao-id"
@@ -162,15 +163,96 @@ export class ProfissionalAreaAtuacaoUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProfissionalComponentUpdate baseFilters />
-
-                        <CepAreaComponentUpdate baseFilters />
-
-                        <CepFimComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <CepIniComponentUpdate baseFilters />
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-area-atuacao-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacao.idProfissional">Id Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cepArea' ? (
+                          <Col md="cepArea">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepAreaLabel" for="profissional-area-atuacao-cepArea">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacao.cepArea">Cep Area</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-cepArea" type="text" name="cepArea" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepArea" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cepFim' ? (
+                          <Col md="cepFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepFimLabel" for="profissional-area-atuacao-cepFim">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacao.cepFim">Cep Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-cepFim" type="text" name="cepFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="profissional-area-atuacao-ativo">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cepIni' ? (
+                          <Col md="cepIni">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepIniLabel" for="profissional-area-atuacao-cepIni">
+                                    <Translate contentKey="generadorApp.profissionalAreaAtuacao.cepIni">Cep Ini</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-area-atuacao-cepIni" type="text" name="cepIni" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cepIni" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -200,110 +282,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-area-atuacao-idProfissional">
-              <Translate contentKey="generadorApp.profissionalAreaAtuacao.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-area-atuacao-idProfissional" type="text" name="idProfissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CepAreaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cepArea' ? (
-    <Col md="cepArea">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cepAreaLabel" for="profissional-area-atuacao-cepArea">
-              <Translate contentKey="generadorApp.profissionalAreaAtuacao.cepArea">Cep Area</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-area-atuacao-cepArea" type="text" name="cepArea" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cepArea" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CepFimComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cepFim' ? (
-    <Col md="cepFim">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cepFimLabel" for="profissional-area-atuacao-cepFim">
-              <Translate contentKey="generadorApp.profissionalAreaAtuacao.cepFim">Cep Fim</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-area-atuacao-cepFim" type="text" name="cepFim" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cepFim" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="profissional-area-atuacao-ativo">
-              <Translate contentKey="generadorApp.profissionalAreaAtuacao.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-area-atuacao-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CepIniComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cepIni' ? (
-    <Col md="cepIni">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cepIniLabel" for="profissional-area-atuacao-cepIni">
-              <Translate contentKey="generadorApp.profissionalAreaAtuacao.cepIni">Cep Ini</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-area-atuacao-cepIni" type="text" name="cepIni" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cepIni" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalAreaAtuacaoUpdate);

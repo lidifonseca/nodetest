@@ -35,7 +35,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508161400",
+    "changelogDate": "20200508215300",
     "entityTableName": "alertas_resultados_esperados",
     "dto": "mapstruct",
     "pagination": "pagination",

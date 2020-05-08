@@ -14,6 +14,8 @@ import {connect} from "react-redux";
 import {toggleSidebarMobileOpen} from "app/shared/reducers/sidebar";
 
 export interface IMyHeaderProps {
+	pageSidebarMinified: boolean;
+	pageSidebarTransparent: boolean;
   isAuthenticated: boolean;
   isAdmin: boolean;
   ribbonEnv: string;
@@ -21,6 +23,8 @@ export interface IMyHeaderProps {
   isSwaggerEnabled: boolean;
   currentLocale: string;
   onLocaleChange: Function;
+  toggleSidebarMinify: Function;
+  toggleMobileSidebar: Function;
 }
 
 export interface IHeaderProps extends StateProps, DispatchProps, IMyHeaderProps {}
@@ -52,14 +56,20 @@ const Header = (props: IHeaderProps) => {
   {/* renderDevRibbon() */}
       <LoadingBar className="loading-bar" />
       <div id="header" className="header navbar-inverse" style={{ boxShadow: "0 0 16px rgba(0,0,0,.15)" }}>
+        <div className="btn sidebar-minify-btn" style={{ fontSize:' 2em',  color: '#fff',  float: 'right' }}
+          onClick={()=>{props.toggleSidebarMinify(!props.pageSidebarMinified)}}>
+            <i className="fa fa-bars"></i>
+        </div>
         <div className={"navbar-header"}>
+
+
           <Brand />
           <div className={"navbar-nav navbar-right d-block d-md-none"}>
             <Collapse isOpen={menuOpen} navbar>
               <Nav id="header-tabs" className="ml-auto navbar-nav navbar-right pull-right" navbar>
                 {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
                 {props.isAuthenticated && <EntitiesMenu />}
-                {props.isAuthenticated && <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />}
+                {props.isAuthenticated && <LocaleMenu currentLocale={props.currentLocale ? props.currentLocale : 'pt_br'} onClick={handleLocaleChange} />}
                 {props.isAuthenticated && <Account />}
                 {props.isAuthenticated && <Logout />}
 
@@ -76,7 +86,7 @@ const Header = (props: IHeaderProps) => {
           <Nav id="header-tabs" style={{height: 40}} className="ml-auto navbar-nav navbar-right pull-right mr-4" navbar>
             {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
             {props.isAuthenticated && <EntitiesMenu />}
-            {props.isAuthenticated && <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />}
+            {props.isAuthenticated && <LocaleMenu currentLocale={props.currentLocale ? props.currentLocale : 'pt_br'} onClick={handleLocaleChange} />}
             {props.isAuthenticated && <Account />}
             {props.isAuthenticated && <Logout />}
           </Nav>
@@ -88,7 +98,6 @@ const Header = (props: IHeaderProps) => {
 
 
 const mapStateToProps = (storeState) => ({
-
 });
 
 

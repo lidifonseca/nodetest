@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -152,11 +153,11 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="log-pac-acesso-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="log-pac-acesso-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="log-pac-acesso-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -164,15 +165,96 @@ export class LogPacAcessoUpdate extends React.Component<ILogPacAcessoUpdateProps
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdPacienteComponentUpdate baseFilters />
-
-                        <ProfissionalComponentUpdate baseFilters />
-
-                        <TokenComponentUpdate baseFilters />
-
-                        <IpLocalComponentUpdate baseFilters />
-
-                        <InforAcessoComponentUpdate baseFilters />
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="log-pac-acesso-idPaciente">
+                                    <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-idPaciente" type="string" className="form-control" name="idPaciente" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'profissional' ? (
+                          <Col md="profissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="profissionalLabel" for="log-pac-acesso-profissional">
+                                    <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-profissional" type="text" name="profissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'token' ? (
+                          <Col md="token">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tokenLabel" for="log-pac-acesso-token">
+                                    <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-token" type="text" name="token" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="token" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ipLocal' ? (
+                          <Col md="ipLocal">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ipLocalLabel" for="log-pac-acesso-ipLocal">
+                                    <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="log-pac-acesso-ipLocal" type="text" name="ipLocal" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ipLocal" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'inforAcesso' ? (
+                          <Col md="inforAcesso">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
+                                    <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="inforAcesso" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -203,110 +285,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdPacienteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPaciente' ? (
-    <Col md="idPaciente">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPacienteLabel" for="log-pac-acesso-idPaciente">
-              <Translate contentKey="generadorApp.logPacAcesso.idPaciente">Id Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="log-pac-acesso-idPaciente" type="string" className="form-control" name="idPaciente" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'profissional' ? (
-    <Col md="profissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="profissionalLabel" for="log-pac-acesso-profissional">
-              <Translate contentKey="generadorApp.logPacAcesso.profissional">Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="log-pac-acesso-profissional" type="text" name="profissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TokenComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'token' ? (
-    <Col md="token">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tokenLabel" for="log-pac-acesso-token">
-              <Translate contentKey="generadorApp.logPacAcesso.token">Token</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="log-pac-acesso-token" type="text" name="token" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="token" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IpLocalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ipLocal' ? (
-    <Col md="ipLocal">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ipLocalLabel" for="log-pac-acesso-ipLocal">
-              <Translate contentKey="generadorApp.logPacAcesso.ipLocal">Ip Local</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="log-pac-acesso-ipLocal" type="text" name="ipLocal" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ipLocal" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const InforAcessoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'inforAcesso' ? (
-    <Col md="inforAcesso">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="inforAcessoLabel" for="log-pac-acesso-inforAcesso">
-              <Translate contentKey="generadorApp.logPacAcesso.inforAcesso">Infor Acesso</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="log-pac-acesso-inforAcesso" type="textarea" name="inforAcesso" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="inforAcesso" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogPacAcessoUpdate);

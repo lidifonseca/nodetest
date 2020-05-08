@@ -27,7 +27,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508165000",
+    "changelogDate": "20200508222900",
     "entityTableName": "franquia_status_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

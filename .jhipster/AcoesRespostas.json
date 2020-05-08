@@ -54,7 +54,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508161200",
+    "changelogDate": "20200508215100",
     "entityTableName": "acoes_respostas",
     "dto": "mapstruct",
     "pagination": "pagination",

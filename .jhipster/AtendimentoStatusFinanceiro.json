@@ -17,7 +17,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508162700",
+    "changelogDate": "20200508220600",
     "entityTableName": "atendimento_status_financeiro",
     "dto": "mapstruct",
     "pagination": "pagination",

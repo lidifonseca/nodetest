@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="servico-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="servico-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="servico-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,9 +143,42 @@ export class ServicoUpdate extends React.Component<IServicoUpdateProps, IServico
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ServicoComponentUpdate baseFilters />
-
-                        <StyleLabelComponentUpdate baseFilters />
+                        {baseFilters !== 'servico' ? (
+                          <Col md="servico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="servicoLabel" for="servico-servico">
+                                    <Translate contentKey="generadorApp.servico.servico">Servico</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="servico-servico" type="text" name="servico" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="servico-styleLabel">
+                                    <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="servico-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -174,47 +208,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ServicoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'servico' ? (
-    <Col md="servico">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="servicoLabel" for="servico-servico">
-              <Translate contentKey="generadorApp.servico.servico">Servico</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="servico-servico" type="text" name="servico" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const StyleLabelComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'styleLabel' ? (
-    <Col md="styleLabel">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="styleLabelLabel" for="servico-styleLabel">
-              <Translate contentKey="generadorApp.servico.styleLabel">Style Label</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="servico-styleLabel" type="text" name="styleLabel" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicoUpdate);

@@ -38,7 +38,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508163100",
+    "changelogDate": "20200508221000",
     "entityTableName": "categoria_atividade",
     "dto": "mapstruct",
     "pagination": "pagination",

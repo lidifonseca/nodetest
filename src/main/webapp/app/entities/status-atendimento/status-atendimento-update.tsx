@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="status-atendimento-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="status-atendimento-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="status-atendimento-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,15 +151,83 @@ export class StatusAtendimentoUpdate extends React.Component<IStatusAtendimentoU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <StatusAtendimentoComponentUpdate baseFilters />
-
-                        <StyleLabelComponentUpdate baseFilters />
-
-                        <OrdenacaoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <AtendimentoComponentUpdate baseFilter atendimentos />
+                        {baseFilters !== 'statusAtendimento' ? (
+                          <Col md="statusAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusAtendimentoLabel" for="status-atendimento-statusAtendimento">
+                                    <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-statusAtendimento" type="text" name="statusAtendimento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="status-atendimento-styleLabel">
+                                    <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ordenacao' ? (
+                          <Col md="ordenacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ordenacaoLabel" for="status-atendimento-ordenacao">
+                                    <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-ordenacao" type="string" className="form-control" name="ordenacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ordenacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="status-atendimento-ativo">
+                                    <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atendimento-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atendimento' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -188,97 +257,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const StatusAtendimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'statusAtendimento' ? (
-    <Col md="statusAtendimento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="statusAtendimentoLabel" for="status-atendimento-statusAtendimento">
-              <Translate contentKey="generadorApp.statusAtendimento.statusAtendimento">Status Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-atendimento-statusAtendimento" type="text" name="statusAtendimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="statusAtendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const StyleLabelComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'styleLabel' ? (
-    <Col md="styleLabel">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="styleLabelLabel" for="status-atendimento-styleLabel">
-              <Translate contentKey="generadorApp.statusAtendimento.styleLabel">Style Label</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-atendimento-styleLabel" type="text" name="styleLabel" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const OrdenacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ordenacao' ? (
-    <Col md="ordenacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ordenacaoLabel" for="status-atendimento-ordenacao">
-              <Translate contentKey="generadorApp.statusAtendimento.ordenacao">Ordenacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-atendimento-ordenacao" type="string" className="form-control" name="ordenacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ordenacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="status-atendimento-ativo">
-              <Translate contentKey="generadorApp.statusAtendimento.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-atendimento-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
-  return baseFilters !== 'atendimento' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatusAtendimentoUpdate);

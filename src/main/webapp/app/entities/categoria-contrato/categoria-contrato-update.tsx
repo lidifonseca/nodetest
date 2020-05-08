@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -172,11 +173,11 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="categoria-contrato-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="categoria-contrato-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="categoria-contrato-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -184,11 +185,96 @@ export class CategoriaContratoUpdate extends React.Component<ICategoriaContratoU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ContratoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <CategoriaComponentUpdate baseFilter categorias />
+                        {baseFilters !== 'contrato' ? (
+                          <Col md="contrato">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <AvGroup>
+                                    <Row>
+                                      <Col md="3">
+                                        <Label className="mt-2" id="contratoLabel" for="contrato">
+                                          <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
+                                        </Label>
+                                      </Col>
+                                      <Col md="9">
+                                        <br />
+                                        {contrato || contratoBase64 ? (
+                                          <div>
+                                            <Row>
+                                              <Col md="11"></Col>
+                                              <Col md="1">
+                                                <Button color="danger" onClick={this.clearBlob('contrato')}>
+                                                  <FontAwesomeIcon icon="times-circle" />
+                                                </Button>
+                                              </Col>
+                                            </Row>
+                                            <a rel="noopener noreferrer" target={'_blank'} href={`${contrato}`}>
+                                              <Translate contentKey="entity.action.open">Open</Translate>
+                                            </a>
+                                            <br />
+                                          </div>
+                                        ) : null}
+                                        <input
+                                          id="file_contrato"
+                                          type="file"
+                                          ref={this.contratoFileInput}
+                                          onChange={this.onBlobChange(false, 'contrato', this.contratoFileInput)}
+                                        />
+                                        <AvInput type="hidden" name="contrato" value={contrato} />
+                                      </Col>
+                                    </Row>
+                                  </AvGroup>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="contrato" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="categoria-contrato-ativo">
+                                    <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="categoria-contrato-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'categoria' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="categoria-contrato-categoria">
+                                    <Translate contentKey="generadorApp.categoriaContrato.categoria">Categoria</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="categoria-contrato-categoria"
+                                    className={'css-select-control'}
+                                    value={this.state.categoriaSelectValue}
+                                    options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ categoriaSelectValue: options })}
+                                    name={'categoria'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -221,104 +307,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ContratoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'contrato' ? (
-    <Col md="contrato">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <AvGroup>
-              <Row>
-                <Col md="3">
-                  <Label className="mt-2" id="contratoLabel" for="contrato">
-                    <Translate contentKey="generadorApp.categoriaContrato.contrato">Contrato</Translate>
-                  </Label>
-                </Col>
-                <Col md="9">
-                  <br />
-                  {contrato || contratoBase64 ? (
-                    <div>
-                      <Row>
-                        <Col md="11"></Col>
-                        <Col md="1">
-                          <Button color="danger" onClick={this.clearBlob('contrato')}>
-                            <FontAwesomeIcon icon="times-circle" />
-                          </Button>
-                        </Col>
-                      </Row>
-                      <a rel="noopener noreferrer" target={'_blank'} href={`${contrato}`}>
-                        <Translate contentKey="entity.action.open">Open</Translate>
-                      </a>
-                      <br />
-                    </div>
-                  ) : null}
-                  <input
-                    id="file_contrato"
-                    type="file"
-                    ref={this.contratoFileInput}
-                    onChange={this.onBlobChange(false, 'contrato', this.contratoFileInput)}
-                  />
-                  <AvInput type="hidden" name="contrato" value={contrato} />
-                </Col>
-              </Row>
-            </AvGroup>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="contrato" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="categoria-contrato-ativo">
-              <Translate contentKey="generadorApp.categoriaContrato.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="categoria-contrato-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CategoriaComponentUpdate = ({ baseFilters, categorias }) => {
-  return baseFilters !== 'categoria' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="categoria-contrato-categoria">
-              <Translate contentKey="generadorApp.categoriaContrato.categoria">Categoria</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="categoria-contrato-categoria"
-              className={'css-select-control'}
-              value={this.state.categoriaSelectValue}
-              options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ categoriaSelectValue: options })}
-              name={'categoria'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriaContratoUpdate);

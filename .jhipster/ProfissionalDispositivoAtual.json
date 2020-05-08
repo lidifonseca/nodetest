@@ -89,7 +89,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508175800",
+    "changelogDate": "20200508233700",
     "entityTableName": "profissional_dispositivo_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

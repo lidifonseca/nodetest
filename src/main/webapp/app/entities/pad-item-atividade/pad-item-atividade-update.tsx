@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -178,11 +179,11 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-item-atividade-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-item-atividade-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-item-atividade-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -190,13 +191,96 @@ export class PadItemAtividadeUpdate extends React.Component<IPadItemAtividadeUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <DataInicioComponentUpdate baseFilters />
-
-                        <DataFimComponentUpdate baseFilters />
-
-                        <AtividadeComponentUpdate baseFilter categoriaAtividades />
-
-                        <PadItemComponentUpdate baseFilter padItems />
+                        {baseFilters !== 'dataInicio' ? (
+                          <Col md="dataInicio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataInicioLabel" for="pad-item-atividade-dataInicio">
+                                    <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-atividade-dataInicio" type="date" className="form-control" name="dataInicio" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'dataFim' ? (
+                          <Col md="dataFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataFimLabel" for="pad-item-atividade-dataFim">
+                                    <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-atividade-dataFim" type="date" className="form-control" name="dataFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atividade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-item-atividade-atividade">
+                                    <Translate contentKey="generadorApp.padItemAtividade.atividade">Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-item-atividade-atividade"
+                                    className={'css-select-control'}
+                                    value={this.state.categoriaAtividadeSelectValue}
+                                    options={
+                                      categoriaAtividades
+                                        ? categoriaAtividades.map(option => ({ value: option.id, label: option.id }))
+                                        : null
+                                    }
+                                    onChange={options => this.setState({ categoriaAtividadeSelectValue: options })}
+                                    name={'atividade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'padItem' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-item-atividade-padItem">
+                                    <Translate contentKey="generadorApp.padItemAtividade.padItem">Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-item-atividade-padItem"
+                                    className={'css-select-control'}
+                                    value={this.state.padItemSelectValue}
+                                    options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ padItemSelectValue: options })}
+                                    name={'padItem'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -230,103 +314,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const DataInicioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataInicio' ? (
-    <Col md="dataInicio">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataInicioLabel" for="pad-item-atividade-dataInicio">
-              <Translate contentKey="generadorApp.padItemAtividade.dataInicio">Data Inicio</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-atividade-dataInicio" type="date" className="form-control" name="dataInicio" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataInicio" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DataFimComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataFim' ? (
-    <Col md="dataFim">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataFimLabel" for="pad-item-atividade-dataFim">
-              <Translate contentKey="generadorApp.padItemAtividade.dataFim">Data Fim</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-atividade-dataFim" type="date" className="form-control" name="dataFim" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtividadeComponentUpdate = ({ baseFilters, categoriaAtividades }) => {
-  return baseFilters !== 'atividade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="pad-item-atividade-atividade">
-              <Translate contentKey="generadorApp.padItemAtividade.atividade">Atividade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="pad-item-atividade-atividade"
-              className={'css-select-control'}
-              value={this.state.categoriaAtividadeSelectValue}
-              options={categoriaAtividades ? categoriaAtividades.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ categoriaAtividadeSelectValue: options })}
-              name={'atividade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
-  return baseFilters !== 'padItem' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="pad-item-atividade-padItem">
-              <Translate contentKey="generadorApp.padItemAtividade.padItem">Pad Item</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="pad-item-atividade-padItem"
-              className={'css-select-control'}
-              value={this.state.padItemSelectValue}
-              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ padItemSelectValue: options })}
-              name={'padItem'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadItemAtividadeUpdate);

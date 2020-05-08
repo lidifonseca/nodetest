@@ -34,7 +34,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508165500",
+    "changelogDate": "20200508223400",
     "entityTableName": "imagem_prontuario",
     "dto": "mapstruct",
     "pagination": "pagination",

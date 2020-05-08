@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class DescPtaUpdate extends React.Component<IDescPtaUpdateProps, IDescPta
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="desc-pta-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="desc-pta-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="desc-pta-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,11 +143,60 @@ export class DescPtaUpdate extends React.Component<IDescPtaUpdateProps, IDescPta
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <NomeComponentUpdate baseFilters />
-
-                        <ResultadoEsperadoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="desc-pta-nome">
+                                    <Translate contentKey="generadorApp.descPta.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="desc-pta-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'resultadoEsperado' ? (
+                          <Col md="resultadoEsperado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="resultadoEsperadoLabel" for="desc-pta-resultadoEsperado">
+                                    <Translate contentKey="generadorApp.descPta.resultadoEsperado">Resultado Esperado</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="desc-pta-resultadoEsperado" type="text" name="resultadoEsperado" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="resultadoEsperado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="desc-pta-ativo">
+                                    <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="desc-pta-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -176,68 +226,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const NomeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nome' ? (
-    <Col md="nome">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeLabel" for="desc-pta-nome">
-              <Translate contentKey="generadorApp.descPta.nome">Nome</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="desc-pta-nome" type="text" name="nome" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ResultadoEsperadoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'resultadoEsperado' ? (
-    <Col md="resultadoEsperado">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="resultadoEsperadoLabel" for="desc-pta-resultadoEsperado">
-              <Translate contentKey="generadorApp.descPta.resultadoEsperado">Resultado Esperado</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="desc-pta-resultadoEsperado" type="text" name="resultadoEsperado" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="resultadoEsperado" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="desc-pta-ativo">
-              <Translate contentKey="generadorApp.descPta.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="desc-pta-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DescPtaUpdate);

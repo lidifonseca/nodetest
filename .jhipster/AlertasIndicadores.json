@@ -31,7 +31,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508161300",
+    "changelogDate": "20200508215200",
     "entityTableName": "alertas_indicadores",
     "dto": "mapstruct",
     "pagination": "pagination",

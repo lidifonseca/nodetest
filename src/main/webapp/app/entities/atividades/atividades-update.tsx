@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class AtividadesUpdate extends React.Component<IAtividadesUpdateProps, IA
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="atividades-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="atividades-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="atividades-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,42 @@ export class AtividadesUpdate extends React.Component<IAtividadesUpdateProps, IA
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <AtividadeComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'atividade' ? (
+                          <Col md="atividade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atividadeLabel" for="atividades-atividade">
+                                    <Translate contentKey="generadorApp.atividades.atividade">Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atividades-atividade" type="text" name="atividade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="atividades-ativo">
+                                    <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atividades-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +216,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const AtividadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'atividade' ? (
-    <Col md="atividade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="atividadeLabel" for="atividades-atividade">
-              <Translate contentKey="generadorApp.atividades.atividade">Atividade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atividades-atividade" type="text" name="atividade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="atividades-ativo">
-              <Translate contentKey="generadorApp.atividades.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atividades-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtividadesUpdate);

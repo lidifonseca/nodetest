@@ -42,7 +42,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508164500",
+    "changelogDate": "20200508222400",
     "entityTableName": "especialidade_unidade",
     "dto": "mapstruct",
     "pagination": "pagination",

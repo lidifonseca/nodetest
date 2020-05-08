@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -180,11 +181,11 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="atendimento-atividades-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="atendimento-atividades-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="atendimento-atividades-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -192,11 +193,78 @@ export class AtendimentoAtividadesUpdate extends React.Component<IAtendimentoAti
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <FeitoComponentUpdate baseFilters />
-
-                        <AtividadeComponentUpdate baseFilter categoriaAtividades />
-
-                        <AtendimentoComponentUpdate baseFilter atendimentos />
+                        {baseFilters !== 'feito' ? (
+                          <Col md="feito">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="feitoLabel" for="atendimento-atividades-feito">
+                                    <Translate contentKey="generadorApp.atendimentoAtividades.feito">Feito</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-atividades-feito" type="string" className="form-control" name="feito" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="feito" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atividade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-atividades-atividade">
+                                    <Translate contentKey="generadorApp.atendimentoAtividades.atividade">Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-atividades-atividade"
+                                    className={'css-select-control'}
+                                    value={this.state.categoriaAtividadeSelectValue}
+                                    options={
+                                      categoriaAtividades
+                                        ? categoriaAtividades.map(option => ({ value: option.id, label: option.id }))
+                                        : null
+                                    }
+                                    onChange={options => this.setState({ categoriaAtividadeSelectValue: options })}
+                                    name={'atividade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atendimento' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-atividades-atendimento">
+                                    <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-atividades-atendimento"
+                                    className={'css-select-control'}
+                                    value={this.state.atendimentoSelectValue}
+                                    options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ atendimentoSelectValue: options })}
+                                    name={'atendimento'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -230,82 +298,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const FeitoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'feito' ? (
-    <Col md="feito">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="feitoLabel" for="atendimento-atividades-feito">
-              <Translate contentKey="generadorApp.atendimentoAtividades.feito">Feito</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-atividades-feito" type="string" className="form-control" name="feito" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="feito" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtividadeComponentUpdate = ({ baseFilters, categoriaAtividades }) => {
-  return baseFilters !== 'atividade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-atividades-atividade">
-              <Translate contentKey="generadorApp.atendimentoAtividades.atividade">Atividade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-atividades-atividade"
-              className={'css-select-control'}
-              value={this.state.categoriaAtividadeSelectValue}
-              options={categoriaAtividades ? categoriaAtividades.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ categoriaAtividadeSelectValue: options })}
-              name={'atividade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
-  return baseFilters !== 'atendimento' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-atividades-atendimento">
-              <Translate contentKey="generadorApp.atendimentoAtividades.atendimento">Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-atividades-atendimento"
-              className={'css-select-control'}
-              value={this.state.atendimentoSelectValue}
-              options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ atendimentoSelectValue: options })}
-              name={'atendimento'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtendimentoAtividadesUpdate);

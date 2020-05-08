@@ -50,7 +50,7 @@
             "relationshipName": "alertasResultadosEsperados"
         }
     ],
-    "changelogDate": "20200508181900",
+    "changelogDate": "20200508235800",
     "entityTableName": "resultados",
     "dto": "mapstruct",
     "pagination": "pagination",

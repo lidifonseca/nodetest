@@ -119,7 +119,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508173600",
+    "changelogDate": "20200508231500",
     "entityTableName": "pad_item",
     "dto": "mapstruct",
     "pagination": "pagination",

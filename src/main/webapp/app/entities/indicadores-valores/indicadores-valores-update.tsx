@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -158,11 +159,11 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="indicadores-valores-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="indicadores-valores-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="indicadores-valores-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -170,19 +171,139 @@ export class IndicadoresValoresUpdate extends React.Component<IIndicadoresValore
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <SexoComponentUpdate baseFilters />
-
-                        <VlMinimoComponentUpdate baseFilters />
-
-                        <VlMaximoComponentUpdate baseFilters />
-
-                        <UnidadeMedidaComponentUpdate baseFilters />
-
-                        <IdadeMinimaComponentUpdate baseFilters />
-
-                        <IdadeMaximaComponentUpdate baseFilters />
-
-                        <IndicadoresComponentUpdate baseFilter indicadores />
+                        {baseFilters !== 'sexo' ? (
+                          <Col md="sexo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sexoLabel" for="indicadores-valores-sexo">
+                                    <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-valores-sexo" type="text" name="sexo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sexo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'vlMinimo' ? (
+                          <Col md="vlMinimo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="vlMinimoLabel" for="indicadores-valores-vlMinimo">
+                                    <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-valores-vlMinimo" type="text" name="vlMinimo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="vlMinimo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'vlMaximo' ? (
+                          <Col md="vlMaximo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="vlMaximoLabel" for="indicadores-valores-vlMaximo">
+                                    <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-valores-vlMaximo" type="text" name="vlMaximo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="vlMaximo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidadeMedida' ? (
+                          <Col md="unidadeMedida">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="unidadeMedidaLabel" for="indicadores-valores-unidadeMedida">
+                                    <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-valores-unidadeMedida" type="text" name="unidadeMedida" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidadeMedida" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idadeMinima' ? (
+                          <Col md="idadeMinima">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idadeMinimaLabel" for="indicadores-valores-idadeMinima">
+                                    <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-valores-idadeMinima" type="text" name="idadeMinima" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idadeMinima" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idadeMaxima' ? (
+                          <Col md="idadeMaxima">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idadeMaximaLabel" for="indicadores-valores-idadeMaxima">
+                                    <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-valores-idadeMaxima" type="text" name="idadeMaxima" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idadeMaxima" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'indicadores' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="indicadores-valores-indicadores">
+                                    <Translate contentKey="generadorApp.indicadoresValores.indicadores">Indicadores</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="indicadores-valores-indicadores"
+                                    className={'css-select-control'}
+                                    value={this.state.indicadoresSelectValue}
+                                    options={indicadores ? indicadores.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ indicadoresSelectValue: options })}
+                                    name={'indicadores'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="indicadores" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -214,159 +335,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const SexoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'sexo' ? (
-    <Col md="sexo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="sexoLabel" for="indicadores-valores-sexo">
-              <Translate contentKey="generadorApp.indicadoresValores.sexo">Sexo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="indicadores-valores-sexo" type="text" name="sexo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="sexo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const VlMinimoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'vlMinimo' ? (
-    <Col md="vlMinimo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="vlMinimoLabel" for="indicadores-valores-vlMinimo">
-              <Translate contentKey="generadorApp.indicadoresValores.vlMinimo">Vl Minimo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="indicadores-valores-vlMinimo" type="text" name="vlMinimo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="vlMinimo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const VlMaximoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'vlMaximo' ? (
-    <Col md="vlMaximo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="vlMaximoLabel" for="indicadores-valores-vlMaximo">
-              <Translate contentKey="generadorApp.indicadoresValores.vlMaximo">Vl Maximo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="indicadores-valores-vlMaximo" type="text" name="vlMaximo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="vlMaximo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UnidadeMedidaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'unidadeMedida' ? (
-    <Col md="unidadeMedida">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="unidadeMedidaLabel" for="indicadores-valores-unidadeMedida">
-              <Translate contentKey="generadorApp.indicadoresValores.unidadeMedida">Unidade Medida</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="indicadores-valores-unidadeMedida" type="text" name="unidadeMedida" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="unidadeMedida" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdadeMinimaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idadeMinima' ? (
-    <Col md="idadeMinima">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idadeMinimaLabel" for="indicadores-valores-idadeMinima">
-              <Translate contentKey="generadorApp.indicadoresValores.idadeMinima">Idade Minima</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="indicadores-valores-idadeMinima" type="text" name="idadeMinima" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idadeMinima" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdadeMaximaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idadeMaxima' ? (
-    <Col md="idadeMaxima">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idadeMaximaLabel" for="indicadores-valores-idadeMaxima">
-              <Translate contentKey="generadorApp.indicadoresValores.idadeMaxima">Idade Maxima</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="indicadores-valores-idadeMaxima" type="text" name="idadeMaxima" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idadeMaxima" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IndicadoresComponentUpdate = ({ baseFilters, indicadores }) => {
-  return baseFilters !== 'indicadores' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="indicadores-valores-indicadores">
-              <Translate contentKey="generadorApp.indicadoresValores.indicadores">Indicadores</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="indicadores-valores-indicadores"
-              className={'css-select-control'}
-              value={this.state.indicadoresSelectValue}
-              options={indicadores ? indicadores.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ indicadoresSelectValue: options })}
-              name={'indicadores'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="indicadores" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndicadoresValoresUpdate);

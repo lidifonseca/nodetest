@@ -18,7 +18,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508174400",
+    "changelogDate": "20200508232300",
     "entityTableName": "pad_item_sorteio_feito",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -180,11 +181,11 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="especialidade-operadora-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="especialidade-operadora-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="especialidade-operadora-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -192,25 +193,220 @@ export class EspecialidadeOperadoraUpdate extends React.Component<IEspecialidade
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <CodTussComponentUpdate baseFilters />
-
-                        <CodDespesaComponentUpdate baseFilters />
-
-                        <CodTabelaComponentUpdate baseFilters />
-
-                        <ValorCustoComponentUpdate baseFilters />
-
-                        <ValorVendaComponentUpdate baseFilters />
-
-                        <DescontoCustoComponentUpdate baseFilters />
-
-                        <DescontoVendaComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <OperadoraComponentUpdate baseFilter operadoras />
-
-                        <EspecialidadeComponentUpdate baseFilter especialidades />
+                        {baseFilters !== 'codTuss' ? (
+                          <Col md="codTuss">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codTussLabel" for="especialidade-operadora-codTuss">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-codTuss" type="text" name="codTuss" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codTuss" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'codDespesa' ? (
+                          <Col md="codDespesa">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codDespesaLabel" for="especialidade-operadora-codDespesa">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-codDespesa" type="text" name="codDespesa" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codDespesa" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'codTabela' ? (
+                          <Col md="codTabela">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codTabelaLabel" for="especialidade-operadora-codTabela">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-codTabela" type="text" name="codTabela" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codTabela" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'valorCusto' ? (
+                          <Col md="valorCusto">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorCustoLabel" for="especialidade-operadora-valorCusto">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-valorCusto"
+                                    type="string"
+                                    className="form-control"
+                                    name="valorCusto"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorCusto" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'valorVenda' ? (
+                          <Col md="valorVenda">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorVendaLabel" for="especialidade-operadora-valorVenda">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-valorVenda"
+                                    type="string"
+                                    className="form-control"
+                                    name="valorVenda"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valorVenda" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'descontoCusto' ? (
+                          <Col md="descontoCusto">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-descontoCusto"
+                                    type="string"
+                                    className="form-control"
+                                    name="descontoCusto"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descontoCusto" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'descontoVenda' ? (
+                          <Col md="descontoVenda">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="especialidade-operadora-descontoVenda"
+                                    type="string"
+                                    className="form-control"
+                                    name="descontoVenda"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descontoVenda" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="especialidade-operadora-ativo">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="especialidade-operadora-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'operadora' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="especialidade-operadora-operadora">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.operadora">Operadora</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="especialidade-operadora-operadora"
+                                    className={'css-select-control'}
+                                    value={this.state.operadoraSelectValue}
+                                    options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ operadoraSelectValue: options })}
+                                    name={'operadora'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'especialidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="especialidade-operadora-especialidade">
+                                    <Translate contentKey="generadorApp.especialidadeOperadora.especialidade">Especialidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="especialidade-operadora-especialidade"
+                                    className={'css-select-control'}
+                                    value={this.state.especialidadeSelectValue}
+                                    options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ especialidadeSelectValue: options })}
+                                    name={'especialidade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -244,229 +440,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const CodTussComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'codTuss' ? (
-    <Col md="codTuss">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="codTussLabel" for="especialidade-operadora-codTuss">
-              <Translate contentKey="generadorApp.especialidadeOperadora.codTuss">Cod Tuss</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-codTuss" type="text" name="codTuss" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="codTuss" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CodDespesaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'codDespesa' ? (
-    <Col md="codDespesa">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="codDespesaLabel" for="especialidade-operadora-codDespesa">
-              <Translate contentKey="generadorApp.especialidadeOperadora.codDespesa">Cod Despesa</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-codDespesa" type="text" name="codDespesa" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="codDespesa" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CodTabelaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'codTabela' ? (
-    <Col md="codTabela">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="codTabelaLabel" for="especialidade-operadora-codTabela">
-              <Translate contentKey="generadorApp.especialidadeOperadora.codTabela">Cod Tabela</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-codTabela" type="text" name="codTabela" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="codTabela" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ValorCustoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'valorCusto' ? (
-    <Col md="valorCusto">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="valorCustoLabel" for="especialidade-operadora-valorCusto">
-              <Translate contentKey="generadorApp.especialidadeOperadora.valorCusto">Valor Custo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-valorCusto" type="string" className="form-control" name="valorCusto" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="valorCusto" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ValorVendaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'valorVenda' ? (
-    <Col md="valorVenda">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="valorVendaLabel" for="especialidade-operadora-valorVenda">
-              <Translate contentKey="generadorApp.especialidadeOperadora.valorVenda">Valor Venda</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-valorVenda" type="string" className="form-control" name="valorVenda" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="valorVenda" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DescontoCustoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descontoCusto' ? (
-    <Col md="descontoCusto">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descontoCustoLabel" for="especialidade-operadora-descontoCusto">
-              <Translate contentKey="generadorApp.especialidadeOperadora.descontoCusto">Desconto Custo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-descontoCusto" type="string" className="form-control" name="descontoCusto" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descontoCusto" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DescontoVendaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descontoVenda' ? (
-    <Col md="descontoVenda">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descontoVendaLabel" for="especialidade-operadora-descontoVenda">
-              <Translate contentKey="generadorApp.especialidadeOperadora.descontoVenda">Desconto Venda</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-descontoVenda" type="string" className="form-control" name="descontoVenda" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descontoVenda" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="especialidade-operadora-ativo">
-              <Translate contentKey="generadorApp.especialidadeOperadora.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="especialidade-operadora-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const OperadoraComponentUpdate = ({ baseFilters, operadoras }) => {
-  return baseFilters !== 'operadora' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="especialidade-operadora-operadora">
-              <Translate contentKey="generadorApp.especialidadeOperadora.operadora">Operadora</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="especialidade-operadora-operadora"
-              className={'css-select-control'}
-              value={this.state.operadoraSelectValue}
-              options={operadoras ? operadoras.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ operadoraSelectValue: options })}
-              name={'operadora'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="operadora" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
-  return baseFilters !== 'especialidade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="especialidade-operadora-especialidade">
-              <Translate contentKey="generadorApp.especialidadeOperadora.especialidade">Especialidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="especialidade-operadora-especialidade"
-              className={'css-select-control'}
-              value={this.state.especialidadeSelectValue}
-              options={especialidades ? especialidades.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ especialidadeSelectValue: options })}
-              name={'especialidade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EspecialidadeOperadoraUpdate);

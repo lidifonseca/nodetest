@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -178,11 +179,11 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="operadora-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="operadora-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="operadora-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -190,37 +191,316 @@ export class OperadoraUpdate extends React.Component<IOperadoraUpdateProps, IOpe
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TipoOperadoraComponentUpdate baseFilters tipoOperadoras />
-
-                        <UnidadeComponentUpdate baseFilters unidadeEasies />
-
-                        <NomeFantasiaComponentUpdate baseFilters />
-
-                        <RazaoSocialComponentUpdate baseFilters />
-
-                        <EnderecoComponentUpdate baseFilters />
-
-                        <CnpjComponentUpdate baseFilters />
-
-                        <IeComponentUpdate baseFilters />
-
-                        <SiteComponentUpdate baseFilters />
-
-                        <ContatoCentralAtendimentoComponentUpdate baseFilters />
-
-                        <EmailCentralAtendimentoComponentUpdate baseFilters />
-
-                        <NomeContatoComercialComponentUpdate baseFilters />
-
-                        <ContatoComercialComponentUpdate baseFilters />
-
-                        <EmailComercialComponentUpdate baseFilters />
-
-                        <NomeContatoFinanceiroComponentUpdate baseFilters />
-
-                        <ContatoFinanceiroComponentUpdate baseFilters />
-
-                        <EmailFinanceiroComponentUpdate baseFilters />
+                        {baseFilters !== 'tipoOperadora' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" for="operadora-tipoOperadora">
+                                    <Translate contentKey="generadorApp.operadora.tipoOperadora">Tipo Operadora</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <Select
+                                    id="operadora-tipoOperadora"
+                                    className={'css-select-control'}
+                                    value={this.state.tipoOperadoraSelectValue}
+                                    options={
+                                      tipoOperadoras ? tipoOperadoras.map(option => ({ value: option.id, label: option.tipo })) : null
+                                    }
+                                    onChange={options => this.setState({ tipoOperadoraSelectValue: options })}
+                                    name={'tipoOperadora'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoOperadora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" for="operadora-unidade">
+                                    <Translate contentKey="generadorApp.operadora.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <Select
+                                    id="operadora-unidade"
+                                    className={'css-select-control'}
+                                    value={this.state.unidadeEasySelectValue}
+                                    options={
+                                      unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                    }
+                                    onChange={options => this.setState({ unidadeEasySelectValue: options })}
+                                    name={'unidade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'nomeFantasia' ? (
+                          <Col md="nomeFantasia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="nomeFantasiaLabel" for="operadora-nomeFantasia">
+                                    <Translate contentKey="generadorApp.operadora.nomeFantasia">Nome Fantasia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-nomeFantasia" type="text" name="nomeFantasia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nomeFantasia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'razaoSocial' ? (
+                          <Col md="razaoSocial">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="razaoSocialLabel" for="operadora-razaoSocial">
+                                    <Translate contentKey="generadorApp.operadora.razaoSocial">Razao Social</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-razaoSocial" type="text" name="razaoSocial" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="razaoSocial" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'endereco' ? (
+                          <Col md="endereco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="enderecoLabel" for="operadora-endereco">
+                                    <Translate contentKey="generadorApp.operadora.endereco">Endereco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-endereco" type="text" name="endereco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="endereco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cnpj' ? (
+                          <Col md="cnpj">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="cnpjLabel" for="operadora-cnpj">
+                                    <Translate contentKey="generadorApp.operadora.cnpj">Cnpj</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-cnpj" type="text" name="cnpj" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cnpj" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ie' ? (
+                          <Col md="ie">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="ieLabel" for="operadora-ie">
+                                    <Translate contentKey="generadorApp.operadora.ie">Ie</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-ie" type="text" name="ie" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ie" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'site' ? (
+                          <Col md="site">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="siteLabel" for="operadora-site">
+                                    <Translate contentKey="generadorApp.operadora.site">Site</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-site" type="text" name="site" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="site" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'contatoCentralAtendimento' ? (
+                          <Col md="contatoCentralAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="contatoCentralAtendimentoLabel" for="operadora-contatoCentralAtendimento">
+                                    <Translate contentKey="generadorApp.operadora.contatoCentralAtendimento">
+                                      Contato Central Atendimento
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-contatoCentralAtendimento" type="text" name="contatoCentralAtendimento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="contatoCentralAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'emailCentralAtendimento' ? (
+                          <Col md="emailCentralAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="emailCentralAtendimentoLabel" for="operadora-emailCentralAtendimento">
+                                    <Translate contentKey="generadorApp.operadora.emailCentralAtendimento">
+                                      Email Central Atendimento
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-emailCentralAtendimento" type="text" name="emailCentralAtendimento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="emailCentralAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'nomeContatoComercial' ? (
+                          <Col md="nomeContatoComercial">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="nomeContatoComercialLabel" for="operadora-nomeContatoComercial">
+                                    <Translate contentKey="generadorApp.operadora.nomeContatoComercial">Nome Contato Comercial</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-nomeContatoComercial" type="text" name="nomeContatoComercial" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nomeContatoComercial" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'contatoComercial' ? (
+                          <Col md="contatoComercial">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="contatoComercialLabel" for="operadora-contatoComercial">
+                                    <Translate contentKey="generadorApp.operadora.contatoComercial">Contato Comercial</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-contatoComercial" type="text" name="contatoComercial" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="contatoComercial" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'emailComercial' ? (
+                          <Col md="emailComercial">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="emailComercialLabel" for="operadora-emailComercial">
+                                    <Translate contentKey="generadorApp.operadora.emailComercial">Email Comercial</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-emailComercial" type="text" name="emailComercial" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="emailComercial" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'nomeContatoFinanceiro' ? (
+                          <Col md="nomeContatoFinanceiro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="nomeContatoFinanceiroLabel" for="operadora-nomeContatoFinanceiro">
+                                    <Translate contentKey="generadorApp.operadora.nomeContatoFinanceiro">Nome Contato Financeiro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-nomeContatoFinanceiro" type="text" name="nomeContatoFinanceiro" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nomeContatoFinanceiro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'contatoFinanceiro' ? (
+                          <Col md="contatoFinanceiro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="contatoFinanceiroLabel" for="operadora-contatoFinanceiro">
+                                    <Translate contentKey="generadorApp.operadora.contatoFinanceiro">Contato Financeiro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-contatoFinanceiro" type="text" name="contatoFinanceiro" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="contatoFinanceiro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'emailFinanceiro' ? (
+                          <Col md="emailFinanceiro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="emailFinanceiroLabel" for="operadora-emailFinanceiro">
+                                    <Translate contentKey="generadorApp.operadora.emailFinanceiro">Email Financeiro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="12">
+                                  <AvField id="operadora-emailFinanceiro" type="text" name="emailFinanceiro" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="emailFinanceiro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -254,355 +534,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TipoOperadoraComponentUpdate = ({ baseFilters, tipoOperadoras }) => {
-  return baseFilters !== 'tipoOperadora' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" for="operadora-tipoOperadora">
-              <Translate contentKey="generadorApp.operadora.tipoOperadora">Tipo Operadora</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <Select
-              id="operadora-tipoOperadora"
-              className={'css-select-control'}
-              value={this.state.tipoOperadoraSelectValue}
-              options={tipoOperadoras ? tipoOperadoras.map(option => ({ value: option.id, label: option.tipo })) : null}
-              onChange={options => this.setState({ tipoOperadoraSelectValue: options })}
-              name={'tipoOperadora'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipoOperadora" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
-  return baseFilters !== 'unidade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" for="operadora-unidade">
-              <Translate contentKey="generadorApp.operadora.unidade">Unidade</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <Select
-              id="operadora-unidade"
-              className={'css-select-control'}
-              value={this.state.unidadeEasySelectValue}
-              options={unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null}
-              onChange={options => this.setState({ unidadeEasySelectValue: options })}
-              name={'unidade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NomeFantasiaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nomeFantasia' ? (
-    <Col md="nomeFantasia">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="nomeFantasiaLabel" for="operadora-nomeFantasia">
-              <Translate contentKey="generadorApp.operadora.nomeFantasia">Nome Fantasia</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-nomeFantasia" type="text" name="nomeFantasia" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nomeFantasia" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const RazaoSocialComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'razaoSocial' ? (
-    <Col md="razaoSocial">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="razaoSocialLabel" for="operadora-razaoSocial">
-              <Translate contentKey="generadorApp.operadora.razaoSocial">Razao Social</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-razaoSocial" type="text" name="razaoSocial" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="razaoSocial" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EnderecoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'endereco' ? (
-    <Col md="endereco">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="enderecoLabel" for="operadora-endereco">
-              <Translate contentKey="generadorApp.operadora.endereco">Endereco</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-endereco" type="text" name="endereco" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="endereco" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CnpjComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cnpj' ? (
-    <Col md="cnpj">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="cnpjLabel" for="operadora-cnpj">
-              <Translate contentKey="generadorApp.operadora.cnpj">Cnpj</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-cnpj" type="text" name="cnpj" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cnpj" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ie' ? (
-    <Col md="ie">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="ieLabel" for="operadora-ie">
-              <Translate contentKey="generadorApp.operadora.ie">Ie</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-ie" type="text" name="ie" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ie" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const SiteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'site' ? (
-    <Col md="site">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="siteLabel" for="operadora-site">
-              <Translate contentKey="generadorApp.operadora.site">Site</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-site" type="text" name="site" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="site" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ContatoCentralAtendimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'contatoCentralAtendimento' ? (
-    <Col md="contatoCentralAtendimento">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="contatoCentralAtendimentoLabel" for="operadora-contatoCentralAtendimento">
-              <Translate contentKey="generadorApp.operadora.contatoCentralAtendimento">Contato Central Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-contatoCentralAtendimento" type="text" name="contatoCentralAtendimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="contatoCentralAtendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EmailCentralAtendimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'emailCentralAtendimento' ? (
-    <Col md="emailCentralAtendimento">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="emailCentralAtendimentoLabel" for="operadora-emailCentralAtendimento">
-              <Translate contentKey="generadorApp.operadora.emailCentralAtendimento">Email Central Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-emailCentralAtendimento" type="text" name="emailCentralAtendimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="emailCentralAtendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NomeContatoComercialComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nomeContatoComercial' ? (
-    <Col md="nomeContatoComercial">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="nomeContatoComercialLabel" for="operadora-nomeContatoComercial">
-              <Translate contentKey="generadorApp.operadora.nomeContatoComercial">Nome Contato Comercial</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-nomeContatoComercial" type="text" name="nomeContatoComercial" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nomeContatoComercial" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ContatoComercialComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'contatoComercial' ? (
-    <Col md="contatoComercial">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="contatoComercialLabel" for="operadora-contatoComercial">
-              <Translate contentKey="generadorApp.operadora.contatoComercial">Contato Comercial</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-contatoComercial" type="text" name="contatoComercial" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="contatoComercial" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EmailComercialComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'emailComercial' ? (
-    <Col md="emailComercial">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="emailComercialLabel" for="operadora-emailComercial">
-              <Translate contentKey="generadorApp.operadora.emailComercial">Email Comercial</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-emailComercial" type="text" name="emailComercial" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="emailComercial" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NomeContatoFinanceiroComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nomeContatoFinanceiro' ? (
-    <Col md="nomeContatoFinanceiro">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="nomeContatoFinanceiroLabel" for="operadora-nomeContatoFinanceiro">
-              <Translate contentKey="generadorApp.operadora.nomeContatoFinanceiro">Nome Contato Financeiro</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-nomeContatoFinanceiro" type="text" name="nomeContatoFinanceiro" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nomeContatoFinanceiro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ContatoFinanceiroComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'contatoFinanceiro' ? (
-    <Col md="contatoFinanceiro">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="contatoFinanceiroLabel" for="operadora-contatoFinanceiro">
-              <Translate contentKey="generadorApp.operadora.contatoFinanceiro">Contato Financeiro</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-contatoFinanceiro" type="text" name="contatoFinanceiro" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="contatoFinanceiro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EmailFinanceiroComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'emailFinanceiro' ? (
-    <Col md="emailFinanceiro">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="emailFinanceiroLabel" for="operadora-emailFinanceiro">
-              <Translate contentKey="generadorApp.operadora.emailFinanceiro">Email Financeiro</Translate>
-            </Label>
-          </Col>
-          <Col md="12">
-            <AvField id="operadora-emailFinanceiro" type="text" name="emailFinanceiro" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="emailFinanceiro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(OperadoraUpdate);

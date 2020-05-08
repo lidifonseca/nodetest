@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -188,11 +189,11 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="usuario-acao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="usuario-acao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="usuario-acao-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -200,13 +201,92 @@ export class UsuarioAcaoUpdate extends React.Component<IUsuarioAcaoUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdAtendimentoComponentUpdate baseFilters />
-
-                        <DescricaoComponentUpdate baseFilters />
-
-                        <TelaComponentUpdate baseFilter telas />
-
-                        <AcaoComponentUpdate baseFilter acaos />
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="usuario-acao-idAtendimento">
+                                    <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-acao-idAtendimento" type="string" className="form-control" name="idAtendimento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'descricao' ? (
+                          <Col md="descricao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descricaoLabel" for="usuario-acao-descricao">
+                                    <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'tela' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="usuario-acao-tela">
+                                    <Translate contentKey="generadorApp.usuarioAcao.tela">Tela</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="usuario-acao-tela"
+                                    className={'css-select-control'}
+                                    value={this.state.telaSelectValue}
+                                    options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ telaSelectValue: options })}
+                                    name={'tela'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'acao' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="usuario-acao-acao">
+                                    <Translate contentKey="generadorApp.usuarioAcao.acao">Acao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="usuario-acao-acao"
+                                    className={'css-select-control'}
+                                    value={this.state.acaoSelectValue}
+                                    options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ acaoSelectValue: options })}
+                                    name={'acao'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="acao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -241,103 +321,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdAtendimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idAtendimento' ? (
-    <Col md="idAtendimento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idAtendimentoLabel" for="usuario-acao-idAtendimento">
-              <Translate contentKey="generadorApp.usuarioAcao.idAtendimento">Id Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="usuario-acao-idAtendimento" type="string" className="form-control" name="idAtendimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DescricaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descricao' ? (
-    <Col md="descricao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descricaoLabel" for="usuario-acao-descricao">
-              <Translate contentKey="generadorApp.usuarioAcao.descricao">Descricao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="usuario-acao-descricao" type="textarea" name="descricao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TelaComponentUpdate = ({ baseFilters, telas }) => {
-  return baseFilters !== 'tela' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="usuario-acao-tela">
-              <Translate contentKey="generadorApp.usuarioAcao.tela">Tela</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="usuario-acao-tela"
-              className={'css-select-control'}
-              value={this.state.telaSelectValue}
-              options={telas ? telas.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ telaSelectValue: options })}
-              name={'tela'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AcaoComponentUpdate = ({ baseFilters, acaos }) => {
-  return baseFilters !== 'acao' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="usuario-acao-acao">
-              <Translate contentKey="generadorApp.usuarioAcao.acao">Acao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="usuario-acao-acao"
-              className={'css-select-control'}
-              value={this.state.acaoSelectValue}
-              options={acaos ? acaos.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ acaoSelectValue: options })}
-              name={'acao'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="acao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsuarioAcaoUpdate);

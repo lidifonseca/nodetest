@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -172,11 +173,11 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-arquivo-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-arquivo-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="paciente-arquivo-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -184,11 +185,102 @@ export class PacienteArquivoUpdate extends React.Component<IPacienteArquivoUpdat
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ArquivoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
+                        {baseFilters !== 'arquivo' ? (
+                          <Col md="arquivo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <AvGroup>
+                                    <Row>
+                                      <Col md="3">
+                                        <Label className="mt-2" id="arquivoLabel" for="arquivo">
+                                          <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
+                                        </Label>
+                                      </Col>
+                                      <Col md="9">
+                                        <br />
+                                        {arquivo || arquivoBase64 ? (
+                                          <div>
+                                            <Row>
+                                              <Col md="11"></Col>
+                                              <Col md="1">
+                                                <Button color="danger" onClick={this.clearBlob('arquivo')}>
+                                                  <FontAwesomeIcon icon="times-circle" />
+                                                </Button>
+                                              </Col>
+                                            </Row>
+                                            <a rel="noopener noreferrer" target={'_blank'} href={`${arquivo}`}>
+                                              <img
+                                                src={`${
+                                                  arquivoBase64 ? 'data:' + arquivoContentType + ';base64,' + arquivoBase64 : arquivo
+                                                }`}
+                                                style={{ maxHeight: '100px' }}
+                                              />
+                                            </a>
+                                            <br />
+                                          </div>
+                                        ) : null}
+                                        <input
+                                          id="file_arquivo"
+                                          type="file"
+                                          ref={this.arquivoFileInput}
+                                          onChange={this.onBlobChange(true, 'arquivo', this.arquivoFileInput)}
+                                          accept="image/*"
+                                        />
+                                        <AvInput type="hidden" name="arquivo" value={arquivo} />
+                                      </Col>
+                                    </Row>
+                                  </AvGroup>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="arquivo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-arquivo-ativo">
+                                    <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-arquivo-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-arquivo-paciente">
+                                    <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-arquivo-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -221,108 +313,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ArquivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'arquivo' ? (
-    <Col md="arquivo">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <AvGroup>
-              <Row>
-                <Col md="3">
-                  <Label className="mt-2" id="arquivoLabel" for="arquivo">
-                    <Translate contentKey="generadorApp.pacienteArquivo.arquivo">Arquivo</Translate>
-                  </Label>
-                </Col>
-                <Col md="9">
-                  <br />
-                  {arquivo || arquivoBase64 ? (
-                    <div>
-                      <Row>
-                        <Col md="11"></Col>
-                        <Col md="1">
-                          <Button color="danger" onClick={this.clearBlob('arquivo')}>
-                            <FontAwesomeIcon icon="times-circle" />
-                          </Button>
-                        </Col>
-                      </Row>
-                      <a rel="noopener noreferrer" target={'_blank'} href={`${arquivo}`}>
-                        <img
-                          src={`${arquivoBase64 ? 'data:' + arquivoContentType + ';base64,' + arquivoBase64 : arquivo}`}
-                          style={{ maxHeight: '100px' }}
-                        />
-                      </a>
-                      <br />
-                    </div>
-                  ) : null}
-                  <input
-                    id="file_arquivo"
-                    type="file"
-                    ref={this.arquivoFileInput}
-                    onChange={this.onBlobChange(true, 'arquivo', this.arquivoFileInput)}
-                    accept="image/*"
-                  />
-                  <AvInput type="hidden" name="arquivo" value={arquivo} />
-                </Col>
-              </Row>
-            </AvGroup>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="arquivo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="paciente-arquivo-ativo">
-              <Translate contentKey="generadorApp.pacienteArquivo.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-arquivo-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-arquivo-paciente">
-              <Translate contentKey="generadorApp.pacienteArquivo.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-arquivo-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteArquivoUpdate);

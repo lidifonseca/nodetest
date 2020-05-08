@@ -26,7 +26,7 @@
             "relationshipName": "profissionalStatusAtual"
         }
     ],
-    "changelogDate": "20200508182500",
+    "changelogDate": "20200509000400",
     "entityTableName": "status_atual_prof",
     "dto": "mapstruct",
     "pagination": "pagination",

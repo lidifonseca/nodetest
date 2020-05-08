@@ -30,7 +30,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508173500",
+    "changelogDate": "20200508231400",
     "entityTableName": "pad_cid",
     "dto": "mapstruct",
     "pagination": "pagination",

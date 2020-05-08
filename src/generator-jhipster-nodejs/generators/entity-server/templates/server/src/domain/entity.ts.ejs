@@ -36,7 +36,7 @@ import { User } from './user.entity';
 <%_ } else { _%>
 <%- formatAsClassJavadoc(clean_javadoc) %>
 <%_ } _%>
-@Entity('<%= forceTableName ? forceTableName : 'tb_'+entityTableName %>')
+@Entity('<%= typeof forceTableName !== 'undefined' && forceTableName ? forceTableName : 'tb_'+entityTableName %>')
 export default class <%= asEntity(entityClass) %> extends BaseEntity  {
 
 <%_ for (idx in fields) {

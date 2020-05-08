@@ -33,7 +33,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508175700",
+    "changelogDate": "20200508233600",
     "entityTableName": "profissional_complexidade_atual",
     "dto": "mapstruct",
     "pagination": "pagination",

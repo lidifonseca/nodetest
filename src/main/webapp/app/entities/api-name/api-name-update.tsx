@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiName
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="api-name-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="api-name-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="api-name-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,13 +143,78 @@ export class ApiNameUpdate extends React.Component<IApiNameUpdateProps, IApiName
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ApiNameComponentUpdate baseFilters />
-
-                        <ApiReceiverComponentUpdate baseFilters />
-
-                        <ApiObsComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'apiName' ? (
+                          <Col md="apiName">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiNameLabel" for="api-name-apiName">
+                                    <Translate contentKey="generadorApp.apiName.apiName">Api Name</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-apiName" type="text" name="apiName" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiName" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'apiReceiver' ? (
+                          <Col md="apiReceiver">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiReceiverLabel" for="api-name-apiReceiver">
+                                    <Translate contentKey="generadorApp.apiName.apiReceiver">Api Receiver</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-apiReceiver" type="text" name="apiReceiver" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiReceiver" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'apiObs' ? (
+                          <Col md="apiObs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apiObsLabel" for="api-name-apiObs">
+                                    <Translate contentKey="generadorApp.apiName.apiObs">Api Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-apiObs" type="text" name="apiObs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apiObs" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="api-name-ativo">
+                                    <Translate contentKey="generadorApp.apiName.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="api-name-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -178,89 +244,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ApiNameComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'apiName' ? (
-    <Col md="apiName">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="apiNameLabel" for="api-name-apiName">
-              <Translate contentKey="generadorApp.apiName.apiName">Api Name</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="api-name-apiName" type="text" name="apiName" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="apiName" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ApiReceiverComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'apiReceiver' ? (
-    <Col md="apiReceiver">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="apiReceiverLabel" for="api-name-apiReceiver">
-              <Translate contentKey="generadorApp.apiName.apiReceiver">Api Receiver</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="api-name-apiReceiver" type="text" name="apiReceiver" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="apiReceiver" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ApiObsComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'apiObs' ? (
-    <Col md="apiObs">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="apiObsLabel" for="api-name-apiObs">
-              <Translate contentKey="generadorApp.apiName.apiObs">Api Obs</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="api-name-apiObs" type="text" name="apiObs" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="apiObs" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="api-name-ativo">
-              <Translate contentKey="generadorApp.apiName.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="api-name-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiNameUpdate);

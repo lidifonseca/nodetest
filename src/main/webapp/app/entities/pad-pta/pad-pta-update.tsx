@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class PadPtaUpdate extends React.Component<IPadPtaUpdateProps, IPadPtaUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-pta-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-pta-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-pta-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,13 +143,78 @@ export class PadPtaUpdate extends React.Component<IPadPtaUpdateProps, IPadPtaUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdPadComponentUpdate baseFilters />
-
-                        <IdDescPtaComponentUpdate baseFilters />
-
-                        <IdCidComponentUpdate baseFilters />
-
-                        <IdCidXPtaNovoComponentUpdate baseFilters />
+                        {baseFilters !== 'idPad' ? (
+                          <Col md="idPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPadLabel" for="pad-pta-idPad">
+                                    <Translate contentKey="generadorApp.padPta.idPad">Id Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-idPad" type="text" name="idPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idDescPta' ? (
+                          <Col md="idDescPta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idDescPtaLabel" for="pad-pta-idDescPta">
+                                    <Translate contentKey="generadorApp.padPta.idDescPta">Id Desc Pta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-idDescPta" type="text" name="idDescPta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idDescPta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idCid' ? (
+                          <Col md="idCid">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idCidLabel" for="pad-pta-idCid">
+                                    <Translate contentKey="generadorApp.padPta.idCid">Id Cid</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-idCid" type="text" name="idCid" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idCidXPtaNovo' ? (
+                          <Col md="idCidXPtaNovo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idCidXPtaNovoLabel" for="pad-pta-idCidXPtaNovo">
+                                    <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-idCidXPtaNovo" type="string" className="form-control" name="idCidXPtaNovo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -178,89 +244,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdPadComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPad' ? (
-    <Col md="idPad">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPadLabel" for="pad-pta-idPad">
-              <Translate contentKey="generadorApp.padPta.idPad">Id Pad</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-idPad" type="text" name="idPad" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdDescPtaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idDescPta' ? (
-    <Col md="idDescPta">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idDescPtaLabel" for="pad-pta-idDescPta">
-              <Translate contentKey="generadorApp.padPta.idDescPta">Id Desc Pta</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-idDescPta" type="text" name="idDescPta" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idDescPta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdCidComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idCid' ? (
-    <Col md="idCid">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idCidLabel" for="pad-pta-idCid">
-              <Translate contentKey="generadorApp.padPta.idCid">Id Cid</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-idCid" type="text" name="idCid" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdCidXPtaNovoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idCidXPtaNovo' ? (
-    <Col md="idCidXPtaNovo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idCidXPtaNovoLabel" for="pad-pta-idCidXPtaNovo">
-              <Translate contentKey="generadorApp.padPta.idCidXPtaNovo">Id Cid X Pta Novo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-idCidXPtaNovo" type="string" className="form-control" name="idCidXPtaNovo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idCidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadPtaUpdate);

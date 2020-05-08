@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-categoria-contrato-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-categoria-contrato-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="profissional-categoria-contrato-id"
@@ -162,11 +163,78 @@ export class ProfissionalCategoriaContratoUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProfissionalComponentUpdate baseFilters />
-
-                        <IdCategoriaContratoComponentUpdate baseFilters />
-
-                        <AceitoComponentUpdate baseFilters />
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-categoria-contrato-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-categoria-contrato-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idCategoriaContrato' ? (
+                          <Col md="idCategoriaContrato">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idCategoriaContratoLabel"
+                                    for="profissional-categoria-contrato-idCategoriaContrato"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">
+                                      Id Categoria Contrato
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-categoria-contrato-idCategoriaContrato"
+                                    type="string"
+                                    className="form-control"
+                                    name="idCategoriaContrato"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCategoriaContrato" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'aceito' ? (
+                          <Col md="aceito">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="aceitoLabel" for="profissional-categoria-contrato-aceito">
+                                    <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-categoria-contrato-aceito"
+                                    type="string"
+                                    className="form-control"
+                                    name="aceito"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="aceito" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -196,73 +264,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-categoria-contrato-idProfissional">
-              <Translate contentKey="generadorApp.profissionalCategoriaContrato.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-categoria-contrato-idProfissional" type="text" name="idProfissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdCategoriaContratoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idCategoriaContrato' ? (
-    <Col md="idCategoriaContrato">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idCategoriaContratoLabel" for="profissional-categoria-contrato-idCategoriaContrato">
-              <Translate contentKey="generadorApp.profissionalCategoriaContrato.idCategoriaContrato">Id Categoria Contrato</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField
-              id="profissional-categoria-contrato-idCategoriaContrato"
-              type="string"
-              className="form-control"
-              name="idCategoriaContrato"
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idCategoriaContrato" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AceitoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'aceito' ? (
-    <Col md="aceito">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="aceitoLabel" for="profissional-categoria-contrato-aceito">
-              <Translate contentKey="generadorApp.profissionalCategoriaContrato.aceito">Aceito</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-categoria-contrato-aceito" type="string" className="form-control" name="aceito" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="aceito" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalCategoriaContratoUpdate);

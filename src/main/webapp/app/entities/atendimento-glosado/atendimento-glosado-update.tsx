@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="atendimento-glosado-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="atendimento-glosado-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="atendimento-glosado-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,47 @@ export class AtendimentoGlosadoUpdate extends React.Component<IAtendimentoGlosad
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdAtendimentoComponentUpdate baseFilters />
-
-                        <GlosadoComponentUpdate baseFilters />
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="atendimento-glosado-idAtendimento">
+                                    <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="atendimento-glosado-idAtendimento"
+                                    type="string"
+                                    className="form-control"
+                                    name="idAtendimento"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'glosado' ? (
+                          <Col md="glosado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="glosadoLabel" for="atendimento-glosado-glosado">
+                                    <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-glosado-glosado" type="text" name="glosado" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="glosado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +221,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdAtendimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idAtendimento' ? (
-    <Col md="idAtendimento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idAtendimentoLabel" for="atendimento-glosado-idAtendimento">
-              <Translate contentKey="generadorApp.atendimentoGlosado.idAtendimento">Id Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-glosado-idAtendimento" type="string" className="form-control" name="idAtendimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const GlosadoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'glosado' ? (
-    <Col md="glosado">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="glosadoLabel" for="atendimento-glosado-glosado">
-              <Translate contentKey="generadorApp.atendimentoGlosado.glosado">Glosado</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-glosado-glosado" type="text" name="glosado" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="glosado" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtendimentoGlosadoUpdate);

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="diario-tags-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="diario-tags-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="diario-tags-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,13 +151,78 @@ export class DiarioTagsUpdate extends React.Component<IDiarioTagsUpdateProps, ID
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <NomeComponentUpdate baseFilters />
-
-                        <IdPaiComponentUpdate baseFilters />
-
-                        <NomeIdComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="diario-tags-nome">
+                                    <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="diario-tags-idPai">
+                                    <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'nomeId' ? (
+                          <Col md="nomeId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeIdLabel" for="diario-tags-nomeId">
+                                    <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-nomeId" type="text" name="nomeId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nomeId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="diario-tags-ativo">
+                                    <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="diario-tags-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,89 +252,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const NomeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nome' ? (
-    <Col md="nome">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeLabel" for="diario-tags-nome">
-              <Translate contentKey="generadorApp.diarioTags.nome">Nome</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="diario-tags-nome" type="text" name="nome" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPaiComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPai' ? (
-    <Col md="idPai">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPaiLabel" for="diario-tags-idPai">
-              <Translate contentKey="generadorApp.diarioTags.idPai">Id Pai</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="diario-tags-idPai" type="string" className="form-control" name="idPai" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NomeIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nomeId' ? (
-    <Col md="nomeId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeIdLabel" for="diario-tags-nomeId">
-              <Translate contentKey="generadorApp.diarioTags.nomeId">Nome Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="diario-tags-nomeId" type="text" name="nomeId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nomeId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="diario-tags-ativo">
-              <Translate contentKey="generadorApp.diarioTags.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="diario-tags-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DiarioTagsUpdate);

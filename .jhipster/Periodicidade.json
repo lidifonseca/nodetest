@@ -22,7 +22,7 @@
             "relationshipName": "padItem"
         }
     ],
-    "changelogDate": "20200508175000",
+    "changelogDate": "20200508232900",
     "entityTableName": "periodicidade",
     "dto": "mapstruct",
     "pagination": "pagination",

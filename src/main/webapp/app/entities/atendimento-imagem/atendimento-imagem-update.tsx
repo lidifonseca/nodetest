@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -140,11 +141,11 @@ export class AtendimentoImagemUpdate extends React.Component<IAtendimentoImagemU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="atendimento-imagem-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="atendimento-imagem-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="atendimento-imagem-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -152,11 +153,75 @@ export class AtendimentoImagemUpdate extends React.Component<IAtendimentoImagemU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <AtendimentoIdComponentUpdate baseFilters />
-
-                        <ImagemComponentUpdate baseFilters />
-
-                        <CriadoEmComponentUpdate baseFilters />
+                        {baseFilters !== 'atendimentoId' ? (
+                          <Col md="atendimentoId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atendimentoIdLabel" for="atendimento-imagem-atendimentoId">
+                                    <Translate contentKey="generadorApp.atendimentoImagem.atendimentoId">Atendimento Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="atendimento-imagem-atendimentoId"
+                                    type="string"
+                                    className="form-control"
+                                    name="atendimentoId"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimentoId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'imagem' ? (
+                          <Col md="imagem">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="imagemLabel" for="atendimento-imagem-imagem">
+                                    <Translate contentKey="generadorApp.atendimentoImagem.imagem">Imagem</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-imagem-imagem" type="text" name="imagem" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="imagem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'criadoEm' ? (
+                          <Col md="criadoEm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="criadoEmLabel" for="atendimento-imagem-criadoEm">
+                                    <Translate contentKey="generadorApp.atendimentoImagem.criadoEm">Criado Em</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="atendimento-imagem-criadoEm"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="criadoEm"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.atendimentoImagemEntity.criadoEm)}
+                                    validate={{
+                                      required: { value: true, errorMessage: translate('entity.validation.required') }
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,78 +251,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const AtendimentoIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'atendimentoId' ? (
-    <Col md="atendimentoId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="atendimentoIdLabel" for="atendimento-imagem-atendimentoId">
-              <Translate contentKey="generadorApp.atendimentoImagem.atendimentoId">Atendimento Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-imagem-atendimentoId" type="string" className="form-control" name="atendimentoId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atendimentoId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ImagemComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'imagem' ? (
-    <Col md="imagem">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="imagemLabel" for="atendimento-imagem-imagem">
-              <Translate contentKey="generadorApp.atendimentoImagem.imagem">Imagem</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-imagem-imagem" type="text" name="imagem" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="imagem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CriadoEmComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'criadoEm' ? (
-    <Col md="criadoEm">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="criadoEmLabel" for="atendimento-imagem-criadoEm">
-              <Translate contentKey="generadorApp.atendimentoImagem.criadoEm">Criado Em</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="atendimento-imagem-criadoEm"
-              type="datetime-local"
-              className="form-control"
-              name="criadoEm"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.atendimentoImagemEntity.criadoEm)}
-              validate={{
-                required: { value: true, errorMessage: translate('entity.validation.required') }
-              }}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtendimentoImagemUpdate);

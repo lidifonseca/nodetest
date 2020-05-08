@@ -18,7 +18,7 @@
             "relationshipName": "especialidade"
         }
     ],
-    "changelogDate": "20200508183100",
+    "changelogDate": "20200509001000",
     "entityTableName": "tipo_especialidade",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -71,6 +71,10 @@ export const Routes = (props: IRoutesProps) => {
               isAuthenticated={props.isAuthenticated}
               isAdmin={props.isAdmin}
               currentLocale={props.currentLocale}
+              toggleSidebarMinify={props.toggleSidebarMinify}
+              toggleMobileSidebar={props.toggleMobileSidebar}
+              pageSidebarMinified={props.pageSidebarMinified}
+              pageSidebarTransparent={props.pageSidebarTransparent}
               onLocaleChange={props.setLocale}
               ribbonEnv={props.ribbonEnv}
               isInProduction={props.isInProduction}

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -158,11 +159,11 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-enquete-app-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-enquete-app-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="paciente-enquete-app-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -170,9 +171,49 @@ export class PacienteEnqueteAppUpdate extends React.Component<IPacienteEnqueteAp
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <VotacaoComponentUpdate baseFilters />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
+                        {baseFilters !== 'votacao' ? (
+                          <Col md="votacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="votacaoLabel" for="paciente-enquete-app-votacao">
+                                    <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-enquete-app-votacao" type="string" className="form-control" name="votacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="votacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-enquete-app-paciente">
+                                    <Translate contentKey="generadorApp.pacienteEnqueteApp.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-enquete-app-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -204,54 +245,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const VotacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'votacao' ? (
-    <Col md="votacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="votacaoLabel" for="paciente-enquete-app-votacao">
-              <Translate contentKey="generadorApp.pacienteEnqueteApp.votacao">Votacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-enquete-app-votacao" type="string" className="form-control" name="votacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="votacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-enquete-app-paciente">
-              <Translate contentKey="generadorApp.pacienteEnqueteApp.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-enquete-app-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteEnqueteAppUpdate);

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -146,11 +147,11 @@ export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Compon
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-dispositivo-complexidade-atual-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-dispositivo-complexidade-atual-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="profissional-dispositivo-complexidade-atual-id"
@@ -165,9 +166,64 @@ export class ProfissionalDispositivoComplexidadeAtualUpdate extends React.Compon
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProfissionalComponentUpdate baseFilters />
-
-                        <IdProfissionalDispositivoComplexidadeComponentUpdate baseFilters />
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idProfissionalLabel"
+                                    for="profissional-dispositivo-complexidade-atual-idProfissional"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-dispositivo-complexidade-atual-idProfissional"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProfissional"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idProfissionalDispositivoComplexidade' ? (
+                          <Col md="idProfissionalDispositivoComplexidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idProfissionalDispositivoComplexidadeLabel"
+                                    for="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
+                                  >
+                                    <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
+                                      Id Profissional Dispositivo Complexidade
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProfissionalDispositivoComplexidade"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissionalDispositivoComplexidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -197,63 +253,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-dispositivo-complexidade-atual-idProfissional">
-              <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField
-              id="profissional-dispositivo-complexidade-atual-idProfissional"
-              type="string"
-              className="form-control"
-              name="idProfissional"
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdProfissionalDispositivoComplexidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissionalDispositivoComplexidade' ? (
-    <Col md="idProfissionalDispositivoComplexidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label
-              className="mt-2"
-              id="idProfissionalDispositivoComplexidadeLabel"
-              for="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
-            >
-              <Translate contentKey="generadorApp.profissionalDispositivoComplexidadeAtual.idProfissionalDispositivoComplexidade">
-                Id Profissional Dispositivo Complexidade
-              </Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField
-              id="profissional-dispositivo-complexidade-atual-idProfissionalDispositivoComplexidade"
-              type="string"
-              className="form-control"
-              name="idProfissionalDispositivoComplexidade"
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissionalDispositivoComplexidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalDispositivoComplexidadeAtualUpdate);

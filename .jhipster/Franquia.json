@@ -160,7 +160,7 @@
             "relationshipName": "franquiaUsuario"
         }
     ],
-    "changelogDate": "20200508164800",
+    "changelogDate": "20200508222700",
     "entityTableName": "franquia",
     "dto": "mapstruct",
     "pagination": "pagination",

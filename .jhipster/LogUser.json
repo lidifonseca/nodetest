@@ -23,7 +23,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508170100",
+    "changelogDate": "20200508224000",
     "entityTableName": "log_user",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -177,11 +178,11 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-status-atual-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-status-atual-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="profissional-status-atual-id"
@@ -196,13 +197,89 @@ export class ProfissionalStatusAtualUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProfissionalComponentUpdate baseFilters />
-
-                        <ObsComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <StatusAtualProfComponentUpdate baseFilter statusAtualProfs />
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-status-atual-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'obs' ? (
+                          <Col md="obs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="obsLabel" for="profissional-status-atual-obs">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="profissional-status-atual-ativo">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-status-atual-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'statusAtualProf' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="profissional-status-atual-statusAtualProf">
+                                    <Translate contentKey="generadorApp.profissionalStatusAtual.statusAtualProf">
+                                      Status Atual Prof
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="profissional-status-atual-statusAtualProf"
+                                    className={'css-select-control'}
+                                    value={this.state.statusAtualProfSelectValue}
+                                    options={
+                                      statusAtualProfs ? statusAtualProfs.map(option => ({ value: option.id, label: option.id })) : null
+                                    }
+                                    onChange={options => this.setState({ statusAtualProfSelectValue: options })}
+                                    name={'statusAtualProf'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtualProf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -235,96 +312,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-status-atual-idProfissional">
-              <Translate contentKey="generadorApp.profissionalStatusAtual.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-status-atual-idProfissional" type="text" name="idProfissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ObsComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'obs' ? (
-    <Col md="obs">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="obsLabel" for="profissional-status-atual-obs">
-              <Translate contentKey="generadorApp.profissionalStatusAtual.obs">Obs</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="profissional-status-atual-obs" type="textarea" name="obs" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="profissional-status-atual-ativo">
-              <Translate contentKey="generadorApp.profissionalStatusAtual.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-status-atual-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const StatusAtualProfComponentUpdate = ({ baseFilters, statusAtualProfs }) => {
-  return baseFilters !== 'statusAtualProf' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="profissional-status-atual-statusAtualProf">
-              <Translate contentKey="generadorApp.profissionalStatusAtual.statusAtualProf">Status Atual Prof</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="profissional-status-atual-statusAtualProf"
-              className={'css-select-control'}
-              value={this.state.statusAtualProfSelectValue}
-              options={statusAtualProfs ? statusAtualProfs.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ statusAtualProfSelectValue: options })}
-              name={'statusAtualProf'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="statusAtualProf" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalStatusAtualUpdate);

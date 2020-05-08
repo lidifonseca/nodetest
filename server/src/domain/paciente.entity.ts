@@ -23,7 +23,7 @@ import Profissional from './profissional.entity';
 import PacienteHospital from './paciente-hospital.entity';
 
 /**
- * @toStringFields nome@@\n@listTableLayout nome cep bairro rg registro@@\n@listFilterLayout\nnome{Label:top,Size:6}\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@\n@formTab DadosDoPaciente<unidade,email,nome,cpf,rg,cep,nascimento,sexo,endereco,telefone,celular,bairro,numero,complemento,cidade,uf,profissionalPref,tipohospital,liminar,detalhes,observacao>@@\n@formTab DadosDoFamiliar<cepFamiliar,enderecoFamiliar,numeroFamiliar,complementoFamiliar,cidadeFamiliar,bairroFamiliar,ufFamiliar,latitudeFamiliar,longitudeFamiliar,acessoFamiliar,emailFamiliar,cpfFamiliar,rgFamiliar,nascimentoFamiliar,sexoFamiliar,telefoneFamiliar,celularFamiliar,observacaoFamiliar>@@\n@listButtons\nview{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}`,color:info,size:sm,icon:eye,text:View}\nedit{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/edit`,color:info,size:sm,icon:pencil-alt,text:Edit}\ndelete{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:trash,text:Delete}\nRelatoriodeInformacoes{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:file-text-o,text:RelatoriodeInformacoes}\nIndicadoresClinicos{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:IndicadoresClinicos}\nMonitoramento{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:list,text:Monitoramento}\nVisualizarProntuario{inDropdown:true,tag:Link,to:`${match.url}/${paciente.id}/delete`,color:info,size:sm,icon:search,text:VisualizarProntuario}\nStatus{inDropdown:true,tag:Link,to:`/paciente-status-atual?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:pencil,text:Status}\nArquivos{inDropdown:true,tag:Link,to:`/paciente-arquivo?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:upload,text:Arquivos}\nDiagnostico{inDropdown:true,tag:Link,to:`/paciente-diagnostico?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:Diagnostico}\nOperadora{inDropdown:true,tag:Link,to:`/paciente-operadora?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:medkit,text:Operadora}\nResetSenha{inDropdown:true,tag:Link,to:`/reset-senha?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:refresh,text:ResetSenha}\nProntuarioEletronico{inDropdown:true,tag:Link,to:`/paciente-prontuario?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:stethoscope,text:ProntuarioEletronico}\nToken{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:key,text:Token}\nQuestionario{inDropdown:true,tag:Link,to:`/questionarios?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:question,text:Questionario}\nTratamentoIndicado{inDropdown:true,tag:Link,to:`/paciente-?baseFilters=paciente&paciente=${paciente.id}`,color:info,size:sm,icon:fa-list-ol,text:TratamentoIndicado}\n@@\n@viewButtons\nview{tag:Link,to:`/paciente/${pacienteEntity.id}`,color:info,size:sm,icon:eye,text:View}\nedit{tag:Link,to:`/paciente/${pacienteEntity.id}/edit`,color:primary,size:sm,icon:pencil-alt,text:Edit}\ndelete{tag:Link,to:`/paciente/${pacienteEntity.id}/delete`,color:danger,size:sm,icon:trash,text:Delete}\n@@\n@formLayout\nunidade{Label:top,Size:6}\nemail{Label:top,Size:6}\nnome{Label:top,Size:6}\ncpf{Label:top,Size:3}\nrg{Label:top,Size:3}\ncep{Label:top,Size:6}\nnascimento{Label:top,Size:3}\nsexo{Label:top,Size:3}\nendereco{Label:top,Size:6}\ntelefone{Label:top,Size:3}\ncelular{Label:top,Size:3}\nbairro{Label:top,Size:4}\nnumero{Label:top,Size:6}\ncomplemento{Label:top,Size:6}\ncidade{Label:top,Size:8}\nuf{Label:top,Size:4}\nprofissionalPref{Label:top,Size:6}\ntipohospital{Label:top,Size:6}\nliminar{Label:top,Size:12}\ndetalhes{Label:top,Size:12}\nobservacao{Label:top,Size:12}\ncomResponsavel{Label:top,Size:12}\n\ngrauParentesco{Label:top,Size:12}\nresponsavelFamiliar{Label:top,Size:12}\n\n\n\ncepFamiliar{Label:top,Size:12}\nenderecoFamiliar{Label:top,Size:12}\nnumeroFamiliar{Label:top,Size:12}\ncomplementoFamiliar{Label:top,Size:12}\ncidadeFamiliar{Label:top,Size:12}\nbairroFamiliar{Label:top,Size:12}\nufFamiliar{Label:top,Size:12}\nlatitudeFamiliar{Label:top,Size:12}\nlongitudeFamiliar{Label:top,Size:12}\nacessoFamiliar{Label:top,Size:12}\nemailFamiliar{Label:top,Size:12}\ncpfFamiliar{Label:top,Size:12}\nrgFamiliar{Label:top,Size:12}\nnascimentoFamiliar{Label:top,Size:12}\nsexoFamiliar{Label:top,Size:12}\ntelefoneFamiliar{Label:top,Size:12}\ncelularFamiliar{Label:top,Size:12}\nobservacaoFamiliar{Label:top,Size:12}\n\n\nfranquia{Label:top,Size:12}\nsenha{Label:top,Size:12}\nregistro{Label:top,Size:12}\nlatitude{Label:top,Size:12}\nlongitude{Label:top,Size:12}\naph{Label:top,Size:12}\nnivelComplexidade{Label:top,Size:12}\npassagemPs{Label:top,Size:12}\nobsPs{Label:top,Size:12}\npassagemInternacao{Label:top,Size:12}\nobsInternacao{Label:top,Size:12}\ncustoTotal{Label:top,Size:12}\nmesmoEndereco{Label:top,Size:12}\ncadastroCompleto{Label:top,Size:12}\nativo{Label:top,Size:12}\nexpoToken{Label:top,Size:12}\n@@\n@viewLayout\ncidade{Label:top,Size:6}\nnome{Label:top,Size:6}\nemail{Label:top,Size:6}\ncpf{Label:top,Size:6}\nrg{Label:top,Size:6}\nregistro{Label:top,Size:6}\n@@
+ * \n\n\n\n\n\n\n\n
  */
 @Entity('tb_paciente')
 export default class Paciente extends BaseEntity {
@@ -55,7 +55,7 @@ export default class Paciente extends BaseEntity {
   telefone: string;
 
   /**
-   * @dbName TELEFONE2@@
+   *
    */
   @Column({ name: 'TELEFONE2', length: 20 })
   telefone2: string;
@@ -64,7 +64,7 @@ export default class Paciente extends BaseEntity {
   celular: string;
 
   /**
-   * @dbName CELULAR1@@
+   *
    */
   @Column({ name: 'CELULAR1', length: 20 })
   celular1: string;
@@ -115,7 +115,7 @@ export default class Paciente extends BaseEntity {
   telefoneFamiliar: string;
 
   /**
-   * @dbName TELEFONE2_FAMILIAR@@
+   *
    */
   @Column({ name: 'TELEFONE2_FAMILIAR', length: 20 })
   telefone2Familiar: string;
@@ -124,7 +124,7 @@ export default class Paciente extends BaseEntity {
   celularFamiliar: string;
 
   /**
-   * @dbName CELULAR2_FAMILIAR@@
+   *
    */
   @Column({ name: 'CELULAR2_FAMILIAR', length: 20 })
   celular2Familiar: string;

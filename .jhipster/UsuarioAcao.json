@@ -27,7 +27,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508184500",
+    "changelogDate": "20200509002400",
     "entityTableName": "usuario_acao",
     "dto": "mapstruct",
     "pagination": "pagination",

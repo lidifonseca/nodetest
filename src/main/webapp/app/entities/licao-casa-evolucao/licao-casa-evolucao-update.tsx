@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -142,11 +143,11 @@ export class LicaoCasaEvolucaoUpdate extends React.Component<ILicaoCasaEvolucaoU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="licao-casa-evolucao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="licao-casa-evolucao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="licao-casa-evolucao-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -154,21 +155,175 @@ export class LicaoCasaEvolucaoUpdate extends React.Component<ILicaoCasaEvolucaoU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <LicaoCasaIdComponentUpdate baseFilters />
-
-                        <AtualizadoEmComponentUpdate baseFilters />
-
-                        <RealizadaComponentUpdate baseFilters />
-
-                        <RealizadaEmComponentUpdate baseFilters />
-
-                        <ObservacoesComponentUpdate baseFilters />
-
-                        <InstrucoesComponentUpdate baseFilters />
-
-                        <DataAgendaComponentUpdate baseFilters />
-
-                        <QtdLembreteComponentUpdate baseFilters />
+                        {baseFilters !== 'licaoCasaId' ? (
+                          <Col md="licaoCasaId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="licaoCasaIdLabel" for="licao-casa-evolucao-licaoCasaId">
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.licaoCasaId">Licao Casa Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-evolucao-licaoCasaId" type="string" className="form-control" name="licaoCasaId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="licaoCasaId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atualizadoEm' ? (
+                          <Col md="atualizadoEm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atualizadoEmLabel" for="licao-casa-evolucao-atualizadoEm">
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.atualizadoEm">Atualizado Em</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="licao-casa-evolucao-atualizadoEm"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="atualizadoEm"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEvolucaoEntity.atualizadoEm)}
+                                    validate={{
+                                      required: { value: true, errorMessage: translate('entity.validation.required') }
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atualizadoEm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'realizada' ? (
+                          <Col md="realizada">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="realizadaLabel" check>
+                                    <AvInput id="licao-casa-evolucao-realizada" type="checkbox" className="form-control" name="realizada" />
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.realizada">Realizada</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="realizada" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'realizadaEm' ? (
+                          <Col md="realizadaEm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="realizadaEmLabel" for="licao-casa-evolucao-realizadaEm">
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.realizadaEm">Realizada Em</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="licao-casa-evolucao-realizadaEm"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="realizadaEm"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEvolucaoEntity.realizadaEm)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="realizadaEm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'observacoes' ? (
+                          <Col md="observacoes">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacoesLabel" for="licao-casa-evolucao-observacoes">
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.observacoes">Observacoes</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-evolucao-observacoes" type="text" name="observacoes" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'instrucoes' ? (
+                          <Col md="instrucoes">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="instrucoesLabel" for="licao-casa-evolucao-instrucoes">
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.instrucoes">Instrucoes</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-evolucao-instrucoes" type="text" name="instrucoes" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="instrucoes" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'dataAgenda' ? (
+                          <Col md="dataAgenda">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataAgendaLabel" for="licao-casa-evolucao-dataAgenda">
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.dataAgenda">Data Agenda</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="licao-casa-evolucao-dataAgenda"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataAgenda"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEvolucaoEntity.dataAgenda)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataAgenda" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'qtdLembrete' ? (
+                          <Col md="qtdLembrete">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="qtdLembreteLabel" check>
+                                    <AvInput
+                                      id="licao-casa-evolucao-qtdLembrete"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="qtdLembrete"
+                                    />
+                                    <Translate contentKey="generadorApp.licaoCasaEvolucao.qtdLembrete">Qtd Lembrete</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="qtdLembrete" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -198,193 +353,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const LicaoCasaIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'licaoCasaId' ? (
-    <Col md="licaoCasaId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="licaoCasaIdLabel" for="licao-casa-evolucao-licaoCasaId">
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.licaoCasaId">Licao Casa Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-evolucao-licaoCasaId" type="string" className="form-control" name="licaoCasaId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="licaoCasaId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtualizadoEmComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'atualizadoEm' ? (
-    <Col md="atualizadoEm">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="atualizadoEmLabel" for="licao-casa-evolucao-atualizadoEm">
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.atualizadoEm">Atualizado Em</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="licao-casa-evolucao-atualizadoEm"
-              type="datetime-local"
-              className="form-control"
-              name="atualizadoEm"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEvolucaoEntity.atualizadoEm)}
-              validate={{
-                required: { value: true, errorMessage: translate('entity.validation.required') }
-              }}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atualizadoEm" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const RealizadaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'realizada' ? (
-    <Col md="realizada">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="realizadaLabel" check>
-              <AvInput id="licao-casa-evolucao-realizada" type="checkbox" className="form-control" name="realizada" />
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.realizada">Realizada</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="realizada" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const RealizadaEmComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'realizadaEm' ? (
-    <Col md="realizadaEm">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="realizadaEmLabel" for="licao-casa-evolucao-realizadaEm">
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.realizadaEm">Realizada Em</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="licao-casa-evolucao-realizadaEm"
-              type="datetime-local"
-              className="form-control"
-              name="realizadaEm"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEvolucaoEntity.realizadaEm)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="realizadaEm" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ObservacoesComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'observacoes' ? (
-    <Col md="observacoes">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="observacoesLabel" for="licao-casa-evolucao-observacoes">
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.observacoes">Observacoes</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-evolucao-observacoes" type="text" name="observacoes" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const InstrucoesComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'instrucoes' ? (
-    <Col md="instrucoes">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="instrucoesLabel" for="licao-casa-evolucao-instrucoes">
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.instrucoes">Instrucoes</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-evolucao-instrucoes" type="text" name="instrucoes" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="instrucoes" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DataAgendaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataAgenda' ? (
-    <Col md="dataAgenda">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataAgendaLabel" for="licao-casa-evolucao-dataAgenda">
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.dataAgenda">Data Agenda</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="licao-casa-evolucao-dataAgenda"
-              type="datetime-local"
-              className="form-control"
-              name="dataAgenda"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEvolucaoEntity.dataAgenda)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataAgenda" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const QtdLembreteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'qtdLembrete' ? (
-    <Col md="qtdLembrete">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="qtdLembreteLabel" check>
-              <AvInput id="licao-casa-evolucao-qtdLembrete" type="checkbox" className="form-control" name="qtdLembrete" />
-              <Translate contentKey="generadorApp.licaoCasaEvolucao.qtdLembrete">Qtd Lembrete</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="qtdLembrete" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LicaoCasaEvolucaoUpdate);

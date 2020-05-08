@@ -33,7 +33,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508181700",
+    "changelogDate": "20200508235600",
     "entityTableName": "respostas",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -152,11 +153,11 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="termos-uso-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="termos-uso-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="termos-uso-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -164,9 +165,42 @@ export class TermosUsoUpdate extends React.Component<ITermosUsoUpdateProps, ITer
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TermosUsoComponentUpdate baseFilters />
-
-                        <TipoComponentUpdate baseFilters />
+                        {baseFilters !== 'termosUso' ? (
+                          <Col md="termosUso">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="termosUsoLabel" for="termos-uso-termosUso">
+                                    <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="termosUso" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'tipo' ? (
+                          <Col md="tipo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoLabel" for="termos-uso-tipo">
+                                    <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="termos-uso-tipo" type="string" className="form-control" name="tipo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -197,47 +231,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TermosUsoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'termosUso' ? (
-    <Col md="termosUso">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="termosUsoLabel" for="termos-uso-termosUso">
-              <Translate contentKey="generadorApp.termosUso.termosUso">Termos Uso</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="termos-uso-termosUso" type="textarea" name="termosUso" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="termosUso" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TipoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipo' ? (
-    <Col md="tipo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoLabel" for="termos-uso-tipo">
-              <Translate contentKey="generadorApp.termosUso.tipo">Tipo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="termos-uso-tipo" type="string" className="form-control" name="tipo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TermosUsoUpdate);

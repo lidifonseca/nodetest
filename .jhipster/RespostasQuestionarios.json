@@ -27,7 +27,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508181800",
+    "changelogDate": "20200508235700",
     "entityTableName": "respostas_questionarios",
     "dto": "mapstruct",
     "pagination": "pagination",

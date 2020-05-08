@@ -30,7 +30,7 @@
             "relationshipName": "usuarioAcao"
         }
     ],
-    "changelogDate": "20200508182800",
+    "changelogDate": "20200509000700",
     "entityTableName": "tela",
     "dto": "mapstruct",
     "pagination": "pagination",

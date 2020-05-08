@@ -35,7 +35,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508170800",
+    "changelogDate": "20200508224700",
     "entityTableName": "motivo_ps",
     "dto": "mapstruct",
     "pagination": "pagination",

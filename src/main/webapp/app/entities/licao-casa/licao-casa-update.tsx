@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -142,11 +143,11 @@ export class LicaoCasaUpdate extends React.Component<ILicaoCasaUpdateProps, ILic
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="licao-casa-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="licao-casa-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="licao-casa-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -154,37 +155,312 @@ export class LicaoCasaUpdate extends React.Component<ILicaoCasaUpdateProps, ILic
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <AtendimentoIdComponentUpdate baseFilters />
-
-                        <PacienteIdComponentUpdate baseFilters />
-
-                        <ProfissionalIdComponentUpdate baseFilters />
-
-                        <AtividadeComponentUpdate baseFilters />
-
-                        <HoraInicioComponentUpdate baseFilters />
-
-                        <RepeticaoHorasComponentUpdate baseFilters />
-
-                        <QtdDiasComponentUpdate baseFilters />
-
-                        <IntervaloDiasComponentUpdate baseFilters />
-
-                        <CriadoEmComponentUpdate baseFilters />
-
-                        <ConcluidaEmComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <AtivComponentUpdate baseFilters />
-
-                        <FormaComponentUpdate baseFilters />
-
-                        <EnviarParaComponentUpdate baseFilters />
-
-                        <NotificarFamiliarComponentUpdate baseFilters />
-
-                        <ReplicarAtividadeComponentUpdate baseFilters />
+                        {baseFilters !== 'atendimentoId' ? (
+                          <Col md="atendimentoId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atendimentoIdLabel" for="licao-casa-atendimentoId">
+                                    <Translate contentKey="generadorApp.licaoCasa.atendimentoId">Atendimento Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-atendimentoId" type="string" className="form-control" name="atendimentoId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimentoId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'pacienteId' ? (
+                          <Col md="pacienteId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="pacienteIdLabel" for="licao-casa-pacienteId">
+                                    <Translate contentKey="generadorApp.licaoCasa.pacienteId">Paciente Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-pacienteId" type="string" className="form-control" name="pacienteId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="pacienteId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'profissionalId' ? (
+                          <Col md="profissionalId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="profissionalIdLabel" for="licao-casa-profissionalId">
+                                    <Translate contentKey="generadorApp.licaoCasa.profissionalId">Profissional Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-profissionalId" type="string" className="form-control" name="profissionalId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="profissionalId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atividade' ? (
+                          <Col md="atividade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atividadeLabel" for="licao-casa-atividade">
+                                    <Translate contentKey="generadorApp.licaoCasa.atividade">Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-atividade" type="text" name="atividade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'horaInicio' ? (
+                          <Col md="horaInicio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="horaInicioLabel" for="licao-casa-horaInicio">
+                                    <Translate contentKey="generadorApp.licaoCasa.horaInicio">Hora Inicio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="licao-casa-horaInicio"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="horaInicio"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEntity.horaInicio)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="horaInicio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'repeticaoHoras' ? (
+                          <Col md="repeticaoHoras">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="repeticaoHorasLabel" check>
+                                    <AvInput
+                                      id="licao-casa-repeticaoHoras"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="repeticaoHoras"
+                                    />
+                                    <Translate contentKey="generadorApp.licaoCasa.repeticaoHoras">Repeticao Horas</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="repeticaoHoras" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'qtdDias' ? (
+                          <Col md="qtdDias">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="qtdDiasLabel" check>
+                                    <AvInput id="licao-casa-qtdDias" type="checkbox" className="form-control" name="qtdDias" />
+                                    <Translate contentKey="generadorApp.licaoCasa.qtdDias">Qtd Dias</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="qtdDias" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'intervaloDias' ? (
+                          <Col md="intervaloDias">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="intervaloDiasLabel" check>
+                                    <AvInput id="licao-casa-intervaloDias" type="checkbox" className="form-control" name="intervaloDias" />
+                                    <Translate contentKey="generadorApp.licaoCasa.intervaloDias">Intervalo Dias</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="intervaloDias" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'criadoEm' ? (
+                          <Col md="criadoEm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="criadoEmLabel" for="licao-casa-criadoEm">
+                                    <Translate contentKey="generadorApp.licaoCasa.criadoEm">Criado Em</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="licao-casa-criadoEm"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="criadoEm"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEntity.criadoEm)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'concluidaEm' ? (
+                          <Col md="concluidaEm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="concluidaEmLabel" for="licao-casa-concluidaEm">
+                                    <Translate contentKey="generadorApp.licaoCasa.concluidaEm">Concluida Em</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="licao-casa-concluidaEm"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="concluidaEm"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEntity.concluidaEm)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="concluidaEm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="licao-casa-ativo" type="checkbox" className="form-control" name="ativo" />
+                                    <Translate contentKey="generadorApp.licaoCasa.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativ' ? (
+                          <Col md="ativ">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativLabel" for="licao-casa-ativ">
+                                    <Translate contentKey="generadorApp.licaoCasa.ativ">Ativ</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-ativ" type="string" className="form-control" name="ativ" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativ" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'forma' ? (
+                          <Col md="forma">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="formaLabel" for="licao-casa-forma">
+                                    <Translate contentKey="generadorApp.licaoCasa.forma">Forma</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-forma" type="text" name="forma" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="forma" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'enviarPara' ? (
+                          <Col md="enviarPara">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="enviarParaLabel" for="licao-casa-enviarPara">
+                                    <Translate contentKey="generadorApp.licaoCasa.enviarPara">Enviar Para</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-enviarPara" type="text" name="enviarPara" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="enviarPara" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'notificarFamiliar' ? (
+                          <Col md="notificarFamiliar">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="notificarFamiliarLabel" for="licao-casa-notificarFamiliar">
+                                    <Translate contentKey="generadorApp.licaoCasa.notificarFamiliar">Notificar Familiar</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-notificarFamiliar" type="text" name="notificarFamiliar" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="notificarFamiliar" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'replicarAtividade' ? (
+                          <Col md="replicarAtividade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="replicarAtividadeLabel" for="licao-casa-replicarAtividade">
+                                    <Translate contentKey="generadorApp.licaoCasa.replicarAtividade">Replicar Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="licao-casa-replicarAtividade" type="text" name="replicarAtividade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="replicarAtividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -214,354 +490,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const AtendimentoIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'atendimentoId' ? (
-    <Col md="atendimentoId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="atendimentoIdLabel" for="licao-casa-atendimentoId">
-              <Translate contentKey="generadorApp.licaoCasa.atendimentoId">Atendimento Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-atendimentoId" type="string" className="form-control" name="atendimentoId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atendimentoId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'pacienteId' ? (
-    <Col md="pacienteId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="pacienteIdLabel" for="licao-casa-pacienteId">
-              <Translate contentKey="generadorApp.licaoCasa.pacienteId">Paciente Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-pacienteId" type="string" className="form-control" name="pacienteId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="pacienteId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ProfissionalIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'profissionalId' ? (
-    <Col md="profissionalId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="profissionalIdLabel" for="licao-casa-profissionalId">
-              <Translate contentKey="generadorApp.licaoCasa.profissionalId">Profissional Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-profissionalId" type="string" className="form-control" name="profissionalId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="profissionalId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtividadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'atividade' ? (
-    <Col md="atividade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="atividadeLabel" for="licao-casa-atividade">
-              <Translate contentKey="generadorApp.licaoCasa.atividade">Atividade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-atividade" type="text" name="atividade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const HoraInicioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'horaInicio' ? (
-    <Col md="horaInicio">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="horaInicioLabel" for="licao-casa-horaInicio">
-              <Translate contentKey="generadorApp.licaoCasa.horaInicio">Hora Inicio</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="licao-casa-horaInicio"
-              type="datetime-local"
-              className="form-control"
-              name="horaInicio"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEntity.horaInicio)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="horaInicio" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const RepeticaoHorasComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'repeticaoHoras' ? (
-    <Col md="repeticaoHoras">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="repeticaoHorasLabel" check>
-              <AvInput id="licao-casa-repeticaoHoras" type="checkbox" className="form-control" name="repeticaoHoras" />
-              <Translate contentKey="generadorApp.licaoCasa.repeticaoHoras">Repeticao Horas</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="repeticaoHoras" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const QtdDiasComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'qtdDias' ? (
-    <Col md="qtdDias">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="qtdDiasLabel" check>
-              <AvInput id="licao-casa-qtdDias" type="checkbox" className="form-control" name="qtdDias" />
-              <Translate contentKey="generadorApp.licaoCasa.qtdDias">Qtd Dias</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="qtdDias" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IntervaloDiasComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'intervaloDias' ? (
-    <Col md="intervaloDias">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="intervaloDiasLabel" check>
-              <AvInput id="licao-casa-intervaloDias" type="checkbox" className="form-control" name="intervaloDias" />
-              <Translate contentKey="generadorApp.licaoCasa.intervaloDias">Intervalo Dias</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="intervaloDias" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CriadoEmComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'criadoEm' ? (
-    <Col md="criadoEm">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="criadoEmLabel" for="licao-casa-criadoEm">
-              <Translate contentKey="generadorApp.licaoCasa.criadoEm">Criado Em</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="licao-casa-criadoEm"
-              type="datetime-local"
-              className="form-control"
-              name="criadoEm"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEntity.criadoEm)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ConcluidaEmComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'concluidaEm' ? (
-    <Col md="concluidaEm">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="concluidaEmLabel" for="licao-casa-concluidaEm">
-              <Translate contentKey="generadorApp.licaoCasa.concluidaEm">Concluida Em</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="licao-casa-concluidaEm"
-              type="datetime-local"
-              className="form-control"
-              name="concluidaEm"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.licaoCasaEntity.concluidaEm)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="concluidaEm" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="ativoLabel" check>
-              <AvInput id="licao-casa-ativo" type="checkbox" className="form-control" name="ativo" />
-              <Translate contentKey="generadorApp.licaoCasa.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativ' ? (
-    <Col md="ativ">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativLabel" for="licao-casa-ativ">
-              <Translate contentKey="generadorApp.licaoCasa.ativ">Ativ</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-ativ" type="string" className="form-control" name="ativ" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativ" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const FormaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'forma' ? (
-    <Col md="forma">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="formaLabel" for="licao-casa-forma">
-              <Translate contentKey="generadorApp.licaoCasa.forma">Forma</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-forma" type="text" name="forma" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="forma" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EnviarParaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'enviarPara' ? (
-    <Col md="enviarPara">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="enviarParaLabel" for="licao-casa-enviarPara">
-              <Translate contentKey="generadorApp.licaoCasa.enviarPara">Enviar Para</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-enviarPara" type="text" name="enviarPara" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="enviarPara" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NotificarFamiliarComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'notificarFamiliar' ? (
-    <Col md="notificarFamiliar">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="notificarFamiliarLabel" for="licao-casa-notificarFamiliar">
-              <Translate contentKey="generadorApp.licaoCasa.notificarFamiliar">Notificar Familiar</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-notificarFamiliar" type="text" name="notificarFamiliar" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="notificarFamiliar" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ReplicarAtividadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'replicarAtividade' ? (
-    <Col md="replicarAtividade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="replicarAtividadeLabel" for="licao-casa-replicarAtividade">
-              <Translate contentKey="generadorApp.licaoCasa.replicarAtividade">Replicar Atividade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="licao-casa-replicarAtividade" type="text" name="replicarAtividade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="replicarAtividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LicaoCasaUpdate);

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class PacienteHospitalUpdate extends React.Component<IPacienteHospitalUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-hospital-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-hospital-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="paciente-hospital-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,42 @@ export class PacienteHospitalUpdate extends React.Component<IPacienteHospitalUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ServicoComponentUpdate baseFilters />
-
-                        <StyleLabelComponentUpdate baseFilters />
+                        {baseFilters !== 'servico' ? (
+                          <Col md="servico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="servicoLabel" for="paciente-hospital-servico">
+                                    <Translate contentKey="generadorApp.pacienteHospital.servico">Servico</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-hospital-servico" type="text" name="servico" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="paciente-hospital-styleLabel">
+                                    <Translate contentKey="generadorApp.pacienteHospital.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-hospital-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +216,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ServicoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'servico' ? (
-    <Col md="servico">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="servicoLabel" for="paciente-hospital-servico">
-              <Translate contentKey="generadorApp.pacienteHospital.servico">Servico</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-hospital-servico" type="text" name="servico" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="servico" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const StyleLabelComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'styleLabel' ? (
-    <Col md="styleLabel">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="styleLabelLabel" for="paciente-hospital-styleLabel">
-              <Translate contentKey="generadorApp.pacienteHospital.styleLabel">Style Label</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-hospital-styleLabel" type="text" name="styleLabel" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteHospitalUpdate);

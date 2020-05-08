@@ -28,7 +28,7 @@
             "relationshipName": "padItem"
         }
     ],
-    "changelogDate": "20200508175100",
+    "changelogDate": "20200508233000",
     "entityTableName": "periodo",
     "dto": "mapstruct",
     "pagination": "pagination",

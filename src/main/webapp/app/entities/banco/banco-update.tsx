@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="banco-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="banco-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="banco-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,9 +143,42 @@ export class BancoUpdate extends React.Component<IBancoUpdateProps, IBancoUpdate
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <CodBancoComponentUpdate baseFilters />
-
-                        <BancoComponentUpdate baseFilters />
+                        {baseFilters !== 'codBanco' ? (
+                          <Col md="codBanco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codBancoLabel" for="banco-codBanco">
+                                    <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="banco-codBanco" type="text" name="codBanco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codBanco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'banco' ? (
+                          <Col md="banco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="bancoLabel" for="banco-banco">
+                                    <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="banco-banco" type="text" name="banco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="banco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -174,47 +208,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const CodBancoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'codBanco' ? (
-    <Col md="codBanco">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="codBancoLabel" for="banco-codBanco">
-              <Translate contentKey="generadorApp.banco.codBanco">Cod Banco</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="banco-codBanco" type="text" name="codBanco" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="codBanco" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const BancoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'banco' ? (
-    <Col md="banco">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="bancoLabel" for="banco-banco">
-              <Translate contentKey="generadorApp.banco.banco">Banco</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="banco-banco" type="text" name="banco" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="banco" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BancoUpdate);

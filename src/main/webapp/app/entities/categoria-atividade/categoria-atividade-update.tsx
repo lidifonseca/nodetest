@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -178,11 +179,11 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="categoria-atividade-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="categoria-atividade-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="categoria-atividade-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -190,15 +191,86 @@ export class CategoriaAtividadeUpdate extends React.Component<ICategoriaAtividad
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <AtividadeComponentUpdate baseFilters />
-
-                        <AtendimentoAtividadesComponentUpdate baseFilter atendimentoAtividades />
-
-                        <PadItemAtividadeComponentUpdate baseFilter padItemAtividades />
-
-                        <UnidadeComponentUpdate baseFilter unidadeEasies />
-
-                        <CategoriaComponentUpdate baseFilter categorias />
+                        {baseFilters !== 'atividade' ? (
+                          <Col md="atividade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="atividadeLabel" for="categoria-atividade-atividade">
+                                    <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="categoria-atividade-atividade" type="text" name="atividade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atendimentoAtividades' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimentoAtividades" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'padItemAtividade' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="padItemAtividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'unidade' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="categoria-atividade-unidade">
+                                    <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="categoria-atividade-unidade"
+                                    className={'css-select-control'}
+                                    value={this.state.unidadeEasySelectValue}
+                                    options={
+                                      unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null
+                                    }
+                                    onChange={options => this.setState({ unidadeEasySelectValue: options })}
+                                    name={'unidade'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'categoria' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="categoria-atividade-categoria">
+                                    <Translate contentKey="generadorApp.categoriaAtividade.categoria">Categoria</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="categoria-atividade-categoria"
+                                    className={'css-select-control'}
+                                    value={this.state.categoriaSelectValue}
+                                    options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ categoriaSelectValue: options })}
+                                    name={'categoria'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -232,98 +304,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const AtividadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'atividade' ? (
-    <Col md="atividade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="atividadeLabel" for="categoria-atividade-atividade">
-              <Translate contentKey="generadorApp.categoriaAtividade.atividade">Atividade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="categoria-atividade-atividade" type="text" name="atividade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtendimentoAtividadesComponentUpdate = ({ baseFilters, atendimentoAtividades }) => {
-  return baseFilters !== 'atendimentoAtividades' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="atendimentoAtividades" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadItemAtividadeComponentUpdate = ({ baseFilters, padItemAtividades }) => {
-  return baseFilters !== 'padItemAtividade' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="padItemAtividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UnidadeComponentUpdate = ({ baseFilters, unidadeEasies }) => {
-  return baseFilters !== 'unidade' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="categoria-atividade-unidade">
-              <Translate contentKey="generadorApp.categoriaAtividade.unidade">Unidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="categoria-atividade-unidade"
-              className={'css-select-control'}
-              value={this.state.unidadeEasySelectValue}
-              options={unidadeEasies ? unidadeEasies.map(option => ({ value: option.id, label: option.razaoSocial })) : null}
-              onChange={options => this.setState({ unidadeEasySelectValue: options })}
-              name={'unidade'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="unidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CategoriaComponentUpdate = ({ baseFilters, categorias }) => {
-  return baseFilters !== 'categoria' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="categoria-atividade-categoria">
-              <Translate contentKey="generadorApp.categoriaAtividade.categoria">Categoria</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="categoria-atividade-categoria"
-              className={'css-select-control'}
-              value={this.state.categoriaSelectValue}
-              options={categorias ? categorias.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ categoriaSelectValue: options })}
-              name={'categoria'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="categoria" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoriaAtividadeUpdate);

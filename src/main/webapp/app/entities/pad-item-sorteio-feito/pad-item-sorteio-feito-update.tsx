@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -160,11 +161,11 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-item-sorteio-feito-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-item-sorteio-feito-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-item-sorteio-feito-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -172,9 +173,54 @@ export class PadItemSorteioFeitoUpdate extends React.Component<IPadItemSorteioFe
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <SorteioFeitoComponentUpdate baseFilters />
-
-                        <PadItemComponentUpdate baseFilter padItems />
+                        {baseFilters !== 'sorteioFeito' ? (
+                          <Col md="sorteioFeito">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sorteioFeitoLabel" for="pad-item-sorteio-feito-sorteioFeito">
+                                    <Translate contentKey="generadorApp.padItemSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="pad-item-sorteio-feito-sorteioFeito"
+                                    type="string"
+                                    className="form-control"
+                                    name="sorteioFeito"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sorteioFeito" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'padItem' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-item-sorteio-feito-padItem">
+                                    <Translate contentKey="generadorApp.padItemSorteioFeito.padItem">Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-item-sorteio-feito-padItem"
+                                    className={'css-select-control'}
+                                    value={this.state.padItemSelectValue}
+                                    options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ padItemSelectValue: options })}
+                                    name={'padItem'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -206,54 +252,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const SorteioFeitoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'sorteioFeito' ? (
-    <Col md="sorteioFeito">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="sorteioFeitoLabel" for="pad-item-sorteio-feito-sorteioFeito">
-              <Translate contentKey="generadorApp.padItemSorteioFeito.sorteioFeito">Sorteio Feito</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-sorteio-feito-sorteioFeito" type="string" className="form-control" name="sorteioFeito" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="sorteioFeito" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
-  return baseFilters !== 'padItem' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="pad-item-sorteio-feito-padItem">
-              <Translate contentKey="generadorApp.padItemSorteioFeito.padItem">Pad Item</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="pad-item-sorteio-feito-padItem"
-              className={'css-select-control'}
-              value={this.state.padItemSelectValue}
-              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ padItemSelectValue: options })}
-              name={'padItem'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadItemSorteioFeitoUpdate);

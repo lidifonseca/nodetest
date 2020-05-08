@@ -31,7 +31,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508161600",
+    "changelogDate": "20200508215500",
     "entityTableName": "api_name",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class ProntuarioMotivoInternacaoPsUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="prontuario-motivo-internacao-ps-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="prontuario-motivo-internacao-ps-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="prontuario-motivo-internacao-ps-id"
@@ -162,11 +163,75 @@ export class ProntuarioMotivoInternacaoPsUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProntuarioComponentUpdate baseFilters />
-
-                        <IdPacienteComponentUpdate baseFilters />
-
-                        <IdMotivoComponentUpdate baseFilters />
+                        {baseFilters !== 'idProntuario' ? (
+                          <Col md="idProntuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProntuarioLabel" for="prontuario-motivo-internacao-ps-idProntuario">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idProntuario">Id Prontuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-internacao-ps-idProntuario"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProntuario"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="prontuario-motivo-internacao-ps-idPaciente">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-internacao-ps-idPaciente"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPaciente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idMotivo' ? (
+                          <Col md="idMotivo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idMotivoLabel" for="prontuario-motivo-internacao-ps-idMotivo">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idMotivo">Id Motivo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-internacao-ps-idMotivo"
+                                    type="string"
+                                    className="form-control"
+                                    name="idMotivo"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idMotivo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -196,68 +261,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProntuarioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProntuario' ? (
-    <Col md="idProntuario">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProntuarioLabel" for="prontuario-motivo-internacao-ps-idProntuario">
-              <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idProntuario">Id Prontuario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-internacao-ps-idProntuario" type="string" className="form-control" name="idProntuario" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPacienteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPaciente' ? (
-    <Col md="idPaciente">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPacienteLabel" for="prontuario-motivo-internacao-ps-idPaciente">
-              <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idPaciente">Id Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-internacao-ps-idPaciente" type="string" className="form-control" name="idPaciente" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdMotivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idMotivo' ? (
-    <Col md="idMotivo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idMotivoLabel" for="prontuario-motivo-internacao-ps-idMotivo">
-              <Translate contentKey="generadorApp.prontuarioMotivoInternacaoPs.idMotivo">Id Motivo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-internacao-ps-idMotivo" type="string" className="form-control" name="idMotivo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idMotivo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProntuarioMotivoInternacaoPsUpdate);

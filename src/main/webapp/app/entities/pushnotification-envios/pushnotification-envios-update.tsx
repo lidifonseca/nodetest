@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -142,11 +143,11 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pushnotification-envios-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pushnotification-envios-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pushnotification-envios-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -154,9 +155,49 @@ export class PushnotificationEnviosUpdate extends React.Component<IPushnotificat
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ReferenciaComponentUpdate baseFilters />
-
-                        <UltimoEnvioComponentUpdate baseFilters />
+                        {baseFilters !== 'referencia' ? (
+                          <Col md="referencia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="referenciaLabel" for="pushnotification-envios-referencia">
+                                    <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pushnotification-envios-referencia" type="text" name="referencia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ultimoEnvio' ? (
+                          <Col md="ultimoEnvio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
+                                    <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="pushnotification-envios-ultimoEnvio"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="ultimoEnvio"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.pushnotificationEnviosEntity.ultimoEnvio)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ultimoEnvio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,54 +227,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ReferenciaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'referencia' ? (
-    <Col md="referencia">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="referenciaLabel" for="pushnotification-envios-referencia">
-              <Translate contentKey="generadorApp.pushnotificationEnvios.referencia">Referencia</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pushnotification-envios-referencia" type="text" name="referencia" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UltimoEnvioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ultimoEnvio' ? (
-    <Col md="ultimoEnvio">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ultimoEnvioLabel" for="pushnotification-envios-ultimoEnvio">
-              <Translate contentKey="generadorApp.pushnotificationEnvios.ultimoEnvio">Ultimo Envio</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="pushnotification-envios-ultimoEnvio"
-              type="datetime-local"
-              className="form-control"
-              name="ultimoEnvio"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.pushnotificationEnviosEntity.ultimoEnvio)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ultimoEnvio" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PushnotificationEnviosUpdate);

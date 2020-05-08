@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -140,11 +141,11 @@ export class OcorrenciaProntuarioUpdate extends React.Component<IOcorrenciaPront
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="ocorrencia-prontuario-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="ocorrencia-prontuario-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="ocorrencia-prontuario-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -152,9 +153,42 @@ export class OcorrenciaProntuarioUpdate extends React.Component<IOcorrenciaPront
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <NomeComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="ocorrencia-prontuario-nome">
+                                    <Translate contentKey="generadorApp.ocorrenciaProntuario.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="ocorrencia-prontuario-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="ocorrencia-prontuario-ativo">
+                                    <Translate contentKey="generadorApp.ocorrenciaProntuario.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="ocorrencia-prontuario-ativo" type="text" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -184,47 +218,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const NomeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nome' ? (
-    <Col md="nome">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeLabel" for="ocorrencia-prontuario-nome">
-              <Translate contentKey="generadorApp.ocorrenciaProntuario.nome">Nome</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="ocorrencia-prontuario-nome" type="text" name="nome" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="ocorrencia-prontuario-ativo">
-              <Translate contentKey="generadorApp.ocorrenciaProntuario.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="ocorrencia-prontuario-ativo" type="text" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(OcorrenciaProntuarioUpdate);

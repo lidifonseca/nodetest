@@ -24,13 +24,13 @@ export default class UnidadeEasy extends BaseEntity {
   ie: string;
 
   /**
-   * @dbName TELEFONE1@@
+   *
    */
   @Column({ name: 'TELEFONE1', length: 20 })
   telefone1: string;
 
   /**
-   * @dbName TELEFONE2@@
+   *
    */
   @Column({ name: 'TELEFONE2', length: 20 })
   telefone2: string;

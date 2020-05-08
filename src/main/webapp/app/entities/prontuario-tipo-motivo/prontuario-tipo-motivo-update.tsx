@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -140,11 +141,11 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="prontuario-tipo-motivo-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="prontuario-tipo-motivo-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="prontuario-tipo-motivo-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -152,17 +153,121 @@ export class ProntuarioTipoMotivoUpdate extends React.Component<IProntuarioTipoM
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <NomeComponentUpdate baseFilters />
-
-                        <IdPaiComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <ClasseComponentUpdate baseFilters />
-
-                        <NameComponentUpdate baseFilters />
-
-                        <IdTipoProntuarioComponentUpdate baseFilters />
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-motivo-nome">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-motivo-idPai">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-motivo-ativo">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'classe' ? (
+                          <Col md="classe">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="classeLabel" for="prontuario-tipo-motivo-classe">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-classe" type="text" name="classe" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="classe" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'name' ? (
+                          <Col md="name">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nameLabel" for="prontuario-tipo-motivo-name">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="prontuario-tipo-motivo-name" type="text" name="name" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="name" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idTipoProntuario' ? (
+                          <Col md="idTipoProntuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idTipoProntuarioLabel" for="prontuario-tipo-motivo-idTipoProntuario">
+                                    <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">
+                                      Id Tipo Prontuario
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-tipo-motivo-idTipoProntuario"
+                                    type="string"
+                                    className="form-control"
+                                    name="idTipoProntuario"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idTipoProntuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -192,131 +297,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const NomeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nome' ? (
-    <Col md="nome">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeLabel" for="prontuario-tipo-motivo-nome">
-              <Translate contentKey="generadorApp.prontuarioTipoMotivo.nome">Nome</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-motivo-nome" type="text" name="nome" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPaiComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPai' ? (
-    <Col md="idPai">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPaiLabel" for="prontuario-tipo-motivo-idPai">
-              <Translate contentKey="generadorApp.prontuarioTipoMotivo.idPai">Id Pai</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-motivo-idPai" type="string" className="form-control" name="idPai" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="prontuario-tipo-motivo-ativo">
-              <Translate contentKey="generadorApp.prontuarioTipoMotivo.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-motivo-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ClasseComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'classe' ? (
-    <Col md="classe">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="classeLabel" for="prontuario-tipo-motivo-classe">
-              <Translate contentKey="generadorApp.prontuarioTipoMotivo.classe">Classe</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-motivo-classe" type="text" name="classe" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="classe" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NameComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'name' ? (
-    <Col md="name">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nameLabel" for="prontuario-tipo-motivo-name">
-              <Translate contentKey="generadorApp.prontuarioTipoMotivo.name">Name</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-motivo-name" type="text" name="name" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="name" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdTipoProntuarioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idTipoProntuario' ? (
-    <Col md="idTipoProntuario">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idTipoProntuarioLabel" for="prontuario-tipo-motivo-idTipoProntuario">
-              <Translate contentKey="generadorApp.prontuarioTipoMotivo.idTipoProntuario">Id Tipo Prontuario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-tipo-motivo-idTipoProntuario" type="string" className="form-control" name="idTipoProntuario" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idTipoProntuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProntuarioTipoMotivoUpdate);

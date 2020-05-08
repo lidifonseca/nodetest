@@ -10,7 +10,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508181300",
+    "changelogDate": "20200508235200",
     "entityTableName": "protocolos",
     "dto": "mapstruct",
     "pagination": "pagination",

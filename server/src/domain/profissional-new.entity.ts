@@ -51,25 +51,25 @@ export default class ProfissionalNew extends BaseEntity {
   sexo: number;
 
   /**
-   * @dbName TELEFONE1@@
+   *
    */
   @Column({ name: 'TELEFONE1', length: 20 })
   telefone1: string;
 
   /**
-   * @dbName TELEFONE2@@
+   *
    */
   @Column({ name: 'TELEFONE2', length: 20 })
   telefone2: string;
 
   /**
-   * @dbName CELULAR1@@
+   *
    */
   @Column({ name: 'CELULAR1', length: 20 })
   celular1: string;
 
   /**
-   * @dbName CELULAR2@@
+   *
    */
   @Column({ name: 'CELULAR2', length: 20 })
   celular2: string;

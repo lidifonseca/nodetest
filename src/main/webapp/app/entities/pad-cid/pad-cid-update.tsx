@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -156,11 +157,11 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-cid-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-cid-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-cid-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -168,13 +169,92 @@ export class PadCidUpdate extends React.Component<IPadCidUpdateProps, IPadCidUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ObservacaoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <PadComponentUpdate baseFilter pads />
-
-                        <CidComponentUpdate baseFilter cids />
+                        {baseFilters !== 'observacao' ? (
+                          <Col md="observacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacaoLabel" for="pad-cid-observacao">
+                                    <Translate contentKey="generadorApp.padCid.observacao">Observacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-cid-observacao" type="text" name="observacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="pad-cid-ativo">
+                                    <Translate contentKey="generadorApp.padCid.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-cid-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'pad' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-cid-pad">
+                                    <Translate contentKey="generadorApp.padCid.pad">Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-cid-pad"
+                                    className={'css-select-control'}
+                                    value={this.state.padSelectValue}
+                                    options={pads ? pads.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ padSelectValue: options })}
+                                    name={'pad'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="pad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cid' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-cid-cid">
+                                    <Translate contentKey="generadorApp.padCid.cid">Cid</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-cid-cid"
+                                    className={'css-select-control'}
+                                    value={this.state.cidSelectValue}
+                                    options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ cidSelectValue: options })}
+                                    name={'cid'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cid" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -208,103 +288,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ObservacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'observacao' ? (
-    <Col md="observacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="observacaoLabel" for="pad-cid-observacao">
-              <Translate contentKey="generadorApp.padCid.observacao">Observacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-cid-observacao" type="text" name="observacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="pad-cid-ativo">
-              <Translate contentKey="generadorApp.padCid.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-cid-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadComponentUpdate = ({ baseFilters, pads }) => {
-  return baseFilters !== 'pad' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="pad-cid-pad">
-              <Translate contentKey="generadorApp.padCid.pad">Pad</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="pad-cid-pad"
-              className={'css-select-control'}
-              value={this.state.padSelectValue}
-              options={pads ? pads.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ padSelectValue: options })}
-              name={'pad'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="pad" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidComponentUpdate = ({ baseFilters, cids }) => {
-  return baseFilters !== 'cid' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="pad-cid-cid">
-              <Translate contentKey="generadorApp.padCid.cid">Cid</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="pad-cid-cid"
-              className={'css-select-control'}
-              value={this.state.cidSelectValue}
-              options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ cidSelectValue: options })}
-              name={'cid'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cid" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadCidUpdate);

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -160,11 +161,11 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="questionarios-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="questionarios-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="questionarios-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -172,17 +173,120 @@ export class QuestionariosUpdate extends React.Component<IQuestionariosUpdatePro
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <DataCadastroComponentUpdate baseFilters />
-
-                        <EtapaAtualComponentUpdate baseFilters />
-
-                        <FinalizadoComponentUpdate baseFilters />
-
-                        <UltimaPerguntaRespondidaComponentUpdate baseFilters />
-
-                        <RespostasQuestionariosComponentUpdate baseFilter respostasQuestionarios />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
+                        {baseFilters !== 'dataCadastro' ? (
+                          <Col md="dataCadastro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataCadastroLabel" for="questionarios-dataCadastro">
+                                    <Translate contentKey="generadorApp.questionarios.dataCadastro">Data Cadastro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="questionarios-dataCadastro"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataCadastro"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.questionariosEntity.dataCadastro)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataCadastro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'etapaAtual' ? (
+                          <Col md="etapaAtual">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="etapaAtualLabel" for="questionarios-etapaAtual">
+                                    <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="questionarios-etapaAtual" type="text" name="etapaAtual" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="etapaAtual" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'finalizado' ? (
+                          <Col md="finalizado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="finalizadoLabel" check>
+                                    <AvInput id="questionarios-finalizado" type="checkbox" className="form-control" name="finalizado" />
+                                    <Translate contentKey="generadorApp.questionarios.finalizado">Finalizado</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="finalizado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ultimaPerguntaRespondida' ? (
+                          <Col md="ultimaPerguntaRespondida">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ultimaPerguntaRespondidaLabel" for="questionarios-ultimaPerguntaRespondida">
+                                    <Translate contentKey="generadorApp.questionarios.ultimaPerguntaRespondida">
+                                      Ultima Pergunta Respondida
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="questionarios-ultimaPerguntaRespondida"
+                                    type="string"
+                                    className="form-control"
+                                    name="ultimaPerguntaRespondida"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ultimaPerguntaRespondida" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'respostasQuestionarios' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="respostasQuestionarios" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="questionarios-paciente">
+                                    <Translate contentKey="generadorApp.questionarios.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="questionarios-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -214,130 +318,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const DataCadastroComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataCadastro' ? (
-    <Col md="dataCadastro">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataCadastroLabel" for="questionarios-dataCadastro">
-              <Translate contentKey="generadorApp.questionarios.dataCadastro">Data Cadastro</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="questionarios-dataCadastro"
-              type="datetime-local"
-              className="form-control"
-              name="dataCadastro"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.questionariosEntity.dataCadastro)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataCadastro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EtapaAtualComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'etapaAtual' ? (
-    <Col md="etapaAtual">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="etapaAtualLabel" for="questionarios-etapaAtual">
-              <Translate contentKey="generadorApp.questionarios.etapaAtual">Etapa Atual</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="questionarios-etapaAtual" type="text" name="etapaAtual" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="etapaAtual" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const FinalizadoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'finalizado' ? (
-    <Col md="finalizado">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="finalizadoLabel" check>
-              <AvInput id="questionarios-finalizado" type="checkbox" className="form-control" name="finalizado" />
-              <Translate contentKey="generadorApp.questionarios.finalizado">Finalizado</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="finalizado" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UltimaPerguntaRespondidaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ultimaPerguntaRespondida' ? (
-    <Col md="ultimaPerguntaRespondida">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ultimaPerguntaRespondidaLabel" for="questionarios-ultimaPerguntaRespondida">
-              <Translate contentKey="generadorApp.questionarios.ultimaPerguntaRespondida">Ultima Pergunta Respondida</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="questionarios-ultimaPerguntaRespondida" type="string" className="form-control" name="ultimaPerguntaRespondida" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ultimaPerguntaRespondida" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const RespostasQuestionariosComponentUpdate = ({ baseFilters, respostasQuestionarios }) => {
-  return baseFilters !== 'respostasQuestionarios' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="respostasQuestionarios" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="questionarios-paciente">
-              <Translate contentKey="generadorApp.questionarios.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="questionarios-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.nome })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionariosUpdate);

@@ -177,7 +177,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508165100",
+    "changelogDate": "20200508223000",
     "entityTableName": "franquia_usuario",
     "dto": "mapstruct",
     "pagination": "pagination",

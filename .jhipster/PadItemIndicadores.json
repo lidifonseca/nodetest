@@ -40,7 +40,7 @@
             "relationshipName": "cidXPtaNovoPadItemIndi"
         }
     ],
-    "changelogDate": "20200508174100",
+    "changelogDate": "20200508232000",
     "entityTableName": "pad_item_indicadores",
     "dto": "mapstruct",
     "pagination": "pagination",

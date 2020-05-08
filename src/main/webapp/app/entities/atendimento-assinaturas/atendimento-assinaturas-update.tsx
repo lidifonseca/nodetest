@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -200,11 +201,11 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="atendimento-assinaturas-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="atendimento-assinaturas-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="atendimento-assinaturas-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -212,13 +213,101 @@ export class AtendimentoAssinaturasUpdate extends React.Component<IAtendimentoAs
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ArquivoAssinaturaComponentUpdate baseFilters />
-
-                        <AtendimentoComponentUpdate baseFilter atendimentos />
-
-                        <ProfissionalComponentUpdate baseFilter profissionals />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
+                        {baseFilters !== 'arquivoAssinatura' ? (
+                          <Col md="arquivoAssinatura">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="arquivoAssinaturaLabel" for="atendimento-assinaturas-arquivoAssinatura">
+                                    <Translate contentKey="generadorApp.atendimentoAssinaturas.arquivoAssinatura">
+                                      Arquivo Assinatura
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-assinaturas-arquivoAssinatura" type="text" name="arquivoAssinatura" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="arquivoAssinatura" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atendimento' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-assinaturas-atendimento">
+                                    <Translate contentKey="generadorApp.atendimentoAssinaturas.atendimento">Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-assinaturas-atendimento"
+                                    className={'css-select-control'}
+                                    value={this.state.atendimentoSelectValue}
+                                    options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ atendimentoSelectValue: options })}
+                                    name={'atendimento'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'profissional' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-assinaturas-profissional">
+                                    <Translate contentKey="generadorApp.atendimentoAssinaturas.profissional">Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-assinaturas-profissional"
+                                    className={'css-select-control'}
+                                    value={this.state.profissionalSelectValue}
+                                    options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ profissionalSelectValue: options })}
+                                    name={'profissional'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-assinaturas-paciente">
+                                    <Translate contentKey="generadorApp.atendimentoAssinaturas.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-assinaturas-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -254,110 +343,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ArquivoAssinaturaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'arquivoAssinatura' ? (
-    <Col md="arquivoAssinatura">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="arquivoAssinaturaLabel" for="atendimento-assinaturas-arquivoAssinatura">
-              <Translate contentKey="generadorApp.atendimentoAssinaturas.arquivoAssinatura">Arquivo Assinatura</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-assinaturas-arquivoAssinatura" type="text" name="arquivoAssinatura" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="arquivoAssinatura" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
-  return baseFilters !== 'atendimento' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-assinaturas-atendimento">
-              <Translate contentKey="generadorApp.atendimentoAssinaturas.atendimento">Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-assinaturas-atendimento"
-              className={'css-select-control'}
-              value={this.state.atendimentoSelectValue}
-              options={atendimentos ? atendimentos.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ atendimentoSelectValue: options })}
-              name={'atendimento'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ProfissionalComponentUpdate = ({ baseFilters, profissionals }) => {
-  return baseFilters !== 'profissional' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-assinaturas-profissional">
-              <Translate contentKey="generadorApp.atendimentoAssinaturas.profissional">Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-assinaturas-profissional"
-              className={'css-select-control'}
-              value={this.state.profissionalSelectValue}
-              options={profissionals ? profissionals.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ profissionalSelectValue: options })}
-              name={'profissional'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="profissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-assinaturas-paciente">
-              <Translate contentKey="generadorApp.atendimentoAssinaturas.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-assinaturas-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtendimentoAssinaturasUpdate);

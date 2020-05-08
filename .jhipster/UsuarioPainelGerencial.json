@@ -159,7 +159,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508184600",
+    "changelogDate": "20200509002500",
     "entityTableName": "usuario_painel_gerencial",
     "dto": "mapstruct",
     "pagination": "pagination",

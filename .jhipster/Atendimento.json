@@ -286,7 +286,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508161800",
+    "changelogDate": "20200508215700",
     "entityTableName": "atendimento",
     "dto": "mapstruct",
     "pagination": "pagination",

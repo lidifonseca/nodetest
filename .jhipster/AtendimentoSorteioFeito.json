@@ -18,7 +18,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508162600",
+    "changelogDate": "20200508220500",
     "entityTableName": "atendimento_sorteio_feito",
     "dto": "mapstruct",
     "pagination": "pagination",

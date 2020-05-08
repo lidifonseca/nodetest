@@ -150,7 +150,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508164200",
+    "changelogDate": "20200508222100",
     "entityTableName": "empresa",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -154,11 +155,11 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="notificacao-config-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="notificacao-config-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="notificacao-config-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -166,21 +167,176 @@ export class NotificacaoConfigUpdate extends React.Component<INotificacaoConfigU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <CriadoEmComponentUpdate baseFilters />
-
-                        <TituloComponentUpdate baseFilters />
-
-                        <ReferenciaComponentUpdate baseFilters />
-
-                        <DescricaoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <EnvioObrigatorioComponentUpdate baseFilters />
-
-                        <ServeProfissionalComponentUpdate baseFilters />
-
-                        <ServePacienteComponentUpdate baseFilters />
+                        {baseFilters !== 'criadoEm' ? (
+                          <Col md="criadoEm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="criadoEmLabel" for="notificacao-config-criadoEm">
+                                    <Translate contentKey="generadorApp.notificacaoConfig.criadoEm">Criado Em</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="notificacao-config-criadoEm"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="criadoEm"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.notificacaoConfigEntity.criadoEm)}
+                                    validate={{
+                                      required: { value: true, errorMessage: translate('entity.validation.required') }
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'titulo' ? (
+                          <Col md="titulo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tituloLabel" for="notificacao-config-titulo">
+                                    <Translate contentKey="generadorApp.notificacaoConfig.titulo">Titulo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="notificacao-config-titulo" type="text" name="titulo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'referencia' ? (
+                          <Col md="referencia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="referenciaLabel" for="notificacao-config-referencia">
+                                    <Translate contentKey="generadorApp.notificacaoConfig.referencia">Referencia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="notificacao-config-referencia" type="text" name="referencia" />
+                                </Col>
+                                <UncontrolledTooltip target="referenciaLabel">
+                                  <Translate contentKey="generadorApp.notificacaoConfig.help.referencia" />
+                                </UncontrolledTooltip>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'descricao' ? (
+                          <Col md="descricao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descricaoLabel" for="notificacao-config-descricao">
+                                    <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="ativoLabel" check>
+                                    <AvInput id="notificacao-config-ativo" type="checkbox" className="form-control" name="ativo" />
+                                    <Translate contentKey="generadorApp.notificacaoConfig.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <UncontrolledTooltip target="ativoLabel">
+                                  <Translate contentKey="generadorApp.notificacaoConfig.help.ativo" />
+                                </UncontrolledTooltip>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'envioObrigatorio' ? (
+                          <Col md="envioObrigatorio">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="envioObrigatorioLabel" check>
+                                    <AvInput
+                                      id="notificacao-config-envioObrigatorio"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="envioObrigatorio"
+                                    />
+                                    <Translate contentKey="generadorApp.notificacaoConfig.envioObrigatorio">Envio Obrigatorio</Translate>
+                                  </Label>
+                                </Col>
+                                <UncontrolledTooltip target="envioObrigatorioLabel">
+                                  <Translate contentKey="generadorApp.notificacaoConfig.help.envioObrigatorio" />
+                                </UncontrolledTooltip>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="envioObrigatorio" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'serveProfissional' ? (
+                          <Col md="serveProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="serveProfissionalLabel" check>
+                                    <AvInput
+                                      id="notificacao-config-serveProfissional"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="serveProfissional"
+                                    />
+                                    <Translate contentKey="generadorApp.notificacaoConfig.serveProfissional">Serve Profissional</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="serveProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'servePaciente' ? (
+                          <Col md="servePaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="servePacienteLabel" check>
+                                    <AvInput
+                                      id="notificacao-config-servePaciente"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="servePaciente"
+                                    />
+                                    <Translate contentKey="generadorApp.notificacaoConfig.servePaciente">Serve Paciente</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="servePaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -211,184 +367,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const CriadoEmComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'criadoEm' ? (
-    <Col md="criadoEm">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="criadoEmLabel" for="notificacao-config-criadoEm">
-              <Translate contentKey="generadorApp.notificacaoConfig.criadoEm">Criado Em</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="notificacao-config-criadoEm"
-              type="datetime-local"
-              className="form-control"
-              name="criadoEm"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.notificacaoConfigEntity.criadoEm)}
-              validate={{
-                required: { value: true, errorMessage: translate('entity.validation.required') }
-              }}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="criadoEm" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TituloComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'titulo' ? (
-    <Col md="titulo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tituloLabel" for="notificacao-config-titulo">
-              <Translate contentKey="generadorApp.notificacaoConfig.titulo">Titulo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="notificacao-config-titulo" type="text" name="titulo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ReferenciaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'referencia' ? (
-    <Col md="referencia">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="referenciaLabel" for="notificacao-config-referencia">
-              <Translate contentKey="generadorApp.notificacaoConfig.referencia">Referencia</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="notificacao-config-referencia" type="text" name="referencia" />
-          </Col>
-          <UncontrolledTooltip target="referenciaLabel">
-            <Translate contentKey="generadorApp.notificacaoConfig.help.referencia" />
-          </UncontrolledTooltip>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="referencia" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DescricaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descricao' ? (
-    <Col md="descricao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descricaoLabel" for="notificacao-config-descricao">
-              <Translate contentKey="generadorApp.notificacaoConfig.descricao">Descricao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="notificacao-config-descricao" type="textarea" name="descricao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="ativoLabel" check>
-              <AvInput id="notificacao-config-ativo" type="checkbox" className="form-control" name="ativo" />
-              <Translate contentKey="generadorApp.notificacaoConfig.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <UncontrolledTooltip target="ativoLabel">
-            <Translate contentKey="generadorApp.notificacaoConfig.help.ativo" />
-          </UncontrolledTooltip>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EnvioObrigatorioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'envioObrigatorio' ? (
-    <Col md="envioObrigatorio">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="envioObrigatorioLabel" check>
-              <AvInput id="notificacao-config-envioObrigatorio" type="checkbox" className="form-control" name="envioObrigatorio" />
-              <Translate contentKey="generadorApp.notificacaoConfig.envioObrigatorio">Envio Obrigatorio</Translate>
-            </Label>
-          </Col>
-          <UncontrolledTooltip target="envioObrigatorioLabel">
-            <Translate contentKey="generadorApp.notificacaoConfig.help.envioObrigatorio" />
-          </UncontrolledTooltip>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="envioObrigatorio" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ServeProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'serveProfissional' ? (
-    <Col md="serveProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="serveProfissionalLabel" check>
-              <AvInput id="notificacao-config-serveProfissional" type="checkbox" className="form-control" name="serveProfissional" />
-              <Translate contentKey="generadorApp.notificacaoConfig.serveProfissional">Serve Profissional</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="serveProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ServePacienteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'servePaciente' ? (
-    <Col md="servePaciente">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="servePacienteLabel" check>
-              <AvInput id="notificacao-config-servePaciente" type="checkbox" className="form-control" name="servePaciente" />
-              <Translate contentKey="generadorApp.notificacaoConfig.servePaciente">Serve Paciente</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="servePaciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificacaoConfigUpdate);

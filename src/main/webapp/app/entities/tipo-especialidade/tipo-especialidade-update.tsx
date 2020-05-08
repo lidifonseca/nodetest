@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class TipoEspecialidadeUpdate extends React.Component<ITipoEspecialidadeU
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="tipo-especialidade-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="tipo-especialidade-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="tipo-especialidade-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,29 @@ export class TipoEspecialidadeUpdate extends React.Component<ITipoEspecialidadeU
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TipoEspecialidadeComponentUpdate baseFilters />
-
-                        <EspecialidadeComponentUpdate baseFilter especialidades />
+                        {baseFilters !== 'tipoEspecialidade' ? (
+                          <Col md="tipoEspecialidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoEspecialidadeLabel" for="tipo-especialidade-tipoEspecialidade">
+                                    <Translate contentKey="generadorApp.tipoEspecialidade.tipoEspecialidade">Tipo Especialidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tipo-especialidade-tipoEspecialidade" type="text" name="tipoEspecialidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'especialidade' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,34 +203,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TipoEspecialidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipoEspecialidade' ? (
-    <Col md="tipoEspecialidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoEspecialidadeLabel" for="tipo-especialidade-tipoEspecialidade">
-              <Translate contentKey="generadorApp.tipoEspecialidade.tipoEspecialidade">Tipo Especialidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tipo-especialidade-tipoEspecialidade" type="text" name="tipoEspecialidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipoEspecialidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EspecialidadeComponentUpdate = ({ baseFilters, especialidades }) => {
-  return baseFilters !== 'especialidade' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="especialidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TipoEspecialidadeUpdate);

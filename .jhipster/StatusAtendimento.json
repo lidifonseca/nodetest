@@ -34,7 +34,7 @@
             "relationshipName": "atendimento"
         }
     ],
-    "changelogDate": "20200508182200",
+    "changelogDate": "20200509000100",
     "entityTableName": "status_atendimento",
     "dto": "mapstruct",
     "pagination": "pagination",

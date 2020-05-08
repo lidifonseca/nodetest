@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="usuario-status-atual-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="usuario-status-atual-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="usuario-status-atual-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,11 +151,65 @@ export class UsuarioStatusAtualUpdate extends React.Component<IUsuarioStatusAtua
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <StatusAtualComponentUpdate baseFilters />
-
-                        <ObsComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'statusAtual' ? (
+                          <Col md="statusAtual">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusAtualLabel" for="usuario-status-atual-statusAtual">
+                                    <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="usuario-status-atual-statusAtual"
+                                    type="string"
+                                    className="form-control"
+                                    name="statusAtual"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtual" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'obs' ? (
+                          <Col md="obs">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="obsLabel" for="usuario-status-atual-obs">
+                                    <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-status-atual-obs" type="text" name="obs" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="usuario-status-atual-ativo">
+                                    <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="usuario-status-atual-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -184,68 +239,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const StatusAtualComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'statusAtual' ? (
-    <Col md="statusAtual">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="statusAtualLabel" for="usuario-status-atual-statusAtual">
-              <Translate contentKey="generadorApp.usuarioStatusAtual.statusAtual">Status Atual</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="usuario-status-atual-statusAtual" type="string" className="form-control" name="statusAtual" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="statusAtual" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ObsComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'obs' ? (
-    <Col md="obs">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="obsLabel" for="usuario-status-atual-obs">
-              <Translate contentKey="generadorApp.usuarioStatusAtual.obs">Obs</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="usuario-status-atual-obs" type="text" name="obs" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="obs" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="usuario-status-atual-ativo">
-              <Translate contentKey="generadorApp.usuarioStatusAtual.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="usuario-status-atual-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsuarioStatusAtualUpdate);

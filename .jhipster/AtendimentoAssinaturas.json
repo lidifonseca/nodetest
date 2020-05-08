@@ -33,7 +33,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508162100",
+    "changelogDate": "20200508220000",
     "entityTableName": "atendimento_assinaturas",
     "dto": "mapstruct",
     "pagination": "pagination",

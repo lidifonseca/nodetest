@@ -28,7 +28,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508174300",
+    "changelogDate": "20200508232200",
     "entityTableName": "pad_item_resultado",
     "dto": "mapstruct",
     "pagination": "pagination",

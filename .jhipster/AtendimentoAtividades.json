@@ -22,7 +22,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508162200",
+    "changelogDate": "20200508220100",
     "entityTableName": "atendimento_atividades",
     "dto": "mapstruct",
     "pagination": "pagination",

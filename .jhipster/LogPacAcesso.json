@@ -39,7 +39,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508170000",
+    "changelogDate": "20200508223900",
     "entityTableName": "log_pac_acesso",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -152,11 +153,11 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-item-indicadores-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-item-indicadores-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-item-indicadores-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -164,19 +165,124 @@ export class PadItemIndicadoresUpdate extends React.Component<IPadItemIndicadore
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdUnidadeMedidaComponentUpdate baseFilters />
-
-                        <TituloComponentUpdate baseFilters />
-
-                        <DescricaoComponentUpdate baseFilters />
-
-                        <MetaComponentUpdate baseFilters />
-
-                        <MaximoStComponentUpdate baseFilters />
-
-                        <MinimoStComponentUpdate baseFilters />
-
-                        <CidXPtaNovoPadItemIndiComponentUpdate baseFilter cidXPtaNovoPadItemIndis />
+                        {baseFilters !== 'idUnidadeMedida' ? (
+                          <Col md="idUnidadeMedida">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idUnidadeMedidaLabel" for="pad-item-indicadores-idUnidadeMedida">
+                                    <Translate contentKey="generadorApp.padItemIndicadores.idUnidadeMedida">Id Unidade Medida</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="pad-item-indicadores-idUnidadeMedida"
+                                    type="string"
+                                    className="form-control"
+                                    name="idUnidadeMedida"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idUnidadeMedida" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'titulo' ? (
+                          <Col md="titulo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tituloLabel" for="pad-item-indicadores-titulo">
+                                    <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-indicadores-titulo" type="text" name="titulo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'descricao' ? (
+                          <Col md="descricao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descricaoLabel" for="pad-item-indicadores-descricao">
+                                    <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'meta' ? (
+                          <Col md="meta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="metaLabel" for="pad-item-indicadores-meta">
+                                    <Translate contentKey="generadorApp.padItemIndicadores.meta">Meta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-indicadores-meta" type="string" className="form-control" name="meta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="meta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'maximoSt' ? (
+                          <Col md="maximoSt">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="maximoStLabel" for="pad-item-indicadores-maximoSt">
+                                    <Translate contentKey="generadorApp.padItemIndicadores.maximoSt">Maximo St</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-indicadores-maximoSt" type="string" className="form-control" name="maximoSt" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="maximoSt" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'minimoSt' ? (
+                          <Col md="minimoSt">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="minimoStLabel" for="pad-item-indicadores-minimoSt">
+                                    <Translate contentKey="generadorApp.padItemIndicadores.minimoSt">Minimo St</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-indicadores-minimoSt" type="string" className="form-control" name="minimoSt" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="minimoSt" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cidXPtaNovoPadItemIndi' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidXPtaNovoPadItemIndi" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -207,139 +313,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdUnidadeMedidaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idUnidadeMedida' ? (
-    <Col md="idUnidadeMedida">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idUnidadeMedidaLabel" for="pad-item-indicadores-idUnidadeMedida">
-              <Translate contentKey="generadorApp.padItemIndicadores.idUnidadeMedida">Id Unidade Medida</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-indicadores-idUnidadeMedida" type="string" className="form-control" name="idUnidadeMedida" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idUnidadeMedida" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TituloComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'titulo' ? (
-    <Col md="titulo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tituloLabel" for="pad-item-indicadores-titulo">
-              <Translate contentKey="generadorApp.padItemIndicadores.titulo">Titulo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-indicadores-titulo" type="text" name="titulo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DescricaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descricao' ? (
-    <Col md="descricao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descricaoLabel" for="pad-item-indicadores-descricao">
-              <Translate contentKey="generadorApp.padItemIndicadores.descricao">Descricao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="pad-item-indicadores-descricao" type="textarea" name="descricao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descricao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const MetaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'meta' ? (
-    <Col md="meta">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="metaLabel" for="pad-item-indicadores-meta">
-              <Translate contentKey="generadorApp.padItemIndicadores.meta">Meta</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-indicadores-meta" type="string" className="form-control" name="meta" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="meta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const MaximoStComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'maximoSt' ? (
-    <Col md="maximoSt">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="maximoStLabel" for="pad-item-indicadores-maximoSt">
-              <Translate contentKey="generadorApp.padItemIndicadores.maximoSt">Maximo St</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-indicadores-maximoSt" type="string" className="form-control" name="maximoSt" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="maximoSt" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const MinimoStComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'minimoSt' ? (
-    <Col md="minimoSt">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="minimoStLabel" for="pad-item-indicadores-minimoSt">
-              <Translate contentKey="generadorApp.padItemIndicadores.minimoSt">Minimo St</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-indicadores-minimoSt" type="string" className="form-control" name="minimoSt" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="minimoSt" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidXPtaNovoPadItemIndiComponentUpdate = ({ baseFilters, cidXPtaNovoPadItemIndis }) => {
-  return baseFilters !== 'cidXPtaNovoPadItemIndi' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="cidXPtaNovoPadItemIndi" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadItemIndicadoresUpdate);

@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class GrauParentescoUpdate extends React.Component<IGrauParentescoUpdateP
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="grau-parentesco-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="grau-parentesco-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="grau-parentesco-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,7 +151,24 @@ export class GrauParentescoUpdate extends React.Component<IGrauParentescoUpdateP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <GrauParentescoComponentUpdate baseFilters />
+                        {baseFilters !== 'grauParentesco' ? (
+                          <Col md="grauParentesco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="grauParentescoLabel" for="grau-parentesco-grauParentesco">
+                                    <Translate contentKey="generadorApp.grauParentesco.grauParentesco">Grau Parentesco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="grau-parentesco-grauParentesco" type="text" name="grauParentesco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="grauParentesco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -180,26 +198,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const GrauParentescoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'grauParentesco' ? (
-    <Col md="grauParentesco">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="grauParentescoLabel" for="grau-parentesco-grauParentesco">
-              <Translate contentKey="generadorApp.grauParentesco.grauParentesco">Grau Parentesco</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="grau-parentesco-grauParentesco" type="text" name="grauParentesco" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="grauParentesco" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(GrauParentescoUpdate);

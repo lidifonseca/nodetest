@@ -178,7 +178,7 @@
             "ownerSide": false
         }
     ],
-    "changelogDate": "20200508184100",
+    "changelogDate": "20200509002000",
     "entityTableName": "unidade_easy",
     "dto": "mapstruct",
     "pagination": "pagination",

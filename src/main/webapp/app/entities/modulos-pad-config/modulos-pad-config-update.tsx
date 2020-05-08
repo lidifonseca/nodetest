@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class ModulosPadConfigUpdate extends React.Component<IModulosPadConfigUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="modulos-pad-config-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="modulos-pad-config-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="modulos-pad-config-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,11 +151,75 @@ export class ModulosPadConfigUpdate extends React.Component<IModulosPadConfigUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdModulosPadComponentUpdate baseFilters />
-
-                        <IdEspecialidadeComponentUpdate baseFilters />
-
-                        <IdPeriodicidadeComponentUpdate baseFilters />
+                        {baseFilters !== 'idModulosPad' ? (
+                          <Col md="idModulosPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idModulosPadLabel" for="modulos-pad-config-idModulosPad">
+                                    <Translate contentKey="generadorApp.modulosPadConfig.idModulosPad">Id Modulos Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="modulos-pad-config-idModulosPad"
+                                    type="string"
+                                    className="form-control"
+                                    name="idModulosPad"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idModulosPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idEspecialidade' ? (
+                          <Col md="idEspecialidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idEspecialidadeLabel" for="modulos-pad-config-idEspecialidade">
+                                    <Translate contentKey="generadorApp.modulosPadConfig.idEspecialidade">Id Especialidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="modulos-pad-config-idEspecialidade"
+                                    type="string"
+                                    className="form-control"
+                                    name="idEspecialidade"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPeriodicidade' ? (
+                          <Col md="idPeriodicidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPeriodicidadeLabel" for="modulos-pad-config-idPeriodicidade">
+                                    <Translate contentKey="generadorApp.modulosPadConfig.idPeriodicidade">Id Periodicidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="modulos-pad-config-idPeriodicidade"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPeriodicidade"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPeriodicidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -184,68 +249,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdModulosPadComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idModulosPad' ? (
-    <Col md="idModulosPad">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idModulosPadLabel" for="modulos-pad-config-idModulosPad">
-              <Translate contentKey="generadorApp.modulosPadConfig.idModulosPad">Id Modulos Pad</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="modulos-pad-config-idModulosPad" type="string" className="form-control" name="idModulosPad" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idModulosPad" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdEspecialidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idEspecialidade' ? (
-    <Col md="idEspecialidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idEspecialidadeLabel" for="modulos-pad-config-idEspecialidade">
-              <Translate contentKey="generadorApp.modulosPadConfig.idEspecialidade">Id Especialidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="modulos-pad-config-idEspecialidade" type="string" className="form-control" name="idEspecialidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPeriodicidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPeriodicidade' ? (
-    <Col md="idPeriodicidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPeriodicidadeLabel" for="modulos-pad-config-idPeriodicidade">
-              <Translate contentKey="generadorApp.modulosPadConfig.idPeriodicidade">Id Periodicidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="modulos-pad-config-idPeriodicidade" type="string" className="form-control" name="idPeriodicidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPeriodicidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModulosPadConfigUpdate);

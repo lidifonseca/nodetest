@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class PeriodoUpdate extends React.Component<IPeriodoUpdateProps, IPeriodo
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="periodo-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="periodo-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="periodo-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,13 +143,52 @@ export class PeriodoUpdate extends React.Component<IPeriodoUpdateProps, IPeriodo
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <PeriodoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <AtendimentoComponentUpdate baseFilter atendimentos />
-
-                        <PadItemComponentUpdate baseFilter padItems />
+                        {baseFilters !== 'periodo' ? (
+                          <Col md="periodo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="periodoLabel" for="periodo-periodo">
+                                    <Translate contentKey="generadorApp.periodo.periodo">Periodo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="periodo-periodo" type="text" name="periodo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="periodo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="periodo-ativo">
+                                    <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="periodo-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atendimento' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'padItem' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -178,63 +218,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const PeriodoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'periodo' ? (
-    <Col md="periodo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="periodoLabel" for="periodo-periodo">
-              <Translate contentKey="generadorApp.periodo.periodo">Periodo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="periodo-periodo" type="text" name="periodo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="periodo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="periodo-ativo">
-              <Translate contentKey="generadorApp.periodo.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="periodo-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
-  return baseFilters !== 'atendimento' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
-  return baseFilters !== 'padItem' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PeriodoUpdate);

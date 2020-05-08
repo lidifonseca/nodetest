@@ -28,7 +28,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508174700",
+    "changelogDate": "20200508232600",
     "entityTableName": "pad_pta",
     "dto": "mapstruct",
     "pagination": "pagination",

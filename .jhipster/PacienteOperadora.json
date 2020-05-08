@@ -30,7 +30,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508172800",
+    "changelogDate": "20200508230700",
     "entityTableName": "paciente_operadora",
     "dto": "mapstruct",
     "pagination": "pagination",

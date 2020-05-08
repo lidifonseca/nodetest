@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="indicadores-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="indicadores-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="indicadores-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,29 @@ export class IndicadoresUpdate extends React.Component<IIndicadoresUpdateProps, 
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TituloComponentUpdate baseFilters />
-
-                        <IndicadoresValoresComponentUpdate baseFilter indicadoresValores />
+                        {baseFilters !== 'titulo' ? (
+                          <Col md="titulo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tituloLabel" for="indicadores-titulo">
+                                    <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="indicadores-titulo" type="text" name="titulo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'indicadoresValores' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="indicadoresValores" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,34 +203,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TituloComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'titulo' ? (
-    <Col md="titulo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tituloLabel" for="indicadores-titulo">
-              <Translate contentKey="generadorApp.indicadores.titulo">Titulo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="indicadores-titulo" type="text" name="titulo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="titulo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IndicadoresValoresComponentUpdate = ({ baseFilters, indicadoresValores }) => {
-  return baseFilters !== 'indicadoresValores' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="indicadoresValores" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(IndicadoresUpdate);

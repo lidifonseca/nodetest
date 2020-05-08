@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class PadMatMedUpdate extends React.Component<IPadMatMedUpdateProps, IPad
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-mat-med-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-mat-med-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-mat-med-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,13 +151,78 @@ export class PadMatMedUpdate extends React.Component<IPadMatMedUpdateProps, IPad
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdPadComponentUpdate baseFilters />
-
-                        <IdMatMedComponentUpdate baseFilters />
-
-                        <QtdComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'idPad' ? (
+                          <Col md="idPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPadLabel" for="pad-mat-med-idPad">
+                                    <Translate contentKey="generadorApp.padMatMed.idPad">Id Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-mat-med-idPad" type="string" className="form-control" name="idPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idMatMed' ? (
+                          <Col md="idMatMed">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idMatMedLabel" for="pad-mat-med-idMatMed">
+                                    <Translate contentKey="generadorApp.padMatMed.idMatMed">Id Mat Med</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-mat-med-idMatMed" type="string" className="form-control" name="idMatMed" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idMatMed" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'qtd' ? (
+                          <Col md="qtd">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="qtdLabel" for="pad-mat-med-qtd">
+                                    <Translate contentKey="generadorApp.padMatMed.qtd">Qtd</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-mat-med-qtd" type="string" className="form-control" name="qtd" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="qtd" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="pad-mat-med-ativo">
+                                    <Translate contentKey="generadorApp.padMatMed.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-mat-med-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,89 +252,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdPadComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPad' ? (
-    <Col md="idPad">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPadLabel" for="pad-mat-med-idPad">
-              <Translate contentKey="generadorApp.padMatMed.idPad">Id Pad</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-mat-med-idPad" type="string" className="form-control" name="idPad" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdMatMedComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idMatMed' ? (
-    <Col md="idMatMed">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idMatMedLabel" for="pad-mat-med-idMatMed">
-              <Translate contentKey="generadorApp.padMatMed.idMatMed">Id Mat Med</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-mat-med-idMatMed" type="string" className="form-control" name="idMatMed" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idMatMed" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const QtdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'qtd' ? (
-    <Col md="qtd">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="qtdLabel" for="pad-mat-med-qtd">
-              <Translate contentKey="generadorApp.padMatMed.qtd">Qtd</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-mat-med-qtd" type="string" className="form-control" name="qtd" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="qtd" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="pad-mat-med-ativo">
-              <Translate contentKey="generadorApp.padMatMed.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-mat-med-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadMatMedUpdate);

@@ -23,7 +23,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508183200",
+    "changelogDate": "20200509001100",
     "entityTableName": "tipo_exame",
     "dto": "mapstruct",
     "pagination": "pagination",

@@ -27,7 +27,7 @@
             "otherEntityField": "razaoSocial"
         }
     ],
-    "changelogDate": "20200508184200",
+    "changelogDate": "20200509002100",
     "entityTableName": "unidade_easy_area_atuacao",
     "dto": "mapstruct",
     "pagination": "pagination",

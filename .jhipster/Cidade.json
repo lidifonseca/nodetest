@@ -31,7 +31,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508163700",
+    "changelogDate": "20200508221600",
     "entityTableName": "cidade",
     "dto": "mapstruct",
     "pagination": "pagination",

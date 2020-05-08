@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="motivo-internacao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="motivo-internacao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="motivo-internacao-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,15 +151,96 @@ export class MotivoInternacaoUpdate extends React.Component<IMotivoInternacaoUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <NomeComponentUpdate baseFilters />
-
-                        <IdPaiComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <ClasseComponentUpdate baseFilters />
-
-                        <NameComponentUpdate baseFilters />
+                        {baseFilters !== 'nome' ? (
+                          <Col md="nome">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nomeLabel" for="motivo-internacao-nome">
+                                    <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-nome" type="text" name="nome" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPai' ? (
+                          <Col md="idPai">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPaiLabel" for="motivo-internacao-idPai">
+                                    <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-idPai" type="string" className="form-control" name="idPai" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="motivo-internacao-ativo">
+                                    <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'classe' ? (
+                          <Col md="classe">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="classeLabel" for="motivo-internacao-classe">
+                                    <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-classe" type="text" name="classe" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="classe" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'name' ? (
+                          <Col md="name">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="nameLabel" for="motivo-internacao-name">
+                                    <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="motivo-internacao-name" type="text" name="name" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="name" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -188,110 +270,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const NomeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'nome' ? (
-    <Col md="nome">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nomeLabel" for="motivo-internacao-nome">
-              <Translate contentKey="generadorApp.motivoInternacao.nome">Nome</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="motivo-internacao-nome" type="text" name="nome" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="nome" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPaiComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPai' ? (
-    <Col md="idPai">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPaiLabel" for="motivo-internacao-idPai">
-              <Translate contentKey="generadorApp.motivoInternacao.idPai">Id Pai</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="motivo-internacao-idPai" type="string" className="form-control" name="idPai" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPai" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="motivo-internacao-ativo">
-              <Translate contentKey="generadorApp.motivoInternacao.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="motivo-internacao-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ClasseComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'classe' ? (
-    <Col md="classe">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="classeLabel" for="motivo-internacao-classe">
-              <Translate contentKey="generadorApp.motivoInternacao.classe">Classe</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="motivo-internacao-classe" type="text" name="classe" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="classe" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NameComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'name' ? (
-    <Col md="name">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="nameLabel" for="motivo-internacao-name">
-              <Translate contentKey="generadorApp.motivoInternacao.name">Name</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="motivo-internacao-name" type="text" name="name" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="name" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MotivoInternacaoUpdate);

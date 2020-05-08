@@ -20,7 +20,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508162300",
+    "changelogDate": "20200508220200",
     "entityTableName": "atendimento_cep_recusado",
     "dto": "mapstruct",
     "pagination": "pagination",

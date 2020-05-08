@@ -32,13 +32,13 @@ export default class Franquia extends BaseEntity {
   site: string;
 
   /**
-   * @dbName TELEFONE1@@
+   *
    */
   @Column({ name: 'TELEFONE1', length: 20 })
   telefone1: string;
 
   /**
-   * @dbName TELEFONE2@@
+   *
    */
   @Column({ name: 'TELEFONE2', length: 20 })
   telefone2: string;

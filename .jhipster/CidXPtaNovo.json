@@ -41,7 +41,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508163500",
+    "changelogDate": "20200508221400",
     "entityTableName": "cid_x_pta_novo",
     "dto": "mapstruct",
     "pagination": "pagination",

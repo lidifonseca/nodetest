@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -172,11 +173,11 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-item-resultado-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-item-resultado-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-item-resultado-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -184,15 +185,106 @@ export class PadItemResultadoUpdate extends React.Component<IPadItemResultadoUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ResultadoComponentUpdate baseFilters />
-
-                        <DataFimComponentUpdate baseFilters />
-
-                        <ResultadoAnalisadoComponentUpdate baseFilters />
-
-                        <UsuarioIdComponentUpdate baseFilters />
-
-                        <PadItemComponentUpdate baseFilter padItems />
+                        {baseFilters !== 'resultado' ? (
+                          <Col md="resultado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="resultadoLabel" for="pad-item-resultado-resultado">
+                                    <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="resultado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'dataFim' ? (
+                          <Col md="dataFim">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataFimLabel" for="pad-item-resultado-dataFim">
+                                    <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-resultado-dataFim" type="date" className="form-control" name="dataFim" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'resultadoAnalisado' ? (
+                          <Col md="resultadoAnalisado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="resultadoAnalisadoLabel" check>
+                                    <AvInput
+                                      id="pad-item-resultado-resultadoAnalisado"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="resultadoAnalisado"
+                                    />
+                                    <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="resultadoAnalisado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'usuarioId' ? (
+                          <Col md="usuarioId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="usuarioIdLabel" for="pad-item-resultado-usuarioId">
+                                    <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-item-resultado-usuarioId" type="string" className="form-control" name="usuarioId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'padItem' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="pad-item-resultado-padItem">
+                                    <Translate contentKey="generadorApp.padItemResultado.padItem">Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="pad-item-resultado-padItem"
+                                    className={'css-select-control'}
+                                    value={this.state.padItemSelectValue}
+                                    options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ padItemSelectValue: options })}
+                                    name={'padItem'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -225,115 +317,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ResultadoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'resultado' ? (
-    <Col md="resultado">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="resultadoLabel" for="pad-item-resultado-resultado">
-              <Translate contentKey="generadorApp.padItemResultado.resultado">Resultado</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="pad-item-resultado-resultado" type="textarea" name="resultado" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="resultado" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DataFimComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataFim' ? (
-    <Col md="dataFim">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataFimLabel" for="pad-item-resultado-dataFim">
-              <Translate contentKey="generadorApp.padItemResultado.dataFim">Data Fim</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-resultado-dataFim" type="date" className="form-control" name="dataFim" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataFim" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ResultadoAnalisadoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'resultadoAnalisado' ? (
-    <Col md="resultadoAnalisado">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="resultadoAnalisadoLabel" check>
-              <AvInput id="pad-item-resultado-resultadoAnalisado" type="checkbox" className="form-control" name="resultadoAnalisado" />
-              <Translate contentKey="generadorApp.padItemResultado.resultadoAnalisado">Resultado Analisado</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="resultadoAnalisado" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UsuarioIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'usuarioId' ? (
-    <Col md="usuarioId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="usuarioIdLabel" for="pad-item-resultado-usuarioId">
-              <Translate contentKey="generadorApp.padItemResultado.usuarioId">Usuario Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-resultado-usuarioId" type="string" className="form-control" name="usuarioId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
-  return baseFilters !== 'padItem' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="pad-item-resultado-padItem">
-              <Translate contentKey="generadorApp.padItemResultado.padItem">Pad Item</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="pad-item-resultado-padItem"
-              className={'css-select-control'}
-              value={this.state.padItemSelectValue}
-              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ padItemSelectValue: options })}
-              name={'padItem'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadItemResultadoUpdate);

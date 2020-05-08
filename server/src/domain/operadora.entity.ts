@@ -11,7 +11,7 @@ import UnidadeEasy from './unidade-easy.entity';
 import TipoOperadora from './tipo-operadora.entity';
 
 /**
- * @toStringFields nomeFantasia@@\n@listTableLayout nomeFantasia@@\n@listFilterLayout nomeFantasia{Label:top,Size:3}@@\n@formLayout\ntipoOperadora{Label:top,Size:12}\nunidade{Label:top,Size:12}\nnomeFantasia{Label:top,Size:12}\nrazaoSocial{Label:top,Size:12}\nendereco{Label:top,Size:12}\ncnpj{Label:top,Size:6}\nie{Label:top,Size:6}\nsite{Label:top,Size:12}\ncontatoCentralAtendimento{Label:top,Size:8}\nemailCentralAtendimento{Label:top,Size:4}\nnomeContatoComercial{Label:top,Size:4}\ncontatoComercial{Label:top,Size:4}\nemailComercial{Label:top,Size:4}\nnomeContatoFinanceiro{Label:top,Size:4}\ncontatoFinanceiro{Label:top,Size:4}\nemailFinanceiro{Label:top,Size:4}\n@@\n@viewLayout\nnomeFantasia{Label:left,Size:12}\nrazaoSocial{Label:left,Size:12}\ncnpj{Label:left,Size:12}\nie{Label:left,Size:12}\nrg{Label:left,Size:12}\nsite{Label:left,Size:12}\n@@
+ * \n\n\n\n
  */
 @Entity('tb_operadora')
 export default class Operadora extends BaseEntity {

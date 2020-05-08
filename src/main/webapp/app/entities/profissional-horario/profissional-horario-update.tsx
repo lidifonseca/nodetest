@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -142,11 +143,11 @@ export class ProfissionalHorarioUpdate extends React.Component<IProfissionalHora
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-horario-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-horario-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="profissional-horario-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -154,13 +155,98 @@ export class ProfissionalHorarioUpdate extends React.Component<IProfissionalHora
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdAtendimentoComponentUpdate baseFilters />
-
-                        <IdProfissionalComponentUpdate baseFilters />
-
-                        <HorarioComponentUpdate baseFilters />
-
-                        <ConfirmComponentUpdate baseFilters />
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="profissional-horario-idAtendimento">
+                                    <Translate contentKey="generadorApp.profissionalHorario.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-horario-idAtendimento"
+                                    type="string"
+                                    className="form-control"
+                                    name="idAtendimento"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-horario-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalHorario.idProfissional">Id Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-horario-idProfissional"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProfissional"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'horario' ? (
+                          <Col md="horario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="horarioLabel" for="profissional-horario-horario">
+                                    <Translate contentKey="generadorApp.profissionalHorario.horario">Horario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="profissional-horario-horario"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="horario"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.profissionalHorarioEntity.horario)}
+                                    validate={{
+                                      required: { value: true, errorMessage: translate('entity.validation.required') }
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="horario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'confirm' ? (
+                          <Col md="confirm">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="confirmLabel" for="profissional-horario-confirm">
+                                    <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-horario-confirm" type="string" className="form-control" name="confirm" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="confirm" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -190,99 +276,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdAtendimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idAtendimento' ? (
-    <Col md="idAtendimento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idAtendimentoLabel" for="profissional-horario-idAtendimento">
-              <Translate contentKey="generadorApp.profissionalHorario.idAtendimento">Id Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-horario-idAtendimento" type="string" className="form-control" name="idAtendimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-horario-idProfissional">
-              <Translate contentKey="generadorApp.profissionalHorario.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-horario-idProfissional" type="string" className="form-control" name="idProfissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const HorarioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'horario' ? (
-    <Col md="horario">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="horarioLabel" for="profissional-horario-horario">
-              <Translate contentKey="generadorApp.profissionalHorario.horario">Horario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="profissional-horario-horario"
-              type="datetime-local"
-              className="form-control"
-              name="horario"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.profissionalHorarioEntity.horario)}
-              validate={{
-                required: { value: true, errorMessage: translate('entity.validation.required') }
-              }}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="horario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ConfirmComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'confirm' ? (
-    <Col md="confirm">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="confirmLabel" for="profissional-horario-confirm">
-              <Translate contentKey="generadorApp.profissionalHorario.confirm">Confirm</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-horario-confirm" type="string" className="form-control" name="confirm" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="confirm" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalHorarioUpdate);

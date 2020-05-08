@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="cidade-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="cidade-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="cidade-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -155,13 +156,59 @@ export class CidadeUpdate extends React.Component<ICidadeUpdateProps, ICidadeUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <DescrCidadeComponentUpdate baseFilters />
-
-                        <AtendimentoComponentUpdate baseFilter atendimentos />
-
-                        <EmpresaComponentUpdate baseFilter empresas />
-
-                        <UfComponentUpdate baseFilter ufs />
+                        {baseFilters !== 'descrCidade' ? (
+                          <Col md="descrCidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="descrCidadeLabel" for="cidade-descrCidade">
+                                    <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cidade-descrCidade" type="text" name="descrCidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="descrCidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'atendimento' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'empresa' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="empresa" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'uf' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="cidade-uf">
+                                    <Translate contentKey="generadorApp.cidade.uf">Uf</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="cidade-uf"
+                                    className={'css-select-control'}
+                                    value={this.state.ufSelectValue}
+                                    options={ufs ? ufs.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ ufSelectValue: options })}
+                                    name={'uf'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="uf" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -193,70 +240,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const DescrCidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'descrCidade' ? (
-    <Col md="descrCidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="descrCidadeLabel" for="cidade-descrCidade">
-              <Translate contentKey="generadorApp.cidade.descrCidade">Descr Cidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cidade-descrCidade" type="text" name="descrCidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="descrCidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtendimentoComponentUpdate = ({ baseFilters, atendimentos }) => {
-  return baseFilters !== 'atendimento' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="atendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EmpresaComponentUpdate = ({ baseFilters, empresas }) => {
-  return baseFilters !== 'empresa' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="empresa" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UfComponentUpdate = ({ baseFilters, ufs }) => {
-  return baseFilters !== 'uf' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="cidade-uf">
-              <Translate contentKey="generadorApp.cidade.uf">Uf</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="cidade-uf"
-              className={'css-select-control'}
-              value={this.state.ufSelectValue}
-              options={ufs ? ufs.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ ufSelectValue: options })}
-              name={'uf'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="uf" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CidadeUpdate);

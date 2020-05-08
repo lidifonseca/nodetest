@@ -20,7 +20,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508173900",
+    "changelogDate": "20200508231800",
     "entityTableName": "pad_item_cep_recusado",
     "dto": "mapstruct",
     "pagination": "pagination",

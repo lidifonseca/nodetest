@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IP
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="protocolos-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="protocolos-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="protocolos-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,7 +151,24 @@ export class ProtocolosUpdate extends React.Component<IProtocolosUpdateProps, IP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ProtocoloComponentUpdate baseFilters />
+                        {baseFilters !== 'protocolo' ? (
+                          <Col md="protocolo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="protocoloLabel" for="protocolos-protocolo">
+                                    <Translate contentKey="generadorApp.protocolos.protocolo">Protocolo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="protocolos-protocolo" type="string" className="form-control" name="protocolo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="protocolo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -180,26 +198,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ProtocoloComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'protocolo' ? (
-    <Col md="protocolo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="protocoloLabel" for="protocolos-protocolo">
-              <Translate contentKey="generadorApp.protocolos.protocolo">Protocolo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="protocolos-protocolo" type="string" className="form-control" name="protocolo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="protocolo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProtocolosUpdate);

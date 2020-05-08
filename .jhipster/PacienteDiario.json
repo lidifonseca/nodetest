@@ -31,7 +31,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508172000",
+    "changelogDate": "20200508225900",
     "entityTableName": "paciente_diario",
     "dto": "mapstruct",
     "pagination": "pagination",

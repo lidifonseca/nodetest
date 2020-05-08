@@ -62,7 +62,7 @@
             "relationshipName": "padCid"
         }
     ],
-    "changelogDate": "20200508163300",
+    "changelogDate": "20200508221200",
     "entityTableName": "cid",
     "dto": "mapstruct",
     "pagination": "pagination",

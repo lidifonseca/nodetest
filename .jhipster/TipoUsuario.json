@@ -22,7 +22,7 @@
             "relationshipName": "usuario"
         }
     ],
-    "changelogDate": "20200508183800",
+    "changelogDate": "20200509001700",
     "entityTableName": "tipo_usuario",
     "dto": "mapstruct",
     "pagination": "pagination",

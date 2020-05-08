@@ -45,7 +45,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508171700",
+    "changelogDate": "20200508225600",
     "entityTableName": "paciente_dados_cartao",
     "dto": "mapstruct",
     "pagination": "pagination",

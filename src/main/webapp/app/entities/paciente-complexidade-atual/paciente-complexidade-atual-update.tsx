@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class PacienteComplexidadeAtualUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-complexidade-atual-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-complexidade-atual-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="paciente-complexidade-atual-id"
@@ -162,19 +163,162 @@ export class PacienteComplexidadeAtualUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdPacienteComponentUpdate baseFilters />
-
-                        <IdPacienteComplexidadeComponentUpdate baseFilters />
-
-                        <BaixaComponentUpdate baseFilters />
-
-                        <MediaComponentUpdate baseFilters />
-
-                        <AltaComponentUpdate baseFilters />
-
-                        <VentilacaoMecanicaComponentUpdate baseFilters />
-
-                        <TelemonitoramenteComponentUpdate baseFilters />
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="paciente-complexidade-atual-idPaciente">
+                                    <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-complexidade-atual-idPaciente"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPaciente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPacienteComplexidade' ? (
+                          <Col md="idPacienteComplexidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idPacienteComplexidadeLabel"
+                                    for="paciente-complexidade-atual-idPacienteComplexidade"
+                                  >
+                                    <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPacienteComplexidade">
+                                      Id Paciente Complexidade
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-complexidade-atual-idPacienteComplexidade"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPacienteComplexidade"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPacienteComplexidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'baixa' ? (
+                          <Col md="baixa">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="baixaLabel" for="paciente-complexidade-atual-baixa">
+                                    <Translate contentKey="generadorApp.pacienteComplexidadeAtual.baixa">Baixa</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-complexidade-atual-baixa" type="string" className="form-control" name="baixa" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="baixa" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'media' ? (
+                          <Col md="media">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="mediaLabel" for="paciente-complexidade-atual-media">
+                                    <Translate contentKey="generadorApp.pacienteComplexidadeAtual.media">Media</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-complexidade-atual-media" type="string" className="form-control" name="media" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="media" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'alta' ? (
+                          <Col md="alta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="altaLabel" for="paciente-complexidade-atual-alta">
+                                    <Translate contentKey="generadorApp.pacienteComplexidadeAtual.alta">Alta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-complexidade-atual-alta" type="string" className="form-control" name="alta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="alta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ventilacaoMecanica' ? (
+                          <Col md="ventilacaoMecanica">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ventilacaoMecanicaLabel" for="paciente-complexidade-atual-ventilacaoMecanica">
+                                    <Translate contentKey="generadorApp.pacienteComplexidadeAtual.ventilacaoMecanica">
+                                      Ventilacao Mecanica
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-complexidade-atual-ventilacaoMecanica"
+                                    type="string"
+                                    className="form-control"
+                                    name="ventilacaoMecanica"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ventilacaoMecanica" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'telemonitoramente' ? (
+                          <Col md="telemonitoramente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="telemonitoramenteLabel" for="paciente-complexidade-atual-telemonitoramente">
+                                    <Translate contentKey="generadorApp.pacienteComplexidadeAtual.telemonitoramente">
+                                      Telemonitoramente
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-complexidade-atual-telemonitoramente"
+                                    type="string"
+                                    className="form-control"
+                                    name="telemonitoramente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="telemonitoramente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -204,157 +348,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdPacienteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPaciente' ? (
-    <Col md="idPaciente">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPacienteLabel" for="paciente-complexidade-atual-idPaciente">
-              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPaciente">Id Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-complexidade-atual-idPaciente" type="string" className="form-control" name="idPaciente" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPacienteComplexidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPacienteComplexidade' ? (
-    <Col md="idPacienteComplexidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPacienteComplexidadeLabel" for="paciente-complexidade-atual-idPacienteComplexidade">
-              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.idPacienteComplexidade">Id Paciente Complexidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField
-              id="paciente-complexidade-atual-idPacienteComplexidade"
-              type="string"
-              className="form-control"
-              name="idPacienteComplexidade"
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPacienteComplexidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const BaixaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'baixa' ? (
-    <Col md="baixa">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="baixaLabel" for="paciente-complexidade-atual-baixa">
-              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.baixa">Baixa</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-complexidade-atual-baixa" type="string" className="form-control" name="baixa" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="baixa" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const MediaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'media' ? (
-    <Col md="media">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="mediaLabel" for="paciente-complexidade-atual-media">
-              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.media">Media</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-complexidade-atual-media" type="string" className="form-control" name="media" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="media" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AltaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'alta' ? (
-    <Col md="alta">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="altaLabel" for="paciente-complexidade-atual-alta">
-              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.alta">Alta</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-complexidade-atual-alta" type="string" className="form-control" name="alta" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="alta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const VentilacaoMecanicaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ventilacaoMecanica' ? (
-    <Col md="ventilacaoMecanica">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ventilacaoMecanicaLabel" for="paciente-complexidade-atual-ventilacaoMecanica">
-              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.ventilacaoMecanica">Ventilacao Mecanica</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-complexidade-atual-ventilacaoMecanica" type="string" className="form-control" name="ventilacaoMecanica" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ventilacaoMecanica" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TelemonitoramenteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'telemonitoramente' ? (
-    <Col md="telemonitoramente">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="telemonitoramenteLabel" for="paciente-complexidade-atual-telemonitoramente">
-              <Translate contentKey="generadorApp.pacienteComplexidadeAtual.telemonitoramente">Telemonitoramente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-complexidade-atual-telemonitoramente" type="string" className="form-control" name="telemonitoramente" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="telemonitoramente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteComplexidadeAtualUpdate);

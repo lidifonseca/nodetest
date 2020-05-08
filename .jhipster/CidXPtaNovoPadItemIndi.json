@@ -71,7 +71,8 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508163600",
+    "changelogDate": "20200508221500",
+    "javadoc": "@forceTableName tb_cid_x_pta_novo_tb_pad_item_indicador@@",
     "entityTableName": "cid_x_pta_novo_pad_item_indi",
     "dto": "mapstruct",
     "pagination": "pagination",
@@ -81,6 +82,5 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*",
-    "javadoc": "@forceTableName tb_cid_x_pta_novo_tb_pad_item_indicador@@"
+    "applications": "*"
 }

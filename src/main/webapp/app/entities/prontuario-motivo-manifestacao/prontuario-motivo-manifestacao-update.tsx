@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -161,11 +162,11 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="prontuario-motivo-manifestacao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="prontuario-motivo-manifestacao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="prontuario-motivo-manifestacao-id"
@@ -180,21 +181,200 @@ export class ProntuarioMotivoManifestacaoUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProntuarioComponentUpdate baseFilters />
-
-                        <IdPacienteComponentUpdate baseFilters />
-
-                        <IdMotivoComponentUpdate baseFilters />
-
-                        <IdMotivoFilhoComponentUpdate baseFilters />
-
-                        <IdManifestacaoComponentUpdate baseFilters />
-
-                        <IdManifestacaoFilhoComponentUpdate baseFilters />
-
-                        <SugestaoComponentUpdate baseFilters />
-
-                        <InformacaoAdicionalComponentUpdate baseFilters />
+                        {baseFilters !== 'idProntuario' ? (
+                          <Col md="idProntuario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProntuarioLabel" for="prontuario-motivo-manifestacao-idProntuario">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idProntuario">Id Prontuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-manifestacao-idProntuario"
+                                    type="string"
+                                    className="form-control"
+                                    name="idProntuario"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPaciente' ? (
+                          <Col md="idPaciente">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPacienteLabel" for="prontuario-motivo-manifestacao-idPaciente">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idPaciente">Id Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-manifestacao-idPaciente"
+                                    type="string"
+                                    className="form-control"
+                                    name="idPaciente"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idMotivo' ? (
+                          <Col md="idMotivo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idMotivoLabel" for="prontuario-motivo-manifestacao-idMotivo">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idMotivo">Id Motivo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-manifestacao-idMotivo"
+                                    type="string"
+                                    className="form-control"
+                                    name="idMotivo"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idMotivo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idMotivoFilho' ? (
+                          <Col md="idMotivoFilho">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idMotivoFilhoLabel" for="prontuario-motivo-manifestacao-idMotivoFilho">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idMotivoFilho">
+                                      Id Motivo Filho
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-manifestacao-idMotivoFilho"
+                                    type="string"
+                                    className="form-control"
+                                    name="idMotivoFilho"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idMotivoFilho" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idManifestacao' ? (
+                          <Col md="idManifestacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idManifestacaoLabel" for="prontuario-motivo-manifestacao-idManifestacao">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idManifestacao">
+                                      Id Manifestacao
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-manifestacao-idManifestacao"
+                                    type="string"
+                                    className="form-control"
+                                    name="idManifestacao"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idManifestacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idManifestacaoFilho' ? (
+                          <Col md="idManifestacaoFilho">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="idManifestacaoFilhoLabel"
+                                    for="prontuario-motivo-manifestacao-idManifestacaoFilho"
+                                  >
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idManifestacaoFilho">
+                                      Id Manifestacao Filho
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="prontuario-motivo-manifestacao-idManifestacaoFilho"
+                                    type="string"
+                                    className="form-control"
+                                    name="idManifestacaoFilho"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idManifestacaoFilho" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'sugestao' ? (
+                          <Col md="sugestao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sugestaoLabel" for="prontuario-motivo-manifestacao-sugestao">
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.sugestao">Sugestao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="prontuario-motivo-manifestacao-sugestao" type="textarea" name="sugestao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sugestao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'informacaoAdicional' ? (
+                          <Col md="informacaoAdicional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label
+                                    className="mt-2"
+                                    id="informacaoAdicionalLabel"
+                                    for="prontuario-motivo-manifestacao-informacaoAdicional"
+                                  >
+                                    <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.informacaoAdicional">
+                                      Informacao Adicional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="prontuario-motivo-manifestacao-informacaoAdicional"
+                                    type="textarea"
+                                    name="informacaoAdicional"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="informacaoAdicional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -225,178 +405,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProntuarioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProntuario' ? (
-    <Col md="idProntuario">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProntuarioLabel" for="prontuario-motivo-manifestacao-idProntuario">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idProntuario">Id Prontuario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-manifestacao-idProntuario" type="string" className="form-control" name="idProntuario" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProntuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPacienteComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPaciente' ? (
-    <Col md="idPaciente">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPacienteLabel" for="prontuario-motivo-manifestacao-idPaciente">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idPaciente">Id Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-manifestacao-idPaciente" type="string" className="form-control" name="idPaciente" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPaciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdMotivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idMotivo' ? (
-    <Col md="idMotivo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idMotivoLabel" for="prontuario-motivo-manifestacao-idMotivo">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idMotivo">Id Motivo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-manifestacao-idMotivo" type="string" className="form-control" name="idMotivo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idMotivo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdMotivoFilhoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idMotivoFilho' ? (
-    <Col md="idMotivoFilho">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idMotivoFilhoLabel" for="prontuario-motivo-manifestacao-idMotivoFilho">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idMotivoFilho">Id Motivo Filho</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-manifestacao-idMotivoFilho" type="string" className="form-control" name="idMotivoFilho" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idMotivoFilho" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdManifestacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idManifestacao' ? (
-    <Col md="idManifestacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idManifestacaoLabel" for="prontuario-motivo-manifestacao-idManifestacao">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idManifestacao">Id Manifestacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="prontuario-motivo-manifestacao-idManifestacao" type="string" className="form-control" name="idManifestacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idManifestacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdManifestacaoFilhoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idManifestacaoFilho' ? (
-    <Col md="idManifestacaoFilho">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idManifestacaoFilhoLabel" for="prontuario-motivo-manifestacao-idManifestacaoFilho">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.idManifestacaoFilho">Id Manifestacao Filho</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField
-              id="prontuario-motivo-manifestacao-idManifestacaoFilho"
-              type="string"
-              className="form-control"
-              name="idManifestacaoFilho"
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idManifestacaoFilho" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const SugestaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'sugestao' ? (
-    <Col md="sugestao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="sugestaoLabel" for="prontuario-motivo-manifestacao-sugestao">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.sugestao">Sugestao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="prontuario-motivo-manifestacao-sugestao" type="textarea" name="sugestao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="sugestao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const InformacaoAdicionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'informacaoAdicional' ? (
-    <Col md="informacaoAdicional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="informacaoAdicionalLabel" for="prontuario-motivo-manifestacao-informacaoAdicional">
-              <Translate contentKey="generadorApp.prontuarioMotivoManifestacao.informacaoAdicional">Informacao Adicional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="prontuario-motivo-manifestacao-informacaoAdicional" type="textarea" name="informacaoAdicional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="informacaoAdicional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProntuarioMotivoManifestacaoUpdate);

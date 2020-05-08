@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class CidUpdate extends React.Component<ICidUpdateProps, ICidUpdateState>
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="cid-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="cid-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="cid-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,21 +143,111 @@ export class CidUpdate extends React.Component<ICidUpdateProps, ICidUpdateState>
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <CodigoComponentUpdate baseFilters />
-
-                        <DiagnosticoComponentUpdate baseFilters />
-
-                        <GrComponentUpdate baseFilters />
-
-                        <TempComponentUpdate baseFilters />
-
-                        <ApelidoComponentUpdate baseFilters />
-
-                        <CidXPtaNovoComponentUpdate baseFilter cidXPtaNovos />
-
-                        <PacienteDiagnosticoComponentUpdate baseFilter pacienteDiagnosticos />
-
-                        <PadCidComponentUpdate baseFilter padCids />
+                        {baseFilters !== 'codigo' ? (
+                          <Col md="codigo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codigoLabel" for="cid-codigo">
+                                    <Translate contentKey="generadorApp.cid.codigo">Codigo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-codigo" type="text" name="codigo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codigo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'diagnostico' ? (
+                          <Col md="diagnostico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="diagnosticoLabel" for="cid-diagnostico">
+                                    <Translate contentKey="generadorApp.cid.diagnostico">Diagnostico</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-diagnostico" type="text" name="diagnostico" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="diagnostico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'gr' ? (
+                          <Col md="gr">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="grLabel" for="cid-gr">
+                                    <Translate contentKey="generadorApp.cid.gr">Gr</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-gr" type="text" name="gr" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="gr" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'temp' ? (
+                          <Col md="temp">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tempLabel" for="cid-temp">
+                                    <Translate contentKey="generadorApp.cid.temp">Temp</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-temp" type="text" name="temp" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="temp" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'apelido' ? (
+                          <Col md="apelido">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="apelidoLabel" for="cid-apelido">
+                                    <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-apelido" type="text" name="apelido" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="apelido" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cidXPtaNovo' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'pacienteDiagnostico' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="pacienteDiagnostico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'padCid' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="padCid" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,134 +277,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const CodigoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'codigo' ? (
-    <Col md="codigo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="codigoLabel" for="cid-codigo">
-              <Translate contentKey="generadorApp.cid.codigo">Codigo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-codigo" type="text" name="codigo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="codigo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DiagnosticoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'diagnostico' ? (
-    <Col md="diagnostico">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="diagnosticoLabel" for="cid-diagnostico">
-              <Translate contentKey="generadorApp.cid.diagnostico">Diagnostico</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-diagnostico" type="text" name="diagnostico" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="diagnostico" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const GrComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'gr' ? (
-    <Col md="gr">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="grLabel" for="cid-gr">
-              <Translate contentKey="generadorApp.cid.gr">Gr</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-gr" type="text" name="gr" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="gr" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TempComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'temp' ? (
-    <Col md="temp">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tempLabel" for="cid-temp">
-              <Translate contentKey="generadorApp.cid.temp">Temp</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-temp" type="text" name="temp" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="temp" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ApelidoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'apelido' ? (
-    <Col md="apelido">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="apelidoLabel" for="cid-apelido">
-              <Translate contentKey="generadorApp.cid.apelido">Apelido</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-apelido" type="text" name="apelido" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="apelido" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidXPtaNovoComponentUpdate = ({ baseFilters, cidXPtaNovos }) => {
-  return baseFilters !== 'cidXPtaNovo' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteDiagnosticoComponentUpdate = ({ baseFilters, pacienteDiagnosticos }) => {
-  return baseFilters !== 'pacienteDiagnostico' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="pacienteDiagnostico" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadCidComponentUpdate = ({ baseFilters, padCids }) => {
-  return baseFilters !== 'padCid' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="padCid" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CidUpdate);

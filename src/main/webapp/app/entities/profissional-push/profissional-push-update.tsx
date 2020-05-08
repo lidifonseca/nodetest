@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class ProfissionalPushUpdate extends React.Component<IProfissionalPushUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-push-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-push-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="profissional-push-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,13 +151,78 @@ export class ProfissionalPushUpdate extends React.Component<IProfissionalPushUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdProfissionalComponentUpdate baseFilters />
-
-                        <IdFranquiaComponentUpdate baseFilters />
-
-                        <MensagemComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-push-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-push-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idFranquia' ? (
+                          <Col md="idFranquia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idFranquiaLabel" for="profissional-push-idFranquia">
+                                    <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-push-idFranquia" type="text" name="idFranquia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'mensagem' ? (
+                          <Col md="mensagem">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="mensagemLabel" for="profissional-push-mensagem">
+                                    <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-push-mensagem" type="text" name="mensagem" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="mensagem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="profissional-push-ativo">
+                                    <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-push-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,89 +252,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-push-idProfissional">
-              <Translate contentKey="generadorApp.profissionalPush.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-push-idProfissional" type="text" name="idProfissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdFranquiaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idFranquia' ? (
-    <Col md="idFranquia">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idFranquiaLabel" for="profissional-push-idFranquia">
-              <Translate contentKey="generadorApp.profissionalPush.idFranquia">Id Franquia</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-push-idFranquia" type="text" name="idFranquia" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idFranquia" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const MensagemComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'mensagem' ? (
-    <Col md="mensagem">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="mensagemLabel" for="profissional-push-mensagem">
-              <Translate contentKey="generadorApp.profissionalPush.mensagem">Mensagem</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-push-mensagem" type="text" name="mensagem" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="mensagem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="profissional-push-ativo">
-              <Translate contentKey="generadorApp.profissionalPush.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-push-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalPushUpdate);

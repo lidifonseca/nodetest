@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -163,11 +164,11 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="alertas-resultados-esperados-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="alertas-resultados-esperados-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="alertas-resultados-esperados-id"
@@ -182,17 +183,136 @@ export class AlertasResultadosEsperadosUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <PontuacaoComponentUpdate baseFilters />
-
-                        <AlteracaoEsperadaComponentUpdate baseFilters />
-
-                        <ObservacoesComponentUpdate baseFilters />
-
-                        <UsuarioIdComponentUpdate baseFilters />
-
-                        <ValorComponentUpdate baseFilters />
-
-                        <ResultadosComponentUpdate baseFilter resultados />
+                        {baseFilters !== 'pontuacao' ? (
+                          <Col md="pontuacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="pontuacaoLabel" for="alertas-resultados-esperados-pontuacao">
+                                    <Translate contentKey="generadorApp.alertasResultadosEsperados.pontuacao">Pontuacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="alertas-resultados-esperados-pontuacao"
+                                    type="string"
+                                    className="form-control"
+                                    name="pontuacao"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="pontuacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'alteracaoEsperada' ? (
+                          <Col md="alteracaoEsperada">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="alteracaoEsperadaLabel" check>
+                                    <AvInput
+                                      id="alertas-resultados-esperados-alteracaoEsperada"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="alteracaoEsperada"
+                                    />
+                                    <Translate contentKey="generadorApp.alertasResultadosEsperados.alteracaoEsperada">
+                                      Alteracao Esperada
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="alteracaoEsperada" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'observacoes' ? (
+                          <Col md="observacoes">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacoesLabel" for="alertas-resultados-esperados-observacoes">
+                                    <Translate contentKey="generadorApp.alertasResultadosEsperados.observacoes">Observacoes</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="alertas-resultados-esperados-observacoes" type="text" name="observacoes" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'usuarioId' ? (
+                          <Col md="usuarioId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="usuarioIdLabel" for="alertas-resultados-esperados-usuarioId">
+                                    <Translate contentKey="generadorApp.alertasResultadosEsperados.usuarioId">Usuario Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="alertas-resultados-esperados-usuarioId"
+                                    type="string"
+                                    className="form-control"
+                                    name="usuarioId"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'valor' ? (
+                          <Col md="valor">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorLabel" for="alertas-resultados-esperados-valor">
+                                    <Translate contentKey="generadorApp.alertasResultadosEsperados.valor">Valor</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="alertas-resultados-esperados-valor" type="string" className="form-control" name="valor" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'resultados' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="alertas-resultados-esperados-resultados">
+                                    <Translate contentKey="generadorApp.alertasResultadosEsperados.resultados">Resultados</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="alertas-resultados-esperados-resultados"
+                                    className={'css-select-control'}
+                                    value={this.state.resultadosSelectValue}
+                                    options={resultados ? resultados.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ resultadosSelectValue: options })}
+                                    name={'resultados'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="resultados" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -224,141 +344,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const PontuacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'pontuacao' ? (
-    <Col md="pontuacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="pontuacaoLabel" for="alertas-resultados-esperados-pontuacao">
-              <Translate contentKey="generadorApp.alertasResultadosEsperados.pontuacao">Pontuacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="alertas-resultados-esperados-pontuacao" type="string" className="form-control" name="pontuacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="pontuacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AlteracaoEsperadaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'alteracaoEsperada' ? (
-    <Col md="alteracaoEsperada">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="alteracaoEsperadaLabel" check>
-              <AvInput
-                id="alertas-resultados-esperados-alteracaoEsperada"
-                type="checkbox"
-                className="form-control"
-                name="alteracaoEsperada"
-              />
-              <Translate contentKey="generadorApp.alertasResultadosEsperados.alteracaoEsperada">Alteracao Esperada</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="alteracaoEsperada" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ObservacoesComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'observacoes' ? (
-    <Col md="observacoes">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="observacoesLabel" for="alertas-resultados-esperados-observacoes">
-              <Translate contentKey="generadorApp.alertasResultadosEsperados.observacoes">Observacoes</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="alertas-resultados-esperados-observacoes" type="text" name="observacoes" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UsuarioIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'usuarioId' ? (
-    <Col md="usuarioId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="usuarioIdLabel" for="alertas-resultados-esperados-usuarioId">
-              <Translate contentKey="generadorApp.alertasResultadosEsperados.usuarioId">Usuario Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="alertas-resultados-esperados-usuarioId" type="string" className="form-control" name="usuarioId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="usuarioId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ValorComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'valor' ? (
-    <Col md="valor">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="valorLabel" for="alertas-resultados-esperados-valor">
-              <Translate contentKey="generadorApp.alertasResultadosEsperados.valor">Valor</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="alertas-resultados-esperados-valor" type="string" className="form-control" name="valor" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ResultadosComponentUpdate = ({ baseFilters, resultados }) => {
-  return baseFilters !== 'resultados' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="alertas-resultados-esperados-resultados">
-              <Translate contentKey="generadorApp.alertasResultadosEsperados.resultados">Resultados</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="alertas-resultados-esperados-resultados"
-              className={'css-select-control'}
-              value={this.state.resultadosSelectValue}
-              options={resultados ? resultados.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ resultadosSelectValue: options })}
-              name={'resultados'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="resultados" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlertasResultadosEsperadosUpdate);

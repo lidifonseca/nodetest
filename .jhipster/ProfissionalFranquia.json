@@ -17,7 +17,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508180300",
+    "changelogDate": "20200508234200",
     "entityTableName": "profissional_franquia",
     "dto": "mapstruct",
     "pagination": "pagination",

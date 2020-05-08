@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -178,11 +179,11 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="acoes-respostas-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="acoes-respostas-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="acoes-respostas-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -190,19 +191,157 @@ export class AcoesRespostasUpdate extends React.Component<IAcoesRespostasUpdateP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <AbrirCampoPersonalizadoComponentUpdate baseFilters />
-
-                        <CondicaoSexoComponentUpdate baseFilters />
-
-                        <ObservacoesComponentUpdate baseFilters />
-
-                        <TipoCampo1ComponentUpdate baseFilters />
-
-                        <TipoCampo2ComponentUpdate baseFilters />
-
-                        <RespostasComponentUpdate baseFilter respostas />
-
-                        <PerguntasQuestionarioComponentUpdate baseFilter perguntasQuestionarios />
+                        {baseFilters !== 'abrirCampoPersonalizado' ? (
+                          <Col md="abrirCampoPersonalizado">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="abrirCampoPersonalizadoLabel" check>
+                                    <AvInput
+                                      id="acoes-respostas-abrirCampoPersonalizado"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="abrirCampoPersonalizado"
+                                    />
+                                    <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">
+                                      Abrir Campo Personalizado
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="abrirCampoPersonalizado" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'condicaoSexo' ? (
+                          <Col md="condicaoSexo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
+                                    <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-condicaoSexo" type="text" name="condicaoSexo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="condicaoSexo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'observacoes' ? (
+                          <Col md="observacoes">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacoesLabel" for="acoes-respostas-observacoes">
+                                    <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-observacoes" type="text" name="observacoes" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'tipoCampo1' ? (
+                          <Col md="tipoCampo1">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
+                                    <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-tipoCampo1" type="text" name="tipoCampo1" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoCampo1" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'tipoCampo2' ? (
+                          <Col md="tipoCampo2">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
+                                    <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="acoes-respostas-tipoCampo2" type="text" name="tipoCampo2" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoCampo2" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'respostas' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="acoes-respostas-respostas">
+                                    <Translate contentKey="generadorApp.acoesRespostas.respostas">Respostas</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="acoes-respostas-respostas"
+                                    className={'css-select-control'}
+                                    value={this.state.respostasSelectValue}
+                                    options={respostas ? respostas.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ respostasSelectValue: options })}
+                                    name={'respostas'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="respostas" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'perguntasQuestionario' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="acoes-respostas-perguntasQuestionario">
+                                    <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionario">
+                                      Perguntas Questionario
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="acoes-respostas-perguntasQuestionario"
+                                    className={'css-select-control'}
+                                    value={this.state.perguntasQuestionarioSelectValue}
+                                    options={
+                                      perguntasQuestionarios
+                                        ? perguntasQuestionarios.map(option => ({ value: option.id, label: option.id }))
+                                        : null
+                                    }
+                                    onChange={options => this.setState({ perguntasQuestionarioSelectValue: options })}
+                                    name={'perguntasQuestionario'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="perguntasQuestionario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -236,169 +375,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const AbrirCampoPersonalizadoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'abrirCampoPersonalizado' ? (
-    <Col md="abrirCampoPersonalizado">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="abrirCampoPersonalizadoLabel" check>
-              <AvInput
-                id="acoes-respostas-abrirCampoPersonalizado"
-                type="checkbox"
-                className="form-control"
-                name="abrirCampoPersonalizado"
-              />
-              <Translate contentKey="generadorApp.acoesRespostas.abrirCampoPersonalizado">Abrir Campo Personalizado</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="abrirCampoPersonalizado" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CondicaoSexoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'condicaoSexo' ? (
-    <Col md="condicaoSexo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="condicaoSexoLabel" for="acoes-respostas-condicaoSexo">
-              <Translate contentKey="generadorApp.acoesRespostas.condicaoSexo">Condicao Sexo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="acoes-respostas-condicaoSexo" type="text" name="condicaoSexo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="condicaoSexo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ObservacoesComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'observacoes' ? (
-    <Col md="observacoes">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="observacoesLabel" for="acoes-respostas-observacoes">
-              <Translate contentKey="generadorApp.acoesRespostas.observacoes">Observacoes</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="acoes-respostas-observacoes" type="text" name="observacoes" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="observacoes" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TipoCampo1ComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipoCampo1' ? (
-    <Col md="tipoCampo1">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoCampo1Label" for="acoes-respostas-tipoCampo1">
-              <Translate contentKey="generadorApp.acoesRespostas.tipoCampo1">Tipo Campo 1</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="acoes-respostas-tipoCampo1" type="text" name="tipoCampo1" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipoCampo1" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TipoCampo2ComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipoCampo2' ? (
-    <Col md="tipoCampo2">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoCampo2Label" for="acoes-respostas-tipoCampo2">
-              <Translate contentKey="generadorApp.acoesRespostas.tipoCampo2">Tipo Campo 2</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="acoes-respostas-tipoCampo2" type="text" name="tipoCampo2" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipoCampo2" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const RespostasComponentUpdate = ({ baseFilters, respostas }) => {
-  return baseFilters !== 'respostas' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="acoes-respostas-respostas">
-              <Translate contentKey="generadorApp.acoesRespostas.respostas">Respostas</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="acoes-respostas-respostas"
-              className={'css-select-control'}
-              value={this.state.respostasSelectValue}
-              options={respostas ? respostas.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ respostasSelectValue: options })}
-              name={'respostas'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="respostas" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PerguntasQuestionarioComponentUpdate = ({ baseFilters, perguntasQuestionarios }) => {
-  return baseFilters !== 'perguntasQuestionario' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="acoes-respostas-perguntasQuestionario">
-              <Translate contentKey="generadorApp.acoesRespostas.perguntasQuestionario">Perguntas Questionario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="acoes-respostas-perguntasQuestionario"
-              className={'css-select-control'}
-              value={this.state.perguntasQuestionarioSelectValue}
-              options={perguntasQuestionarios ? perguntasQuestionarios.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ perguntasQuestionarioSelectValue: options })}
-              name={'perguntasQuestionario'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="perguntasQuestionario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AcoesRespostasUpdate);

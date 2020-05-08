@@ -1,4 +1,4 @@
-/* eslint complexity: ["error", 100] */
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 import { connect } from 'react-redux';

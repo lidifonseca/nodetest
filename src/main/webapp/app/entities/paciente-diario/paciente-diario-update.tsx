@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -192,11 +193,11 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-diario-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-diario-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="paciente-diario-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -204,15 +205,110 @@ export class PacienteDiarioUpdate extends React.Component<IPacienteDiarioUpdateP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdOperadoraComponentUpdate baseFilters />
-
-                        <HistoricoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
-
-                        <UsuarioComponentUpdate baseFilter usuarios />
+                        {baseFilters !== 'idOperadora' ? (
+                          <Col md="idOperadora">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idOperadoraLabel" for="paciente-diario-idOperadora">
+                                    <Translate contentKey="generadorApp.pacienteDiario.idOperadora">Id Operadora</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diario-idOperadora" type="string" className="form-control" name="idOperadora" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idOperadora" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'historico' ? (
+                          <Col md="historico">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="historicoLabel" for="paciente-diario-historico">
+                                    <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="historico" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-diario-ativo">
+                                    <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diario-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-diario-paciente">
+                                    <Translate contentKey="generadorApp.pacienteDiario.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-diario-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'usuario' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-diario-usuario">
+                                    <Translate contentKey="generadorApp.pacienteDiario.usuario">Usuario</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-diario-usuario"
+                                    className={'css-select-control'}
+                                    value={this.state.usuarioSelectValue}
+                                    options={usuarios ? usuarios.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ usuarioSelectValue: options })}
+                                    name={'usuario'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -247,124 +343,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdOperadoraComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idOperadora' ? (
-    <Col md="idOperadora">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idOperadoraLabel" for="paciente-diario-idOperadora">
-              <Translate contentKey="generadorApp.pacienteDiario.idOperadora">Id Operadora</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-diario-idOperadora" type="string" className="form-control" name="idOperadora" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idOperadora" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const HistoricoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'historico' ? (
-    <Col md="historico">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="historicoLabel" for="paciente-diario-historico">
-              <Translate contentKey="generadorApp.pacienteDiario.historico">Historico</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput id="paciente-diario-historico" type="textarea" name="historico" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="historico" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="paciente-diario-ativo">
-              <Translate contentKey="generadorApp.pacienteDiario.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-diario-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-diario-paciente">
-              <Translate contentKey="generadorApp.pacienteDiario.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-diario-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UsuarioComponentUpdate = ({ baseFilters, usuarios }) => {
-  return baseFilters !== 'usuario' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-diario-usuario">
-              <Translate contentKey="generadorApp.pacienteDiario.usuario">Usuario</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-diario-usuario"
-              className={'css-select-control'}
-              value={this.state.usuarioSelectValue}
-              options={usuarios ? usuarios.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ usuarioSelectValue: options })}
-              name={'usuario'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="usuario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteDiarioUpdate);

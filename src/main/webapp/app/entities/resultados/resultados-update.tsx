@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -140,11 +141,11 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="resultados-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="resultados-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="resultados-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -152,19 +153,131 @@ export class ResultadosUpdate extends React.Component<IResultadosUpdateProps, IR
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ObjetivoComponentUpdate baseFilters />
-
-                        <ValorComponentUpdate baseFilters />
-
-                        <PrazoComponentUpdate baseFilters />
-
-                        <ComplementoComponentUpdate baseFilters />
-
-                        <DataCadastroComponentUpdate baseFilters />
-
-                        <DataVencimentoPrazoComponentUpdate baseFilters />
-
-                        <AlertasResultadosEsperadosComponentUpdate baseFilter alertasResultadosEsperados />
+                        {baseFilters !== 'objetivo' ? (
+                          <Col md="objetivo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="objetivoLabel" for="resultados-objetivo">
+                                    <Translate contentKey="generadorApp.resultados.objetivo">Objetivo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-objetivo" type="text" name="objetivo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="objetivo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'valor' ? (
+                          <Col md="valor">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="valorLabel" for="resultados-valor">
+                                    <Translate contentKey="generadorApp.resultados.valor">Valor</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-valor" type="text" name="valor" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'prazo' ? (
+                          <Col md="prazo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="prazoLabel" for="resultados-prazo">
+                                    <Translate contentKey="generadorApp.resultados.prazo">Prazo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-prazo" type="text" name="prazo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="prazo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'complemento' ? (
+                          <Col md="complemento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="complementoLabel" for="resultados-complemento">
+                                    <Translate contentKey="generadorApp.resultados.complemento">Complemento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="resultados-complemento" type="text" name="complemento" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="complemento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'dataCadastro' ? (
+                          <Col md="dataCadastro">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataCadastroLabel" for="resultados-dataCadastro">
+                                    <Translate contentKey="generadorApp.resultados.dataCadastro">Data Cadastro</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="resultados-dataCadastro"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataCadastro"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.resultadosEntity.dataCadastro)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataCadastro" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'dataVencimentoPrazo' ? (
+                          <Col md="dataVencimentoPrazo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataVencimentoPrazoLabel" for="resultados-dataVencimentoPrazo">
+                                    <Translate contentKey="generadorApp.resultados.dataVencimentoPrazo">Data Vencimento Prazo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="resultados-dataVencimentoPrazo"
+                                    type="date"
+                                    className="form-control"
+                                    name="dataVencimentoPrazo"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataVencimentoPrazo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'alertasResultadosEsperados' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="alertasResultadosEsperados" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -194,146 +307,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ObjetivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'objetivo' ? (
-    <Col md="objetivo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="objetivoLabel" for="resultados-objetivo">
-              <Translate contentKey="generadorApp.resultados.objetivo">Objetivo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="resultados-objetivo" type="text" name="objetivo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="objetivo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ValorComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'valor' ? (
-    <Col md="valor">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="valorLabel" for="resultados-valor">
-              <Translate contentKey="generadorApp.resultados.valor">Valor</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="resultados-valor" type="text" name="valor" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="valor" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PrazoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'prazo' ? (
-    <Col md="prazo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="prazoLabel" for="resultados-prazo">
-              <Translate contentKey="generadorApp.resultados.prazo">Prazo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="resultados-prazo" type="text" name="prazo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="prazo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ComplementoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'complemento' ? (
-    <Col md="complemento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="complementoLabel" for="resultados-complemento">
-              <Translate contentKey="generadorApp.resultados.complemento">Complemento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="resultados-complemento" type="text" name="complemento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="complemento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DataCadastroComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataCadastro' ? (
-    <Col md="dataCadastro">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataCadastroLabel" for="resultados-dataCadastro">
-              <Translate contentKey="generadorApp.resultados.dataCadastro">Data Cadastro</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="resultados-dataCadastro"
-              type="datetime-local"
-              className="form-control"
-              name="dataCadastro"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.resultadosEntity.dataCadastro)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataCadastro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DataVencimentoPrazoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataVencimentoPrazo' ? (
-    <Col md="dataVencimentoPrazo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataVencimentoPrazoLabel" for="resultados-dataVencimentoPrazo">
-              <Translate contentKey="generadorApp.resultados.dataVencimentoPrazo">Data Vencimento Prazo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="resultados-dataVencimentoPrazo" type="date" className="form-control" name="dataVencimentoPrazo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataVencimentoPrazo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AlertasResultadosEsperadosComponentUpdate = ({ baseFilters, alertasResultadosEsperados }) => {
-  return baseFilters !== 'alertasResultadosEsperados' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="alertasResultadosEsperados" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultadosUpdate);

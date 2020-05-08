@@ -19,7 +19,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508182100",
+    "changelogDate": "20200509000000",
     "entityTableName": "servico",
     "dto": "mapstruct",
     "pagination": "pagination",

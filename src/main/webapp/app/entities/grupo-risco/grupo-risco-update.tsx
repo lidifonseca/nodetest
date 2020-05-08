@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IG
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="grupo-risco-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="grupo-risco-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="grupo-risco-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,42 @@ export class GrupoRiscoUpdate extends React.Component<IGrupoRiscoUpdateProps, IG
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <GrupoRiscoComponentUpdate baseFilters />
-
-                        <StyleLabelComponentUpdate baseFilters />
+                        {baseFilters !== 'grupoRisco' ? (
+                          <Col md="grupoRisco">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="grupoRiscoLabel" for="grupo-risco-grupoRisco">
+                                    <Translate contentKey="generadorApp.grupoRisco.grupoRisco">Grupo Risco</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="grupo-risco-grupoRisco" type="text" name="grupoRisco" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="grupoRisco" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="grupo-risco-styleLabel">
+                                    <Translate contentKey="generadorApp.grupoRisco.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="grupo-risco-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +216,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const GrupoRiscoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'grupoRisco' ? (
-    <Col md="grupoRisco">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="grupoRiscoLabel" for="grupo-risco-grupoRisco">
-              <Translate contentKey="generadorApp.grupoRisco.grupoRisco">Grupo Risco</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="grupo-risco-grupoRisco" type="text" name="grupoRisco" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="grupoRisco" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const StyleLabelComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'styleLabel' ? (
-    <Col md="styleLabel">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="styleLabelLabel" for="grupo-risco-styleLabel">
-              <Translate contentKey="generadorApp.grupoRisco.styleLabel">Style Label</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="grupo-risco-styleLabel" type="text" name="styleLabel" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(GrupoRiscoUpdate);

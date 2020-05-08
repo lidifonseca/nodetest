@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -140,11 +141,11 @@ export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigra
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="migracao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="migracao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="migracao-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -152,9 +153,49 @@ export class MigracaoUpdate extends React.Component<IMigracaoUpdateProps, IMigra
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdPadComponentUpdate baseFilters />
-
-                        <DataHoraMigracaoComponentUpdate baseFilters />
+                        {baseFilters !== 'idPad' ? (
+                          <Col md="idPad">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPadLabel" for="migracao-idPad">
+                                    <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="migracao-idPad" type="string" className="form-control" name="idPad" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'dataHoraMigracao' ? (
+                          <Col md="dataHoraMigracao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="dataHoraMigracaoLabel" for="migracao-dataHoraMigracao">
+                                    <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvInput
+                                    id="migracao-dataHoraMigracao"
+                                    type="datetime-local"
+                                    className="form-control"
+                                    name="dataHoraMigracao"
+                                    placeholder={'YYYY-MM-DD HH:mm'}
+                                    value={isNew ? null : convertDateTimeFromServer(this.props.migracaoEntity.dataHoraMigracao)}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="dataHoraMigracao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -184,54 +225,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdPadComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPad' ? (
-    <Col md="idPad">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPadLabel" for="migracao-idPad">
-              <Translate contentKey="generadorApp.migracao.idPad">Id Pad</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="migracao-idPad" type="string" className="form-control" name="idPad" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPad" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const DataHoraMigracaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'dataHoraMigracao' ? (
-    <Col md="dataHoraMigracao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="dataHoraMigracaoLabel" for="migracao-dataHoraMigracao">
-              <Translate contentKey="generadorApp.migracao.dataHoraMigracao">Data Hora Migracao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvInput
-              id="migracao-dataHoraMigracao"
-              type="datetime-local"
-              className="form-control"
-              name="dataHoraMigracao"
-              placeholder={'YYYY-MM-DD HH:mm'}
-              value={isNew ? null : convertDateTimeFromServer(this.props.migracaoEntity.dataHoraMigracao)}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="dataHoraMigracao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MigracaoUpdate);

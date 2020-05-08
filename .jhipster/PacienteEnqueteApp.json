@@ -15,7 +15,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508172400",
+    "changelogDate": "20200508230300",
     "entityTableName": "paciente_enquete_app",
     "dto": "mapstruct",
     "pagination": "pagination",

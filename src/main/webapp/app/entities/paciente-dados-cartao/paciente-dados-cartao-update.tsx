@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -160,11 +161,11 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-dados-cartao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-dados-cartao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="paciente-dados-cartao-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -172,19 +173,131 @@ export class PacienteDadosCartaoUpdate extends React.Component<IPacienteDadosCar
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <BandeiraComponentUpdate baseFilters />
-
-                        <NumeroCartaoComponentUpdate baseFilters />
-
-                        <ValidadeComponentUpdate baseFilters />
-
-                        <CodAtivacaoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <PacientePedidoComponentUpdate baseFilter pacientePedidos />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
+                        {baseFilters !== 'bandeira' ? (
+                          <Col md="bandeira">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="bandeiraLabel" for="paciente-dados-cartao-bandeira">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-bandeira" type="text" name="bandeira" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="bandeira" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'numeroCartao' ? (
+                          <Col md="numeroCartao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="numeroCartaoLabel" for="paciente-dados-cartao-numeroCartao">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-numeroCartao" type="text" name="numeroCartao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="numeroCartao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'validade' ? (
+                          <Col md="validade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="validadeLabel" for="paciente-dados-cartao-validade">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-validade" type="date" className="form-control" name="validade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="validade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'codAtivacao' ? (
+                          <Col md="codAtivacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="codAtivacaoLabel" for="paciente-dados-cartao-codAtivacao">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="paciente-dados-cartao-codAtivacao"
+                                    type="string"
+                                    className="form-control"
+                                    name="codAtivacao"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="codAtivacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-dados-cartao-ativo">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-dados-cartao-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'pacientePedido' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="pacientePedido" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-dados-cartao-paciente">
+                                    <Translate contentKey="generadorApp.pacienteDadosCartao.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-dados-cartao-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -216,146 +329,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const BandeiraComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'bandeira' ? (
-    <Col md="bandeira">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="bandeiraLabel" for="paciente-dados-cartao-bandeira">
-              <Translate contentKey="generadorApp.pacienteDadosCartao.bandeira">Bandeira</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-dados-cartao-bandeira" type="text" name="bandeira" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="bandeira" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const NumeroCartaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'numeroCartao' ? (
-    <Col md="numeroCartao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="numeroCartaoLabel" for="paciente-dados-cartao-numeroCartao">
-              <Translate contentKey="generadorApp.pacienteDadosCartao.numeroCartao">Numero Cartao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-dados-cartao-numeroCartao" type="text" name="numeroCartao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="numeroCartao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ValidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'validade' ? (
-    <Col md="validade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="validadeLabel" for="paciente-dados-cartao-validade">
-              <Translate contentKey="generadorApp.pacienteDadosCartao.validade">Validade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-dados-cartao-validade" type="date" className="form-control" name="validade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="validade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CodAtivacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'codAtivacao' ? (
-    <Col md="codAtivacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="codAtivacaoLabel" for="paciente-dados-cartao-codAtivacao">
-              <Translate contentKey="generadorApp.pacienteDadosCartao.codAtivacao">Cod Ativacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-dados-cartao-codAtivacao" type="string" className="form-control" name="codAtivacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="codAtivacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="paciente-dados-cartao-ativo">
-              <Translate contentKey="generadorApp.pacienteDadosCartao.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-dados-cartao-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacientePedidoComponentUpdate = ({ baseFilters, pacientePedidos }) => {
-  return baseFilters !== 'pacientePedido' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="pacientePedido" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-dados-cartao-paciente">
-              <Translate contentKey="generadorApp.pacienteDadosCartao.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-dados-cartao-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteDadosCartaoUpdate);

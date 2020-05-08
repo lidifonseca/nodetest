@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="tela-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="tela-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="tela-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,13 +143,39 @@ export class TelaUpdate extends React.Component<ITelaUpdateProps, ITelaUpdateSta
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TelaComponentUpdate baseFilters />
-
-                        <LogUserComponentUpdate baseFilter logUsers />
-
-                        <LogUserFranquiaComponentUpdate baseFilter logUserFranquias />
-
-                        <UsuarioAcaoComponentUpdate baseFilter usuarioAcaos />
+                        {baseFilters !== 'tela' ? (
+                          <Col md="tela">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="telaLabel" for="tela-tela">
+                                    <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tela-tela" type="text" name="tela" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'logUser' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="logUser" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'logUserFranquia' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="logUserFranquia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'usuarioAcao' ? (
+                          <Col md="12"></Col>
+                        ) : (
+                          <AvInput type="hidden" name="usuarioAcao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -178,50 +205,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TelaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tela' ? (
-    <Col md="tela">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="telaLabel" for="tela-tela">
-              <Translate contentKey="generadorApp.tela.tela">Tela</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tela-tela" type="text" name="tela" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tela" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const LogUserComponentUpdate = ({ baseFilters, logUsers }) => {
-  return baseFilters !== 'logUser' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="logUser" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const LogUserFranquiaComponentUpdate = ({ baseFilters, logUserFranquias }) => {
-  return baseFilters !== 'logUserFranquia' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="logUserFranquia" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const UsuarioAcaoComponentUpdate = ({ baseFilters, usuarioAcaos }) => {
-  return baseFilters !== 'usuarioAcao' ? (
-    <Col md="12"></Col>
-  ) : (
-    <AvInput type="hidden" name="usuarioAcao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TelaUpdate);

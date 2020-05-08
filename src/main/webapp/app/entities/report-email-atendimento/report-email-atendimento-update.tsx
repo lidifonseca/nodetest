@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -140,11 +141,11 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="report-email-atendimento-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="report-email-atendimento-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="report-email-atendimento-id"
@@ -159,9 +160,52 @@ export class ReportEmailAtendimentoUpdate extends React.Component<IReportEmailAt
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdAtendimentoComponentUpdate baseFilters />
-
-                        <TipoReportComponentUpdate baseFilters />
+                        {baseFilters !== 'idAtendimento' ? (
+                          <Col md="idAtendimento">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtendimentoLabel" for="report-email-atendimento-idAtendimento">
+                                    <Translate contentKey="generadorApp.reportEmailAtendimento.idAtendimento">Id Atendimento</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="report-email-atendimento-idAtendimento"
+                                    type="string"
+                                    className="form-control"
+                                    name="idAtendimento"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'tipoReport' ? (
+                          <Col md="tipoReport">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tipoReportLabel" for="report-email-atendimento-tipoReport">
+                                    <Translate contentKey="generadorApp.reportEmailAtendimento.tipoReport">Tipo Report</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="report-email-atendimento-tipoReport"
+                                    type="string"
+                                    className="form-control"
+                                    name="tipoReport"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tipoReport" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -191,47 +235,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdAtendimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idAtendimento' ? (
-    <Col md="idAtendimento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idAtendimentoLabel" for="report-email-atendimento-idAtendimento">
-              <Translate contentKey="generadorApp.reportEmailAtendimento.idAtendimento">Id Atendimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="report-email-atendimento-idAtendimento" type="string" className="form-control" name="idAtendimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idAtendimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const TipoReportComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tipoReport' ? (
-    <Col md="tipoReport">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tipoReportLabel" for="report-email-atendimento-tipoReport">
-              <Translate contentKey="generadorApp.reportEmailAtendimento.tipoReport">Tipo Report</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="report-email-atendimento-tipoReport" type="string" className="form-control" name="tipoReport" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tipoReport" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportEmailAtendimentoUpdate);

@@ -20,9 +20,6 @@ import SidebarNav from 'app/shared/layout/sidebar/sidebar-nav.tsx';
 					<PerfectScrollbar className="height-full" options={{suppressScrollX: true}}>
 						<SidebarProfile userAccount={props.userAccount}/>
 						<SidebarNav userAccount={props.userAccount}/>
-						<div className="sidebar-minify-btn" onClick={()=>{props.toggleSidebarMinify(!props.pageSidebarMinified)}}>
-							  <i className="fa fa-angle-double-left"></i>
-						</div>
 					</PerfectScrollbar>
 				</div>
 				<div className="sidebar-bg"></div>

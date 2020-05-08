@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="tempo-experiencia-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="tempo-experiencia-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="tempo-experiencia-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,7 +151,24 @@ export class TempoExperienciaUpdate extends React.Component<ITempoExperienciaUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <TempoExperienciaComponentUpdate baseFilters />
+                        {baseFilters !== 'tempoExperiencia' ? (
+                          <Col md="tempoExperiencia">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="tempoExperienciaLabel" for="tempo-experiencia-tempoExperiencia">
+                                    <Translate contentKey="generadorApp.tempoExperiencia.tempoExperiencia">Tempo Experiencia</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="tempo-experiencia-tempoExperiencia" type="text" name="tempoExperiencia" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="tempoExperiencia" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -180,26 +198,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const TempoExperienciaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'tempoExperiencia' ? (
-    <Col md="tempoExperiencia">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="tempoExperienciaLabel" for="tempo-experiencia-tempoExperiencia">
-              <Translate contentKey="generadorApp.tempoExperiencia.tempoExperiencia">Tempo Experiencia</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="tempo-experiencia-tempoExperiencia" type="text" name="tempoExperiencia" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="tempoExperiencia" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TempoExperienciaUpdate);

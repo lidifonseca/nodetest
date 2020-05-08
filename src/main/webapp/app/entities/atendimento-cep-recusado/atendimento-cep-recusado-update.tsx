@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -160,11 +161,11 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="atendimento-cep-recusado-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="atendimento-cep-recusado-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="atendimento-cep-recusado-id"
@@ -179,9 +180,49 @@ export class AtendimentoCepRecusadoUpdate extends React.Component<IAtendimentoCe
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <CepComponentUpdate baseFilters />
-
-                        <PadItemComponentUpdate baseFilter padItems />
+                        {baseFilters !== 'cep' ? (
+                          <Col md="cep">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cepLabel" for="atendimento-cep-recusado-cep">
+                                    <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="atendimento-cep-recusado-cep" type="text" name="cep" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cep" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'padItem' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="atendimento-cep-recusado-padItem">
+                                    <Translate contentKey="generadorApp.atendimentoCepRecusado.padItem">Pad Item</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="atendimento-cep-recusado-padItem"
+                                    className={'css-select-control'}
+                                    value={this.state.padItemSelectValue}
+                                    options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ padItemSelectValue: options })}
+                                    name={'padItem'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -213,54 +254,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const CepComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cep' ? (
-    <Col md="cep">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cepLabel" for="atendimento-cep-recusado-cep">
-              <Translate contentKey="generadorApp.atendimentoCepRecusado.cep">Cep</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-cep-recusado-cep" type="text" name="cep" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cep" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PadItemComponentUpdate = ({ baseFilters, padItems }) => {
-  return baseFilters !== 'padItem' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="atendimento-cep-recusado-padItem">
-              <Translate contentKey="generadorApp.atendimentoCepRecusado.padItem">Pad Item</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="atendimento-cep-recusado-padItem"
-              className={'css-select-control'}
-              value={this.state.padItemSelectValue}
-              options={padItems ? padItems.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ padItemSelectValue: options })}
-              name={'padItem'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="padItem" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AtendimentoCepRecusadoUpdate);

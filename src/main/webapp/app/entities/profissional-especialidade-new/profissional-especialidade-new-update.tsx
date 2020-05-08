@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -143,11 +144,11 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="profissional-especialidade-new-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="profissional-especialidade-new-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput
                                 id="profissional-especialidade-new-id"
@@ -162,9 +163,51 @@ export class ProfissionalEspecialidadeNewUpdate extends React.Component<
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdEspecialidadeComponentUpdate baseFilters />
-
-                        <IdProfissionalComponentUpdate baseFilters />
+                        {baseFilters !== 'idEspecialidade' ? (
+                          <Col md="idEspecialidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idEspecialidadeLabel" for="profissional-especialidade-new-idEspecialidade">
+                                    <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">
+                                      Id Especialidade
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField
+                                    id="profissional-especialidade-new-idEspecialidade"
+                                    type="string"
+                                    className="form-control"
+                                    name="idEspecialidade"
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idProfissional' ? (
+                          <Col md="idProfissional">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idProfissionalLabel" for="profissional-especialidade-new-idProfissional">
+                                    <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">
+                                      Id Profissional
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="profissional-especialidade-new-idProfissional" type="text" name="idProfissional" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -194,47 +237,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdEspecialidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idEspecialidade' ? (
-    <Col md="idEspecialidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idEspecialidadeLabel" for="profissional-especialidade-new-idEspecialidade">
-              <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idEspecialidade">Id Especialidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-especialidade-new-idEspecialidade" type="string" className="form-control" name="idEspecialidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idEspecialidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdProfissionalComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idProfissional' ? (
-    <Col md="idProfissional">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idProfissionalLabel" for="profissional-especialidade-new-idProfissional">
-              <Translate contentKey="generadorApp.profissionalEspecialidadeNew.idProfissional">Id Profissional</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="profissional-especialidade-new-idProfissional" type="text" name="idProfissional" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idProfissional" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfissionalEspecialidadeNewUpdate);

@@ -78,7 +78,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508173000",
+    "changelogDate": "20200508230900",
     "entityTableName": "paciente_prontuario",
     "dto": "mapstruct",
     "pagination": "pagination",

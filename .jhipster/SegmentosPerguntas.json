@@ -18,7 +18,7 @@
             "relationshipName": "perguntasQuestionario"
         }
     ],
-    "changelogDate": "20200508182000",
+    "changelogDate": "20200508235900",
     "entityTableName": "segmentos_perguntas",
     "dto": "mapstruct",
     "pagination": "pagination",

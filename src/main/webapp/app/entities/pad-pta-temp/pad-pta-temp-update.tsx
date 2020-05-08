@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="pad-pta-temp-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="pad-pta-temp-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="pad-pta-temp-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,13 +151,78 @@ export class PadPtaTempUpdate extends React.Component<IPadPtaTempUpdateProps, IP
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <SessionIdComponentUpdate baseFilters />
-
-                        <IdPtaComponentUpdate baseFilters />
-
-                        <IdCidComponentUpdate baseFilters />
-
-                        <CidXPtaNovoIdComponentUpdate baseFilters />
+                        {baseFilters !== 'sessionId' ? (
+                          <Col md="sessionId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="sessionIdLabel" for="pad-pta-temp-sessionId">
+                                    <Translate contentKey="generadorApp.padPtaTemp.sessionId">Session Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-sessionId" type="text" name="sessionId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="sessionId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idPta' ? (
+                          <Col md="idPta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idPtaLabel" for="pad-pta-temp-idPta">
+                                    <Translate contentKey="generadorApp.padPtaTemp.idPta">Id Pta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-idPta" type="string" className="form-control" name="idPta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idPta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idCid' ? (
+                          <Col md="idCid">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idCidLabel" for="pad-pta-temp-idCid">
+                                    <Translate contentKey="generadorApp.padPtaTemp.idCid">Id Cid</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-idCid" type="string" className="form-control" name="idCid" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cidXPtaNovoId' ? (
+                          <Col md="cidXPtaNovoId">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="cidXPtaNovoIdLabel" for="pad-pta-temp-cidXPtaNovoId">
+                                    <Translate contentKey="generadorApp.padPtaTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="pad-pta-temp-cidXPtaNovoId" type="string" className="form-control" name="cidXPtaNovoId" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidXPtaNovoId" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -186,89 +252,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const SessionIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'sessionId' ? (
-    <Col md="sessionId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="sessionIdLabel" for="pad-pta-temp-sessionId">
-              <Translate contentKey="generadorApp.padPtaTemp.sessionId">Session Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-temp-sessionId" type="text" name="sessionId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="sessionId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdPtaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idPta' ? (
-    <Col md="idPta">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idPtaLabel" for="pad-pta-temp-idPta">
-              <Translate contentKey="generadorApp.padPtaTemp.idPta">Id Pta</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-temp-idPta" type="string" className="form-control" name="idPta" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idPta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdCidComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idCid' ? (
-    <Col md="idCid">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idCidLabel" for="pad-pta-temp-idCid">
-              <Translate contentKey="generadorApp.padPtaTemp.idCid">Id Cid</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-temp-idCid" type="string" className="form-control" name="idCid" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidXPtaNovoIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cidXPtaNovoId' ? (
-    <Col md="cidXPtaNovoId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cidXPtaNovoIdLabel" for="pad-pta-temp-cidXPtaNovoId">
-              <Translate contentKey="generadorApp.padPtaTemp.cidXPtaNovoId">Cid X Pta Novo Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-pta-temp-cidXPtaNovoId" type="string" className="form-control" name="cidXPtaNovoId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cidXPtaNovoId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PadPtaTempUpdate);

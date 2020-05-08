@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -138,11 +139,11 @@ export class StatusAtualLigacaoUpdate extends React.Component<IStatusAtualLigaca
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="status-atual-ligacao-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="status-atual-ligacao-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="status-atual-ligacao-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -150,9 +151,44 @@ export class StatusAtualLigacaoUpdate extends React.Component<IStatusAtualLigaca
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <StatusAtualLigacaoComponentUpdate baseFilters />
-
-                        <StyleLabelComponentUpdate baseFilters />
+                        {baseFilters !== 'statusAtualLigacao' ? (
+                          <Col md="statusAtualLigacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="statusAtualLigacaoLabel" for="status-atual-ligacao-statusAtualLigacao">
+                                    <Translate contentKey="generadorApp.statusAtualLigacao.statusAtualLigacao">
+                                      Status Atual Ligacao
+                                    </Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atual-ligacao-statusAtualLigacao" type="text" name="statusAtualLigacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="statusAtualLigacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'styleLabel' ? (
+                          <Col md="styleLabel">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="styleLabelLabel" for="status-atual-ligacao-styleLabel">
+                                    <Translate contentKey="generadorApp.statusAtualLigacao.styleLabel">Style Label</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="status-atual-ligacao-styleLabel" type="text" name="styleLabel" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -182,47 +218,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const StatusAtualLigacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'statusAtualLigacao' ? (
-    <Col md="statusAtualLigacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="statusAtualLigacaoLabel" for="status-atual-ligacao-statusAtualLigacao">
-              <Translate contentKey="generadorApp.statusAtualLigacao.statusAtualLigacao">Status Atual Ligacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-atual-ligacao-statusAtualLigacao" type="text" name="statusAtualLigacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="statusAtualLigacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const StyleLabelComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'styleLabel' ? (
-    <Col md="styleLabel">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="styleLabelLabel" for="status-atual-ligacao-styleLabel">
-              <Translate contentKey="generadorApp.statusAtualLigacao.styleLabel">Style Label</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="status-atual-ligacao-styleLabel" type="text" name="styleLabel" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="styleLabel" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(StatusAtualLigacaoUpdate);

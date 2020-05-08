@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -130,11 +131,11 @@ export class CidPtaUpdate extends React.Component<ICidPtaUpdateProps, ICidPtaUpd
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="cid-pta-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="cid-pta-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="cid-pta-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -142,13 +143,78 @@ export class CidPtaUpdate extends React.Component<ICidPtaUpdateProps, ICidPtaUpd
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <IdDescPtaComponentUpdate baseFilters />
-
-                        <IdCidComponentUpdate baseFilters />
-
-                        <IdAtividadeComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
+                        {baseFilters !== 'idDescPta' ? (
+                          <Col md="idDescPta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idDescPtaLabel" for="cid-pta-idDescPta">
+                                    <Translate contentKey="generadorApp.cidPta.idDescPta">Id Desc Pta</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-pta-idDescPta" type="string" className="form-control" name="idDescPta" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idDescPta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idCid' ? (
+                          <Col md="idCid">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idCidLabel" for="cid-pta-idCid">
+                                    <Translate contentKey="generadorApp.cidPta.idCid">Id Cid</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-pta-idCid" type="string" className="form-control" name="idCid" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'idAtividade' ? (
+                          <Col md="idAtividade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="idAtividadeLabel" for="cid-pta-idAtividade">
+                                    <Translate contentKey="generadorApp.cidPta.idAtividade">Id Atividade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-pta-idAtividade" type="string" className="form-control" name="idAtividade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="idAtividade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="cid-pta-ativo">
+                                    <Translate contentKey="generadorApp.cidPta.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="cid-pta-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -178,89 +244,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const IdDescPtaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idDescPta' ? (
-    <Col md="idDescPta">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idDescPtaLabel" for="cid-pta-idDescPta">
-              <Translate contentKey="generadorApp.cidPta.idDescPta">Id Desc Pta</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-pta-idDescPta" type="string" className="form-control" name="idDescPta" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idDescPta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdCidComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idCid' ? (
-    <Col md="idCid">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idCidLabel" for="cid-pta-idCid">
-              <Translate contentKey="generadorApp.cidPta.idCid">Id Cid</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-pta-idCid" type="string" className="form-control" name="idCid" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idCid" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const IdAtividadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'idAtividade' ? (
-    <Col md="idAtividade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="idAtividadeLabel" for="cid-pta-idAtividade">
-              <Translate contentKey="generadorApp.cidPta.idAtividade">Id Atividade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-pta-idAtividade" type="string" className="form-control" name="idAtividade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="idAtividade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="cid-pta-ativo">
-              <Translate contentKey="generadorApp.cidPta.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="cid-pta-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CidPtaUpdate);

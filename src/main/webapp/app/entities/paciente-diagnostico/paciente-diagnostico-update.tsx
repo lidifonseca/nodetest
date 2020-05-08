@@ -1,3 +1,4 @@
+/* eslint complexity: ["error", 300] */
 import React from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
@@ -178,11 +179,11 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
                         <AvGroup>
                           <Row>
                             {/*
-                      <Col md="3">
-                      <Label className="mt-2" for="paciente-diagnostico-id">
-                        <Translate contentKey="global.field.id">ID</Translate>
-                      </Label>
-                      </Col> */}
+                        <Col md="3">
+                        <Label className="mt-2" for="paciente-diagnostico-id">
+                          <Translate contentKey="global.field.id">ID</Translate>
+                        </Label>
+                        </Col> */}
                             <Col md="12">
                               <AvInput id="paciente-diagnostico-id" type="hidden" className="form-control" name="id" required readOnly />
                             </Col>
@@ -190,19 +191,152 @@ export class PacienteDiagnosticoUpdate extends React.Component<IPacienteDiagnost
                         </AvGroup>
                       ) : null}
                       <Row>
-                        <ObservacaoComponentUpdate baseFilters />
-
-                        <AtivoComponentUpdate baseFilters />
-
-                        <CidPrimarioComponentUpdate baseFilters />
-
-                        <ComplexidadeComponentUpdate baseFilters />
-
-                        <CidComAltaComponentUpdate baseFilters />
-
-                        <PacienteComponentUpdate baseFilter pacientes />
-
-                        <CComponentUpdate baseFilter cids />
+                        {baseFilters !== 'observacao' ? (
+                          <Col md="observacao">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="observacaoLabel" for="paciente-diagnostico-observacao">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-observacao" type="text" name="observacao" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'ativo' ? (
+                          <Col md="ativo">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="ativoLabel" for="paciente-diagnostico-ativo">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-ativo" type="string" className="form-control" name="ativo" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cidPrimario' ? (
+                          <Col md="cidPrimario">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="cidPrimarioLabel" check>
+                                    <AvInput
+                                      id="paciente-diagnostico-cidPrimario"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="cidPrimario"
+                                    />
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidPrimario" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'complexidade' ? (
+                          <Col md="complexidade">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" id="complexidadeLabel" for="paciente-diagnostico-complexidade">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <AvField id="paciente-diagnostico-complexidade" type="text" name="complexidade" />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="complexidade" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'cidComAlta' ? (
+                          <Col md="cidComAlta">
+                            <AvGroup>
+                              <Row>
+                                <Col md="12">
+                                  <Label className="mt-2" id="cidComAltaLabel" check>
+                                    <AvInput
+                                      id="paciente-diagnostico-cidComAlta"
+                                      type="checkbox"
+                                      className="form-control"
+                                      name="cidComAlta"
+                                    />
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
+                                  </Label>
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="cidComAlta" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'paciente' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-diagnostico-paciente">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.paciente">Paciente</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-diagnostico-paciente"
+                                    className={'css-select-control'}
+                                    value={this.state.pacienteSelectValue}
+                                    options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ pacienteSelectValue: options })}
+                                    name={'paciente'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
+                        )}
+                        {baseFilters !== 'c' ? (
+                          <Col md="12">
+                            <AvGroup>
+                              <Row>
+                                <Col md="3">
+                                  <Label className="mt-2" for="paciente-diagnostico-c">
+                                    <Translate contentKey="generadorApp.pacienteDiagnostico.c">C</Translate>
+                                  </Label>
+                                </Col>
+                                <Col md="9">
+                                  <Select
+                                    id="paciente-diagnostico-c"
+                                    className={'css-select-control'}
+                                    value={this.state.cidSelectValue}
+                                    options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
+                                    onChange={options => this.setState({ cidSelectValue: options })}
+                                    name={'c'}
+                                  />
+                                </Col>
+                              </Row>
+                            </AvGroup>
+                          </Col>
+                        ) : (
+                          <AvInput type="hidden" name="c" value={this.state.fieldsBase[baseFilters]} />
+                        )}
                       </Row>
                     </div>
                   )}
@@ -236,162 +370,5 @@ const mapDispatchToProps = {
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
-
-const ObservacaoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'observacao' ? (
-    <Col md="observacao">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="observacaoLabel" for="paciente-diagnostico-observacao">
-              <Translate contentKey="generadorApp.pacienteDiagnostico.observacao">Observacao</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-diagnostico-observacao" type="text" name="observacao" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="observacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const AtivoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'ativo' ? (
-    <Col md="ativo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="ativoLabel" for="paciente-diagnostico-ativo">
-              <Translate contentKey="generadorApp.pacienteDiagnostico.ativo">Ativo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-diagnostico-ativo" type="string" className="form-control" name="ativo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="ativo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidPrimarioComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cidPrimario' ? (
-    <Col md="cidPrimario">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="cidPrimarioLabel" check>
-              <AvInput id="paciente-diagnostico-cidPrimario" type="checkbox" className="form-control" name="cidPrimario" />
-              <Translate contentKey="generadorApp.pacienteDiagnostico.cidPrimario">Cid Primario</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cidPrimario" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ComplexidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'complexidade' ? (
-    <Col md="complexidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="complexidadeLabel" for="paciente-diagnostico-complexidade">
-              <Translate contentKey="generadorApp.pacienteDiagnostico.complexidade">Complexidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="paciente-diagnostico-complexidade" type="text" name="complexidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="complexidade" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidComAltaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cidComAlta' ? (
-    <Col md="cidComAlta">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="cidComAltaLabel" check>
-              <AvInput id="paciente-diagnostico-cidComAlta" type="checkbox" className="form-control" name="cidComAlta" />
-              <Translate contentKey="generadorApp.pacienteDiagnostico.cidComAlta">Cid Com Alta</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cidComAlta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const PacienteComponentUpdate = ({ baseFilters, pacientes }) => {
-  return baseFilters !== 'paciente' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-diagnostico-paciente">
-              <Translate contentKey="generadorApp.pacienteDiagnostico.paciente">Paciente</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-diagnostico-paciente"
-              className={'css-select-control'}
-              value={this.state.pacienteSelectValue}
-              options={pacientes ? pacientes.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ pacienteSelectValue: options })}
-              name={'paciente'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="paciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CComponentUpdate = ({ baseFilters, cids }) => {
-  return baseFilters !== 'c' ? (
-    <Col md="12">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" for="paciente-diagnostico-c">
-              <Translate contentKey="generadorApp.pacienteDiagnostico.c">C</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <Select
-              id="paciente-diagnostico-c"
-              className={'css-select-control'}
-              value={this.state.cidSelectValue}
-              options={cids ? cids.map(option => ({ value: option.id, label: option.id })) : null}
-              onChange={options => this.setState({ cidSelectValue: options })}
-              name={'c'}
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="c" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PacienteDiagnosticoUpdate);

@@ -59,7 +59,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200508165700",
+    "changelogDate": "20200508223600",
     "entityTableName": "indicadores_valores",
     "dto": "mapstruct",
     "pagination": "pagination",

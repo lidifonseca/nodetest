@@ -37,7 +37,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508173700",
+    "changelogDate": "20200508231600",
     "entityTableName": "pad_item_alerta",
     "dto": "mapstruct",
     "pagination": "pagination",

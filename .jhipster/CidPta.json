@@ -31,7 +31,7 @@
         }
     ],
     "relationships": [],
-    "changelogDate": "20200508163400",
+    "changelogDate": "20200508221300",
     "entityTableName": "cid_pta",
     "dto": "mapstruct",
     "pagination": "pagination",
