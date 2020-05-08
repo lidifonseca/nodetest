@@ -7,6 +7,8 @@ import { Navbar, Nav, Collapse } from 'reactstrap';
 import LoadingBar from 'react-redux-loading-bar';
 
 import { EntitiesMenu } from '../menus/entities';
+
+import { LocaleMenu } from 'app/shared/layout/menus';
 import { Brand, Account, Logout, SwaggerMenu } from './header-components';
 import {connect} from "react-redux";
 import {toggleSidebarMobileOpen} from "app/shared/reducers/sidebar";
@@ -57,6 +59,7 @@ const Header = (props: IHeaderProps) => {
               <Nav id="header-tabs" className="ml-auto navbar-nav navbar-right pull-right" navbar>
                 {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
                 {props.isAuthenticated && <EntitiesMenu />}
+                {props.isAuthenticated && <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />}
                 {props.isAuthenticated && <Account />}
                 {props.isAuthenticated && <Logout />}
 
@@ -73,6 +76,7 @@ const Header = (props: IHeaderProps) => {
           <Nav id="header-tabs" style={{height: 40}} className="ml-auto navbar-nav navbar-right pull-right mr-4" navbar>
             {props.isAuthenticated && props.isAdmin && props.isSwaggerEnabled && <SwaggerMenu />}
             {props.isAuthenticated && <EntitiesMenu />}
+            {props.isAuthenticated && <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />}
             {props.isAuthenticated && <Account />}
             {props.isAuthenticated && <Logout />}
           </Nav>

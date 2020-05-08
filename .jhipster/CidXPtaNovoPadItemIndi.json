@@ -82,5 +82,5 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "javadoc": "@forceTableName tb_cid_x_pta_novo_pad_item_indicador@@"
+    "javadoc": "@forceTableName tb_cid_x_pta_novo_tb_pad_item_indicador@@"
 }

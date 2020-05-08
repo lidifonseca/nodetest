@@ -183,7 +183,7 @@ entity CidXPtaNovo {
 }
 
 /**
-	@forceTableName tb_cid_x_pta_novo_pad_item_indicador@@
+	@forceTableName tb_cid_x_pta_novo_tb_pad_item_indicador@@
 */
 entity CidXPtaNovoPadItemIndi {
 	meta String maxlength(145),

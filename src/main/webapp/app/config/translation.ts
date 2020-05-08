@@ -6,7 +6,8 @@ TranslatorContext.setDefaultLocale('pt-br');
 TranslatorContext.setRenderInnerTextForMissingKeys(false);
 
 export const languages: any = {
-  'pt-br': { name: 'Português (Brasil)' }
+  'pt-br': { name: 'Português (Brasil)' },
+  en: { name: 'English' }
   // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
 };
 
