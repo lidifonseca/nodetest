@@ -83,9 +83,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
         dataPadItemIncompleto: '',
         dataPadItemCompleto: '',
         numGhc: '',
-        cidXPtaNovo: '',
-        categoriaId: '',
-        score: '',
         atendimento: '',
         atendimentoCepRecusado: '',
         atendimentoSorteioFeito: '',
@@ -173,15 +170,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       'numGhc=' +
       this.state.numGhc +
       '&' +
-      'cidXPtaNovo=' +
-      this.state.cidXPtaNovo +
-      '&' +
-      'categoriaId=' +
-      this.state.categoriaId +
-      '&' +
-      'score=' +
-      this.state.score +
-      '&' +
       'atendimento=' +
       this.state.atendimento +
       '&' +
@@ -233,9 +221,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
-      cidXPtaNovo,
-      categoriaId,
-      score,
       atendimento,
       atendimentoCepRecusado,
       atendimentoSorteioFeito,
@@ -263,9 +248,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
-      cidXPtaNovo,
-      categoriaId,
-      score,
       atendimento,
       atendimentoCepRecusado,
       atendimentoSorteioFeito,
@@ -442,39 +424,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                             </Label>
 
                             <AvInput type="text" name="numGhc" id="pad-item-numGhc" value={this.state.numGhc} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'cidXPtaNovo' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="cidXPtaNovoLabel" for="pad-item-cidXPtaNovo">
-                              <Translate contentKey="generadorApp.padItem.cidXPtaNovo">Cid X Pta Novo</Translate>
-                            </Label>
-                            <AvInput type="string" name="cidXPtaNovo" id="pad-item-cidXPtaNovo" value={this.state.cidXPtaNovo} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'categoriaId' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="categoriaIdLabel" for="pad-item-categoriaId">
-                              <Translate contentKey="generadorApp.padItem.categoriaId">Categoria Id</Translate>
-                            </Label>
-                            <AvInput type="string" name="categoriaId" id="pad-item-categoriaId" value={this.state.categoriaId} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'score' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="scoreLabel" for="pad-item-score">
-                              <Translate contentKey="generadorApp.padItem.score">Score</Translate>
-                            </Label>
-                            <AvInput type="string" name="score" id="pad-item-score" value={this.state.score} />
                           </Row>
                         </Col>
                       ) : null}
@@ -713,24 +662,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'cidXPtaNovo' ? (
-                        <th className="hand" onClick={this.sort('cidXPtaNovo')}>
-                          <Translate contentKey="generadorApp.padItem.cidXPtaNovo">Cid X Pta Novo</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-                      {this.state.baseFilters !== 'categoriaId' ? (
-                        <th className="hand" onClick={this.sort('categoriaId')}>
-                          <Translate contentKey="generadorApp.padItem.categoriaId">Categoria Id</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-                      {this.state.baseFilters !== 'score' ? (
-                        <th className="hand" onClick={this.sort('score')}>
-                          <Translate contentKey="generadorApp.padItem.score">Score</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
 
                       {this.state.baseFilters !== 'pad' ? (
                         <th>
@@ -810,12 +741,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
                         ) : null}
 
                         {this.state.baseFilters !== 'numGhc' ? <td>{padItem.numGhc}</td> : null}
-
-                        {this.state.baseFilters !== 'cidXPtaNovo' ? <td>{padItem.cidXPtaNovo}</td> : null}
-
-                        {this.state.baseFilters !== 'categoriaId' ? <td>{padItem.categoriaId}</td> : null}
-
-                        {this.state.baseFilters !== 'score' ? <td>{padItem.score}</td> : null}
 
                         {this.state.baseFilters !== 'pad' ? (
                           <td>{padItem.pad ? <Link to={`pad/${padItem.pad.id}`}>{padItem.pad.id}</Link> : ''}</td>

@@ -38,12 +38,6 @@ export default class Pad extends BaseEntity {
   @Column({ type: 'integer', name: 'STATUS_PAD' })
   statusPad: number;
 
-  @Column({ name: 'IMAGE_PATH', length: 250 })
-  imagePath: string;
-
-  @Column({ type: 'double', name: 'SCORE' })
-  score: number;
-
   @OneToMany(
     type => PadCid,
     other => other.pad

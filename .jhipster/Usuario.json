@@ -515,22 +515,6 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "100"
-        },
-        {
-            "fieldName": "envioCidSemPta",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "envioAnaliseResultadoEsperado",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "envioDescumprimento",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "envioMelhoraTempo",
-            "fieldType": "Boolean"
         }
     ],
     "relationships": [

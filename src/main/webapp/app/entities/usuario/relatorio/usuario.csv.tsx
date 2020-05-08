@@ -195,10 +195,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
         copiarNomeProf: '',
         copiarRegistroProf: '',
         idAreaAtuacao: '',
-        envioCidSemPta: '',
-        envioAnaliseResultadoEsperado: '',
-        envioDescumprimento: '',
-        envioMelhoraTempo: '',
         diario: '',
         pacienteDiario: '',
         unidade: '',
@@ -604,18 +600,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       'idAreaAtuacao=' +
       this.state.idAreaAtuacao +
       '&' +
-      'envioCidSemPta=' +
-      this.state.envioCidSemPta +
-      '&' +
-      'envioAnaliseResultadoEsperado=' +
-      this.state.envioAnaliseResultadoEsperado +
-      '&' +
-      'envioDescumprimento=' +
-      this.state.envioDescumprimento +
-      '&' +
-      'envioMelhoraTempo=' +
-      this.state.envioMelhoraTempo +
-      '&' +
       'diario=' +
       this.state.diario +
       '&' +
@@ -755,10 +739,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       copiarNomeProf,
       copiarRegistroProf,
       idAreaAtuacao,
-      envioCidSemPta,
-      envioAnaliseResultadoEsperado,
-      envioDescumprimento,
-      envioMelhoraTempo,
       diario,
       pacienteDiario,
       unidade,
@@ -888,10 +868,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       copiarNomeProf,
       copiarRegistroProf,
       idAreaAtuacao,
-      envioCidSemPta,
-      envioAnaliseResultadoEsperado,
-      envioDescumprimento,
-      envioMelhoraTempo,
       diario,
       pacienteDiario,
       unidade,

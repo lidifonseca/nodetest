@@ -36,18 +36,6 @@
         {
             "fieldName": "statusPad",
             "fieldType": "Integer"
-        },
-        {
-            "fieldName": "imagePath",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "250"
-        },
-        {
-            "fieldName": "score",
-            "fieldType": "Double"
         }
     ],
     "relationships": [

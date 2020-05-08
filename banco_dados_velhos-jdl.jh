@@ -81,8 +81,9 @@ entity Atendimento {
 	dataCancelamento LocalDate,
 	tipoUsuarioCancelamento String maxlength(5),
 	confidencialProfissional String maxlength(255),
-	confidencialPaciente String maxlength(255),
-	imagemAssinatura String maxlength(245)
+	confidencialPaciente String maxlength(255)
+	// ,
+	// imagemAssinatura String maxlength(245)
 }
 
 entity AtendimentoAceite {
@@ -972,9 +973,10 @@ entity Pad {
 	dataFim LocalDate,
 	dataConferido LocalDate,
 	ativo Integer,
-	statusPad Integer,
-	imagePath String maxlength(250),
-	score Double
+	statusPad Integer
+	// ,
+	// imagePath String maxlength(250),
+	// score Double
 }
 
 entity PadCid {
@@ -992,10 +994,10 @@ entity PadItem {
 	ativo Integer,
 	dataPadItemIncompleto Instant,
 	dataPadItemCompleto Instant,
-	numGhc String maxlength(40),
-	cidXPtaNovo Integer,
-	categoriaId Integer,
-	score Double
+	numGhc String maxlength(40)
+	// cidXPtaNovo Integer,
+	// categoriaId Integer,
+	// score Double
 }
 
 entity PadItemAlerta {
@@ -1651,11 +1653,12 @@ entity Usuario {
 	copiarEvolucao Integer,
 	copiarNomeProf Integer,
 	copiarRegistroProf Integer,
-	idAreaAtuacao String maxlength(100),
-	envioCidSemPta Integer,
-	envioAnaliseResultadoEsperado Integer,
-	envioDescumprimento Integer,
-	envioMelhoraTempo Boolean
+	idAreaAtuacao String maxlength(100)
+	// ,
+	// envioCidSemPta Integer,
+	// envioAnaliseResultadoEsperado Integer,
+	// envioDescumprimento Integer,
+	// envioMelhoraTempo Boolean
 }
 
 entity UsuarioAcao {

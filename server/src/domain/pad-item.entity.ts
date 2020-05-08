@@ -51,15 +51,6 @@ export default class PadItem extends BaseEntity {
   @Column({ name: 'NUM_GHC', length: 40 })
   numGhc: string;
 
-  @Column({ type: 'integer', name: 'CID_X_PTA_NOVO' })
-  cidXPtaNovo: number;
-
-  @Column({ type: 'integer', name: 'CATEGORIA_ID' })
-  categoriaId: number;
-
-  @Column({ type: 'double', name: 'SCORE' })
-  score: number;
-
   @OneToMany(
     type => Atendimento,
     other => other.padItem

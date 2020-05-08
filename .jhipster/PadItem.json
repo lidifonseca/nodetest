@@ -45,18 +45,6 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "40"
-        },
-        {
-            "fieldName": "cidXPtaNovo",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "categoriaId",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "score",
-            "fieldType": "Double"
         }
     ],
     "relationships": [

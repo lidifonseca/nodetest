@@ -66,7 +66,6 @@ export interface IAtendimentoBaseState {
   tipoUsuarioCancelamento: any;
   confidencialProfissional: any;
   confidencialPaciente: any;
-  imagemAssinatura: any;
   atendimentoAceite: any;
   atendimentoAssinaturas: any;
   atendimentoAtividades: any;
@@ -213,7 +212,6 @@ export type ICrudGetAllActionAtendimento<T> = (
   tipoUsuarioCancelamento?: any,
   confidencialProfissional?: any,
   confidencialPaciente?: any,
-  imagemAssinatura?: any,
   atendimentoAceite?: any,
   atendimentoAssinaturas?: any,
   atendimentoAtividades?: any,
@@ -264,7 +262,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   tipoUsuarioCancelamento,
   confidencialProfissional,
   confidencialPaciente,
-  imagemAssinatura,
   atendimentoAceite,
   atendimentoAssinaturas,
   atendimentoAtividades,
@@ -313,7 +310,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   const tipoUsuarioCancelamentoRequest = tipoUsuarioCancelamento ? `tipoUsuarioCancelamento.contains=${tipoUsuarioCancelamento}&` : '';
   const confidencialProfissionalRequest = confidencialProfissional ? `confidencialProfissional.contains=${confidencialProfissional}&` : '';
   const confidencialPacienteRequest = confidencialPaciente ? `confidencialPaciente.contains=${confidencialPaciente}&` : '';
-  const imagemAssinaturaRequest = imagemAssinatura ? `imagemAssinatura.contains=${imagemAssinatura}&` : '';
   const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
   const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
@@ -330,7 +326,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -376,7 +372,6 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   tipoUsuarioCancelamento,
   confidencialProfissional,
   confidencialPaciente,
-  imagemAssinatura,
   atendimentoAceite,
   atendimentoAssinaturas,
   atendimentoAtividades,
@@ -425,7 +420,6 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   const tipoUsuarioCancelamentoRequest = tipoUsuarioCancelamento ? `tipoUsuarioCancelamento.contains=${tipoUsuarioCancelamento}&` : '';
   const confidencialProfissionalRequest = confidencialProfissional ? `confidencialProfissional.contains=${confidencialProfissional}&` : '';
   const confidencialPacienteRequest = confidencialPaciente ? `confidencialPaciente.contains=${confidencialPaciente}&` : '';
-  const imagemAssinaturaRequest = imagemAssinatura ? `imagemAssinatura.contains=${imagemAssinatura}&` : '';
   const atendimentoAceiteRequest = atendimentoAceite ? `atendimentoAceite.equals=${atendimentoAceite}&` : '';
   const atendimentoAssinaturasRequest = atendimentoAssinaturas ? `atendimentoAssinaturas.equals=${atendimentoAssinaturas}&` : '';
   const atendimentoAtividadesRequest = atendimentoAtividades ? `atendimentoAtividades.equals=${atendimentoAtividades}&` : '';
@@ -442,7 +436,7 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -537,7 +531,6 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
   const tipoUsuarioCancelamento = url.searchParams.get('tipoUsuarioCancelamento') || '';
   const confidencialProfissional = url.searchParams.get('confidencialProfissional') || '';
   const confidencialPaciente = url.searchParams.get('confidencialPaciente') || '';
-  const imagemAssinatura = url.searchParams.get('imagemAssinatura') || '';
 
   const atendimentoAceite = url.searchParams.get('atendimentoAceite') || '';
   const atendimentoAssinaturas = url.searchParams.get('atendimentoAssinaturas') || '';
@@ -586,7 +579,6 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
     tipoUsuarioCancelamento,
     confidencialProfissional,
     confidencialPaciente,
-    imagemAssinatura,
     atendimentoAceite,
     atendimentoAssinaturas,
     atendimentoAtividades,

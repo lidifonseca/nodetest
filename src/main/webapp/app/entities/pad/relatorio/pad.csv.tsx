@@ -84,8 +84,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         dataConferido: '',
         ativo: '',
         statusPad: '',
-        imagePath: '',
-        score: '',
         padCid: '',
         padItem: '',
         unidade: '',
@@ -158,12 +156,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'statusPad=' +
       this.state.statusPad +
       '&' +
-      'imagePath=' +
-      this.state.imagePath +
-      '&' +
-      'score=' +
-      this.state.score +
-      '&' +
       'padCid=' +
       this.state.padCid +
       '&' +
@@ -192,8 +184,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      imagePath,
-      score,
       padCid,
       padItem,
       unidade,
@@ -212,8 +202,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      imagePath,
-      score,
       padCid,
       padItem,
       unidade,

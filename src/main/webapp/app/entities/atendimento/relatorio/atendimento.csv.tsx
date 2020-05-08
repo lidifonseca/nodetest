@@ -127,7 +127,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         tipoUsuarioCancelamento: '',
         confidencialProfissional: '',
         confidencialPaciente: '',
-        imagemAssinatura: '',
         atendimentoAceite: '',
         atendimentoAssinaturas: '',
         atendimentoAtividades: '',
@@ -282,9 +281,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       'confidencialPaciente=' +
       this.state.confidencialPaciente +
       '&' +
-      'imagemAssinatura=' +
-      this.state.imagemAssinatura +
-      '&' +
       'atendimentoAceite=' +
       this.state.atendimentoAceite +
       '&' +
@@ -359,7 +355,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       tipoUsuarioCancelamento,
       confidencialProfissional,
       confidencialPaciente,
-      imagemAssinatura,
       atendimentoAceite,
       atendimentoAssinaturas,
       atendimentoAtividades,
@@ -410,7 +405,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       tipoUsuarioCancelamento,
       confidencialProfissional,
       confidencialPaciente,
-      imagemAssinatura,
       atendimentoAceite,
       atendimentoAssinaturas,
       atendimentoAtividades,

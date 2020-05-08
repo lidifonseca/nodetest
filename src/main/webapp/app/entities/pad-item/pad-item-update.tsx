@@ -258,12 +258,6 @@ export class PadItemUpdate extends React.Component<IPadItemUpdateProps, IPadItem
 
                         <NumGhcComponentUpdate baseFilters />
 
-                        <CidXPtaNovoComponentUpdate baseFilters />
-
-                        <CategoriaIdComponentUpdate baseFilters />
-
-                        <ScoreComponentUpdate baseFilters />
-
                         <AtendimentoComponentUpdate baseFilter atendimentos />
 
                         <AtendimentoCepRecusadoComponentUpdate baseFilter atendimentoCepRecusados />
@@ -545,69 +539,6 @@ const NumGhcComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="numGhc" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidXPtaNovoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cidXPtaNovo' ? (
-    <Col md="cidXPtaNovo">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cidXPtaNovoLabel" for="pad-item-cidXPtaNovo">
-              <Translate contentKey="generadorApp.padItem.cidXPtaNovo">Cid X Pta Novo</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-cidXPtaNovo" type="string" className="form-control" name="cidXPtaNovo" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cidXPtaNovo" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CategoriaIdComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'categoriaId' ? (
-    <Col md="categoriaId">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="categoriaIdLabel" for="pad-item-categoriaId">
-              <Translate contentKey="generadorApp.padItem.categoriaId">Categoria Id</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-categoriaId" type="string" className="form-control" name="categoriaId" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="categoriaId" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ScoreComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'score' ? (
-    <Col md="score">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="scoreLabel" for="pad-item-score">
-              <Translate contentKey="generadorApp.padItem.score">Score</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-item-score" type="string" className="form-control" name="score" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

@@ -420,14 +420,6 @@ export class UsuarioUpdate extends React.Component<IUsuarioUpdateProps, IUsuario
 
                         <IdAreaAtuacaoComponentUpdate baseFilters />
 
-                        <EnvioCidSemPtaComponentUpdate baseFilters />
-
-                        <EnvioAnaliseResultadoEsperadoComponentUpdate baseFilters />
-
-                        <EnvioDescumprimentoComponentUpdate baseFilters />
-
-                        <EnvioMelhoraTempoComponentUpdate baseFilters />
-
                         <DiarioComponentUpdate baseFilter diarios />
 
                         <PacienteDiarioComponentUpdate baseFilter pacienteDiarios />
@@ -2965,93 +2957,6 @@ const IdAreaAtuacaoComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="idAreaAtuacao" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EnvioCidSemPtaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'envioCidSemPta' ? (
-    <Col md="envioCidSemPta">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="envioCidSemPtaLabel" for="usuario-envioCidSemPta">
-              <Translate contentKey="generadorApp.usuario.envioCidSemPta">Envio Cid Sem Pta</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="usuario-envioCidSemPta" type="string" className="form-control" name="envioCidSemPta" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="envioCidSemPta" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EnvioAnaliseResultadoEsperadoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'envioAnaliseResultadoEsperado' ? (
-    <Col md="envioAnaliseResultadoEsperado">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="envioAnaliseResultadoEsperadoLabel" for="usuario-envioAnaliseResultadoEsperado">
-              <Translate contentKey="generadorApp.usuario.envioAnaliseResultadoEsperado">Envio Analise Resultado Esperado</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField
-              id="usuario-envioAnaliseResultadoEsperado"
-              type="string"
-              className="form-control"
-              name="envioAnaliseResultadoEsperado"
-            />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="envioAnaliseResultadoEsperado" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EnvioDescumprimentoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'envioDescumprimento' ? (
-    <Col md="envioDescumprimento">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="envioDescumprimentoLabel" for="usuario-envioDescumprimento">
-              <Translate contentKey="generadorApp.usuario.envioDescumprimento">Envio Descumprimento</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="usuario-envioDescumprimento" type="string" className="form-control" name="envioDescumprimento" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="envioDescumprimento" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const EnvioMelhoraTempoComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'envioMelhoraTempo' ? (
-    <Col md="envioMelhoraTempo">
-      <AvGroup>
-        <Row>
-          <Col md="12">
-            <Label className="mt-2" id="envioMelhoraTempoLabel" check>
-              <AvInput id="usuario-envioMelhoraTempo" type="checkbox" className="form-control" name="envioMelhoraTempo" />
-              <Translate contentKey="generadorApp.usuario.envioMelhoraTempo">Envio Melhora Tempo</Translate>
-            </Label>
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="envioMelhoraTempo" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

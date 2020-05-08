@@ -1848,68 +1848,6 @@ export class UsuarioDetail extends React.Component<IUsuarioDetailProps, IUsuario
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="envioCidSemPta">
-                            <Translate contentKey="generadorApp.usuario.envioCidSemPta">Envio Cid Sem Pta</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioEntity.envioCidSemPta}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="envioAnaliseResultadoEsperado">
-                            <Translate contentKey="generadorApp.usuario.envioAnaliseResultadoEsperado">
-                              Envio Analise Resultado Esperado
-                            </Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioEntity.envioAnaliseResultadoEsperado}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="envioDescumprimento">
-                            <Translate contentKey="generadorApp.usuario.envioDescumprimento">Envio Descumprimento</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioEntity.envioDescumprimento}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="envioMelhoraTempo">
-                            <Translate contentKey="generadorApp.usuario.envioMelhoraTempo">Envio Melhora Tempo</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{usuarioEntity.envioMelhoraTempo ? 'true' : 'false'}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.usuario.unidade">Unidade</Translate>
                         </dt>
                       </Col>

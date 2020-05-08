@@ -93,9 +93,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
         dataPadItemIncompleto: '',
         dataPadItemCompleto: '',
         numGhc: '',
-        cidXPtaNovo: '',
-        categoriaId: '',
-        score: '',
         atendimento: '',
         atendimentoCepRecusado: '',
         atendimentoSorteioFeito: '',
@@ -181,15 +178,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       'numGhc=' +
       this.state.numGhc +
       '&' +
-      'cidXPtaNovo=' +
-      this.state.cidXPtaNovo +
-      '&' +
-      'categoriaId=' +
-      this.state.categoriaId +
-      '&' +
-      'score=' +
-      this.state.score +
-      '&' +
       'atendimento=' +
       this.state.atendimento +
       '&' +
@@ -241,9 +229,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
-      cidXPtaNovo,
-      categoriaId,
-      score,
       atendimento,
       atendimentoCepRecusado,
       atendimentoSorteioFeito,
@@ -271,9 +256,6 @@ export class PadItem extends React.Component<IPadItemProps, IPadItemState> {
       dataPadItemIncompleto,
       dataPadItemCompleto,
       numGhc,
-      cidXPtaNovo,
-      categoriaId,
-      score,
       atendimento,
       atendimentoCepRecusado,
       atendimentoSorteioFeito,

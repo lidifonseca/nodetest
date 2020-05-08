@@ -183,36 +183,6 @@ export class PadDetail extends React.Component<IPadDetailProps, IPadState> {
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="imagePath">
-                            <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.imagePath}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="score">
-                            <Translate contentKey="generadorApp.pad.score">Score</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padEntity.score}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.pad.unidade">Unidade</Translate>
                         </dt>
                       </Col>

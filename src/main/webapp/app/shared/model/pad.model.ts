@@ -14,8 +14,6 @@ export interface IPad {
   dataConferido?: Moment;
   ativo?: number;
   statusPad?: number;
-  imagePath?: string;
-  score?: number;
   padCids?: IPadCid[];
   padItems?: IPadItem[];
   unidadeRazaoSocial?: string;

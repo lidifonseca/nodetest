@@ -371,18 +371,6 @@ export default class Usuario extends BaseEntity {
   @Column({ name: 'ID_AREA_ATUACAO', length: 100 })
   idAreaAtuacao: string;
 
-  @Column({ type: 'integer', name: 'ENVIO_CID_SEM_PTA' })
-  envioCidSemPta: number;
-
-  @Column({ type: 'integer', name: 'ENVIO_ANALISE_RESULTADO_ESPERADO' })
-  envioAnaliseResultadoEsperado: number;
-
-  @Column({ type: 'integer', name: 'ENVIO_DESCUMPRIMENTO' })
-  envioDescumprimento: number;
-
-  @Column({ type: 'boolean', name: 'ENVIO_MELHORA_TEMPO' })
-  envioMelhoraTempo: boolean;
-
   @OneToMany(
     type => Diario,
     other => other.usuario

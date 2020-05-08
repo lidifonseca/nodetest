@@ -118,7 +118,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         tipoUsuarioCancelamento: '',
         confidencialProfissional: '',
         confidencialPaciente: '',
-        imagemAssinatura: '',
         atendimentoAceite: '',
         atendimentoAssinaturas: '',
         atendimentoAtividades: '',
@@ -275,9 +274,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       'confidencialPaciente=' +
       this.state.confidencialPaciente +
       '&' +
-      'imagemAssinatura=' +
-      this.state.imagemAssinatura +
-      '&' +
       'atendimentoAceite=' +
       this.state.atendimentoAceite +
       '&' +
@@ -352,7 +348,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       tipoUsuarioCancelamento,
       confidencialProfissional,
       confidencialPaciente,
-      imagemAssinatura,
       atendimentoAceite,
       atendimentoAssinaturas,
       atendimentoAtividades,
@@ -403,7 +398,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       tipoUsuarioCancelamento,
       confidencialProfissional,
       confidencialPaciente,
-      imagemAssinatura,
       atendimentoAceite,
       atendimentoAssinaturas,
       atendimentoAtividades,
@@ -929,23 +923,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         </Col>
                       ) : null}
 
-                      {this.state.baseFilters !== 'imagemAssinatura' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="imagemAssinaturaLabel" for="atendimento-imagemAssinatura">
-                              <Translate contentKey="generadorApp.atendimento.imagemAssinatura">Imagem Assinatura</Translate>
-                            </Label>
-
-                            <AvInput
-                              type="text"
-                              name="imagemAssinatura"
-                              id="atendimento-imagemAssinatura"
-                              value={this.state.imagemAssinatura}
-                            />
-                          </Row>
-                        </Col>
-                      ) : null}
-
                       {this.state.baseFilters !== 'atendimentoAceite' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1"></Row>
@@ -1408,12 +1385,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'imagemAssinatura' ? (
-                        <th className="hand" onClick={this.sort('imagemAssinatura')}>
-                          <Translate contentKey="generadorApp.atendimento.imagemAssinatura">Imagem Assinatura</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <th>
@@ -1569,8 +1540,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         {this.state.baseFilters !== 'confidencialProfissional' ? <td>{atendimento.confidencialProfissional}</td> : null}
 
                         {this.state.baseFilters !== 'confidencialPaciente' ? <td>{atendimento.confidencialPaciente}</td> : null}
-
-                        {this.state.baseFilters !== 'imagemAssinatura' ? <td>{atendimento.imagemAssinatura}</td> : null}
 
                         {this.state.baseFilters !== 'unidade' ? (
                           <td>

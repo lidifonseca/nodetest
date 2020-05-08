@@ -186,10 +186,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
         copiarNomeProf: '',
         copiarRegistroProf: '',
         idAreaAtuacao: '',
-        envioCidSemPta: '',
-        envioAnaliseResultadoEsperado: '',
-        envioDescumprimento: '',
-        envioMelhoraTempo: '',
         diario: '',
         pacienteDiario: '',
         unidade: '',
@@ -597,18 +593,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       'idAreaAtuacao=' +
       this.state.idAreaAtuacao +
       '&' +
-      'envioCidSemPta=' +
-      this.state.envioCidSemPta +
-      '&' +
-      'envioAnaliseResultadoEsperado=' +
-      this.state.envioAnaliseResultadoEsperado +
-      '&' +
-      'envioDescumprimento=' +
-      this.state.envioDescumprimento +
-      '&' +
-      'envioMelhoraTempo=' +
-      this.state.envioMelhoraTempo +
-      '&' +
       'diario=' +
       this.state.diario +
       '&' +
@@ -748,10 +732,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       copiarNomeProf,
       copiarRegistroProf,
       idAreaAtuacao,
-      envioCidSemPta,
-      envioAnaliseResultadoEsperado,
-      envioDescumprimento,
-      envioMelhoraTempo,
       diario,
       pacienteDiario,
       unidade,
@@ -881,10 +861,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
       copiarNomeProf,
       copiarRegistroProf,
       idAreaAtuacao,
-      envioCidSemPta,
-      envioAnaliseResultadoEsperado,
-      envioDescumprimento,
-      envioMelhoraTempo,
       diario,
       pacienteDiario,
       unidade,
@@ -2416,62 +2392,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         </Col>
                       ) : null}
 
-                      {this.state.baseFilters !== 'envioCidSemPta' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="envioCidSemPtaLabel" for="usuario-envioCidSemPta">
-                              <Translate contentKey="generadorApp.usuario.envioCidSemPta">Envio Cid Sem Pta</Translate>
-                            </Label>
-                            <AvInput type="string" name="envioCidSemPta" id="usuario-envioCidSemPta" value={this.state.envioCidSemPta} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'envioAnaliseResultadoEsperado' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="envioAnaliseResultadoEsperadoLabel" for="usuario-envioAnaliseResultadoEsperado">
-                              <Translate contentKey="generadorApp.usuario.envioAnaliseResultadoEsperado">
-                                Envio Analise Resultado Esperado
-                              </Translate>
-                            </Label>
-                            <AvInput
-                              type="string"
-                              name="envioAnaliseResultadoEsperado"
-                              id="usuario-envioAnaliseResultadoEsperado"
-                              value={this.state.envioAnaliseResultadoEsperado}
-                            />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'envioDescumprimento' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="envioDescumprimentoLabel" for="usuario-envioDescumprimento">
-                              <Translate contentKey="generadorApp.usuario.envioDescumprimento">Envio Descumprimento</Translate>
-                            </Label>
-                            <AvInput
-                              type="string"
-                              name="envioDescumprimento"
-                              id="usuario-envioDescumprimento"
-                              value={this.state.envioDescumprimento}
-                            />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'envioMelhoraTempo' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="envioMelhoraTempoLabel" check>
-                              <AvInput id="usuario-envioMelhoraTempo" type="checkbox" className="form-control" name="envioMelhoraTempo" />
-                              <Translate contentKey="generadorApp.usuario.envioMelhoraTempo">Envio Melhora Tempo</Translate>
-                            </Label>
-                          </Row>
-                        </Col>
-                      ) : null}
-
                       {this.state.baseFilters !== 'diario' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1"></Row>
@@ -3284,32 +3204,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'envioCidSemPta' ? (
-                        <th className="hand" onClick={this.sort('envioCidSemPta')}>
-                          <Translate contentKey="generadorApp.usuario.envioCidSemPta">Envio Cid Sem Pta</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-                      {this.state.baseFilters !== 'envioAnaliseResultadoEsperado' ? (
-                        <th className="hand" onClick={this.sort('envioAnaliseResultadoEsperado')}>
-                          <Translate contentKey="generadorApp.usuario.envioAnaliseResultadoEsperado">
-                            Envio Analise Resultado Esperado
-                          </Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-                      {this.state.baseFilters !== 'envioDescumprimento' ? (
-                        <th className="hand" onClick={this.sort('envioDescumprimento')}>
-                          <Translate contentKey="generadorApp.usuario.envioDescumprimento">Envio Descumprimento</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-                      {this.state.baseFilters !== 'envioMelhoraTempo' ? (
-                        <th className="hand" onClick={this.sort('envioMelhoraTempo')}>
-                          <Translate contentKey="generadorApp.usuario.envioMelhoraTempo">Envio Melhora Tempo</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <th>
@@ -3579,16 +3473,6 @@ export class Usuario extends React.Component<IUsuarioProps, IUsuarioState> {
                         {this.state.baseFilters !== 'copiarRegistroProf' ? <td>{usuario.copiarRegistroProf}</td> : null}
 
                         {this.state.baseFilters !== 'idAreaAtuacao' ? <td>{usuario.idAreaAtuacao}</td> : null}
-
-                        {this.state.baseFilters !== 'envioCidSemPta' ? <td>{usuario.envioCidSemPta}</td> : null}
-
-                        {this.state.baseFilters !== 'envioAnaliseResultadoEsperado' ? (
-                          <td>{usuario.envioAnaliseResultadoEsperado}</td>
-                        ) : null}
-
-                        {this.state.baseFilters !== 'envioDescumprimento' ? <td>{usuario.envioDescumprimento}</td> : null}
-
-                        {this.state.baseFilters !== 'envioMelhoraTempo' ? <td>{usuario.envioMelhoraTempo ? 'true' : 'false'}</td> : null}
 
                         {this.state.baseFilters !== 'unidade' ? (
                           <td>{usuario.unidade ? <Link to={`unidade-easy/${usuario.unidade.id}`}>{usuario.unidade.id}</Link> : ''}</td>

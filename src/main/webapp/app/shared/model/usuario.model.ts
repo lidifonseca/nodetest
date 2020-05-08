@@ -125,10 +125,6 @@ export interface IUsuario {
   copiarNomeProf?: number;
   copiarRegistroProf?: number;
   idAreaAtuacao?: string;
-  envioCidSemPta?: number;
-  envioAnaliseResultadoEsperado?: number;
-  envioDescumprimento?: number;
-  envioMelhoraTempo?: boolean;
   diarios?: IDiario[];
   pacienteDiarios?: IPacienteDiario[];
   unidadeRazaoSocial?: string;
@@ -136,6 +132,4 @@ export interface IUsuario {
   tipoUsuario?: string | any;
 }
 
-export const defaultValue: Readonly<IUsuario> = {
-  envioMelhoraTempo: false
-};
+export const defaultValue: Readonly<IUsuario> = {};

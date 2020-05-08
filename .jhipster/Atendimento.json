@@ -208,14 +208,6 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "255"
-        },
-        {
-            "fieldName": "imagemAssinatura",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "245"
         }
     ],
     "relationships": [

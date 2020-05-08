@@ -196,10 +196,6 @@ export class PadUpdate extends React.Component<IPadUpdateProps, IPadUpdateState>
 
                         <StatusPadComponentUpdate baseFilters />
 
-                        <ImagePathComponentUpdate baseFilters />
-
-                        <ScoreComponentUpdate baseFilters />
-
                         <PadCidComponentUpdate baseFilter padCids />
 
                         <PadItemComponentUpdate baseFilter padItems />
@@ -406,48 +402,6 @@ const StatusPadComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="statusPad" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ImagePathComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'imagePath' ? (
-    <Col md="imagePath">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="imagePathLabel" for="pad-imagePath">
-              <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-imagePath" type="text" name="imagePath" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="imagePath" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ScoreComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'score' ? (
-    <Col md="score">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="scoreLabel" for="pad-score">
-              <Translate contentKey="generadorApp.pad.score">Score</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="pad-score" type="string" className="form-control" name="score" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="score" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

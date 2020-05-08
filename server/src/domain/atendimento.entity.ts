@@ -120,9 +120,6 @@ export default class Atendimento extends BaseEntity {
   @Column({ name: 'CONFIDENCIAL_PACIENTE', length: 255 })
   confidencialPaciente: string;
 
-  @Column({ name: 'IMAGEM_ASSINATURA', length: 245 })
-  imagemAssinatura: string;
-
   @OneToMany(
     type => AtendimentoAceite,
     other => other.atendimento

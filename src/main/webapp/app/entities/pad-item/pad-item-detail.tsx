@@ -215,51 +215,6 @@ export class PadItemDetail extends React.Component<IPadItemDetailProps, IPadItem
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="cidXPtaNovo">
-                            <Translate contentKey="generadorApp.padItem.cidXPtaNovo">Cid X Pta Novo</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemEntity.cidXPtaNovo}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="categoriaId">
-                            <Translate contentKey="generadorApp.padItem.categoriaId">Categoria Id</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemEntity.categoriaId}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
-                          <span id="score">
-                            <Translate contentKey="generadorApp.padItem.score">Score</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{padItemEntity.score}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.padItem.pad">Pad</Translate>
                         </dt>
                       </Col>

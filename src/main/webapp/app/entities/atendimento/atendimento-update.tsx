@@ -393,8 +393,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 
                         <ConfidencialPacienteComponentUpdate baseFilters />
 
-                        <ImagemAssinaturaComponentUpdate baseFilters />
-
                         <AtendimentoAceiteComponentUpdate baseFilter atendimentoAceites />
 
                         <AtendimentoAssinaturasComponentUpdate baseFilter atendimentoAssinaturas />
@@ -1180,27 +1178,6 @@ const ConfidencialPacienteComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="confidencialPaciente" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const ImagemAssinaturaComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'imagemAssinatura' ? (
-    <Col md="imagemAssinatura">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="imagemAssinaturaLabel" for="atendimento-imagemAssinatura">
-              <Translate contentKey="generadorApp.atendimento.imagemAssinatura">Imagem Assinatura</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-imagemAssinatura" type="text" name="imagemAssinatura" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="imagemAssinatura" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

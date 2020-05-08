@@ -41,8 +41,6 @@ export interface IPadBaseState {
   dataConferido: any;
   ativo: any;
   statusPad: any;
-  imagePath: any;
-  score: any;
   padCid: any;
   padItem: any;
   unidade: any;
@@ -145,8 +143,6 @@ export type ICrudGetAllActionPad<T> = (
   dataConferido?: any,
   ativo?: any,
   statusPad?: any,
-  imagePath?: any,
-  score?: any,
   padCid?: any,
   padItem?: any,
   unidade?: any,
@@ -165,8 +161,6 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   dataConferido,
   ativo,
   statusPad,
-  imagePath,
-  score,
   padCid,
   padItem,
   unidade,
@@ -183,8 +177,6 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   const dataConferidoRequest = dataConferido ? `dataConferido.equals=${dataConferido}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
   const statusPadRequest = statusPad ? `statusPad.contains=${statusPad}&` : '';
-  const imagePathRequest = imagePath ? `imagePath.contains=${imagePath}&` : '';
-  const scoreRequest = score ? `score.contains=${score}&` : '';
   const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
   const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
@@ -194,7 +186,7 @@ export const getEntities: ICrudGetAllActionPad<IPad> = (
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${imagePathRequest}${scoreRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -215,8 +207,6 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
   dataConferido,
   ativo,
   statusPad,
-  imagePath,
-  score,
   padCid,
   padItem,
   unidade,
@@ -233,8 +223,6 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
   const dataConferidoRequest = dataConferido ? `dataConferido.equals=${dataConferido}&` : '';
   const ativoRequest = ativo ? `ativo.contains=${ativo}&` : '';
   const statusPadRequest = statusPad ? `statusPad.contains=${statusPad}&` : '';
-  const imagePathRequest = imagePath ? `imagePath.contains=${imagePath}&` : '';
-  const scoreRequest = score ? `score.contains=${score}&` : '';
   const padCidRequest = padCid ? `padCid.equals=${padCid}&` : '';
   const padItemRequest = padItem ? `padItem.equals=${padItem}&` : '';
   const unidadeRequest = unidade ? `unidade.equals=${unidade}&` : '';
@@ -244,7 +232,7 @@ export const getEntitiesExport: ICrudGetAllActionPad<IPad> = (
   return {
     type: ACTION_TYPES.FETCH_PAD_LIST,
     payload: axios.get<IPad>(
-      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${imagePathRequest}${scoreRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idOperadoraRequest}${idFranquiaRequest}${nroPadRequest}${dataInicioRequest}${dataFimRequest}${dataConferidoRequest}${ativoRequest}${statusPadRequest}${padCidRequest}${padItemRequest}${unidadeRequest}${pacienteRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -302,8 +290,6 @@ export const getPadState = (location): IPadBaseState => {
   const dataConferido = url.searchParams.get('dataConferido') || '';
   const ativo = url.searchParams.get('ativo') || '';
   const statusPad = url.searchParams.get('statusPad') || '';
-  const imagePath = url.searchParams.get('imagePath') || '';
-  const score = url.searchParams.get('score') || '';
 
   const padCid = url.searchParams.get('padCid') || '';
   const padItem = url.searchParams.get('padItem') || '';
@@ -320,8 +306,6 @@ export const getPadState = (location): IPadBaseState => {
     dataConferido,
     ativo,
     statusPad,
-    imagePath,
-    score,
     padCid,
     padItem,
     unidade,

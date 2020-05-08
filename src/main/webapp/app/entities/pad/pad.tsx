@@ -75,8 +75,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
         dataConferido: '',
         ativo: '',
         statusPad: '',
-        imagePath: '',
-        score: '',
         padCid: '',
         padItem: '',
         unidade: '',
@@ -151,12 +149,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       'statusPad=' +
       this.state.statusPad +
       '&' +
-      'imagePath=' +
-      this.state.imagePath +
-      '&' +
-      'score=' +
-      this.state.score +
-      '&' +
       'padCid=' +
       this.state.padCid +
       '&' +
@@ -185,8 +177,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      imagePath,
-      score,
       padCid,
       padItem,
       unidade,
@@ -205,8 +195,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
       dataConferido,
       ativo,
       statusPad,
-      imagePath,
-      score,
       padCid,
       padItem,
       unidade,
@@ -340,29 +328,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                               <Translate contentKey="generadorApp.pad.statusPad">Status Pad</Translate>
                             </Label>
                             <AvInput type="string" name="statusPad" id="pad-statusPad" value={this.state.statusPad} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'imagePath' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="imagePathLabel" for="pad-imagePath">
-                              <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
-                            </Label>
-
-                            <AvInput type="text" name="imagePath" id="pad-imagePath" value={this.state.imagePath} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'score' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="scoreLabel" for="pad-score">
-                              <Translate contentKey="generadorApp.pad.score">Score</Translate>
-                            </Label>
-                            <AvInput type="string" name="score" id="pad-score" value={this.state.score} />
                           </Row>
                         </Col>
                       ) : null}
@@ -509,18 +474,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'imagePath' ? (
-                        <th className="hand" onClick={this.sort('imagePath')}>
-                          <Translate contentKey="generadorApp.pad.imagePath">Image Path</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
-                      {this.state.baseFilters !== 'score' ? (
-                        <th className="hand" onClick={this.sort('score')}>
-                          <Translate contentKey="generadorApp.pad.score">Score</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
 
                       {this.state.baseFilters !== 'unidade' ? (
                         <th>
@@ -576,10 +529,6 @@ export class Pad extends React.Component<IPadProps, IPadState> {
                         {this.state.baseFilters !== 'ativo' ? <td>{pad.ativo}</td> : null}
 
                         {this.state.baseFilters !== 'statusPad' ? <td>{pad.statusPad}</td> : null}
-
-                        {this.state.baseFilters !== 'imagePath' ? <td>{pad.imagePath}</td> : null}
-
-                        {this.state.baseFilters !== 'score' ? <td>{pad.score}</td> : null}
 
                         {this.state.baseFilters !== 'unidade' ? (
                           <td>{pad.unidade ? <Link to={`unidade-easy/${pad.unidade.id}`}>{pad.unidade.id}</Link> : ''}</td>

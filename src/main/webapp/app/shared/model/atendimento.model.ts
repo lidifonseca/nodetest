@@ -46,7 +46,6 @@ export interface IAtendimento {
   tipoUsuarioCancelamento?: string;
   confidencialProfissional?: string;
   confidencialPaciente?: string;
-  imagemAssinatura?: string;
   atendimentoAceites?: IAtendimentoAceite[];
   atendimentoAssinaturas?: IAtendimentoAssinaturas[];
   atendimentoAtividades?: IAtendimentoAtividades[];

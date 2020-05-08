@@ -23,9 +23,6 @@ export interface IPadItem {
   dataPadItemIncompleto?: Moment;
   dataPadItemCompleto?: Moment;
   numGhc?: string;
-  cidXPtaNovo?: number;
-  categoriaId?: number;
-  score?: number;
   atendimentos?: IAtendimento[];
   atendimentoCepRecusados?: IAtendimentoCepRecusado[];
   atendimentoSorteioFeitos?: IAtendimentoSorteioFeito[];

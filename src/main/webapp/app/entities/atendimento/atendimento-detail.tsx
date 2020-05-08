@@ -562,21 +562,6 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="imagemAssinatura">
-                            <Translate contentKey="generadorApp.atendimento.imagemAssinatura">Imagem Assinatura</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.imagemAssinatura}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <Translate contentKey="generadorApp.atendimento.unidade">Unidade</Translate>
                         </dt>
                       </Col>
