@@ -341,8 +341,6 @@ export class AtendimentoUpdate extends React.Component<IAtendimentoUpdateProps, 
 
                         <BairroComponentUpdate baseFilters />
 
-                        <CidadeComponentUpdate baseFilters />
-
                         <UfComponentUpdate baseFilters />
 
                         <LatitudeComponentUpdate baseFilters />
@@ -608,27 +606,6 @@ const BairroComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="bairro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cidade' ? (
-    <Col md="cidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cidadeLabel" for="atendimento-cidade">
-              <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="atendimento-cidade" type="text" name="cidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

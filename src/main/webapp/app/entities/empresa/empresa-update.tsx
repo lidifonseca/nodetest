@@ -192,8 +192,6 @@ export class EmpresaUpdate extends React.Component<IEmpresaUpdateProps, IEmpresa
 
                         <BairroComponentUpdate baseFilters />
 
-                        <CidadeComponentUpdate baseFilters />
-
                         <UfComponentUpdate baseFilters />
 
                         <TipoComponentUpdate baseFilters />
@@ -576,27 +574,6 @@ const BairroComponentUpdate = ({ baseFilters }) => {
     </Col>
   ) : (
     <AvInput type="hidden" name="bairro" value={this.state.fieldsBase[baseFilters]} />
-  );
-};
-
-const CidadeComponentUpdate = ({ baseFilters }) => {
-  return baseFilters !== 'cidade' ? (
-    <Col md="cidade">
-      <AvGroup>
-        <Row>
-          <Col md="3">
-            <Label className="mt-2" id="cidadeLabel" for="empresa-cidade">
-              <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
-            </Label>
-          </Col>
-          <Col md="9">
-            <AvField id="empresa-cidade" type="text" name="cidade" />
-          </Col>
-        </Row>
-      </AvGroup>
-    </Col>
-  ) : (
-    <AvInput type="hidden" name="cidade" value={this.state.fieldsBase[baseFilters]} />
   );
 };
 

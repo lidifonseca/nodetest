@@ -56,7 +56,6 @@ entity Atendimento {
 	numero String maxlength(30),
 	complemento String maxlength(20),
 	bairro String maxlength(40),
-	cidade String maxlength(100),
 	uf String maxlength(5),
 	latitude String maxlength(60),
 	longitude String maxlength(60),
@@ -240,7 +239,6 @@ entity Empresa {
 	numero String maxlength(30),
 	complemento String maxlength(20),
 	bairro String maxlength(40),
-	cidade String maxlength(100),
 	uf String maxlength(5),
 	tipo Integer required
 }

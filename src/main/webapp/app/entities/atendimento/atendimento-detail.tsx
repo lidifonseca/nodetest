@@ -162,21 +162,6 @@ export class AtendimentoDetail extends React.Component<IAtendimentoDetailProps, 
                     <Row>
                       <Col md="3">
                         <dt>
-                          <span id="cidade">
-                            <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
-                          </span>
-                        </dt>
-                      </Col>
-                      <Col md="9">
-                        <dd>{atendimentoEntity.cidade}</dd>
-                      </Col>
-                    </Row>
-                  </Col>
-
-                  <Col md="12">
-                    <Row>
-                      <Col md="3">
-                        <dt>
                           <span id="uf">
                             <Translate contentKey="generadorApp.atendimento.uf">Uf</Translate>
                           </span>

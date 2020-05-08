@@ -89,7 +89,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
         numero: '',
         complemento: '',
         bairro: '',
-        cidade: '',
         uf: '',
         tipo: '',
         cidade: ''
@@ -185,9 +184,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       'bairro=' +
       this.state.bairro +
       '&' +
-      'cidade=' +
-      this.state.cidade +
-      '&' +
       'uf=' +
       this.state.uf +
       '&' +
@@ -221,7 +217,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       tipo,
       cidade,
@@ -247,7 +242,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       tipo,
       cidade,

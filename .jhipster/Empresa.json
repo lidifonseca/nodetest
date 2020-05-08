@@ -126,14 +126,6 @@
             "fieldValidateRulesMaxlength": "40"
         },
         {
-            "fieldName": "cidade",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "100"
-        },
-        {
             "fieldName": "uf",
             "fieldType": "String",
             "fieldValidateRules": [

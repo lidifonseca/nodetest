@@ -20,7 +20,6 @@ export interface IAtendimento {
   numero?: string;
   complemento?: string;
   bairro?: string;
-  cidade?: string;
   uf?: string;
   latitude?: string;
   longitude?: string;

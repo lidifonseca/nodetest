@@ -80,7 +80,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
         numero: '',
         complemento: '',
         bairro: '',
-        cidade: '',
         uf: '',
         tipo: '',
         cidade: ''
@@ -178,9 +177,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       'bairro=' +
       this.state.bairro +
       '&' +
-      'cidade=' +
-      this.state.cidade +
-      '&' +
       'uf=' +
       this.state.uf +
       '&' +
@@ -214,7 +210,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       tipo,
       cidade,
@@ -240,7 +235,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       tipo,
       cidade,
@@ -477,18 +471,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                         </Col>
                       ) : null}
 
-                      {this.state.baseFilters !== 'cidade' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="cidadeLabel" for="empresa-cidade">
-                              <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
-                            </Label>
-
-                            <AvInput type="text" name="cidade" id="empresa-cidade" value={this.state.cidade} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
                       {this.state.baseFilters !== 'uf' ? (
                         <Col md="3">
                           <Row className="mr-1 mt-1">
@@ -661,12 +643,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'cidade' ? (
-                        <th className="hand" onClick={this.sort('cidade')}>
-                          <Translate contentKey="generadorApp.empresa.cidade">Cidade</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
                       {this.state.baseFilters !== 'uf' ? (
                         <th className="hand" onClick={this.sort('uf')}>
                           <Translate contentKey="generadorApp.empresa.uf">Uf</Translate>
@@ -735,8 +711,6 @@ export class Empresa extends React.Component<IEmpresaProps, IEmpresaState> {
                         {this.state.baseFilters !== 'complemento' ? <td>{empresa.complemento}</td> : null}
 
                         {this.state.baseFilters !== 'bairro' ? <td>{empresa.bairro}</td> : null}
-
-                        {this.state.baseFilters !== 'cidade' ? <td>{empresa.cidade}</td> : null}
 
                         {this.state.baseFilters !== 'uf' ? <td>{empresa.uf}</td> : null}
 

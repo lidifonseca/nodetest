@@ -71,9 +71,6 @@ export default class Empresa extends BaseEntity {
   @Column({ name: 'BAIRRO', length: 40 })
   bairro: string;
 
-  @Column({ name: 'CIDADE', length: 100 })
-  cidade: string;
-
   @Column({ name: 'UF', length: 5 })
   uf: string;
 

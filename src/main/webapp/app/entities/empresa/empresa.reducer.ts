@@ -49,7 +49,6 @@ export interface IEmpresaBaseState {
   numero: any;
   complemento: any;
   bairro: any;
-  cidade: any;
   uf: any;
   tipo: any;
   cidade: any;
@@ -157,7 +156,6 @@ export type ICrudGetAllActionEmpresa<T> = (
   numero?: any,
   complemento?: any,
   bairro?: any,
-  cidade?: any,
   uf?: any,
   tipo?: any,
   cidade?: any,
@@ -183,7 +181,6 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   numero,
   complemento,
   bairro,
-  cidade,
   uf,
   tipo,
   cidade,
@@ -207,7 +204,6 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
-  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
   const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
@@ -216,7 +212,7 @@ export const getEntities: ICrudGetAllActionEmpresa<IEmpresa> = (
   return {
     type: ACTION_TYPES.FETCH_EMPRESA_LIST,
     payload: axios.get<IEmpresa>(
-      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${tipoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -245,7 +241,6 @@ export const getEntitiesExport: ICrudGetAllActionEmpresa<IEmpresa> = (
   numero,
   complemento,
   bairro,
-  cidade,
   uf,
   tipo,
   cidade,
@@ -269,7 +264,6 @@ export const getEntitiesExport: ICrudGetAllActionEmpresa<IEmpresa> = (
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
-  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const tipoRequest = tipo ? `tipo.contains=${tipo}&` : '';
   const cidadeRequest = cidade ? `cidade.equals=${cidade}&` : '';
@@ -278,7 +272,7 @@ export const getEntitiesExport: ICrudGetAllActionEmpresa<IEmpresa> = (
   return {
     type: ACTION_TYPES.FETCH_EMPRESA_LIST,
     payload: axios.get<IEmpresa>(
-      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${tipoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${empresaRequest}${nomeRequest}${emailRequest}${cpfRequest}${rgRequest}${nascimentoRequest}${sexoRequest}${telefone1Request}${telefone2Request}${celular1Request}${celular2Request}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${tipoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -339,7 +333,6 @@ export const getEmpresaState = (location): IEmpresaBaseState => {
   const numero = url.searchParams.get('numero') || '';
   const complemento = url.searchParams.get('complemento') || '';
   const bairro = url.searchParams.get('bairro') || '';
-  const cidade = url.searchParams.get('cidade') || '';
   const uf = url.searchParams.get('uf') || '';
   const tipo = url.searchParams.get('tipo') || '';
 
@@ -363,7 +356,6 @@ export const getEmpresaState = (location): IEmpresaBaseState => {
     numero,
     complemento,
     bairro,
-    cidade,
     uf,
     tipo,
     cidade

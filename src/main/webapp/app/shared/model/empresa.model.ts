@@ -19,7 +19,6 @@ export interface IEmpresa {
   numero?: string;
   complemento?: string;
   bairro?: string;
-  cidade?: string;
   uf?: string;
   tipo?: number;
   cidade?: string | any;

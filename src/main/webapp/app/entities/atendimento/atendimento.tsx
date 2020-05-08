@@ -92,7 +92,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         numero: '',
         complemento: '',
         bairro: '',
-        cidade: '',
         uf: '',
         latitude: '',
         longitude: '',
@@ -197,9 +196,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       '&' +
       'bairro=' +
       this.state.bairro +
-      '&' +
-      'cidade=' +
-      this.state.cidade +
       '&' +
       'uf=' +
       this.state.uf +
@@ -330,7 +326,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -382,7 +377,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -556,18 +550,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                             </Label>
 
                             <AvInput type="text" name="bairro" id="atendimento-bairro" value={this.state.bairro} />
-                          </Row>
-                        </Col>
-                      ) : null}
-
-                      {this.state.baseFilters !== 'cidade' ? (
-                        <Col md="3">
-                          <Row className="mr-1 mt-1">
-                            <Label id="cidadeLabel" for="atendimento-cidade">
-                              <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
-                            </Label>
-
-                            <AvInput type="text" name="cidade" id="atendimento-cidade" value={this.state.cidade} />
                           </Row>
                         </Col>
                       ) : null}
@@ -1270,12 +1252,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                           <FontAwesomeIcon icon="sort" />
                         </th>
                       ) : null}
-                      {this.state.baseFilters !== 'cidade' ? (
-                        <th className="hand" onClick={this.sort('cidade')}>
-                          <Translate contentKey="generadorApp.atendimento.cidade">Cidade</Translate>
-                          <FontAwesomeIcon icon="sort" />
-                        </th>
-                      ) : null}
                       {this.state.baseFilters !== 'uf' ? (
                         <th className="hand" onClick={this.sort('uf')}>
                           <Translate contentKey="generadorApp.atendimento.uf">Uf</Translate>
@@ -1521,8 +1497,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
                         {this.state.baseFilters !== 'complemento' ? <td>{atendimento.complemento}</td> : null}
 
                         {this.state.baseFilters !== 'bairro' ? <td>{atendimento.bairro}</td> : null}
-
-                        {this.state.baseFilters !== 'cidade' ? <td>{atendimento.cidade}</td> : null}
 
                         {this.state.baseFilters !== 'uf' ? <td>{atendimento.uf}</td> : null}
 

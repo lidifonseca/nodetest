@@ -101,7 +101,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
         numero: '',
         complemento: '',
         bairro: '',
-        cidade: '',
         uf: '',
         latitude: '',
         longitude: '',
@@ -204,9 +203,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       '&' +
       'bairro=' +
       this.state.bairro +
-      '&' +
-      'cidade=' +
-      this.state.cidade +
       '&' +
       'uf=' +
       this.state.uf +
@@ -337,7 +333,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,
@@ -389,7 +384,6 @@ export class Atendimento extends React.Component<IAtendimentoProps, IAtendimento
       numero,
       complemento,
       bairro,
-      cidade,
       uf,
       latitude,
       longitude,

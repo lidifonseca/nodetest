@@ -40,7 +40,6 @@ export interface IAtendimentoBaseState {
   numero: any;
   complemento: any;
   bairro: any;
-  cidade: any;
   uf: any;
   latitude: any;
   longitude: any;
@@ -188,7 +187,6 @@ export type ICrudGetAllActionAtendimento<T> = (
   numero?: any,
   complemento?: any,
   bairro?: any,
-  cidade?: any,
   uf?: any,
   latitude?: any,
   longitude?: any,
@@ -240,7 +238,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   numero,
   complemento,
   bairro,
-  cidade,
   uf,
   latitude,
   longitude,
@@ -290,7 +287,6 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
-  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const latitudeRequest = latitude ? `latitude.contains=${latitude}&` : '';
   const longitudeRequest = longitude ? `longitude.contains=${longitude}&` : '';
@@ -334,7 +330,7 @@ export const getEntities: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -354,7 +350,6 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   numero,
   complemento,
   bairro,
-  cidade,
   uf,
   latitude,
   longitude,
@@ -404,7 +399,6 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   const numeroRequest = numero ? `numero.contains=${numero}&` : '';
   const complementoRequest = complemento ? `complemento.contains=${complemento}&` : '';
   const bairroRequest = bairro ? `bairro.contains=${bairro}&` : '';
-  const cidadeRequest = cidade ? `cidade.contains=${cidade}&` : '';
   const ufRequest = uf ? `uf.contains=${uf}&` : '';
   const latitudeRequest = latitude ? `latitude.contains=${latitude}&` : '';
   const longitudeRequest = longitude ? `longitude.contains=${longitude}&` : '';
@@ -448,7 +442,7 @@ export const getEntitiesExport: ICrudGetAllActionAtendimento<IAtendimento> = (
   return {
     type: ACTION_TYPES.FETCH_ATENDIMENTO_LIST,
     payload: axios.get<IAtendimento>(
-      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${cidadeRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
+      `${requestUrl}${idFranquiaRequest}${idProfissionalRequest}${cepRequest}${enderecoRequest}${numeroRequest}${complementoRequest}${bairroRequest}${ufRequest}${latitudeRequest}${longitudeRequest}${dataAgendaRequest}${horarioRequest}${dataChegadaRequest}${latitudeChegadaRequest}${longitudeChegadaRequest}${dataSaidaRequest}${latitudeSaidaRequest}${longitudeSaidaRequest}${evolucaoRequest}${observacaoRequest}${intercorrenciaRequest}${avaliacaoRequest}${aceitoRequest}${motivoRequest}${valorRequest}${ordemAtendimentoRequest}${ativoRequest}${dataForaHoraRequest}${idUsuarioCancelamentoRequest}${dataCancelamentoRequest}${tipoUsuarioCancelamentoRequest}${confidencialProfissionalRequest}${confidencialPacienteRequest}${imagemAssinaturaRequest}${atendimentoAceiteRequest}${atendimentoAssinaturasRequest}${atendimentoAtividadesRequest}${unidadeRequest}${pacienteRequest}${operadoraRequest}${especialidadeRequest}${padItemRequest}${statusAtendimentoRequest}${periodoRequest}${cidadeRequest}cacheBuster=${new Date().getTime()}`
     )
   };
 };
@@ -517,7 +511,6 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
   const numero = url.searchParams.get('numero') || '';
   const complemento = url.searchParams.get('complemento') || '';
   const bairro = url.searchParams.get('bairro') || '';
-  const cidade = url.searchParams.get('cidade') || '';
   const uf = url.searchParams.get('uf') || '';
   const latitude = url.searchParams.get('latitude') || '';
   const longitude = url.searchParams.get('longitude') || '';
@@ -567,7 +560,6 @@ export const getAtendimentoState = (location): IAtendimentoBaseState => {
     numero,
     complemento,
     bairro,
-    cidade,
     uf,
     latitude,
     longitude,
