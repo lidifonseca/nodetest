@@ -29,19 +29,19 @@ import { <%= enumClass %> } from './enumeration/<%= uniqueEnums[enumClass] %>';
 import { User } from './user.entity';
 <%_ } _%>
 
-<%_ if (typeof javadoc == 'undefined') { _%>
+<%_ if (typeof clean_javadoc == 'undefined') { _%>
 /**
  * A <%= asEntity(entityClass) %>.
  */
 <%_ } else { _%>
-<%- formatAsClassJavadoc(javadoc) %>
+<%- formatAsClassJavadoc(clean_javadoc) %>
 <%_ } _%>
-@Entity('tb_<%= entityTableName %>')
+@Entity('<%= forceTableName ? forceTableName : 'tb_'+entityTableName %>')
 export default class <%= asEntity(entityClass) %> extends BaseEntity  {
 
 <%_ for (idx in fields) {
-    if (typeof fields[idx].javadoc !== 'undefined') { _%>
-<%- formatAsFieldJavadoc(fields[idx].javadoc) %>
+    if (typeof fields[idx].clean_javadoc !== 'undefined') { _%>
+<%- formatAsFieldJavadoc(fields[idx].clean_javadoc) %>
     <%_ }
     let required = false;
     let unique = false;
@@ -105,10 +105,10 @@ export default class <%= asEntity(entityClass) %> extends BaseEntity  {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
 
-        if (typeof relationships.javadoc != 'undefined') { _%>
-<%- formatAsFieldJavadoc(relationships.javadoc) %>
+        if (typeof relationships.clean_javadoc != 'undefined') { _%>
+<%- formatAsFieldJavadoc(relationships.clean_javadoc) %>
             <%_ if (!hasDto) { _%>
-    @ApiModelProperty({description = "<%- formatAsApiDescription(relationships.javadoc) %>"})
+    @ApiModelProperty({description = "<%- formatAsApiDescription(relationships.clean_javadoc) %>"})
             <%_ }_%>
     <%_ }
         if (relationshipType === 'one-to-many') {_%>

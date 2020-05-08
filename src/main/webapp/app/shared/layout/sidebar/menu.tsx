@@ -18,7 +18,7 @@ const Menu = [
   { path: '/especialidadesatividade', icon: 'fa fa-stethoscope', title: 'Especialidades X Atividades' , role: [AUTHORITIES.ADMIN] },
   { path: '/cid-pta', icon: 'fa fa-stethoscope', title: 'CID X PTA' , role: [AUTHORITIES.ADMIN] },
   { path: '/indicadores', icon: 'fa fa-list-ol', title: 'Indicadores Clínicos' , role: [AUTHORITIES.ADMIN] },
-  { path: '/alerta-indicadores', icon: 'fa fa-bell', title: 'Alertas' , role: [AUTHORITIES.ADMIN] },
+  { path: '/alertas-indicadores', icon: 'fa fa-bell', title: 'Alertas' , role: [AUTHORITIES.ADMIN] },
   { path: '/alertas-resultados-esperados', icon: 'fa fa-bell', title: 'Alertas Res. Esp.' , role: [AUTHORITIES.ADMIN] },
   { path: '/operadora', icon: 'fa fa-medkit', title: 'Operadora' , role: [AUTHORITIES.ADMIN] },
   { path: '/unidade-easy', icon: 'fa fa-building-o', title: 'Unidade Easy Care' , role: [AUTHORITIES.ADMIN] },

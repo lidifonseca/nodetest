@@ -10,9 +10,9 @@ import Categoria from './categoria.entity';
 import CidXPtaNovo from './cid-x-pta-novo.entity';
 
 /**
- * A CidXPtaNovoPadItemIndi.
+ *
  */
-@Entity('tb_cid_x_pta_novo_pad_item_indi')
+@Entity('tb_cid_x_pta_novo_pad_item_indicador')
 export default class CidXPtaNovoPadItemIndi extends BaseEntity {
   @Column({ name: 'META', length: 145 })
   meta: string;

@@ -606,7 +606,6 @@ function analizeJavadoc(generator) {
             let parameter =  generatorJavadoc.substring(generatorJavadoc.indexOf('@')+1, generatorJavadoc.indexOf('@@'))
                                     .split(" ").join("_*JOIN*_").split("\\n").join("_*JOIN*_").split("_*JOIN*_");
             if(parameter.length > 1) {
-                // generator.fields[idx][parameter[0]] = parameter[1].trim();
                 if(parameter[0] === "formTab") {
                     let value = parameter[1].trim().split(">")[0].split("<");
                     let fields = value[1].split(",");
@@ -624,7 +623,7 @@ function analizeJavadoc(generator) {
                         }
                     }
                 }
-                if(parameter[0] === "viewTab") {
+                else if(parameter[0] === "viewTab") {
                     let value = parameter[1].trim().split(">")[0].split("<");
                     let fields = value[1].split(",");
                     if(generator.viewTabs.indexOf(value[0]) === -1) {
@@ -641,7 +640,7 @@ function analizeJavadoc(generator) {
                         }
                     }
                 }
-                if((["listButtons","viewButtons"]).indexOf(parameter[0]) !== -1) {
+                else if((["listButtons","viewButtons"]).indexOf(parameter[0]) !== -1) {
                     
                     for (const key in parameter) {
                         if (key > 0) {
@@ -663,7 +662,7 @@ function analizeJavadoc(generator) {
                         }
                     }
                 }
-                if((["listTableLayout","listFilterLayout", "formLayout", "viewLayout", "toStringFields"]).indexOf(parameter[0]) !== -1) {
+                else if((["listTableLayout","listFilterLayout", "formLayout", "viewLayout", "toStringFields"]).indexOf(parameter[0]) !== -1) {
                     for (const key in parameter) {
                         if (key > 0) {
                             const element = parameter[key];
@@ -706,11 +705,14 @@ function analizeJavadoc(generator) {
                             }
                         }
                     }
+                } else {
+                    generator[parameter[0]] = parameter[1];
                 }
             }
             generatorJavadoc = generatorJavadoc.substring(0,generatorJavadoc.indexOf('@')) + generatorJavadoc.substring(generatorJavadoc.indexOf('@@')+2).trim();
         }
     }
+    generator['clean_javadoc'] = generatorJavadoc
     for (idx in generator.fields) { 
         let javadoc = generator.fields[idx].javadoc; 
         generator.fields[idx]['clean_javadoc'] = undefined;

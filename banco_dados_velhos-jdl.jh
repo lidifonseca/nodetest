@@ -182,6 +182,9 @@ entity CidXPtaNovo {
 	titulo String maxlength(245)
 }
 
+/**
+	@forceTableName tb_cid_x_pta_novo_pad_item_indicador@@
+*/
 entity CidXPtaNovoPadItemIndi {
 	meta String maxlength(145),
 	maximo String maxlength(145),
